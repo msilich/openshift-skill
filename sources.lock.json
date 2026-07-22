@@ -20,6 +20,14 @@
       "license": "Apache-2.0",
       "status": "Developer Preview"
     },
+    "argocd_mcp_server": {
+      "commit": "1bb80b2816f0c8810efedc2fdcf318fd18ce214d",
+      "url": "https://github.com/argoproj-labs/mcp-for-argocd",
+      "license": "Apache-2.0",
+      "package_manager": "pnpm@10.34.1",
+      "transport": "stdio",
+      "mode": "MCP_READ_ONLY=true"
+    },
     "agentic_skills": {
       "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
       "url": "https://github.com/openshift/agentic-skills",
@@ -37,6 +45,8 @@
     "qwen_provider": "optional OpenAI-compatible example",
     "provider_api_key": "environment-only",
     "read_kubeconfig": "user-supplied",
-    "day2_kubeconfig": "user-supplied"
+    "day2_kubeconfig": "user-supplied",
+    "argocd_token_registry": "optional user-supplied protected file",
+    "argocd_ca_bundle": "optional user-supplied PEM file"
   }
 }

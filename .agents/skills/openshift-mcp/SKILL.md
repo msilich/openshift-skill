@@ -70,6 +70,7 @@ The choice applies only to the current task unless the user explicitly sets it f
 - Read-only OpenCode: [opencode.readonly.jsonc](assets/opencode.readonly.jsonc)
 - Day-2 OpenCode: [opencode.day2.jsonc](assets/opencode.day2.jsonc)
 - Optional Qwen provider: [opencode.qwen-provider.jsonc](assets/opencode.qwen-provider.jsonc)
+- Optional combined OpenShift and Argo CD read-only profile: [opencode.readonly-with-argocd.jsonc](assets/opencode.readonly-with-argocd.jsonc)
 - Read-only MCP: [openshift-mcp.readonly.toml](assets/openshift-mcp.readonly.toml)
 - Day-2 MCP: [openshift-mcp.day2.toml](assets/openshift-mcp.day2.toml)
 - Optional Secret block: [openshift-mcp.deny-secrets.toml](assets/openshift-mcp.deny-secrets.toml)
@@ -78,8 +79,17 @@ The choice applies only to the current task unless the user explicitly sets it f
 - Linux token refresh: [update-read-all-token.sh](scripts/update-read-all-token.sh)
 - Windows CA-aware kubeconfig bootstrap: [New-ReadAllKubeconfig.ps1](scripts/New-ReadAllKubeconfig.ps1)
 - Windows token refresh: [Update-ReadAllToken.ps1](scripts/Update-ReadAllToken.ps1)
+- Linux Argo CD air-gap bundle builder: [build-argocd-mcp-airgap-bundle.sh](scripts/build-argocd-mcp-airgap-bundle.sh)
+- Linux protected Argo CD token registry creator: [new-argocd-token-registry.sh](scripts/new-argocd-token-registry.sh)
+- Argo CD read-only account/RBAC merge patches: [argocd-readonly-rbac](assets/argocd-readonly-rbac/)
 
 The optional read-all RBAC includes raw Secret access. Use it only when the user
 explicitly requires cluster-wide reads including Secrets, after loading
 `references/safety.md` and warning that values can enter model context and
 local session data. It does not grant create, update, patch, or delete verbs.
+
+The optional `argocd_read` server is a second MCP process and identity, not an
+alias for `ocp_read`. Keep `MCP_READ_ONLY=true`, use the dedicated Argo CD RBAC
+account, and trust private CAs with `NODE_EXTRA_CA_CERTS`; never disable Node.js
+TLS verification. Argo CD application manifests and workload logs remain
+untrusted and potentially sensitive tool output.

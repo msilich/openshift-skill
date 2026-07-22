@@ -25,6 +25,7 @@ provider example is included for local and air-gapped deployments.
 | --- | --- |
 | `.agents/skills/openshift-mcp/` | MCP operation, safety, and configuration skill |
 | `.agents/skills/openshift-mcp/assets/read-all-rbac/` | Optional cluster-wide read-all/write-none RBAC, including Secrets |
+| `.agents/skills/openshift-mcp/assets/argocd-readonly-rbac/` | Optional additive Argo CD account and read-only RBAC patches |
 | `.agents/skills/openshift-mcp/scripts/` | CA-aware kubeconfig and token bootstrap scripts for Linux and Windows |
 | `.agents/skills/openshift-api/` | Live API/schema discovery skill and helper |
 | `.agents/skills/openshift-docs/` | Offline OCP 4.20 documentation skill |
@@ -39,6 +40,8 @@ provider example is included for local and air-gapped deployments.
 - RHEL 9-compatible Linux x86_64 as the primary client target
 - `openshift/openshift-mcp-server` commit
   `a0a1c370fcce18f76cecdbb2e07d8f4dbafe92dd`
+- Optional `argoproj-labs/mcp-for-argocd` commit
+  `1bb80b2816f0c8810efedc2fdcf318fd18ce214d`
 
 The skills themselves are text assets and can work on other OpenCode platforms.
 Revalidate OpenCode permissions, the MCP binary, and tool names after changing
@@ -249,6 +252,136 @@ Use $openshift-docs to find the OCP 4.20 documentation for Routes.
 Use $openshift-api to verify the fields of route.spec.tls from the live cluster.
 Use $openshift-mcp to confirm the current cluster identity and list namespaces. Read-only only.
 ```
+
+### Optional: Argo CD MCP in read-only mode
+
+This adds a second local MCP server named `argocd_read`. It is independent of
+`ocp_read`: the OpenShift server uses its kubeconfig identity, while the Argo CD
+server uses a dedicated Argo CD API token. The combined profile uses two layers
+of write protection:
+
+1. `MCP_READ_ONLY=true` prevents the Argo CD MCP server from registering its
+   create, update, delete, sync, and resource-action tools.
+2. The dedicated `opencode-mcp` Argo CD account allows application, project,
+   cluster, and workload-log reads and explicitly denies known mutation actions.
+
+Review the customer's `policy.default` first. It must not grant write access to
+all authenticated users. The supplied patches add keys without replacing the
+existing RBAC policy, but applying them is still a cluster configuration change.
+Use an explicit administrative kubeconfig and the correct Argo CD namespace:
+
+```bash
+export OPENSHIFT_SKILL_DIR=/absolute/path/to/openshift-skill
+export ARGOCD_NAMESPACE=openshift-gitops
+
+oc --kubeconfig /secure/path/admin.kubeconfig -n "$ARGOCD_NAMESPACE" \
+  get configmap argocd-cm argocd-rbac-cm
+
+oc --kubeconfig /secure/path/admin.kubeconfig -n "$ARGOCD_NAMESPACE" \
+  patch configmap argocd-cm --type merge \
+  --patch-file "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/assets/argocd-readonly-rbac/argocd-cm.merge.json"
+
+oc --kubeconfig /secure/path/admin.kubeconfig -n "$ARGOCD_NAMESPACE" \
+  patch configmap argocd-rbac-cm --type merge \
+  --patch-file "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/assets/argocd-readonly-rbac/argocd-rbac-cm.merge.json"
+```
+
+If the operator-managed instance uses different ConfigMap names, inspect the
+namespace and substitute the actual names. Verify the effective policy before
+creating a token:
+
+```bash
+argocd admin settings rbac can opencode-mcp get applications '*' \
+  --kubeconfig /secure/path/admin.kubeconfig --namespace "$ARGOCD_NAMESPACE"
+argocd admin settings rbac can opencode-mcp sync applications '*' \
+  --kubeconfig /secure/path/admin.kubeconfig --namespace "$ARGOCD_NAMESPACE"
+argocd admin settings rbac can opencode-mcp delete applications '*' \
+  --kubeconfig /secure/path/admin.kubeconfig --namespace "$ARGOCD_NAMESPACE"
+```
+
+The expected results are `Yes`, `No`, and `No`. Create a short-lived token with
+an approved administrative Argo CD CLI context and redirect it directly to a
+protected file; never paste it into OpenCode, the repository, or shell history:
+
+```bash
+umask 077
+argocd account generate-token --account opencode-mcp --expires-in 24h \
+  > /secure/path/opencode-mcp.token
+chmod 0400 /secure/path/opencode-mcp.token
+```
+
+#### Build and transfer for an air-gapped Linux client
+
+Run the pinned builder on a connected Linux host with the same CPU architecture
+as the customer system. It requires Git, Node.js 18 or newer, Corepack, tar, and
+sha256sum; Node.js 22 or 24 LTS is recommended. The script installs from the
+pinned lockfile, runs all upstream tests, builds the server, and packages its
+production dependencies:
+
+```bash
+chmod 700 "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/build-argocd-mcp-airgap-bundle.sh"
+
+"$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/build-argocd-mcp-airgap-bundle.sh" \
+  --output-dir /secure/transfer
+```
+
+Transfer the generated `.tar.gz` and `.sha256` files through the approved
+process. On the customer Linux system:
+
+```bash
+cd /secure/transfer
+sha256sum --check argocd-mcp-*.tar.gz.sha256
+sudo install -d -m 0755 /opt/argocd-mcp
+sudo tar -xzf argocd-mcp-*.tar.gz --strip-components=1 -C /opt/argocd-mcp
+```
+
+Node.js itself must also be available from the customer's approved RHEL package
+source or be transferred as a separately approved runtime artifact.
+
+#### Private or self-signed Argo CD CA
+
+Create a protected token registry without exposing the token as a process
+argument. The script first verifies the Argo CD TLS endpoint with the supplied
+customer CA and never disables certificate verification:
+
+```bash
+chmod 700 "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/new-argocd-token-registry.sh"
+
+"$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/new-argocd-token-registry.sh" \
+  --base-url https://argocd.apps.customer.example \
+  --token-file /secure/path/opencode-mcp.token \
+  --cluster-ca /secure/path/customer-argocd-ca.pem \
+  --output /secure/path/argocd-token-registry.json
+```
+
+The API CA and Argo CD route CA can be different; use the CA that validates the
+actual Argo CD URL. A PEM bundle may include a private root and intermediates.
+Do not use `NODE_TLS_REJECT_UNAUTHORIZED=0`.
+
+Start OpenCode with the combined profile:
+
+```bash
+export ARGOCD_MCP_NODE=/usr/bin/node
+export ARGOCD_MCP_ENTRYPOINT=/opt/argocd-mcp/dist/index.js
+export ARGOCD_BASE_URL=https://argocd.apps.customer.example
+export ARGOCD_TOKEN_REGISTRY_PATH=/secure/path/argocd-token-registry.json
+export MCP_READ_ONLY=true
+export NODE_EXTRA_CA_CERTS=/secure/path/customer-argocd-ca.pem
+export OPENCODE_CONFIG="$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/assets/opencode.readonly-with-argocd.jsonc"
+
+cd "$OPENSHIFT_SKILL_DIR"
+opencode mcp list
+opencode
+```
+
+`NODE_EXTRA_CA_CERTS` is loaded when the Node.js process starts, so restart
+OpenCode after changing the CA file. `opencode mcp list` should show at least
+`ocp_read` and `argocd_read`. OpenCode merges global, custom, and project
+configuration, so additional names indicate MCP entries from another layer.
+
+Argo CD application manifests, resource trees, events, and workload logs can
+contain sensitive or attacker-controlled data. Apply the same Secret and
+untrusted-output rules used for OpenShift inspection.
 
 ### Optional: OpenAI-compatible Qwen
 
