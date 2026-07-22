@@ -20,6 +20,10 @@
     "expected_skill": "openshift-mcp"
   },
   {
+    "prompt": "Erzeuge unter Windows aus meiner angemeldeten Admin-Kubeconfig eine CA-gepruefte Read-all/Write-none-Kubeconfig fuer OpenCode.",
+    "expected_skill": "openshift-mcp"
+  },
+  {
     "prompt": "Welche Felder unter Route.spec.tls stellt dieser Cluster bereit?",
     "expected_skill": "openshift-api"
   },

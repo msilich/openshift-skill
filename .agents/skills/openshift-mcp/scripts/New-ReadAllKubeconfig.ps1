@@ -81,10 +81,10 @@ if ($caText -notmatch "-----BEGIN CERTIFICATE-----") {
     throw "CA file is not a PEM certificate or PEM CA bundle: $caPath"
 }
 
-$adminConfig = Invoke-OcText @("--kubeconfig", $adminPath, "config", "view", "--raw", "--minify", "--flatten", "-o", "json") | ConvertFrom-Json
-$adminContext = @($adminConfig.contexts)[0].context
-$adminCluster = @($adminConfig.clusters | Where-Object { $_.name -eq $adminContext.cluster })[0].cluster
-$apiServer = $adminCluster.server
+$apiServer = Invoke-OcText @(
+    "--kubeconfig", $adminPath, "config", "view", "--raw", "--minify", "--flatten",
+    "-o", "jsonpath={.clusters[0].cluster.server}"
+)
 if ([string]::IsNullOrWhiteSpace($apiServer)) {
     throw "No API server found in the admin kubeconfig"
 }
@@ -104,51 +104,87 @@ if ([string]::IsNullOrWhiteSpace($token)) {
 
 $outputDirectory = Split-Path -Parent $outputPath
 New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
+$workingPath = Join-Path $outputDirectory (".read-all.kubeconfig.{0}.tmp" -f [guid]::NewGuid().ToString("N"))
+$resultObject = $null
+try {
+    $stream = [IO.File]::Open(
+        $workingPath,
+        [IO.FileMode]::CreateNew,
+        [IO.FileAccess]::Write,
+        [IO.FileShare]::None
+    )
+    $stream.Dispose()
+    Protect-CredentialFile -Path $workingPath
 
-& oc config set-cluster openshift-mcp-cluster "--server=$apiServer" "--certificate-authority=$caPath" "--embed-certs=true" "--kubeconfig=$outputPath" | Out-Null
-if ($LASTEXITCODE -ne 0) { throw "Could not write cluster configuration" }
-& oc config set-credentials $ServiceAccount "--token=$token" "--kubeconfig=$outputPath" | Out-Null
-if ($LASTEXITCODE -ne 0) { throw "Could not write the ServiceAccount token" }
-Protect-CredentialFile -Path $outputPath
-& oc config set-context $ContextName "--cluster=openshift-mcp-cluster" "--user=$ServiceAccount" "--namespace=$DefaultNamespace" "--kubeconfig=$outputPath" | Out-Null
-if ($LASTEXITCODE -ne 0) { throw "Could not write context" }
-& oc config use-context $ContextName "--kubeconfig=$outputPath" | Out-Null
-if ($LASTEXITCODE -ne 0) { throw "Could not select context" }
+    & oc config set-cluster openshift-mcp-cluster "--server=$apiServer" "--certificate-authority=$caPath" "--embed-certs=true" "--kubeconfig=$workingPath" | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Could not write cluster configuration" }
+    & oc config set-credentials $ServiceAccount "--token=$token" "--kubeconfig=$workingPath" | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Could not write the ServiceAccount token" }
+    & oc config set-context $ContextName "--cluster=openshift-mcp-cluster" "--user=$ServiceAccount" "--namespace=$DefaultNamespace" "--kubeconfig=$workingPath" | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Could not write context" }
+    & oc config use-context $ContextName "--kubeconfig=$workingPath" | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Could not select context" }
 
-$resultConfig = Invoke-OcText @("--kubeconfig", $outputPath, "config", "view", "--raw", "-o", "json") | ConvertFrom-Json
-$resultCluster = @($resultConfig.clusters)[0].cluster
-if (@($resultConfig.contexts).Count -ne 1 -or @($resultConfig.clusters).Count -ne 1 -or @($resultConfig.users).Count -ne 1) {
-    throw "Generated kubeconfig is not limited to one context, cluster and user"
+    $countText = Invoke-OcText @(
+        "--kubeconfig", $workingPath, "config", "view", "--raw", "-o",
+        "go-template={{len .contexts}} {{len .clusters}} {{len .users}}"
+    )
+    $counts = @($countText -split "\s+" | Where-Object { $_ })
+    if ($counts.Count -ne 3 -or $counts[0] -ne "1" -or $counts[1] -ne "1" -or $counts[2] -ne "1") {
+        throw "Generated kubeconfig is not limited to one context, cluster and user"
+    }
+
+    $resultCAData = Invoke-OcText @(
+        "--kubeconfig", $workingPath, "config", "view", "--raw", "-o",
+        "jsonpath={.clusters[0].cluster.certificate-authority-data}"
+    )
+    $resultInsecure = Invoke-OcText @(
+        "--kubeconfig", $workingPath, "config", "view", "--raw", "-o",
+        "jsonpath={.clusters[0].cluster.insecure-skip-tls-verify}"
+    )
+    $expectedCAData = [Convert]::ToBase64String([IO.File]::ReadAllBytes($caPath))
+    if ([string]::IsNullOrWhiteSpace($resultCAData) -or $resultCAData -ne $expectedCAData -or $resultInsecure -eq "true") {
+        throw "Customer CA was not embedded securely or differs from the selected CA"
+    }
+
+    $expectedIdentity = "system:serviceaccount:${Namespace}:${ServiceAccount}"
+    $actualIdentity = Invoke-OcText @("--kubeconfig", $workingPath, "--request-timeout=8s", "whoami")
+    $actualServer = Invoke-OcText @("--kubeconfig", $workingPath, "--request-timeout=8s", "whoami", "--show-server")
+    if ($actualIdentity -ne $expectedIdentity -or $actualServer -ne $apiServer) {
+        throw "Generated kubeconfig has an unexpected identity or API server"
+    }
+
+    $canReadSecrets = Invoke-OcText @("--kubeconfig", $workingPath, "--request-timeout=8s", "auth", "can-i", "get", "secrets", "--all-namespaces")
+    $canCreate = Invoke-OcText @("--kubeconfig", $workingPath, "--request-timeout=8s", "auth", "can-i", "create", "deployments.apps", "--all-namespaces")
+    $canPatch = Invoke-OcText @("--kubeconfig", $workingPath, "--request-timeout=8s", "auth", "can-i", "patch", "deployments.apps", "--all-namespaces")
+    $canDelete = Invoke-OcText @("--kubeconfig", $workingPath, "--request-timeout=8s", "auth", "can-i", "delete", "pods", "--all-namespaces")
+    if ($canReadSecrets -ne "yes" -or $canCreate -ne "no" -or $canPatch -ne "no" -or $canDelete -ne "no") {
+        throw "Effective RBAC does not match the expected read-all/write-none profile"
+    }
+
+    [IO.File]::Move($workingPath, $outputPath)
+    $workingPath = $null
+    Protect-CredentialFile -Path $outputPath
+
+    $resultObject = [pscustomobject]@{
+        OutputKubeconfig = $outputPath
+        ApiServer = $actualServer
+        AdminIdentityUsedForTokenRequest = $adminIdentity
+        ServiceAccountIdentity = $actualIdentity
+        CustomerCAEmbedded = $true
+        InsecureSkipTLSVerify = $false
+        CanReadSecrets = $canReadSecrets
+        CanCreateDeployments = $canCreate
+        CanPatchDeployments = $canPatch
+        CanDeletePods = $canDelete
+        TokenExpiresLocal = Get-JwtExpiry -Token $token
+    }
 }
-$resultInsecureProperty = $resultCluster.PSObject.Properties["insecure-skip-tls-verify"]
-$resultInsecure = $null -ne $resultInsecureProperty -and [bool]$resultInsecureProperty.Value
-if ([string]::IsNullOrWhiteSpace($resultCluster."certificate-authority-data") -or $resultInsecure) {
-    throw "Customer CA was not embedded securely"
+finally {
+    $token = $null
+    if ($workingPath -and (Test-Path -LiteralPath $workingPath)) {
+        Remove-Item -LiteralPath $workingPath -Force
+    }
 }
 
-$expectedIdentity = "system:serviceaccount:${Namespace}:${ServiceAccount}"
-$actualIdentity = Invoke-OcText @("--kubeconfig", $outputPath, "--request-timeout=8s", "whoami")
-$actualServer = Invoke-OcText @("--kubeconfig", $outputPath, "--request-timeout=8s", "whoami", "--show-server")
-if ($actualIdentity -ne $expectedIdentity -or $actualServer -ne $apiServer) {
-    throw "Generated kubeconfig has an unexpected identity or API server"
-}
-
-$canReadSecrets = Invoke-OcText @("--kubeconfig", $outputPath, "--request-timeout=8s", "auth", "can-i", "get", "secrets", "--all-namespaces")
-$canCreate = Invoke-OcText @("--kubeconfig", $outputPath, "--request-timeout=8s", "auth", "can-i", "create", "deployments.apps", "--all-namespaces")
-$canDelete = Invoke-OcText @("--kubeconfig", $outputPath, "--request-timeout=8s", "auth", "can-i", "delete", "pods", "--all-namespaces")
-if ($canReadSecrets -ne "yes" -or $canCreate -ne "no" -or $canDelete -ne "no") {
-    throw "Effective RBAC does not match the expected read-all/write-none profile"
-}
-
-[pscustomobject]@{
-    OutputKubeconfig = $outputPath
-    ApiServer = $actualServer
-    AdminIdentityUsedForTokenRequest = $adminIdentity
-    ServiceAccountIdentity = $actualIdentity
-    CustomerCAEmbedded = $true
-    InsecureSkipTLSVerify = $false
-    CanReadSecrets = $canReadSecrets
-    CanCreateDeployments = $canCreate
-    CanDeletePods = $canDelete
-    TokenExpiresLocal = Get-JwtExpiry -Token $token
-}
+$resultObject
