@@ -5,6 +5,8 @@
     "primary_platform": "linux-x86_64",
     "primary_distribution": "rhel-9-compatible",
     "openshift": "4.20",
+    "optional_openshift_gitops": "1.21.1 with Argo CD 3.4.4",
+    "argocd_cli_validation": "3.4.5",
     "notes": "Skills are text assets; adapt paths and revalidate binaries on other supported OpenCode platforms."
   },
   "sources": {

@@ -161,6 +161,8 @@ class SkillBundleTest(unittest.TestCase):
             (directory / "argocd-rbac-cm.merge.json").read_text(encoding="utf-8")
         )
         policy = policy_patch["data"]["policy.opencode-mcp.csv"]
+        policy_csv = (directory / "policy.csv").read_text(encoding="utf-8").strip()
+        self.assertEqual(policy.strip(), policy_csv)
         rules = [[part.strip() for part in line.split(",")] for line in policy.splitlines()]
         self.assertTrue(rules)
         self.assertTrue(all(len(rule) == 6 and rule[0] == "p" for rule in rules))
@@ -169,6 +171,18 @@ class SkillBundleTest(unittest.TestCase):
         self.assertTrue(all(rule[3] == "get" for rule in allowed))
         self.assertIn(["p", "opencode-mcp", "applications", "sync", "*", "deny"], denied)
         self.assertIn(["p", "opencode-mcp", "exec", "create", "*", "deny"], denied)
+
+    def test_argocd_operator_bootstrap_is_dry_run_first_and_secret_scoped(self) -> None:
+        script = (
+            SKILLS_ROOT / "openshift-mcp" / "scripts" / "configure-argocd-mcp-opencode.mjs"
+        ).read_text(encoding="utf-8")
+        self.assertIn("--dry-run=server", script)
+        self.assertIn("specProperties?.localUsers", script)
+        self.assertIn("`${account}-local-user`", script)
+        self.assertIn('"jsonpath={.data.apiToken}"', script)
+        self.assertIn("MCP_READ_ONLY: 'true'", script)
+        self.assertIn("token not printed", script)
+        self.assertNotIn("NODE_TLS_REJECT_UNAUTHORIZED", script)
 
     def test_readonly_profile_has_no_generic_oc_escape(self) -> None:
         config = load_jsonc(EXAMPLES / "opencode.readonly.jsonc")

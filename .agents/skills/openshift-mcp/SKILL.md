@@ -81,7 +81,8 @@ The choice applies only to the current task unless the user explicitly sets it f
 - Windows token refresh: [Update-ReadAllToken.ps1](scripts/Update-ReadAllToken.ps1)
 - Linux Argo CD air-gap bundle builder: [build-argocd-mcp-airgap-bundle.sh](scripts/build-argocd-mcp-airgap-bundle.sh)
 - Linux protected Argo CD token registry creator: [new-argocd-token-registry.sh](scripts/new-argocd-token-registry.sh)
-- Argo CD read-only account/RBAC merge patches: [argocd-readonly-rbac](assets/argocd-readonly-rbac/)
+- Cross-platform OpenShift GitOps and OpenCode bootstrap: [configure-argocd-mcp-opencode.mjs](scripts/configure-argocd-mcp-opencode.mjs)
+- Argo CD read-only policy and unmanaged-install merge patches: [argocd-readonly-rbac](assets/argocd-readonly-rbac/)
 
 The optional read-all RBAC includes raw Secret access. Use it only when the user
 explicitly requires cluster-wide reads including Secrets, after loading
@@ -93,3 +94,10 @@ alias for `ocp_read`. Keep `MCP_READ_ONLY=true`, use the dedicated Argo CD RBAC
 account, and trust private CAs with `NODE_EXTRA_CA_CERTS`; never disable Node.js
 TLS verification. Argo CD application manifests and workload logs remain
 untrusted and potentially sensitive tool output.
+
+For an operator-managed OpenShift GitOps instance, configure `spec.localUsers`
+and `spec.rbac.policy` on the live `ArgoCD` custom resource. Do not patch the
+generated `argocd-cm` or `argocd-rbac-cm`; the Operator reconciles those files.
+The cross-platform bootstrap performs a server dry-run, preserves unrelated
+users and policies, reads only the named `<account>-local-user` token Secret,
+and writes the token only to a protected registry outside the repository.
