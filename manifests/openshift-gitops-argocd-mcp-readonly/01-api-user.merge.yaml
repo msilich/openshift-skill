@@ -1,0 +1,8 @@
+spec:
+  localUsers:
+    - name: opencode-mcp
+      enabled: true
+      apiKey: true
+      login: false
+      tokenLifetime: "168h"
+      autoRenewToken: true

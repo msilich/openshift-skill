@@ -29,6 +29,7 @@ provider example is included for local and air-gapped deployments.
 | `.agents/skills/openshift-mcp/scripts/` | CA-aware OpenShift and Argo CD/OpenCode bootstrap scripts |
 | `.agents/skills/openshift-api/` | Live API/schema discovery skill and helper |
 | `.agents/skills/openshift-docs/` | Offline OCP 4.20 documentation skill |
+| `manifests/openshift-gitops-argocd-mcp-readonly/` | Simple reviewed merge-patch YAMLs for an unchanged default OpenShift GitOps instance |
 | `sources.lock.json` | Exact source and compatibility baselines |
 | `tools/docs/` | Reproducible documentation conversion inputs |
 | `tests/` | Offline integrity and behavior checks |
@@ -293,6 +294,13 @@ removed by a subject-specific deny rule.
 For Red Hat OpenShift GitOps, configure the `ArgoCD` custom resource. Do not
 patch `argocd-cm` or `argocd-rbac-cm` directly: they are generated objects and
 the Operator can immediately reconcile such changes away.
+
+For an unchanged default instance with no additional local users or custom
+policy lines, the small YAML merge patches and exact preview/apply commands in
+`manifests/openshift-gitops-argocd-mcp-readonly/` provide the most transparent
+customer workflow. Because the CRD treats `localUsers` as a complete list and
+`rbac.policy` as one string, those static patches must not be used when custom
+entries already exist; use the preserving bootstrap below in that case.
 
 The cross-platform bootstrap requires `oc`, `argocd`, and Node.js. It:
 

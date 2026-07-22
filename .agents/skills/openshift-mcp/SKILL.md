@@ -83,6 +83,7 @@ The choice applies only to the current task unless the user explicitly sets it f
 - Linux protected Argo CD token registry creator: [new-argocd-token-registry.sh](scripts/new-argocd-token-registry.sh)
 - Cross-platform OpenShift GitOps and OpenCode bootstrap: [configure-argocd-mcp-opencode.mjs](scripts/configure-argocd-mcp-opencode.mjs)
 - Argo CD read-only policy and unmanaged-install merge patches: [argocd-readonly-rbac](assets/argocd-readonly-rbac/)
+- Simple default OpenShift GitOps customer YAMLs: [manifests/openshift-gitops-argocd-mcp-readonly](../../../manifests/openshift-gitops-argocd-mcp-readonly/)
 
 The optional read-all RBAC includes raw Secret access. Use it only when the user
 explicitly requires cluster-wide reads including Secrets, after loading
