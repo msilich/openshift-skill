@@ -92,10 +92,12 @@ Require `no` for create, patch, and delete. Require the Secret result to match
 the user's selected scope. Stop rather than broadening an existing identity.
 
 When provisioning the bundled read-all/write-none identity, inspect the exact
-files under `<skill-dir>/assets/read-all-rbac/`. Use the deterministic Linux
-bootstrap script for target validation, CA validation, RBAC preview, RBAC
-application, permission checks, TokenRequest, and protected kubeconfig
-creation. Its default first phase is read-only:
+files under `<skill-dir>/assets/read-all-rbac/`. Use the deterministic Linux or
+Windows bootstrap script for target validation, CA validation, RBAC preview,
+RBAC application, permission checks, TokenRequest, and protected kubeconfig
+creation. Its default first phase is read-only.
+
+Linux:
 
 ```text
 <skill-dir>/scripts/bootstrap-read-all.sh preview \
@@ -103,6 +105,16 @@ creation. Its default first phase is read-only:
   --expected-server <expected-api-url> \
   --expected-admin-identity <expected-admin-identity> \
   --output <new-read-kubeconfig>
+```
+
+Windows PowerShell:
+
+```powershell
+& "<skill-dir>\scripts\Bootstrap-ReadAll.ps1" Preview `
+  -AdminKubeconfig <admin-kubeconfig> `
+  -ExpectedServer <expected-api-url> `
+  -ExpectedAdminIdentity <expected-admin-identity> `
+  -OutputKubeconfig <new-read-kubeconfig>
 ```
 
 The script runs `oc diff` and `oc apply --dry-run=server`; `oc diff` exit code
@@ -114,7 +126,8 @@ By default, the script copies only the flattened CA field from the
 administrative kubeconfig. This is appropriate when that kubeconfig was
 created with the customer-approved CA. Add `--cluster-ca
 <customer-api-ca.pem>` to every phase to override it with an explicit PEM
-bundle. The script never copies the administrative credential.
+bundle. On Windows, use `-ClusterCAPath <customer-api-ca.pem>` instead. The
+script never copies the administrative credential.
 
 Explain the exact four objects, cluster-wide read scope, Secret exposure, and
 write prohibition. Request a fresh `once` approval for
@@ -128,6 +141,16 @@ command:
   --expected-server <expected-api-url> \
   --expected-admin-identity <expected-admin-identity> \
   --output <new-read-kubeconfig>
+```
+
+Windows PowerShell:
+
+```powershell
+& "<skill-dir>\scripts\Bootstrap-ReadAll.ps1" ApplyRbac `
+  -AdminKubeconfig <admin-kubeconfig> `
+  -ExpectedServer <expected-api-url> `
+  -ExpectedAdminIdentity <expected-admin-identity> `
+  -OutputKubeconfig <new-read-kubeconfig>
 ```
 
 The script applies only the bundled four objects and uses impersonation to
@@ -153,11 +176,21 @@ After approval, repeat the same reviewed arguments with the
   --output <new-read-kubeconfig>
 ```
 
+Windows PowerShell:
+
+```powershell
+& "<skill-dir>\scripts\Bootstrap-ReadAll.ps1" CreateKubeconfig `
+  -AdminKubeconfig <admin-kubeconfig> `
+  -ExpectedServer <expected-api-url> `
+  -ExpectedAdminIdentity <expected-admin-identity> `
+  -OutputKubeconfig <new-read-kubeconfig>
+```
+
 The script revalidates live RBAC before it delegates to the lower-level
-`new-read-all-kubeconfig.sh`. Do not enable shell tracing. Do not capture,
-print, decode, or return the token. Use only the script's non-sensitive
-summary. Re-run the context, identity, server, TLS, and representative
-permission checks against the new kubeconfig.
+`new-read-all-kubeconfig.sh` or `New-ReadAllKubeconfig.ps1`. Do not enable shell
+tracing. Do not capture, print, decode, or return the token. Use only the
+script's non-sensitive summary. Re-run the context, identity, server, TLS, and
+representative permission checks against the new kubeconfig.
 
 ## 5. Preview the OpenCode configuration
 

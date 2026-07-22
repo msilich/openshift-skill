@@ -88,6 +88,7 @@ The choice applies only to the current task unless the user explicitly sets it f
 - Optional Secret block: [openshift-mcp.deny-secrets.toml](assets/openshift-mcp.deny-secrets.toml)
 - Optional cluster-wide read-all/write-none RBAC: [read-all-rbac](assets/read-all-rbac/)
 - Deterministic Linux read-all bootstrap: [bootstrap-read-all.sh](scripts/bootstrap-read-all.sh)
+- Deterministic Windows read-all bootstrap: [Bootstrap-ReadAll.ps1](scripts/Bootstrap-ReadAll.ps1)
 - Linux CA-aware kubeconfig bootstrap: [new-read-all-kubeconfig.sh](scripts/new-read-all-kubeconfig.sh)
 - Linux token refresh: [update-read-all-token.sh](scripts/update-read-all-token.sh)
 - Windows CA-aware kubeconfig bootstrap: [New-ReadAllKubeconfig.ps1](scripts/New-ReadAllKubeconfig.ps1)

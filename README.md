@@ -157,10 +157,10 @@ oc --kubeconfig /secure/path/read-only.kubeconfig whoami --show-server
 
 The bundled `read-all-rbac` manifests grant only `get`, `list`, and `watch` on
 all API resources, plus `get` on non-resource URLs. They grant no create,
-update, patch, or delete verbs. Use the deterministic Linux bootstrap with an
-explicit admin kubeconfig, expected identity, and expected API URL. The script
-never modifies the admin kubeconfig and never accepts a login token. Run
-`oc login` separately before this workflow.
+update, patch, or delete verbs. Use the deterministic Linux or Windows
+bootstrap with an explicit admin kubeconfig, expected identity, and expected
+API URL. The scripts never modify the admin kubeconfig and never accept a
+login token. Run `oc login` separately before this workflow.
 
 ```bash
 export OPENSHIFT_SKILL_DIR=/absolute/path/to/openshift-skill
@@ -223,19 +223,32 @@ target. Restart OpenCode or its MCP child after refresh. Do not leave the admin
 kubeconfig on the MCP host unless the customer's security design explicitly
 requires and protects it.
 
-Equivalent PowerShell scripts are included for preparation or testing on
-Windows:
+The deterministic three-phase workflow is also available on Windows. Run the
+commands separately so the two approvals and their changes remain explicit:
 
 ```powershell
-& "$env:OPENSHIFT_SKILL_DIR\.agents\skills\openshift-mcp\scripts\New-ReadAllKubeconfig.ps1" `
-  -AdminKubeconfig C:\Secure\admin.kubeconfig `
-  -ClusterCAPath C:\Secure\customer-api-ca.pem `
-  -OutputKubeconfig C:\Secure\read-all.kubeconfig
+$McpSkill = Join-Path $env:OPENSHIFT_SKILL_DIR ".agents\skills\openshift-mcp"
+$BootstrapArgs = @{
+  AdminKubeconfig      = "C:\Secure\admin.kubeconfig"
+  ExpectedServer       = "https://api.example.test:6443"
+  ExpectedAdminIdentity = "customer-admin"
+  OutputKubeconfig     = "C:\Secure\read-all.kubeconfig"
+}
 
-& "$env:OPENSHIFT_SKILL_DIR\.agents\skills\openshift-mcp\scripts\Update-ReadAllToken.ps1" `
+& "$McpSkill\scripts\Bootstrap-ReadAll.ps1" Preview @BootstrapArgs
+& "$McpSkill\scripts\Bootstrap-ReadAll.ps1" ApplyRbac @BootstrapArgs
+& "$McpSkill\scripts\Bootstrap-ReadAll.ps1" CreateKubeconfig @BootstrapArgs
+
+& "$McpSkill\scripts\Update-ReadAllToken.ps1" `
   -AdminKubeconfig C:\Secure\admin.kubeconfig `
   -TargetKubeconfig C:\Secure\read-all.kubeconfig
 ```
+
+By default, the Windows bootstrap copies only the flattened embedded CA from
+the authenticated admin kubeconfig. Add `ClusterCAPath =
+"C:\Secure\customer-api-ca.pem"` to `$BootstrapArgs` to select an explicit CA
+bundle. The output is created through a protected temporary file and moved
+into place only after identity, server, TLS, and permission verification.
 
 Point `OPENSHIFT_MCP_READ_KUBECONFIG` at the resulting read-all kubeconfig when
 starting the existing read-only MCP/OpenCode profile. The MCP process remains

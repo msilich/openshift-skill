@@ -366,6 +366,24 @@ class SkillBundleTest(unittest.TestCase):
         self.assertNotIn("oc login", text)
         self.assertNotIn("--insecure-skip-tls-verify=true", text)
 
+        windows_script = skill / "scripts" / "Bootstrap-ReadAll.ps1"
+        self.assertTrue(windows_script.is_file())
+        windows_text = windows_script.read_text(encoding="utf-8")
+        for phase in ("Preview", "ApplyRbac", "CreateKubeconfig"):
+            self.assertIn(phase, windows_text)
+        for required in (
+            "AdminKubeconfig",
+            "ClusterCAPath",
+            "ExpectedServer",
+            "ExpectedAdminIdentity",
+            "OutputKubeconfig",
+        ):
+            self.assertIn(required, windows_text)
+        self.assertIn("--insecure-skip-tls-verify=false", windows_text)
+        self.assertIn("New-ReadAllKubeconfig.ps1", windows_text)
+        self.assertNotIn("oc login", windows_text)
+        self.assertNotIn("--insecure-skip-tls-verify=true", windows_text)
+
         skill_text = (skill / "SKILL.md").read_text(encoding="utf-8")
         bootstrap_text = (skill / "references" / "bootstrap-readonly.md").read_text(
             encoding="utf-8"
@@ -374,6 +392,10 @@ class SkillBundleTest(unittest.TestCase):
         self.assertIn("bootstrap-read-all.sh preview", bootstrap_text)
         self.assertIn("bootstrap-read-all.sh apply-rbac", bootstrap_text)
         self.assertIn("bootstrap-read-all.sh create-kubeconfig", bootstrap_text)
+        self.assertIn("Bootstrap-ReadAll.ps1", skill_text)
+        self.assertIn('Bootstrap-ReadAll.ps1" Preview', bootstrap_text)
+        self.assertIn('Bootstrap-ReadAll.ps1" ApplyRbac', bootstrap_text)
+        self.assertIn('Bootstrap-ReadAll.ps1" CreateKubeconfig', bootstrap_text)
 
     def test_docs_defers_to_the_connected_cluster_api(self) -> None:
         text = (SKILLS_ROOT / "openshift-docs" / "SKILL.md").read_text(encoding="utf-8")
