@@ -81,7 +81,7 @@ The choice applies only to the current task unless the user explicitly sets it f
 - Windows token refresh: [Update-ReadAllToken.ps1](scripts/Update-ReadAllToken.ps1)
 - Linux Argo CD air-gap bundle builder: [build-argocd-mcp-airgap-bundle.sh](scripts/build-argocd-mcp-airgap-bundle.sh)
 - Linux protected Argo CD token registry creator: [new-argocd-token-registry.sh](scripts/new-argocd-token-registry.sh)
-- Cross-platform OpenCode MCP configuration generator: [generate-opencode-mcp-config.mjs](scripts/generate-opencode-mcp-config.mjs)
+- Python 3.9 OpenCode MCP configuration generator: [generate-opencode-mcp-config.py](scripts/generate-opencode-mcp-config.py)
 - Cross-platform OpenShift GitOps and OpenCode bootstrap: [configure-argocd-mcp-opencode.mjs](scripts/configure-argocd-mcp-opencode.mjs)
 - Argo CD read-only policy and unmanaged-install merge patches: [argocd-readonly-rbac](assets/argocd-readonly-rbac/)
 - Simple default OpenShift GitOps customer YAMLs: [manifests/openshift-gitops-argocd-mcp-readonly](../../../manifests/openshift-gitops-argocd-mcp-readonly/)

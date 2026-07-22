@@ -6,5 +6,4 @@
 *.jsonc text eol=lf
 *.csv text eol=lf
 *.py text eol=lf
-*.mjs text eol=lf
 *.ps1 text
