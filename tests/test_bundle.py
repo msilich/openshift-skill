@@ -318,6 +318,34 @@ class SkillBundleTest(unittest.TestCase):
         for risk in ("delete", "drain", "debug", "rbac", "operator", "storage", "network"):
             self.assertIn(risk, text.lower())
 
+    def test_readonly_bootstrap_has_ordered_separate_approvals(self) -> None:
+        text = (
+            SKILLS_ROOT / "openshift-mcp" / "references" / "bootstrap-readonly.md"
+        ).read_text(encoding="utf-8")
+        normalized = text.lower()
+        workflow = normalized.split("## 1. collect the inputs", 1)[1]
+        markers = [
+            "obtain and restate these values",
+            "perform a read-only preflight",
+            "gate 1: cluster rbac approval",
+            "gate 2: credential creation approval",
+            "preview the opencode configuration",
+            "gate 3: configuration write approval",
+            "verify the result",
+            "report completion",
+        ]
+        positions = [workflow.index(marker) for marker in markers]
+        self.assertEqual(positions, sorted(positions))
+        self.assertIn("three separate", normalized)
+        self.assertIn("skip the first two", normalized)
+        self.assertIn("--dry-run=server", text)
+        self.assertIn("generate-opencode-mcp-config.py", text)
+        self.assertIn("python 3.9", normalized)
+        self.assertIn("npx --no-install", normalized)
+        self.assertIn("do not claim that the current process reloaded", normalized)
+        self.assertIn("`oc config view --raw`", normalized)
+        self.assertNotIn("node generate-opencode", normalized)
+
     def test_docs_defers_to_the_connected_cluster_api(self) -> None:
         text = (SKILLS_ROOT / "openshift-docs" / "SKILL.md").read_text(encoding="utf-8")
         self.assertIn("live discovery through `openshift-api` as authoritative", text)

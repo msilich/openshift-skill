@@ -1,6 +1,6 @@
 ---
 name: openshift-mcp
-description: Operate and troubleshoot OpenShift through openshift/openshift-mcp-server with MCP-first execution and controlled oc fallback. Use for cluster inspection, incident diagnosis, workload or administrative Day-2 changes, target-context and RBAC verification, rollout or recovery work, and OpenCode MCP operations with any configured model where namespaces, secrets, or destructive actions must be handled safely.
+description: Configure, operate, and troubleshoot OpenShift through openshift/openshift-mcp-server with MCP-first execution and controlled oc fallback. Use for read-only OpenCode or DevSpaces bootstrap, CA-aware kubeconfig creation, MCP configuration, cluster inspection, incident diagnosis, workload or administrative Day-2 changes, target-context and RBAC verification, rollout or recovery work where namespaces, secrets, credentials, or destructive actions must be handled safely.
 ---
 
 # OpenShift MCP operations
@@ -22,6 +22,7 @@ The OpenShift MCP server is Developer Preview at the pinned baseline and is not 
 - Read [operations.md](references/operations.md) before any write, delete, exec, rollout, node, operator, or recovery task.
 - Read [safety.md](references/safety.md) whenever Secrets, credentials, RBAC, OAuth, cluster-scoped resources, nodes, upgrades, storage, or destructive actions may be involved.
 - Read [server-baseline.md](references/server-baseline.md) when installing, configuring, upgrading, or debugging the MCP/OpenCode integration.
+- Read [bootstrap-readonly.md](references/bootstrap-readonly.md) when the user asks OpenCode to prepare a read-only kubeconfig or configure the local OpenCode/DevSpaces MCP connection.
 
 ## Select the identity
 
@@ -41,6 +42,17 @@ oc --kubeconfig <same-kubeconfig-as-mcp> whoami --show-server
 ```
 
 Then make one harmless MCP read against the intended namespace or named resource. Stop if either view disagrees with the expected target. If `oc` is unavailable, state the configured MCP mapping and require user confirmation before the first Day-2 call.
+
+## Bootstrap read-only OpenCode
+
+When the user requests initial read-only setup, follow
+[bootstrap-readonly.md](references/bootstrap-readonly.md) in order. Collect and
+restate every target and path before acting. Keep cluster RBAC, protected
+credential creation, and the local OpenCode config write behind three separate
+fresh `once` approvals; skip the first two when a verified read-only kubeconfig
+already exists. Preview every persistent change, never expose credential
+values, and require a new OpenCode process before claiming that MCP config or
+CA changes are active.
 
 ## Execute MCP-first
 
