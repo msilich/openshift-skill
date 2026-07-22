@@ -222,6 +222,32 @@ The supplied MCP profiles are self-contained in
 model provider; OpenCode continues to use the provider configured by the user
 or organization.
 
+To merge only the MCP entries into an existing plain-JSON OpenCode config, use
+the cross-platform generator. It installs no package, has no token option,
+preserves unrelated configuration, rejects credential arguments and duplicate
+commands, and previews by default. Do not place secrets in a command array. Its
+built-in commands use the environment-based entry points shown
+below. For MCP packages already present in a DevSpace, pass the exact `npx`
+commands as JSON arrays and include `--no-install` or `--offline` so OpenCode
+cannot fetch from a registry at startup:
+
+```bash
+node .agents/skills/openshift-mcp/scripts/generate-opencode-mcp-config.mjs \
+  --config "$HOME/.config/opencode/opencode.json" \
+  --profile both \
+  --openshift-command-json '["npx","--no-install","<openshift-mcp-command>","--config","{env:OPENSHIFT_MCP_READ_CONFIG}","--kubeconfig","{env:OPENSHIFT_MCP_READ_KUBECONFIG}","--cluster-provider","disabled"]' \
+  --argocd-command-json '["npx","--no-install","<argocd-mcp-command>","stdio"]' \
+  --include-argocd-ca
+```
+
+Review the proposed `ocp_read` and `argocd_read` entries, then repeat the same
+command with `--apply`. The generator writes atomically, creates a timestamped
+backup of an existing config, and is idempotent. It refuses JSONC input rather
+than removing comments. Set `ARGOCD_BASE_URL`, `ARGOCD_TOKEN_REGISTRY_PATH`,
+and, when requested, `NODE_EXTRA_CA_CERTS` in the DevSpace or shell environment;
+their values are not copied into the generated config. Restart OpenCode and run
+`opencode mcp list` after applying.
+
 OpenCode merges global, custom, and project configuration. Use a trusted
 operations workspace and review the effective configuration before adding
 credentials; a later project configuration can override an earlier custom
