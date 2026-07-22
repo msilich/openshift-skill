@@ -1,0 +1,515 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To trace Open vSwitch and OVN traffic flows in OpenShift Container Platform, you can use the `ovnkube-trace` utility, which runs `ovn-trace`, `ovs-appctl ofproto/trace`, and `ovn-detrace` in a single correlated output.
+
+You can execute the `ovnkube-trace` binary from a dedicated container. For releases after OpenShift Container Platform 4.7, you can also copy the binary to a local host and execute it from that host.
+
+# Installing the ovnkube-trace on local host
+
+To run `ovnkube-trace` from your local host against a cluster, you can copy the binary from an `ovnkube-control-plane` pod and use familiar Kubernetes namespace and pod arguments.
+
+The `ovnkube-trace` tool traces packet simulations for arbitrary UDP or TCP traffic between points in an OVN-Kubernetes driven OpenShift Container Platform cluster.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You are logged in to the cluster with `cluster-admin` privileges.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a pod variable by using the following command:
+
+    ``` terminal
+    $  POD=$(oc get pods -n openshift-ovn-kubernetes -l app=ovnkube-control-plane -o name | head -1 | awk -F '/' '{print $NF}')
+    ```
+
+2.  Run the following command on your local host to copy the binary from the `ovnkube-control-plane` pods:
+
+    ``` terminal
+    $  oc cp -n openshift-ovn-kubernetes $POD:/usr/bin/ovnkube-trace -c ovnkube-cluster-manager ovnkube-trace
+    ```
+
+    > [!NOTE]
+    > If you are using Red Hat Enterprise Linux (RHEL) 8 to run the `ovnkube-trace` tool, you must copy the file `/usr/lib/rhel8/ovnkube-trace` to your local host.
+
+3.  Make `ovnkube-trace` executable by running the following command:
+
+    ``` terminal
+    $  chmod +x ovnkube-trace
+    ```
+
+4.  Display the options available with `ovnkube-trace` by running the following command:
+
+    ``` terminal
+    $  ./ovnkube-trace -help
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    Usage of ./ovnkube-trace:
+      -addr-family string
+            Address family (ip4 or ip6) to be used for tracing (default "ip4")
+      -dst string
+            dest: destination pod name
+      -dst-ip string
+            destination IP address (meant for tests to external targets)
+      -dst-namespace string
+            k8s namespace of dest pod (default "default")
+      -dst-port string
+            dst-port: destination port (default "80")
+      -kubeconfig string
+            absolute path to the kubeconfig file
+      -loglevel string
+            loglevel: klog level (default "0")
+      -ovn-config-namespace string
+            namespace used by ovn-config itself
+      -service string
+            service: destination service name
+      -skip-detrace
+            skip ovn-detrace command
+      -src string
+            src: source pod name
+      -src-namespace string
+            k8s namespace of source pod (default "default")
+      -tcp
+            use tcp transport protocol
+      -udp
+            use udp transport protocol
+    ```
+
+    </div>
+
+    The command-line arguments supported are familiar Kubernetes constructs, such as namespaces, pods, services so you do not need to find the MAC address, the IP address of the destination nodes, or the ICMP type.
+
+    The log levels are:
+
+    - 0 (minimal output)
+
+    - 2 (more verbose output showing results of trace commands)
+
+    - 5 (debug output)
+
+</div>
+
+# Running ovnkube-trace
+
+To simulate packet forwarding in an OVN logical network, you can run `ovnkube-trace` with source and destination pods, ports, and log levels.
+
+The examples in the following procedure show DNS resolution and default-deny network policy troubleshooting.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You are logged in to the cluster with a user with `cluster-admin` privileges.
+
+- You have installed the `ovnkube-trace` binary on your local host.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Start a web service in the default namespace by entering the following command:
+
+    ``` terminal
+    $ oc run web --namespace=default --image=quay.io/openshifttest/nginx --labels="app=web" --expose --port=80
+    ```
+
+2.  List the pods running in the `openshift-dns` namespace:
+
+    ``` terminal
+    $ oc get pods -n openshift-dns
+    ```
+
+    The output is similar to the following:
+
+    ``` terminal
+    NAME                  READY   STATUS    RESTARTS   AGE
+    dns-default-8s42x     2/2     Running   0          5h8m
+    dns-default-mdw6r     2/2     Running   0          4h58m
+    dns-default-p8t5h     2/2     Running   0          4h58m
+    dns-default-rl6nk     2/2     Running   0          5h8m
+    dns-default-xbgqx     2/2     Running   0          5h8m
+    dns-default-zv8f6     2/2     Running   0          4h58m
+    node-resolver-62jjb   1/1     Running   0          5h8m
+    node-resolver-8z4cj   1/1     Running   0          4h59m
+    node-resolver-bq244   1/1     Running   0          5h8m
+    node-resolver-hc58n   1/1     Running   0          4h59m
+    node-resolver-lm6z4   1/1     Running   0          5h8m
+    node-resolver-zfx5k   1/1     Running   0          5h
+    ```
+
+3.  Run the following `ovnkube-trace` command to verify DNS resolution is working:
+
+    ``` terminal
+    $ ./ovnkube-trace \
+      -src-namespace default \
+      -src web \
+      -dst-namespace openshift-dns \
+      -dst dns-default-p8t5h \
+      -udp -dst-port 53 \
+      -loglevel 0
+    ```
+
+    where:
+
+    `-src-namespace`
+    Specifies namespace of the source pod.
+
+    `-src`
+    Specifies source pod name.
+
+    `-dst-namespace`
+    Specifies namespace of destination pod.
+
+    `-dst`
+    Specifies destination pod name.
+
+    `-udp`
+    Specifies use of the `udp` transport protocol. Port 53 is the port the DNS service uses.
+
+    `-loglevel`
+    Specifies the log level to 0 (0 is minimal and 5 is debug).
+
+    If the `src&dst` pod lands on the same node, the output is similar to the following:
+
+    ``` terminal
+    ovn-trace source pod to destination pod indicates success from web to dns-default-p8t5h
+    ovn-trace destination pod to source pod indicates success from dns-default-p8t5h to web
+    ovs-appctl ofproto/trace source pod to destination pod indicates success from web to dns-default-p8t5h
+    ovs-appctl ofproto/trace destination pod to source pod indicates success from dns-default-p8t5h to web
+    ovn-detrace source pod to destination pod indicates success from web to dns-default-p8t5h
+    ovn-detrace destination pod to source pod indicates success from dns-default-p8t5h to web
+    ```
+
+    If the `src&dst` pod lands on a different node, the output is similar to the following:
+
+    ``` terminal
+    ovn-trace source pod to destination pod indicates success from web to dns-default-8s42x
+    ovn-trace (remote) source pod to destination pod indicates success from web to dns-default-8s42x
+    ovn-trace destination pod to source pod indicates success from dns-default-8s42x to web
+    ovn-trace (remote) destination pod to source pod indicates success from dns-default-8s42x to web
+    ovs-appctl ofproto/trace source pod to destination pod indicates success from web to dns-default-8s42x
+    ovs-appctl ofproto/trace destination pod to source pod indicates success from dns-default-8s42x to web
+    ovn-detrace source pod to destination pod indicates success from web to dns-default-8s42x
+    ovn-detrace destination pod to source pod indicates success from dns-default-8s42x to web
+    ```
+
+    The output indicates success from the deployed pod to the DNS port and also indicates that it is successful going back in the other direction. So you know bi-directional traffic is supported on UDP port 53 if my web pod wants to do dns resolution from core DNS.
+
+    If for example that did not work and you wanted to get the `ovn-trace`, the `ovs-appctl` of `proto/trace` and `ovn-detrace`, and more debug type information increase the log level to 2 and run the command again as follows:
+
+    ``` terminal
+    $ ./ovnkube-trace \
+      -src-namespace default \
+      -src web \
+      -dst-namespace openshift-dns \
+      -dst dns-default-467qw \
+      -udp -dst-port 53 \
+      -loglevel 2
+    ```
+
+    The output from this increased log level is too much to list here. In a failure situation the output of this command shows which flow is dropping that traffic. For example an egress or ingress network policy may be configured on the cluster that does not allow that traffic.
+
+</div>
+
+# Testing a default deny policy with ovnkube-trace
+
+To verify that an ingress default deny network policy blocks traffic in OpenShift Container Platform, you can run `ovnkube-trace` with a higher log level and read the ACL debug output. You can add an allow policy for labeled namespaces and confirm that traffic succeeds.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You are logged in to the cluster with a user with `cluster-admin` privileges.
+
+- You have installed the `ovnkube-trace` binary on your local host.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create the following YAML that defines a `deny-by-default` policy to deny ingress from all pods in all namespaces. Save the YAML in the `deny-by-default.yaml` file:
+
+    ``` yaml
+    kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: deny-by-default
+      namespace: default
+    spec:
+      podSelector: {}
+      ingress: []
+    ```
+
+2.  Apply the policy by entering the following command:
+
+    ``` terminal
+    $ oc apply -f deny-by-default.yaml
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    networkpolicy.networking.k8s.io/deny-by-default created
+    ```
+
+    </div>
+
+3.  Start a web service in the `default` namespace by entering the following command:
+
+    ``` terminal
+    $ oc run web --namespace=default --image=quay.io/openshifttest/nginx --labels="app=web" --expose --port=80
+    ```
+
+4.  Run the following command to create the `prod` namespace:
+
+    ``` terminal
+    $ oc create namespace prod
+    ```
+
+5.  Run the following command to label the `prod` namespace:
+
+    ``` terminal
+    $ oc label namespace/prod purpose=production
+    ```
+
+6.  To deploy an `alpine` image in the `prod` namespace and start a shell, run the following command:
+
+    ``` terminal
+    $ oc run test-6459 --namespace=prod --rm -i -t --image=alpine -- sh
+    ```
+
+7.  Open another terminal session.
+
+8.  In this new terminal session run `ovn-trace` to verify the failure in communication between the source pod `test-6459` running in namespace `prod` and destination pod running in the `default` namespace:
+
+    ``` terminal
+    $ ./ovnkube-trace \
+     -src-namespace prod \
+     -src test-6459 \
+     -dst-namespace default \
+     -dst web \
+     -tcp -dst-port 80 \
+     -loglevel 0
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    ovn-trace source pod to destination pod indicates failure from test-6459 to web
+    ```
+
+    </div>
+
+9.  Increase the log level to 2 to expose the reason for the failure by running the following command:
+
+    ``` terminal
+    $ ./ovnkube-trace \
+     -src-namespace prod \
+     -src test-6459 \
+     -dst-namespace default \
+     -dst web \
+     -tcp -dst-port 80 \
+     -loglevel 2
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    ...
+    ------------------------------------------------
+     3. ls_out_acl_hint (northd.c:7454): !ct.new && ct.est && !ct.rpl && ct_mark.blocked == 0, priority 4, uuid 12efc456
+        reg0[8] = 1;
+        reg0[10] = 1;
+        next;
+     5. ls_out_acl_action (northd.c:7835): reg8[30..31] == 0, priority 500, uuid 69372c5d
+        reg8[30..31] = 1;
+        next(4);
+     5. ls_out_acl_action (northd.c:7835): reg8[30..31] == 1, priority 500, uuid 2fa0af89
+        reg8[30..31] = 2;
+        next(4);
+     4. ls_out_acl_eval (northd.c:7691): reg8[30..31] == 2 && reg0[10] == 1 && (outport == @a16982411286042166782_ingressDefaultDeny), priority 2000, uuid 447d0dab
+        reg8[17] = 1;
+        ct_commit { ct_mark.blocked = 1; };
+        next;
+    ...
+    ```
+
+    </div>
+
+    where: `ct_commit { ct_mark.blocked = 1; };`:: Specifies that ingress traffic is blocked due to the default deny policy being in place.
+
+10. Create a policy that allows traffic from all pods in a particular namespaces with a label `purpose=production`. Save the YAML in the `web-allow-prod.yaml` file:
+
+    ``` yaml
+    kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: web-allow-prod
+      namespace: default
+    spec:
+      podSelector:
+        matchLabels:
+          app: web
+      policyTypes:
+      - Ingress
+      ingress:
+      - from:
+        - namespaceSelector:
+            matchLabels:
+              purpose: production
+    ```
+
+11. Apply the policy by entering the following command:
+
+    ``` terminal
+    $ oc apply -f web-allow-prod.yaml
+    ```
+
+12. Run `ovnkube-trace` to verify that traffic is now allowed by entering the following command:
+
+    ``` terminal
+    $ ./ovnkube-trace \
+     -src-namespace prod \
+     -src test-6459 \
+     -dst-namespace default \
+     -dst web \
+     -tcp -dst-port 80 \
+     -loglevel 0
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    ovn-trace source pod to destination pod indicates success from test-6459 to web
+    ovn-trace destination pod to source pod indicates success from web to test-6459
+    ovs-appctl ofproto/trace source pod to destination pod indicates success from test-6459 to web
+    ovs-appctl ofproto/trace destination pod to source pod indicates success from web to test-6459
+    ovn-detrace source pod to destination pod indicates success from test-6459 to web
+    ovn-detrace destination pod to source pod indicates success from web to test-6459
+    ```
+
+    </div>
+
+13. Run the following command in the shell that was opened in step six to connect nginx to the web-server:
+
+    ``` terminal
+    $ wget -qO- --timeout=2 http://web.default
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Welcome to nginx!</title>
+    <style>
+      body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+      }
+    </style>
+    </head>
+    <body>
+    <h1>Welcome to nginx!</h1>
+    <p>If you see this page, the nginx web server is successfully installed and
+    working. Further configuration is required.</p>
+
+    <p>For online documentation and support please refer to
+    <a href="http://nginx.org/">nginx.org</a>.<br/>
+    Commercial support is available at
+    <a href="http://nginx.com/">nginx.com</a>.</p>
+
+    <p><em>Thank you for using nginx.</em></p>
+    </body>
+    </html>
+    ```
+
+    </div>
+
+</div>
+
+# Additional resources
+
+- [Tracing Openflow with ovnkube-trace utility](https://access.redhat.com/solutions/5887511)
+
+- [ovnkube-trace](https://github.com/ovn-kubernetes/ovn-kubernetes/blob/master/docs/troubleshooting/ovnkube-trace.md)

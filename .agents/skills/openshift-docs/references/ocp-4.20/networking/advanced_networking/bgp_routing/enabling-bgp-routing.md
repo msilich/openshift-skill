@@ -1,0 +1,51 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To support dynamic route advertisement and integration with external network infrastructure, you can enable Border Gateway Protocol (BGP) routing for your cluster as a cluster administrator.
+
+As a cluster administrator, you can enable OVN-Kubernetes BGP routing support for your cluster.
+
+# Enabling Border Gateway Protocol (BGP) routing
+
+To allow external network integration and route advertisement on supported infrastructure, you can enable Border Gateway Protocol (BGP) routing for your cluster by configuring the cluster network to use an FRR-based dynamic routing provider.
+
+As a cluster administrator, you can enable BGP routing support for your cluster on bare-metal infrastructure.
+
+If you are using BGP routing in conjunction with the MetalLB Operator, the necessary BGP routing support is enabled automatically. You do not need to manually enable BGP routing support.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You are logged in to the cluster as a user with the `cluster-admin` role.
+
+- The cluster is installed on compatible infrastructure.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To enable a dynamic routing provider, enter the following command:
+
+  ``` terminal
+  $ oc patch Network.operator.openshift.io/cluster --type=merge -p '{
+    "spec": {
+      "additionalRoutingCapabilities": {
+        "providers": ["FRR"]
+      }
+    }
+  }'
+  ```
+
+</div>

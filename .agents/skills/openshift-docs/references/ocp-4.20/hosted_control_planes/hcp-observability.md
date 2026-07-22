@@ -1,0 +1,301 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can gather metrics for hosted control planes by configuring metrics sets. Monitoring dashboards are created in the management cluster for each hosted cluster that it manages.
+
+# Configuring metrics sets for hosted control planes
+
+Hosted control planes creates `ServiceMonitor` resources in each control plane namespace that allow a Prometheus stack to gather metrics from the control planes.
+
+The `ServiceMonitor` resources use metrics relabelings to define which metrics are included or excluded from a particular component, such as etcd or the Kubernetes API server. The number of metrics that are produced by control planes directly impacts the resource requirements of the monitoring stack that gathers them.
+
+Instead of producing a fixed number of metrics that apply to all situations, you can configure a metrics set that identifies a set of metrics to produce for each control plane. The following metrics sets are supported:
+
+- `Telemetry`: These metrics are needed for telemetry. This set is the default set and is the smallest set of metrics.
+
+- `SRE`: This set includes the necessary metrics to produce alerts and allow the troubleshooting of control plane components.
+
+- `All`: This set includes all of the metrics that are produced by standalone OpenShift Container Platform control plane components.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To configure a metrics set, set the `METRICS_SET` environment variable in the HyperShift Operator deployment by entering the following command:
+
+  ``` terminal
+  $ oc set env -n hypershift deployment/operator METRICS_SET=All
+  ```
+
+</div>
+
+## SRE metrics set example
+
+When you specify the `SRE` metrics set, the HyperShift Operator looks for a config map named `sre-metric-set` with a single key: `config`. The value of the `config` key must contain a set of `RelabelConfigs` that are organized by control plane component.
+
+You can specify the following components:
+
+- `etcd`
+
+- `kubeAPIServer`
+
+- `kubeControllerManager`
+
+- `openshiftAPIServer`
+
+- `openshiftControllerManager`
+
+- `openshiftRouteControllerManager`
+
+- `cvo`
+
+- `olm`
+
+- `catalogOperator`
+
+- `registryOperator`
+
+- `nodeTuningOperator`
+
+- `controlPlaneOperator`
+
+- `hostedClusterConfigOperator`
+
+A configuration of the `SRE` metrics set is illustrated in the following example:
+
+``` terminal
+kubeAPIServer:
+  - action:       "drop"
+    regex:        "etcd_(debugging|disk|server).*"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "apiserver_admission_controller_admission_latencies_seconds_.*"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "apiserver_admission_step_admission_latencies_seconds_.*"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "scheduler_(e2e_scheduling_latency_microseconds|scheduling_algorithm_predicate_evaluation|scheduling_algorithm_priority_evaluation|scheduling_algorithm_preemption_evaluation|scheduling_algorithm_latency_microseconds|binding_latency_microseconds|scheduling_latency_seconds)"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "apiserver_(request_count|request_latencies|request_latencies_summary|dropped_requests|storage_data_key_generation_latencies_microseconds|storage_transformation_failures_total|storage_transformation_latencies_microseconds|proxy_tunnel_sync_latency_secs)"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "docker_(operations|operations_latency_microseconds|operations_errors|operations_timeout)"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "reflector_(items_per_list|items_per_watch|list_duration_seconds|lists_total|short_watches_total|watch_duration_seconds|watches_total)"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "etcd_(helper_cache_hit_count|helper_cache_miss_count|helper_cache_entry_count|request_cache_get_latencies_summary|request_cache_add_latencies_summary|request_latencies_summary)"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "transformation_(transformation_latencies_microseconds|failures_total)"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "network_plugin_operations_latency_microseconds|sync_proxy_rules_latency_microseconds|rest_client_request_latency_seconds"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "apiserver_request_duration_seconds_bucket;(0.15|0.25|0.3|0.35|0.4|0.45|0.6|0.7|0.8|0.9|1.25|1.5|1.75|2.5|3|3.5|4.5|6|7|8|9|15|25|30|50)"
+    sourceLabels: ["__name__", "le"]
+kubeControllerManager:
+  - action:       "drop"
+    regex:        "etcd_(debugging|disk|request|server).*"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "rest_client_request_latency_seconds_(bucket|count|sum)"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "root_ca_cert_publisher_sync_duration_seconds_(bucket|count|sum)"
+    sourceLabels: ["__name__"]
+openshiftAPIServer:
+  - action:       "drop"
+    regex:        "etcd_(debugging|disk|server).*"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "apiserver_admission_controller_admission_latencies_seconds_.*"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "apiserver_admission_step_admission_latencies_seconds_.*"
+    sourceLabels: ["__name__"]
+  - action:       "drop"
+    regex:        "apiserver_request_duration_seconds_bucket;(0.15|0.25|0.3|0.35|0.4|0.45|0.6|0.7|0.8|0.9|1.25|1.5|1.75|2.5|3|3.5|4.5|6|7|8|9|15|25|30|50)"
+    sourceLabels: ["__name__", "le"]
+openshiftControllerManager:
+  - action:       "drop"
+    regex:        "etcd_(debugging|disk|request|server).*"
+    sourceLabels: ["__name__"]
+openshiftRouteControllerManager:
+  - action:       "drop"
+    regex:        "etcd_(debugging|disk|request|server).*"
+    sourceLabels: ["__name__"]
+olm:
+  - action:       "drop"
+    regex:        "etcd_(debugging|disk|server).*"
+    sourceLabels: ["__name__"]
+catalogOperator:
+  - action:       "drop"
+    regex:        "etcd_(debugging|disk|server).*"
+    sourceLabels: ["__name__"]
+cvo:
+  - action: drop
+    regex: "etcd_(debugging|disk|server).*"
+    sourceLabels: ["__name__"]
+```
+
+# Customized hosted cluster identifiers
+
+When you enable observability for hosted control planes, control plane metrics include an `_id` label that identifies the hosted cluster. You can set `spec.clusterID` in the `HostedCluster` custom resource (CR) at creation time to use a stable identifier instead of a randomly assigned UUID.
+
+When you forward hosted cluster metrics to an external monitoring system, the `_id` label is commonly used to identify the cluster. If you reinstall a hosted cluster, specifying the same `clusterID` value preserves your external monitoring configuration.
+
+Each hosted cluster has a unique cluster identifier. The HyperShift Operator uses this identifier in telemetry and in metrics that the control plane operators produce. The identifier is exposed on time series as the `_id` label.
+
+If you do not specify `spec.clusterID` when you create a `HostedCluster` CR, the HyperShift controller generates a random RFC4122 UUID and sets the field for you.
+
+> [!NOTE]
+> The `spec.clusterID` specification is not the same as the `spec.infraID` specification. The `infraID` value identifies cloud infrastructure resources.
+
+## Example: Setting a custom cluster identifier
+
+You can set the `spec.clusterID` value only when you create a `HostedCluster` custom resource (CR).
+
+> [!IMPORTANT]
+> After you set `spec.clusterID` is set, you cannot change it. Plan the identifier before you create the hosted cluster.
+
+The following example shows a `HostedCluster` CR with a custom cluster identifier set:
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `HostedCluster` CR with a custom cluster identifier
+
+</div>
+
+``` yaml
+apiVersion: hypershift.openshift.io/v1beta1
+kind: HostedCluster
+metadata:
+  name: <hosted_cluster_name>
+  namespace: <hosted_cluster_namespace>
+spec:
+  clusterID: fa45babd-40f3-4085-9b30-8bc3b7df1557
+  controllerAvailabilityPolicy: SingleReplica
+  dns:
+    baseDomain: example.com
+  platform:
+    type: AWS
+  release:
+    image: <ocp_release_image>
+  pullSecret:
+    name: <pull_secret_name>
+```
+
+</div>
+
+The `spec.clusterID` value is the UUID that you want to use as the stable cluster identifier in metrics. The value must be a valid RFC4122 UUID: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` in hexadecimal digits.
+
+The value of `spec.clusterID` is added as the `_id` label on control plane metrics through Prometheus relabeling rules on `ServiceMonitor` and `PodMonitor` resources. HyperShift Operator metrics for the hosted cluster also use the same `_id` label, so you can correlate metrics from the management cluster and the hosted control plane in one query.
+
+For example, to filter metrics for a specific hosted cluster, use the `_id` label in a PromQL expression:
+
+``` promql
+{__name__=~"hypershift_.*", _id="fa45babd-40f3-4085-9b30-8bc3b7df1557"}
+```
+
+When you enable monitoring dashboards, the `CLUSTER_ID` placeholder in the dashboard template is replaced with the same UUID. For more information, see "Dashboard customization".
+
+### Cluster identifier reuse after a reinstall
+
+If you delete and re-create a hosted cluster, a new random `clusterID` is assigned unless you specify one. To keep the same identifier in external monitoring systems, set `spec.clusterID` in the new `HostedCluster` CR to the UUID that you used before.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Dashboard customization](hcp-observability.md#hcp-customize-dashboards_hcp-observability)
+
+- [Configuring metrics sets for hosted control planes](hcp-observability.md#hosted-control-planes-metrics-sets_hcp-observability)
+
+- [Enabling monitoring dashboards in a hosted cluster](hcp-observability.md#hosted-control-planes-monitoring-dashboard_hcp-observability)
+
+</div>
+
+# Enabling monitoring dashboards in a hosted cluster
+
+You can enable monitoring dashboards in a hosted cluster by creating a config map.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create the `hypershift-operator-install-flags` config map in the `local-cluster` namespace. See the following example configuration:
+
+    ``` yaml
+    kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: hypershift-operator-install-flags
+      namespace: local-cluster
+    data:
+      installFlagsToAdd: "--monitoring-dashboards --metrics-set=All"
+      installFlagsToRemove: ""
+    ```
+
+    The `--monitoring-dashboards --metrics-set=All` flag adds the monitoring dashboard for all metrics.
+
+2.  Wait a couple of minutes for the HyperShift Operator deployment in the `hypershift` namespace to be updated to include the following environment variable:
+
+    ``` yaml
+        - name: MONITORING_DASHBOARDS
+          value: "1"
+    ```
+
+    When monitoring dashboards are enabled, for each hosted cluster that the HyperShift Operator manages, the Operator creates a config map named `hc-<hosted_cluster_namespace>-<hosted_cluster_name>` in the `openshift-config-managed` namespace, where `<hosted_cluster_namespace>` is the namespace of the hosted cluster and `<hosted_cluster_name>` is the name of the hosted cluster. As a result, a new dashboard is added in the administrative console of the management cluster.
+
+3.  To view the dashboard, log in to the management cluster’s console and go to the dashboard for the hosted cluster by clicking **Observe → Dashboards**.
+
+4.  Optional: To disable monitoring dashboards in a hosted cluster, remove the `--monitoring-dashboards --metrics-set=All` flag from the `hypershift-operator-install-flags` config map. When you delete a hosted cluster, its corresponding dashboard is also deleted.
+
+</div>
+
+## Dashboard customization
+
+To generate dashboards for each hosted cluster, the HyperShift Operator uses a template that is stored in the `monitoring-dashboard-template` config map in the Operator namespace (`hypershift`). This template contains a set of Grafana panels that contain the metrics for the dashboard.
+
+You can edit the content of the config map to customize the dashboards.
+
+When a dashboard is generated, the following strings are replaced with values that correspond to a specific hosted cluster:
+
+| Name | Description |
+|----|----|
+| `__NAME__` | The name of the hosted cluster |
+| `__NAMESPACE__` | The namespace of the hosted cluster |
+| `__CONTROL_PLANE_NAMESPACE__` | The namespace where the control plane pods of the hosted cluster are placed |
+| `__CLUSTER_ID__` | The UUID of the hosted cluster, which matches the `_id` label of the hosted cluster metrics |
+
+To set a custom cluster identifier when you create the hosted cluster, see "Customized hosted cluster identifiers".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Customized hosted cluster identifiers](hcp-observability.md#hcp-cluster-ids_hcp-observability)
+
+</div>

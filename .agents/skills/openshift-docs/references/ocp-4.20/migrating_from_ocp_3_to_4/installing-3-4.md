@@ -1,0 +1,879 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can install the Migration Toolkit for Containers (MTC) on OpenShift Container Platform 3 and 4.
+
+After you install the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.17 by using the Operator Lifecycle Manager, you manually install the legacy Migration Toolkit for Containers Operator on OpenShift Container Platform 3.
+
+By default, the MTC web console and the `Migration Controller` pod run on the target cluster. You can configure the `Migration Controller` custom resource manifest to run the MTC web console and the `Migration Controller` pod on a [source cluster or on a remote cluster](https://access.redhat.com/articles/5064151).
+
+After you have installed MTC, you must configure an object storage to use as a replication repository.
+
+To uninstall MTC, see [Uninstalling MTC and deleting resources](installing-3-4.md#migration-uninstalling-mtc-clean-up_installing-3-4).
+
+# Compatibility guidelines
+
+You must install the Migration Toolkit for Containers (MTC) Operator that is compatible with your OpenShift Container Platform version.
+
+control cluster
+The cluster that runs the MTC controller and GUI.
+
+remote cluster
+A source or destination cluster for a migration that runs Velero. The Control Cluster communicates with Remote clusters using the Velero API to drive migrations.
+
+You must use the compatible MTC version for migrating your OpenShift Container Platform clusters. For the migration to succeed, both your source cluster and the destination cluster must use the same version of MTC.
+
+MTC 1.7 supports migrations from OpenShift Container Platform 3.11 to 4.17.
+
+MTC 1.8 only supports migrations from OpenShift Container Platform 4.14 and later.
+
+| Details | OpenShift Container Platform 3.11 | OpenShift Container Platform 4.14 or later |
+|----|----|----|
+| Stable MTC version | MTC v.1.7.*z* | MTC v.1.8.*z* |
+| Installation | As described in this guide | Install with OLM, release channel `release-v1.8` |
+
+MTC compatibility: Migrating from OpenShift Container Platform 3 to 4
+
+Edge cases exist where network restrictions prevent OpenShift Container Platform 4 clusters from connecting to other clusters involved in the migration. For example, when migrating from an OpenShift Container Platform 3.11 cluster on premises to a OpenShift Container Platform 4 cluster in the cloud, the OpenShift Container Platform 4 cluster might have trouble connecting to the OpenShift Container Platform 3.11 cluster. In this case, it is possible to designate the OpenShift Container Platform 3.11 cluster as the control cluster and push workloads to the remote OpenShift Container Platform 4 cluster.
+
+# Installing the legacy Migration Toolkit for Containers Operator on OpenShift Container Platform 3
+
+You can install the legacy Migration Toolkit for Containers Operator manually on OpenShift Container Platform 3.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must be logged in as a user with `cluster-admin` privileges on all clusters.
+
+- You must have access to `registry.redhat.io`.
+
+- You must have `podman` installed.
+
+- You must create an [image stream secret](https://access.redhat.com/solutions/3772061) and copy it to each node in the cluster.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Log in to `registry.redhat.io` with your Red Hat Customer Portal credentials:
+
+    ``` terminal
+    $ podman login registry.redhat.io
+    ```
+
+2.  Download the `operator.yml` file by entering the following command:
+
+    ``` terminal
+    podman cp $(podman create registry.redhat.io/rhmtc/openshift-migration-legacy-rhel8-operator:v1.7):/operator.yml ./
+    ```
+
+3.  Download the `controller.yml` file by entering the following command:
+
+    ``` terminal
+    podman cp $(podman create registry.redhat.io/rhmtc/openshift-migration-legacy-rhel8-operator:v1.7):/controller.yml ./
+    ```
+
+4.  Log in to your OpenShift Container Platform source cluster.
+
+5.  Verify that the cluster can authenticate with `registry.redhat.io`:
+
+    ``` terminal
+    $ oc run test --image registry.redhat.io/ubi9 --command sleep infinity
+    ```
+
+6.  Create the Migration Toolkit for Containers Operator object:
+
+    ``` terminal
+    $ oc create -f operator.yml
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    namespace/openshift-migration created
+    rolebinding.rbac.authorization.k8s.io/system:deployers created
+    serviceaccount/migration-operator created
+    customresourcedefinition.apiextensions.k8s.io/migrationcontrollers.migration.openshift.io created
+    role.rbac.authorization.k8s.io/migration-operator created
+    rolebinding.rbac.authorization.k8s.io/migration-operator created
+    clusterrolebinding.rbac.authorization.k8s.io/migration-operator created
+    deployment.apps/migration-operator created
+    Error from server (AlreadyExists): error when creating "./operator.yml":
+    rolebindings.rbac.authorization.k8s.io "system:image-builders" already exists
+    Error from server (AlreadyExists): error when creating "./operator.yml":
+    rolebindings.rbac.authorization.k8s.io "system:image-pullers" already exists
+    ```
+
+    </div>
+
+    - You can ignore `Error from server (AlreadyExists)` messages. They are caused by the Migration Toolkit for Containers Operator creating resources for earlier versions of OpenShift Container Platform 4 that are provided in later releases.
+
+7.  Create the `MigrationController` object:
+
+    ``` terminal
+    $ oc create -f controller.yml
+    ```
+
+8.  Verify that the MTC pods are running:
+
+    ``` terminal
+    $ oc get pods -n openshift-migration
+    ```
+
+</div>
+
+# Installing the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.17
+
+You install the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.17 by using the Operator Lifecycle Manager.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must be logged in as a user with `cluster-admin` privileges on all clusters.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In the OpenShift Container Platform web console, click **Ecosystem** → **Software Catalog**.
+
+2.  Use the **Filter by keyword** field to find the **Migration Toolkit for Containers Operator**.
+
+3.  Select the **Migration Toolkit for Containers Operator** and click **Install**.
+
+4.  Click **Install**.
+
+    On the **Installed Operators** page, the **Migration Toolkit for Containers Operator** appears in the **openshift-migration** project with the status **Succeeded**.
+
+5.  Click **Migration Toolkit for Containers Operator**.
+
+6.  Under **Provided APIs**, locate the **Migration Controller** tile, and click **Create Instance**.
+
+7.  Click **Create**.
+
+8.  Click **Workloads** → **Pods** to verify that the MTC pods are running.
+
+</div>
+
+# Proxy configuration
+
+For OpenShift Container Platform 4.1 and earlier versions, you must configure proxies in the `MigrationController` custom resource (CR) manifest after you install the Migration Toolkit for Containers Operator because these versions do not support a cluster-wide `proxy` object.
+
+For OpenShift Container Platform 4.2 to 4.17, the MTC inherits the cluster-wide proxy settings. You can change the proxy parameters if you want to override the cluster-wide proxy settings.
+
+## Direct volume migration
+
+Direct Volume Migration (DVM) was introduced in MTC 1.4.2. DVM supports only one proxy. The source cluster cannot access the route of the target cluster if the target cluster is also behind a proxy.
+
+If you want to perform a DVM from a source cluster behind a proxy, you must configure a TCP proxy that works at the transport layer and forwards the SSL connections transparently without decrypting and re-encrypting them with their own SSL certificates. A Stunnel proxy is an example of such a proxy.
+
+### TCP proxy setup for DVM
+
+You can set up a direct connection between the source and the target cluster through a TCP proxy and configure the `stunnel_tcp_proxy` variable in the `MigrationController` CR to use the proxy:
+
+``` yaml
+apiVersion: migration.openshift.io/v1alpha1
+kind: MigrationController
+metadata:
+  name: migration-controller
+  namespace: openshift-migration
+spec:
+  [...]
+  stunnel_tcp_proxy: http://username:password@ip:port
+```
+
+Direct volume migration (DVM) supports only basic authentication for the proxy. Moreover, DVM works only from behind proxies that can tunnel a TCP connection transparently. HTTP/HTTPS proxies in man-in-the-middle mode do not work. The existing cluster-wide proxies might not support this behavior. As a result, the proxy settings for DVM are intentionally kept different from the usual proxy configuration in MTC.
+
+### Why use a TCP proxy instead of an HTTP/HTTPS proxy?
+
+You can enable DVM by running Rsync between the source and the target cluster over an OpenShift route. Traffic is encrypted using Stunnel, a TCP proxy. The Stunnel running on the source cluster initiates a TLS connection with the target Stunnel and transfers data over an encrypted channel.
+
+Cluster-wide HTTP/HTTPS proxies in OpenShift are usually configured in man-in-the-middle mode where they negotiate their own TLS session with the outside servers. However, this does not work with Stunnel. Stunnel requires that its TLS session be untouched by the proxy, essentially making the proxy a transparent tunnel which simply forwards the TCP connection as-is. Therefore, you must use a TCP proxy.
+
+### Known issue
+
+<div class="formalpara">
+
+<div class="title">
+
+Migration fails with error `Upgrade request required`
+
+</div>
+
+The migration Controller uses the SPDY protocol to execute commands within remote pods. If the remote cluster is behind a proxy or a firewall that does not support the SPDY protocol, the migration controller fails to execute remote commands. The migration fails with the error message `Upgrade request required`. Workaround: Use a proxy that supports the SPDY protocol.
+
+</div>
+
+In addition to supporting the SPDY protocol, the proxy or firewall also must pass the `Upgrade` HTTP header to the API server. The client uses this header to open a websocket connection with the API server. If the `Upgrade` header is blocked by the proxy or firewall, the migration fails with the error message `Upgrade request required`. Workaround: Ensure that the proxy forwards the `Upgrade` header.
+
+## Tuning network policies for migrations
+
+OpenShift supports restricting traffic to or from pods using *NetworkPolicy* or *EgressFirewalls* based on the network plugin used by the cluster. If any of the source namespaces involved in a migration use such mechanisms to restrict network traffic to pods, the restrictions might inadvertently stop traffic to Rsync pods during migration.
+
+Rsync pods running on both the source and the target clusters must connect to each other over an OpenShift Route. Existing *NetworkPolicy* or *EgressNetworkPolicy* objects can be configured to automatically exempt Rsync pods from these traffic restrictions.
+
+### NetworkPolicy configuration
+
+#### Egress traffic from Rsync pods
+
+You can use the unique labels of Rsync pods to allow egress traffic to pass from them if the `NetworkPolicy` configuration in the source or destination namespaces blocks this type of traffic. The following policy allows **all** egress traffic from Rsync pods in the namespace:
+
+``` yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-egress-from-rsync-pods
+spec:
+  podSelector:
+    matchLabels:
+      owner: directvolumemigration
+      app: directvolumemigration-rsync-transfer
+  egress:
+  - {}
+  policyTypes:
+  - Egress
+```
+
+#### Ingress traffic to Rsync pods
+
+``` yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-all-egress-from-rsync-pods
+spec:
+  podSelector:
+    matchLabels:
+      owner: directvolumemigration
+      app: directvolumemigration-rsync-transfer
+  ingress:
+  - {}
+  policyTypes:
+  - Ingress
+```
+
+### EgressNetworkPolicy configuration
+
+The `EgressNetworkPolicy` object or *Egress Firewalls* are OpenShift constructs designed to block egress traffic leaving the cluster.
+
+Unlike the `NetworkPolicy` object, the Egress Firewall works at a project level because it applies to all pods in the namespace. Therefore, the unique labels of Rsync pods do not exempt only Rsync pods from the restrictions. However, you can add the CIDR ranges of the source or target cluster to the *Allow* rule of the policy so that a direct connection can be setup between two clusters.
+
+Based on which cluster the Egress Firewall is present in, you can add the CIDR range of the other cluster to allow egress traffic between the two:
+
+``` yaml
+apiVersion: network.openshift.io/v1
+kind: EgressNetworkPolicy
+metadata:
+  name: test-egress-policy
+  namespace: <namespace>
+spec:
+  egress:
+  - to:
+      cidrSelector: <cidr_of_source_or_target_cluster>
+    type: Deny
+```
+
+### Choosing alternate endpoints for data transfer
+
+By default, DVM uses an OpenShift Container Platform route as an endpoint to transfer PV data to destination clusters. You can choose another type of supported endpoint, if cluster topologies allow.
+
+For each cluster, you can configure an endpoint by setting the `rsync_endpoint_type` variable on the appropriate **destination** cluster in your `MigrationController` CR:
+
+``` yaml
+apiVersion: migration.openshift.io/v1alpha1
+kind: MigrationController
+metadata:
+  name: migration-controller
+  namespace: openshift-migration
+spec:
+  [...]
+  rsync_endpoint_type: [NodePort|ClusterIP|Route]
+```
+
+### Configuring supplemental groups for Rsync pods
+
+When your PVCs use a shared storage, you can configure the access to that storage by adding supplemental groups to Rsync pod definitions in order for the pods to allow access:
+
+| Variable | Type | Default | Description |
+|----|----|----|----|
+| `src_supplemental_groups` | string | Not set | Comma-separated list of supplemental groups for source Rsync pods |
+| `target_supplemental_groups` | string | Not set | Comma-separated list of supplemental groups for target Rsync pods |
+
+Supplementary groups for Rsync pods
+
+<div class="formalpara">
+
+<div class="title">
+
+Example usage
+
+</div>
+
+The `MigrationController` CR can be updated to set values for these supplemental groups:
+
+</div>
+
+``` yaml
+spec:
+  src_supplemental_groups: "1000,2000"
+  target_supplemental_groups: "2000,3000"
+```
+
+## Configuring proxies
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must be logged in as a user with `cluster-admin` privileges on all clusters.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Get the `MigrationController` CR manifest:
+
+    ``` terminal
+    $ oc get migrationcontroller <migration_controller> -n openshift-migration
+    ```
+
+2.  Update the proxy parameters:
+
+    ``` yaml
+    apiVersion: migration.openshift.io/v1alpha1
+    kind: MigrationController
+    metadata:
+      name: <migration_controller>
+      namespace: openshift-migration
+    ...
+    spec:
+      stunnel_tcp_proxy: http://<username>:<password>@<ip>:<port>
+      noProxy: example.com
+    ```
+
+    - Stunnel proxy URL for direct volume migration.
+
+    - Comma-separated list of destination domain names, domains, IP addresses, or other network CIDRs to exclude proxying.
+
+      Preface a domain with `.` to match subdomains only. For example, `.y.com` matches `x.y.com`, but not `y.com`. Use `*` to bypass proxy for all destinations. If you scale up workers that are not included in the network defined by the `networking.machineNetwork[].cidr` field from the installation configuration, you must add them to this list to prevent connection issues.
+
+      This field is ignored if neither the `httpProxy` nor the `httpsProxy` field is set.
+
+3.  Save the manifest as `migration-controller.yaml`.
+
+4.  Apply the updated manifest:
+
+    ``` terminal
+    $ oc replace -f migration-controller.yaml -n openshift-migration
+    ```
+
+</div>
+
+For more information, see [Configuring the cluster-wide proxy](../networking/configuring_network_settings/enable-cluster-wide-proxy.md#nw-proxy-configure-object_config-cluster-wide-proxy).
+
+# Configuring a replication repository
+
+You must configure an object storage to use as a replication repository. The Migration Toolkit for Containers (MTC) copies data from the source cluster to the replication repository, and then from the replication repository to the target cluster.
+
+MTC supports the [file system and snapshot data copy methods](about-mtc-3-4.md#migration-understanding-data-copy-methods_about-mtc-3-4) for migrating data from the source cluster to the target cluster. You can select a method that is suited for your environment and is supported by your storage provider.
+
+The following storage providers are supported:
+
+- [Multicloud Object Gateway](installing-3-4.md#migration-configuring-mcg_installing-3-4)
+
+- [Amazon Web Services S3](installing-3-4.md#migration-configuring-aws-s3_installing-3-4)
+
+- [Google Cloud](installing-3-4.md#migration-configuring-gcp_installing-3-4)
+
+- [Microsoft Azure Blob](installing-3-4.md#migration-configuring-azure_installing-3-4)
+
+- Generic S3 object storage, for example, Minio or Ceph S3
+
+## Prerequisites
+
+- All clusters must have uninterrupted network access to the replication repository.
+
+- If you use a proxy server with an internally hosted replication repository, you must ensure that the proxy allows access to the replication repository.
+
+## Retrieving Multicloud Object Gateway credentials
+
+Retrieve the Multicloud Object Gateway (MCG) credentials and S3 endpoint, which you need to configure MCG as a replication repository for the Migration Toolkit for Containers (MTC).
+
+Retrieve the Multicloud Object Gateway (MCG) credentials, which you need to create a `Secret` custom resource (CR) for MTC.
+
+> [!NOTE]
+> Although the MCG Operator is [deprecated](https://catalog.redhat.com/software/containers/ocs4/mcg-rhel8-operator/5ddbcefbdd19c71643b56ce9?architecture=amd64&image=64243f5dcd0eb61355af9abd), the MCG plugin is still available for OpenShift Data Foundation. To download the plugin, browse to [Download Red Hat OpenShift Data Foundation](https://access.redhat.com/downloads/content/547/ver=4/rhel---9/4.15.4/x86_64/product-software) and download the appropriate MCG plugin for your operating system.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must deploy OpenShift Data Foundation by using the appropriate [Red Hat OpenShift Data Foundation deployment guide](https://docs.redhat.com/en/documentation/red_hat_openshift_data_foundation/4.15).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Obtain the S3 endpoint, `AWS_ACCESS_KEY_ID`, and the `AWS_SECRET_ACCESS_KEY` value by running the `oc describe` command for the `NooBaa` CR.
+
+  You use these credentials to add MCG as a replication repository.
+
+</div>
+
+## Configuring Amazon Web Services
+
+Configure Amazon Web Services (AWS) S3 storage and Identity and Access Management (IAM) credentials for backup storage with Migration Toolkit for Containers (MTC). This provides the necessary permissions and storage infrastructure for data protection operations.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html) installed.
+
+- The AWS S3 storage bucket must be accessible to the source and target clusters.
+
+- If you are using the snapshot copy method:
+
+  - You must have access to EC2 Elastic Block Storage (EBS).
+
+  - The source and target clusters must be in the same region.
+
+  - The source and target clusters must have the same storage class.
+
+  - The storage class must be compatible with snapshots.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Set the `BUCKET` variable:
+
+    ``` terminal
+    $ BUCKET=<your_bucket>
+    ```
+
+2.  Set the `REGION` variable:
+
+    ``` terminal
+    $ REGION=<your_region>
+    ```
+
+3.  Create an AWS S3 bucket:
+
+    ``` terminal
+    $ aws s3api create-bucket \
+        --bucket $BUCKET \
+        --region $REGION \
+        --create-bucket-configuration LocationConstraint=$REGION
+    ```
+
+    where:
+
+    `LocationConstraint`
+    Specifies the bucket configuration location constraint. `us-east-1` does not support `LocationConstraint`. If your region is `us-east-1`, omit `--create-bucket-configuration LocationConstraint=$REGION`.
+
+4.  Create an IAM user:
+
+    ``` terminal
+    $ aws iam create-user --user-name velero
+    ```
+
+    where:
+
+    `velero`
+    Specifies the user name. If you want to use Velero to back up multiple clusters with multiple S3 buckets, create a unique user name for each cluster.
+
+5.  Create a `velero-policy.json` file:
+
+    ``` terminal
+    $ cat > velero-policy.json <<EOF
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "ec2:DescribeVolumes",
+                    "ec2:DescribeSnapshots",
+                    "ec2:CreateTags",
+                    "ec2:CreateVolume",
+                    "ec2:CreateSnapshot",
+                    "ec2:DeleteSnapshot"
+                ],
+                "Resource": "*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObject",
+                    "s3:DeleteObject",
+                    "s3:PutObject",
+                    "s3:AbortMultipartUpload",
+                    "s3:ListMultipartUploadParts"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::${BUCKET}/*"
+                ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:ListBucket",
+                    "s3:GetBucketLocation",
+                    "s3:ListBucketMultipartUploads"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::${BUCKET}"
+                ]
+            }
+        ]
+    }
+    EOF
+    ```
+
+6.  Attach the policies to give the `velero` user the minimum necessary permissions:
+
+    ``` terminal
+    $ aws iam put-user-policy \
+      --user-name velero \
+      --policy-name velero \
+      --policy-document file://velero-policy.json
+    ```
+
+7.  Create an access key for the `velero` user:
+
+    ``` terminal
+    $ aws iam create-access-key --user-name velero
+    ```
+
+    ``` terminal
+    {
+      "AccessKey": {
+            "UserName": "velero",
+            "Status": "Active",
+            "CreateDate": "2017-07-31T22:24:41.576Z",
+            "SecretAccessKey": <AWS_SECRET_ACCESS_KEY>,
+            "AccessKeyId": <AWS_ACCESS_KEY_ID>
+      }
+    }
+    ```
+
+    Record the `AWS_SECRET_ACCESS_KEY` and the `AWS_ACCESS_KEY_ID`. You use the credentials to add AWS as a replication repository.
+
+</div>
+
+## Configuring Google Cloud
+
+You configure a Google Cloud storage bucket as a replication repository for the Migration Toolkit for Containers (MTC).
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have the `gcloud` and `gsutil` CLI tools installed. See the [Google cloud documentation](https://cloud.google.com/sdk/docs/) for details.
+
+- The Google Cloud storage bucket must be accessible to the source and target clusters.
+
+- If you are using the snapshot copy method:
+
+  - The source and target clusters must be in the same region.
+
+  - The source and target clusters must have the same storage class.
+
+  - The storage class must be compatible with snapshots.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Log in to Google Cloud:
+
+    ``` terminal
+    $ gcloud auth login
+    ```
+
+2.  Set the `BUCKET` variable:
+
+    ``` terminal
+    $ BUCKET=<bucket>
+    ```
+
+    where:
+
+    `bucket`
+    Specifies the bucket name.
+
+3.  Create the storage bucket:
+
+    ``` terminal
+    $ gsutil mb gs://$BUCKET/
+    ```
+
+4.  Set the `PROJECT_ID` variable to your active project:
+
+    ``` terminal
+    $ PROJECT_ID=$(gcloud config get-value project)
+    ```
+
+5.  Create a service account:
+
+    ``` terminal
+    $ gcloud iam service-accounts create velero \
+        --display-name "Velero service account"
+    ```
+
+6.  List your service accounts:
+
+    ``` terminal
+    $ gcloud iam service-accounts list
+    ```
+
+7.  Set the `SERVICE_ACCOUNT_EMAIL` variable to match its `email` value:
+
+    ``` terminal
+    $ SERVICE_ACCOUNT_EMAIL=$(gcloud iam service-accounts list \
+        --filter="displayName:Velero service account" \
+        --format 'value(email)')
+    ```
+
+8.  Attach the policies to give the `velero` user the minimum necessary permissions:
+
+    ``` terminal
+    $ ROLE_PERMISSIONS=(
+        compute.disks.get
+        compute.disks.create
+        compute.disks.createSnapshot
+        compute.snapshots.get
+        compute.snapshots.create
+        compute.snapshots.useReadOnly
+        compute.snapshots.delete
+        compute.zones.get
+        storage.objects.create
+        storage.objects.delete
+        storage.objects.get
+        storage.objects.list
+        iam.serviceAccounts.signBlob
+    )
+    ```
+
+9.  Create the `velero.server` custom role:
+
+    ``` terminal
+    $ gcloud iam roles create velero.server \
+        --project $PROJECT_ID \
+        --title "Velero Server" \
+        --permissions "$(IFS=","; echo "${ROLE_PERMISSIONS[*]}")"
+    ```
+
+10. Add IAM policy binding to the project:
+
+    ``` terminal
+    $ gcloud projects add-iam-policy-binding $PROJECT_ID \
+        --member serviceAccount:$SERVICE_ACCOUNT_EMAIL \
+        --role projects/$PROJECT_ID/roles/velero.server
+    ```
+
+11. Update the IAM service account:
+
+    ``` terminal
+    $ gsutil iam ch serviceAccount:$SERVICE_ACCOUNT_EMAIL:objectAdmin gs://${BUCKET}
+    ```
+
+12. Save the IAM service account keys to the `credentials-velero` file in the current directory:
+
+    ``` terminal
+    $ gcloud iam service-accounts keys create credentials-velero \
+        --iam-account $SERVICE_ACCOUNT_EMAIL
+    ```
+
+    You use the `credentials-velero` file to add Google Cloud as a replication repository.
+
+</div>
+
+## Configuring Microsoft Azure
+
+Configure Microsoft Azure storage and service principal credentials for backup storage with Migration Toolkit for Containers (MTC). This provides the necessary authentication and storage infrastructure for data protection operations.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) installed.
+
+- The Azure Blob storage container must be accessible to the source and target clusters.
+
+- If you are using the snapshot copy method:
+
+  - The source and target clusters must be in the same region.
+
+  - The source and target clusters must have the same storage class.
+
+  - The storage class must be compatible with snapshots.
+
+</div>
+
+## Additional resources
+
+- [MTC workflow](about-mtc-3-4.md#migration-mtc-workflow_about-mtc-3-4)
+
+- [About data copy methods](about-mtc-3-4.md#migration-understanding-data-copy-methods_about-mtc-3-4)
+
+- [Adding a replication repository to the MTC web console](migrating-applications-3-4.md#migration-adding-replication-repository-to-cam_migrating-applications-3-4)
+
+# Uninstalling MTC and deleting resources
+
+You can uninstall the Migration Toolkit for Containers (MTC) and delete its resources to clean up the cluster.
+
+> [!NOTE]
+> Deleting the `velero` custom resource definitions (CRDs) removes Velero from the cluster.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have logged in to the OpenShift Container Platform cluster as a cluster administrator.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Delete the `MigrationController` custom resource (CR) on all clusters:
+
+    ``` terminal
+    $ oc delete migrationcontroller <migration_controller>
+    ```
+
+2.  Uninstall the Migration Toolkit for Containers Operator on OpenShift Container Platform 4 by using the Operator Lifecycle Manager (OLM).
+
+3.  Delete cluster-scoped resources on all clusters by running the following commands:
+
+    - `migration` custom resource definitions (CRDs):
+
+      ``` terminal
+      $ oc delete $(oc get crds -o name | grep 'migration.openshift.io')
+      ```
+
+    - `velero` CRDs:
+
+      ``` terminal
+      $ oc delete $(oc get crds -o name | grep 'velero')
+      ```
+
+    - `migration` cluster roles:
+
+      ``` terminal
+      $ oc delete $(oc get clusterroles -o name | grep 'migration.openshift.io')
+      ```
+
+    - `migration-operator` cluster role:
+
+      ``` terminal
+      $ oc delete clusterrole migration-operator
+      ```
+
+    - `velero` cluster roles:
+
+      ``` terminal
+      $ oc delete $(oc get clusterroles -o name | grep 'velero')
+      ```
+
+    - `migration` cluster role bindings:
+
+      ``` terminal
+      $ oc delete $(oc get clusterrolebindings -o name | grep 'migration.openshift.io')
+      ```
+
+    - `migration-operator` cluster role bindings:
+
+      ``` terminal
+      $ oc delete clusterrolebindings migration-operator
+      ```
+
+    - `velero` cluster role bindings:
+
+      ``` terminal
+      $ oc delete $(oc get clusterrolebindings -o name | grep 'velero')
+      ```
+
+</div>

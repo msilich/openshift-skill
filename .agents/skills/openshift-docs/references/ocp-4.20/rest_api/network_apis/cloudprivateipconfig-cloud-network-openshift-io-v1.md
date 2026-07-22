@@ -1,0 +1,329 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Description
+CloudPrivateIPConfig performs an assignment of a private IP address to the primary NIC associated with cloud VMs. This is done by specifying the IP and Kubernetes node which the IP should be assigned to. This CRD is intended to be used by the network plugin which manages the cluster network. The spec side represents the desired state requested by the network plugin, and the status side represents the current state that this CRD’s controller has executed. No users will have permission to modify it, and if a cluster-admin decides to edit it for some reason, their changes will be overwritten the next time the network plugin reconciles the object. Note: the CR’s name must specify the requested private IP address (can be IPv4 or IPv6).
+
+Compatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).
+
+Type
+`object`
+
+Required
+- `spec`
+
+# Specification
+
+| Property | Type | Description |
+|----|----|----|
+| `apiVersion` | `string` | APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: <https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources> |
+| `kind` | `string` | Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: <https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds> |
+| `metadata` | [`ObjectMeta`](../objects/index.md#io-k8s-apimachinery-pkg-apis-meta-v1-ObjectMeta) | Standard object’s metadata. More info: <https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata> |
+| `spec` | `object` | spec is the definition of the desired private IP request. |
+| `status` | `object` | status is the observed status of the desired private IP request. Read-only. |
+
+## .spec
+
+Description
+spec is the definition of the desired private IP request.
+
+Type
+`object`
+
+| Property | Type | Description |
+|----|----|----|
+| `node` | `string` | node is the node name, as specified by the Kubernetes field: node.metadata.name |
+
+## .status
+
+Description
+status is the observed status of the desired private IP request. Read-only.
+
+Type
+`object`
+
+Required
+- `conditions`
+
+| Property | Type | Description |
+|----|----|----|
+| `conditions` | `array` | condition is the assignment condition of the private IP and its status |
+| `conditions[]` | `object` | Condition contains details for one aspect of the current state of this API Resource. |
+| `node` | `string` | node is the node name, as specified by the Kubernetes field: node.metadata.name |
+
+## .status.conditions
+
+Description
+condition is the assignment condition of the private IP and its status
+
+Type
+`array`
+
+## .status.conditions\[\]
+
+Description
+Condition contains details for one aspect of the current state of this API Resource.
+
+Type
+`object`
+
+Required
+- `lastTransitionTime`
+
+- `message`
+
+- `reason`
+
+- `status`
+
+- `type`
+
+| Property | Type | Description |
+|----|----|----|
+| `lastTransitionTime` | `string` | lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed. If that is not known, then using the time when the API field changed is acceptable. |
+| `message` | `string` | message is a human readable message indicating details about the transition. This may be an empty string. |
+| `observedGeneration` | `integer` | observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions\[x\].observedGeneration is 9, the condition is out of date with respect to the current state of the instance. |
+| `reason` | `string` | reason contains a programmatic identifier indicating the reason for the condition’s last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty. |
+| `status` | `string` | status of the condition, one of True, False, Unknown. |
+| `type` | `string` | type of condition in CamelCase or in foo.example.com/CamelCase. |
+
+# API endpoints
+
+The following API endpoints are available:
+
+- `/apis/cloud.network.openshift.io/v1/cloudprivateipconfigs`
+
+  - `DELETE`: delete collection of CloudPrivateIPConfig
+
+  - `GET`: list objects of kind CloudPrivateIPConfig
+
+  - `POST`: create a CloudPrivateIPConfig
+
+- `/apis/cloud.network.openshift.io/v1/cloudprivateipconfigs/{name}`
+
+  - `DELETE`: delete a CloudPrivateIPConfig
+
+  - `GET`: read the specified CloudPrivateIPConfig
+
+  - `PATCH`: partially update the specified CloudPrivateIPConfig
+
+  - `PUT`: replace the specified CloudPrivateIPConfig
+
+- `/apis/cloud.network.openshift.io/v1/cloudprivateipconfigs/{name}/status`
+
+  - `GET`: read status of the specified CloudPrivateIPConfig
+
+  - `PATCH`: partially update status of the specified CloudPrivateIPConfig
+
+  - `PUT`: replace status of the specified CloudPrivateIPConfig
+
+## /apis/cloud.network.openshift.io/v1/cloudprivateipconfigs
+
+HTTP method
+`DELETE`
+
+Description
+delete collection of CloudPrivateIPConfig
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`Status`](../objects/index.md#io-k8s-apimachinery-pkg-apis-meta-v1-Status) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+HTTP method
+`GET`
+
+Description
+list objects of kind CloudPrivateIPConfig
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`CloudPrivateIPConfigList`](../objects/index.md#io-openshift-network-cloud-v1-CloudPrivateIPConfigList) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+HTTP method
+`POST`
+
+Description
+create a CloudPrivateIPConfig
+
+| Parameter | Type | Description |
+|----|----|----|
+| `dryRun` | `string` | When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed |
+| `fieldValidation` | `string` | fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered. |
+
+Query parameters
+
+| Parameter | Type | Description |
+|----|----|----|
+| `body` | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |  |
+
+Body parameters
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 201 - Created | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 202 - Accepted | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+## /apis/cloud.network.openshift.io/v1/cloudprivateipconfigs/{name}
+
+| Parameter | Type     | Description                      |
+|-----------|----------|----------------------------------|
+| `name`    | `string` | name of the CloudPrivateIPConfig |
+
+Global path parameters
+
+HTTP method
+`DELETE`
+
+Description
+delete a CloudPrivateIPConfig
+
+| Parameter | Type | Description |
+|----|----|----|
+| `dryRun` | `string` | When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed |
+
+Query parameters
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`Status`](../objects/index.md#io-k8s-apimachinery-pkg-apis-meta-v1-Status) schema |
+| 202 - Accepted | [`Status`](../objects/index.md#io-k8s-apimachinery-pkg-apis-meta-v1-Status) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+HTTP method
+`GET`
+
+Description
+read the specified CloudPrivateIPConfig
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+HTTP method
+`PATCH`
+
+Description
+partially update the specified CloudPrivateIPConfig
+
+| Parameter | Type | Description |
+|----|----|----|
+| `dryRun` | `string` | When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed |
+| `fieldValidation` | `string` | fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered. |
+
+Query parameters
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+HTTP method
+`PUT`
+
+Description
+replace the specified CloudPrivateIPConfig
+
+| Parameter | Type | Description |
+|----|----|----|
+| `dryRun` | `string` | When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed |
+| `fieldValidation` | `string` | fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered. |
+
+Query parameters
+
+| Parameter | Type | Description |
+|----|----|----|
+| `body` | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |  |
+
+Body parameters
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 201 - Created | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+## /apis/cloud.network.openshift.io/v1/cloudprivateipconfigs/{name}/status
+
+| Parameter | Type     | Description                      |
+|-----------|----------|----------------------------------|
+| `name`    | `string` | name of the CloudPrivateIPConfig |
+
+Global path parameters
+
+HTTP method
+`GET`
+
+Description
+read status of the specified CloudPrivateIPConfig
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+HTTP method
+`PATCH`
+
+Description
+partially update status of the specified CloudPrivateIPConfig
+
+| Parameter | Type | Description |
+|----|----|----|
+| `dryRun` | `string` | When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed |
+| `fieldValidation` | `string` | fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered. |
+
+Query parameters
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses
+
+HTTP method
+`PUT`
+
+Description
+replace status of the specified CloudPrivateIPConfig
+
+| Parameter | Type | Description |
+|----|----|----|
+| `dryRun` | `string` | When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed |
+| `fieldValidation` | `string` | fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered. |
+
+Query parameters
+
+| Parameter | Type | Description |
+|----|----|----|
+| `body` | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |  |
+
+Body parameters
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 201 - Created | [`CloudPrivateIPConfig`](cloudprivateipconfig-cloud-network-openshift-io-v1.md#cloudprivateipconfig-cloud-network-openshift-io-v1) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses

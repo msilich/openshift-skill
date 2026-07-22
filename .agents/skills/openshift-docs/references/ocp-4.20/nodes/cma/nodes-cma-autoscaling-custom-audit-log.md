@@ -1,0 +1,216 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can gather audit logs, which are a security-relevant chronological set of records documenting the sequence of activities that have affected the system by individual users, administrators, or other components of the system.
+
+For example, audit logs can help you understand where an autoscaling request is coming from. This is key information when backends are getting overloaded by autoscaling requests made by user applications and you need to determine which is the troublesome application.
+
+# Configuring audit logging
+
+You can configure auditing for the Custom Metrics Autoscaler Operator by editing the `KedaController` custom resource. The logs are sent to an audit log file on a volume that is secured by using a persistent volume claim in the `KedaController` CR.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- The Custom Metrics Autoscaler Operator must be installed.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit the `KedaController` custom resource to add the `auditConfig` stanza:
+
+    ``` yaml
+    kind: KedaController
+    apiVersion: keda.sh/v1alpha1
+    metadata:
+      name: keda
+      namespace: openshift-keda
+    spec:
+    # ...
+      metricsServer:
+    # ...
+        auditConfig:
+          logFormat: "json"
+          logOutputVolumeClaim: "pvc-audit-log"
+          policy:
+            rules:
+            - level: Metadata
+            omitStages: "RequestReceived"
+            omitManagedFields: false
+          lifetime:
+            maxAge: "2"
+            maxBackup: "1"
+            maxSize: "50"
+    ```
+
+    - Specifies the output format of the audit log, either `legacy` or `json`.
+
+    - Specifies an existing persistent volume claim for storing the log data. All requests coming to the API server are logged to this persistent volume claim. If you leave this field empty, the log data is sent to stdout.
+
+    - Specifies which events should be recorded and what data they should include:
+
+      - `None`: Do not log events.
+
+      - `Metadata`: Log only the metadata for the request, such as user, timestamp, and so forth. Do not log the request text and the response text. This is the default.
+
+      - `Request`: Log only the metadata and the request text but not the response text. This option does not apply for non-resource requests.
+
+      - `RequestResponse`: Log event metadata, request text, and response text. This option does not apply for non-resource requests.
+
+    - Specifies stages for which no event is created.
+
+    - Specifies whether to omit the managed fields of the request and response bodies from being written to the API audit log, either `true` to omit the fields or `false` to include the fields.
+
+    - Specifies the size and lifespan of the audit logs.
+
+      - `maxAge`: The maximum number of days to retain audit log files, based on the timestamp encoded in their filename.
+
+      - `maxBackup`: The maximum number of audit log files to retain. Set to `0` to retain all audit log files.
+
+      - `maxSize`: The maximum size in megabytes of an audit log file before it gets rotated.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  View the audit log file directly:
+
+    1.  Obtain the name of the `keda-metrics-apiserver-*` pod:
+
+        ``` terminal
+        oc get pod -n openshift-keda
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` terminal
+        NAME                                                  READY   STATUS    RESTARTS   AGE
+        custom-metrics-autoscaler-operator-5cb44cd75d-9v4lv   1/1     Running   0          8m20s
+        keda-metrics-apiserver-65c7cc44fd-rrl4r               1/1     Running   0          2m55s
+        keda-operator-776cbb6768-zpj5b                        1/1     Running   0          2m55s
+        ```
+
+        </div>
+
+    2.  View the log data by using a command similar to the following:
+
+        ``` terminal
+        $ oc logs keda-metrics-apiserver-<hash>|grep -i metadata
+        ```
+
+        - Optional: You can use the `grep` command to specify the log level to display: `Metadata`, `Request`, `RequestResponse`.
+
+          For example:
+
+          ``` terminal
+          $ oc logs keda-metrics-apiserver-65c7cc44fd-rrl4r|grep -i metadata
+          ```
+
+          <div class="formalpara">
+
+          <div class="title">
+
+          Example output
+
+          </div>
+
+          ``` terminal
+           ...
+          {"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Metadata","auditID":"4c81d41b-3dab-4675-90ce-20b87ce24013","stage":"ResponseComplete","requestURI":"/healthz","verb":"get","user":{"username":"system:anonymous","groups":["system:unauthenticated"]},"sourceIPs":["10.131.0.1"],"userAgent":"kube-probe/1.28","responseStatus":{"metadata":{},"code":200},"requestReceivedTimestamp":"2023-02-16T13:00:03.554567Z","stageTimestamp":"2023-02-16T13:00:03.555032Z","annotations":{"authorization.k8s.io/decision":"allow","authorization.k8s.io/reason":""}}
+           ...
+          ```
+
+          </div>
+
+2.  Alternatively, you can view a specific log:
+
+    1.  Use a command similar to the following to log into the `keda-metrics-apiserver-*` pod:
+
+        ``` terminal
+        $ oc rsh pod/keda-metrics-apiserver-<hash> -n openshift-keda
+        ```
+
+        For example:
+
+        ``` terminal
+        $ oc rsh pod/keda-metrics-apiserver-65c7cc44fd-rrl4r -n openshift-keda
+        ```
+
+    2.  Change to the `/var/audit-policy/` directory:
+
+        ``` terminal
+        sh-4.4$ cd /var/audit-policy/
+        ```
+
+    3.  List the available logs:
+
+        ``` terminal
+        sh-4.4$ ls
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` terminal
+        log-2023.02.17-14:50  policy.yaml
+        ```
+
+        </div>
+
+    4.  View the log, as needed:
+
+        ``` terminal
+        sh-4.4$ cat <log_name>/<pvc_name>|grep -i <log_level>
+        ```
+
+        - Optional: You can use the `grep` command to specify the log level to display: `Metadata`, `Request`, `RequestResponse`.
+
+          For example:
+
+          ``` terminal
+          sh-4.4$ cat log-2023.02.17-14:50/pvc-audit-log|grep -i Request
+          ```
+
+          <div class="formalpara">
+
+          <div class="title">
+
+          Example output
+
+          </div>
+
+               ...
+              {"kind":"Event","apiVersion":"audit.k8s.io/v1","level":"Request","auditID":"63e7f68c-04ec-4f4d-8749-bf1656572a41","stage":"ResponseComplete","requestURI":"/openapi/v2","verb":"get","user":{"username":"system:aggregator","groups":["system:authenticated"]},"sourceIPs":["10.128.0.1"],"responseStatus":{"metadata":{},"code":304},"requestReceivedTimestamp":"2023-02-17T13:12:55.035478Z","stageTimestamp":"2023-02-17T13:12:55.038346Z","annotations":{"authorization.k8s.io/decision":"allow","authorization.k8s.io/reason":"RBAC: allowed by ClusterRoleBinding \"system:discovery\" of ClusterRole \"system:discovery\" to Group \"system:authenticated\""}}
+               ...
+
+          </div>
+
+</div>

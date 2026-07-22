@@ -1,0 +1,45 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You might want to remove a hosted cluster if you are no longer using it, you are trying to reduce resources, or the hosted cluster is experiencing issues that are difficult to resolve.
+
+# Destroying a hosted cluster on non-bare-metal agent machines
+
+You can use the `hcp` command-line interface (CLI) to destroy a hosted cluster on non-bare-metal agent machines.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Delete the hosted cluster and its backend resources by running the following command:
+
+  ``` terminal
+  $ hcp destroy cluster agent --name <hosted_cluster_name>
+  ```
+
+  Replace `<hosted_cluster_name>` with the name of your hosted cluster.
+
+</div>
+
+# Destroying a hosted cluster on non-bare-metal agent machines by using the web console
+
+You can use the multicluster engine Operator web console to destroy a hosted cluster on non-bare-metal agent machines.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In the console, click **Infrastructure** → **Clusters**.
+
+2.  On the **Clusters** page, select the cluster that you want to destroy.
+
+3.  In the **Actions** menu, select **Destroy clusters** to remove the cluster.
+
+</div>

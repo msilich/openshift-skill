@@ -1,0 +1,441 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can create virtual machines (VMs) by uploading operating system images from your local machine.
+
+You can create a Windows VM by uploading a Windows image to a PVC. Then you clone the PVC when you create the VM.
+
+> [!IMPORTANT]
+> You must install the QEMU guest agent on VMs created from operating system images that are not provided by Red Hat.
+>
+> You must also install VirtIO drivers on Windows VMs.
+
+# Creating a VM from an uploaded image by using the web console
+
+You can create a virtual machine (VM) from an uploaded operating system image by using the OpenShift Container Platform web console.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have an `IMG`, `ISO`, or `QCOW2` image file.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Navigate to **Virtualization** → **Catalog** in the web console.
+
+2.  Click a template tile without an available boot source.
+
+3.  Click **Customize VirtualMachine**.
+
+4.  On the **Customize template parameters** page, expand **Storage** and select **Upload (Upload a new file to a PVC)** from the **Disk source** list.
+
+5.  Browse to the image on your local machine and set the disk size.
+
+6.  Click **Customize VirtualMachine**.
+
+7.  Click **Create VirtualMachine**.
+
+</div>
+
+## Generalizing a VM image
+
+You can generalize a Red Hat Enterprise Linux (RHEL) image to remove all system-specific configuration data before you use the image to create a golden image, a preconfigured snapshot of a virtual machine (VM). You can use a golden image to deploy new VMs.
+
+You can generalize a RHEL VM by using the `virtctl`, `guestfs`, and `virt-sysprep` tools.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have a RHEL virtual machine (VM) to use as a base VM.
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You have installed the `virtctl` tool.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Stop the RHEL VM if it is running, by entering the following command:
+
+    ``` terminal
+    $ virtctl stop <my_vm_name>
+    ```
+
+2.  Optional: Clone the virtual machine to avoid losing the data from your original VM. You can then generalize the cloned VM.
+
+3.  Retrieve the `dataVolume` that stores the root filesystem for the VM by running the following command:
+
+    ``` terminal
+    $ oc get vm <my_vm_name> -o jsonpath="{.spec.template.spec.volumes}{'\n'}"
+    ```
+
+    Example output:
+
+    ``` terminal
+    [{"dataVolume":{"name":"<my_vm_volume>"},"name":"rootdisk"},{"cloudInitNoCloud":{...}]
+    ```
+
+4.  Retrieve the persistent volume claim (PVC) that matches the listed `dataVolume` by running the followimg command:
+
+    ``` terminal
+    $ oc get pvc
+    ```
+
+    Example output:
+
+    ``` terminal
+    NAME            STATUS   VOLUME  CAPACITY   ACCESS MODES  STORAGECLASS     AGE
+    <my_vm_volume> Bound  …
+    ```
+
+    > [!NOTE]
+    > If your cluster configuration does not enable you to clone a VM, to avoid losing the data from your original VM, you can clone the VM PVC to a data volume instead. You can then use the cloned PVC to create a golden image.
+    >
+    > If you are creating a golden image by cloning a PVC, continue with the next steps, using the cloned PVC.
+
+5.  Deploy a new interactive container with `libguestfs-tools` and attach the PVC to it by running the following command:
+
+    ``` terminal
+    $ virtctl guestfs <my-vm-volume> --uid 107
+    ```
+
+    This command opens a shell for you to run the next command.
+
+6.  Remove all configurations specific to your system by running the following command:
+
+    ``` terminal
+    $ virt-sysprep -a disk.img
+    ```
+
+7.  In the OpenShift Container Platform console, click **Virtualization** → **Catalog**.
+
+8.  Click **Add volume**.
+
+9.  In the **Add volume** window:
+
+    1.  From the **Source type** list, select **Use existing Volume**.
+
+    2.  From the **Volume project** list, select your project.
+
+    3.  From the **Volume name** list, select the correct PVC.
+
+    4.  In the **Volume name** field, enter a name for the new golden image.
+
+    5.  From the **Preference** list, select the RHEL version you are using.
+
+    6.  From the **Default Instance Type** list, select the instance type with the correct CPU and memory requirements for the version of RHEL you selected previously.
+
+    7.  Heterogeneous clusters only: From the **Architecture** list, select the architecture that corresponds with the selected volume.
+
+    8.  Click **Save**.
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Result
+
+</div>
+
+The new volume appears in the **Select volume to boot from** list. This is your new golden image. You can use this volume to create new VMs.
+
+</div>
+
+# Creating a Windows VM
+
+You can create a Windows virtual machine (VM) by uploading a Windows image to a persistent volume claim (PVC) and then cloning the PVC when you create a VM by using the OpenShift Container Platform web console.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You created a Windows installation DVD or USB with the Windows Media Creation Tool. See [Create Windows 10 installation media](https://www.microsoft.com/en-us/software-download/windows10) in the Microsoft documentation.
+
+- You created an `autounattend.xml` answer file. See [Answer files (unattend.xml)](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/update-windows-settings-and-scripts-create-your-own-answer-file-sxs) in the Microsoft documentation.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Upload the Windows image as a new PVC:
+
+    1.  Navigate to **Storage** → **PersistentVolumeClaims** in the web console.
+
+    2.  Click **Create PersistentVolumeClaim** → **With Data upload form**.
+
+    3.  Browse to the Windows image and select it.
+
+    4.  Enter the PVC name, select the storage class and size and then click **Upload**.
+
+        The Windows image is uploaded to a PVC.
+
+2.  Configure a new VM by cloning the uploaded PVC:
+
+    1.  Navigate to **Virtualization** → **Catalog**.
+
+    2.  Select a Windows template tile and click **Customize VirtualMachine**.
+
+    3.  Select **Clone (clone PVC)** from the **Disk source** list.
+
+    4.  Select the PVC project, the Windows image PVC, and the disk size.
+
+3.  Apply the answer file to the VM:
+
+    1.  Click **Customize VirtualMachine parameters**.
+
+    2.  On the **Sysprep** section of the **Scripts** tab, click **Edit**.
+
+    3.  Browse to the `autounattend.xml` answer file and click **Save**.
+
+4.  Set the run strategy of the VM:
+
+    1.  Clear **Start this VirtualMachine after creation** so that the VM does not start immediately.
+
+    2.  Click **Create VirtualMachine**.
+
+    3.  On the **YAML** tab, replace `running:false` with `runStrategy: RerunOnFailure` and click **Save**.
+
+5.  Click the Options menu ![kebab](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAjCAIAAADqn+bCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA+0lEQVRIie2WMQqEMBBFJ47gUXRBLyBYqbUXULCx9CR2XsAb6AlUEM9kpckW7obdZhwWYWHXX/3i8TPJZEKEUgpOlXFu3JX4V4kmB2qaZhgGKSUiZlkWxzEBC84N9zxv27bdO47Tti0Bs3at4wBgXVca/lJnfN/XPggCGmadIwAsywIAiGhZFk1ydy2EYJKgGCqK4vZUVVU0zKpxnmftp2mi4S/1GhG1N82DMWNNYVmW4zgqpRAxTVMa5t4evlg11nXd9/1eY57nSZIQMKtG13WllLu3bbvrOgJmdUbHwfur8Xniqw6Hh5UYRdGDNowwDA+WvP4UV+JPJ94B1gKUWcTOCT0AAAAASUVORK5CYII=) and select **Start**.
+
+    The VM boots from the `sysprep` disk containing the `autounattend.xml` answer file.
+
+</div>
+
+## Generalizing a Windows VM image
+
+You can generalize a Windows operating system image to remove all system-specific configuration data before you use the image to create a new virtual machine (VM).
+
+Before generalizing the VM, you must ensure the `sysprep` tool cannot detect an answer file after the unattended Windows installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- A running Windows VM with the QEMU guest agent installed.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In the OpenShift Container Platform console, click **Virtualization** → **VirtualMachines**.
+
+2.  Select a Windows VM to open the **VirtualMachine details** page.
+
+3.  Click **Configuration** → **Disks**.
+
+4.  Click the Options menu ![kebab](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAjCAIAAADqn+bCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA+0lEQVRIie2WMQqEMBBFJ47gUXRBLyBYqbUXULCx9CR2XsAb6AlUEM9kpckW7obdZhwWYWHXX/3i8TPJZEKEUgpOlXFu3JX4V4kmB2qaZhgGKSUiZlkWxzEBC84N9zxv27bdO47Tti0Bs3at4wBgXVca/lJnfN/XPggCGmadIwAsywIAiGhZFk1ydy2EYJKgGCqK4vZUVVU0zKpxnmftp2mi4S/1GhG1N82DMWNNYVmW4zgqpRAxTVMa5t4evlg11nXd9/1eY57nSZIQMKtG13WllLu3bbvrOgJmdUbHwfur8Xniqw6Hh5UYRdGDNowwDA+WvP4UV+JPJ94B1gKUWcTOCT0AAAAASUVORK5CYII=) beside the `sysprep` disk and select **Detach**.
+
+5.  Click **Detach**.
+
+6.  Rename `C:\Windows\Panther\unattend.xml` to avoid detection by the `sysprep` tool.
+
+7.  Start the `sysprep` program by running the following command:
+
+    ``` terminal
+    %WINDIR%\System32\Sysprep\sysprep.exe /generalize /shutdown /oobe /mode:vm
+    ```
+
+8.  After the `sysprep` tool completes, the Windows VM shuts down. The disk image of the VM is now available to use as an installation image for Windows VMs.
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Result
+
+</div>
+
+You can now specialize the VM.
+
+</div>
+
+## Specializing a Windows VM image
+
+Specializing a Windows virtual machine (VM) configures the computer-specific information from a generalized Windows image onto the VM.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have a generalized Windows disk image.
+
+- You must create an `unattend.xml` answer file. See the [Microsoft documentation](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/update-windows-settings-and-scripts-create-your-own-answer-file-sxs?view=windows-11) for details.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In the OpenShift Container Platform console, click **Virtualization** → **Catalog**.
+
+2.  Select a Windows template and click **Customize VirtualMachine**.
+
+3.  Select **PVC (clone PVC)** from the **Disk source** list.
+
+4.  Select the PVC project and PVC name of the generalized Windows image.
+
+5.  Click **Customize VirtualMachine parameters**.
+
+6.  Click the **Scripts** tab.
+
+7.  In the **Sysprep** section, click **Edit**, browse to the `unattend.xml` answer file, and click **Save**.
+
+8.  Click **Create VirtualMachine**.
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Result
+
+</div>
+
+During the initial boot, Windows uses the `unattend.xml` answer file to specialize the VM. The VM is now ready to use.
+
+</div>
+
+# Uploading a virtual machine image by using the CLI
+
+You can upload an operating system image by using the `virtctl` command-line tool. You can use an existing data volume or create a new data volume for the image.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have an `ISO`, `IMG`, or `QCOW2` operating system image file.
+
+- For best performance, compress the image file by using the [virt-sparsify](https://libguestfs.org/virt-sparsify.1.html) tool or the `xz` or `gzip` utilities.
+
+- The client machine must be configured to trust the OpenShift Container Platform router’s certificate.
+
+- You have installed the `virtctl` CLI.
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Upload the image by running the `virtctl image-upload` command:
+
+    ``` terminal
+    $ virtctl image-upload dv <datavolume_name> \
+      --size=<datavolume_size> \
+      --image-path=</path/to/image>
+    ```
+
+    `<datavolume_name>`
+    The name of the data volume.
+
+    `<datavolume_size>`
+    The size of the data volume. For example: `--size=500Mi`, `--size=1G`
+
+    `</path/to/image>`
+    The file path of the image.
+
+    <div class="note">
+
+    <div class="title">
+
+    </div>
+
+    - If you do not want to create a new data volume, omit the `--size` parameter and include the `--no-create` flag.
+
+    - When uploading a disk image to a PVC, the PVC size must be larger than the size of the uncompressed virtual disk.
+
+    - To allow insecure server connections when using HTTPS, use the `--insecure` parameter. When you use the `--insecure` flag, the authenticity of the upload endpoint is **not** verified.
+
+    </div>
+
+2.  Optional. To verify that a data volume was created, view all data volumes by running the following command:
+
+    ``` terminal
+    $ oc get dvs
+    ```
+
+</div>
+
+# Additional resources
+
+- [Installing the QEMU guest agent](../managing_vms/virt-installing-qemu-guest-agent.md#virt-installing-qemu-guest-agent)
+
+- [Installing VirtIO drivers on Windows VMs](../managing_vms/virt-install-virtio-drivers-on-windows-vms.md#virt-install-virtio-drivers-on-windows-vms)
+
+- [Cloning VMs](virt-cloning-vms.md#virt-cloning-vms)
+
+- [Cloning a PVC to a data volume](virt-creating-vms-by-cloning-pvcs.md#virt-cloning-pvc-to-dv-cli_virt-creating-vms-by-cloning-pvcs)
+
+- [Sysprep (Generalize) a Windows installation](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/sysprep--generalize--a-windows-installation)
+
+- [Configuration pass of Windows Setup (generalize)](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/generalize)
+
+- [Configuration pass of Windows Setup (specialize)](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/specialize)

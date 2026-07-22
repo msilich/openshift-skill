@@ -1,0 +1,42 @@
+{
+  "format_version": 1,
+  "generated_for": "openshift-skill",
+  "tested_baseline": {
+    "primary_platform": "linux-x86_64",
+    "primary_distribution": "rhel-9-compatible",
+    "openshift": "4.20",
+    "notes": "Skills are text assets; adapt paths and revalidate binaries on other supported OpenCode platforms."
+  },
+  "sources": {
+    "opencode": {
+      "version": "1.18.4",
+      "commit": "4872c48c230728150e8e3406722943450ed58dcb",
+      "url": "https://github.com/anomalyco/opencode",
+      "license": "MIT"
+    },
+    "openshift_mcp_server": {
+      "commit": "a0a1c370fcce18f76cecdbb2e07d8f4dbafe92dd",
+      "url": "https://github.com/openshift/openshift-mcp-server",
+      "license": "Apache-2.0",
+      "status": "Developer Preview"
+    },
+    "agentic_skills": {
+      "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
+      "url": "https://github.com/openshift/agentic-skills",
+      "license": "Apache-2.0"
+    },
+    "openshift_docs": {
+      "branch": "enterprise-4.20",
+      "commit": "5aee2719f9ad01a82bb80b391e5af25f566c73c0",
+      "url": "https://github.com/openshift/openshift-docs",
+      "license": "Apache-2.0"
+    }
+  },
+  "runtime_inputs": {
+    "model_provider": "user-supplied OpenCode provider",
+    "qwen_provider": "optional OpenAI-compatible example",
+    "provider_api_key": "environment-only",
+    "read_kubeconfig": "user-supplied",
+    "day2_kubeconfig": "user-supplied"
+  }
+}

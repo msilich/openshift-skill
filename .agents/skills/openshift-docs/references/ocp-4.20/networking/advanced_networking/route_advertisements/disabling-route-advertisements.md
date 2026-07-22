@@ -1,0 +1,47 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To stop the broadcast of cluster network routes and egress IP addresses to your provider network, you can disable route advertisements. Disabling this feature removes the automatically generated routing configurations while maintaining your existing network infrastructure.
+
+# Disabling route advertisements
+
+To prevent your cluster from advertising additional routes to the network, you must disable the route advertisements feature in the network operator configuration. You can disable route advertisements to manage network traffic and maintain security within your environment.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You are logged in to the cluster as a user with the `cluster-admin` role.
+
+- The cluster is installed on compatible infrastructure.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To disable additional routing support, enter the following command:
+
+  ``` terminal
+  $ oc patch network.operator cluster -p '{
+    "spec": {
+      "defaultNetwork": {
+        "ovnKubernetesConfig": {
+          "routeAdvertisements": "Disabled"
+        }
+      }
+    }
+  }'
+  ```
+
+</div>

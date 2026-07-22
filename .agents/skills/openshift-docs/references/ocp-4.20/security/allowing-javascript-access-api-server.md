@@ -1,0 +1,72 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+By default, the cluster restricts API server requests to the web console for security. Because the default configuration only permits the web console, you must update the API Server configuration of the cluster to approve additional hostnames for API and OAuth access.
+
+# Allowing JavaScript-based access to the API server from additional hosts
+
+If you need to access the API server or OAuth server from a JavaScript application by using a different hostname, you can configure additional hostnames to allow.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Access to the cluster as a user with the `cluster-admin` role.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit the `APIServer` resource:
+
+    ``` terminal
+    $ oc edit apiserver.config.openshift.io cluster
+    ```
+
+2.  Add the `additionalCORSAllowedOrigins` field under the `spec` section and specify one or more additional hostnames:
+
+    ``` yaml
+    apiVersion: config.openshift.io/v1
+    kind: APIServer
+    metadata:
+      annotations:
+        release.openshift.io/create-only: "true"
+      creationTimestamp: "2019-07-11T17:35:37Z"
+      generation: 1
+      name: cluster
+      resourceVersion: "907"
+      selfLink: /apis/config.openshift.io/v1/apiservers/cluster
+      uid: 4b45a8dd-a402-11e9-91ec-0219944e0696
+    spec:
+      additionalCORSAllowedOrigins:
+      - (?i)//my\.subdomain\.domain\.com(:|\z)
+    ```
+
+    where:
+
+    `additionalCORSAllowedOrigins`
+    The hostname is specified as a [Golang regular expression](https://github.com/google/re2/wiki/Syntax) that matches against CORS headers from HTTP requests against the API server and OAuth server.
+
+    > [!NOTE]
+    > This example uses the following syntax:
+    >
+    > - The `(?i)` makes it case-insensitive.
+    >
+    > - The `//` pins to the beginning of the domain and matches the double slash following `http:` or `https:`.
+    >
+    > - The `\.` escapes dots in the domain name.
+    >
+    > - The `(:|\z)` matches the end of the domain name `(\z)` or a port separator `(:)`.
+
+3.  Save the file to apply the changes.
+
+</div>

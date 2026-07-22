@@ -1,0 +1,154 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can change the configuration of your VMware vSphere Cluster API machines by updating values in the Cluster API custom resource manifests.
+
+> [!IMPORTANT]
+> Managing machines with the Cluster API is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+>
+> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
+# Sample YAML for configuring VMware vSphere clusters
+
+The following example YAML files show configurations for a VMware vSphere cluster.
+
+## Sample YAML for a Cluster API machine template resource on VMware vSphere
+
+The machine template resource is provider-specific and defines the basic properties of the machines that a compute machine set creates. The compute machine set references this template when creating machines.
+
+``` yaml
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: VSphereMachineTemplate
+metadata:
+  name: <template_name>
+  namespace: openshift-cluster-api
+spec:
+  template:
+    spec:
+      template: <vm_template_name>
+      server: <vcenter_server_ip>
+      diskGiB: 128
+      cloneMode: linkedClone
+      datacenter: <vcenter_data_center_name>
+      datastore: <vcenter_datastore_name>
+      folder: <vcenter_vm_folder_path>
+      resourcePool: <vsphere_resource_pool>
+      numCPUs: 4
+      memoryMiB: 16384
+      network:
+        devices:
+        - dhcp4: true
+          networkName: "<vm_network_name>"
+```
+
+where:
+
+`kind`
+Specifies the machine template kind. This value must match the value for your platform.
+
+`metadata.name`
+Specifies a name for the machine template.
+
+`spec.template.spec`
+Specifies the details for your environment. The values here are examples.
+
+`spec.template.spec.template`
+Specifies the vSphere VM template to use, such as `user-5ddjd-rhcos`.
+
+`spec.template.spec.server`
+Specifies the vCenter server IP or fully qualified domain name.
+
+`spec.template.spec.cloneMode`
+Specifies the type of VM clone to use. The following values are valid:
+
+- `fullClone`
+
+- `linkedClone`
+
+When using the `linkedClone` type, the disk size matches the clone source instead of using the `diskGiB` value. For more information, see the vSphere documentation about VM clone types.
+
+`spec.template.spec.datacenter`
+Specifies the vCenter data center to deploy the compute machine set on.
+
+`spec.template.spec.datastore`
+Specifies the vCenter datastore to deploy the compute machine set on.
+
+`spec.template.spec.folder`
+Specifies the path to the vSphere VM folder in vCenter, such as `/dc1/vm/user-inst-5ddjd`.
+
+`spec.template.spec.resourcePool`
+Specifies the vSphere resource pool for your VMs.
+
+`spec.template.spec.network.devices.networkName`
+Specifies the vSphere VM network to deploy the compute machine set to. This VM network must be where other compute machines reside in the cluster.
+
+## Sample YAML for a Cluster API compute machine set resource on VMware vSphere
+
+The compute machine set resource defines additional properties of the machines that the resource creates. The compute machine set also references the cluster resource and machine template when creating machines.
+
+``` yaml
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachineSet
+metadata:
+  name: <machine_set_name>
+  namespace: openshift-cluster-api
+  labels:
+    cluster.x-k8s.io/cluster-name: <cluster_name>
+spec:
+  clusterName: <cluster_name>
+  replicas: 1
+  selector:
+    matchLabels:
+      test: example
+      cluster.x-k8s.io/cluster-name: <cluster_name>
+      cluster.x-k8s.io/set-name: <machine_set_name>
+  template:
+    metadata:
+      labels:
+        test: example
+        cluster.x-k8s.io/cluster-name: <cluster_name>
+        cluster.x-k8s.io/set-name: <machine_set_name>
+        node-role.kubernetes.io/<role>: ""
+    spec:
+      bootstrap:
+         dataSecretName: worker-user-data
+      clusterName: <cluster_name>
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+        kind: VSphereMachineTemplate
+        name: <template_name>
+      failureDomain:
+        - name: <failure_domain_name>
+          region: <region_a>
+          zone: <zone_a>
+          server: <vcenter_server_name>
+          topology:
+            datacenter: <region_a_data_center>
+            computeCluster: "</region_a_data_center/host/zone_a_cluster>"
+            resourcePool: "</region_a_data_center/host/zone_a_cluster/Resources/resource_pool>"
+            datastore: "</region_a_data_center/datastore/datastore_a>"
+            networks:
+            - port-group
+```
+
+where:
+
+`metadata.name`
+Specifies a name for the compute machine set. The cluster ID, machine role, and region form a typical pattern for this value in the following format: `<cluster_name>-<role>-<region>`.
+
+`metadata.labels.cluster.x-k8s.io/cluster-name`
+Specifies the cluster ID as the name of the cluster.
+
+`spec.clusterName`
+Specifies the cluster ID as the name of the cluster.
+
+`spec.template.spec.infrastructureRef.kind`
+Specifies the machine template kind. This value must match the value for your platform.
+
+`spec.template.spec.infrastructureRef.name`
+Specifies the machine template name.
+
+`spec.template.spec.failureDomain`
+Specifies the failure domain configuration details.
+
+> [!NOTE]
+> Using multiple regions and zones on a vSphere cluster that uses the Cluster API is not a validated configuration.

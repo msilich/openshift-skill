@@ -1,0 +1,191 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can create virtual machines (VMs) by importing operating system images from web pages.
+
+> [!IMPORTANT]
+> You must install the QEMU guest agent on VMs created from operating system images that are not provided by Red Hat.
+
+# Creating a VM from an image on a web page by using the web console
+
+You can create a virtual machine (VM) by importing an image from a web page by using the OpenShift Container Platform web console.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have access to the web page that contains the image.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Navigate to **Virtualization** → **Catalog** in the web console.
+
+2.  Click a template tile without an available boot source.
+
+3.  Click **Customize VirtualMachine**.
+
+4.  On the **Customize template parameters** page, expand **Storage** and select **URL (creates PVC)** from the **Disk source** list.
+
+5.  Enter the image URL. Example: `https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.9/x86_64/product-software`
+
+6.  Set the disk size.
+
+7.  Click **Next**.
+
+8.  Click **Create VirtualMachine**.
+
+</div>
+
+# Creating a VM from an image on a web page by using the CLI
+
+You can create a virtual machine (VM) from an image on a web page by using the command line.
+
+When the VM is created, the data volume with the image is imported into persistent storage.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have access credentials for the web page that contains the image.
+
+- You have installed the `virtctl` CLI.
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a `VirtualMachine` manifest for your VM and save it as a YAML file. For example, to create a minimal Red Hat Enterprise Linux (RHEL) VM from an image on a web page, run the following command:
+
+    ``` terminal
+    $ virtctl create vm --name vm-rhel-9 --instancetype u1.small --preference rhel.9 --volume-import type:http,url:https://example.com/rhel9.qcow2,size:10Gi
+    ```
+
+2.  Review the `VirtualMachine` manifest for your VM:
+
+    ``` yaml
+    apiVersion: kubevirt.io/v1
+    kind: VirtualMachine
+    metadata:
+      name: vm-rhel-9
+    spec:
+      dataVolumeTemplates:
+      - metadata:
+          name: imported-volume-6dcpf
+        spec:
+          source:
+            http:
+              url: https://example.com/rhel9.qcow2
+          storage:
+            resources:
+              requests:
+                storage: 10Gi
+      instancetype:
+        name: u1.small
+      preference:
+        name: rhel.9
+      runStrategy: Always
+      template:
+        spec:
+          domain:
+            devices: {}
+            resources: {}
+          terminationGracePeriodSeconds: 180
+          volumes:
+          - dataVolume:
+              name: imported-volume-6dcpf
+            name: imported-volume-6dcpf
+    ```
+
+    - `metadata.name` defines the VM name.
+
+    - `spec.dataVolumeTemplates.metadata.name` defines the data volume name.
+
+    - `spec.dataVolumeTemplates.spec.source.http.url` defines the URL of the image.
+
+    - `spec.dataVolumeTemplates.spec.storage.resources.requests.storage` defines the size of the storage requested for the data volume.
+
+    - `spec.instancetype.name` defines the instance type to use to control resource sizing of the VM.
+
+    - `spec.preference.name` defines the preference to use.
+
+3.  Create the VM by running the following command:
+
+    ``` terminal
+    $ oc create -f <vm_manifest_file>.yaml
+    ```
+
+    The `oc create` command creates the data volume and the VM. The CDI controller creates an underlying PVC with the correct annotation and the import process begins. When the import is complete, the data volume status changes to `Succeeded`. You can start the VM.
+
+    Data volume provisioning happens in the background, so there is no need to monitor the process.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  The importer pod downloads the image from the specified URL and stores it on the provisioned persistent volume. View the status of the importer pod:
+
+    ``` terminal
+    $ oc get pods
+    ```
+
+2.  Monitor the status of the data volume:
+
+    ``` terminal
+    $ oc get dv <data_volume_name>
+    ```
+
+    If the provisioning is successful, the data volume phase is `Succeeded`.
+
+    Example output:
+
+    ``` terminal
+    NAME                    PHASE       PROGRESS   RESTARTS   AGE
+    imported-volume-6dcpf   Succeeded   100.0%                18s
+    ```
+
+3.  Verify that provisioning is complete and that the VM has started by accessing its serial console:
+
+    ``` terminal
+    $ virtctl console <vm_name>
+    ```
+
+    If the VM is running and the serial console is accessible, the output looks as follows:
+
+    ``` terminal
+    Successfully connected to vm-rhel-9 console. The escape sequence is ^]
+    ```
+
+</div>
+
+# Additional resources
+
+- [Installing the QEMU guest agent](../managing_vms/virt-installing-qemu-guest-agent.md#virt-installing-qemu-guest-agent)

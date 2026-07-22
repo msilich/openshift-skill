@@ -1,0 +1,21 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+The following release notes track the development of the NBDE Tang Server Operator in OpenShift Container Platform.
+
+[RHEA-2023:7491](https://access.redhat.com/errata/RHEA-2023:7491)
+The NBDE Tang Server Operator 1.0 has been released in the Red Hat OpenShift Enterprise 4 catalog.
+
+[RHEA-2024:0854](https://access.redhat.com/errata/RHEA-2024:0854)
+The NBDE Tang Server Operator 1.0.1 has been moved from the `alpha` channel to the `stable` channel.
+
+[RHBA-2024:8681](https://access.redhat.com/errata/RHBA-2024:8681)
+The 1.0.2 update contains fixes that increase the Container Health Index of containers deployed with the NBDE Tang Server Operator to the highest grade.
+
+[RHEA-2024:10970](https://access.redhat.com/errata/RHEA-2024:10970)
+The 1.0.3 update contains changes that re-increase the Container Health Index to the highest grade.
+
+[RHBA-2025:0663](https://access.redhat.com/errata/RHBA-2025:0663)
+The NBDE Tang Server Operator 1.1 includes the `golang` package version 1.23.2 and the `golang.org/x/net/html` package version 0.33.0. The updates improve the Container Health Index.
+
+[RHBA-2025:4453](https://access.redhat.com/errata/RHBA-2025:4453)
+The 1.1.1 update provides a fix for [CVE-2025-22866](https://access.redhat.com/security/cve/cve-2025-22866).

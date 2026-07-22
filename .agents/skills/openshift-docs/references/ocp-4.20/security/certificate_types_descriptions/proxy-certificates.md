@@ -1,0 +1,168 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Proxy certificates allow platform components to trust custom certificate authorities when making egress connections. Understanding proxy certificates helps you configure secure external access for services that require custom certificate authority (CA) trust bundles.
+
+# Proxy certificate purpose
+
+Proxy certificates allow platform components to trust custom certificate authorities when making egress connections. Proxy certificates allow users to specify one or more custom certificate authority (CA) certificates used by platform components when making egress connections.
+
+The `trustedCA` field of the Proxy object is a reference to a config map that contains a user-provided trusted certificate authority (CA) bundle. This bundle is merged with the Red Hat Enterprise Linux CoreOS (RHCOS) trust bundle and injected into the `truststore` of platform components that make egress HTTPS calls. For example, `image-registry-operator` calls an external image registry to download images. If `trustedCA` is not specified, only the RHCOS trust bundle is used for proxied HTTPS connections. Provide custom CA certificates to the RHCOS trust bundle if you want to use your own certificate infrastructure.
+
+The `trustedCA` field should only be consumed by a proxy validator. The validator reads the certificate bundle from the required key `ca-bundle.crt`. The validator copies the bundle to a config map named `user-ca-bundle` in the `openshift-config-managed` namespace.
+
+``` yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-ca-bundle
+  namespace: openshift-config
+data:
+  ca-bundle.crt: |
+    -----BEGIN CERTIFICATE-----
+    Custom CA certificate bundle.
+    -----END CERTIFICATE-----
+```
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Configuring the cluster-wide proxy](../../networking/configuring_network_settings/enable-cluster-wide-proxy.md#enable-cluster-wide-proxy)
+
+</div>
+
+# Managing proxy certificates during installation
+
+Configure proxy-trusted CA certificates during OpenShift Container Platform installation using the `additionalTrustBundle` value in the installation program configuration.
+
+The `additionalTrustBundle` value of the installation program configuration is used to specify any proxy-trusted CA certificates during installation.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  View the installation program configuration file by running the following command:
+
+    ``` terminal
+    $ cat install-config.yaml
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    ...
+    proxy:
+      httpProxy: http://<username:password@proxy.example.com:123/>
+      httpsProxy: http://<username:password@proxy.example.com:123/>
+      noProxy: <123.example.com,10.88.0.0/16>
+    additionalTrustBundle: |
+        -----BEGIN CERTIFICATE-----
+       <MY_HTTPS_PROXY_TRUSTED_CA_CERT>
+        -----END CERTIFICATE-----
+    ...
+    ```
+
+    </div>
+
+    > [!NOTE]
+    > Proxy certificates are managed by the system and not by users.
+
+</div>
+
+# Proxy certificate location
+
+The user-provided trust bundle is mounted into the file system of platform components that make egress HTTPS calls.
+
+The user-provided trust bundle is represented as a config map. The config map is mounted into the file system of platform components that make egress HTTPS calls. Typically, Operators mount the config map to `/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem`, but mounting the config map is not required by the proxy. A proxy can modify or inspect the HTTPS connection. In either case, the proxy must generate and sign a new certificate for the connection.
+
+Complete proxy support means connecting to the specified proxy and trusting any signatures the trust bundle has generated. Therefore, it is necessary to let the user specify a trusted root, such that any certificate chain connected to that trusted root is also trusted.
+
+If you use the RHCOS trust bundle, place CA certificates in `/etc/pki/ca-trust/source/anchors`.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Using shared system certificates](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/securing_networks/using-shared-system-certificates)
+
+</div>
+
+# Proxy certificate expiration
+
+The CA administrator configures the expiration term for proxy certificates before they can be used by OpenShift Container Platform or RHCOS.
+
+The user sets the expiration term of the user-provided trust bundle.
+
+The default expiration term is defined by the CA certificate itsself. The CA administrator must configure the default expiration term for the certificate before the certificate can be used by OpenShift Container Platform or RHCOS.
+
+> [!NOTE]
+> Red Hat does not monitor when CAs expire. Due to the long life of the CAs, this is generally not an issue. However, you might need to periodically update the trust bundle.
+
+# Services using proxy certificates
+
+Platform components and services running on RHCOS nodes can use proxy certificates to establish trusted egress HTTPS connections.
+
+By default, all platform components that make egress HTTPS calls use the RHCOS trust bundle. If `trustedCA` is defined, the trust certificate is also used.
+
+Any service that is running on the RHCOS node is able to use the trust bundle of the node.
+
+# Proxy certificate customization
+
+Update proxy certificates by modifying the config map referenced by `trustedCA` or by using machine configs to write CA certificates to the RHCOS trust bundle.
+
+Updating the user-provided trust bundle consists of completing one of the following tasks:
+
+- Updating the PEM-encoded certificates in the config map referenced by `trustedCA`
+
+- Creating a config map in the namespace `openshift-config` that contains the new trust bundle and updating `trustedCA` to reference the name of the new config map.
+
+The mechanism for writing CA certificates to the RHCOS trust bundle is exactly the same as writing any other file to RHCOS, which is done through the use of machine configs. When the Machine Config Operator (MCO) applies the new machine config that contains the new CA certificates, the MCO runs the `update-ca-trust` program and restarts the CRI-O service on the RHCOS nodes. This update does not require a node reboot. Restarting the CRI-O service automatically updates the trust bundle with the new CA certificates. For example:
+
+``` yaml
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: worker
+  name: 50-examplecorp-ca-cert
+spec:
+  config:
+    ignition:
+      version: 3.1.0
+    storage:
+      files:
+      - contents:
+          source: data:text/plain;charset=utf-8;base64,<base64_encoded_ca_certificate>
+        mode: 0644
+        overwrite: true
+        path: /etc/pki/ca-trust/source/anchors/examplecorp-ca.crt
+```
+
+The `truststore` of machines must also support updating the `truststore` of nodes.
+
+# Proxy certificate renewal
+
+No Operators can auto-renew proxy certificates on RHCOS nodes. You might need to periodically update the trust bundle manually.
+
+There are no Operators that can auto-renew certificates on the RHCOS nodes.
+
+> [!NOTE]
+> Red Hat does not monitor when CAs expire. Due to the long life of CAs, this is generally not an issue. However, you might need to periodically update the trust bundle.

@@ -1,0 +1,54 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can remove a cluster that you deployed to Nutanix.
+
+# Removing a cluster that uses installer-provisioned infrastructure
+
+To remove an OpenShift Container Platform cluster that uses installer-provisioned infrastructure, you can run the installation program destroy command. Use the installation files from your original deployment to uninstall the cluster from your cloud platform.
+
+> [!NOTE]
+> After uninstallation, check your cloud provider for any resources that were not removed properly, especially with user-provisioned infrastructure clusters. Some resources might exist because either the installation program did not create the resource or could not access the resource.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have a copy of the installation program that you used to deploy the cluster.
+
+- You have the files that the installation program generated when you created your cluster.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  From the directory that has the installation program on the computer that you used to install the cluster, run the following command:
+
+    ``` terminal
+    $ ./openshift-install destroy cluster \
+    --dir <installation_directory> --log-level info
+    ```
+
+    where:
+
+    `<installation_directory>`
+    Specify the path to the directory that you stored the installation files in.
+
+    `--log-level info`
+    To view different details, specify `warn`, `debug`, or `error` instead of `info`.
+
+    > [!NOTE]
+    > You must specify the directory that includes the cluster definition files for your cluster. The installation program requires the `metadata.json` file in this directory to delete the cluster.
+
+2.  Optional: Delete the `<installation_directory>` directory and the OpenShift Container Platform installation program.
+
+</div>

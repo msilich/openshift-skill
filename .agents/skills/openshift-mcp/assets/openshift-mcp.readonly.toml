@@ -1,0 +1,37 @@
+# Read-only MCP process using a dedicated, least-privilege ServiceAccount kubeconfig.
+# Pass the kubeconfig explicitly with --kubeconfig; the OpenCode template uses
+# OPENSHIFT_MCP_READ_KUBECONFIG so this TOML contains no machine-specific path.
+# Source baseline: openshift/openshift-mcp-server@a0a1c370fcce18f76cecdbb2e07d8f4dbafe92dd
+
+cluster_provider_strategy = "disabled"
+read_only = true
+disable_destructive = true
+validation_enabled = true
+list_output = "table"
+toolsets = ["core"]
+
+# OpenCode currently has no MCP elicitation support. Keep rules empty; this
+# fallback only makes any future confirmation rule fail closed.
+confirmation_fallback = "deny"
+
+enabled_tools = [
+  "events_list",
+  "namespaces_list",
+  "projects_list",
+  "nodes_log",
+  "nodes_stats_summary",
+  "nodes_top",
+  "pods_list",
+  "pods_list_in_namespace",
+  "pods_get",
+  "pods_top",
+  "pods_log",
+  "resources_list",
+  "resources_get",
+]
+
+server_instructions = """
+Use this server only for read-only OpenShift inspection and diagnosis. Keep the
+cluster, namespace, API version, kind, and name explicit. Stop before Secret
+access until the user chooses the per-task Secret policy.
+"""

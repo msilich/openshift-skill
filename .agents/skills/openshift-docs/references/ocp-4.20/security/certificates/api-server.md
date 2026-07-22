@@ -1,0 +1,182 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To allow clients outside of the cluster to verify the API server’s certificate, you can replace the default API server certificate with one that is issued by a CA that clients trust.
+
+By default, the API server certificate is issued by an internal OpenShift Container Platform cluster CA. As a result, clients outside of the cluster cannot verify the API server’s certificate.
+
+> [!NOTE]
+> In hosted control plane clusters, you can add as many custom certificates to your Kubernetes API Server as you need. However, do not add a certificate for the endpoint that worker nodes use to communicate with the control plane. For more information, see [Configuring a custom API server certificate in a hosted cluster](../../hosted_control_planes/hcp-deploy/hcp-deploy-bm.md#hcp-custom-cert_hcp-deploy-bm).
+
+# Adding an API server named certificate for the first time
+
+The default API server certificate is issued by an internal OpenShift Container Platform cluster Certificate Authority (CA). You can add alternative certificates that the API server will return based on the fully qualified domain name (FQDN) requested by the client, for example when a reverse proxy or load balancer is used.
+
+> [!NOTE]
+> Adding a custom API server named certificate for the first time triggers the `kube-apiserver-operator` to roll out a new revision of the API server pods. Node reboots are not required.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have a certificate for the FQDN and its corresponding private key. Each should be in a separate PEM format file.
+
+- The private key must be unencrypted.
+
+- The certificate must include the `subjectAltName` extension showing the FQDN.
+
+- The certificate file can contain one or more certificates in a chain. The certificate for the API server FQDN must be the first certificate in the file, followed by intermediate certificates, and ending with the root CA certificate.
+
+</div>
+
+> [!WARNING]
+> Do not provide a named certificate for the internal load balancer (host name `api-int.<cluster_name>.<base_domain>`). Doing so will leave your cluster in a degraded state.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Log in to the CLI as the `kubeadmin` user:
+
+    ``` terminal
+    $ oc login -u kubeadmin -p <password> https://<fqdn>:6443
+    ```
+
+    where:
+
+    `<password>`
+    Specifies your cluster administrative password.
+
+    `<fqdn>`
+    Specifies the fully qualified domain name of the internal cluster API endpoint.
+
+2.  Create a secret that contains the certificate chain and private key in the `openshift-config` namespace:
+
+    ``` terminal
+    $ oc create secret tls <secret_name> \
+         --cert=<path_to_certificate_file> \
+         --key=<path_to_private_key_file> \
+         -n openshift-config
+    ```
+
+    where:
+
+    `<secret_name>`
+    Specifies the name of the new secret resource that will contain the cryptographic key pair.
+
+    `<path_to_certificate_file>`
+    Specifies the absolute local path to your custom certificate chain file.
+
+    `<path_to_private_key_file>`
+    Specifies the absolute local path to the unencrypted private key file associated with the certificate.
+
+3.  Update the API server to reference the created secret resource:
+
+    ``` terminal
+    $ oc patch apiserver cluster --type=merge -p '
+    {
+      "spec": {
+        "servingCerts": {
+          "namedCertificates": [
+            {
+              "names": ["<fqdn>"],
+              "servingCertificate": {
+                "name": "<secret_name>"
+              }
+            }
+          ]
+        }
+      }
+    }'
+    ```
+
+    where:
+
+    `<fqdn>`
+    Specifies the fully qualified domain name for which the API server serves this custom certificate. Do not include a port number.
+
+    `<secret_name>`
+    Specifies the name of the secret you created in the previous step.
+
+4.  Verify that a new revision of the Kubernetes API server rolls out by checking the operator status:
+
+    ``` terminal
+    $ oc get clusteroperators kube-apiserver
+    ```
+
+    > [!NOTE]
+    > The `PROGRESSING` status column will change to `True` while the API server operator deploys the new pod revision configured with your custom certificate. Do not interrupt the process or apply additional configuration updates while the rollout is underway. Continue only after the status returns to `False` and `AVAILABLE` reads `True`.
+
+</div>
+
+# Updating or renewing an existing API server named certificate
+
+Update or renew an expired or expiring named certificate that has already been configured in your cluster to avoid API availability issues. The API server pods dynamically detect and reload the updated certificate asset without disruption.
+
+> [!NOTE]
+> When an existing API server named certificate is renewed by updating its corresponding secret, a new revision of the Kubernetes API server pods does not roll out. Node reboots are not required.
+
+> [!WARNING]
+> If the renewed certificate is signed by a different root CA than the previous certificate, internal applications or custom pods that communicate with the API server might encounter X509 certificate validation errors. If these client workloads do not automatically hot-reload their truststores, you must manually restart them to force them to pick up the new certificate chain.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have the renewed certificate chain and private key files in PEM format.
+
+- The secret containing the old certificate already exists in the `openshift-config` namespace and is actively referenced by the `apiserver/cluster` configuration.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Log in to the CLI as the `kubeadmin` user.
+
+2.  Update the existing secret resource in the `openshift-config` namespace with the newly issued certificate and private key:
+
+    ``` terminal
+    $ oc create secret tls <existing_secret_name> \
+         --cert=<path_to_new_cert>.crt \
+         --key=<path_to_new_key>.key \
+         -n openshift-config \
+         --dry-run=client -o yaml | oc replace -f -
+    ```
+
+    where:
+
+    `<existing_secret_name>`
+    Specifies the target name of the existing active secret that you are replacing.
+
+    `<path_to_new_cert>.crt`
+    Specifies the absolute local file system path to the renewed certificate chain file.
+
+    `<path_to_new_key>.key`
+    Specifies the absolute local file system path to the corresponding unencrypted private key file.
+
+3.  Verify that the `kube-apiserver` pods successfully hot-reload the updated assets without initiating a new cluster deployment revision:
+
+    ``` terminal
+    $ oc get clusteroperators kube-apiserver
+    ```
+
+    Confirm that the `PROGRESSING` status column remains `False`. If the status changes to `True`, verify that your underlying `apiserver/cluster` resource parameters were not modified structural layout changes during the substitution.
+
+</div>

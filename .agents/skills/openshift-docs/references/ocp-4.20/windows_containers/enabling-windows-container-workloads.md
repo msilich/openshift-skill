@@ -1,0 +1,809 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Before adding Windows workloads to your cluster, you must install the Windows Machine Config Operator (WMCO), which is available in the OpenShift Container Platform software catalog. The WMCO orchestrates the process of deploying and managing Windows workloads on a cluster.
+
+> [!NOTE]
+> Dual NIC is not supported on WMCO-managed Windows instances.
+
+# Prerequisites
+
+- You have access to an OpenShift Container Platform cluster using an account with `cluster-admin` permissions.
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You have installed your cluster using one of the following infrastructures:
+
+  - Any installer-provisioned infrastructure
+
+  - A user-provisioned infrastructure with the `platform: none` field set in your `install-config.yaml` file
+
+- You have configured hybrid networking with OVN-Kubernetes for your cluster. For more information, see "Configuring hybrid networking".
+
+- You are running an OpenShift Container Platform cluster version 4.6.8 or later.
+
+> [!NOTE]
+> Windows instances deployed by the WMCO are configured with the containerd container runtime. Because WMCO installs and manages the runtime, it is recommended that you do not manually install containerd on nodes.
+
+For the comprehensive prerequisites for the Windows Machine Config Operator, see "Windows Machine Config Operator prerequisites".
+
+# Installing the Windows Machine Config Operator
+
+You can install the Windows Machine Config Operator using either the web console or OpenShift CLI (`oc`).
+
+> [!NOTE]
+> Due to a limitation within the Windows operating system, `clusterNetwork` CIDR addresses of class E, such as `240.0.0.0`, are not compatible with Windows nodes.
+
+## Installing the Windows Machine Config Operator using the web console
+
+You can use the OpenShift Container Platform web console to install the Windows Machine Config Operator (WMCO).
+
+> [!NOTE]
+> Dual NIC is not supported on WMCO-managed Windows instances.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  From the **Administrator** perspective in the OpenShift Container Platform web console, navigate to the **Ecosystem** → **Software Catalog** page.
+
+2.  Use the **Filter by keyword** box to search for `Windows Machine Config Operator` in the catalog. Click the **Windows Machine Config Operator** tile.
+
+3.  Review the information about the Operator and click **Install**.
+
+4.  On the **Install Operator** page:
+
+    1.  Select the **stable** channel as the **Update Channel**. The **stable** channel enables the latest stable release of the WMCO to be installed.
+
+    2.  The **Installation Mode** is preconfigured because the WMCO must be available in a single namespace only.
+
+    3.  Choose the **Installed Namespace** for the WMCO. The default Operator recommended namespace is `openshift-windows-machine-config-operator`.
+
+    4.  Click the **Enable Operator recommended cluster monitoring on the Namespace** checkbox to enable cluster monitoring for the WMCO.
+
+    5.  Select an **Approval Strategy**.
+
+        - The **Automatic** strategy allows Operator Lifecycle Manager (OLM) to automatically update the Operator when a new version is available.
+
+        - The **Manual** strategy requires a user with appropriate credentials to approve the Operator update.
+
+5.  Click **Install**. The WMCO is now listed on the **Installed Operators** page.
+
+    > [!NOTE]
+    > The WMCO is installed automatically into the namespace you defined, such as `openshift-windows-machine-config-operator`.
+
+6.  Verify that the **Status** shows **Succeeded** to confirm successful installation of the WMCO.
+
+</div>
+
+## Installing the Windows Machine Config Operator using the CLI
+
+You can use the OpenShift CLI (`oc`) to install the Windows Machine Config Operator (WMCO).
+
+> [!NOTE]
+> Dual NIC is not supported on WMCO-managed Windows instances.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a namespace for the WMCO.
+
+    1.  Create a `Namespace` object YAML file for the WMCO. For example, `wmco-namespace.yaml`:
+
+        ``` yaml
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: openshift-windows-machine-config-operator
+          labels:
+            openshift.io/cluster-monitoring: "true"
+        ```
+
+        where
+
+        `metadata.name`
+        Specifies the namespace to create the secret. You should deploy the WMCO in the `openshift-windows-machine-config-operator` namespace.
+
+        `metadata.labels`
+        Specifies the label required for enabling cluster monitoring for the WMCO.
+
+    2.  Create the namespace:
+
+        ``` terminal
+        $ oc create -f <file-name>.yaml
+        ```
+
+        For example:
+
+        ``` terminal
+        $ oc create -f wmco-namespace.yaml
+        ```
+
+2.  Create the Operator group for the WMCO.
+
+    1.  Create an `OperatorGroup` object YAML file. For example, `wmco-og.yaml`:
+
+        ``` yaml
+        apiVersion: operators.coreos.com/v1
+        kind: OperatorGroup
+        metadata:
+          name: windows-machine-config-operator
+          namespace: openshift-windows-machine-config-operator
+        spec:
+          targetNamespaces:
+          - openshift-windows-machine-config-operator
+        ```
+
+    2.  Create the Operator group:
+
+        ``` terminal
+        $ oc create -f <file-name>.yaml
+        ```
+
+        For example:
+
+        ``` terminal
+        $ oc create -f wmco-og.yaml
+        ```
+
+3.  Subscribe the namespace to the WMCO.
+
+    1.  Create a `Subscription` object YAML file. For example, `wmco-sub.yaml`:
+
+        ``` yaml
+        apiVersion: operators.coreos.com/v1alpha1
+        kind: Subscription
+        metadata:
+          name: windows-machine-config-operator
+          namespace: openshift-windows-machine-config-operator
+        spec:
+          channel: "stable"
+          installPlanApproval: "Automatic"
+          name: "windows-machine-config-operator"
+          source: "redhat-operators"
+          sourceNamespace: "openshift-marketplace"
+        ```
+
+        where:
+
+        `spec.channel`
+        Specifies `stable` as the channel.
+
+        `spec.installPlanApproval`
+        Specifies an approval strategy. You can set `Automatic` or `Manual`.
+
+        `spec.source`
+        Specifies the `redhat-operators` catalog source, which contains the `windows-machine-config-operator` package manifests. If your OpenShift Container Platform is installed on a restricted network, also known as a disconnected cluster, specify the name of the `CatalogSource` object you created when you configured the Operator LifeCycle Manager (OLM).
+
+        `spec.sourceNamespace`
+        Specifies the namespace of the catalog source. Use `openshift-marketplace` for the default software catalog sources.
+
+    2.  Create the subscription:
+
+        ``` terminal
+        $ oc create -f <file-name>.yaml
+        ```
+
+        For example:
+
+        ``` terminal
+        $ oc create -f wmco-sub.yaml
+        ```
+
+        The WMCO is now installed to the `openshift-windows-machine-config-operator`.
+
+4.  Verify the WMCO installation:
+
+    ``` terminal
+    $ oc get csv -n openshift-windows-machine-config-operator
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME                                    DISPLAY                           VERSION   REPLACES   PHASE
+    windows-machine-config-operator.2.0.0   Windows Machine Config Operator   2.0.0                Succeeded
+    ```
+
+    </div>
+
+</div>
+
+# Configuring a secret for the Windows Machine Config Operator
+
+Before you can use the Windows Machine Config Operator (WMCO), you must create a secret in the same WMCO namespace as your private key.
+
+This secret is required to allow the WMCO to communicate with the Windows virtual machine (VM). Use a different private key than the one used when installing the cluster.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You installed the Windows Machine Config Operator (WMCO) using Operator Lifecycle Manager (OLM).
+
+- You created a PEM-encoded file containing a private key by using a strong algorithm, such as ECDSA.
+
+  If you created the key pair on a Red Hat Enterprise Linux (RHEL) system, before you can use the public key on a Windows system, make sure the public key is saved using ASCII encoding. For example, the following PowerShell command copies a public key, encoding it for the ASCII character set:
+
+  ``` terminal
+  C:\> echo "ssh-rsa <ssh_pub_key>" | Out-File <ssh_key_path> -Encoding ascii
+  ```
+
+  where:
+
+  `<ssh_pub_key>`
+  Specifies the SSH public key used to access the cluster.
+
+  `<ssh_key_path>`
+  Specifies the path to the SSH public key.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Define the secret required to access the Windows VMs:
+
+  ``` terminal
+  $ oc create secret generic cloud-private-key --from-file=private-key.pem=${HOME}/.ssh/<key> \
+      -n openshift-windows-machine-config-operator
+  ```
+
+  You must create the private key in the WMCO namespace, such as `openshift-windows-machine-config-operator`.
+
+</div>
+
+# Configuring debug-level logging for the Windows Machine Config Operator
+
+You can edit the WMCO `Subscription` object to change the Windows Machine Config Operator (WMCO) log level to `debug`, if you need more verbose output.
+
+By default, the WMCO is configured to use the `info` log level.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit the `windows-machine-config-operator` subscription in the `windows-machine-config-operator` namespace by using the following command:
+
+    ``` terminal
+    $ oc edit subscription windows-machine-config-operator -n openshift-windows-machine-config-operator
+    ```
+
+2.  Add the follwing parameters to the `.spec.config.env` stanza:
+
+    ``` yaml
+    apiVersion: operators.coreos.com/v1alpha1
+    kind: Subscription
+    # ...
+      name: windows-machine-config-operator
+      namespace: openshift-windows-machine-config-operator
+    # ...
+    spec:
+    # ...
+      config:
+        env:
+        - name: ARGS
+          value: --debugLogging
+    ```
+
+    where:
+
+    `spec.config.env.name`
+    Specifies a list of environment variables that must exist in all containers in the pod.
+
+    `spec.config.env.value`
+    Specifies the `debug` level of verbosity for log messages.
+
+    You can revert to the default `info` log level by removing the `name` and `value` parameters that you added.
+
+</div>
+
+# Using Windows containers in a proxy-enabled cluster
+
+You can add Windows nodes and run workloads in a proxy-enabled cluster because Windows Machine Config Operator (WMCO) can consume and use the cluster-wide egress proxy when making external requests outside the cluster’s internal network.
+
+Because of the support for the cluster-wide egress proxy, your Windows nodes can pull images from registries that are secured behind your proxy server or to make requests to off-cluster services and services that use a custom public key infrastructure.
+
+> [!NOTE]
+> The cluster-wide proxy affects system components only, not user workloads.
+
+In proxy-enabled clusters, the WMCO is aware of the `NO_PROXY`, `HTTP_PROXY`, and `HTTPS_PROXY` values that are set for the cluster. The WMCO periodically checks whether the proxy environment variables have changed. If there is a discrepancy, the WMCO reconciles and updates the proxy environment variables on the Windows instances.
+
+Windows workloads created on Windows nodes in proxy-enabled clusters do not inherit proxy settings from the node by default, the same as with Linux nodes. Also, by default PowerShell sessions do not inherit proxy settings on Windows nodes in proxy-enabled clusters.
+
+For more information on the cluster-wide proxy, see "Configuring the cluster-wide proxy".
+
+# Using Windows containers with a mirror registry
+
+When using the Windows Machine Config Operator (WMCO), your Windows workloads can pull images from a registry mirror rather than from a public registry by using an `ImageDigestMirrorSet` (IDMS) or `ImageTagMirrorSet` (ITMS) object to configure your cluster to pull images from the mirror registry.
+
+A mirror registry has the following benefits:
+
+- Avoids public registry outages
+
+- Speeds up node and pod creation
+
+- Pulls images from behind your organization’s firewall
+
+A mirror registry can also be used with a OpenShift Container Platform cluster in a disconnected, or air-gapped, network. A *disconnected network* is a restricted network without direct internet connectivity. Because the cluster does not have access to the internet, any external container images cannot be referenced.
+
+Using a mirror registry requires the following general steps:
+
+- Create the mirror registry, using a tool such as Red Hat Quay.
+
+- Create a container image registry credentials file.
+
+- Copy the images from your online image repository to your mirror registry.
+
+For information about these steps, see "About disconnected installation mirroring."
+
+After creating the mirror registry and mirroring the images, you can use an `ImageDigestMirrorSet` (IDMS) or `ImageTagMirrorSet` (ITMS) object to configure your cluster to pull images from the mirror registry without needing to update each of your pod specs. The IDMS and ITMS objects redirect requests to pull images from a repository on a source image registry and have it resolved by the mirror repository instead.
+
+If changes are made to the IDMS or ITMS object, the WMCO automatically updates the appropriate `hosts.toml` file on your Windows nodes with the new information. Note that the WMCO sequentially updates each Windows node when mirror settings are changed. As such, the time required for these updates increases with the number of Windows nodes in the cluster.
+
+Because Windows nodes configured by the WMCO rely on the containerd container runtime, the WMCO ensures that the containerd configuration files are up-to-date with the registry settings. For new nodes, these files are copied to the instances upon creation. For existing nodes, after activating the mirror registry, the registry controller uses SSH to access each node and copy the generated configuration files, replacing any existing files.
+
+You can use a mirror registry with machine set or Bring-Your-Own-Host (BYOH) Windows nodes.
+
+When using an IDMS or ITMS object to mirror container images on Windows nodes, take note of the following behaviors that differ from Linux nodes:
+
+- Mirroring on Windows nodes works on the registry level, rather than on the image level used by Linux nodes. As such, Windows images mirrored by using IDMS or ITMS objects have specific naming requirements.
+
+  The final portion of the namespace and the image name of the mirror image must match the image being mirrored. For example, when mirroring the `mcr.microsoft.com/oss/kubernetes/pause:3.9` image, the mirror must be in the `$mirrorRegistry/<organization>/oss/kubernetes/pause:3.9` format, where `$org` can be any organization name or namespace or excluded entirely. Some valid values are `$mirrorRegistry/oss/kubernetes/pause:3.9`, `$mirrorRegistry/custom/oss/kubernetes/pause:3.9`, and `$mirrorRegistry/x/y/z/oss/kubernetes/pause:3.9`.
+
+- A Windows node takes the ITMS object and uses it to configure registry-wide mirrors. In the following example, configuring `quay.io/remote-org/image` to mirror to `quay.io/my-org/image` results in the Windows node using that mirror for all images from `quay.io/remote-org`. As such, `quay.io/remote-org/image:tag` uses the `quay.io/my-org/image:tag` image, as expected, but another container using `quay.io/remote-org/different-image:tag` would also try to use the `quay.io/remote-org/different-image:tag` mirror. This can cause unintended behavior if it is not accounted for.
+
+  For this reason, specify container images using a digest by an IDMS object instead of an ITMS object. Using a digest can prevent the wrong container image from being used, by ensuring that the image the container specifies and the image being pulled have the same digest.
+
+## Understanding image registry repository mirroring
+
+You must mirror images to update clusters in disconnected environments.
+
+By setting up container registry repository mirroring, you can perform the following tasks:
+
+- Configure your OpenShift Container Platform cluster to redirect requests to pull images from a repository on a source image registry and have it resolved by a repository on a mirrored image registry.
+
+- Identify multiple mirrored repositories for each target repository, to make sure that if one mirror is down, another can be used.
+
+Repository mirroring in OpenShift Container Platform includes the following attributes:
+
+- Image pulls are resilient to registry downtimes.
+
+- Clusters in disconnected environments can pull images from critical locations, such as `quay.io`, and have registries behind a company firewall provide the requested images.
+
+- A particular order of registries is tried when an image pull request is made, with the permanent registry typically being the last one tried.
+
+- The mirror information you enter is added to the appropriate `hosts.toml` containerd configuration file(s) on every Windows node in the OpenShift Container Platform cluster.
+
+- When a node makes a request for an image from the source repository, it tries each mirrored repository in turn until it finds the requested content. If all mirrors fail, the cluster tries the source repository. If successful, the image is pulled to the node.
+
+You can set up repository mirroring in the following ways:
+
+- At OpenShift Container Platform installation:
+
+  By pulling container images needed by OpenShift Container Platform and then bringing those images behind your company’s firewall, you can install OpenShift Container Platform into a data center that is in a disconnected environment.
+
+- After OpenShift Container Platform installation:
+
+  If you did not configure mirroring during OpenShift Container Platform installation, you can do so postinstallation by using any of the following custom resource (CR) objects:
+
+  - `ImageDigestMirrorSet` (IDMS). This object allows you to pull images from a mirrored registry by using digest specifications. The IDMS CR enables you to set a fall back policy that allows or stops continued attempts to pull from the source registry if the image pull fails.
+
+  - `ImageTagMirrorSet` (ITMS). This object allows you to pull images from a mirrored registry by using image tags. The ITMS CR enables you to set a fall back policy that allows or stops continued attempts to pull from the source registry if the image pull fails.
+
+Each of these custom resource objects identify the following information:
+
+- The source of the container image repository you want to mirror.
+
+- A separate entry for each mirror repository you want to offer the content
+
+Note the following actions and how they affect node drain behavior:
+
+- If you create an IDMS or ICSP CR object, the MCO does not drain or reboot the node.
+
+- If you create an ITMS CR object, the MCO drains and reboots the node.
+
+- If you delete an ITMS or IDMS CR object, the MCO drains and reboots the node.
+
+- If you modify an ITMS or IDMS CR object, the MCO drains and reboots the node.
+
+The Windows Machine Config Operator (WMCO) watches for changes to the IDMS and ITMS resources and generates a set of `hosts.toml` containerd configuration files, one file for each source registry, with those changes. The WMCO then updates any existing Windows nodes to use the new registry configuration.
+
+> [!NOTE]
+> The IDMS and ITMS objects must be created before you can add Windows nodes using a mirrored registry.
+
+## Configuring image registry repository mirroring
+
+You can create postinstallation mirror configuration custom resources (CR) to redirect image pull requests from a source image registry to a mirrored image registry.
+
+> [!IMPORTANT]
+> Windows images mirrored through `ImageDigestMirrorSet` and `ImageTagMirrorSet` objects have specific naming requirements as described in "Using Windows containers with a mirror registry".
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Access to the cluster as a user with the `cluster-admin` role.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Configure mirrored repositories, by either:
+
+    - Setting up a mirrored repository with Red Hat Quay. You can copy images from one repository to another and also automatically sync those repositories repeatedly over time by using Red Hat Quay.
+
+      - [Red Hat Quay Repository Mirroring](https://docs.redhat.com/en/documentation/red_hat_quay/3/html/manage_red_hat_quay/arch-mirroring-intro#enabling-repository-mirroring-quay)
+
+    - Using a tool such as `skopeo` to copy images manually from the source repository to the mirrored repository.
+
+      For example, after installing the skopeo RPM package on a {op-system-base-full system}, use the `skopeo` command as shown in the following example:
+
+      ``` terminal
+      $ skopeo copy --all \
+      docker://registry.access.redhat.com/ubi9/ubi-minimal:latest@sha256:5cf... \
+      docker://example.io/example/ubi-minimal
+      ```
+
+      In this example, you have a container image registry named `example.io` and image repository named `example`. You want to copy the `ubi9/ubi-minimal` image from `registry.access.redhat.com` to `example.io`. After you create the mirrored registry, you can configure your OpenShift Container Platform cluster to redirect requests made to the source repository to the mirrored repository.
+
+    > [!IMPORTANT]
+    > You must mirror the `mcr.microsoft.com/oss/kubernetes/pause:3.9` image. For example, you could use the following `skopeo` command to mirror the image:
+    >
+    > ``` terminal
+    > $ skopeo copy \
+    > docker://mcr.microsoft.com/oss/kubernetes/pause:3.9\
+    > docker://example.io/oss/kubernetes/pause:3.9
+    > ```
+
+2.  Log in to your OpenShift Container Platform cluster.
+
+3.  Create an `ImageDigestMirrorSet` or `ImageTagMirrorSet` CR, as needed, replacing the source and mirrors with your own registry and repository pairs and images:
+
+    ``` yaml
+    apiVersion: config.openshift.io/v1
+    kind: ImageDigestMirrorSet
+    metadata:
+      name: ubi9repo
+    spec:
+      imageDigestMirrors:
+      - mirrors:
+        - example.io/example/ubi-minimal
+        - example.com/example2/ubi-minimal
+        source: registry.access.redhat.com/ubi9/ubi-minimal
+        mirrorSourcePolicy: AllowContactingSource
+      - mirrors:
+        - mirror.example.com
+        source: registry.redhat.io
+        mirrorSourcePolicy: NeverContactSource
+      - mirrors:
+        - docker.io
+        source: docker-mirror.internal
+        mirrorSourcePolicy: AllowContactingSource
+    ```
+
+4.  Create the new object by running the following command:
+
+    ``` terminal
+    $ oc create -f registryrepomirror.yaml
+    ```
+
+5.  To check that the mirrored configuration settings are applied, do the following on one of the nodes.
+
+    1.  List your nodes:
+
+        ``` terminal
+        $ oc get node
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` terminal
+        NAME                           STATUS                     ROLES    AGE  VERSION
+        worker-1.compute.local         Ready                      worker   7m   v1.35.4
+        master-1.compute.local         Ready                      master   11m  v1.35.4
+        master-2.compute.local         Ready                      master   11m  v1.35.4
+        worker-2.compute.local         Ready                      worker   7m   v1.35.4
+        worker-3.compute.local         Ready                      worker   7m   v1.35.4
+        master-3.compute.local         Ready                      master   11m  v1.35.4
+        ```
+
+        </div>
+
+    2.  Start the debugging process to access the node:
+
+        ``` terminal
+        $ oc debug node/worker-1.compute.local
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` terminal
+        Starting pod/worker-1.compute.local-debug ...
+        To use host binaries, run `chroot /host`
+        ```
+
+        </div>
+
+    3.  Change your root directory to `/host`:
+
+        ``` terminal
+        sh-4.2# chroot /host
+        ```
+
+    4.  Check that the WMCO generated a `hosts.toml` file for each registry on each Windows instance. For the previous example IDMS object, there should be three files in the following file structure:
+
+        ``` terminal
+        $ tree $config_path
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` terminal
+        C:/k/containerd/registries/
+        |── registry.access.redhat.com
+        |   └── hosts.toml
+        |── mirror.example.com
+        |   └── hosts.toml
+        └── docker.io
+            └── hosts.toml:
+        ```
+
+        </div>
+
+        The following output represents a `hosts.toml` containerd configuration file where the previous example IDMS object was applied.
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example host.toml files
+
+        </div>
+
+        ``` terminal
+        $ cat "$config_path"/registry.access.redhat.com/host.toml
+        server = "https://registry.access.redhat.com" # default fallback server since "AllowContactingSource" mirrorSourcePolicy is set
+
+        [host."https://example.io/example/ubi-minimal"]
+         capabilities = ["pull"]
+
+        [host."https://example.com/example2/ubi-minimal"] # secondary mirror
+         capabilities = ["pull"]
+
+        $ cat "$config_path"/registry.redhat.io/host.toml
+        # "server" omitted since "NeverContactSource" mirrorSourcePolicy is set
+
+        [host."https://mirror.example.com"]
+         capabilities = ["pull"]
+
+        $ cat "$config_path"/docker.io/host.toml
+        server = "https://docker.io"
+
+        [host."https://docker-mirror.internal"]
+         capabilities = ["pull", "resolve"] # resolve tags
+        ```
+
+        </div>
+
+    5.  Pull an image to the node from the source and check if it is resolved by the mirror.
+
+        ``` terminal
+        sh-4.2# podman pull --log-level=debug registry.access.redhat.com/ubi9/ubi-minimal@sha256:5cf...
+        ```
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Troubleshooting
+
+</div>
+
+If the repository mirroring procedure does not work as described, use the following information about how repository mirroring works to help troubleshoot the problem:
+
+</div>
+
+- The first working mirror is used to supply the pulled image.
+
+- The main registry is only used if no other mirror works.
+
+- From the system context, the `Insecure` flags are used as fallback.
+
+# Rebooting a node gracefully
+
+You can perform a graceful restart of a node, where all workloads are moved to other nodes, without data loss or service disruption.
+
+The Windows Machine Config Operator (WMCO) minimizes node reboots whenever possible. However, certain operations and updates require a reboot to ensure that changes are applied correctly and securely. To safely reboot your Windows nodes, use the graceful reboot process. For information on gracefully rebooting a standard OpenShift Container Platform node, see "Rebooting a node gracefully" in the Nodes documentation.
+
+Before rebooting a node, it is recommended to backup etcd data to avoid any data loss on the node.
+
+> [!NOTE]
+> For single-node OpenShift clusters that require users to perform the `oc login` command rather than having the certificates in `kubeconfig` file to manage the cluster, the `oc adm` commands might not be available after cordoning and draining the node. This is because the `openshift-oauth-apiserver` pod is not running due to the cordon. You can use SSH to access the nodes as indicated in the following procedure.
+>
+> In a single-node OpenShift cluster, pods cannot be rescheduled when cordoning and draining. However, doing so gives the pods, especially your workload pods, time to properly stop and release associated resources.
+
+The following procedure demonstrates how to perform a graceful restart of a node.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Mark the node as unschedulable:
+
+    ``` terminal
+    $ oc adm cordon <node1>
+    ```
+
+2.  Drain the node to remove all the running pods:
+
+    ``` terminal
+    $ oc adm drain <node1> --ignore-daemonsets --delete-emptydir-data --force
+    ```
+
+    You might receive errors that pods associated with custom pod disruption budgets (PDB) cannot be evicted.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example error
+
+    </div>
+
+    ``` terminal
+    error when evicting pods/"rails-postgresql-example-1-72v2w" -n "rails" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
+    ```
+
+    </div>
+
+    In this case, run the drain command again, adding the `disable-eviction` flag, which bypasses the PDB checks:
+
+    ``` terminal
+    $ oc adm drain <node1> --ignore-daemonsets --delete-emptydir-data --force --disable-eviction
+    ```
+
+3.  SSH into the Windows node and enter PowerShell by running the following command:
+
+    ``` terminal
+    C:\> powershell
+    ```
+
+4.  Restart the node by running the following command:
+
+    ``` terminal
+    C:\>  Restart-Computer -Force
+    ```
+
+5.  Windows nodes on Amazon Web Services (AWS) do not return to `READY` state after a graceful reboot due to an inconsistency with the EC2 instance metadata routes and the Host Network Service (HNS) networks.
+
+    After the reboot, SSH into any Windows node on AWS and add the route by running the following command in a shell prompt:
+
+    ``` terminal
+    C:\> route add 169.254.169.254 mask 255.255.255.0 <gateway_ip>
+    ```
+
+    where:
+
+    `169.254.169.254`
+    Specifies the address of the EC2 instance metadata endpoint.
+
+    `255.255.255.255`
+    Specifies the network mask of the EC2 instance metadata endpoint.
+
+    `<gateway_ip>`
+    Specifies the corresponding IP address of the gateway in the Windows instance, which you can find by running the following command:
+
+    ``` terminal
+    C:\> ipconfig | findstr /C:"Default Gateway"
+    ```
+
+6.  After the reboot is complete, mark the node as schedulable by running the following command:
+
+    ``` terminal
+    $ oc adm uncordon <node1>
+    ```
+
+7.  Verify that the node is ready:
+
+    ``` terminal
+    $ oc get node <node1>
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME    STATUS  ROLES    AGE     VERSION
+    <node1> Ready   worker   6d22h   v1.18.3+b0068a8
+    ```
+
+    </div>
+
+</div>
+
+# Additional resources
+
+- [Windows Machine Config Operator prerequisites](wmco_rn/windows-containers-release-notes-prereqs.md#windows-containers-release-notes-prereqs)
+
+- [Configuring hybrid networking](../networking/ovn_kubernetes_network_provider/configuring-hybrid-networking.md#configuring-hybrid-ovnkubernetes)
+
+- [Configuring the cluster-wide proxy](../networking/configuring_network_settings/enable-cluster-wide-proxy.md#enable-cluster-wide-proxy)
+
+- [About disconnected installation mirroring](../disconnected/index.md#installing-mirroring-disconnected-about)
+
+- [Using Windows containers with a mirror registry](enabling-windows-container-workloads.md#wmco-disconnected-cluster_enabling-windows-container-workloads)
+
+- [Rebooting a OpenShift Container Platform node gracefully](../nodes/nodes/nodes-nodes-rebooting.md#nodes-nodes-rebooting-gracefully_nodes-nodes-rebooting)
+
+- [Backing up etcd data](../backup_and_restore/control_plane_backup_and_restore/backing-up-etcd.md#backup-etcd)
+
+- [Generating a key pair for cluster node SSH access](../installing/installing_azure/ipi/installing-azure-default.md#ssh-agent-using_installing-azure-default)
+
+- [Adding Operators to a cluster](../operators/admin/olm-adding-operators-to-cluster.md#olm-adding-operators-to-a-cluster)

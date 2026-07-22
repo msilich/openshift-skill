@@ -1,0 +1,2422 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+In OpenShift Container Platform version 4.17, you can install a cluster with a customized configuration or a customized network configuration on infrastructure that the installation program provisions on Microsoft Azure.
+
+To install a cluster with customizations or with network customizations, modify parameters in the `install-config.yaml` file before you install the cluster.
+
+By customizing your network configuration, your cluster can coexist with existing IP address allocations in your environment and integrate with existing MTU and VXLAN configurations.
+
+You must set most of the network configuration parameters during installation, and you can modify only the `kubeProxy` configuration parameters in a running cluster.
+
+# Using the Azure Marketplace offering
+
+You can use the Azure Marketplace offering to deploy an OpenShift Container Platform cluster, which is billed on pay-per-use basis (hourly, per core) through Azure, while still being supported directly by Red Hat.
+
+To deploy an OpenShift Container Platform cluster using the Azure Marketplace offering, you must first obtain the Azure Marketplace image. The installation program uses this image to deploy worker or control plane nodes. When obtaining your image, consider the following:
+
+- While the images are the same, the Azure Marketplace publisher is different depending on your region. If you are located in North America, specify `redhat` as the publisher. If you are located in EMEA, specify `redhat-limited` as the publisher.
+
+- The offer includes a `rh-ocp-worker` SKU and a `rh-ocp-worker-gen1` SKU. The `rh-ocp-worker` SKU represents a Hyper-V generation version 2 VM image. The default instance types used in OpenShift Container Platform are version 2 compatible. If you plan to use an instance type that is only version 1 compatible, use the image associated with the `rh-ocp-worker-gen1` SKU. The `rh-ocp-worker-gen1` SKU represents a Hyper-V version 1 VM image.
+
+> [!IMPORTANT]
+> Installing images with the Azure marketplace is not supported on clusters with 64-bit ARM instances.
+>
+> You should only modify the RHCOS image for compute machines to use an Azure Marketplace image. Control plane machines and infrastructure nodes do not require an OpenShift Container Platform subscription and use the public RHCOS default image by default, which does not incur subscription costs on your Azure bill. Therefore, you should not modify the cluster default boot image or the control plane boot images. Applying the Azure Marketplace image to them will incur additional licensing costs that cannot be recovered.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the Azure CLI client `(az)`.
+
+- Your Azure account is entitled for the offer and you have logged into this account with the Azure CLI client.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Display all of the available OpenShift Container Platform images by running one of the following commands:
+
+    - North America:
+
+      ``` terminal
+      $  az vm image list --all --offer rh-ocp-worker --publisher redhat -o table
+      ```
+
+      <div class="formalpara">
+
+      <div class="title">
+
+      Example output
+
+      </div>
+
+      ``` terminal
+      Offer          Publisher       Sku                 Urn                                                             Version
+      -------------  --------------  ------------------  --------------------------------------------------------------  -----------------
+      rh-ocp-worker  RedHat          rh-ocp-worker       RedHat:rh-ocp-worker:rh-ocp-worker:4.17.2024100419              4.17.2024100419
+      rh-ocp-worker  RedHat          rh-ocp-worker-gen1  RedHat:rh-ocp-worker:rh-ocp-worker-gen1:4.17.2024100419         4.17.2024100419
+      ```
+
+      </div>
+
+    - EMEA:
+
+      ``` terminal
+      $  az vm image list --all --offer rh-ocp-worker --publisher redhat-limited -o table
+      ```
+
+      <div class="formalpara">
+
+      <div class="title">
+
+      Example output
+
+      </div>
+
+      ``` terminal
+      Offer          Publisher       Sku                 Urn                                                                     Version
+      -------------  --------------  ------------------  --------------------------------------------------------------          -----------------
+      rh-ocp-worker  redhat-limited  rh-ocp-worker       redhat-limited:rh-ocp-worker:rh-ocp-worker:4.17.2024100419              4.17.2024100419
+      rh-ocp-worker  redhat-limited  rh-ocp-worker-gen1  redhat-limited:rh-ocp-worker:rh-ocp-worker-gen1:4.17.2024100419         4.17.2024100419
+      ```
+
+      </div>
+
+    > [!NOTE]
+    > Use the latest image that is available for compute and control plane nodes. If required, your VMs are automatically upgraded as part of the installation process.
+
+2.  Inspect the image for your offer by running one of the following commands:
+
+    - North America:
+
+      ``` terminal
+      $ az vm image show --urn redhat:rh-ocp-worker:rh-ocp-worker:<version>
+      ```
+
+    - EMEA:
+
+      ``` terminal
+      $ az vm image show --urn redhat-limited:rh-ocp-worker:rh-ocp-worker:<version>
+      ```
+
+3.  Review the terms of the offer by running one of the following commands:
+
+    - North America:
+
+      ``` terminal
+      $ az vm image terms show --urn redhat:rh-ocp-worker:rh-ocp-worker:<version>
+      ```
+
+    - EMEA:
+
+      ``` terminal
+      $ az vm image terms show --urn redhat-limited:rh-ocp-worker:rh-ocp-worker:<version>
+      ```
+
+4.  Accept the terms of the offering by running one of the following commands:
+
+    - North America:
+
+      ``` terminal
+      $ az vm image terms accept --urn redhat:rh-ocp-worker:rh-ocp-worker:<version>
+      ```
+
+    - EMEA:
+
+      ``` terminal
+      $ az vm image terms accept --urn redhat-limited:rh-ocp-worker:rh-ocp-worker:<version>
+      ```
+
+5.  Record the image details of your offer. You must update the `compute` section in the `install-config.yaml` file with values for `publisher`, `offer`, `sku`, and `version` before deploying the cluster. You may also update the `controlPlane` section to deploy control plane machines with the specified image details, or the `defaultMachinePlatform` section to deploy both control plane and compute machines with the specified image details. Use the latest available image for control plane and compute nodes.
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Sample `install-config.yaml` file with the Azure Marketplace compute nodes
+
+</div>
+
+``` yaml
+apiVersion: v1
+baseDomain: example.com
+compute:
+- hyperthreading: Enabled
+  name: worker
+  platform:
+    azure:
+      type: Standard_D4s_v5
+      osImage:
+        publisher: redhat
+        offer: rh-ocp-worker
+        sku: rh-ocp-worker
+        version: 413.92.2023101700
+  replicas: 3
+```
+
+</div>
+
+# Creating the installation configuration file
+
+You can customize the OpenShift Container Platform cluster you install on Microsoft Azure.
+
+> [!IMPORTANT]
+> Do not specify `windows`, `microsoft`, or other variants of these words in the `metadata.name` parameter of the `install-config.yaml` file. Specifying one of these words for the cluster name causes the installation program to generate an error message like the following example message:
+>
+> ``` terminal
+> The resource name 'windows-xxxx-identity' or a part of the name is a trademarked or reserved word.
+> ```
+>
+> Additionally, specifying `login` at the beginning of the name in the `metadata.name` parameter of the `install-config.yaml` file results in the generation of an error message. You can specify `login` in the middle or end of the name.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have the OpenShift Container Platform installation program and the pull secret for your cluster.
+
+- You have an Azure subscription ID and tenant ID.
+
+- If you are installing the cluster using a service principal, you have its application ID and password.
+
+- If you are installing the cluster using a system-assigned managed identity, you have enabled it on the virtual machine that you will run the installation program from.
+
+- If you are installing the cluster using a user-assigned managed identity, you have met these prerequisites:
+
+  - You have its client ID.
+
+  - You have assigned it to the virtual machine that you will run the installation program from.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Optional: If you have run the installation program on this computer before, and want to use an alternative service principal or managed identity, go to the `~/.azure/` directory and delete the `osServicePrincipal.json` configuration file.
+
+    Deleting this file prevents the installation program from automatically reusing subscription and authentication values from a previous installation.
+
+2.  Create the `install-config.yaml` file.
+
+    1.  Change to the directory that contains the installation program and run the following command:
+
+        ``` terminal
+        $ ./openshift-install create install-config --dir <installation_directory>
+        ```
+
+        - `<installation_directory>`: For `<installation_directory>`, specify the directory name to store the files that the installation program creates.
+
+          When specifying the directory:
+
+        - Verify that the directory has the `execute` permission. This permission is required to run Terraform binaries under the installation directory.
+
+        - Use an empty directory. Some installation assets, such as bootstrap X.509 certificates, have short expiration intervals, therefore you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
+
+    2.  At the prompts, provide the configuration details for your cloud:
+
+        1.  Optional: Select an SSH key to use to access your cluster machines.
+
+            > [!NOTE]
+            > For production OpenShift Container Platform clusters on which you want to perform installation debugging or disaster recovery, specify an SSH key that your `ssh-agent` process uses.
+
+        2.  Select **azure** as the platform to target.
+
+            If the installation program cannot locate the `osServicePrincipal.json` configuration file from a previous installation, you are prompted for Azure subscription and authentication values.
+
+        3.  Enter the following Azure parameter values for your subscription:
+
+            - **azure subscription id**: Enter the subscription ID to use for the cluster.
+
+            - **azure tenant id**: Enter the tenant ID.
+
+        4.  Depending on the Azure identity you are using to deploy the cluster, do one of the following when prompted for the **azure service principal client id**:
+
+            - If you are using a service principal, enter its application ID.
+
+            - If you are using a system-assigned managed identity, leave this value blank.
+
+            - If you are using a user-assigned managed identity, specify its client ID.
+
+        5.  Depending on the Azure identity you are using to deploy the cluster, do one of the following when prompted for the **azure service principal client secret**:
+
+            - If you are using a service principal, enter its password.
+
+            - If you are using a system-assigned managed identity, leave this value blank.
+
+            - If you are using a user-assigned managed identity, leave this value blank.
+
+        6.  Select the region to deploy the cluster to.
+
+        7.  Select the base domain to deploy the cluster to. The base domain corresponds to the Azure DNS Zone that you created for your cluster.
+
+        8.  Enter a descriptive name for your cluster.
+
+            > [!IMPORTANT]
+            > All Azure resources that are available through public endpoints are subject to resource name restrictions, and you cannot create resources that use certain terms. For a list of terms that Azure restricts, see [Resolve reserved resource name errors](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-reserved-resource-name) in the Azure documentation.
+
+3.  Modify the `install-config.yaml` file. You can find more information about the available parameters in the "Installation configuration parameters" section.
+
+    > [!NOTE]
+    > If you are installing a three-node cluster, be sure to set the `compute.replicas` parameter to `0`. This ensures that the cluster’s control planes are schedulable. For more information, see "Installing a three-node cluster on Azure".
+
+4.  Back up the `install-config.yaml` file so that you can use it to install multiple clusters.
+
+    > [!IMPORTANT]
+    > The `install-config.yaml` file is consumed during the installation process. If you want to reuse the file, you must back it up now.
+
+    If previously not detected, the installation program creates an `osServicePrincipal.json` configuration file and stores this file in the `~/.azure/` directory on your computer. This ensures that the installation program can load the profile when it is creating an OpenShift Container Platform cluster on the target platform.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installation configuration parameters for Azure](../installation-config-parameters-azure.md#installation-config-parameters-azure)
+
+</div>
+
+## Minimum resource requirements for cluster installation
+
+Each created cluster must meet minimum requirements so that the cluster runs as expected.
+
+| Machine | Operating System | vCPU <sup>\[1\]</sup> | Virtual RAM | Storage | Input/Output Per Second (IOPS)<sup>\[2\]</sup> |
+|----|----|----|----|----|----|
+| Bootstrap | RHCOS | 4 | 16 GB | 100 GB | 300 |
+| Control plane | RHCOS | 4 | 16 GB | 100 GB | 300 |
+| Compute | RHCOS | 2 | 8 GB | 100 GB | 300 |
+
+Minimum resource requirements
+
+1.  One vCPU is equivalent to one physical core when simultaneous multithreading (SMT), or Hyper-Threading, is not enabled. When enabled, use the following formula to calculate the corresponding ratio: (threads per core × cores) × sockets = vCPUs.
+
+2.  OpenShift Container Platform and Kubernetes are sensitive to disk performance, and faster storage is recommended, particularly for etcd on the control plane nodes which require a 10 ms p99 fsync duration. Note that on many cloud platforms, storage size and IOPS scale together, so you might need to over-allocate storage volume to obtain sufficient performance.
+
+3.  As with all user-provisioned installations, if you choose to use RHEL compute machines in your cluster, you take responsibility for all operating system life cycle management and maintenance, including performing system updates, applying patches, and completing all other required tasks. Use of RHEL 7 compute machines is deprecated and has been removed in OpenShift Container Platform 4.10 and later.
+
+> [!NOTE]
+> For OpenShift Container Platform version 4.19, RHCOS is based on RHEL version 9.6, which updates the micro-architecture requirements. The following list contains the minimum instruction set architectures (ISA) that each architecture requires:
+>
+> - x86-64 architecture requires x86-64-v2 ISA
+>
+> - ARM64 architecture requires ARMv8.0-A ISA
+>
+> - IBM Power architecture requires Power 9 ISA
+>
+> - s390x architecture requires z14 ISA
+>
+> For more information, see "Architectures".
+
+> [!IMPORTANT]
+> You are required to use Azure virtual machines that have the `premiumIO` parameter set to `true`.
+
+If an instance type for your platform meets the minimum requirements for cluster machines, it is supported to use in OpenShift Container Platform.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Architectures (RHEL documentation)](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.2_release_notes/index#architectures)
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Optimizing storage](../../../scalability_and_performance/optimization/optimizing-storage.md#optimizing-storage)
+
+</div>
+
+## Tested instance types for Azure
+
+There are several Microsoft Azure instance types tested with OpenShift Container Platform. Choose a listed instance type when you install a cluster on 64-bit x86 infrastructure.
+
+<div class="example">
+
+<div class="title">
+
+Machine types based on 64-bit x86 architecture
+
+</div>
+
+<https://raw.githubusercontent.com/openshift/installer/release-4.20/docs/user/azure/tested_instance_types_x86_64.md>
+
+</div>
+
+## Tested instance types for Azure on 64-bit ARM infrastructures
+
+There are several Microsoft Azure ARM64 instance types tested with OpenShift Container Platform. Choose a listed instance type when you install a cluster on 64-bit ARM infrastructure.
+
+<div class="example">
+
+<div class="title">
+
+Machine types based on 64-bit ARM architecture
+
+</div>
+
+<https://raw.githubusercontent.com/openshift/installer/release-4.20/docs/user/azure/tested_instance_types_aarch64.md>
+
+</div>
+
+## Enabling trusted launch for Azure VMs
+
+To enable trusted launch on Azure virtual machines for your OpenShift Container Platform cluster, you can configure secure boot and virtualized Trusted Platform Modules in the `install-config.yaml` file. Apply the settings to control plane nodes, compute nodes, or all nodes as needed.
+
+For more information about the sizes of virtual machines that support the trusted launch features, secure boot, and virtualized Trusted Platform Modules, see the Additional resources section.
+
+> [!IMPORTANT]
+> Trusted launch is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+>
+> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created an `install-config.yaml` file.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Edit the `install-config.yaml` file before deploying your cluster:
+
+  - Enable trusted launch only on control plane by adding the following stanza:
+
+    ``` yaml
+    controlPlane:
+      platform:
+        azure:
+          settings:
+            securityType: TrustedLaunch
+            trustedLaunch:
+              uefiSettings:
+                secureBoot: Enabled
+                virtualizedTrustedPlatformModule: Enabled
+    ```
+
+  - Enable trusted launch only on compute node by adding the following stanza:
+
+    ``` yaml
+    compute:
+      platform:
+        azure:
+          settings:
+            securityType: TrustedLaunch
+            trustedLaunch:
+              uefiSettings:
+                secureBoot: Enabled
+                virtualizedTrustedPlatformModule: Enabled
+    ```
+
+  - Enable trusted launch on all nodes by adding the following stanza:
+
+    ``` yaml
+    platform:
+      azure:
+        settings:
+          securityType: TrustedLaunch
+          trustedLaunch:
+            uefiSettings:
+              secureBoot: Enabled
+              virtualizedTrustedPlatformModule: Enabled
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Secure Boot (Microsoft Azure documentation)](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch#secure-boot)
+
+- [virtualized Trusted Platform Modules (Microsoft Azure documentation)](https://learn.microsoft.com/en-us/windows/security/hardware-security/tpm/trusted-platform-module-overview)
+
+- [Virtual machine sizes (Microsoft Azure documentation)](https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch#virtual-machines-sizes)
+
+</div>
+
+## Enabling confidential VMs
+
+To enable confidential VMs on Azure for your OpenShift Container Platform cluster, you can configure the `install-config.yaml` file before deployment. Apply the settings to control plane nodes, compute nodes, or all nodes as needed.
+
+You can use confidential VMs with the following VM sizes:
+
+- DCasv5-series
+
+- DCadsv5-series
+
+- ECasv5-series
+
+- ECadsv5-series
+
+- DCesv5-series
+
+- DCedsv5-series
+
+- ECesv5-series
+
+- ECedsv5-series
+
+- NCCads_H100_v5
+
+> [!IMPORTANT]
+> Confidential VMs are currently not supported on 64-bit ARM architectures.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created an `install-config.yaml` file.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Edit the `install-config.yaml` file before deploying your cluster:
+
+  - Enable confidential VMs only on control plane by adding the following stanza:
+
+    ``` yaml
+    controlPlane:
+      platform:
+        azure:
+          settings:
+            securityType: ConfidentialVM
+            confidentialVM:
+              uefiSettings:
+                secureBoot: Enabled
+                virtualizedTrustedPlatformModule: Enabled
+          osDisk:
+            securityProfile:
+              securityEncryptionType: VMGuestStateOnly
+    ```
+
+  - Enable confidential VMs only on compute nodes by adding the following stanza:
+
+    ``` yaml
+    compute:
+      platform:
+        azure:
+          settings:
+            securityType: ConfidentialVM
+            confidentialVM:
+              uefiSettings:
+                secureBoot: Enabled
+                virtualizedTrustedPlatformModule: Enabled
+          osDisk:
+            securityProfile:
+              securityEncryptionType: VMGuestStateOnly
+    ```
+
+  - Enable confidential VMs on all nodes by adding the following stanza:
+
+    ``` yaml
+    platform:
+      azure:
+        defaultMachinePlatform:
+          settings:
+            securityType: ConfidentialVM
+            confidentialVM:
+              uefiSettings:
+                secureBoot: Enabled
+                virtualizedTrustedPlatformModule: Enabled
+          osDisk:
+            securityProfile:
+              securityEncryptionType: VMGuestStateOnly
+    ```
+
+</div>
+
+## Configuring a dedicated disk for etcd
+
+You can install your OpenShift Container Platform cluster on Microsoft Azure with a dedicated data disk for `etcd`. This configuration attaches a separate managed disk to each control plane node and uses it only for `etcd` data, which can improve cluster performance and stability.
+
+> [!IMPORTANT]
+> Dedicated disk for etcd is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+>
+> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created an `install-config.yaml` file.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To configure a dedicated `etcd` disk, edit the `install-config.yaml` file and add the `diskSetup` and `dataDisks` parameters to the `controlPlane` stanza:
+
+  ``` yaml
+  # ...
+  controlPlane:
+    architecture: amd64
+    hyperthreading: Enabled
+    name: master
+    platform:
+      azure:
+        type: Standard_D4s_v5
+        dataDisks:
+        - nameSuffix: etcddisk
+          cachingType: None
+          diskSizeGB: 20
+          lun: 0
+    diskSetup:
+    - type: etcd
+      etcd:
+        platformDiskID: etcddisk
+    replicas: 3
+  # ...
+  ```
+
+  where:
+
+  `controlPlane.platform.azure.dataDisks.nameSuffix`
+  Specifies the same value you defined for `platformDiskID`.
+
+  `controlPlane.platform.azure.dataDisks.cachingType`
+  Specifies `None`. Other caching requirements are not currently supported.
+
+  `controlPlane.platform.azure.dataDisks.diskSizeGB`
+  Specifies a disk size in GB. This value can be any integer greater than `0`.
+
+  > [!NOTE]
+  > A minimum of 20 GB ensures enough space is available for defragmentation operations.
+
+  `controlPlane.platform.azure.dataDisks.lun`
+  Specifies a logical unit number (LUN). This can be any integer from `0` through `63` that is not used by another disk.
+
+  `controlPlane.diskSetup.type`
+  Specifies `etcd`. This identifies `etcd` as the node component type to receive a dedicated disk.
+
+  `controlPlane.diskSetup.etcd.platformDiskID`
+  Specifies a name to identify the disk. This value must not exceed 12 characters.
+
+</div>
+
+## Sample customized install-config.yaml file for Azure
+
+You can customize the `install-config.yaml` file to specify more details about your OpenShift Container Platform cluster’s platform or modify the values of the required parameters.
+
+> [!IMPORTANT]
+> This sample YAML file is provided for reference only. You must obtain your `install-config.yaml` file by using the installation program and modify it. For a full list and description of all installation configuration parameters, see *Installation configuration parameters for Azure*.
+
+<div class="formalpara">
+
+<div class="title">
+
+Sample `install-config.yaml` file for Azure
+
+</div>
+
+``` yaml
+apiVersion: v1
+baseDomain: example.com
+pullSecret: '{"auths": ...}'
+sshKey: ssh-ed25519 AAAA...
+metadata:
+  name: example-cluster
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  platform:
+    azure:
+      type: Standard_D8s_v3
+  replicas: 3
+compute:
+- hyperthreading: Enabled
+  name: worker
+  platform:
+    azure:
+      type: Standard_D2s_v3
+  replicas: 3
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+platform:
+  azure:
+    baseDomainResourceGroupName: example-basedomain-resourcegroup-name
+    region: centralus
+```
+
+</div>
+
+where:
+
+`controlPlane`
+Specifies parameters that apply to control plane machines.
+
+`compute`
+Specifies parameters that apply to compute machines.
+
+`networking`
+Specifies parameters that apply to the cluster networking configuration. If you do not provide networking values, the installation program provides default values.
+
+`platform`
+Specifies parameters that apply to the infrastructure platform that hosts the cluster.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installation configuration parameters for Azure](../installation-config-parameters-azure.md#installation-config-parameters-azure)
+
+</div>
+
+## Configuring the cluster-wide proxy during installation
+
+Production environments can deny direct access to the internet and instead have an HTTP or HTTPS proxy available. You can configure a new OpenShift Container Platform cluster to use a proxy by configuring the proxy settings in the `install-config.yaml` file.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have an existing `install-config.yaml` file.
+
+- You have reviewed the sites that your cluster requires access to and determined whether any of them need to bypass the proxy. By default, all cluster egress traffic is proxied, including calls to hosting cloud provider APIs. You added sites to the `Proxy` object’s `spec.noProxy` field to bypass the proxy if necessary.
+
+  > [!NOTE]
+  > The `Proxy` object `status.noProxy` field is populated with the values of the `networking.machineNetwork[].cidr`, `networking.clusterNetwork[].cidr`, and `networking.serviceNetwork[]` fields from your installation configuration.
+  >
+  > For installations on Amazon Web Services (AWS), Google Cloud, Microsoft Azure, and Red Hat OpenStack Platform (RHOSP), the `Proxy` object `status.noProxy` field is also populated with the instance metadata endpoint (`169.254.169.254`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit your `install-config.yaml` file and add the proxy settings. For example:
+
+    ``` yaml
+    apiVersion: v1
+    baseDomain: my.domain.com
+    proxy:
+      httpProxy: http://<username>:<pswd>@<ip>:<port>
+      httpsProxy: https://<username>:<pswd>@<ip>:<port>
+      noProxy: example.com
+    additionalTrustBundle: |
+        -----BEGIN CERTIFICATE-----
+        <MY_TRUSTED_CA_CERT>
+        -----END CERTIFICATE-----
+    additionalTrustBundlePolicy: <policy_to_add_additionalTrustBundle>
+    # ...
+    ```
+
+    where:
+
+    `proxy.httpProxy`
+    Specifies a proxy URL to use for creating HTTP connections outside the cluster. The URL scheme must be `http`.
+
+    `proxy.httpsProxy`
+    Specifies a proxy URL to use for creating HTTPS connections outside the cluster.
+
+    `proxy.noProxy`
+    Specifies a comma-separated list of destination domain names, IP addresses, or other network CIDRs to exclude from proxying. Preface a domain with `.` to match subdomains only. For example, `.y.com` matches `x.y.com`, but not `y.com`. Use `*` to bypass the proxy for all destinations.
+
+    `additionalTrustBundle`
+    If provided, the installation program generates a config map that is named `user-ca-bundle` in the `openshift-config` namespace to hold the additional CA certificates. If you provide `additionalTrustBundle` and at least one proxy setting, the `Proxy` object is configured to reference the `user-ca-bundle` config map in the `trustedCA` field. The Cluster Network Operator then creates a `trusted-ca-bundle` config map that merges the contents specified for the `trustedCA` parameter with the RHCOS trust bundle. The `additionalTrustBundle` field is required unless the proxy’s identity certificate is signed by an authority from the RHCOS trust bundle.
+
+    `additionalTrustBundlePolicy`
+    Specifies the policy that determines the configuration of the `Proxy` object to reference the `user-ca-bundle` config map in the `trustedCA` field. The allowed values are `Proxyonly` and `Always`. Use `Proxyonly` to reference the `user-ca-bundle` config map only when `http/https` proxy is configured. Use `Always` to always reference the `user-ca-bundle` config map. The default value is `Proxyonly`. Optional parameter.
+
+    > [!NOTE]
+    > The installation program does not support the proxy `readinessEndpoints` field.
+
+    > [!NOTE]
+    > If the installation program times out, restart and then complete the deployment by using the `wait-for` command of the installation program. For example:
+    >
+    > ``` terminal
+    > $ ./openshift-install wait-for install-complete --log-level debug
+    > ```
+
+2.  Save the file and reference it when installing OpenShift Container Platform.
+
+    The installation program creates a cluster-wide proxy that is named `cluster` that uses the proxy settings in the provided `install-config.yaml` file. If no proxy settings are provided, a `cluster` `Proxy` object is still created, but it will have a nil `spec`.
+
+    > [!NOTE]
+    > Only the `Proxy` object named `cluster` is supported, and no additional proxies can be created.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- For more details about Accelerated Networking, see [Accelerated Networking for Microsoft Azure VMs](../../../machine_management/creating_machinesets/creating-machineset-azure.md#machineset-azure-accelerated-networking_creating-machineset-azure).
+
+</div>
+
+# Network configuration phases
+
+There are two phases prior to OpenShift Container Platform installation where you can customize the network configuration. Customize settings in the `install-config.yaml` file and in the Cluster Network Operator manifest across two configuration phases.
+
+Phase 1
+You can customize the following network-related fields in the `install-config.yaml` file before you create the manifest files:
+
+- `networking.networkType`
+
+- `networking.clusterNetwork`
+
+- `networking.serviceNetwork`
+
+- `networking.machineNetwork`
+
+- `nodeNetworking`
+
+  For more information, see "Installation configuration parameters".
+
+  > [!NOTE]
+  > Set the `networking.machineNetwork` to match the Classless Inter-Domain Routing (CIDR) where the preferred subnet is located.
+
+  > [!IMPORTANT]
+  > The CIDR range `172.17.0.0/16` is reserved by `libVirt`. You cannot use any other CIDR range that overlaps with the `172.17.0.0/16` CIDR range for networks in your cluster.
+
+Phase 2
+After creating the manifest files by running `openshift-install create manifests`, you can define a customized Cluster Network Operator manifest with only the fields you want to modify. You can use the manifest to specify an advanced network configuration.
+
+During phase 2, you cannot override the values that you specified in phase 1 in the `install-config.yaml` file. However, you can customize the network plugin during phase 2.
+
+# Specifying advanced network configuration
+
+To integrate your OpenShift Container Platform cluster with your existing network environment, you can specify advanced network configuration in a manifest before you install the cluster. Advanced network configuration can be configured only during cluster installation.
+
+> [!IMPORTANT]
+> Customizing your network configuration by modifying the OpenShift Container Platform manifest files created by the installation program is not supported. Applying a manifest file that you create, as in the following procedure, is supported.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created the `install-config.yaml` file and completed any modifications to it.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Change to the directory that contains the installation program and create the manifests:
+
+    ``` terminal
+    $ ./openshift-install create manifests --dir <installation_directory>
+    ```
+
+    The `<installation_directory>` specifies the name of the directory that contains the `install-config.yaml` file for your cluster.
+
+2.  Create a stub manifest file for the advanced network configuration that is named `cluster-network-03-config.yml` in the `<installation_directory>/manifests/` directory:
+
+    ``` yaml
+    apiVersion: operator.openshift.io/v1
+    kind: Network
+    metadata:
+      name: cluster
+    spec:
+    ```
+
+3.  Specify the advanced network configuration for your cluster in the `cluster-network-03-config.yml` file, such as in the following example:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Enable IPsec for the OVN-Kubernetes network provider
+
+    </div>
+
+    ``` yaml
+    apiVersion: operator.openshift.io/v1
+    kind: Network
+    metadata:
+      name: cluster
+    spec:
+      defaultNetwork:
+        ovnKubernetesConfig:
+          ipsecConfig:
+            mode: Full
+    ```
+
+    </div>
+
+4.  Optional: Back up the `manifests/cluster-network-03-config.yml` file. The installation program consumes the `manifests/` directory when you create the Ignition config files.
+
+5.  Remove the Kubernetes manifest files that define the control plane machines and compute `MachineSets`:
+
+    ``` terminal
+    $ rm -f openshift/99_openshift-cluster-api_master-machines-*.yaml openshift/99_openshift-cluster-api_worker-machineset-*.yaml
+    ```
+
+    Because you create and manage these resources yourself, you do not have to initialize them.
+
+    - You can preserve the `MachineSet` files to create compute machines by using the machine API, but you must update references to them to match your environment.
+
+</div>
+
+# Cluster Network Operator configuration
+
+To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity. Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
+
+The CNO configuration inherits the following fields during cluster installation from the `Network` API in the `Network.config.openshift.io` API group:
+
+`clusterNetwork`
+IP address pools from which pod IP addresses are allocated.
+
+`serviceNetwork`
+IP address pool for services.
+
+`defaultNetwork.type`
+Cluster network plugin. `OVNKubernetes` is the only supported plugin during installation.
+
+You can specify the cluster network plugin configuration for your cluster by setting the fields for the `defaultNetwork` object in the CNO object named `cluster`.
+
+## Cluster Network Operator configuration object
+
+The fields for the Cluster Network Operator (CNO) are described in the following table:
+
+<table>
+<caption>Cluster Network Operator configuration object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>metadata.name</code></p></td>
+<td style="text-align: left;"><p><code>string</code></p></td>
+<td style="text-align: left;"><p>The name of the CNO object. This name is always <code>cluster</code>.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>spec.clusterNetwork</code></p></td>
+<td style="text-align: left;"><p><code>array</code></p></td>
+<td style="text-align: left;"><p>A list specifying the blocks of IP addresses from which pod IP addresses are allocated and the subnet prefix length assigned to each individual node in the cluster. For example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">clusterNetwork</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">cidr</span><span class="kw">:</span><span class="at"> 10.128.0.0/19</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">hostPrefix</span><span class="kw">:</span><span class="at"> </span><span class="dv">23</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">cidr</span><span class="kw">:</span><span class="at"> 10.128.32.0/19</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">hostPrefix</span><span class="kw">:</span><span class="at"> </span><span class="dv">23</span></span></code></pre></div></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>spec.serviceNetwork</code></p></td>
+<td style="text-align: left;"><p><code>array</code></p></td>
+<td style="text-align: left;"><p>A block of IP addresses for services. The OVN-Kubernetes network plugin supports only a single IP address block for the service network. For example:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">serviceNetwork</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> 172.30.0.0/14</span></span></code></pre></div>
+<p>You can customize this field only in the <code>install-config.yaml</code> file before you create the manifests. The value is read-only in the manifest file.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>spec.defaultNetwork</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>Configures the network plugin for the cluster network.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>spec.additionalRoutingCapabilities.providers</code></p></td>
+<td style="text-align: left;"><p><code>array</code></p></td>
+<td style="text-align: left;"><p>This setting enables a dynamic routing provider. The FRR routing capability provider is required for the route advertisement feature. The only supported value is <code>FRR</code>.</p>
+<ul>
+<li><p><code>FRR</code>: The FRR routing provider</p></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">additionalRoutingCapabilities</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">providers</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> FRR</span></span></code></pre></div></td>
+</tr>
+</tbody>
+</table>
+
+> [!IMPORTANT]
+> For a cluster that needs to deploy objects across multiple networks, ensure that you specify the same value for the `clusterNetwork.hostPrefix` parameter for each network type that is defined in the `install-config.yaml` file. Setting a different value for each `clusterNetwork.hostPrefix` parameter can impact the OVN-Kubernetes network plugin, where the plugin cannot effectively route object traffic among different nodes.
+
+## defaultNetwork object configuration
+
+The values for the `defaultNetwork` object are defined in the following table:
+
+<table>
+<caption><code>defaultNetwork</code> object</caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 20%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>type</code></p></td>
+<td style="text-align: left;"><p><code>string</code></p></td>
+<td style="text-align: left;"><p><code>OVNKubernetes</code>. The Red Hat OpenShift Networking network plugin is selected during installation. This value cannot be changed after cluster installation.</p>
+<div class="note">
+<div class="title">
+&#10;</div>
+<p>OpenShift Container Platform uses the OVN-Kubernetes network plugin by default.</p>
+</div></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ovnKubernetesConfig</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>This object is only valid for the OVN-Kubernetes network plugin.</p></td>
+</tr>
+</tbody>
+</table>
+
+## Configuration for the OVN-Kubernetes network plugin
+
+The following table describes the configuration fields for the OVN-Kubernetes network plugin:
+
+<table>
+<caption><code>ovnKubernetesConfig</code> object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>mtu</code></p></td>
+<td style="text-align: left;"><p><code>integer</code></p></td>
+<td style="text-align: left;"><p>The maximum transmission unit (MTU) for the Geneve (Generic Network Virtualization Encapsulation) overlay network. This is detected automatically based on the MTU of the primary network interface. You do not normally need to override the detected MTU.</p>
+<p>If the auto-detected value is not what you expect it to be, confirm that the MTU on the primary network interface on your nodes is correct. You cannot use this option to change the MTU value of the primary network interface on the nodes.</p>
+<p>If your cluster requires different MTU values for different nodes, you must set this value to <code>100</code> less than the lowest MTU value in your cluster. For example, if some nodes in your cluster have an MTU of <code>9001</code>, and some have an MTU of <code>1500</code>, you must set this value to <code>1400</code>.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>genevePort</code></p></td>
+<td style="text-align: left;"><p><code>integer</code></p></td>
+<td style="text-align: left;"><p>The port to use for all Geneve packets. The default value is <code>6081</code>. This value cannot be changed after cluster installation.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ipsecConfig</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>Specify a configuration object for customizing the IPsec configuration.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ipv4</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>Specifies a configuration object for IPv4 settings.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ipv6</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>Specifies a configuration object for IPv6 settings.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>policyAuditConfig</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>Specify a configuration object for customizing network policy audit logging. If unset, the defaults audit log settings are used.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>routeAdvertisements</code></p></td>
+<td style="text-align: left;"><p><code>string</code></p></td>
+<td style="text-align: left;"><p>Specifies whether to advertise cluster network routes. The default value is <code>Disabled</code>.</p>
+<ul>
+<li><p><code>Enabled</code>: Import routes to the cluster network and advertise cluster network routes as configured in <code>RouteAdvertisements</code> objects.</p></li>
+<li><p><code>Disabled</code>: Do not import routes to the cluster network or advertise cluster network routes.</p></li>
+</ul></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>gatewayConfig</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>Optional: Specify a configuration object for customizing how egress traffic is sent to the node gateway. Valid values are <code>Shared</code> and <code>Local</code>. The default value is <code>Shared</code>. In the default setting, the Open vSwitch (OVS) outputs traffic directly to the node IP interface. In the <code>Local</code> setting, it traverses the host network; consequently, it gets applied to the routing table of the host.</p>
+<div class="note">
+<div class="title">
+&#10;</div>
+<p>While migrating egress traffic, you can expect some disruption to workloads and service traffic until the Cluster Network Operator (CNO) successfully rolls out the changes.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption><code>ovnKubernetesConfig.ipv4</code> object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>internalTransitSwitchSubnet</code></p></td>
+<td style="text-align: left;"><p>string</p></td>
+<td style="text-align: left;"><p>If your existing network infrastructure overlaps with the <code>100.88.0.0/16</code> IPv4 subnet, you can specify a different IP address range for internal use by OVN-Kubernetes. The subnet for the distributed transit switch that enables east-west traffic. This subnet cannot overlap with any other subnets used by OVN-Kubernetes or on the host itself. It must be large enough to accommodate one IP address per node in your cluster.</p>
+<p>The default value is <code>100.88.0.0/16</code>.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>internalJoinSubnet</code></p></td>
+<td style="text-align: left;"><p>string</p></td>
+<td style="text-align: left;"><p>If your existing network infrastructure overlaps with the <code>100.64.0.0/16</code> IPv4 subnet, you can specify a different IP address range for internal use by OVN-Kubernetes. You must ensure that the IP address range does not overlap with any other subnet used by your OpenShift Container Platform installation. The IP address range must be larger than the maximum number of nodes that can be added to the cluster. For example, if the <code>clusterNetwork.cidr</code> value is <code>10.128.0.0/14</code> and the <code>clusterNetwork.hostPrefix</code> value is <code>/23</code>, then the maximum number of nodes is <code>2^(23-14)=512</code>.</p>
+<p>The default value is <code>100.64.0.0/16</code>.</p></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption><code>ovnKubernetesConfig.ipv6</code> object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>internalTransitSwitchSubnet</code></p></td>
+<td style="text-align: left;"><p>string</p></td>
+<td style="text-align: left;"><p>If your existing network infrastructure overlaps with the <code>fd97::/64</code> IPv6 subnet, you can specify a different IP address range for internal use by OVN-Kubernetes. The subnet for the distributed transit switch that enables east-west traffic. This subnet cannot overlap with any other subnets used by OVN-Kubernetes or on the host itself. It must be large enough to accommodate one IP address per node in your cluster.</p>
+<p>The default value is <code>fd97::/64</code>.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>internalJoinSubnet</code></p></td>
+<td style="text-align: left;"><p>string</p></td>
+<td style="text-align: left;"><p>If your existing network infrastructure overlaps with the <code>fd98::/64</code> IPv6 subnet, you can specify a different IP address range for internal use by OVN-Kubernetes. You must ensure that the IP address range does not overlap with any other subnet used by your OpenShift Container Platform installation. The IP address range must be larger than the maximum number of nodes that can be added to the cluster.</p>
+<p>The default value is <code>fd98::/64</code>.</p></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<caption><code>policyAuditConfig</code> object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>rateLimit</code></p></td>
+<td style="text-align: left;"><p>integer</p></td>
+<td style="text-align: left;"><p>The maximum number of messages to generate every second per node. The default value is <code>20</code> messages per second.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>maxFileSize</code></p></td>
+<td style="text-align: left;"><p>integer</p></td>
+<td style="text-align: left;"><p>The maximum size for the audit log in bytes. The default value is <code>50000000</code> or 50 MB.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>maxLogFiles</code></p></td>
+<td style="text-align: left;"><p>integer</p></td>
+<td style="text-align: left;"><p>The maximum number of log files that are retained.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>destination</code></p></td>
+<td style="text-align: left;"><p>string</p></td>
+<td style="text-align: left;"><p>One of the following additional audit log targets:</p>
+<dl>
+<dt><code>libc</code></dt>
+<dd>
+<p>The libc <code>syslog()</code> function of the journald process on the host.</p>
+</dd>
+<dt><code>udp:&lt;host&gt;:&lt;port&gt;</code></dt>
+<dd>
+<p>A syslog server. Replace <code>&lt;host&gt;:&lt;port&gt;</code> with the host and port of the syslog server.</p>
+</dd>
+<dt><code>unix:&lt;file&gt;</code></dt>
+<dd>
+<p>A Unix Domain Socket file specified by <code>&lt;file&gt;</code>.</p>
+</dd>
+<dt><code>null</code></dt>
+<dd>
+<p>Do not send the audit logs to any additional target.</p>
+</dd>
+</dl></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>syslogFacility</code></p></td>
+<td style="text-align: left;"><p>string</p></td>
+<td style="text-align: left;"><p>The syslog facility, such as <code>kern</code>, as defined by RFC5424. The default value is <code>local0</code>.</p></td>
+</tr>
+</tbody>
+</table>
+
+<table id="gatewayConfig-object_installing-azure-customizations">
+<caption><code>gatewayConfig</code> object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>routingViaHost</code></p></td>
+<td style="text-align: left;"><p><code>boolean</code></p></td>
+<td style="text-align: left;"><p>Set this field to <code>true</code> to send egress traffic from pods to the host networking stack. For highly-specialized installations and applications that rely on manually configured routes in the kernel routing table, you might want to route egress traffic to the host networking stack. By default, egress traffic is processed in OVN to exit the cluster and is not affected by specialized routes in the kernel routing table. The default value is <code>false</code>.</p>
+<p>This field has an interaction with the Open vSwitch hardware offloading feature. If you set this field to <code>true</code>, you do not receive the performance benefits of the offloading because egress traffic is processed by the host networking stack.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ipForwarding</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>You can control IP forwarding for all traffic on OVN-Kubernetes managed interfaces by using the <code>ipForwarding</code> specification in the <code>Network</code> resource. Specify <code>Restricted</code> to only allow IP forwarding for Kubernetes related traffic. Specify <code>Global</code> to allow forwarding of all IP traffic. For new installations, the default is <code>Restricted</code>. For updates to OpenShift Container Platform 4.14 or later, the default is <code>Global</code>.</p>
+<div class="note">
+<div class="title">
+&#10;</div>
+<p>The default value of <code>Restricted</code> sets the IP forwarding to drop.</p>
+</div></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ipv4</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>Optional: Specify an object to configure the internal OVN-Kubernetes masquerade address for host to service traffic for IPv4 addresses.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ipv6</code></p></td>
+<td style="text-align: left;"><p><code>object</code></p></td>
+<td style="text-align: left;"><p>Optional: Specify an object to configure the internal OVN-Kubernetes masquerade address for host to service traffic for IPv6 addresses.</p></td>
+</tr>
+</tbody>
+</table>
+
+<table id="gatewayconfig-ipv4-object_installing-azure-customizations">
+<caption><code>gatewayConfig.ipv4</code> object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>internalMasqueradeSubnet</code></p></td>
+<td style="text-align: left;"><p><code>string</code></p></td>
+<td style="text-align: left;"><p>The masquerade IPv4 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses as well as the shared gateway bridge interface. The default value is <code>169.254.169.0/29</code>.</p>
+<div class="important">
+<div class="title">
+&#10;</div>
+<p>For OpenShift Container Platform 4.17 and later versions, clusters use <code>169.254.0.0/17</code> as the default masquerade subnet. For upgraded clusters, there is no change to the default masquerade subnet.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+
+<table id="gatewayconfig-ipv6-object_installing-azure-customizations">
+<caption><code>gatewayConfig.ipv6</code> object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>internalMasqueradeSubnet</code></p></td>
+<td style="text-align: left;"><p><code>string</code></p></td>
+<td style="text-align: left;"><p>The masquerade IPv6 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses as well as the shared gateway bridge interface. The default value is <code>fd69::/125</code>.</p>
+<div class="important">
+<div class="title">
+&#10;</div>
+<p>For OpenShift Container Platform 4.17 and later versions, clusters use <code>fd69::/112</code> as the default masquerade subnet. For upgraded clusters, there is no change to the default masquerade subnet.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+
+<table id="nw-operator-cr-ipsec_installing-azure-customizations">
+<caption><code>ipsecConfig</code> object</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>mode</code></p></td>
+<td style="text-align: left;"><p><code>string</code></p></td>
+<td style="text-align: left;"><p>Specifies the behavior of the IPsec implementation. Must be one of the following values:</p>
+<ul>
+<li><p><code>Disabled</code>: IPsec is not enabled on cluster nodes.</p></li>
+<li><p><code>External</code>: IPsec is enabled for network traffic with external hosts.</p></li>
+<li><p><code>Full</code>: IPsec is enabled for pod traffic and network traffic with external hosts.</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+
+<div class="formalpara">
+
+<div class="title">
+
+Example OVN-Kubernetes configuration with IPSec enabled
+
+</div>
+
+``` yaml
+defaultNetwork:
+  type: OVNKubernetes
+  ovnKubernetesConfig:
+    mtu: 1400
+    genevePort: 6081
+    ipsecConfig:
+      mode: Full
+```
+
+</div>
+
+# Configuring hybrid networking with OVN-Kubernetes
+
+To configure hybrid networking with OVN-Kubernetes, you can set `hybridOverlayConfig` during installation or patch the Cluster Network Operator (CNO) after installation.
+
+> [!NOTE]
+> This configuration is necessary to run both Linux and Windows nodes in the same cluster.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You defined `OVNKubernetes` for the `networking.networkType` parameter in the `install-config.yaml` file. See the installation documentation for configuring OpenShift Container Platform network customizations on your chosen cloud provider for more information.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Change to the directory that contains the installation program and create the manifests:
+
+    ``` terminal
+    $ ./openshift-install create manifests --dir <installation_directory>
+    ```
+
+    For the `<installation_directory>`, specify the name of the directory that contains the `install-config.yaml` file for your cluster.
+
+2.  Create a stub manifest file for the advanced network configuration that is named `cluster-network-03-config.yml` in the `<installation_directory>/manifests/` directory:
+
+    ``` terminal
+    $ cat <<EOF > <installation_directory>/manifests/cluster-network-03-config.yml
+    apiVersion: operator.openshift.io/v1
+    kind: Network
+    metadata:
+      name: cluster
+    spec:
+    EOF
+    ```
+
+    For `<installation_directory>`, specify the directory name that contains the `manifests/` directory for your cluster.
+
+3.  Open the `cluster-network-03-config.yml` file in an editor and specify a hybrid networking configuration similar to the following example:
+
+    ``` yaml
+    apiVersion: operator.openshift.io/v1
+    kind: Network
+    metadata:
+      name: cluster
+    spec:
+      defaultNetwork:
+        ovnKubernetesConfig:
+          hybridOverlayConfig:
+            hybridClusterNetwork:
+            - cidr: 10.132.0.0/14
+              hostPrefix: 23
+            hybridOverlayVXLANPort: 9898
+    ```
+
+    where:
+
+    `spec.defaultNetwork.ovnKubernetesConfig.hybridOverlayConfig.hybridClusterNetwork`
+    Specifies the CIDR configuration used for nodes on the additional overlay network. The `hybridClusterNetwork` CIDR must not overlap with the `clusterNetwork` CIDR.
+
+    `spec.defaultNetwork.ovnKubernetesConfig.hybridOverlayConfig.hybridOverlayVXLANPort`
+    Specifies a custom VXLAN port for the additional overlay network. This is required for running Windows nodes in a cluster installed on vSphere, and must not be configured for any other cloud provider. The custom port can be any open port excluding the default `6081` port. For more information on this requirement, see [Pod-to-pod connectivity between hosts is broken](https://docs.microsoft.com/en-us/virtualization/windowscontainers/kubernetes/common-problems#pod-to-pod-connectivity-between-hosts-is-broken-on-my-kubernetes-cluster-running-on-vsphere) in the Microsoft documentation.
+
+    > [!NOTE]
+    > Windows Server Long-Term Servicing Channel (LTSC): Windows Server 2019 is not supported on clusters with a custom `hybridOverlayVXLANPort` value because this Windows server version does not support selecting a custom VXLAN port.
+
+4.  Save the `cluster-network-03-config.yml` file and quit the text editor.
+
+5.  Optional: Back up the `manifests/cluster-network-03-config.yml` file. The installation program deletes the `manifests/` directory when creating the cluster.
+
+</div>
+
+> [!NOTE]
+> For more information about using Linux and Windows nodes in the same cluster, see [Understanding Windows container workloads](../../../windows_containers/understanding-windows-container-workloads.md#understanding-windows-container-workloads).
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- For more details about Accelerated Networking, see [Accelerated Networking for Microsoft Azure VMs](../../../machine_management/creating_machinesets/creating-machineset-azure.md#machineset-azure-accelerated-networking_creating-machineset-azure).
+
+</div>
+
+# Configuring user-defined tags for Azure
+
+In OpenShift Container Platform, you can use tags for grouping resources and for managing resource access and cost. Tags are applied only to the resources created by the OpenShift Container Platform installation program and its core Operators such as Machine API Operator, Cluster Ingress Operator, Cluster Image Registry Operator. The OpenShift Container Platform consists of the following types of tags:
+
+OpenShift Container Platform tags
+By default, OpenShift Container Platform installation program attaches the OpenShift Container Platform tags to the Azure resources. These OpenShift Container Platform tags are not accessible to the users. The format of the OpenShift Container Platform tags is `kubernetes.io_cluster.<cluster_id>:owned`, where `<cluster_id>` is the value of `.status.infrastructureName` in the infrastructure resource for the cluster.
+
+User-defined tags
+User-defined tags are manually created in `install-config.yaml` file during installation. When creating the user-defined tags, you must consider the following points:
+
+- User-defined tags on Azure resources can only be defined during OpenShift Container Platform cluster creation, and cannot be modified after the cluster is created.
+
+- Support for user-defined tags is available only for the resources created in the Azure Public Cloud.
+
+- User-defined tags are not supported for the OpenShift Container Platform clusters upgraded to OpenShift Container Platform 4.17.
+
+## Creating user-defined tags for Azure
+
+To define the list of user-defined tags, edit the `.platform.azure.userTags` field in the `install-config.yaml` file.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Specify the `.platform.azure.userTags` field as shown in the following `install-config.yaml` file:
+
+  ``` yaml
+  apiVersion: v1
+  baseDomain: example.com
+  #...
+  platform:
+    azure:
+      userTags:
+        <key>: <value>
+  #...
+  ```
+
+  - Defines the additional keys and values that the installation program adds as tags to all Azure resources that it creates.
+
+  - Specify the key and value. You can configure a maximum of 10 tags for resource group and resources. Tag keys are case-insensitive. For more information on requirements for specifying user-defined tags, see "User-defined tags requirements" section.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example `install-config.yaml` file
+
+    </div>
+
+    ``` yaml
+    apiVersion: v1
+    baseDomain: example.com
+    #...
+    platform:
+      azure:
+        userTags:
+          createdBy: user
+          environment: dev
+    #...
+    ```
+
+    </div>
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Access the list of created user-defined tags for the Azure resources by running the following command:
+
+  ``` terminal
+  $ oc get infrastructures.config.openshift.io cluster -o=jsonpath-as-json='{.status.platformStatus.azure.resourceTags}'
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` json
+  [
+      [
+          {
+              "key": "createdBy",
+              "value": "user"
+          },
+          {
+              "key": "environment",
+              "value": "dev"
+          }
+      ]
+  ]
+  ```
+
+  </div>
+
+</div>
+
+## User-defined tags requirements
+
+The user-defined tags have the following requirements:
+
+- A tag key must have a maximum of 128 characters.
+
+- A tag key must begin with a letter.
+
+- A tag key must end with a letter, number or underscore.
+
+- A tag key must contain only letters, numbers, underscores(`_`), periods(`.`), and hyphens(`-`).
+
+- A tag key must not be specified as `name`.
+
+- A tag key must not have the following prefixes:
+
+  - `kubernetes.io`
+
+  - `openshift.io`
+
+  - `microsoft`
+
+  - `azure`
+
+  - `windows`
+
+- A tag value must have a maximum of 256 characters.
+
+For more information about Azure tags, see [Azure user-defined tags](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources?tabs=json).
+
+# Alternatives to storing administrator-level secrets in the kube-system project
+
+By default, administrator secrets are stored in the `kube-system` project. If you configured the `credentialsMode` parameter in the `install-config.yaml` file to `Manual`, you must use one of the following alternatives:
+
+- To manage long-term cloud credentials manually, follow the procedure in [Manually creating long-term credentials](installing-azure-customizations.md#manually-create-iam_installing-azure-customizations).
+
+- To implement short-term credentials that are managed outside the cluster for individual components, follow the procedures in [Configuring an Azure cluster to use short-term credentials](installing-azure-customizations.md#installing-azure-with-short-term-creds_installing-azure-customizations).
+
+## Manually creating long-term credentials
+
+The Cloud Credential Operator (CCO) can be put into manual mode prior to installation in environments where the cloud identity and access management (IAM) APIs are not reachable, or the administrator prefers not to store an administrator-level credential secret in the cluster `kube-system` namespace.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  If you did not set the `credentialsMode` parameter in the `install-config.yaml` configuration file to `Manual`, modify the value as shown:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample configuration file snippet
+
+    </div>
+
+    ``` yaml
+    apiVersion: v1
+    baseDomain: example.com
+    credentialsMode: Manual
+    # ...
+    ```
+
+    </div>
+
+2.  If you have not previously created installation manifest files, do so by running the following command:
+
+    ``` terminal
+    $ openshift-install create manifests --dir <installation_directory>
+    ```
+
+    where `<installation_directory>` is the directory in which the installation program creates files.
+
+3.  Set a `$RELEASE_IMAGE` variable with the release image from your installation file by running the following command:
+
+    ``` terminal
+    $ RELEASE_IMAGE=$(./openshift-install version | awk '/release image/ {print $3}')
+    ```
+
+4.  Extract the list of `CredentialsRequest` custom resources (CRs) from the OpenShift Container Platform release image by running the following command:
+
+    ``` terminal
+    $ oc adm release extract \
+      --from=$RELEASE_IMAGE \
+      --credentials-requests \
+      --included \
+      --install-config=<path_to_directory_with_installation_configuration>/install-config.yaml \
+      --to=<path_to_directory_for_credentials_requests>
+    ```
+
+    where:
+
+    `--included`
+    Specifies only the manifests that your specific cluster configuration requires.
+
+    `<path_to_directory_with_installation_configuration>`
+    Specifies the location of the `install-config.yaml` file.
+
+    `<path_to_directory_for_credentials_requests>`
+    Specifies the path to the directory where you want to store the `CredentialsRequest` objects. If the specified directory does not exist, this command creates it.
+
+    This command creates a YAML file for each `CredentialsRequest` object.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample `CredentialsRequest` object
+
+    </div>
+
+    ``` yaml
+    apiVersion: cloudcredential.openshift.io/v1
+    kind: CredentialsRequest
+    metadata:
+      name: <component_credentials_request>
+      namespace: openshift-cloud-credential-operator
+      ...
+    spec:
+      providerSpec:
+        apiVersion: cloudcredential.openshift.io/v1
+        kind: AzureProviderSpec
+        roleBindings:
+        - role: Contributor
+      ...
+    ```
+
+    </div>
+
+5.  Create YAML files for secrets in the `openshift-install` manifests directory that you generated previously. The secrets must be stored using the namespace and secret name defined in the `spec.secretRef` for each `CredentialsRequest` object.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample `CredentialsRequest` object with secrets
+
+    </div>
+
+    ``` yaml
+    apiVersion: cloudcredential.openshift.io/v1
+    kind: CredentialsRequest
+    metadata:
+      name: <component_credentials_request>
+      namespace: openshift-cloud-credential-operator
+      ...
+    spec:
+      providerSpec:
+        apiVersion: cloudcredential.openshift.io/v1
+        kind: AzureProviderSpec
+        roleBindings:
+        - role: Contributor
+          ...
+      secretRef:
+        name: <component_secret>
+        namespace: <component_namespace>
+      ...
+    ```
+
+    </div>
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample `Secret` object
+
+    </div>
+
+    ``` yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: <component_secret>
+      namespace: <component_namespace>
+    data:
+      azure_subscription_id: <base64_encoded_azure_subscription_id>
+      azure_client_id: <base64_encoded_azure_client_id>
+      azure_client_secret: <base64_encoded_azure_client_secret>
+      azure_tenant_id: <base64_encoded_azure_tenant_id>
+      azure_resource_prefix: <base64_encoded_azure_resource_prefix>
+      azure_resourcegroup: <base64_encoded_azure_resourcegroup>
+      azure_region: <base64_encoded_azure_region>
+    ```
+
+    </div>
+
+    > [!IMPORTANT]
+    > Before upgrading a cluster that uses manually maintained credentials, you must ensure that the CCO is in an upgradeable state.
+
+</div>
+
+## Configuring an Azure cluster to use short-term credentials
+
+To install a cluster that uses Microsoft Entra Workload ID, you must configure the Cloud Credential Operator utility and create the required Azure resources for your cluster.
+
+### Configuring the Cloud Credential Operator utility
+
+To create and manage cloud credentials from outside of the cluster when the Cloud Credential Operator (CCO) is operating in manual mode, extract and prepare the CCO utility (`ccoctl`) binary.
+
+> [!NOTE]
+> The `ccoctl` utility is a Linux binary that must run in a Linux environment.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to an OpenShift Container Platform account with cluster administrator access.
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+- You have created a global Azure account for the `ccoctl` utility to use with the following permissions:
+
+  - `Microsoft.Resources/subscriptions/resourceGroups/read`
+
+  - `Microsoft.Resources/subscriptions/resourceGroups/write`
+
+  - `Microsoft.Resources/subscriptions/resourceGroups/delete`
+
+  - `Microsoft.Authorization/roleAssignments/read`
+
+  - `Microsoft.Authorization/roleAssignments/delete`
+
+  - `Microsoft.Authorization/roleAssignments/write`
+
+  - `Microsoft.Authorization/roleDefinitions/read`
+
+  - `Microsoft.Authorization/roleDefinitions/write`
+
+  - `Microsoft.Authorization/roleDefinitions/delete`
+
+  - `Microsoft.Storage/storageAccounts/listkeys/action`
+
+  - `Microsoft.Storage/storageAccounts/delete`
+
+  - `Microsoft.Storage/storageAccounts/read`
+
+  - `Microsoft.Storage/storageAccounts/write`
+
+  - `Microsoft.Storage/storageAccounts/blobServices/containers/delete`
+
+  - `Microsoft.Storage/storageAccounts/blobServices/containers/read`
+
+  - `Microsoft.Storage/storageAccounts/blobServices/containers/write`
+
+  - `Microsoft.ManagedIdentity/userAssignedIdentities/delete`
+
+  - `Microsoft.ManagedIdentity/userAssignedIdentities/read`
+
+  - `Microsoft.ManagedIdentity/userAssignedIdentities/write`
+
+  - `Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials/read`
+
+  - `Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials/write`
+
+  - `Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials/delete`
+
+  - `Microsoft.Storage/register/action`
+
+  - `Microsoft.ManagedIdentity/register/action`
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Set a variable for the OpenShift Container Platform release image by running the following command:
+
+    ``` terminal
+    $ RELEASE_IMAGE=$(./openshift-install version | awk '/release image/ {print $3}')
+    ```
+
+2.  Obtain the CCO container image from the OpenShift Container Platform release image by running the following command:
+
+    ``` terminal
+    $ CCO_IMAGE=$(oc adm release info --image-for='cloud-credential-operator' $RELEASE_IMAGE -a ~/.pull-secret)
+    ```
+
+    > [!NOTE]
+    > Ensure that the architecture of the `$RELEASE_IMAGE` matches the architecture of the environment in which you will use the `ccoctl` tool.
+
+3.  Extract the `ccoctl` binary from the CCO container image within the OpenShift Container Platform release image by running the following command:
+
+    ``` terminal
+    $ oc image extract $CCO_IMAGE \
+      --file="/usr/bin/ccoctl.<rhel_version>" \
+      -a ~/.pull-secret
+    ```
+
+    For `<rhel_version>`, specify the value that corresponds to the version of Red Hat Enterprise Linux (RHEL) that the host uses. If no value is specified, `ccoctl.rhel8` is used by default. The following values are valid:
+
+    - `rhel8`: Specify this value for hosts that use RHEL 8.
+
+    - `rhel9`: Specify this value for hosts that use RHEL 9.
+
+    > [!NOTE]
+    > The `ccoctl` binary is created in the directory from where you executed the command and not in `/usr/bin/`. You must rename the directory or move the `ccoctl.<rhel_version>` binary to `ccoctl`.
+
+4.  Change the permissions to make `ccoctl` executable by running the following command:
+
+    ``` terminal
+    $ chmod 775 ccoctl
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- To verify that `ccoctl` is ready to use, display the help file. Use a relative file name when you run the command, for example:
+
+  ``` terminal
+  $ ./ccoctl
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` terminal
+  OpenShift credentials provisioning tool
+
+  Usage:
+    ccoctl [command]
+
+  Available Commands:
+    aws          Manage credentials objects for AWS cloud
+    azure        Manage credentials objects for Azure
+    gcp          Manage credentials objects for Google cloud
+    help         Help about any command
+    ibmcloud     Manage credentials objects for IBM Cloud
+    nutanix      Manage credentials objects for Nutanix
+
+  Flags:
+    -h, --help   help for ccoctl
+
+  Use "ccoctl [command] --help" for more information about a command.
+  ```
+
+  </div>
+
+</div>
+
+### Creating Azure resources with the Cloud Credential Operator utility
+
+You can use the `ccoctl azure create-all` command to automate the creation of Azure resources.
+
+> [!NOTE]
+> By default, `ccoctl` creates objects in the directory in which the commands are run. To create the objects in a different directory, use the `--output-dir` flag. This procedure uses `<path_to_ccoctl_output_dir>` to refer to this directory.
+
+<div class="formalpara">
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+You must have:
+
+</div>
+
+- Extracted and prepared the `ccoctl` binary.
+
+- Access to your Microsoft Azure account by using the Azure CLI.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Set a `$RELEASE_IMAGE` variable with the release image from your installation file by running the following command:
+
+    ``` terminal
+    $ RELEASE_IMAGE=$(./openshift-install version | awk '/release image/ {print $3}')
+    ```
+
+2.  Extract the list of `CredentialsRequest` objects from the OpenShift Container Platform release image by running the following command:
+
+    ``` terminal
+    $ oc adm release extract \
+      --from=$RELEASE_IMAGE \
+      --credentials-requests \
+      --included \
+      --install-config=<path_to_directory_with_installation_configuration>/install-config.yaml \
+      --to=<path_to_directory_for_credentials_requests>
+    ```
+
+    where:
+
+    `--included`
+    Specifies to include only the manifests that your specific cluster configuration requires.
+
+    `<path_to_directory_with_installation_configuration>`
+    Specifies the location of the `install-config.yaml` file.
+
+    `<path_to_directory_for_credentials_requests>`
+    Specifies the path to the directory where you want to store the `CredentialsRequest` objects. If the specified directory does not exist, this command creates it.
+
+    > [!NOTE]
+    > This command might take a few moments to run.
+
+3.  To enable the `ccoctl` utility to detect your Azure credentials automatically, log in to the Azure CLI by running the following command:
+
+    ``` terminal
+    $ az login
+    ```
+
+4.  Use the `ccoctl` tool to process all `CredentialsRequest` objects by running the following command:
+
+    ``` terminal
+    $ ccoctl azure create-all \
+      --name=<azure_infra_name> \
+      --output-dir=<ccoctl_output_dir> \
+      --region=<azure_region> \
+      --subscription-id=<azure_subscription_id> \
+      --credentials-requests-dir=<path_to_credentials_requests_directory> \
+      --dnszone-resource-group-name=<azure_dns_zone_resource_group_name> \
+      --tenant-id=<azure_tenant_id> \
+      --network-resource-group-name <azure_resource_group>
+    ```
+
+    where:
+
+    `<azure_infra_name>`
+    Specifies the user-defined name for all created Azure resources used for tracking.
+
+    `<ccoctl_output_dir>`
+    Specifies the directory in which you want the `ccoctl` utility to create objects. By default, the utility creates objects in the directory in which the commands are run. This parameter is optional.
+
+    `<azure_region>`
+    Specifies the Azure region in which cloud resources will be created.
+
+    `<azure_subscription_id>`
+    Specifies the Azure subscription ID to use.
+
+    `<path_to_credentials_requests_directory>`
+    Specifies the directory containing the files for the component `CredentialsRequest` objects.
+
+    `<azure_dns_zone_resource_group_name>`
+    Specifies the name of the resource group containing the cluster’s base domain Azure DNS zone.
+
+    `<azure_tenant_id>`
+    Specifies the Azure tenant ID to use.
+
+    `<azure_resource_group>`
+    Specifies the virtual network resource group if it is different from the cluster resource group. This parameter is optional.
+
+    > [!NOTE]
+    > If your cluster uses Technology Preview features that are enabled by the `TechPreviewNoUpgrade` feature set, you must include the `--enable-tech-preview` parameter.
+    >
+    > To see additional optional parameters and explanations of how to use them, run the `azure create-all --help` command.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- To verify that the OpenShift Container Platform secrets are created, list the files in the `<path_to_ccoctl_output_dir>/manifests` directory:
+
+  ``` terminal
+  $ ls <path_to_ccoctl_output_dir>/manifests
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` text
+  azure-ad-pod-identity-webhook-config.yaml
+  cluster-authentication-02-config.yaml
+  openshift-cloud-controller-manager-azure-cloud-credentials-credentials.yaml
+  openshift-cloud-network-config-controller-cloud-credentials-credentials.yaml
+  openshift-cluster-api-capz-manager-bootstrap-credentials-credentials.yaml
+  openshift-cluster-csi-drivers-azure-disk-credentials-credentials.yaml
+  openshift-cluster-csi-drivers-azure-file-credentials-credentials.yaml
+  openshift-image-registry-installer-cloud-credentials-credentials.yaml
+  openshift-ingress-operator-cloud-credentials-credentials.yaml
+  openshift-machine-api-azure-cloud-credentials-credentials.yaml
+  ```
+
+  </div>
+
+  You can verify that the Microsoft Entra ID service accounts are created by querying Azure. For more information, refer to Azure documentation on listing Entra ID service accounts.
+
+</div>
+
+### Incorporating the Cloud Credential Operator utility manifests
+
+To implement short-term security credentials managed outside the cluster for individual components, you must move the manifest files that the Cloud Credential Operator utility (`ccoctl`) created to the correct directories for the installation program.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have configured an account with the cloud platform that hosts your cluster.
+
+- You have configured the Cloud Credential Operator utility (`ccoctl`).
+
+- You have created the cloud provider resources that are required for your cluster with the `ccoctl` utility.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  If you did not set the `credentialsMode` parameter in the `install-config.yaml` configuration file to `Manual`, modify the value as shown:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample configuration file snippet
+
+    </div>
+
+    ``` yaml
+    apiVersion: v1
+    baseDomain: example.com
+    credentialsMode: Manual
+    # ...
+    ```
+
+    </div>
+
+2.  If you used the `ccoctl` utility to create a new Azure resource group instead of using an existing resource group, modify the `resourceGroupName` parameter in the `install-config.yaml` as shown:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample configuration file snippet
+
+    </div>
+
+    ``` yaml
+    apiVersion: v1
+    baseDomain: example.com
+    # ...
+    platform:
+      azure:
+        resourceGroupName: <azure_infra_name>
+    # ...
+    ```
+
+    </div>
+
+    The `<azure_infra_name>` value must match the user-defined name for Azure resources that was specified with the `--name` argument of the `ccoctl azure create-all` command.
+
+3.  If you have not previously created installation manifest files, do so by running the following command:
+
+    ``` terminal
+    $ openshift-install create manifests --dir <installation_directory>
+    ```
+
+    where `<installation_directory>` is the directory in which the installation program creates files.
+
+4.  Copy the manifests that the `ccoctl` utility generated to the `manifests` directory that the installation program created by running the following command:
+
+    ``` terminal
+    $ cp /<path_to_ccoctl_output_dir>/manifests/* ./manifests/
+    ```
+
+5.  Copy the `tls` directory that contains the private key to the installation directory:
+
+    ``` terminal
+    $ cp -a /<path_to_ccoctl_output_dir>/tls .
+    ```
+
+</div>
+
+# Deploying the cluster
+
+To deploy your OpenShift Container Platform cluster, you can initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions infrastructure and completes cluster setup.
+
+> [!IMPORTANT]
+> You can run the `create cluster` command of the installation program only once, during initial installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have configured an account with the cloud platform that hosts your cluster.
+
+- You have the OpenShift Container Platform installation program and the pull secret for your cluster.
+
+- You have an Azure subscription ID and tenant ID.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- In the directory that contains the installation program, initialize the cluster deployment by running the following command:
+
+  ``` terminal
+  $ ./openshift-install create cluster --dir <installation_directory> \
+      --log-level=info
+  ```
+
+  - For `<installation_directory>`, specify the location of your customized `./install-config.yaml` file.
+
+  - To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Verification
+
+</div>
+
+When the cluster deployment completes successfully:
+
+</div>
+
+- The terminal displays directions for accessing your cluster, including a link to the web console and credentials for the `kubeadmin` user.
+
+- Credential information also outputs to `<installation_directory>/.openshift_install.log`.
+
+  > [!IMPORTANT]
+  > Do not delete the installation program or the files that the installation program creates. Both are required to delete the cluster.
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` terminal
+  ...
+  INFO Install complete!
+  INFO To access the cluster as the system:admin user when using 'oc', run 'export KUBECONFIG=/home/myuser/install_dir/auth/kubeconfig'
+  INFO Access the OpenShift web-console here: https://console-openshift-console.apps.mycluster.example.com
+  INFO Login to the console with user: "kubeadmin", and password: "password"
+  INFO Time elapsed: 36m22s
+  ```
+
+  </div>
+
+  <div class="important">
+
+  <div class="title">
+
+  </div>
+
+  - The Ignition config files that the installation program generates contain certificates that expire after 24 hours, which are then renewed at that time. If the cluster is shut down before renewing the certificates and the cluster is later restarted after the 24 hours have elapsed, the cluster automatically recovers the expired certificates. The exception is that you must manually approve the pending `node-bootstrapper` certificate signing requests (CSRs) to recover kubelet certificates. See the documentation for *Recovering from expired control plane certificates* for more information.
+
+  - It is recommended that you use Ignition config files within 12 hours after they are generated because the 24-hour certificate rotates from 16 to 22 hours after the cluster is installed. By using the Ignition config files within 12 hours, you can avoid installation failure if the certificate update runs during installation.
+
+  </div>
+
+# Logging in to the cluster by using the CLI
+
+To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
+
+The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You deployed an OpenShift Container Platform cluster.
+
+- You installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Export the `kubeadmin` credentials by running the following command:
+
+    ``` terminal
+    $ export KUBECONFIG=<installation_directory>/auth/kubeconfig
+    ```
+
+    where:
+
+    `<installation_directory>`
+    Specifies the path to the directory that stores the installation files.
+
+2.  Verify you can run `oc` commands successfully using the exported configuration by running the following command:
+
+    ``` terminal
+    $ oc whoami
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    system:admin
+    ```
+
+    </div>
+
+</div>
+
+<div>
+
+<div class="title">
+
+Next steps
+
+</div>
+
+- "Customize your cluster"
+
+- "Remote health reporting"
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Accessing the web console](../../../web_console/web-console.md#web-console)
+
+</div>
+
+# Next steps
+
+- [Customize your cluster](../../../post_installation_configuration/cluster-tasks.md#available_cluster_customizations).
+
+- If necessary, you can [Remote health reporting](../../../support/remote_health_monitoring/remote-health-reporting.md#remote-health-reporting).

@@ -1,0 +1,260 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Back up and restore virtual machines by using the OpenShift API for Data Protection.
+
+> [!IMPORTANT]
+> Red Hat supports using OpenShift Virtualization 4.14 or later with OADP 1.3.x or later.
+>
+> OADP versions earlier than 1.3.0 are not supported for back up and restore of OpenShift Virtualization.
+
+# Installing and configuring OADP with OpenShift Virtualization
+
+As a cluster administrator, you can install the OpenShift API for Data Protection (OADP) with OpenShift Virtualization by installing the OADP Operator and configuring a backup location. You can then install the Data Protection Application.
+
+To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog.
+
+> [!NOTE]
+> OpenShift API for Data Protection with OpenShift Virtualization supports the following backup and restore storage options:
+>
+> - Container Storage Interface (CSI) backups
+>
+> - Container Storage Interface (CSI) backups with DataMover
+>
+> The following storage options are excluded:
+>
+> - File system backup and restore
+>
+> - Volume snapshot backup and restore
+>
+> The latest version of the OADP Operator installs Velero 1.16.
+
+> [!WARNING]
+> Red Hat support is limited to only the following options:
+>
+> - CSI backups
+>
+> - CSI backups with DataMover.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Access to the cluster as a user with the `cluster-admin` role.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Install the OADP Operator according to the instructions for your storage provider.
+
+2.  Install the Data Protection Application (DPA) with the `kubevirt` and `openshift` OADP plug-ins.
+
+3.  Back up virtual machines by creating a `Backup` custom resource (CR).
+
+    You restore the `Backup` CR by creating a `Restore` CR.
+
+</div>
+
+# Installing the Data Protection Application
+
+You install the Data Protection Application (DPA) by creating an instance of the `DataProtectionApplication` API.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must install the OADP Operator.
+
+- You must configure object storage as a backup location.
+
+- If you use snapshots to back up PVs, your cloud provider must support either a native snapshot API or Container Storage Interface (CSI) snapshots.
+
+- If the backup and snapshot locations use the same credentials, you must create a `Secret` with the default name, `cloud-credentials`.
+
+  > [!NOTE]
+  > If you do not want to specify backup or snapshot locations during the installation, you can create a default `Secret` with an empty `credentials-velero` file. If there is no default `Secret`, the installation will fail.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Click **Ecosystem** → **Installed Operators** and select the OADP Operator.
+
+2.  Under **Provided APIs**, click **Create instance** in the **DataProtectionApplication** box.
+
+3.  Click **YAML View** and update the parameters of the `DataProtectionApplication` manifest:
+
+    ``` yaml
+    apiVersion: oadp.openshift.io/v1alpha1
+    kind: DataProtectionApplication
+    metadata:
+      name: <dpa_sample>
+      namespace: openshift-adp
+    spec:
+      configuration:
+        velero:
+          defaultPlugins:
+            - kubevirt
+            - gcp
+            - csi
+            - openshift
+          resourceTimeout: 10m
+        nodeAgent:
+          enable: true
+          uploaderType: kopia
+          podConfig:
+            nodeSelector: <node_selector>
+      backupLocations:
+        - velero:
+            provider: gcp
+            default: true
+            credential:
+              key: cloud
+              name: <default_secret>
+            objectStorage:
+              bucket: <bucket_name>
+              prefix: <prefix>
+    ```
+
+    where:
+
+    `namespace`
+    Specifies the default namespace for OADP which is `openshift-adp`. The namespace is a variable and is configurable.
+
+    `kubevirt`
+    Specifies that the `kubevirt` plugin is mandatory for OpenShift Virtualization.
+
+    `gcp`
+    Specifies the plugin for the backup provider, for example, `gcp`, if it exists.
+
+    `csi`
+    Specifies that the `csi` plugin is mandatory for backing up PVs with CSI snapshots. The `csi` plugin uses the [Velero CSI beta snapshot APIs](https://velero.io/docs/main/csi/). You do not need to configure a snapshot location.
+
+    `openshift`
+    Specifies that the `openshift` plugin is mandatory.
+
+    `resourceTimeout`
+    Specifies how many minutes to wait for several Velero resources such as Velero CRD availability, volumeSnapshot deletion, and backup repository availability, before timeout occurs. The default is 10m.
+
+    `nodeAgent`
+    Specifies the administrative agent that routes the administrative requests to servers.
+
+    `enable`
+    Set this value to `true` if you want to enable `nodeAgent` and perform File System Backup.
+
+    `uploaderType`
+    Specifies the uploader type. Enter `kopia` as your uploader to use the Built-in DataMover. The `nodeAgent` deploys a daemon set, which means that the `nodeAgent` pods run on each working node. You can configure File System Backup by adding `spec.defaultVolumesToFsBackup: true` to the `Backup` CR.
+
+    `nodeSelector`
+    Specifies the nodes on which Kopia are available. By default, Kopia runs on all nodes.
+
+    `provider`
+    Specifies the backup provider.
+
+    `name`
+    Specifies the correct default name for the `Secret`, for example, `cloud-credentials-gcp`, if you use a default plugin for the backup provider. If specifying a custom name, then the custom name is used for the backup location. If you do not specify a `Secret` name, the default name is used.
+
+    `bucket`
+    Specifies a bucket as the backup storage location. If the bucket is not a dedicated bucket for Velero backups, you must specify a prefix.
+
+    `prefix`
+    Specifies a prefix for Velero backups, for example, `velero`, if the bucket is used for multiple purposes.
+
+4.  Click **Create**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Verify the installation by viewing the OpenShift API for Data Protection (OADP) resources by running the following command:
+
+    ``` terminal
+    $ oc get all -n openshift-adp
+    ```
+
+        NAME                                                     READY   STATUS    RESTARTS   AGE
+        pod/oadp-operator-controller-manager-67d9494d47-6l8z8    2/2     Running   0          2m8s
+        pod/node-agent-9cq4q                                     1/1     Running   0          94s
+        pod/node-agent-m4lts                                     1/1     Running   0          94s
+        pod/node-agent-pv4kr                                     1/1     Running   0          95s
+        pod/velero-588db7f655-n842v                              1/1     Running   0          95s
+
+        NAME                                                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+        service/oadp-operator-controller-manager-metrics-service   ClusterIP   172.30.70.140    <none>        8443/TCP   2m8s
+        service/openshift-adp-velero-metrics-svc                   ClusterIP   172.30.10.0      <none>        8085/TCP   8h
+
+        NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+        daemonset.apps/node-agent    3         3         3       3            3           <none>          96s
+
+        NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
+        deployment.apps/oadp-operator-controller-manager    1/1     1            1           2m9s
+        deployment.apps/velero                              1/1     1            1           96s
+
+        NAME                                                           DESIRED   CURRENT   READY   AGE
+        replicaset.apps/oadp-operator-controller-manager-67d9494d47    1         1         1       2m9s
+        replicaset.apps/velero-588db7f655                              1         1         1       96s
+
+2.  Verify that the `DataProtectionApplication` (DPA) is reconciled by running the following command:
+
+    ``` terminal
+    $ oc get dpa dpa-sample -n openshift-adp -o jsonpath=''
+    ```
+
+    ``` yaml
+    {"conditions":[{"lastTransitionTime":"2023-10-27T01:23:57Z","message":"Reconcile complete","reason":"Complete","status":"True","type":"Reconciled"}]}
+    ```
+
+3.  Verify the `type` is set to `Reconciled`.
+
+4.  Verify the backup storage location and confirm that the `PHASE` is `Available` by running the following command:
+
+    ``` terminal
+    $ oc get backupstoragelocations.velero.io -n openshift-adp
+    ```
+
+    ``` yaml
+    NAME           PHASE       LAST VALIDATED   AGE     DEFAULT
+    dpa-sample-1   Available   1s               3d16h   true
+    ```
+
+</div>
+
+# Additional resources
+
+- [Application backup and restore operations](../../backup_and_restore/index.md#application-backup-restore-operations-overview)
+
+- [Backing up applications with File System Backup: Kopia or Restic](../../backup_and_restore/application_backup_and_restore/backing_up_and_restoring/oadp-backing-up-applications-restic-doc.md#oadp-backing-up-applications-restic-doc)
+
+- [OADP plug-ins](../../backup_and_restore/application_backup_and_restore/oadp-features-plugins.md#oadp-plugins_oadp-features-plugins)
+
+- [Backing up applications](../../backup_and_restore/application_backup_and_restore/backing_up_and_restoring/backing-up-applications.md#backing-up-applications)
+
+- [Restoring applications](../../backup_and_restore/application_backup_and_restore/backing_up_and_restoring/restoring-applications.md#restoring-applications)
+
+- [Using Operator Lifecycle Manager in disconnected environments](../../disconnected/using-olm.md#olm-restricted-networks)

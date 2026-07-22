@@ -1,0 +1,110 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can create Bring-Your-Own-Host (BYOH) Windows instances to bring existing Windows Server VMs into OpenShift Container Platform. By using BYOH Windows instances, you can mitigate major disruptions if a Windows server goes offline.
+
+# Configuring a BYOH Windows instance
+
+To create a Bring-Your-Own-Host (BYOH) Windows instance, you must create a config map in the Windows Machine Config Operator (WMCO) namespace.
+
+<div class="formalpara">
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+Any Windows instances that are to be attached to the cluster as a node must fulfill the following requirements:
+
+</div>
+
+- The instance must be on the same network as the Linux worker nodes in the cluster.
+
+- Port 22 must be open and running an SSH server.
+
+- The default shell for the SSH server must be the [Windows Command shell](https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_server_configuration#configuring-the-default-shell-for-openssh-in-windows), or `cmd.exe`.
+
+- Port 10250 must be open for log collection.
+
+- An administrator user is present with the [private key used in the secret set as an authorized SSH key](https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_keymanagement#configure-key-based-authentication) (Microsoft documentation).
+
+- If you are creating a BYOH Windows instance for an installer-provisioned infrastructure (IPI) AWS cluster, you must add a tag to the AWS instance that matches the `spec.template.spec.value.tag` value in the compute machine set for your worker nodes. For example, `kubernetes.io/cluster/<cluster_id>: owned` or `kubernetes.io/cluster/<cluster_id>: shared`.
+
+- If you are creating a BYOH Windows instance on vSphere, communication with the internal API server must be enabled.
+
+- The hostname of the instance must follow the [RFC 1123](https://datatracker.ietf.org/doc/html/rfc1123) DNS label requirements, which include the following standards:
+
+  - Contains only lowercase alphanumeric characters or '-'.
+
+  - Starts with an alphanumeric character.
+
+  - Ends with an alphanumeric character.
+
+> [!NOTE]
+> Windows instances deployed by the WMCO are configured with the containerd container runtime. Because the WMCO installs and manages the runtime, it is recommended that you not manually install containerd on nodes.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a ConfigMap named `windows-instances` in the WMCO namespace that describes the Windows instances to be added.
+
+    > [!NOTE]
+    > Format each entry in the config map’s data section by using the address as the key while formatting the value as `username=<username>`.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example config map
+
+    </div>
+
+    ``` yaml
+    kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: windows-instances
+      namespace: openshift-windows-machine-config-operator
+    data:
+      10.1.42.1: |-
+        username=Administrator
+      instance.example.com: |-
+        username=core
+    ```
+
+    </div>
+
+    where:
+
+    `data`
+    Specifies the address that the WMCO uses to reach the instance over SSH, either a DNS name or an IPv4 address. A DNS PTR record must exist for this address. You should use a DNS name with your BYOH instance if your organization uses DHCP to assign IP addresses. If not, you need to update the `windows-instances` ConfigMap whenever the instance is assigned a new IP address.
+
+    Also, specify the user name of the administrator user created in the prerequisites.
+
+</div>
+
+# Removing BYOH Windows instances
+
+You can remove a Bring-Your-Own-Host (BYOH) instance that is attached to the cluster by deleting the instance’s entry in the BYOH config map. Deleting an instance reverts that instance back to its previous state, before it was added to the cluster.
+
+The removal process does not remove any logs or container runtime artifacts from the instances.
+
+For an instance to be cleanly removed, it must be accessible with the current private key provided to WMCO. For example, to remove the `10.1.42.1` instance from the previous example, the config map would be changed to the following:
+
+``` yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: windows-instances
+  namespace: openshift-windows-machine-config-operator
+data:
+  instance.example.com: |-
+    username=core
+```
+
+Deleting `windows-instances` is viewed as a request to deconstruct all Windows instances added as nodes.

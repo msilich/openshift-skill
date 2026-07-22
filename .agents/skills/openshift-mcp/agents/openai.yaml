@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift MCP Operations"
+  short_description: "Operate OpenShift safely through MCP and oc"
+  default_prompt: "Use $openshift-mcp to diagnose this OpenShift issue and perform the requested Day-2 operation safely."

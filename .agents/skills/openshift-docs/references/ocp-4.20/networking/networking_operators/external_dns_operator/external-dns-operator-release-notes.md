@@ -1,0 +1,104 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+The External DNS Operator deploys and manages `ExternalDNS` to provide name resolution for services and routes. This enables your external DNS provider to resolve hostnames directly to OpenShift Container Platform resources.
+
+> [!IMPORTANT]
+> The External DNS Operator is only supported on the `x86_64` architecture.
+
+These release notes track the development of the External DNS Operator in OpenShift Container Platform.
+
+# External DNS Operator 1.3
+
+The External DNS Operator 1.3 release notes summarize all new features and enhancements, notable technical changes, major corrections from previous versions, and any known bugs upon general availability.
+
+External DNS Operator 1.3.2
+The following advisory is available for the External DNS Operator version 1.3.2:
+
+- [RHEA-2025:22454 Product Enhancement Advisory](https://access.redhat.com/errata/RHEA-2025:22454)
+
+External DNS Operator 1.3.1
+The following advisory is available for the External DNS Operator version 1.3.1:
+
+- [RHEA-2025:15598 Product Enhancement Advisory](https://access.redhat.com/errata/RHEA-2025:15598)
+
+  This update includes improved container security.
+
+External DNS Operator 1.3.0
+The following advisory is available for the External DNS Operator version 1.3.0:
+
+- [RHEA-2024:8550 Product Enhancement Advisory](https://access.redhat.com/errata/RHEA-2024:8550)
+
+  This update includes a rebase to the 0.14.2 version of the upstream project.
+
+  Bug fixes:
+
+- Previously, the ExternalDNS Operator could not deploy operands on HCP clusters. With this release, the Operator deploys operands in a running and ready state. (link:https://issues.redhat.com/browse/OCPBUGS-37059\[OCPBUGS-37059))
+
+- Previously, the ExternalDNS Operator was not using RHEL 9 as its building or base images. With this release, RHEL9 is the base. ([OCPBUGS-41683](https://issues.redhat.com/browse/OCPBUGS-41683))
+
+- Previously, the godoc had a broken link for Infoblox provider. With this release, the godoc is revised for accuracy. Some links are removed while some other are replaced with GitHub permalinks. ([OCPBUGS-36797](https://issues.redhat.com/browse/OCPBUGS-36797))
+
+# External DNS Operator 1.2
+
+The External DNS Operator 1.2 release notes summarize all new features and enhancements, notable technical changes, major corrections from previous versions, and any known bugs upon general availability.
+
+External DNS Operator 1.2.0
+The following advisory is available for the External DNS Operator version 1.2.0:
+
+- [RHEA-2022:5867 ExternalDNS Operator 1.2 Operator or operand containers](https://access.redhat.com/errata/RHEA-2023:7239)
+
+  New features:
+
+- The External DNS Operator now supports AWS shared VPC. For more information, see "Creating DNS records in a different AWS Account using a shared VPC".
+
+  Bug fixes:
+
+- The update strategy for the operand changed from `Rolling` to `Recreate`. ([OCPBUGS-3630](https://issues.redhat.com/browse/OCPBUGS-3630))
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Creating DNS records in a different AWS Account using a shared VPC](nw-creating-dns-records-on-aws.md#nw-control-dns-records-public-aws-with-VPC_creating-dns-records-on-aws)
+
+</div>
+
+# External DNS Operator 1.1
+
+The External DNS Operator 1.1 release notes summarize all new features and enhancements, notable technical changes, major corrections from previous versions, and any known bugs upon general availability.
+
+External DNS Operator 1.1.1
+The following advisory is available for the External DNS Operator version 1.1.1:
+
+- [RHEA-2024:0536 ExternalDNS Operator 1.1 Operator or operand containers](https://access.redhat.com/errata/RHEA-2024:0536)
+
+External DNS Operator 1.1.0
+This release included a rebase of the operand from the upstream project version 0.13.1. The following advisory is available for the External DNS Operator version 1.1.0:
+
+- [RHEA-2022:9086-01 ExternalDNS Operator 1.1 Operator or operand containers](https://access.redhat.com/errata/RHEA-2022:9086)
+
+  Bug fixes:
+
+- Previously, the ExternalDNS Operator enforced an empty `defaultMode` value for volumes, which caused constant updates due to a conflict with the OpenShift API. Now, the `defaultMode` value is not enforced and operand deployment does not update constantly. ([OCPBUGS-2793](https://issues.redhat.com/browse/OCPBUGS-2793))
+
+# External DNS Operator 1.0
+
+The External DNS Operator 1.0 release notes summarize all new features and enhancements, notable technical changes, major corrections from previous versions, and any known bugs upon general availability.
+
+External DNS Operator 1.0.1
+The following advisory is available for the External DNS Operator version 1.0.1:
+
+- [RHEA-2024:0537 ExternalDNS Operator 1.0 Operator or operand containers](https://access.redhat.com/errata/RHEA-2024:0537)
+
+External DNS Operator 1.0.0
+The following advisory is available for the External DNS Operator version 1.0.0:
+
+- [RHEA-2022:5867 ExternalDNS Operator 1.0 Operator or operand containers](https://access.redhat.com/errata/RHEA-2022:5867)
+
+  Bug fixes:
+
+- Previously, the External DNS Operator issued a warning about the violation of the restricted SCC policy during ExternalDNS operand pod deployments. This issue has been resolved. ([BZ#2086408](https://bugzilla.redhat.com/show_bug.cgi?id=2086408))

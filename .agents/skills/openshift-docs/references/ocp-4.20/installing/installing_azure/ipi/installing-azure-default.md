@@ -1,0 +1,235 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can install an OpenShift Container Platform cluster on Microsoft Azure by using the default configuration options. The installation program provisions the required infrastructure.
+
+# Deploying the cluster
+
+To deploy your OpenShift Container Platform cluster, you can initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions infrastructure and completes cluster setup.
+
+> [!IMPORTANT]
+> You can run the `create cluster` command of the installation program only once, during initial installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have configured an account with the cloud platform that hosts your cluster.
+
+- You have the OpenShift Container Platform installation program and the pull secret for your cluster.
+
+- You have an Azure subscription ID and tenant ID.
+
+- You have the application ID and password of a service principal.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Optional: If you have run the installation program on this computer before, and want to use an alternative service principal, go to the `~/.azure/` directory and delete the `osServicePrincipal.json` configuration file.
+
+    Deleting this file prevents the installation program from automatically reusing subscription and authentication values from a previous installation.
+
+2.  In the directory that contains the installation program, initialize the cluster deployment by running the following command:
+
+    ``` terminal
+    $ ./openshift-install create cluster --dir <installation_directory> \
+        --log-level=info
+    ```
+
+    - For `<installation_directory>`, specify the directory name to store the files that the installation program creates.
+
+    - To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
+
+    When specifying the directory:
+
+    - Verify that the directory has the `execute` permission. This permission is required to run Terraform binaries under the installation directory.
+
+    - Use an empty directory. Some installation assets, such as bootstrap X.509 certificates, have short expiration intervals, therefore you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
+
+3.  Provide values at the prompts:
+
+    1.  Optional: Select an SSH key to use to access your cluster machines.
+
+        > [!NOTE]
+        > For production OpenShift Container Platform clusters on which you want to perform installation debugging or disaster recovery, specify an SSH key that your `ssh-agent` process uses.
+
+    2.  Select **azure** as the platform to target.
+
+        If the installation program cannot locate the `osServicePrincipal.json` configuration file from a previous installation, you are prompted for Azure subscription and authentication values.
+
+    3.  Specify the following Azure parameter values for your subscription and service principal:
+
+        - **azure subscription id**: Enter the subscription ID to use for the cluster.
+
+        - **azure tenant id**: Enter the tenant ID.
+
+        - **azure service principal client id**: Enter its application ID.
+
+        - **azure service principal client secret**: Enter its password.
+
+    4.  Select the region to deploy the cluster to.
+
+    5.  Select the base domain to deploy the cluster to. The base domain corresponds to the Azure DNS Zone that you created for your cluster.
+
+    6.  Enter a descriptive name for your cluster.
+
+        > [!IMPORTANT]
+        > All Azure resources that are available through public endpoints are subject to resource name restrictions, and you cannot create resources that use certain terms. For a list of terms that Azure restricts, see [Resolve reserved resource name errors](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-reserved-resourcename) in the Azure documentation.
+
+    7.  Paste the [pull secret from Red Hat OpenShift Cluster Manager](https://console.redhat.com/openshift/install/pull-secret).
+
+    > [!NOTE]
+    > If previously not detected, the installation program creates an `osServicePrincipal.json` configuration file and stores this file in the `~/.azure/` directory on your computer. This ensures that the installation program can load the profile when it is creating an OpenShift Container Platform cluster on the target platform.
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Verification
+
+</div>
+
+When the cluster deployment completes successfully:
+
+</div>
+
+- The terminal displays directions for accessing your cluster, including a link to the web console and credentials for the `kubeadmin` user.
+
+- Credential information also outputs to `<installation_directory>/.openshift_install.log`.
+
+  > [!IMPORTANT]
+  > Do not delete the installation program or the files that the installation program creates. Both are required to delete the cluster.
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` terminal
+  ...
+  INFO Install complete!
+  INFO To access the cluster as the system:admin user when using 'oc', run 'export KUBECONFIG=/home/myuser/install_dir/auth/kubeconfig'
+  INFO Access the OpenShift web-console here: https://console-openshift-console.apps.mycluster.example.com
+  INFO Login to the console with user: "kubeadmin", and password: "password"
+  INFO Time elapsed: 36m22s
+  ```
+
+  </div>
+
+  <div class="important">
+
+  <div class="title">
+
+  </div>
+
+  - The Ignition config files that the installation program generates contain certificates that expire after 24 hours, which are then renewed at that time. If the cluster is shut down before renewing the certificates and the cluster is later restarted after the 24 hours have elapsed, the cluster automatically recovers the expired certificates. The exception is that you must manually approve the pending `node-bootstrapper` certificate signing requests (CSRs) to recover kubelet certificates. See the documentation for *Recovering from expired control plane certificates* for more information.
+
+  - It is recommended that you use Ignition config files within 12 hours after they are generated because the 24-hour certificate rotates from 16 to 22 hours after the cluster is installed. By using the Ignition config files within 12 hours, you can avoid installation failure if the certificate update runs during installation.
+
+  </div>
+
+# Logging in to the cluster by using the CLI
+
+To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
+
+The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You deployed an OpenShift Container Platform cluster.
+
+- You installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Export the `kubeadmin` credentials by running the following command:
+
+    ``` terminal
+    $ export KUBECONFIG=<installation_directory>/auth/kubeconfig
+    ```
+
+    where:
+
+    `<installation_directory>`
+    Specifies the path to the directory that stores the installation files.
+
+2.  Verify you can run `oc` commands successfully using the exported configuration by running the following command:
+
+    ``` terminal
+    $ oc whoami
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    system:admin
+    ```
+
+    </div>
+
+</div>
+
+<div>
+
+<div class="title">
+
+Next steps
+
+</div>
+
+- "Customize your cluster"
+
+- "Remote health reporting"
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Accessing the web console](../../../web_console/web-console.md#web-console)
+
+- [Customize your cluster](../../../post_installation_configuration/cluster-tasks.md#available_cluster_customizations)
+
+- [Remote health reporting](../../../support/remote_health_monitoring/remote-health-reporting.md#remote-health-reporting)
+
+</div>

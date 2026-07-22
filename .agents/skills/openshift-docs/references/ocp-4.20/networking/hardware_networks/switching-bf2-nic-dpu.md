@@ -1,0 +1,120 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can switch the Bluefield-2 network device from data processing unit (DPU) mode to network interface controller (NIC) mode.
+
+Before you perform any tasks in the following documentation, ensure that you [installed the SR-IOV Network Operator](../networking_operators/sr-iov-operator/installing-sriov-operator.md#installing-sriov-operator).
+
+# Switching Bluefield-2 from DPU mode to NIC mode
+
+Use the following procedure to switch Bluefield-2 from data processing units (DPU) mode to network interface controller (NIC) mode.
+
+> [!IMPORTANT]
+> Currently, only switching Bluefield-2 from DPU to NIC mode is supported. Switching from NIC mode to DPU mode is unsupported.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the SR-IOV Network Operator. For more information, see "Installing SR-IOV Network Operator".
+
+- You have updated Bluefield-2 to the latest firmware. For more information, see [Firmware for NVIDIA BlueField-2](https://network.nvidia.com/support/firmware/bluefield2/).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Add the following label to each of your compute nodes by entering the following command. You must run the command for each compute node.
+
+    ``` terminal
+    $ oc label node <node_name> node-role.kubernetes.io/sriov=
+    ```
+
+    where:
+
+    `node_name`
+    Refers to the name of a compute node.
+
+2.  Create a machine config pool for the SR-IOV Network Operator, for example:
+
+    ``` yaml
+    apiVersion: machineconfiguration.openshift.io/v1
+    kind: MachineConfigPool
+    metadata:
+      name: sriov
+    spec:
+      machineConfigSelector:
+        matchExpressions:
+        - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,sriov]}
+      nodeSelector:
+        matchLabels:
+          node-role.kubernetes.io/sriov: ""
+    ```
+
+3.  Apply the following `machineconfig.yaml` file to the compute nodes:
+
+    ``` yaml
+    apiVersion: machineconfiguration.openshift.io/v1
+    kind: MachineConfig
+    metadata:
+      labels:
+        machineconfiguration.openshift.io/role: sriov
+      name: 99-bf2-dpu
+    spec:
+      config:
+        ignition:
+          version: 3.2.0
+        storage:
+          files:
+          - contents:
+              source: data:text/plain;charset=utf-8;base64,ZmluZF9jb250YWluZXIoKSB7CiAgY3JpY3RsIHBzIC1vIGpzb24gfCBqcSAtciAnLmNvbnRhaW5lcnNbXSB8IHNlbGVjdCgubWV0YWRhdGEubmFtZT09InNyaW92LW5ldHdvcmstY29uZmlnLWRhZW1vbiIpIHwgLmlkJwp9CnVudGlsIG91dHB1dD0kKGZpbmRfY29udGFpbmVyKTsgW1sgLW4gIiRvdXRwdXQiIF1dOyBkbwogIGVjaG8gIndhaXRpbmcgZm9yIGNvbnRhaW5lciB0byBjb21lIHVwIgogIHNsZWVwIDE7CmRvbmUKISBzdWRvIGNyaWN0bCBleGVjICRvdXRwdXQgL2JpbmRhdGEvc2NyaXB0cy9iZjItc3dpdGNoLW1vZGUuc2ggIiRAIgo=
+            mode: 0755
+            overwrite: true
+            path: /etc/default/switch_in_sriov_config_daemon.sh
+        systemd:
+          units:
+          - name: dpu-switch.service
+            enabled: true
+            contents: |
+              [Unit]
+              Description=Switch BlueField2 card to NIC/DPU mode
+              RequiresMountsFor=%t/containers
+              Wants=network.target
+              After=network-online.target kubelet.service
+              [Service]
+              SuccessExitStatus=0 120
+              RemainAfterExit=True
+              ExecStart=/bin/bash -c '/etc/default/switch_in_sriov_config_daemon.sh nic || shutdown -r now'
+              Type=oneshot
+              [Install]
+              WantedBy=multi-user.target
+    ```
+
+    - `ExecStart` specifies the command to switch the Bluefield-2 into NIC mode. Optionally, you can specify the PCI address of a specific card, for example `ExecStart=/bin/bash -c '/etc/default/switch_in_sriov_config_daemon.sh nic 0000:5e:00.0 || echo done'`. By default, the first device is selected. If there is more than one device, you must specify which PCI address to use. The PCI address must be the same on all nodes that are switching Bluefield-2 from DPU mode to NIC mode.
+
+4.  Wait for the compute nodes to restart. After restarting, the Bluefield-2 network device on the compute nodes is switched into NIC mode.
+
+5.  Optional: You might need to restart the host hardware because most recent Bluefield-2 firmware releases require a hardware restart to switch into NIC mode.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installing SR-IOV Network Operator](../networking_operators/sr-iov-operator/installing-sriov-operator.md#installing-sriov-operator)
+
+</div>

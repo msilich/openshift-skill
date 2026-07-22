@@ -1,0 +1,43 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Cluster administrators can use the Run Once Duration Override Operator to force a limit on the time that run-once pods can be active. After the time limit expires, the cluster tries to terminate the run-once pods. The main reason to have such a limit is to prevent tasks such as builds to run for an excessive amount of time.
+
+To apply the run-once duration override from the Run Once Duration Override Operator to run-once pods, you must enable it on each applicable namespace.
+
+These release notes track the development of the Run Once Duration Override Operator for OpenShift Container Platform.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [About the Run Once Duration Override Operator](index.md#rodoo-about_run-once-duration-override-about)
+
+</div>
+
+# Run Once Duration Override Operator 1.3.1
+
+Issued: 29 October 2025
+
+The following advisory is available for the Run Once Duration Override Operator 1.3.1: ([RHBA-2025:19272](https://access.redhat.com/errata/RHBA-2025:19272))
+
+## New features and enhancements
+
+- This release of the Run Once Duration Override Operator updates the Kubernetes version to 1.33.
+
+## Bug fixes
+
+- This release of the Run Once Duration Override Operator addresses several Common Vulnerabilities and Exposures (CVEs).
+
+# Run Once Duration Override Operator 1.3.0
+
+Issued: 9 July 2025
+
+The following advisory is available for the Run Once Duration Override Operator 1.3.0: ([RHBA-2025-10725](https://access.redhat.com/errata/RHBA-2025:10725))
+
+## Bug fixes
+
+- This release of the Run Once Duration Override Operator addresses several Common Vulnerabilities and Exposures (CVEs).

@@ -1,0 +1,31 @@
+{
+  "format_version": 1,
+  "sources": {
+    "agentic_skills_converter": {
+      "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.agentic-skills",
+      "path": "documentation/openshift-docs/convert.py",
+      "sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "url": "https://github.com/openshift/agentic-skills"
+    },
+    "openshift_docs": {
+      "branch_hint": "enterprise-4.20",
+      "commit": "5aee2719f9ad01a82bb80b391e5af25f566c73c0",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.openshift-docs",
+      "url": "https://github.com/openshift/openshift-docs"
+    }
+  },
+  "dependencies": {
+    "asciidoctor": "2.0.23",
+    "pandoc": "3.7.0.2",
+    "python_minimum": "3.12",
+    "pyyaml": "6.0.3"
+  },
+  "expected_output": {
+    "converted_topics": 1746,
+    "markdown_files": 1748,
+    "markdown_manifest_sha256": "5d09522a8edf3ba39fabe2e61c2c38bfc6ff0e60f675a1c5aba33de9f4730636"
+  }
+}

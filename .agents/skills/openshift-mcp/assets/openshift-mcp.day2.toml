@@ -1,0 +1,48 @@
+# Complete personal single-context Day-2 profile. Protect the kubeconfig as admin material.
+# Pass it explicitly with --kubeconfig; the OpenCode template uses
+# OPENSHIFT_MCP_DAY2_KUBECONFIG so this TOML contains no machine-specific path.
+# Source baseline: openshift/openshift-mcp-server@a0a1c370fcce18f76cecdbb2e07d8f4dbafe92dd
+
+cluster_provider_strategy = "disabled"
+read_only = false
+disable_destructive = false
+validation_enabled = true
+list_output = "table"
+experimental_enable_target_compatibility_tool_filters = true
+
+# Every toolset registered by the pinned OpenShift downstream build. Some
+# extension tools also require their operator/backend-specific configuration.
+toolsets = [
+  "core",
+  "config",
+  "helm",
+  "kcp",
+  "ossm",
+  "kubevirt",
+  "netobserv",
+  "tekton",
+  "cluster-diagnostics",
+  "openshift/mustgather",
+  "netedge",
+  "oadp",
+  "openshift",
+  "observability/logs",
+  "observability/metrics",
+  "observability/otelcol",
+  "observability/traces",
+]
+
+# OpenCode currently has no MCP elicitation support. Keep rules empty and use
+# OpenCode permission `ocp_day2_* = "ask"` for every tool call.
+confirmation_fallback = "deny"
+
+# Keep all registered Day-2 tools except raw kubeconfig disclosure.
+disabled_tools = ["configuration_view"]
+
+server_instructions = """
+Use this server only for an explicitly requested OpenShift Day-2 task. Inspect
+current state first, keep every target explicit, make one bounded change, and
+verify the resulting rollout and health. Do not access Secrets without the
+user's per-task choice. This complete profile is intentionally privileged;
+OpenCode must ask for every tool call.
+"""

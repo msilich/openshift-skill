@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift 4.20 Documentation"
+  short_description: "Search the offline OpenShift 4.20 docs"
+  default_prompt: "Use $openshift-docs to answer this question from the bundled OpenShift 4.20 documentation."

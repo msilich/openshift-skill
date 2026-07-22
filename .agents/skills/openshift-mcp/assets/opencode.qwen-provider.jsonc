@@ -1,0 +1,23 @@
+// Optional OpenAI-compatible Qwen provider. Merge this object into the normal
+// OpenCode configuration or use it as the provider layer for either MCP profile.
+// Keep the API key in the environment; never commit it.
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "qwen/REPLACE_WITH_QWEN_MODEL_ID",
+  "enabled_providers": ["qwen"],
+  "provider": {
+    "qwen": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenAI-compatible Qwen",
+      "options": {
+        "baseURL": "{env:QWEN_BASE_URL}",
+        "apiKey": "{env:QWEN_API_KEY}"
+      },
+      "models": {
+        "REPLACE_WITH_QWEN_MODEL_ID": {
+          "name": "Qwen for OpenShift operations"
+        }
+      }
+    }
+  }
+}

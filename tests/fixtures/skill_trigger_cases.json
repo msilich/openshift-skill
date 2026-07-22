@@ -1,0 +1,26 @@
+[
+  {
+    "prompt": "Diagnose why deployment payments-api is unavailable in namespace payments.",
+    "expected_skill": "openshift-mcp"
+  },
+  {
+    "prompt": "Skaliere das Deployment api im Namespace shop auf drei Replicas und pruefe den Rollout.",
+    "expected_skill": "openshift-mcp"
+  },
+  {
+    "prompt": "Welche Felder unter Route.spec.tls stellt dieser Cluster bereit?",
+    "expected_skill": "openshift-api"
+  },
+  {
+    "prompt": "Verify the served apiVersion and CRD schema for ClusterLogForwarder.",
+    "expected_skill": "openshift-api"
+  },
+  {
+    "prompt": "Find the OCP 4.20 procedure for configuring a custom ingress certificate.",
+    "expected_skill": "openshift-docs"
+  },
+  {
+    "prompt": "Wie funktioniert ein disconnected Cluster-Update in OpenShift 4.20?",
+    "expected_skill": "openshift-docs"
+  }
+]

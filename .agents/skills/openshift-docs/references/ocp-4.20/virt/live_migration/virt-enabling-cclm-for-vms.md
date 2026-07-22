@@ -1,0 +1,144 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Cross-cluster live migration enables users to move a virtual machine (VM) workload from one OpenShift Container Platform cluster to another cluster without disruption.
+
+# Prerequisites
+
+- OpenShift Virtualization 4.20 or later must be installed.
+
+- The OpenShift Container Platform and OpenShift Virtualization minor release versions must match. For example, if the OpenShift Container Platform version is 4.20.0, the OpenShift Virtualization must also be 4.20.0.
+
+- Two OpenShift Container Platform clusters are required, and the migration network for both clusters must be connected to the same L2 network segment.
+
+- You must have cluster administration privileges and appropriate RBAC privileges to manage VMs on both clusters.
+
+> [!IMPORTANT]
+> Cross-cluster live migration is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+>
+> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
+# Setting a live migration feature gate for each cluster in OpenShift Virtualization
+
+To enable cross-cluster live migration, you must set a feature gate for each of the two clusters in OpenShift Virtualization.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You must have cluster admin privileges.
+
+- The `virt-synchronization-controller` pods must be running.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Set the feature gate by running the following command for each cluster:
+
+  ``` terminal
+  $ oc patch hyperconverged kubevirt-hyperconverged -n openshift-cnv --type json -p '[{"op":"replace", "path": "/spec/featureGates/decentralizedLiveMigration", "value": true}]'
+  ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- To verify that the feature gate enablement is successful for each cluster, run the following command in the OpenShift Virtualization namespace to locate the synchronization pods:
+
+  ``` terminal
+  $ oc get -n {CNVNamespace} pod | grep virt-synchronization
+  ```
+
+  Example output:
+
+  ``` terminal
+  virt-synchronization-controller-898789f8fc-nsbsm      1/1     Running   0               5d1h
+  virt-synchronization-controller-898789f8fc-vmmfj      1/1     Running   0               5d1h
+  ```
+
+</div>
+
+# Setting a live migration feature gate in the Migration Toolkit for Virtualization (MTV)
+
+You enable the OpenShift Container Platform live migration feature gate in the Migration Toolkit for Virtualization (MTV) to allow virtual machines to migrate between clusters during cross-cluster live migration. This feature gate must be enabled in both clusters that participate in the migration.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You must have cluster admin privileges.
+
+- The `virt-synchronization-controller` pods must be running.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To enable the feature gate by modifying the CR, run the following command:
+
+  ``` terminal
+  $ oc patch ForkliftController forklift-controller -n openshift-mtv --type json -p '[{"op": "add", "path": "/spec/feature_ocp_live_migration", "value": "true"}]'
+  ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Verify that the feature gate is enabled by checking the `ForkliftController` custom resource (CR). Run the following command:
+
+  ``` terminal
+  $ oc get ForkliftController forklift-controller -n openshift-mtv -o yaml
+  ```
+
+  Confirm that the `feature_ocp_live_migration` key value is set to `true`, as shown in the following example:
+
+  ``` yaml
+  apiVersion: forklift.konveyor.io/v1beta1
+  kind: ForkliftController
+  metadata:
+    name: forklift-controller
+    namespace: openshift-mtv
+  spec:
+    feature_ocp_live_migration: "true"
+    feature_ui_plugin: "true"
+    feature_validation: "true"
+    feature_volume_populator: "true"
+  ```
+
+</div>

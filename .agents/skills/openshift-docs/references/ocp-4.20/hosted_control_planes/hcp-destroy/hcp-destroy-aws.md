@@ -1,0 +1,55 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You might want to remove a hosted cluster if you are no longer using it, you are trying to reduce resources, or the hosted cluster is experiencing issues that are difficult to resolve.
+
+# Destroying a hosted cluster on AWS by using the CLI
+
+To delete a hosted cluster and its managed cluster resource from hosted control planes on Amazon Web Services (AWS), use the command-line interface (CLI).
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Delete the managed cluster resource on multicluster engine Operator by running the following command:
+
+    ``` terminal
+    $ oc delete managedcluster <hosted_cluster_name>
+    ```
+
+    Replace `<hosted_cluster_name>` with the name of your cluster.
+
+2.  Delete the hosted cluster and its backend resources by running the following command:
+
+    ``` terminal
+    $ hcp destroy cluster aws  \
+      --name <hosted_cluster_name> \
+      --infra-id <infra_id> \
+      --role-arn <arn_role> \
+      --sts-creds <path_to_sts_credential_file> \
+      --base-domain <base_domain>
+    ```
+
+    where:
+
+    - `<hosted_cluster_name>` specifies the name of your hosted cluster, for example, `my-hosted-cluster`.
+
+    - `<infra_id>` specifies the infrastructure name for your hosted cluster.
+
+    - `<arn_role>` specifies the Amazon Resource Name (ARN), for example, `arn:aws:iam::820196288204:role/myrole`.
+
+    - `<path_to_sts_credential_file>` specifies the path to your AWS Security Token Service (STS) credentials file, for example, `/home/user/sts-creds/sts-creds.json`.
+
+    - `<base_domain>` specifies your base domain, for example, `example.com`.
+
+      > [!IMPORTANT]
+      > If your session token for AWS Security Token Service (STS) is expired, retrieve the STS credentials in a JSON file named `sts-creds.json` by running the following command:
+      >
+      > ``` terminal
+      > $ aws sts get-session-token --output json > sts-creds.json
+      > ```
+
+</div>

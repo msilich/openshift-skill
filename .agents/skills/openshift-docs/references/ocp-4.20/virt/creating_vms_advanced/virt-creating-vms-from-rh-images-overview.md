@@ -1,0 +1,136 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+RHEL golden images are published as container disks in a secure registry. The Containerized Data Importer (CDI) polls imports golden images into your cluster and stores them in the `openshift-virtualization-os-images` project as snapshots or persistent volume claims (PVCs).
+
+RHEL images are automatically updated. You can disable and re-enable automatic updates for these images. For more information, see "Additional resources".
+
+Cluster administrators can enable automatic subscription for RHEL virtual machines in the OpenShift Container Platform web console.
+
+You can create virtual machines (VMs) from operating system images provided by Red Hat by using one of the following methods:
+
+- Create a VM from a template by using the web console.
+
+- Create a VM from an instance type by using the web console.
+
+- Create a VM from a `VirtualMachine` manifest by using the command line.
+
+> [!IMPORTANT]
+> Do not create VMs in the default `openshift-*` namespaces. Instead, create a new namespace or use an existing namespace without the `openshift` prefix.
+
+# About golden images
+
+A golden image is a preconfigured snapshot of a virtual machine (VM) that you can use as a resource to deploy new VMs. For example, you can use golden images to provision the same system environment consistently and deploy systems more quickly and efficiently.
+
+## How do golden images work?
+
+Golden images are created by installing and configuring an operating system and software applications on a reference machine or virtual machine. This includes setting up the system, installing required drivers, applying patches and updates, and configuring specific options and preferences.
+
+After the golden image is created, it is saved as a template or image file that can be replicated and deployed across multiple clusters. The golden image can be updated by its maintainer periodically to incorporate necessary software updates and patches, ensuring that the image remains up to date and secure, and newly created VMs are based on this updated image.
+
+## Red Hat implementation of golden images
+
+Red Hat publishes golden images as container disks in the registry for versions of Red Hat Enterprise Linux (RHEL). Container disks are virtual machine images that are stored as a container image in a container image registry. Any published image will automatically be made available in connected clusters after the installation of OpenShift Virtualization. After the images are available in a cluster, they are ready to use to create VMs.
+
+# About VM boot sources
+
+Virtual machines (VMs) consist of a VM definition and one or more disks that are backed by data volumes. VM templates enable you to create VMs using predefined specifications.
+
+Every template requires a boot source, which is a fully configured disk image including configured drivers. Each template contains a VM definition with a pointer to the boot source. Each boot source has a predefined name and namespace. For some operating systems, a boot source is automatically provided. If it is not provided, then an administrator must prepare a custom boot source.
+
+Provided boot sources are updated automatically to the latest version of the operating system. For auto-updated boot sources, persistent volume claims (PVCs) and volume snapshots are created with the cluster’s default storage class. If you select a different default storage class after configuration, you must delete the existing boot sources in the cluster namespace that are configured with the previous default storage class.
+
+# Configuring a custom namespace for golden images by using the web console
+
+You can configure a custom namespace for golden images in your cluster by using the OpenShift Container Platform web console.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In the web console, select **Virtualization** → **Overview**.
+
+2.  Select the **Settings** tab.
+
+3.  On the **Cluster** tab, select **General settings** → **Bootable volumes project**.
+
+4.  Select a namespace to use for golden images.
+
+    1.  If you already created a namespace, select it from the **Project** list.
+
+    2.  If you did not create a namespace, scroll to the bottom of the list and click **Create project**.
+
+        1.  Enter a name for your new namespace in the **Name** field of the **Create project** dialog.
+
+        2.  Click **Create**.
+
+</div>
+
+# Configuring a custom namespace for golden images by using the CLI
+
+You can configure a custom namespace for golden images in your cluster by setting the `spec.commonBootImageNamespace` field in the `HyperConverged` custom resource (CR).
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You installed the OpenShift CLI (`oc`).
+
+- You created a namespace to use for golden images.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Open the `HyperConverged` CR in your default editor by running the following command:
+
+    ``` terminal
+    $ oc edit hyperconverged kubevirt-hyperconverged -n openshift-cnv
+    ```
+
+2.  Configure the custom namespace by updating the value of the `spec.commonBootImageNamespace` field.
+
+    Example configuration file:
+
+    ``` yaml
+    apiVersion: hco.kubevirt.io/v1
+    kind: HyperConverged
+    metadata:
+      name: kubevirt-hyperconverged
+      namespace: openshift-cnv
+    spec:
+      commonBootImageNamespace: <custom_namespace>
+    # ...
+    ```
+
+    where:
+
+    `spec.commonBootImageNamespace`
+    Specifies the namespace to use for golden images.
+
+3.  Save your changes and exit the editor.
+
+</div>
+
+# Additional resources
+
+- [Managing Red Hat boot source updates](../storage/virt-automatic-bootsource-updates.md#virt-managing-auto-update-all-system-boot-sources_virt-automatic-bootsource-updates)
+
+- [Creating a VM from a template by using the web console](../creating_vm/virt-creating-vms-from-templates.md#virt-creating-vms-from-templates)
+
+- [Creating a VM from an instance type by using the web console](../creating_vm/virt-creating-vms-from-instance-types.md#virt-creating-vms-from-instance-types)
+
+- [Creating a VM from a `VirtualMachine` manifest by using the command line](virt-creating-vms-from-cli.md#virt-creating-vms-from-cli)

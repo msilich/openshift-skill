@@ -1,0 +1,281 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Hosted control planes deployments in disconnected environments function differently than in a standalone OpenShift Container Platform.
+
+Hosted control planes involves two distinct environments:
+
+- Control plane: Located in the management cluster, where the hosted control planes pods are run and managed by the Control Plane Operator.
+
+- Data plane: Located in the workers of the hosted cluster, where the workload and a few other pods run, managed by the Hosted Cluster Config Operator.
+
+The `ImageContentSourcePolicy` (ICSP) custom resource for the data plane is managed through the `ImageContentSources` API in the hosted cluster manifest.
+
+For the control plane, ICSP objects are managed in the management cluster. These objects are parsed by the HyperShift Operator and are shared as `registry-overrides` entries with the Control Plane Operator. These entries are injected into any one of the available deployments in the hosted control planes namespace as an argument.
+
+To work with disconnected registries in the hosted control planes, you must first create the appropriate ICSP in the management cluster. Then, to deploy disconnected workloads in the data plane, you need to add the entries that you want into the `ImageContentSources` field in the hosted cluster manifest.
+
+# Prerequisites to deploy hosted control planes on IBM Z in a disconnected environment
+
+To deploy hosted control planes on IBM Z in a disconnected environment, you must meet a few prerequisites.
+
+You need the following resources:
+
+- A mirror registry. For more information, see "Mirror registry for Red Hat OpenShift introduction".
+
+- A mirrored image for a disconnected installation. For more information, see "Mirroring images for a disconnected installation using the oc-mirror plugin".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Mirror registry for Red Hat OpenShift introduction](../../disconnected/installing-mirroring-creating-registry.md#mirror-registry-introduction_installing-mirroring-creating-registry)
+
+- [Mirroring images for a disconnected installation by using the oc-mirror plugin v2](../../disconnected/about-installing-oc-mirror-v2.md#about-installing-oc-mirror-v2)
+
+</div>
+
+# Adding credentials and the registry certificate authority to the management cluster
+
+To pull the mirror registry images from the management cluster, you must first add credentials and the certificate authority of the mirror registry to the management cluster.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a `ConfigMap` with the certificate of the mirror registry by running the following command:
+
+    ``` terminal
+    $ oc apply -f registry-config.yaml
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: registry-config
+      namespace: openshift-config
+    data:
+      <mirror_registry>: |
+        -----BEGIN CERTIFICATE-----
+        -----END CERTIFICATE-----
+    #...
+    ```
+
+    </div>
+
+2.  Patch the `image.config.openshift.io` cluster-wide object to include the following entries:
+
+    ``` yaml
+    spec:
+      additionalTrustedCA:
+        - name: registry-config
+    ```
+
+3.  Update the management cluster pull secret to add the credentials of the mirror registry.
+
+    1.  Fetch the pull secret from the cluster in a JSON format by running the following command:
+
+        ``` terminal
+        $ oc get secret/pull-secret -n openshift-config -o json \
+          | jq -r '.data.".dockerconfigjson"' \
+          | base64 -d > authfile
+        ```
+
+    2.  Edit the fetched secret JSON file to include a section with the credentials of the certificate authority:
+
+        ``` terminal
+          "auths": {
+            "<mirror_registry>": {
+              "auth": "<credentials>",
+              "email": "you@example.com"
+            }
+          },
+        ```
+
+        - `<mirror_registry>` specifies the name of the mirror registry.
+
+        - `<credentials>` specifies the credentials for the mirror registry to allow fetch of images.
+
+    3.  Update the pull secret on the cluster by running the following command:
+
+        ``` terminal
+        $ oc set data secret/pull-secret -n openshift-config \
+          --from-file=.dockerconfigjson=authfile
+        ```
+
+</div>
+
+# Update the registry certificate authority in the AgentServiceConfig resource with the mirror registry
+
+When you use a mirror registry for images, agents need to trust the registry’s certificate to securely pull images. You can add the certificate authority of the mirror registry to the `AgentServiceConfig` custom resource by creating a `ConfigMap`.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have installed multicluster engine for Kubernetes Operator.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In the same namespace where you installed multicluster engine Operator, create a `ConfigMap` resource with the mirror registry details. This `ConfigMap` resource ensures that you grant the hosted cluster workers the capability to retrieve images from the mirror registry.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example ConfigMap file
+
+    </div>
+
+    ``` yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: mirror-config
+      namespace: multicluster-engine
+      labels:
+        app: assisted-service
+    data:
+      ca-bundle.crt: |
+        -----BEGIN CERTIFICATE-----
+        -----END CERTIFICATE-----
+      registries.conf: |
+
+        [[registry]]
+          location = "registry.stage.redhat.io"
+          insecure = false
+          blocked = false
+          mirror-by-digest-only = true
+          prefix = ""
+
+          [[registry.mirror]]
+            location = "<mirror_registry>"
+            insecure = false
+
+        [[registry]]
+          location = "registry.redhat.io/multicluster-engine"
+          insecure = false
+          blocked = false
+          mirror-by-digest-only = true
+          prefix = ""
+
+          [[registry.mirror]]
+            location = "<mirror_registry>/multicluster-engine"
+            insecure = false
+    ```
+
+    </div>
+
+    Replace `<mirror_registry>` with the name of the mirror registry.
+
+2.  Patch the `AgentServiceConfig` resource to include the `ConfigMap` resource that you created. If the `AgentServiceConfig` resource is not present, create the `AgentServiceConfig` resource with the following content embedded into it:
+
+    ``` terminal
+    spec:
+      mirrorRegistryRef:
+        name: mirror-config
+    ```
+
+</div>
+
+# Adding the registry certificate authority to the hosted cluster
+
+When you are deploying hosted control planes on IBM Z in a disconnected environment, include the `additional-trust-bundle` and `image-content-sources` resources. The hosted cluster uses those resources to inject the certificate authority into the data plane compute nodes so that the images are pulled from the registry.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create the `icsp.yaml` file with the `image-content-sources` information.
+
+    The `image-content-sources` information is available in the `ImageContentSourcePolicy` YAML file that is generated after you mirror the images by using `oc-mirror`.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example ImageContentSourcePolicy file
+
+    </div>
+
+    ``` terminal
+    # cat icsp.yaml
+    - mirrors:
+      - <mirror_registry>/openshift/release
+      source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+    - mirrors:
+      - <mirror_registry>/openshift/release-images
+      source: quay.io/openshift-release-dev/ocp-release
+    ```
+
+    </div>
+
+2.  Create a hosted cluster and provide the `additional-trust-bundle` certificate to update the compute nodes with the certificates as in the following example:
+
+    ``` terminal
+    $ hcp create cluster agent \
+        --name=my-hosted-cluster \
+        --pull-secret=/user/name/pullsecret \
+        --agent-namespace=clusters-hosted \
+        --base-domain=example.com \
+        --api-server-address=api.my-hosted-cluster.example.com \
+        --etcd-storage-class=lvm-storageclass \
+        --ssh-key ~/.ssh/id_rsa.pub \
+        --namespace <hosted_cluster_namespace> \
+        --control-plane-availability-policy SingleReplica \
+        --release-image=quay.io/openshift-release-dev/ocp-release:4.20.0-multi \
+        --additional-trust-bundle <path for cert> \
+        --image-content-sources icsp.yaml
+    ```
+
+    - `--name` specifies the name of your hosted cluster.
+
+    - `--pull-secret` specifies the path to your pull secret.
+
+    - `--agent-namespace` specifies the name of the hosted control plane namespace.
+
+    - `--base-domain` specifies the name of your base domain.
+
+    - `--etcd-storage-class` specifies the etcd storage class name.
+
+    - `--ssh-key` specifies the path to your SSH public key. The default file path is `~/.ssh/id_rsa.pub`.
+
+    - `--namespace` specifies the name of the hosted cluster namespace.
+
+    - `--release-image` specifies the supported OpenShift Container Platform version that you want to use.
+
+    - `--additional-trust-bundle` specifies the path to the Certificate Authority of the mirror registry.
+
+</div>

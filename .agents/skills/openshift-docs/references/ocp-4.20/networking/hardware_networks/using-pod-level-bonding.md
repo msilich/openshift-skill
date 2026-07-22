@@ -1,0 +1,172 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Bonding at the pod level is vital to enable workloads inside pods that require high availability and more throughput. With pod-level bonding, you can create a bond interface from multiple single root I/O virtualization (SR-IOV) virtual function interfaces in a kernel mode interface. The SR-IOV virtual functions are passed into the pod and attached to a kernel driver.
+
+One scenario where pod level bonding is required is creating a bond interface from multiple SR-IOV virtual functions on different physical functions. Creating a bond interface from two different physical functions on the host can be used to achieve high availability and throughput at pod level.
+
+Before you perform any tasks in the following documentation, ensure that you [installed the SR-IOV Network Operator](../networking_operators/sr-iov-operator/installing-sriov-operator.md#installing-sriov-operator).
+
+For guidance on tasks such as creating a SR-IOV network, network policies, network attachment definitions and pods, see [Configuring an SR-IOV network device](configuring-sriov-device.md#configuring-sriov-device).
+
+# Configuring a bond interface from two SR-IOV interfaces
+
+Bonding enables multiple network interfaces to be aggregated into a single logical "bonded" interface. Bond Container Network Interface (Bond-CNI) brings bond capability into containers.
+
+Bond-CNI can be created by using Single Root I/O Virtualization (SR-IOV) virtual functions and placing them in the container network namespace.
+
+OpenShift Container Platform only supports Bond-CNI by using SR-IOV virtual functions. The SR-IOV Network Operator provides the SR-IOV CNI plugin needed to manage the virtual functions. Other CNI plugins or types of interfaces are not supported.
+
+# Creating a bond network attachment definition
+
+After the SR-IOV virtual functions are available, you can create a bond network attachment definition.
+
+The following YAML example shows a bond network attachment definition:
+
+``` yaml
+apiVersion: "k8s.cni.cncf.io/v1"
+    kind: NetworkAttachmentDefinition
+    metadata:
+      name: bond-net1
+      namespace: demo
+    spec:
+      config: '{
+      "type": "bond",
+      "cniVersion": "0.3.1",
+      "name": "bond-net1",
+      "mode": "active-backup",
+      "failOverMac": 1,
+      "linksInContainer": true,
+      "miimon": "100",
+      "mtu": 1500,
+      "links": [
+            {"name": "net1"},
+            {"name": "net2"}
+        ],
+      "ipam": {
+            "type": "host-local",
+            "subnet": "10.56.217.0/24",
+            "routes": [{
+            "dst": "0.0.0.0/0"
+            }],
+            "gateway": "10.56.217.1"
+        }
+      }'
+```
+
+- The `type` field is always set to `bond`.
+
+- The `mode` field specifies the bonding mode.
+
+  > [!NOTE]
+  > The supported bonding modes are:
+  >
+  > - `balance-rr` - 0
+  >
+  > - `active-backup` - 1
+  >
+  > - `balance-xor` - 2
+  >
+  > For `balance-rr` or `balance-xor` modes, you must set the `trust` mode to `on` for the SR-IOV virtual function.
+
+- The `failOverMac` field is mandatory for active-backup mode and must be set to `1`.
+
+- The `linksInContainer` field must be set to `true` to inform the Bond CNI that the required interfaces are inside the container. By default, Bond CNI looks for these interfaces on the host, which does not work for integration with SR-IOV and Multus.
+
+- The `links` field defines which interfaces to use for the bond. By default, Multus names the attached interfaces as "net" plus a consecutive number, starting with one.
+
+# Creating a pod using a bond interface
+
+You can create a pod that uses a bond interface by applying a YAML configuration that references SR-IOV and bond network attachments.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- The SR-IOV Network Operator must be installed and configured to obtain virtual functions in a container.
+
+- To configure SR-IOV interfaces, an SR-IOV network and policy must be created for each interface.
+
+- The SR-IOV Network Operator creates a network attachment definition for each SR-IOV interface, based on the SR-IOV network and policy defined.
+
+- The `linkState` is set to the default value `auto` for the SR-IOV virtual function.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a pod with a YAML file named for example `podbonding.yaml` with content similar to the following:
+
+    ``` yaml
+    apiVersion: v1
+        kind: Pod
+        metadata:
+          name: bondpod1
+          namespace: demo
+          annotations:
+            k8s.v1.cni.cncf.io/networks: demo/sriovnet1, demo/sriovnet2, demo/bond-net1
+        spec:
+          containers:
+          - name: podexample
+            image: quay.io/openshift/origin-network-interface-bond-cni:4.11.0
+            command: ["/bin/bash", "-c", "sleep INF"]
+    ```
+
+    The network annotation has two SR-IOV network attachments and one bond network attachment. The bond attachment uses the two SR-IOV interfaces as bonded port interfaces.
+
+2.  Apply the YAML by running the following command:
+
+    ``` terminal
+    $ oc apply -f podbonding.yaml
+    ```
+
+3.  Inspect the pod interfaces with the following command:
+
+    ``` terminal
+    $ oc rsh -n demo bondpod1
+    sh-4.4#
+    sh-4.4# ip a
+    1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    valid_lft forever preferred_lft forever
+    3: eth0@if150: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1450 qdisc noqueue state UP
+    link/ether 62:b1:b5:c8:fb:7a brd ff:ff:ff:ff:ff:ff
+    inet 10.244.1.122/24 brd 10.244.1.255 scope global eth0
+    valid_lft forever preferred_lft forever
+    4: net3: <BROADCAST,MULTICAST,UP,LOWER_UP400> mtu 1500 qdisc noqueue state UP qlen 1000
+    link/ether 9e:23:69:42:fb:8a brd ff:ff:ff:ff:ff:ff
+    inet 10.56.217.66/24 scope global bond0
+    valid_lft forever preferred_lft forever
+    43: net1: <BROADCAST,MULTICAST,UP,LOWER_UP800> mtu 1500 qdisc mq master bond0 state UP qlen 1000
+    link/ether 9e:23:69:42:fb:8a brd ff:ff:ff:ff:ff:ff
+    44: net2: <BROADCAST,MULTICAST,UP,LOWER_UP800> mtu 1500 qdisc mq master bond0 state UP qlen 1000
+    link/ether 9e:23:69:42:fb:8a brd ff:ff:ff:ff:ff:ff
+    ```
+
+    - The bond interface is automatically named `net3`. To set a specific interface name, add the `@name` suffix to the pod’s `k8s.v1.cni.cncf.io/networks` annotation.
+
+    - The `net1` interface is based on an SR-IOV virtual function.
+
+    - The `net2` interface is based on an SR-IOV virtual function.
+
+    > [!NOTE]
+    > If no interface names are configured in the pod annotation, interface names are assigned automatically as `net<n>`, with `<n>` starting at `1`.
+
+4.  Optional: If you want to set a specific interface name, for example `bond0`, edit the `k8s.v1.cni.cncf.io/networks` annotation and set `bond0` as the interface name as follows:
+
+    ``` terminal
+    annotations:
+            k8s.v1.cni.cncf.io/networks: demo/sriovnet1, demo/sriovnet2, demo/bond-net1@bond0
+    ```
+
+</div>

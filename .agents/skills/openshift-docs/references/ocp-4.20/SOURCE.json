@@ -1,0 +1,59 @@
+{
+  "artifact": {
+    "converted_topics": 1746,
+    "format": "GitHub-Flavored Markdown",
+    "markdown_files": 1748,
+    "product": "OpenShift Container Platform",
+    "scope": "Complete openshift-enterprise topic map at the pinned revision",
+    "version": "4.20"
+  },
+  "conversion": {
+    "arguments": {
+      "branch": "enterprise-4.20",
+      "distro": "openshift-enterprise",
+      "topics": "all"
+    },
+    "build_tools": {
+      "asciidoctor": "2.0.23",
+      "pandoc": "3.7.0.2",
+      "python": "3.14.3",
+      "pyyaml": "6.0.3"
+    },
+    "failed_topics": 0,
+    "modifications": [
+      "Converted the source AsciiDoc files to GitHub-Flavored Markdown.",
+      "Removed the generated HTML index and CDN-dependent viewer.",
+      "Replaced the rolling weekly-update statement with pinned-snapshot provenance.",
+      "Added a format-modification notice to every Markdown file.",
+      "Rewrote DocBook .xml cross-references to bundled Markdown targets."
+    ],
+    "successful_topics": 1746
+  },
+  "integrity": {
+    "agentic_skills_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "algorithm": "sha256",
+    "markdown_manifest_algorithm": "SHA-256 of sorted UTF-8 lines: '<file-sha256>  <relative-path>\\n'",
+    "markdown_manifest_sha256": "5d09522a8edf3ba39fabe2e61c2c38bfc6ff0e60f675a1c5aba33de9f4730636",
+    "openshift_docs_license_sha256": "e1855c6f04f2435df62fe754d9621de265e3fa77717d3910f5a5500cf1e651ad"
+  },
+  "runtime_network_required": false,
+  "schema_version": 1,
+  "source_commit_time_utc": "2026-07-21T18:30:36Z",
+  "sources": {
+    "agentic_skills_converter": {
+      "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.agentic-skills",
+      "path": "documentation/openshift-docs/convert.py",
+      "sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "url": "https://github.com/openshift/agentic-skills"
+    },
+    "openshift_docs": {
+      "branch_hint": "enterprise-4.20",
+      "commit": "5aee2719f9ad01a82bb80b391e5af25f566c73c0",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.openshift-docs",
+      "url": "https://github.com/openshift/openshift-docs"
+    }
+  }
+}

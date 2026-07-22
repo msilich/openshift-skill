@@ -1,0 +1,1552 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can install an OpenShift Container Platform cluster using the Agent-based Installer, with customizations to meet your deployment needs.
+
+The following procedures deploy a single-node OpenShift Container Platform cluster in a disconnected environment. You can use these procedures as a basis and modify according to your requirements.
+
+# Prerequisites for installing a cluster with the Agent-based Installer
+
+Before beginning your cluster installation, you must complete prerequisite tasks that prepare your environment.
+
+- You reviewed details about the OpenShift Container Platform installation and update processes. For more information, see "Installation and update".
+
+- You read "Selecting a cluster installation method and preparing it for users".
+
+- If you use a firewall or proxy, you configured it to allow the sites that your cluster requires access to. For more information, see "Configuring your firewall".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installation and update](../../architecture/architecture-installation.md#architecture-installation)
+
+- [Selecting a cluster installation method and preparing it for users](../overview/installing-preparing.md#installing-preparing)
+
+- [Configuring your firewall](../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall)
+
+</div>
+
+# Downloading the Agent-based Installer
+
+Begin the installation process by downloading the Agent-based Installer and the CLI needed for your installation.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Log in to the Red Hat Hybrid Cloud Console using your login credentials.
+
+2.  Navigate to [Datacenter](https://console.redhat.com/openshift/create/datacenter).
+
+3.  Click **Run Agent-based Installer locally**.
+
+4.  Select the operating system and architecture for the **OpenShift Installer** and **Command line interface**.
+
+5.  Click **Download Installer** to download and extract the install program.
+
+6.  Download or copy the pull secret by clicking on **Download pull secret** or **Copy pull secret**.
+
+7.  Click **Download command-line tools** and place the `openshift-install` binary in a directory that is on your `PATH`.
+
+</div>
+
+# Verifying the supported architecture for an Agent-based installation
+
+Before installing an OpenShift Container Platform cluster using the Agent-based Installer, you can optionally verify the supported architecture on which you can install the cluster.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You installed the OpenShift CLI (`oc`).
+
+- You have downloaded the installation program.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Log in to the OpenShift CLI (`oc`).
+
+2.  Check your release payload by running the following command:
+
+    ``` terminal
+    $ ./openshift-install version
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    ./openshift-install 4.20.0
+    built from commit abc123def456
+    release image quay.io/openshift-release-dev/ocp-release@sha256:123abc456def789ghi012jkl345mno678pqr901stu234vwx567yz0
+    release architecture amd64
+    ```
+
+    </div>
+
+    If you are using the release image with the `multi` payload, the `release architecture` displayed in the output of this command is the default architecture.
+
+3.  To check the architecture of the payload, run the following command:
+
+    ``` terminal
+    $ oc adm release info <release_image> -o jsonpath="{ .metadata.metadata}"
+    ```
+
+    Replace `<release_image>` with the release image. For example: `quay.io/openshift-release-dev/ocp-release@sha256:123abc456def789ghi012jkl345mno678pqr901stu234vwx567yz0`.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output when the release image uses the `multi` payload
+
+    </div>
+
+    ``` terminal
+    {"release.openshift.io architecture":"multi"}
+    ```
+
+    </div>
+
+    If you are using the release image with the `multi` payload, you can install the cluster on different architectures such as `arm64`, `amd64`, `s390x`, and `ppc64le`. Otherwise, you can install the cluster only on the `release architecture` displayed in the output of the `openshift-install version` command.
+
+</div>
+
+# Creating the preferred configuration inputs
+
+Create the preferred configuration inputs used to create the agent image.
+
+> [!NOTE]
+> Configuring the `install-config.yaml` and `agent-config.yaml` files is the preferred method for using the Agent-based Installer. Using GitOps ZTP manifests is optional.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Install the `nmstate` dependency by running the following command:
+
+    ``` terminal
+    $ sudo dnf install /usr/bin/nmstatectl -y
+    ```
+
+2.  Place the `openshift-install` binary in a directory that is on your PATH.
+
+3.  Create a directory to store the install configuration by running the following command:
+
+    ``` terminal
+    $ mkdir ~/<directory_name>
+    ```
+
+4.  Create the `install-config.yaml` file by running the following command:
+
+    ``` terminal
+    $ cat << EOF > ./<directory_name>/install-config.yaml
+    apiVersion: v1
+    baseDomain: test.example.com
+    compute:
+    - architecture: amd64
+      hyperthreading: Enabled
+      name: worker
+      replicas: 0
+    controlPlane:
+      architecture: amd64
+      hyperthreading: Enabled
+      name: master
+      replicas: 1
+    metadata:
+      name: sno-cluster
+    networking:
+      clusterNetwork:
+      - cidr: 10.128.0.0/14
+        hostPrefix: 23
+      machineNetwork:
+      - cidr: 192.168.0.0/16
+      networkType: OVNKubernetes
+      serviceNetwork:
+      - 172.30.0.0/16
+    platform:
+      none: {}
+    pullSecret: '<pull_secret>'
+    sshKey: '<ssh_pub_key>'
+    additionalTrustBundle: |
+      -----BEGIN CERTIFICATE-----
+      ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+      -----END CERTIFICATE-----
+    imageContentSources:
+    - mirrors:
+      - <local_registry>/<local_repository_name>/release
+      source: quay.io/openshift-release-dev/ocp-release
+    - mirrors:
+      - <local_registry>/<local_repository_name>/release
+      source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+    EOF
+    ```
+
+    where:
+
+    `compute.architecture`
+    Specifies the system architecture. Valid values are `amd64`, `arm64`, `ppc64le`, and `s390x`.
+
+    If you are using the release image with the `multi` payload, you can install the cluster on different architectures such as `arm64`, `amd64`, `s390x`, and `ppc64le`. Otherwise, you can install the cluster only on the `release architecture` displayed in the output of the `openshift-install version` command. For more information, see "Verifying the supported architecture for installing an Agent-based Installer cluster".
+
+    `metadata.name`
+    Specifies your cluster name. This value is required.
+
+    `networking.networkingType`
+    Specifies the cluster network plugin to install. The default value `OVNKubernetes` is the only supported value.
+
+    `platform`
+    Specifies your platform. If you set the platform to `vSphere`, `baremetal`, or `none`, you can configure IP address endpoints for cluster nodes in three ways: IPv4, IPv6, or IPv4 and IPv6 in parallel (dual-stack).
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example of dual-stack networking
+
+    </div>
+
+    ``` yaml
+    networking:
+      clusterNetwork:
+        - cidr: 172.21.0.0/16
+          hostPrefix: 23
+        - cidr: fd02::/48
+          hostPrefix: 64
+      machineNetwork:
+        - cidr: 192.168.11.0/16
+        - cidr: 2001:DB8::/32
+      serviceNetwork:
+        - 172.22.0.0/16
+        - fd03::/112
+      networkType: OVNKubernetes
+    platform:
+      baremetal:
+        apiVIPs:
+        - 192.168.11.3
+        - 2001:DB8::4
+        ingressVIPs:
+        - 192.168.11.4
+        - 2001:DB8::5
+    ```
+
+    </div>
+
+    > [!NOTE]
+    > For bare-metal platforms, host settings made in the platform section of the `install-config.yaml` file are used by default, unless they are overridden by configurations made in the `agent-config.yaml` file.
+
+    `pullSecret`
+    Specifies your pull secret.
+
+    `sshKey`
+    Specifies your SSH public key.
+
+    `additionalTrustBundle`
+    Specifies the contents of the certificate file that you used for your mirror registry. The certificate file can be an existing, trusted certificate authority or the self-signed certificate that you generated for the mirror registry. You must specify this parameter if you are using a disconnected mirror registry.
+
+    `imageContentSources`
+    Specifies the `imageContentSources` section according to the output of the command that you used to mirror the repository. You must specify this parameter if you are using a disconnected mirror registry.
+
+    <div class="important">
+
+    <div class="title">
+
+    </div>
+
+    - When using the `oc adm release mirror` command, use the output from the `imageContentSources` section.
+
+    - When using the `oc mirror` command, use the `repositoryDigestMirrors` section of the `ImageContentSourcePolicy` file that results from running the command.
+
+    - The `ImageContentSourcePolicy` resource is deprecated.
+
+    </div>
+
+5.  Create the `agent-config.yaml` file by running the following command:
+
+    ``` terminal
+    $ cat > agent-config.yaml << EOF
+    apiVersion: v1beta1
+    kind: AgentConfig
+    metadata:
+      name: sno-cluster
+    rendezvousIP: 192.168.111.80
+    hosts:
+      - hostname: master-0
+        interfaces:
+          - name: eno1
+            macAddress: 00:ef:44:21:e6:a5
+        rootDeviceHints:
+          deviceName: /dev/sdb
+        networkConfig:
+          interfaces:
+            - name: eno1
+              type: ethernet
+              state: up
+              mac-address: 00:ef:44:21:e6:a5
+              ipv4:
+                enabled: true
+                address:
+                  - ip: 192.168.111.80
+                    prefix-length: 23
+                dhcp: false
+          dns-resolver:
+            config:
+              server:
+                - 192.168.111.1
+          routes:
+            config:
+              - destination: 0.0.0.0/0
+                next-hop-address: 192.168.111.2
+                next-hop-interface: eno1
+                table-id: 254
+    EOF
+    ```
+
+    where:
+
+    `rendezvousIP`
+    Specifies the IP address used to determine which node performs the bootstrapping process as well as running the `assisted-service` component. You must provide the rendezvous IP address when you do not specify at least one host’s IP address in the `networkConfig` parameter. If this address is not provided, one IP address is selected from the provided hosts' `networkConfig`.
+
+    `hosts`
+    Specifies host configuration. The number of hosts defined must not exceed the total number of hosts defined in the `install-config.yaml` file, which is the sum of the values of the `compute.replicas` and `controlPlane.replicas` parameters. This configuration is optional.
+
+    `hosts.hostname`
+    Specifies a value that overrides the hostname obtained from either the Dynamic Host Configuration Protocol (DHCP) or a reverse DNS lookup. Each host must have a unique hostname supplied by one of these methods. This configuration is optional.
+
+    `hosts.rootDeviceHints`
+    Specifies a configuration that enables provisioning of the Red Hat Enterprise Linux CoreOS (RHCOS) image to a particular device. The installation program examines the devices in the order it discovers them, and compares the discovered values with the hint values. It uses the first discovered device that matches the hint value.
+
+    > [!NOTE]
+    > This parameter is mandatory for FCP multipath configurations on IBM Z.
+
+    `hosts.networkConfig`
+    Specifies the network interface configuration of a host in NMState format. This configuration is optional.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Deploying with dual-stack networking](../installing_bare_metal/ipi/ipi-install-installation-workflow.md#modifying-install-config-for-dual-stack-network_ipi-install-installation-workflow)
+
+- [Configuring the install-config yaml file](../installing_bare_metal/ipi/ipi-install-installation-workflow.md#configuring-the-install-config-file_ipi-install-installation-workflow)
+
+- [Configuring a three-node cluster](../installing_bare_metal/upi/installing-restricted-networks-bare-metal.md#installation-three-node-cluster_installing-restricted-networks-bare-metal)
+
+- [About root device hints](preparing-to-install-with-agent-based-installer.md#root-device-hints_preparing-to-install-with-agent-based-installer)
+
+- [NMState state examples (NMState documentation)](https://nmstate.io/examples.html)
+
+- [Configuring regions and zones for a VMware vCenter](../installing_vsphere/ipi/installing-vsphere-installer-provisioned-customizations.md#configuring-vsphere-regions-zones_installing-vsphere-installer-provisioned-customizations)
+
+- [Verifying the supported architecture for installing an Agent-based installer cluster](installing-with-agent-based-installer.md#agent-install-verifying-architectures_installing-with-agent-based-installer)
+
+- [Configuring the Agent-based Installer to use mirrored images](understanding-disconnected-installation-mirroring.md#agent-install-configuring-for-disconnected-registry_understanding-disconnected-installation-mirroring)
+
+</div>
+
+# Creating additional manifest files
+
+As an optional task, you can create additional manifests to further configure your cluster beyond the configurations available in the `install-config.yaml` and `agent-config.yaml` files.
+
+> [!IMPORTANT]
+> Customizations to the cluster made by additional manifests are not validated, are not guaranteed to work, and might result in a nonfunctional cluster.
+
+## Creating a directory to contain additional manifests
+
+If you create additional manifests to configure your Agent-based installation beyond the `install-config.yaml` and `agent-config.yaml` files, you must create an `openshift` subdirectory within your installation directory. All of your additional machine configurations must be located within this subdirectory.
+
+> [!NOTE]
+> The most common type of additional manifest you can add is a `MachineConfig` object. For examples of `MachineConfig` objects you can add during the Agent-based installation, see "Using MachineConfig objects to configure nodes" in the "Additional resources" section.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- On your installation host, create an `openshift` subdirectory within the installation directory by running the following command:
+
+  ``` terminal
+  $ mkdir <installation_directory>/openshift
+  ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Using MachineConfig objects to configure nodes](../../machine_configuration/machine-configs-configure.md#machine-configs-configure)
+
+</div>
+
+## Creating a manifest object that includes a customized br-ex bridge
+
+By default, OpenShift Container Platform automatically configures the Open vSwitch (OVS) `br-ex` bridge on nodes. For advanced networking requirements, you can override this default behavior on bare-metal platforms. To do this, use the Agent-based Installer to create a `MachineConfig` object that includes an NMState configuration file.
+
+> [!IMPORTANT]
+> Customizations to the cluster made by additional manifests are not validated and not guaranteed to work. These manifests might result in a nonfunctional cluster.
+>
+> For more information about an additional manifest file, see "Creating a directory to contain additional manifests".
+
+Consider using the customized `br-ex` bridge configuration for any of the following tasks:
+
+- You need to modify the `br-ex` bridge after you installed the cluster.
+
+- You need to modify the maximum transmission unit (MTU) for your cluster.
+
+- You need to update DNS values.
+
+- You need to modify attributes for a different bond interface. Examples include MIImon (Media Independent Interface Monitor), bonding mode or Quality of Service (QoS).
+
+- You need to enable Link Layer Discovery Protocol (LLDP) to discover and troubleshoot switch connectivity.
+
+> [!NOTE]
+> Use the default OVS `br-ex` bridge for standard environments.
+>
+> Use the default OVS `br-ex` bridge mechanism for single network interface controller (NIC) environments with default network settings.
+
+After you install Red Hat Enterprise Linux CoreOS (RHCOS) and the system reboots, the Machine Config Operator injects Ignition configuration files into each node. This operation ensures that each node receives the `br-ex` bridge network configuration. To prevent configuration conflicts, the default OVS `br-ex` bridge mechanism is disabled.
+
+> [!WARNING]
+> The following list of interface names are reserved and you cannot use the names with NMstate configurations:
+>
+> - `br-ext`
+>
+> - `br-int`
+>
+> - `br-local`
+>
+> - `br-nexthop`
+>
+> - `br0`
+>
+> - `ext-vxlan`
+>
+> - `ext`
+>
+> - `genev_sys_*`
+>
+> - `int`
+>
+> - `k8s-*`
+>
+> - `ovn-k8s-*`
+>
+> - `patch-br-*`
+>
+> - `tun0`
+>
+> - `vxlan_sys_*`
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Optional: You have installed the [`nmstatectl`](https://nmstate.io/user/quick_guide.html) CLI tool to validate your NMState configuration.
+
+- You checked that an `openshift` subdirectory exists in your installation directory. If the subdirectory does not exist, create the subdirectory.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create an NMState configuration file and define a customized `br-ex` bridge network configuration in the file:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example of an NMState configuration for a customized `br-ex` bridge network
+
+    </div>
+
+    ``` yaml
+    interfaces:
+    - name: enp2s0
+      type: ethernet
+      state: up
+      mtu: 9000
+      ipv4:
+        enabled: false
+      ipv6:
+        enabled: false
+    - name: br-ex
+      type: ovs-bridge
+      state: up
+      ipv4:
+        enabled: false
+        dhcp: false
+      ipv6:
+        enabled: false
+        dhcp: false
+      bridge:
+        options:
+          mcast-snooping-enable: true
+        port:
+        - name: enp2s0
+        - name: br-ex
+    - name: br-ex
+      type: ovs-interface
+      state: up
+      copy-mac-from: enp2s0
+      mtu: 9000
+      ipv4:
+        enabled: true
+        dhcp: true
+        auto-route-metric: 48
+      ipv6:
+        enabled: true
+        dhcp: true
+        auto-route-metric: 48
+    # ...
+    ```
+
+    </div>
+
+    where:
+
+    `interfaces.name`
+    Specifies the name of the interface.
+
+    `interfaces.type`
+    Specifies the type of ethernet.
+
+    `interfaces.state`
+    Specifies the requested state for the interface after creation.
+
+    `mtu`
+    To ensure network stability and performance, you must explicitly declare the MTU in the manifest for every interface. Do not rely on automatic MTU configuration. The MTU configured on a bridge port or VLAN-tagged interface must not exceed the maximum frame size supported by the attached physical medium. A mismatch causes packet fragmentation or connectivity loss.
+
+    `ipv4.enabled`
+    Disables IPv4 and IPv6 in this example.
+
+    `port.name`
+    Specifies the node NIC to which the bridge attaches.
+
+    `auto-route-metric`
+    Sets the parameter to `48` to ensure the `br-ex` default route always has the highest precedence (lowest metric). This configuration prevents routing conflicts with any other interfaces that are automatically configured by the `NetworkManager` service.
+
+2.  Use the `cat` command to base64-encode the contents of the NMState configuration:
+
+    ``` terminal
+    $ cat <nmstate_configuration>.yml | base64
+    ```
+
+    where:
+
+    `<nmstate_configuration>`
+    Replace `<nmstate_configuration>` with the name of your NMState resource YAML file.
+
+3.  Create a `MachineConfig` file as an additional manifest file. Define a customized `br-ex` bridge network configuration analogous to the following example in the file. The Agent-based Installer automatically applies the updates from the `MachineConfig` object to your cluster.
+
+    ``` yaml
+    apiVersion: machineconfiguration.openshift.io/v1
+    kind: MachineConfig
+    metadata:
+      labels:
+        machineconfiguration.openshift.io/role: worker
+      name: 10-br-ex-worker
+    spec:
+      config:
+        ignition:
+          version: 3.2.0
+        storage:
+          files:
+          - contents:
+              source: data:text/plain;charset=utf-8;base64,<base64_encoded_nmstate_configuration>
+            mode: 0644
+            overwrite: true
+            path: /etc/nmstate/openshift/worker-0.yml
+          - contents:
+              source: data:text/plain;charset=utf-8;base64,<base64_encoded_nmstate_configuration>
+            mode: 0644
+            overwrite: true
+            path: /etc/nmstate/openshift/worker-1.yml
+    # ...
+    ```
+
+    where:
+
+    `metadata.name`
+    Specifies the name of the policy.
+
+    `contents.source`
+    Writes the encoded base64 information to the specified path.
+
+    `path`
+    For each node in your cluster, specify the hostname path to your node and the base-64 encoded Ignition configuration file data for the machine type. The `worker` role is the default role for nodes in your cluster. You must use the `.yml` extension for configuration files. For example, use `$(hostname -s).yml` when specifying the short hostname path for each node or all nodes in the `MachineConfig` manifest file.
+
+    You can apply a single global configuration to all nodes in your cluster by using the `/etc/nmstate/openshift/cluster.yml` configuration file. In this case, you do not need to specify the short hostname path for each node, such as `/etc/nmstate/openshift/<node_hostname>.yml`. For example:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example /etc/nmstate/openshift/cluster.yml configuration file
+
+    </div>
+
+    ``` yaml
+    # ...
+          - contents:
+              source: data:text/plain;charset=utf-8;base64,<base64_encoded_nmstate_configuration>
+            mode: 0644
+            overwrite: true
+            path: /etc/nmstate/openshift/cluster.yml
+    # ...
+    ```
+
+    </div>
+
+4.  Save the additional manifest file in the `openshift` subdirectory of your installation directory.
+
+    On completing other configuration inputs for your installation, such as encrypting the disk, you create the ISO image. After booting this image, the customized `br-ex` bridge configuration applies to each node in your cluster.
+
+</div>
+
+## Creating disk partitions
+
+In general, you must use the default disk partitioning that is created during the RHCOS installation. However, there are cases where you might want to create a separate partition for a directory that you expect to grow.
+
+OpenShift Container Platform supports the addition of a single partition to attach storage to either the `/var` directory or a subdirectory of `/var`. For example:
+
+- `/var/lib/containers`: Holds container-related content that can grow as more images and containers are added to a system.
+
+- `/var/lib/etcd`: Holds data that you might want to keep separate for purposes such as performance optimization of etcd storage.
+
+- `/var`: Holds data that you might want to keep separate for purposes such as auditing.
+
+  > [!IMPORTANT]
+  > For disk sizes larger than 100GB, and especially larger than 1TB, create a separate `/var` partition.
+
+Storing the contents of a `/var` directory separately makes it easier to grow storage for those areas as needed and reinstall OpenShift Container Platform at a later date to keep that data intact. This method eliminates the need to re-pull containers or copy large log files during system updates.
+
+The use of a separate partition for the `/var` directory or a subdirectory of `/var` also prevents data growth in the partitioned directory from filling up the root file system.
+
+The following procedure sets up a separate `/var` partition by adding a machine config manifest that is wrapped into the Ignition config file for a node type during the preparation phase of an installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created an `openshift` subdirectory within your installation directory.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a Butane config that configures the additional partition. For example, name the file `$HOME/clusterconfig/98-var-partition.bu`, change the disk device name to the name of the storage device on the `worker` systems, and set the storage size as appropriate. This example places the `/var` directory on a separate partition:
+
+    ``` yaml
+    variant: openshift
+    version: 4.17.0
+    metadata:
+      labels:
+        machineconfiguration.openshift.io/role: worker
+      name: 98-var-partition
+    storage:
+      disks:
+      - device: /dev/disk/by-id/<device_name>
+        partitions:
+        - label: var
+          start_mib: <partition_start_offset>
+          size_mib: <partition_size>
+          number: 5
+      filesystems:
+        - device: /dev/disk/by-partlabel/var
+          path: /var
+          format: xfs
+          mount_options: [defaults, prjquota]
+          with_mount_unit: true
+    ```
+
+    where:
+
+    `<device_name>`
+    Specifies the storage device name of the disk that you want to partition.
+
+    `<partition_start_offset>`
+    Specifies the minimum offset value for the boot disk. For best performance, specify a minimum offset value of 25000 mebibytes. The root file system is automatically resized to fill all available space up to the specified offset. If no offset value is specified, or if the specified value is smaller than the recommended minimum, the resulting root file system will be too small, and future reinstalls of RHCOS might overwrite the beginning of the data partition.
+
+    `<partition_size>`
+    Specifies the size of the data partition in mebibytes.
+
+    `mount_options`
+    The `prjquota` mount option must be enabled for filesystems used for container storage.
+
+    > [!NOTE]
+    > When creating a separate `/var` partition, you cannot use different instance types for compute nodes, if the different instance types do not have the same device name.
+
+2.  Create a manifest from the Butane config and save it to the `clusterconfig/openshift` directory. For example, run the following command:
+
+    ``` terminal
+    $ butane $HOME/clusterconfig/98-var-partition.bu -o $HOME/clusterconfig/openshift/98-var-partition.yaml
+    ```
+
+</div>
+
+## Using ZTP manifests
+
+As an optional task, you can use GitOps Zero Touch Provisioning (ZTP) manifests to configure your installation beyond the options available through the `install-config.yaml` and `agent-config.yaml` files.
+
+See "Challenges of the network far edge" to learn more about GitOps Zero Touch Provisioning (ZTP).
+
+> [!NOTE]
+> GitOps ZTP manifests can be generated with or without configuring the `install-config.yaml` and `agent-config.yaml` files beforehand. If you chose to configure the `install-config.yaml` and `agent-config.yaml` files, the configurations will be imported to the ZTP cluster manifests when they are generated.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have placed the `openshift-install` binary in a directory that is on your `PATH`.
+
+- Optional: You have created and configured the `install-config.yaml` and `agent-config.yaml` files.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Generate ZTP cluster manifests by running the following command:
+
+    ``` terminal
+    $ openshift-install agent create cluster-manifests --dir <installation_directory>
+    ```
+
+    > [!IMPORTANT]
+    > If you have created the `install-config.yaml` and `agent-config.yaml` files, those files are deleted and replaced by the cluster manifests generated through this command.
+    >
+    > Any configurations made to the `install-config.yaml` and `agent-config.yaml` files are imported to the ZTP cluster manifests when you run the `openshift-install agent create cluster-manifests` command.
+
+2.  Navigate to the `cluster-manifests` directory by running the following command:
+
+    ``` terminal
+    $ cd <installation_directory>/cluster-manifests
+    ```
+
+3.  Configure the manifest files in the `cluster-manifests` directory. For sample files, see the "Sample GitOps ZTP custom resources" section.
+
+4.  Disconnected clusters: If you did not define mirror configuration in the `install-config.yaml` file before generating the ZTP manifests, perform the following steps:
+
+    1.  Navigate to the `mirror` directory by running the following command:
+
+        ``` terminal
+        $ cd ../mirror
+        ```
+
+    2.  Configure the manifest files in the `mirror` directory.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Sample GitOps ZTP custom resources](installing-with-agent-based-installer.md#sample-ztp-custom-resources_installing-with-agent-based-installer)
+
+- [Challenges of the network far edge](../../edge_computing/ztp-deploying-far-edge-clusters-at-scale.md#ztp-deploying-far-edge-clusters-at-scale)
+
+</div>
+
+## Encrypting the disk
+
+As an optional task, you can encrypt your disk or partition while installing OpenShift Container Platform with the Agent-based Installer.
+
+> [!IMPORTANT]
+> If there are leftover TPM encryption keys from a previous operating system on the bare-metal host, the cluster deployment can get stuck. To avoid this situation, it is highly recommended to reset the TPM chip in the BIOS before booting the ISO.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created and configured the `install-config.yaml` and `agent-config.yaml` files, unless you are using ZTP manifests.
+
+- You have placed the `openshift-install` binary in a directory that is on your `PATH`.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Generate ZTP cluster manifests by running the following command:
+
+    ``` terminal
+    $ openshift-install agent create cluster-manifests --dir <installation_directory>
+    ```
+
+    > [!IMPORTANT]
+    > If you have created the `install-config.yaml` and `agent-config.yaml` files, those files are deleted and replaced by the cluster manifests generated through this command.
+    >
+    > Any configurations made to the `install-config.yaml` and `agent-config.yaml` files are imported to the ZTP cluster manifests when you run the `openshift-install agent create cluster-manifests` command.
+
+    > [!NOTE]
+    > If you have already generated ZTP manifests, skip this step.
+
+2.  Navigate to the `cluster-manifests` directory by running the following command:
+
+    ``` terminal
+    $ cd <installation_directory>/cluster-manifests
+    ```
+
+3.  Add the following section to the `agent-cluster-install.yaml` file:
+
+    ``` yaml
+    diskEncryption:
+        enableOn: all
+        mode: tang
+        tangServers: "server1": "http://tang-server-1.example.com:7500"
+    ```
+
+    where:
+
+    `diskEncryption.enableOn`
+    Specifies which nodes to enable disk encryption on. Valid values are `none`, `all`, `masters`, and `workers`.
+
+    `diskEncryption.mode`
+    Specifies which disk encryption mode to use. Valid values are `tpmv2` and `tang`.
+
+    `diskEncryption.tangServers`
+    Specifies the Tang servers if you are using Tang. This value is optional.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [About disk encryption](../install_config/installing-customizing.md#installation-special-config-storage_installing-customizing)
+
+</div>
+
+# Creating and booting the agent image
+
+After you have prepared the configuration inputs for your installation, create the ISO image and boot it on your machines.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- If you plan to boot the agent image from a USB drive, you have installed the `syslinux` package.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create the agent image by running the following command:
+
+    ``` terminal
+    $ openshift-install --dir <install_directory> agent create image
+    ```
+
+    > [!NOTE]
+    > Red Hat Enterprise Linux CoreOS (RHCOS) supports multipathing on the primary disk, allowing stronger resilience to hardware failure to achieve higher host availability. Multipathing is enabled by default in the agent ISO image, with a default `/etc/multipath.conf` configuration.
+
+2.  If you plan to boot the ISO image from a USB drive, add a master boot record to the image by running the following command:
+
+    ``` terminal
+    $ isohybrid --uefi <agent_iso_image>
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example command
+
+    </div>
+
+    ``` terminal
+    $ isohybrid --uefi agent.x86_64.iso
+    ```
+
+    </div>
+
+3.  Boot the `agent.x86_64.iso`, `agent.aarch64.iso`, or `agent.s390x.iso` image on the bare-metal machines.
+
+</div>
+
+# Adding IBM Z agents with RHEL KVM
+
+You can manually add IBM Z® agents with RHEL KVM.
+
+Only use this procedure for IBM Z® clusters with RHEL KVM.
+
+> [!NOTE]
+> The `nmstateconfig` parameter must be configured for the KVM boot.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Boot your RHEL KVM machine.
+
+2.  To deploy the virtual server, run the `virt-install` command with the following parameters:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    ISO boot
+
+    </div>
+
+    ``` terminal
+    $ virt-install
+        --name <vm_name> \
+        --autostart \
+        --memory=<memory> \
+        --cpu host \
+        --vcpus=<vcpus> \
+        --cdrom \<path_to_image>/<agent_iso_image> \
+        --disk pool=default,size=<disk_pool_size> \
+        --network network:default,mac=<mac_address> \
+        --graphics none \
+        --noautoconsole \
+        --os-variant rhel9.0 \
+        --wait=-1
+    ```
+
+    </div>
+
+    For the `--cdrom` parameter, specify the location of the ISO image on the local server, for example, `<path_to_image>/home/<image>.iso`.
+
+    > [!NOTE]
+    > For KVM-based installations using DASD devices on IBM Z, a partition (for example, `/dev/dasdb1`) must be created using the `fdasd` partitioning tool.
+
+3.  Optional: Enable FIPS mode.
+
+    To enable FIPS mode on IBM Z® clusters with RHEL KVM you must use PXE boot instead and run the `virt-install` command with the following parameters:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    PXE boot
+
+    </div>
+
+    ``` terminal
+    $ virt-install \
+       --name <vm_name> \
+       --autostart \
+       --ram=16384 \
+       --cpu host \
+       --vcpus=8 \
+       --location <path_to_kernel_initrd_image>,kernel=kernel.img,initrd=initrd.img \
+       --disk <qcow_image_path> \
+       --network network:macvtap ,mac=<mac_address> \
+       --graphics none \
+       --noautoconsole \
+       --wait=-1 \
+       --extra-args "rd.neednet=1 nameserver=<nameserver>" \
+       --extra-args "ip=<IP>::<nameserver>::<hostname>:enc1:none" \
+       --extra-args "coreos.live.rootfs_url=http://<http_server>:8080/agent.s390x-rootfs.img" \
+       --extra-args "random.trust_cpu=on rd.luks.options=discard" \
+       --extra-args "ignition.firstboot ignition.platform.id=metal" \
+       --extra-args "console=tty1 console=ttyS1,115200n8" \
+       --extra-args "coreos.inst.persistent-kargs=console=tty1 console=ttyS1,115200n8" \
+       --extra-args "fips=1" \
+       --osinfo detect=on,require=off
+    ```
+
+    </div>
+
+    where:
+
+    `--location`
+    Specifies the location of the kernel/initrd on the HTTP or HTTPS server.
+
+    `--extra-args "fips=1"`
+    Specifies the enablement of FIPS mode. This entry is required in addition to setting the `fips` parameter to `true` in the `install-config.yaml` file.
+
+    <div class="note">
+
+    <div class="title">
+
+    </div>
+
+    - For KVM-based installations using DASD devices on IBM Z, a partition (for example, `/dev/dasdb1`) must be created using the `fdasd` partitioning tool.
+
+    - Currently, only PXE boot is supported to enable FIPS mode on IBM Z®.
+
+    </div>
+
+</div>
+
+# Verifying that the current installation host can pull release images
+
+After you boot the agent image and network services are made available to the host, the agent console application performs a pull check to verify that the current host can retrieve release images.
+
+If the primary pull check passes, you can quit the application to continue with the installation. If the pull check fails, the application performs additional checks, as seen in the `Additional checks` section of the TUI, to help you troubleshoot the problem. A failure for any of the additional checks is not necessarily critical as long as the primary pull check succeeds.
+
+If there are host network configuration issues that might cause an installation to fail, you can use the console application to make adjustments to your network configurations.
+
+> [!IMPORTANT]
+> If the agent console application detects host network configuration issues, the installation workflow will be halted until the user manually stops the console application and signals the intention to proceed.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Wait for the agent console application to check whether or not the configured release image can be pulled from a registry.
+
+2.  If the agent console application states that the installer connectivity checks have passed, wait for the prompt to time out to continue with the installation.
+
+    > [!NOTE]
+    > You can still choose to view or change network configuration settings even if the connectivity checks have passed.
+    >
+    > However, if you choose to interact with the agent console application rather than letting it time out, you must manually quit the TUI to proceed with the installation.
+
+3.  If the agent console application checks have failed, which is indicated by a red icon beside the `Release image URL` pull check, use the following steps to reconfigure the host’s network settings:
+
+    1.  Read the `Check Errors` section of the TUI. This section displays error messages specific to the failed checks.
+
+        <figure>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcIAAAFRCAYAAADn6q2oAAAAw3pUWHRSYXcgcHJvZmlsZSB0eXBlIGV4aWYAAHjabVBbDsMgDPvnFDsCiQMNx6GPSbvBjr/QpFLZZgnbJeCGpOP9eqbHAJMkKYvWVms2SJPG3YxmRz+Zspx8YuNwNO+nQmHHAZjCC1pd6dqPC5dSN1duQbpFYZ0LTVxZv4LYBaOB4fcIahEE9gJFQPdn5dp0uT9hPfIM9ZUGic5t/3wvNr292H/AfICQjQHxBjAWEroZGDOaHSQU8zi5oEaYDeTfnC6kDy/wWU+QSnmjAAABhGlDQ1BJQ0MgcHJvZmlsZQAAeJx9kT1Iw0AcxV9btSIVh3YQqZChOtlFRRxrFYpQIdQKrTqYXPoFTRqSFBdHwbXg4Mdi1cHFWVcHV0EQ/ABxdXFSdJES/5cUWsR4cNyPd/ced+8Af7PKVLMnAaiaZWRSSSGXXxWCrwhgFGFE0ScxU58TxTQ8x9c9fHy9i/Ms73N/jkGlYDLAJxAnmG5YxBvEM5uWznmfOMLKkkJ8Tjxh0AWJH7kuu/zGueSwn2dGjGxmnjhCLJS6WO5iVjZU4mnimKJqlO/Puaxw3uKsVuusfU/+wlBBW1nmOs0oUljEEkQIkFFHBVVYiNOqkWIiQ/tJD/+I4xfJJZOrAkaOBdSgQnL84H/wu1uzODXpJoWSQO+LbX+MAcFdoNWw7e9j226dAIFn4Err+GtNYPaT9EZHix0BQ9vAxXVHk/eAyx1g+EmXDMmRAjT9xSLwfkbflAfCt8DAmttbex+nD0CWukrfAAeHwHiJstc93t3f3du/Z9r9/QBv73Kl+8HESwAADXppVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDQuNC4wLUV4aXYyIj4KIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgIHhtbG5zOkdJTVA9Imh0dHA6Ly93d3cuZ2ltcC5vcmcveG1wLyIKICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIgogICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIgogICB4bXBNTTpEb2N1bWVudElEPSJnaW1wOmRvY2lkOmdpbXA6YzI5MWJjNDgtOWEwNi00YjBlLTgzNjYtZmNkYzlhOTZhNzA3IgogICB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjAzNWQyYzUzLTFmZjgtNDYyZS1iNTkxLTEyZWM2MzZkZWYxMCIKICAgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjcwYjNjOTE3LTY3N2QtNDNjYi1iZjkwLWI0NDRmNDM1MzIzMSIKICAgR0lNUDpBUEk9IjIuMCIKICAgR0lNUDpQbGF0Zm9ybT0iTWFjIE9TIgogICBHSU1QOlRpbWVTdGFtcD0iMTY4MDExODU1Njg3MjA2MCIKICAgR0lNUDpWZXJzaW9uPSIyLjEwLjM0IgogICBkYzpGb3JtYXQ9ImltYWdlL3BuZyIKICAgdGlmZjpPcmllbnRhdGlvbj0iMSIKICAgeG1wOkNyZWF0b3JUb29sPSJHSU1QIDIuMTAiCiAgIHhtcDpNZXRhZGF0YURhdGU9IjIwMjM6MDM6MjlUMTU6MzU6NTYtMDQ6MDAiCiAgIHhtcDpNb2RpZnlEYXRlPSIyMDIzOjAzOjI5VDE1OjM1OjU2LTA0OjAwIj4KICAgPHhtcE1NOkhpc3Rvcnk+CiAgICA8cmRmOlNlcT4KICAgICA8cmRmOmxpCiAgICAgIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiCiAgICAgIHN0RXZ0OmNoYW5nZWQ9Ii8iCiAgICAgIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6MzAxZDBiNGEtZmZkMC00NmYzLWJlNzMtZGU0ZWNlODEyZGQ4IgogICAgICBzdEV2dDpzb2Z0d2FyZUFnZW50PSJHaW1wIDIuMTAgKE1hYyBPUykiCiAgICAgIHN0RXZ0OndoZW49IjIwMjMtMDMtMjlUMTU6MzU6NTYtMDQ6MDAiLz4KICAgIDwvcmRmOlNlcT4KICAgPC94bXBNTTpIaXN0b3J5PgogIDwvcmRmOkRlc2NyaXB0aW9uPgogPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+Migb7QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+cDHRMjOKqNpt4AACAASURBVHja7L13cB1Xfu/56b75XtwAXOQcCIIEc46SSIlUlmc8GnuePQ7PdtVbu94/79VWbW3VVr3y1v69VVv1yvvstf0cR+MZSzOSLEtilJgDGAAm5EBk4CLcnLt7/zi8lwABkKBGmiE156OCQPTtPvfXp0//vuf3O6dPKz/98QcGEglANguqCVTl6y1XN0DXwGQC5QllG0A2AyhgNsNXMcUAtCyYVnG8pkFWE3ZZLA/3z2SE3WaTsPtXha6DYXx9NhgGZLLit8UMqvqENpEB7cH3m0xf7XosvCbfRPsyDHEdTeavbp/k1xrzr/IelzwjKEAqBXduQWUVlFc8WbCexgNOT8DMDKxbD2bLExy/BpfPg8cDW7YI5/a0zM/D0CBs2vzk4ycm4HYHuL2wd6/Y3zCg+w4MDcGWbVBX9zXWx9OIoAaj94UA1dR+PTakM3C3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" alt="The home screen of the agent console application displaying check errors" />
+        </figure>
+
+    2.  Select **Configure network** to launch the NetworkManager TUI.
+
+    3.  Select **Edit a connection** and select the connection you want to reconfigure.
+
+    4.  Edit the configuration and select **OK** to save your changes.
+
+    5.  Select **Back** to return to the main screen of the NetworkManager TUI.
+
+    6.  Select **Activate a Connection**.
+
+    7.  Select the reconfigured network to deactivate it.
+
+    8.  Select the reconfigured network again to reactivate it.
+
+    9.  Select **Back** and then select **Quit** to return to the agent console application.
+
+    10. Wait at least five seconds for the continuous network checks to restart using the new network configuration.
+
+    11. If the `Release image URL` pull check succeeds and displays a green icon beside the URL, select **Quit** to exit the agent console application and continue with the installation.
+
+</div>
+
+# Tracking and verifying installation progress
+
+After the installation has started, you can track installation progress and verify a successful installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have configured a DNS record for the Kubernetes API server.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Optional: To know when the bootstrap host (rendezvous host) reboots, run the following command:
+
+    ``` terminal
+    $ ./openshift-install --dir <install_directory> agent wait-for bootstrap-complete \
+        --log-level=info
+    ```
+
+    where:
+
+    `--dir`
+    specifies the path to the directory where the agent ISO was generated.
+
+    `--log-level`
+    Specifies the level of installation details. Valid values are `info`, `warn`, `debug`, and `error`.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    ...................................................................
+    ...................................................................
+    INFO Bootstrap configMap status is complete
+    INFO cluster bootstrap is complete
+    ```
+
+    </div>
+
+    The command succeeds when the Kubernetes API server signals that it has been bootstrapped on the control plane machines.
+
+2.  Track the progress and verify successful installation by running the following command:
+
+    ``` terminal
+    $ openshift-install --dir <install_directory> agent wait-for install-complete
+    ```
+
+    Replace `<install_directory>` with the path to the directory where the agent ISO was generated.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    ...................................................................
+    ...................................................................
+    INFO Cluster is installed
+    INFO Install complete!
+    INFO To access the cluster as the system:admin user when using 'oc', run
+    INFO     export KUBECONFIG=/home/core/installer/auth/kubeconfig
+    INFO Access the OpenShift web-console here: https://console-openshift-console.apps.sno-cluster.test.example.com
+    ```
+
+    </div>
+
+    > [!NOTE]
+    > If you are using the optional method of GitOps ZTP manifests, you can configure IP address endpoints for cluster nodes through the `AgentClusterInstall.yaml` file in three ways:
+    >
+    > - IPv4
+    >
+    > - IPv6
+    >
+    > - IPv4 and IPv6 in parallel (dual-stack)
+    >
+    > IPv6 is supported only on bare metal platforms.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example of dual-stack networking
+
+    </div>
+
+    ``` yaml
+    apiVIP: 192.168.11.3
+    ingressVIP: 192.168.11.4
+    clusterDeploymentRef:
+      name: mycluster
+    imageSetRef:
+      name: openshift-4.17
+    networking:
+      clusterNetwork:
+      - cidr: 172.21.0.0/16
+        hostPrefix: 23
+      - cidr: fd02::/48
+        hostPrefix: 64
+      machineNetwork:
+      - cidr: 192.168.11.0/16
+      - cidr: 2001:DB8::/32
+      serviceNetwork:
+      - 172.22.0.0/16
+      - fd03::/112
+      networkType: OVNKubernetes
+    ```
+
+    </div>
+
+</div>
+
+# Sample GitOps ZTP custom resources
+
+You can optionally use GitOps Zero Touch Provisioning (ZTP) custom resource (CR) objects to install an OpenShift Container Platform cluster with the Agent-based Installer.
+
+You can customize the following GitOps ZTP custom resources to specify more details about your OpenShift Container Platform cluster. The following sample GitOps ZTP custom resources are for a single-node cluster.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `agent-cluster-install.yaml` file
+
+</div>
+
+``` yaml
+  apiVersion: extensions.hive.openshift.io/v1beta1
+  kind: AgentClusterInstall
+  metadata:
+    name: test-agent-cluster-install
+    namespace: cluster0
+  spec:
+    clusterDeploymentRef:
+      name: ostest
+    imageSetRef:
+      name: openshift-4.17
+    networking:
+      clusterNetwork:
+      - cidr: 10.128.0.0/14
+        hostPrefix: 23
+      serviceNetwork:
+      - 172.30.0.0/16
+    provisionRequirements:
+      controlPlaneAgents: 1
+      workerAgents: 0
+    sshPublicKey: <ssh_public_key>
+```
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `cluster-deployment.yaml` file
+
+</div>
+
+``` yaml
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: ostest
+  namespace: cluster0
+spec:
+  baseDomain: test.metalkube.org
+  clusterInstallRef:
+    group: extensions.hive.openshift.io
+    kind: AgentClusterInstall
+    name: test-agent-cluster-install
+    version: v1beta1
+  clusterName: ostest
+  controlPlaneConfig:
+    servingCertificates: {}
+  platform:
+    agentBareMetal:
+      agentSelector:
+        matchLabels:
+          bla: aaa
+  pullSecretRef:
+    name: pull-secret
+```
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `cluster-image-set.yaml` file
+
+</div>
+
+``` yaml
+apiVersion: hive.openshift.io/v1
+kind: ClusterImageSet
+metadata:
+  name: openshift-4.17
+spec:
+  releaseImage: registry.ci.openshift.org/ocp/release:4.17.0-0.nightly-2022-06-06-025509
+```
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `infra-env.yaml` file
+
+</div>
+
+``` yaml
+apiVersion: agent-install.openshift.io/v1beta1
+kind: InfraEnv
+metadata:
+  name: myinfraenv
+  namespace: cluster0
+spec:
+  clusterRef:
+    name: ostest
+    namespace: cluster0
+  cpuArchitecture: aarch64
+  pullSecretRef:
+    name: pull-secret
+  sshAuthorizedKey: <ssh_public_key>
+  nmStateConfigLabelSelector:
+    matchLabels:
+      cluster0-nmstate-label-name: cluster0-nmstate-label-value
+```
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `nmstateconfig.yaml` file
+
+</div>
+
+``` yaml
+apiVersion: agent-install.openshift.io/v1beta1
+kind: NMStateConfig
+metadata:
+  name: master-0
+  namespace: openshift-machine-api
+  labels:
+    cluster0-nmstate-label-name: cluster0-nmstate-label-value
+spec:
+  config:
+    interfaces:
+      - name: eth0
+        type: ethernet
+        state: up
+        mac-address: 52:54:01:aa:aa:a1
+        ipv4:
+          enabled: true
+          address:
+            - ip: 192.168.122.2
+              prefix-length: 23
+          dhcp: false
+    dns-resolver:
+      config:
+        server:
+          - 192.168.122.1
+    routes:
+      config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.122.1
+          next-hop-interface: eth0
+          table-id: 254
+  interfaces:
+    - name: "eth0"
+      macAddress: 52:54:01:aa:aa:a1
+```
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `pull-secret.yaml` file
+
+</div>
+
+``` yaml
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/dockerconfigjson
+metadata:
+  name: pull-secret
+  namespace: cluster0
+stringData:
+  .dockerconfigjson: <pull_secret>
+```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Challenges of the network far edge](../../edge_computing/ztp-deploying-far-edge-clusters-at-scale.md#ztp-deploying-far-edge-clusters-at-scale)
+
+</div>
+
+# Gathering log data from a failed Agent-based installation
+
+If you encounter a failed Agent-based installation, you can gather log data to provide for a support case.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have configured a DNS record for the Kubernetes API server.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Run the following command and collect the output:
+
+    ``` terminal
+    $ ./openshift-install --dir <installation_directory> agent wait-for bootstrap-complete --log-level=debug
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example error message
+
+    </div>
+
+    ``` terminal
+    ...
+    ERROR Bootstrap failed to complete: : bootstrap process timed out: context deadline exceeded
+    ```
+
+    </div>
+
+2.  If the output from the previous command indicates a failure, or if the bootstrap is not progressing, run the following command to connect to the rendezvous host and collect the output:
+
+    ``` terminal
+    $ ssh core@<node-ip> agent-gather -O >agent-gather.tar.xz
+    ```
+
+    > [!NOTE]
+    > Red Hat Support can diagnose most issues using the data gathered from the rendezvous host, but if some hosts are not able to register, gathering this data from every host might be helpful.
+
+3.  If the bootstrap completes and the cluster nodes reboot, run the following command and collect the output:
+
+    ``` terminal
+    $ ./openshift-install --dir <install_directory> agent wait-for install-complete --log-level=debug
+    ```
+
+4.  If the output from the previous command indicates a failure, perform the following steps:
+
+    1.  Export the `kubeconfig` file to your environment by running the following command:
+
+        ``` terminal
+        $ export KUBECONFIG=<install_directory>/auth/kubeconfig
+        ```
+
+    2.  Gather information for debugging by running the following command:
+
+        ``` terminal
+        $ oc adm must-gather
+        ```
+
+    3.  Create a compressed file from the `must-gather` directory that was just created in your working directory by running the following command:
+
+        ``` terminal
+        $ tar cvaf must-gather.tar.gz <must_gather_directory>
+        ```
+
+5.  Excluding the `/auth` subdirectory, attach the installation directory used during the deployment to your support case on the [Red Hat Customer Portal](https://access.redhat.com).
+
+6.  Attach all other data gathered from this procedure to your support case.
+
+</div>

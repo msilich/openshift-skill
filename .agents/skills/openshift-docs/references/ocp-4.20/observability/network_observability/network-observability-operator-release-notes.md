@@ -1,0 +1,151 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Review new features, enhancements, fixed issues, and known issues for the Network Observability Operator. These release notes provide information to help you understand changes and security advisories in the latest Operator release.
+
+The Network Observability Operator enables administrators to observe and analyze network traffic flows for OpenShift Container Platform clusters.
+
+These release notes track the development of the Network Observability Operator in the OpenShift Container Platform.
+
+# Network Observability Operator 1.12.1 advisory
+
+Network Observability Operator 1.12.1 includes a product enhancement advisory.
+
+- [RHEA-2026:40244 Network Observability Operator 1.12.1](https://access.redhat.com/errata/RHEA-2026:40244)
+
+# Network Observability Operator 1.12 advisory
+
+You can review the advisory for Network Observability Operator 1.12 release.
+
+- [RHSA-2026:24473 Network Observability Operator 1.12](https://access.redhat.com/errata/RHSA-2026:24473)
+
+# Network Observability Operator 1.12 new features and enhancements
+
+The Network Observability Operator 1.12 release introduces non-decrypting TLS metadata tracking, Kafka message compression options, automated secondary network indexing, and expanded web console compatibility for OpenShift Container Platform clusters.
+
+Transport Layer Security traffic metadata tracking
+The Network Observability Operator can now capture and analyze Transport Layer Security (TLS) metadata from network flows without decrypting traffic. By extracting handshake details from `ClientHello` and `ServerHello` messages, the Operator provides visibility into encryption protocols while maintaining data privacy.
+
+The following key benefits include:
+
+- Security risk detection: Identify workloads using deprecated TLS versions (1.0, 1.1) or weak cipher suites.
+
+- Compliance auditing: Audit TLS configurations to meet regulatory requirements through metric aggregation and dashboard visualization.
+
+- Security posture assessment: Visualize encrypted network traffic with lock icons in the **Topology** view and identify unencrypted communications across your cluster.
+
+- Configure Prometheus alerts to automatically report insecure or non-compliant TLS configurations.
+
+  To use this feature, enable `TLSTracking` in the `spec.agent.ebpf.features` list of the `FlowCollector` custom resource (CR).
+
+Support for Kafka compression
+Message compression configuration is now available when using Kafka to scale network flow collection. Enabling compression reduces the network bandwidth required to transport flows and decreases the storage footprint on Kafka brokers.
+
+The following key benefits include:
+
+- Reduced network load: Compressing flow data minimizes the traffic volume between the eBPF agent or flowlogs-pipeline and your Kafka cluster.
+
+- Storage efficiency: Smaller message sizes lead to improved disk space utilization on Kafka brokers.
+
+- Tunable performance: Choose from several compression algorithms, such as `gzip`, `snappy`, `lz4`, or `zstd`, to balance CPU usage with compression ratios.
+
+  To enable this feature, configure the `spec.kafka.compression` and `spec.exporters.kafka.compression` fields in the `FlowCollector` custom resource.
+
+Simplified secondary network indexing
+The configuration process for secondary network indexing is now simplified.
+
+The `name` field in the `spec.processor.advanced.secondaryNetworks` list is deprecated and ignored. The Network Observability Operator automatically evaluates all secondary networks regardless of their assigned names, removing the requirement for manual name-matching entries in the `FlowCollector` CR.
+
+OpenShift Container Platform web console compatibility
+The Network Observability web console plugin is updated to support OpenShift Container Platform 4.22 and later. Backward compatibility is maintained for OpenShift Container Platform versions 4.14 through 4.21.
+
+# Network Observability Operator 1.12 fixed issues
+
+The Network Observability Operator 1.12 release contains several fixed issues that improve performance, system status reporting, and user experience.
+
+Consistent FlowCollector pipeline status
+Before this update, changes to the sampling field caused an inconsistency in the `FlowCollector` resource status. As a consequence, you could see conflicting statuses across pipeline components.
+
+With this release, status reporting is made consistent across all components. As a result, the reliability of the pipeline status indicator is improved.
+
+[NETOBSERV-2375](https://issues.redhat.com/browse/NETOBSERV-2375)
+
+Fixed `--help` flag processing in netobserv-cli
+Before this update, the `--help` flag was ignored when placed after other command flags in the Network Observability CLI. As a consequence, running commands such as `oc netobserv flows --interfaces=br-ex --max-time=10s --help` executed the flow collection instead of displaying the help page.
+
+With this release, the `--help` flag is recognized regardless of its position in the command. As a result, you can now display help information by placing the `--help` flag anywhere in your command arguments.
+
+[NETOBSERV-2617](https://issues.redhat.com/browse/NETOBSERV-2617)
+
+Improved visibility of DNS names warning messages
+Before this update, the **DNS names** graph repeatedly displayed a warning message on every refresh when running in a Prometheus-only configuration. As a consequence, the persistent warning message covered other dashboard elements.
+
+With this release, the warning message is only displayed during the initial data load and does not overlay other content. As a result, interface clarity is improved when navigating the dashboard.
+
+[NETOBSERV-2618](https://issues.redhat.com/browse/NETOBSERV-2618)
+
+Prometheus enabled by default in FlowCollector configurations
+Before this update, the default setting for Prometheus metrics was unassigned during `FlowCollector` custom resource creation. As a consequence, you had to manually ensure that metrics collection was active to query accurate flow data.
+
+With this release, the default value for Prometheus metrics collection in the `FlowCollector` configuration is set to `true`. As a result, the deployment process is simplified and flow metrics are collected automatically.
+
+[NETOBSERV-2620](https://issues.redhat.com/browse/NETOBSERV-2620)
+
+Usage examples added to CLI subcommand help text
+Before this update, the `help` subcommands for the Network Observability CLI lacked syntax examples. As a consequence, understanding how to construct complex filtering and capture commands required additional research.
+
+With this release, clear examples are included in the subcommand help outputs. As a result, the usability and discoverability of the CLI features are enhanced.
+
+[NETOBSERV-2646](https://issues.redhat.com/browse/NETOBSERV-2646)
+
+Corrected latency formatting for values above one second
+Before this update, flow durations and network latencies greater than one second were improperly formatted as milliseconds. As a consequence, donut graphs and latency metrics displayed confusing or inaccurate time designations.
+
+With this release, the duration formatting function handles values greater than one millisecond accurately using decimal seconds. As a result, you can view precise network latency values in console charts.
+
+[NETOBSERV-2669](https://issues.redhat.com/browse/NETOBSERV-2669)
+
+Improved FlowCollector status reporting when eBPF pods are absent
+Before this update, the `FlowCollector` resource reported a status of `Ready` even when a restrictive `nodeSelector` prevented any eBPF agent pods from deploying. As a consequence, the system status misrepresented the health of the agent layer.
+
+With this release, the Operator checks for a zero-pod deployment count. As a result, the `FlowCollector` CR now correctly identifies when zero eBPF pods are active, improving cluster error diagnostics.
+
+[NETOBSERV-2674](https://issues.redhat.com/browse/NETOBSERV-2674)
+
+Optimized field exports for OpenTelemetry exporters
+Before this update, the OpenTelemetry exporter processed missing or null keys as non-null data. As a consequence, unpopulated `metadata` fields were exported to log streams, which increased storage usage and cluttered telemetry files.
+
+With this release, the OpenTelemetry exporter filters out null or unrelated fields, exporting only keys that belong to explicitly enabled features. As a result, exported log sizes are reduced and data efficiency is improved.
+
+[NETOBSERV-2705](https://issues.redhat.com/browse/NETOBSERV-2705)
+
+Added sampling probability fields to IPFIX exports
+Before this update, Internet Protocol Flow Information Export (IPFIX) record exports omitted per-flow sampling information. As a consequence, data exports failed to comply with the standard IPFIX specifications for `samplingProbability` usage.
+
+With this release, the exporter includes sampling probability details within the IPFIX packet metadata. As a result, exported OpenTelemetry data matches industry compliance standards.
+
+[NETOBSERV-2706](https://issues.redhat.com/browse/NETOBSERV-2706)
+
+Fixed TLS volume name conflicts on OpenTelemetry exporters
+Before this update, configuring TLS certificates on OpenTelemetry exporters generated an invalid volume name format. As a consequence, the `apiserver` rejected the underlying Flow-logs Pipeline deployment specification, causing the pipeline pod to fail during initialization.
+
+With this release, the Operator ensures valid volume names are generated when handling TLS attributes. As a result, enabling TLS on your OpenTelemetry exporters no longer interferes with pipeline pod lifecycles.
+
+[NETOBSERV-2707](https://issues.redhat.com/browse/NETOBSERV-2707)
+
+Improved pod-to-pod flow filter rule matching for asymmetric CIDR rules
+Before this update, the default flow filter action was not enforced when a network flow failed to match both a CIDR rule and its corresponding `peerCIDR` rule identically. As a consequence, unexpected acknowledgment-only, `ACK`, flows bypass filtering restrictions inside the pod network.
+
+With this release, when a network flow matches a designated CIDR rule but fails the `peerCIDR` pairing, the default filtering action is correctly applied. As a result, traffic blocking and network rule isolation are handled more securely.
+
+[NETOBSERV-2755](https://issues.redhat.com/browse/NETOBSERV-2755)
+
+# Network Observability Operator 1.12 known issues
+
+The following known issues affect the Network Observability Operator 1.12 release.
+
+Operator fails to start when custom web console logos are configured
+When you configure custom product logos in the `Console.operator.openshift.io` resource using the `spec.customization.logos` field, the Network Observability Operator pod fails to start during installation. The Operator incorrectly reports a validation error indicating that both `logos` and the deprecated `customLogoFile` fields are set, even though only `logos` is configured.
+
+To work around this problem, manually enable the Network Observability Operator OpenShift Container Platform web console plugin by adding `netobserv-plugin-static` to the `spec.plugins` list in the `Console` cluster resource, or by enabling the plugin through the web console under **Administration** → **Cluster Settings** → **Configuration** → **Console** → **Console plugins**.
+
+[NETOBSERV-2767](https://issues.redhat.com/browse/NETOBSERV-2767)

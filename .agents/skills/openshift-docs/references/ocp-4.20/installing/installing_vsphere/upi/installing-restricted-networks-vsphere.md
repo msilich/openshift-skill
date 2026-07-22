@@ -1,0 +1,2102 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+In OpenShift Container Platform version 4.17, you can install a cluster on VMware vSphere infrastructure that you provision in a restricted network.
+
+> [!IMPORTANT]
+> The steps for performing a user-provisioned infrastructure installation are provided as an example only. Installing a cluster with infrastructure you provide requires knowledge of the vSphere platform and the installation process of OpenShift Container Platform. Use the user-provisioned infrastructure installation instructions as a guide; you are free to create the required resources through other methods.
+
+# Prerequisites
+
+- You have completed the tasks in [Preparing to install a cluster using user-provisioned infrastructure](upi-vsphere-preparing-to-install.md#upi-vsphere-preparing-to-install).
+
+- You reviewed your VMware platform licenses. Red Hat does not place any restrictions on your VMware licenses, but some VMware infrastructure components require licensing.
+
+- You reviewed details about the [OpenShift Container Platform installation and update](../../../architecture/architecture-installation.md#architecture-installation) processes.
+
+- You read the documentation on [selecting a cluster installation method and preparing it for users](../../overview/installing-preparing.md#installing-preparing).
+
+- You [created a registry on your mirror host](../../../disconnected/installing-mirroring-installation-images.md#installing-mirroring-installation-images) and obtained the `imageContentSources` data for your version of OpenShift Container Platform.
+
+  > [!IMPORTANT]
+  > Because the installation media is on the mirror host, you can use that computer to complete all installation steps.
+
+- You provisioned [persistent storage](../../../storage/understanding-persistent-storage.md#understanding-persistent-storage) for your cluster. To deploy a private image registry, your storage must provide `ReadWriteMany` access modes.
+
+- Completing the installation requires that you upload the Red Hat Enterprise Linux CoreOS (RHCOS) OVA on vSphere hosts. The machine from which you complete this process requires access to port 443 on the vCenter and ESXi hosts. You verified that port 443 is accessible.
+
+- If you use a firewall, you confirmed with the administrator that port 443 is accessible. Control plane nodes must be able to reach vCenter and ESXi hosts on port 443 for the installation to succeed.
+
+- If you use a firewall and plan to use the Telemetry service, you [configured the firewall to allow the sites](../../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall) that your cluster requires access to.
+
+  > [!NOTE]
+  > Be sure to also review this site list if you are configuring a proxy.
+
+# About installations in restricted networks
+
+In OpenShift Container Platform 4.17, you can install a cluster in a restricted network without an active internet connection to obtain software components.
+
+Depending on the cloud platform where you install the cluster, you can complete a restricted network installation by using either installer-provisioned infrastructure or user-provisioned infrastructure.
+
+If you choose to perform a restricted network installation on a cloud platform, you still require access to its cloud APIs. Some cloud functions, like Amazon Web Service’s Route 53 DNS and IAM services, require internet access. Depending on your network, you might require less internet access for an installation on bare metal hardware, Nutanix, or on VMware vSphere.
+
+To complete a restricted network installation, you must create a registry that mirrors the contents of the OpenShift image registry and contains the installation media. You can create this registry on a mirror host, which can access both the internet and your closed network, or by using other methods that meet your restrictions.
+
+> [!IMPORTANT]
+> Because of the complexity of the configuration for user-provisioned installations, consider completing a standard user-provisioned infrastructure installation before you attempt a restricted network installation using user-provisioned infrastructure. Completing this test installation might make it easier to isolate and troubleshoot any issues that might arise during your installation in a restricted network.
+
+## Additional limits
+
+Clusters in restricted networks have the following additional limitations and restrictions:
+
+- The `ClusterVersion` status includes an `Unable to retrieve available updates` error.
+
+- By default, you cannot use the contents of the Developer Catalog because you cannot access the required image stream tags.
+
+# Internet access for OpenShift Container Platform
+
+In OpenShift Container Platform 4.17, you require access to the internet to obtain the images that are necessary to install your cluster.
+
+You must have internet access to perform the following actions:
+
+- Access Red Hat Hybrid Cloud Console to download the installation program and perform subscription management. If the cluster has internet access and you do not disable Telemetry, that service automatically entitles your cluster.
+
+- Access Quay.io to obtain the packages that are required to install your cluster.
+
+- Obtain the packages that are required to perform cluster updates.
+
+# VMware vSphere region and zone enablement
+
+You can deploy an OpenShift Container Platform cluster to multiple vSphere data centers. Each data center can run multiple clusters. This configuration reduces the risk of a hardware failure or network outage that can cause your cluster to fail.
+
+To enable regions and zones, you must define multiple failure domains for your OpenShift Container Platform cluster.
+
+> [!IMPORTANT]
+> The VMware vSphere region and zone enablement feature requires the vSphere Container Storage Interface (CSI) driver as the default storage driver in the cluster. As a result, the feature is only available on a newly installed cluster.
+>
+> For a cluster that was upgraded from a previous release, you must enable CSI automatic migration for the cluster. You can then configure multiple regions and zones for the upgraded cluster.
+
+The default installation configuration deploys a cluster to a single vSphere data center. If you want to deploy a cluster to multiple vSphere data centers, you must create an installation configuration file that enables the region and zone feature.
+
+The default `install-config.yaml` file includes `vcenters` and `failureDomains` fields, where you can specify multiple vSphere data centers and clusters for your OpenShift Container Platform cluster. You can use the default `failureDomains` from `install-config.yaml` if you want to install an OpenShift Container Platform cluster in a vSphere environment that consists of single data center.
+
+The following list describes terms associated with defining zones and regions for your cluster:
+
+- Failure domain: Establishes the relationships between a region and zone. You define a failure domain by using vCenter objects, such as a `datastore` object. A failure domain defines the vCenter location for OpenShift Container Platform cluster nodes.
+
+- Region: Specifies a vCenter data center. You define a region by using a tag from the `openshift-region` tag category.
+
+- Zone: Specifies a vCenter cluster. You define a zone by using a tag from the `openshift-zone` tag category.
+
+> [!NOTE]
+> If you plan on specifying more than one failure domain in your `install-config.yaml` file, you must create tag categories, zone tags, and region tags in advance of creating the configuration file.
+
+You must create a vCenter tag for each vCenter data center, which represents a region. Additionally, you must create a vCenter tag for each cluster than runs in a data center, which represents a zone. After you create the tags, you must attach each tag to their respective data centers and clusters.
+
+The following table outlines an example of the relationship among regions, zones, and tags for a configuration with multiple vSphere data centers running in a single VMware vCenter.
+
+| Data center (region) | Cluster (zone) | Tags       |
+|----------------------|----------------|------------|
+| us-east              | us-east-1      | us-east-1a |
+| us-east-1b           |                |            |
+| us-east-2            | us-east-2a     |            |
+| us-east-2b           |                |            |
+| us-west              | us-west-1      | us-west-1a |
+| us-west-1b           |                |            |
+| us-west-2            | us-west-2a     |            |
+| us-west-2b           |                |            |
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Additional VMware vSphere configuration parameters](../installation-config-parameters-vsphere.md#installation-configuration-parameters-additional-vsphere_installation-config-parameters-vsphere)
+
+- [Deprecated VMware vSphere configuration parameters](../installation-config-parameters-vsphere.md#deprecated-parameters-vsphere_installation-config-parameters-vsphere)
+
+- [vSphere automatic migration](../../../storage/container_storage_interface/persistent-storage-csi-migration.md#persistent-storage-csi-migration-sc-vsphere_persistent-storage-csi-migration)
+
+- [VMware vSphere CSI Driver Operator](../../../storage/container_storage_interface/persistent-storage-csi-vsphere.md#persistent-storage-csi-vsphere-top-aware_persistent-storage-csi-vsphere)
+
+</div>
+
+# Manually creating the installation configuration file
+
+Installing the cluster requires that you manually create the installation configuration file.
+
+> [!IMPORTANT]
+> The Cloud Controller Manager Operator performs a connectivity check on a provided hostname or IP address. Ensure that you specify a hostname or an IP address to a reachable vCenter server. If you provide metadata to a non-existent vCenter server, installation of the cluster fails at the bootstrap stage.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have an SSH public key on your local machine for use with the installation program. You can use the key for SSH authentication onto your cluster nodes for debugging and disaster recovery.
+
+- You have obtained the OpenShift Container Platform installation program and the pull secret for your cluster.
+
+- Obtain the `imageContentSources` section from the output of the command to mirror the repository.
+
+- Obtain the contents of the certificate for your mirror registry.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create an installation directory to store your required installation assets in:
+
+    ``` terminal
+    $ mkdir <installation_directory>
+    ```
+
+    > [!IMPORTANT]
+    > You must create a directory. Some installation assets, such as bootstrap X.509 certificates have short expiration intervals, so you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
+
+2.  Customize the provided sample `install-config.yaml` file template and save the file in the `<installation_directory>`.
+
+    > [!NOTE]
+    > You must name this configuration file `install-config.yaml`.
+
+    - Unless you use a registry that RHCOS trusts by default, such as `docker.io`, you must provide the contents of the certificate for your mirror repository in the `additionalTrustBundle` section. In most cases, you must provide the certificate for your mirror.
+
+    - You must include the `imageContentSources` section from the output of the command to mirror the repository.
+
+      <div class="important">
+
+      <div class="title">
+
+      </div>
+
+      - The `ImageContentSourcePolicy` file is generated as an output of `oc mirror` after the mirroring process is finished.
+
+      - The `oc mirror` command generates an `ImageContentSourcePolicy` file which contains the YAML needed to define `ImageContentSourcePolicy`. Copy the text from this file and paste it into your `install-config.yaml` file.
+
+      - You must run the 'oc mirror' command twice. The first time you run the `oc mirror` command, you get a full `ImageContentSourcePolicy` file. The second time you run the `oc mirror` command, you only get the difference between the first and second run. Because of this behavior, you must always keep a backup of these files in case you need to merge them into one complete `ImageContentSourcePolicy` file. Keeping a backup of these two output files ensures that you have a complete `ImageContentSourcePolicy` file.
+
+      </div>
+
+3.  If you are installing a three-node cluster or a cluster with user-provisioned infrastructure, set the `compute.replicas` parameter to `0`. In a three-node cluster, this ensures that the cluster’s control planes are schedulable. For more information, see "Installing a three-node cluster". In a cluster with user-provisioned infrastructure, you must manually deploy compute machines before you finish installing OpenShift Container Platform.
+
+4.  Back up the `install-config.yaml` file so that you can use it to install many clusters.
+
+    > [!IMPORTANT]
+    > Back up the `install-config.yaml` file now, because the installation process consumes the file in the next step.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installation configuration parameters](../installation-config-parameters-vsphere.md#installation-config-parameters-vsphere)
+
+</div>
+
+## Sample install-config.yaml file for a VMware vSphere cluster
+
+You can customize the `install-config.yaml` file to specify more details about your OpenShift Container Platform cluster’s platform or change the values of the required parameters.
+
+> [!IMPORTANT]
+> Carefully review the "Installation configuration parameters for vSphere" page for detailed parameter explanations.
+
+``` yaml
+apiVersion: v1
+baseDomain: example.com
+metadata:
+  name: test
+sshKey: ssh-ed25519 AAAA...
+compute:
+- name:  <worker_name>
+  platform: {}
+  replicas: 0
+controlPlane:
+  name: <control_plane_name>
+  platform: {}
+  replicas: 3
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+platform:
+  vsphere:
+    failureDomains:
+    - name: <failure_domain_name>
+      region: <default_region_name>
+      server: <fully_qualified_domain_name>
+      topology:
+        computeCluster: "/<data_center>/host/<cluster>"
+        datacenter: <data_center>
+        datastore: "/<data_center>/datastore/<datastore>"
+        networks:
+        - <VM_Network_name>
+      zone: <default_zone_name>
+    vcenters:
+    - datacenters:
+      - <data_center>
+      server: <fully_qualified_domain_name>
+      user: administrator@vsphere.local
+```
+
+where:
+
+`compute`
+Specifes the parameters that apply to compute nodes.
+
+`controlPlane`
+Specifies the parameters that apply to control plane nodes.
+
+`networking`
+Specifies the parameters that apply to cluster networking configuration.
+
+`platform`
+Specifies the parameters that apply to the configuration of the platform hosting the cluster.
+
+## Configuring the cluster-wide proxy during installation
+
+Production environments can deny direct access to the internet and instead have an HTTP or HTTPS proxy available. You can configure a new OpenShift Container Platform cluster to use a proxy by configuring the proxy settings in the `install-config.yaml` file.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have an existing `install-config.yaml` file.
+
+- You have reviewed the sites that your cluster requires access to and determined whether any of them need to bypass the proxy. By default, all cluster egress traffic is proxied, including calls to hosting cloud provider APIs. You added sites to the `Proxy` object’s `spec.noProxy` field to bypass the proxy if necessary.
+
+  > [!NOTE]
+  > The `Proxy` object `status.noProxy` field is populated with the values of the `networking.machineNetwork[].cidr`, `networking.clusterNetwork[].cidr`, and `networking.serviceNetwork[]` fields from your installation configuration.
+  >
+  > For installations on Amazon Web Services (AWS), Google Cloud, Microsoft Azure, and Red Hat OpenStack Platform (RHOSP), the `Proxy` object `status.noProxy` field is also populated with the instance metadata endpoint (`169.254.169.254`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit your `install-config.yaml` file and add the proxy settings. For example:
+
+    ``` yaml
+    apiVersion: v1
+    baseDomain: my.domain.com
+    proxy:
+      httpProxy: http://<username>:<pswd>@<ip>:<port>
+      httpsProxy: https://<username>:<pswd>@<ip>:<port>
+      noProxy: example.com
+    additionalTrustBundle: |
+        -----BEGIN CERTIFICATE-----
+        <MY_TRUSTED_CA_CERT>
+        -----END CERTIFICATE-----
+    additionalTrustBundlePolicy: <policy_to_add_additionalTrustBundle>
+    # ...
+    ```
+
+    where:
+
+    `proxy.httpProxy`
+    Specifies a proxy URL to use for creating HTTP connections outside the cluster. The URL scheme must be `http`.
+
+    `proxy.httpsProxy`
+    Specifies a proxy URL to use for creating HTTPS connections outside the cluster.
+
+    `proxy.noProxy`
+    Specifies a comma-separated list of destination domain names, IP addresses, or other network CIDRs to exclude from proxying. Preface a domain with `.` to match subdomains only. For example, `.y.com` matches `x.y.com`, but not `y.com`. Use `*` to bypass the proxy for all destinations. You must include vCenter’s IP address and the IP range that you use for its machines.
+
+    `additionalTrustBundle`
+    If provided, the installation program generates a config map that is named `user-ca-bundle` in the `openshift-config` namespace to hold the additional CA certificates. If you provide `additionalTrustBundle` and at least one proxy setting, the `Proxy` object is configured to reference the `user-ca-bundle` config map in the `trustedCA` field. The Cluster Network Operator then creates a `trusted-ca-bundle` config map that merges the contents specified for the `trustedCA` parameter with the RHCOS trust bundle. The `additionalTrustBundle` field is required unless the proxy’s identity certificate is signed by an authority from the RHCOS trust bundle.
+
+    `additionalTrustBundlePolicy`
+    Specifies the policy that determines the configuration of the `Proxy` object to reference the `user-ca-bundle` config map in the `trustedCA` field. The allowed values are `Proxyonly` and `Always`. Use `Proxyonly` to reference the `user-ca-bundle` config map only when `http/https` proxy is configured. Use `Always` to always reference the `user-ca-bundle` config map. The default value is `Proxyonly`. Optional parameter.
+
+    > [!NOTE]
+    > The installation program does not support the proxy `readinessEndpoints` field.
+
+    > [!NOTE]
+    > If the installation program times out, restart and then complete the deployment by using the `wait-for` command of the installation program. For example:
+    >
+    > ``` terminal
+    > $ ./openshift-install wait-for install-complete --log-level debug
+    > ```
+
+2.  Save the file and reference it when installing OpenShift Container Platform.
+
+    The installation program creates a cluster-wide proxy that is named `cluster` that uses the proxy settings in the provided `install-config.yaml` file. If no proxy settings are provided, a `cluster` `Proxy` object is still created, but it will have a nil `spec`.
+
+    > [!NOTE]
+    > Only the `Proxy` object named `cluster` is supported, and no additional proxies can be created.
+
+</div>
+
+## Configuring regions and zones for a VMware vCenter
+
+You can modify the default installation configuration file, so that you can deploy an OpenShift Container Platform cluster to multiple vSphere data centers.
+
+The default `install-config.yaml` file configuration from the previous release of OpenShift Container Platform is deprecated. You can continue to use the deprecated default configuration, but the `openshift-installer` will prompt you with a warning message that indicates the use of deprecated fields in the configuration file.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have an existing `install-config.yaml` installation configuration file.
+
+  > [!IMPORTANT]
+  > You must specify at least one failure domain for your OpenShift Container Platform cluster, so that you can provision data center objects for your VMware vCenter server. Consider specifying multiple failure domains if you need to provision virtual machine nodes in different data centers, clusters, datastores, and other components. To enable regions and zones, you must define multiple failure domains for your OpenShift Container Platform cluster.
+
+- You have installed the `govc` command line tool.
+
+  > [!IMPORTANT]
+  > The example uses the `govc` command. The `govc` command is an open source command available from VMware; it is not available from Red Hat. The Red Hat support team does not maintain the `govc` command. Instructions for downloading and installing `govc` are found on the VMware documentation website.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create the `openshift-region` and `openshift-zone` vCenter tag categories by running the following commands:
+
+    > [!IMPORTANT]
+    > If you specify different names for the `openshift-region` and `openshift-zone` vCenter tag categories, the installation of the OpenShift Container Platform cluster fails.
+
+    ``` terminal
+    $ govc tags.category.create -d "OpenShift region" openshift-region
+    ```
+
+    ``` terminal
+    $ govc tags.category.create -d "OpenShift zone" openshift-zone
+    ```
+
+2.  For each region where you want to deploy your cluster, create a region tag by running the following command:
+
+    ``` terminal
+    $ govc tags.create -c <region_tag_category> <region_tag>
+    ```
+
+3.  For each zone where you want to deploy your cluster, create a zone tag by running the following command:
+
+    ``` terminal
+    $ govc tags.create -c <zone_tag_category> <zone_tag>
+    ```
+
+4.  Attach region tags to each vCenter data center object by running the following command:
+
+    ``` terminal
+    $ govc tags.attach -c <region_tag_category> <region_tag_1> /<data_center_1>
+    ```
+
+5.  Attach the zone tags to each vCenter cluster object by running the following command:
+
+    ``` terminal
+    $ govc tags.attach -c <zone_tag_category> <zone_tag_1> /<data_center_1>/host/<cluster1>
+    ```
+
+6.  Change to the directory that contains the installation program and initialize the cluster deployment according to your chosen installation requirements.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample `install-config.yaml` file with multiple data centers defined in a vSphere center
+
+    </div>
+
+    ``` yaml
+    # ...
+    compute:
+    ---
+      vsphere:
+          zones:
+            - "<machine_pool_zone_1>"
+            - "<machine_pool_zone_2>"
+    # ...
+    controlPlane:
+    # ...
+    vsphere:
+          zones:
+            - "<machine_pool_zone_1>"
+            - "<machine_pool_zone_2>"
+    # ...
+    platform:
+      vsphere:
+        vcenters:
+    # ...
+        datacenters:
+          - <data_center_1_name>
+          - <data_center_2_name>
+        failureDomains:
+        - name: <machine_pool_zone_1>
+          region: <region_tag_1>
+          zone: <zone_tag_1>
+          server: <fully_qualified_domain_name>
+          topology:
+            datacenter: <data_center_1>
+            computeCluster: "/<data_center_1>/host/<cluster1>"
+            networks:
+            - <VM_Network1_name>
+            datastore: "/<data_center_1>/datastore/<datastore1>"
+            resourcePool: "/<data_center_1>/host/<cluster1>/Resources/<resourcePool1>"
+            folder: "/<data_center_1>/vm/<folder1>"
+        - name: <machine_pool_zone_2>
+          region: <region_tag_2>
+          zone: <zone_tag_2>
+          server: <fully_qualified_domain_name>
+          topology:
+            datacenter: <data_center_2>
+            computeCluster: "/<data_center_2>/host/<cluster2>"
+            networks:
+            - <VM_Network2_name>
+            datastore: "/<data_center_2>/datastore/<datastore2>"
+            resourcePool: "/<data_center_2>/host/<cluster2>/Resources/<resourcePool2>"
+            folder: "/<data_center_2>/vm/<folder2>"
+    # ...
+    ```
+
+    </div>
+
+</div>
+
+# Creating the Kubernetes manifest and Ignition config files
+
+To customize cluster definitions and manually start machines, generate the Kubernetes manifest and Ignition config files.
+
+The installation configuration file transforms into the Kubernetes manifests. The manifests wrap into the Ignition configuration files, which are later used to configure the cluster machines.
+
+<div class="important">
+
+<div class="title">
+
+</div>
+
+- The Ignition config files that the OpenShift Container Platform installation program generates contain certificates that expire after 24 hours, which are then renewed at that time. If the cluster is shut down before renewing the certificates and the cluster is later restarted after the 24 hours have elapsed, the cluster automatically recovers the expired certificates. The exception is that you must manually approve the pending `node-bootstrapper` certificate signing requests (CSRs) to recover kubelet certificates. See the documentation for *Recovering from expired control plane certificates* for more information.
+
+- It is recommended that you use Ignition config files within 12 hours after they are generated because the 24-hour certificate rotates from 16 to 22 hours after the cluster is installed. By using the Ignition config files within 12 hours, you can avoid installation failure if the certificate update runs during installation.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You obtained the OpenShift Container Platform installation program. For a restricted network installation, these files are on your mirror host.
+
+- You created the `install-config.yaml` installation configuration file.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Change to the directory that contains the OpenShift Container Platform installation program and generate the Kubernetes manifests for the cluster:
+
+    ``` terminal
+    $ ./openshift-install create manifests --dir <installation_directory>
+    ```
+
+    where
+
+    `<installation_directory>`
+    Specifies the installation directory that contains the `install-config.yaml` file you created.
+
+2.  Remove the Kubernetes manifest files that define the control plane machines, compute machine sets, and control plane machine sets:
+
+    ``` terminal
+    $ rm -f openshift/99_openshift-cluster-api_master-machines-*.yaml openshift/99_openshift-cluster-api_worker-machineset-*.yaml openshift/99_openshift-machine-api_master-control-plane-machine-set.yaml
+    ```
+
+    Because you create and manage these resources yourself, you do not have to initialize them. You can preserve the compute machine set files to create compute machines by using the machine API, but you must update references to them to match your environment.
+
+3.  Check that the `mastersSchedulable` parameter in the `<installation_directory>/manifests/cluster-scheduler-02-config.yml` Kubernetes manifest file is set to `false`. This setting prevents pods from being scheduled on the control plane machines:
+
+    1.  Open the `<installation_directory>/manifests/cluster-scheduler-02-config.yml` file.
+
+    2.  Locate the `mastersSchedulable` parameter and ensure that it is set to `false`.
+
+    3.  Save and exit the file.
+
+4.  To create the Ignition configuration files, run the following command from the directory that contains the installation program:
+
+    ``` terminal
+    $ ./openshift-install create ignition-configs --dir <installation_directory>
+    ```
+
+    where:
+
+    `<installation_directory>`
+    Specifies the same installation directory.
+
+    Ignition config files are created for the bootstrap, control plane, and compute nodes in the installation directory. The `kubeadmin-password` and `kubeconfig` files are created in the `./<installation_directory>/auth` directory:
+
+        .
+        ├── auth
+        │   ├── kubeadmin-password
+        │   └── kubeconfig
+        ├── bootstrap.ign
+        ├── master.ign
+        ├── metadata.json
+        └── worker.ign
+
+</div>
+
+# Configuring chrony time service
+
+You must set the time server and related settings used by the chrony time service (`chronyd`) by modifying the contents of the `chrony.conf` file and passing those contents to your nodes as a machine config.
+
+For more information on chrony best practices, see the following resources:
+
+- [Configuring chrony (Red Hat Knowledgebase article)](https://access.redhat.com/solutions/3073261)
+
+- [Best practices for NTP (Red Hat Knowledgebase article)](https://access.redhat.com/solutions/778603)
+
+- [Basic chrony NTP troubleshooting (Red Hat Ceph Storage documentation)](https://docs.redhat.com/en/documentation/red_hat_ceph_storage/8/html-single/troubleshooting_guide/basic-chrony-NTP-troubleshooting_diag#basic-chrony-NTP-troubleshooting_diag)
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a Butane config including the contents of the `chrony.conf` file. For example, to configure chrony on worker nodes, create a `99-worker-chrony.bu` file.
+
+    > [!NOTE]
+    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+
+    ``` yaml
+    variant: openshift
+    version: 4.17.0
+    metadata:
+      name: 99-worker-chrony
+      labels:
+        machineconfiguration.openshift.io/role: worker
+    storage:
+      files:
+      - path: /etc/chrony.conf
+        mode: 0644
+        overwrite: true
+        contents:
+          inline: |
+            pool 0.rhel.pool.ntp.org iburst
+            driftfile /var/lib/chrony/drift
+            makestep 1.0 3
+            rtcsync
+            logdir /var/log/chrony
+    ```
+
+    - `name: 99-worker-chrony` - Specify a name for the machine config file. On control plane nodes, substitute `master` for `worker`.
+
+    - `machineconfiguration.openshift.io/role: worker` - On control plane nodes, substitute `master` for `worker`.
+
+    - `mode: 0644` - Specify an octal value mode for the `mode` field in the machine config file. After creating the file and applying the changes, the `mode` is converted to a decimal value. You can check the YAML file with the command `oc get mc <mc-name> -o yaml`.
+
+    - `pool 0.rhel.pool.ntp.org iburst` - Specify any valid, reachable time source, such as the one provided by your DHCP server.
+
+    > [!NOTE]
+    > For all-machine to all-machine communication, the Network Time Protocol (NTP) on UDP is port `123`. If an external NTP time server is configured, you must open UDP port `123`.
+
+2.  Use Butane to generate a `MachineConfig` object file, `99-worker-chrony.yaml`, containing the configuration to be delivered to the nodes:
+
+    ``` terminal
+    $ butane 99-worker-chrony.bu -o 99-worker-chrony.yaml
+    ```
+
+3.  Apply the configurations in one of two ways:
+
+    - If the cluster is not running yet, after you generate manifest files, add the `MachineConfig` object file to the `<installation_directory>/openshift` directory, and then continue to create the cluster.
+
+    - If the cluster is already running, apply the file:
+
+      ``` terminal
+      $ oc apply -f ./99-worker-chrony.yaml
+      ```
+
+</div>
+
+# Extracting the infrastructure name
+
+The Ignition config files contain a unique cluster identifier that you can use to uniquely identify your cluster in VMware vSphere. If you plan to use the cluster identifier as the name of your virtual machine folder, you must extract it.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You obtained the OpenShift Container Platform installation program and the pull secret for your cluster.
+
+- You generated the Ignition config files for your cluster.
+
+- You installed the `jq` package.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To extract and view the infrastructure name from the Ignition config file metadata, run the following command:
+
+  ``` terminal
+  $ jq -r .infraID <installation_directory>/metadata.json
+  ```
+
+  - For `<installation_directory>`, specify the path to the directory that you stored the installation files in.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    openshift-vw9j6
+    ```
+
+    </div>
+
+  - The output of this command is your cluster name and a random string.
+
+</div>
+
+# Installing RHCOS and starting the OpenShift Container Platform bootstrap process
+
+To install OpenShift Container Platform on user-provisioned infrastructure on VMware vSphere, you must install Red Hat Enterprise Linux CoreOS (RHCOS) on vSphere hosts. When you install RHCOS, you must provide the Ignition config file that was generated by the OpenShift Container Platform installation program for the type of machine you are installing. If you have configured suitable networking, DNS, and load balancing infrastructure, the OpenShift Container Platform bootstrap process begins automatically after the RHCOS machines have rebooted.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have obtained the Ignition config files for your cluster.
+
+- You have access to an HTTP server that you can access from your computer and that the machines that you create can access.
+
+- You have created a [vSphere cluster](https://docs.vmware.com/en/VMware-vSphere/6.0/com.vmware.vsphere.vcenterhost.doc/GUID-B1018F28-3F14-4DFE-9B4B-F48BBDB72C10.html).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Upload the bootstrap Ignition config file, which is named `<installation_directory>/bootstrap.ign`, that the installation program created to your HTTP server. Note the URL of this file.
+
+2.  Save the following secondary Ignition config file for your bootstrap node to your computer as `<installation_directory>/merge-bootstrap.ign`:
+
+    ``` text
+    {
+      "ignition": {
+        "config": {
+          "merge": [
+            {
+              "source": "<bootstrap_ignition_config_url>",
+              "verification": {}
+            }
+          ]
+        },
+        "timeouts": {},
+        "version": "3.2.0"
+      },
+      "networkd": {},
+      "passwd": {},
+      "storage": {},
+      "systemd": {}
+    }
+    ```
+
+    - Specify the URL of the bootstrap Ignition config file that you hosted.
+
+      When you create the virtual machine (VM) for the bootstrap machine, you use this Ignition config file.
+
+3.  Locate the following Ignition config files that the installation program created:
+
+    - `<installation_directory>/master.ign`
+
+    - `<installation_directory>/worker.ign`
+
+    - `<installation_directory>/merge-bootstrap.ign`
+
+4.  Convert the Ignition config files to Base64 encoding. Later in this procedure, you must add these files to the extra configuration parameter `guestinfo.ignition.config.data` in your VM.
+
+    For example, if you use a Linux operating system, you can use the `base64` command to encode the files.
+
+    ``` terminal
+    $ base64 -w0 <installation_directory>/master.ign > <installation_directory>/master.64
+    ```
+
+    ``` terminal
+    $ base64 -w0 <installation_directory>/worker.ign > <installation_directory>/worker.64
+    ```
+
+    ``` terminal
+    $ base64 -w0 <installation_directory>/merge-bootstrap.ign > <installation_directory>/merge-bootstrap.64
+    ```
+
+    > [!IMPORTANT]
+    > If you plan to add more compute machines to your cluster after you finish installation, do not delete these files.
+
+5.  Obtain the RHCOS OVA image. Images are available from the [RHCOS image mirror](https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.18/) page.
+
+    > [!IMPORTANT]
+    > The RHCOS images might not change with every release of OpenShift Container Platform. You must download an image with the highest version that is less than or equal to the OpenShift Container Platform version that you install. Use the image version that matches your OpenShift Container Platform version if it is available.
+
+    The filename contains the OpenShift Container Platform version number in the format `rhcos-vmware.<architecture>.ova`.
+
+6.  In the vSphere Client, create a folder in your data center to store your VMs.
+
+    1.  Click the **VMs and Templates** view.
+
+    2.  Right-click the name of your data center.
+
+    3.  Click **New Folder** → **New VM and Template Folder**.
+
+    4.  In the window that is displayed, enter the folder name. If you did not specify an existing folder in the `install-config.yaml` file, then create a folder with the same name as the infrastructure ID. You use this folder name so vCenter dynamically provisions storage in the appropriate location for its Workspace configuration.
+
+7.  In the vSphere Client, create a template for the OVA image and then clone the template as needed.
+
+    > [!NOTE]
+    > In the following steps, you create a template and then clone the template for all of your cluster machines. You then provide the location for the Ignition config file for that cloned machine type when you provision the VMs.
+
+    1.  From the **Hosts and Clusters** tab, right-click your cluster name and select **Deploy OVF Template**.
+
+    2.  On the **Select an OVF** tab, specify the name of the RHCOS OVA file that you downloaded.
+
+    3.  On the **Select a name and folder** tab, set a **Virtual machine name** for your template, such as `Template-RHCOS`. Click the name of your vSphere cluster and select the folder you created in the previous step.
+
+    4.  On the **Select a compute resource** tab, click the name of your vSphere cluster.
+
+    5.  On the **Select storage** tab, configure the storage options for your VM.
+
+        - Select **Thin Provision** or **Thick Provision**, based on your storage preferences.
+
+        - Select the datastore that you specified in your `install-config.yaml` file.
+
+        - If you want to encrypt your virtual machines, select **Encrypt this virtual machine**. See the section titled "Requirements for encrypting virtual machines" for more information.
+
+    6.  On the **Select network** tab, specify the network that you configured for the cluster, if available.
+
+    7.  When creating the OVF template, do not specify values on the **Customize template** tab or configure the template any further.
+
+        > [!IMPORTANT]
+        > Do not start the original VM template. The VM template must remain off and must be cloned for new RHCOS machines. Starting the VM template configures the VM template as a VM on the platform, which prevents it from being used as a template that compute machine sets can apply configurations to.
+
+8.  Optional: Update the configured virtual hardware version in the VM template, if necessary. Follow [Upgrading a virtual machine to the latest hardware version](https://kb.vmware.com/s/article/1010675) in the VMware documentation for more information.
+
+    > [!IMPORTANT]
+    > It is recommended that you update the hardware version of the VM template to version 15 before creating VMs from it, if necessary. Using hardware version 13 for your cluster nodes running on vSphere is now deprecated. If your imported template defaults to hardware version 13, you must ensure that your ESXi host is on 6.7U3 or later before upgrading the VM template to hardware version 15. If your vSphere version is less than 6.7U3, you can skip this upgrade step; however, a future version of OpenShift Container Platform is scheduled to remove support for hardware version 13 and vSphere versions less than 6.7U3.
+
+9.  After the template deploys, deploy a VM for a machine in the cluster.
+
+    1.  Right-click the template name and click **Clone** → **Clone to Virtual Machine**.
+
+    2.  On the **Select a name and folder** tab, specify a name for the VM. You might include the machine type in the name, such as `control-plane-0` or `compute-1`.
+
+        > [!NOTE]
+        > Ensure that all virtual machine names across a vSphere installation are unique.
+
+    3.  On the **Select a name and folder** tab, select the name of the folder that you created for the cluster.
+
+    4.  On the **Select a compute resource** tab, select the name of a host in your data center.
+
+    5.  On the **Select clone options** tab, select **Customize this virtual machine’s hardware**.
+
+    6.  On the **Customize hardware** tab, click **Advanced Parameters**.
+
+        > [!IMPORTANT]
+        > The following configuration suggestions are for example purposes only. As a cluster administrator, you must configure resources according to the resource demands placed on your cluster. To best manage cluster resources, consider creating a resource pool from the cluster’s root resource pool.
+
+        - Optional: Override default DHCP networking in vSphere. To enable static IP networking:
+
+          - Set your static IP configuration:
+
+            <div class="formalpara">
+
+            <div class="title">
+
+            Example command
+
+            </div>
+
+            ``` terminal
+            $ export IPCFG="ip=<ip>::<gateway>:<netmask>:<hostname>:<iface>:none nameserver=srv1 [nameserver=srv2 [nameserver=srv3 [...]]]"
+            ```
+
+            </div>
+
+            <div class="formalpara">
+
+            <div class="title">
+
+            Example command
+
+            </div>
+
+            ``` terminal
+            $ export IPCFG="ip=192.168.100.101::192.168.100.254:255.255.255.0:::none nameserver=8.8.8.8"
+            ```
+
+            </div>
+
+          - Set the `guestinfo.afterburn.initrd.network-kargs` property before you boot a VM from an OVA in vSphere:
+
+            <div class="formalpara">
+
+            <div class="title">
+
+            Example command
+
+            </div>
+
+            ``` terminal
+            $ govc vm.change -vm "<vm_name>" -e "guestinfo.afterburn.initrd.network-kargs=${IPCFG}"
+            ```
+
+            </div>
+
+        - Add the following configuration parameter names and values by specifying data in the **Attribute** and **Values** fields. Ensure that you select the **Add** button for each parameter that you create.
+
+          - `guestinfo.ignition.config.data`: Locate the base-64 encoded files that you created previously in this procedure, and paste the contents of the base64-encoded Ignition config file for this machine type.
+
+          - `guestinfo.ignition.config.data.encoding`: Specify `base64`.
+
+          - `disk.EnableUUID`: Specify `TRUE`.
+
+          - `stealclock.enable`: If this parameter was not defined, add it and specify `TRUE`.
+
+          - Create a child resource pool from the cluster’s root resource pool. Perform resource allocation in this child resource pool.
+
+    7.  In the **Virtual Hardware** panel of the **Customize hardware** tab, modify the specified values as required. Ensure that the amount of RAM, CPU, and disk storage meets the minimum requirements for the machine type.
+
+    8.  Complete the remaining configuration steps. On clicking the **Finish** button, you have completed the cloning operation.
+
+    9.  From the **Virtual Machines** tab, right-click on your VM and then select **Power** → **Power On**.
+
+    10. Check the console output to verify that Ignition ran.
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example command
+
+        </div>
+
+        ``` terminal
+        Ignition: ran on 2022/03/14 14:48:33 UTC (this boot)
+        Ignition: user-provided config was applied
+        ```
+
+        </div>
+
+</div>
+
+<div>
+
+<div class="title">
+
+Next steps
+
+</div>
+
+- Create the rest of the machines for your cluster by following the preceding steps for each machine.
+
+  > [!IMPORTANT]
+  > You must create the bootstrap and control plane machines at this time. Because some pods are deployed on compute machines by default, also create at least two compute machines before you install the cluster.
+
+</div>
+
+# Adding more compute machines to a cluster in vSphere
+
+You can add more compute machines to a user-provisioned OpenShift Container Platform cluster on VMware vSphere.
+
+After your vSphere template deploys in your OpenShift Container Platform cluster, you can deploy a virtual machine (VM) for a machine in that cluster.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Obtain the base64-encoded Ignition file for your compute machines.
+
+- You have access to the vSphere template that you created for your cluster.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Right-click the template’s name and click **Clone** → **Clone to Virtual Machine**.
+
+2.  On the **Select a name and folder** tab, specify a name for the VM. You might include the machine type in the name, such as `compute-1`.
+
+    > [!NOTE]
+    > Ensure that all virtual machine names across a vSphere installation are unique.
+
+3.  On the **Select a name and folder** tab, select the name of the folder that you created for the cluster.
+
+4.  On the **Select a compute resource** tab, select the name of a host in your data center.
+
+5.  On the **Select storage** tab, select storage for your configuration and disk files.
+
+6.  On the **Select clone options** tab, select **Customize this virtual machine’s hardware**.
+
+7.  On the **Customize hardware** tab, click **Advanced Parameters**.
+
+    - Add the following configuration parameter names and values by specifying data in the **Attribute** and **Values** fields. Ensure that you select the **Add** button for each parameter that you create.
+
+      - `guestinfo.ignition.config.data`: Paste the contents of the base64-encoded compute Ignition config file for this machine type.
+
+      - `guestinfo.ignition.config.data.encoding`: Specify `base64`.
+
+      - `disk.EnableUUID`: Specify `TRUE`.
+
+8.  In the **Virtual Hardware** panel of the **Customize hardware** tab, modify the specified values as required. Ensure that the amount of RAM, CPU, and disk storage meets the minimum requirements for the machine type. If many networks exist, select **Add New Device** \> **Network Adapter**, and then enter your network information in the fields provided by the **New Network** menu item.
+
+9.  Complete the remaining configuration steps. On clicking the **Finish** button, you have completed the cloning operation.
+
+10. From the **Virtual Machines** tab, right-click on your VM and then select **Power** → **Power On**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Next steps
+
+</div>
+
+- Continue to create more compute machines for your cluster.
+
+</div>
+
+# Disk partitioning
+
+In most cases, data partitions are originally created by installing RHCOS, rather than by installing another operating system. In such cases, the OpenShift Container Platform installer should be allowed to configure your disk partitions.
+
+However, there are two cases where you might want to intervene to override the default partitioning when installing an OpenShift Container Platform node:
+
+- Create separate partitions: For greenfield installations on an empty disk, you might want to add separate storage to a partition. This is officially supported for making `/var` or a subdirectory of `/var`, such as `/var/lib/etcd`, a separate partition, but not both.
+
+  > [!IMPORTANT]
+  > For disk sizes larger than 100GB, and especially disk sizes larger than 1TB, create a separate `/var` partition. See "Creating a separate `/var` partition" and this [Red Hat Knowledgebase article](https://access.redhat.com/solutions/5587281) for more information.
+
+  > [!IMPORTANT]
+  > Kubernetes supports only two file system partitions. If you add more than one partition to the original configuration, Kubernetes cannot monitor all of them.
+
+- Retain existing partitions: For a brownfield installation where you are reinstalling OpenShift Container Platform on an existing node and want to retain data partitions installed from your previous operating system, there are both boot arguments and options to `coreos-installer` that allow you to retain existing data partitions.
+
+# Creating a separate `/var` partition
+
+In general, disk partitioning for OpenShift Container Platform should be left to the installer. However, there are cases where you might want to create separate partitions in a part of the filesystem that you expect to grow.
+
+OpenShift Container Platform supports the addition of a single partition to attach storage to either the `/var` partition or a subdirectory of `/var`. For example:
+
+- `/var/lib/containers`: Holds container-related content that can grow as more images and containers are added to a system.
+
+- `/var/lib/etcd`: Holds data that you might want to keep separate for purposes such as performance optimization of etcd storage.
+
+- `/var`: Holds data that you might want to keep separate for purposes such as auditing.
+
+  > [!IMPORTANT]
+  > For disk sizes larger than 100GB, and especially larger than 1TB, create a separate `/var` partition.
+
+Storing the contents of a `/var` directory separately makes it easier to grow storage for those areas as needed and reinstall OpenShift Container Platform at a later date and keep that data intact. With this method, you will not have to pull all your containers again, nor will you have to copy massive log files when you update systems.
+
+Because `/var` must be in place before a fresh installation of Red Hat Enterprise Linux CoreOS (RHCOS), the following procedure sets up the separate `/var` partition by creating a machine config manifest that is inserted during the `openshift-install` preparation phases of an OpenShift Container Platform installation.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a directory to hold the OpenShift Container Platform installation files:
+
+    ``` terminal
+    $ mkdir $HOME/clusterconfig
+    ```
+
+2.  Run `openshift-install` to create a set of files in the `manifest` and `openshift` subdirectories. Answer the system questions as you are prompted:
+
+    ``` terminal
+    $ openshift-install create manifests --dir $HOME/clusterconfig
+    ? SSH Public Key ...
+    $ ls $HOME/clusterconfig/openshift/
+    99_kubeadmin-password-secret.yaml
+    99_openshift-cluster-api_master-machines-0.yaml
+    99_openshift-cluster-api_master-machines-1.yaml
+    99_openshift-cluster-api_master-machines-2.yaml
+    ...
+    ```
+
+3.  Create a Butane config that configures the additional partition. For example, name the file `$HOME/clusterconfig/98-var-partition.bu`, change the disk device name to the name of the storage device on the `worker` systems, and set the storage size as appropriate. This example places the `/var` directory on a separate partition:
+
+    ``` yaml
+    variant: openshift
+    version: 4.17.0
+    metadata:
+      labels:
+        machineconfiguration.openshift.io/role: worker
+      name: 98-var-partition
+    storage:
+      disks:
+      - device: /dev/disk/by-id/<device_name>
+        partitions:
+        - label: var
+          start_mib: <partition_start_offset>
+          size_mib: <partition_size>
+          number: 5
+      filesystems:
+        - device: /dev/disk/by-partlabel/var
+          path: /var
+          format: xfs
+          mount_options: [defaults, prjquota]
+          with_mount_unit: true
+    ```
+
+    - The storage device name of the disk that you want to partition.
+
+    - When adding a data partition to the boot disk, a minimum value of 25000 mebibytes is recommended. The root file system is automatically resized to fill all available space up to the specified offset. If no value is specified, or if the specified value is smaller than the recommended minimum, the resulting root file system will be too small, and future reinstalls of RHCOS might overwrite the beginning of the data partition.
+
+    - The size of the data partition in mebibytes.
+
+    - The `prjquota` mount option must be enabled for filesystems used for container storage.
+
+      > [!NOTE]
+      > When creating a separate `/var` partition, you cannot use different instance types for worker nodes, if the different instance types do not have the same device name.
+
+4.  Create a manifest from the Butane config and save it to the `clusterconfig/openshift` directory. For example, run the following command:
+
+    ``` terminal
+    $ butane $HOME/clusterconfig/98-var-partition.bu -o $HOME/clusterconfig/openshift/98-var-partition.yaml
+    ```
+
+5.  Run `openshift-install` again to create Ignition configs from a set of files in the `manifest` and `openshift` subdirectories:
+
+    ``` terminal
+    $ openshift-install create ignition-configs --dir $HOME/clusterconfig
+    $ ls $HOME/clusterconfig/
+    auth  bootstrap.ign  master.ign  metadata.json  worker.ign
+    ```
+
+</div>
+
+Now you can use the Ignition config files as input to the vSphere installation procedures to install Red Hat Enterprise Linux CoreOS (RHCOS) systems.
+
+# Waiting for the bootstrap process to complete
+
+The OpenShift Container Platform bootstrap process begins after the cluster nodes first boot into the persistent RHCOS environment that has been installed to disk. The configuration information provided through the Ignition config files is used to initialize the bootstrap process and install OpenShift Container Platform on the machines. You must wait for the bootstrap process to complete.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created the Ignition config files for your cluster.
+
+- You have configured suitable network, DNS, and load balancing infrastructure.
+
+- You have obtained the installation program and generated the Ignition config files for your cluster.
+
+- You installed RHCOS on your cluster machines and provided the Ignition config files that the OpenShift Container Platform installation program generated.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Monitor the bootstrap process:
+
+    ``` terminal
+    $ ./openshift-install --dir <installation_directory> wait-for bootstrap-complete \
+        --log-level=info
+    ```
+
+    where:
+
+    `<installation_directory>`
+    Specifies the path to the directory that stores the installation files.
+
+    `--log-level=info`
+    Specifies `warn`, `debug`, or `error` instead of `info` to view different installation details.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    INFO Waiting up to 30m0s for the Kubernetes API at https://api.test.example.com:6443...
+    INFO API v1.33.4 up
+    INFO Waiting up to 30m0s for bootstrapping to complete...
+    INFO It is now safe to remove the bootstrap resources
+    ```
+
+    </div>
+
+    The command succeeds when the Kubernetes API server signals that it has been bootstrapped on the control plane machines.
+
+2.  After the bootstrap process is complete, remove the bootstrap machine from the load balancer.
+
+    > [!IMPORTANT]
+    > You must remove the bootstrap machine from the load balancer at this point. You can also remove or reformat the bootstrap machine itself.
+
+</div>
+
+# Logging in to the cluster by using the CLI
+
+To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
+
+The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You deployed an OpenShift Container Platform cluster.
+
+- You installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Export the `kubeadmin` credentials by running the following command:
+
+    ``` terminal
+    $ export KUBECONFIG=<installation_directory>/auth/kubeconfig
+    ```
+
+    where:
+
+    `<installation_directory>`
+    Specifies the path to the directory that stores the installation files.
+
+2.  Verify you can run `oc` commands successfully using the exported configuration by running the following command:
+
+    ``` terminal
+    $ oc whoami
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    system:admin
+    ```
+
+    </div>
+
+</div>
+
+<div>
+
+<div class="title">
+
+Next steps
+
+</div>
+
+- "Customize your cluster"
+
+- "Remote health reporting"
+
+</div>
+
+# Approving the certificate signing requests for your machines
+
+When you add machines to a cluster, two pending certificate signing requests (CSRs) are generated for each machine that you added. You must confirm that these CSRs are approved or, if necessary, approve them yourself. The client requests must be approved first, followed by the server requests.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You added machines to your cluster.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Confirm that the cluster recognizes the machines:
+
+    ``` terminal
+    $ oc get nodes
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME      STATUS    ROLES   AGE  VERSION
+    master-0  Ready     master  63m  v1.33.4
+    master-1  Ready     master  63m  v1.33.4
+    master-2  Ready     master  64m  v1.33.4
+    ```
+
+    </div>
+
+    The output lists all of the machines that you created.
+
+    > [!NOTE]
+    > The preceding output might not include the compute nodes until some CSRs are approved.
+
+2.  Review the pending CSRs and ensure that you see the client requests with the `Pending` or `Approved` status for each machine that you added to the cluster:
+
+    ``` terminal
+    $ oc get csr
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME        AGE     REQUESTOR                                                                   CONDITION
+    csr-8b2br   15m     system:serviceaccount:openshift-machine-config-operator:node-bootstrapper   Pending
+    csr-8vnps   15m     system:serviceaccount:openshift-machine-config-operator:node-bootstrapper   Pending
+    ...
+    ```
+
+    </div>
+
+    In this example, two machines are joining the cluster. You might see more approved CSRs in the list.
+
+3.  If the CSRs were not approved, after all of the pending CSRs for the machines you added are in `Pending` status, approve the CSRs for your cluster machines:
+
+    > [!NOTE]
+    > You must approve your CSRs within an hour of adding the machines to the cluster. If you do not approve them within an hour, the certificates will rotate, and more than two certificates will be present for each node. You must approve all of these certificates. After the client CSR is approved, the Kubelet creates a secondary CSR for the serving certificate, which requires manual approval. The subsequent serving certificate renewal requests are then automatically approved by the `machine-approver` if the Kubelet requests a new certificate with identical parameters.
+
+    > [!NOTE]
+    > For clusters running on platforms that are not machine API enabled, such as bare metal and other user-provisioned infrastructure, you must implement a method of automatically approving the kubelet serving certificate requests (CSRs). If a request is not approved, then the `oc exec`, `oc rsh`, and `oc logs` commands cannot succeed, because a serving certificate is required when the API server connects to the kubelet. Any operation that contacts the Kubelet endpoint requires this certificate approval to be in place. The method must watch for new CSRs, confirm that the CSR was submitted by the `node-bootstrapper` service account in the `system:node` or `system:admin` groups, and confirm the identity of the node.
+
+    - To approve them individually, run the following command for each valid CSR:
+
+      ``` terminal
+      $ oc adm certificate approve <csr_name>
+      ```
+
+      where:
+
+      `<csr_name>`
+      Specifies the name of a CSR from the list of current CSRs.
+
+    - To approve all pending CSRs, run the following command:
+
+      ``` terminal
+      $ oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs --no-run-if-empty oc adm certificate approve
+      ```
+
+      > [!NOTE]
+      > Some Operators might not become available until some CSRs are approved.
+
+4.  Now that your client requests are approved, you must review the server requests for each machine that you added to the cluster:
+
+    ``` terminal
+    $ oc get csr
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME        AGE     REQUESTOR                                                                   CONDITION
+    csr-bfd72   5m26s   system:node:ip-10-0-50-126.us-east-2.compute.internal                       Pending
+    csr-c57lv   5m26s   system:node:ip-10-0-95-157.us-east-2.compute.internal                       Pending
+    ...
+    ```
+
+    </div>
+
+5.  If the remaining CSRs are not approved, and are in the `Pending` status, approve the CSRs for your cluster machines:
+
+    - To approve them individually, run the following command for each valid CSR:
+
+      ``` terminal
+      $ oc adm certificate approve <csr_name>
+      ```
+
+      where:
+
+      `<csr_name>`
+      Specifies the name of a CSR from the list of current CSRs.
+
+    - To approve all pending CSRs, run the following command:
+
+      ``` terminal
+      $ oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
+      ```
+
+6.  After all client and server CSRs have been approved, the machines have the `Ready` status. Verify this by running the following command:
+
+    ``` terminal
+    $ oc get nodes
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME      STATUS    ROLES   AGE  VERSION
+    master-0  Ready     master  73m  v1.33.4
+    master-1  Ready     master  73m  v1.33.4
+    master-2  Ready     master  74m  v1.33.4
+    worker-0  Ready     worker  11m  v1.33.4
+    worker-1  Ready     worker  11m  v1.33.4
+    ```
+
+    </div>
+
+    > [!NOTE]
+    > You might need to wait a few minutes after approval of the server CSRs for the machines to transition to the `Ready` status.
+
+</div>
+
+# Initial Operator configuration
+
+After the control plane initializes, you must immediately configure some Operators so that they all become available.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Your control plane has initialized.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Watch the cluster components come online:
+
+    ``` terminal
+    $ watch -n5 oc get clusteroperators
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
+    authentication                             4.17.0    True        False         False      19m
+    baremetal                                  4.17.0    True        False         False      37m
+    cloud-credential                           4.17.0    True        False         False      40m
+    cluster-autoscaler                         4.17.0    True        False         False      37m
+    config-operator                            4.17.0    True        False         False      38m
+    console                                    4.17.0    True        False         False      26m
+    csi-snapshot-controller                    4.17.0    True        False         False      37m
+    dns                                        4.17.0    True        False         False      37m
+    etcd                                       4.17.0    True        False         False      36m
+    image-registry                             4.17.0    True        False         False      31m
+    ingress                                    4.17.0    True        False         False      30m
+    insights                                   4.17.0    True        False         False      31m
+    kube-apiserver                             4.17.0    True        False         False      26m
+    kube-controller-manager                    4.17.0    True        False         False      36m
+    kube-scheduler                             4.17.0    True        False         False      36m
+    kube-storage-version-migrator              4.17.0    True        False         False      37m
+    machine-api                                4.17.0    True        False         False      29m
+    machine-approver                           4.17.0    True        False         False      37m
+    machine-config                             4.17.0    True        False         False      36m
+    marketplace                                4.17.0    True        False         False      37m
+    monitoring                                 4.17.0    True        False         False      29m
+    network                                    4.17.0    True        False         False      38m
+    node-tuning                                4.17.0    True        False         False      37m
+    openshift-apiserver                        4.17.0    True        False         False      32m
+    openshift-controller-manager               4.17.0    True        False         False      30m
+    openshift-samples                          4.17.0    True        False         False      32m
+    operator-lifecycle-manager                 4.17.0    True        False         False      37m
+    operator-lifecycle-manager-catalog         4.17.0    True        False         False      37m
+    operator-lifecycle-manager-packageserver   4.17.0    True        False         False      32m
+    service-ca                                 4.17.0    True        False         False      38m
+    storage                                    4.17.0    True        False         False      37m
+    ```
+
+    </div>
+
+2.  Configure the Operators that are not available.
+
+</div>
+
+## Disabling the default software catalog sources
+
+In a restricted network environment, you must disable the default catalogs as a cluster administrator.
+
+Operator catalogs that source content provided by Red Hat and community projects are configured for the software catalog by default during an OpenShift Container Platform installation.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Disable the sources for the default catalogs by adding `disableAllDefaultSources: true` to the `OperatorHub` object:
+
+  ``` terminal
+  $ oc patch OperatorHub cluster --type json \
+      -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
+  ```
+
+  > [!TIP]
+  > Alternatively, you can use the web console to manage catalog sources. From the **Administration** → **Cluster Settings** → **Configuration** → **OperatorHub** page, click the **Sources** tab, where you can create, update, delete, disable, and enable individual sources.
+
+</div>
+
+## Image registry storage configuration
+
+The Image Registry Operator is not initially available for platforms that do not provide default storage. After installation, you must configure your registry to use storage so that the Registry Operator is made available.
+
+Configure a persistent volume, which is required for production clusters. Where applicable, you can configure an empty directory as the storage location for non-production clusters.
+
+You can also allow the image registry to use block storage types by using the `Recreate` rollout strategy during upgrades.
+
+### Configuring registry storage for VMware vSphere
+
+As a cluster administrator, following installation you must configure your registry to use storage.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Cluster administrator permissions.
+
+- A cluster on VMware vSphere.
+
+- Persistent storage provisioned for your cluster, such as Red Hat OpenShift Data Foundation.
+
+  > [!IMPORTANT]
+  > OpenShift Container Platform supports `ReadWriteOnce` access for image registry storage when you have only one replica. `ReadWriteOnce` access also requires that the registry uses the `Recreate` rollout strategy. To deploy an image registry that supports high availability with two or more replicas, `ReadWriteMany` access is required.
+
+- Must have "100Gi" capacity.
+
+</div>
+
+> [!IMPORTANT]
+> Testing shows issues with using the NFS server on RHEL as storage backend for core services. This includes the OpenShift Container Registry and Quay, Prometheus for monitoring storage, and Elasticsearch for logging storage. Therefore, using RHEL NFS to back PVs used by core services is not recommended.
+>
+> Other NFS implementations on the marketplace might not have these issues. Contact the individual NFS implementation vendor for more information on any testing that was possibly completed against these OpenShift Container Platform core components.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Change the `spec.storage.pvc` field in the `configs.imageregistry/cluster` resource.
+
+    > [!NOTE]
+    > When you use shared storage, review your security settings to prevent outside access.
+
+2.  Verify that you do not have a registry pod by running the following command:
+
+    ``` terminal
+    $ oc get pod -n openshift-image-registry -l docker-registry=default
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    No resourses found in openshift-image-registry namespace
+    ```
+
+    </div>
+
+    > [!NOTE]
+    > If you do have a registry pod in your output, you do not need to continue with this procedure.
+
+3.  Check the registry configuration by running the following command:
+
+    ``` terminal
+    $ oc edit configs.imageregistry.operator.openshift.io
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` yaml
+    storage:
+      pvc:
+        claim:
+    ```
+
+    </div>
+
+    Leave the `claim` field blank to allow the automatic creation of an `image-registry-storage` persistent volume claim (PVC). The PVC is generated based on the default storage class. However, be aware that the default storage class might provide ReadWriteOnce (RWO) volumes, such as a RADOS Block Device (RBD), which can cause issues when you replicate to more than one replica.
+
+4.  Check the `clusteroperator` status by running the following command:
+
+    ``` terminal
+    $ oc get clusteroperator image-registry
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME             VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE   MESSAGE
+    image-registry   4.7       True        False         False      6h50m
+    ```
+
+    </div>
+
+</div>
+
+### Configuring storage for the image registry in non-production clusters
+
+You must configure storage for the Image Registry Operator. For non-production clusters, you can set the image registry to an empty directory. If you do so, all images are lost if you restart the registry.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To set the image registry storage to an empty directory:
+
+  ``` terminal
+  $ oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}}}'
+  ```
+
+  > [!WARNING]
+  > Configure this option only for non-production clusters.
+
+  If you run this command before the Image Registry Operator initializes its components, the `oc patch` command fails with the following error:
+
+  ``` terminal
+  Error from server (NotFound): configs.imageregistry.operator.openshift.io "cluster" not found
+  ```
+
+  Wait a few minutes and run the command again.
+
+</div>
+
+### Configuring block registry storage for VMware vSphere
+
+To allow the image registry to use block storage types such as vSphere Virtual Machine Disk (VMDK) during upgrades as a cluster administrator, you can use the `Recreate` rollout strategy.
+
+> [!IMPORTANT]
+> Block storage volumes are supported but not recommended for use with image registry on production clusters. An installation where the registry is configured on block storage is not highly available because the registry cannot have more than one replica.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Enter the following command to set the image registry storage as a block storage type, patch the registry so that it uses the `Recreate` rollout strategy, and runs with only `1` replica:
+
+    ``` terminal
+    $ oc patch config.imageregistry.operator.openshift.io/cluster --type=merge -p '{"spec":{"rolloutStrategy":"Recreate","replicas":1}}'
+    ```
+
+2.  Provision the persistent volume (PV) for the block storage device, and create a persistent volume claim (PVC) for that volume. The requested block volume uses the ReadWriteOnce (RWO) access mode.
+
+    1.  Create a `pvc.yaml` file with the following contents to define a VMware vSphere `PersistentVolumeClaim` object:
+
+        ``` yaml
+        kind: PersistentVolumeClaim
+        apiVersion: v1
+        metadata:
+          name: image-registry-storage
+          namespace: openshift-image-registry
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Gi
+        ```
+
+        where:
+
+</div>
+
+`metadata.name`
+Specifies a unique name that represents the `PersistentVolumeClaim` object.
+
+`metadata.namespace`
+Specifies the `namespace` for the `PersistentVolumeClaim` object, which is `openshift-image-registry`.
+
+`spec.accessModes`
+Specifies the access mode of the persistent volume claim. With `ReadWriteOnce`, the volume can be mounted with read and write permissions by a single node.
+
+`spec.resources.requests.storage`
+Specifies the size of the persistent volume claim.
+
+1.  Enter the following command to create the `PersistentVolumeClaim` object from the file:
+
+    ``` terminal
+    $ oc create -f pvc.yaml -n openshift-image-registry
+    ```
+
+    1.  Enter the following command to edit the registry configuration so that it references the correct PVC:
+
+        ``` terminal
+        $ oc edit config.imageregistry.operator.openshift.io -o yaml
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` yaml
+        storage:
+          pvc:
+            claim:
+        ```
+
+        </div>
+
+        By creating a custom PVC, you can leave the `claim` field blank for the default automatic creation of an `image-registry-storage` PVC.
+
+For instructions about configuring registry storage so that it references the correct PVC, see [Configuring the registry for vSphere](../../../registry/configuring_registry_storage/configuring-registry-storage-vsphere.md#registry-configuring-storage-vsphere_configuring-registry-storage-vsphere).
+
+# Completing installation on user-provisioned infrastructure
+
+To finalize the installation on user-provisioned infrastructure, complete the cluster deployment after configuring the Operators. This ensures the cluster is fully operational on the infrastructure that you provide.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Your control plane has initialized.
+
+- You have completed the initial Operator configuration.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Confirm that all the cluster components are online with the following command:
+
+    ``` terminal
+    $ watch -n5 oc get clusteroperators
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
+    authentication                             4.17.0    True        False         False      19m
+    baremetal                                  4.17.0    True        False         False      37m
+    cloud-credential                           4.17.0    True        False         False      40m
+    cluster-autoscaler                         4.17.0    True        False         False      37m
+    config-operator                            4.17.0    True        False         False      38m
+    console                                    4.17.0    True        False         False      26m
+    csi-snapshot-controller                    4.17.0    True        False         False      37m
+    dns                                        4.17.0    True        False         False      37m
+    etcd                                       4.17.0    True        False         False      36m
+    image-registry                             4.17.0    True        False         False      31m
+    ingress                                    4.17.0    True        False         False      30m
+    insights                                   4.17.0    True        False         False      31m
+    kube-apiserver                             4.17.0    True        False         False      26m
+    kube-controller-manager                    4.17.0    True        False         False      36m
+    kube-scheduler                             4.17.0    True        False         False      36m
+    kube-storage-version-migrator              4.17.0    True        False         False      37m
+    machine-api                                4.17.0    True        False         False      29m
+    machine-approver                           4.17.0    True        False         False      37m
+    machine-config                             4.17.0    True        False         False      36m
+    marketplace                                4.17.0    True        False         False      37muser
+    monitoring                                 4.17.0    True        False         False      29m
+    network                                    4.17.0    True        False         False      38m
+    node-tuning                                4.17.0    True        False         False      37m
+    openshift-apiserver                        4.17.0    True        False         False      32muser
+    openshift-controller-manager               4.17.0    True        False         False      30m
+    openshift-samples                          4.17.0    True        False         False      32m
+    operator-lifecycle-manager                 4.17.0    True        False         False      37m
+    operator-lifecycle-manager-catalog         4.17.0    True        False         False      37m
+    operator-lifecycle-manager-packageserver   4.17.0    True        False         False      32m
+    service-ca                                 4.17.0    True        False         False      38m
+    storage                                    4.17.0    True        False         False      37m
+    ```
+
+    </div>
+
+    Alternatively, the following command notifies you when all of the clusters are available. The command also retrieves and displays credentials:
+
+    ``` terminal
+    $ ./openshift-install --dir <installation_directory> wait-for install-complete
+    ```
+
+    where:
+
+    `<installation_directory>`
+    Specifies the path to the directory that you stored the installation files in.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    INFO Waiting up to 30m0s for the cluster to initialize...
+    ```
+
+    </div>
+
+    The command succeeds when the Cluster Version Operator finishes deploying the OpenShift Container Platform cluster from Kubernetes API server.
+
+    <div class="important">
+
+    <div class="title">
+
+    </div>
+
+    - The Ignition config files that the installation program generates contain certificates that expire after 24 hours, which are then renewed at that time. If the cluster is shut down before renewing the certificates and the cluster is later restarted after the 24 hours have elapsed, the cluster automatically recovers the expired certificates. The exception is that you must manually approve the pending `node-bootstrapper` certificate signing requests (CSRs) to recover kubelet certificates. See the documentation for *Recovering from expired control plane certificates* for more information.
+
+    - It is recommended that you use Ignition config files within 12 hours after they are generated because the 24-hour certificate rotates from 16 to 22 hours after the cluster is installed. By using the Ignition config files within 12 hours, you can avoid installation failure if the certificate update runs during installation.
+
+    </div>
+
+2.  Confirm that the Kubernetes API server is communicating with the pods.
+
+    1.  To view a list of all pods, use the following command:
+
+        ``` terminal
+        $ oc get pods --all-namespaces
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` terminal
+        NAMESPACE                         NAME                                            READY   STATUS      RESTARTS   AGE
+        openshift-apiserver-operator      openshift-apiserver-operator-85cb746d55-zqhs8   1/1     Running     1          9m
+        openshift-apiserver               apiserver-67b9g                                 1/1     Running     0          3m
+        openshift-apiserver               apiserver-ljcmx                                 1/1     Running     0          1m
+        openshift-apiserver               apiserver-z25h4                                 1/1     Running     0          2m
+        openshift-authentication-operator authentication-operator-69d5d8bf84-vh2n8        1/1     Running     0          5m
+        ```
+
+        </div>
+
+    2.  View the logs for a pod that is listed in the output of the previous command by using the following command:
+
+        ``` terminal
+        $ oc logs <pod_name> -n <namespace>
+        ```
+
+        where:
+
+        `<namespace>`
+        Specifies the pod name and namespace, as shown in the output of an earlier command.
+
+        If the pod logs display, the Kubernetes API server can communicate with the cluster machines.
+
+3.  For an installation with Fibre Channel Protocol (FCP), additional steps are required to enable multipathing. Do not enable multipathing during installation.
+
+    See "Enabling multipathing with kernel arguments on RHCOS" in the *Postinstallation machine configuration tasks* documentation for more information.
+
+4.  Register your cluster on the [Cluster registration](https://console.redhat.com/openshift/register) page.
+
+</div>
+
+You can add extra compute machines after the cluster installation is completed by following [Adding compute machines to vSphere](../../../machine_management/user_infra/adding-vsphere-compute-user-infra.md#adding-vsphere-compute-user-infra).
+
+# Configuring vSphere DRS anti-affinity rules for control plane nodes
+
+vSphere Distributed Resource Scheduler (DRS) anti-affinity rules can be configured to support higher availability of OpenShift Container Platform Control Plane nodes. Anti-affinity rules ensure that the vSphere Virtual Machines for the OpenShift Container Platform Control Plane nodes are not scheduled to the same vSphere Host.
+
+<div class="important">
+
+<div class="title">
+
+</div>
+
+- The following information applies to compute DRS only and does not apply to storage DRS.
+
+- The `govc` command is an open-source command available from VMware; it is not available from Red Hat. The `govc` command is not supported by the Red Hat support.
+
+- Instructions for downloading and installing `govc` are found on the VMware documentation website.
+
+</div>
+
+Create an anti-affinity rule by running the following command:
+
+<div class="formalpara">
+
+<div class="title">
+
+Example command
+
+</div>
+
+``` terminal
+$ govc cluster.rule.create \
+  -name openshift4-control-plane-group \
+  -dc MyDatacenter -cluster MyCluster \
+  -enable \
+  -anti-affinity master-0 master-1 master-2
+```
+
+</div>
+
+After creating the rule, your control plane nodes are automatically migrated by vSphere so they are not running on the same hosts. This might take some time while vSphere reconciles the new rule. Successful command completion is shown in the following procedure.
+
+> [!NOTE]
+> The migration occurs automatically and might cause brief OpenShift API outage or latency until the migration finishes.
+
+The vSphere DRS anti-affinity rules need to be updated manually in the event of a control plane VM name change or migration to a new vSphere Cluster.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Remove any existing DRS anti-affinity rule by running the following command:
+
+    ``` terminal
+    $ govc cluster.rule.remove \
+      -name openshift4-control-plane-group \
+      -dc MyDatacenter -cluster MyCluster
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example Output
+
+    </div>
+
+    ``` terminal
+    [13-10-22 09:33:24] Reconfigure /MyDatacenter/host/MyCluster...OK
+    ```
+
+    </div>
+
+2.  Create the rule again with updated names by running the following command:
+
+    ``` terminal
+    $ govc cluster.rule.create \
+      -name openshift4-control-plane-group \
+      -dc MyDatacenter -cluster MyOtherCluster \
+      -enable \
+      -anti-affinity master-0 master-1 master-2
+    ```
+
+</div>
+
+# Telemetry access for OpenShift Container Platform
+
+To provide metrics about cluster health and the success of updates, the Telemetry service requires internet access. When connected, this service runs automatically by default and registers your cluster to [OpenShift Cluster Manager](https://console.redhat.com/openshift).
+
+After you confirm that your [OpenShift Cluster Manager](https://console.redhat.com/openshift) inventory is correct, either maintained automatically by Telemetry or manually by using OpenShift Cluster Manager,use subscription watch to track your OpenShift Container Platform subscriptions at the account or multi-cluster level. For more information about subscription watch, see "Data Gathered and Used by Red Hat’s subscription services" in the *Additional resources* section.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- See [About remote health monitoring](../../../support/remote_health_monitoring/about-remote-health-monitoring.md#about-remote-health-monitoring) for more information about the Telemetry service
+
+</div>
+
+# Next steps
+
+- [Customize your cluster](../../../post_installation_configuration/cluster-tasks.md#available_cluster_customizations).
+
+- If the mirror registry that you used to install your cluster has a trusted CA, add it to the cluster by [configuring additional trust stores](../../../openshift_images/image-configuration.md#images-configuration-cas_image-configuration).
+
+- If necessary, you can [Remote health reporting](../../../support/remote_health_monitoring/remote-health-reporting.md#remote-health-reporting).
+
+- Optional: [View the events from the vSphere Problem Detector Operator](../using-vsphere-problem-detector-operator.md#vsphere-problem-detector-viewing-events_vsphere-problem-detector) to determine if the cluster has permission or storage configuration issues.
+
+- Optional: if you created encrypted virtual machines, [create an encrypted storage class](../../../storage/container_storage_interface/persistent-storage-csi-vsphere.md#vsphere-pv-encryption).

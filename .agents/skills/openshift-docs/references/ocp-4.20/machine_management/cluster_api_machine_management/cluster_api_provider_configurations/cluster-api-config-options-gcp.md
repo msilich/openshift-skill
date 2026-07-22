@@ -1,0 +1,110 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can change the configuration of your Google Cloud Cluster API machines by updating values in the Cluster API custom resource manifests.
+
+> [!IMPORTANT]
+> Managing machines with the Cluster API is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+>
+> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
+# Sample YAML for configuring Google Cloud clusters
+
+The following example YAML files show configurations for a Google Cloud cluster.
+
+## Sample YAML for a Cluster API machine template resource on Google Cloud
+
+The machine template resource is provider-specific and defines the basic properties of the machines that a compute machine set creates. The compute machine set references this template when creating machines.
+
+``` yaml
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: GCPMachineTemplate
+metadata:
+  name: <template_name>
+  namespace: openshift-cluster-api
+spec:
+  template:
+    spec:
+      rootDeviceType: pd-ssd
+      rootDeviceSize: 128
+      instanceType: n1-standard-4
+      image: projects/rhcos-cloud/global/images/rhcos-411-85-202203181601-0-gcp-x86-64
+      subnet: <cluster_name>-worker-subnet
+      serviceAccounts:
+        email: <service_account_email_address>
+        scopes:
+          - https://www.googleapis.com/auth/cloud-platform
+      additionalLabels:
+        kubernetes-io-cluster-<cluster_name>: owned
+      additionalNetworkTags:
+        - <cluster_name>-worker
+      ipForwarding: Disabled
+```
+
+where:
+
+`kind`
+Specifies the machine template kind. This value must match the value for your platform.
+
+`metadata.name`
+Specifies a name for the machine template.
+
+`spec.template.spec`
+Specifies the details for your environment. The values here are examples.
+
+## Sample YAML for a Cluster API compute machine set resource on Google Cloud
+
+The compute machine set resource defines additional properties of the machines that it creates. The compute machine set also references the cluster resource and machine template when creating machines.
+
+``` yaml
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachineSet
+metadata:
+  name: <machine_set_name>
+  namespace: openshift-cluster-api
+  labels:
+    cluster.x-k8s.io/cluster-name: <cluster_name>
+spec:
+  clusterName: <cluster_name>
+  replicas: 1
+  selector:
+    matchLabels:
+      test: example
+      cluster.x-k8s.io/cluster-name: <cluster_name>
+      cluster.x-k8s.io/set-name: <machine_set_name>
+  template:
+    metadata:
+      labels:
+        test: example
+        cluster.x-k8s.io/cluster-name: <cluster_name>
+        cluster.x-k8s.io/set-name: <machine_set_name>
+        node-role.kubernetes.io/<role>: ""
+    spec:
+      bootstrap:
+         dataSecretName: worker-user-data
+      clusterName: <cluster_name>
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+        kind: GCPMachineTemplate
+        name: <template_name>
+      failureDomain: <failure_domain>
+```
+
+where:
+
+`metadata.name`
+Specifies a name for the compute machine set. The cluster ID, machine role, and region form a typical pattern for this value in the following format: `<cluster_name>-<role>-<region>`.
+
+`metadata.labels.cluster.x-k8s.io/cluster-name`
+Specifies the cluster ID as the name of the cluster.
+
+`spec.clusterName`
+Specifies the cluster ID as the name of the cluster.
+
+`spec.template.spec.infrastructureRef.kind`
+Specifies the machine template kind. This value must match the value for your platform.
+
+`spec.template.spec.infrastructureRef.name`
+Specifies the machine template name.
+
+`spec.template.spec.failureDomain`
+Specifies the failure domain within the Google Cloud region.

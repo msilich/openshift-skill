@@ -1,0 +1,585 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+In dynamic provisioning, instead of a manually creating a pool of persistent volumes (PVs), an administrator creates a storage class. Using the storage class, OpenShift Container Platform automatically triggers the storage backend to create a brand-new volume of the exact size and type requested, creates the PV object, and then the PV binds to the persistent volume claim (PVC).
+
+# About dynamic provisioning
+
+The `StorageClass` resource object describes and classifies storage that can be requested, and provides a means for passing parameters for dynamically provisioned storage on-demand.
+
+`StorageClass` objects can also serve as a management mechanism for controlling different levels of storage and access to the storage. Cluster Administrators (`cluster-admin`) or Storage Administrators (`storage-admin`) define and create the `StorageClass` objects that users can request without needing any detailed knowledge about the underlying storage volume sources.
+
+The OpenShift Container Platform persistent volume framework enables this functionality and allows administrators to provision a cluster with persistent storage. The framework also gives users a way to request those resources without having any knowledge of the underlying infrastructure.
+
+Many storage types are available for use as persistent volumes in OpenShift Container Platform. While all of them can be statically provisioned by an administrator, some types of storage are created dynamically using the built-in provider and plugin APIs.
+
+# Available dynamic provisioning plugins
+
+Provisioner plugins automatically create storage resources on-demand by connecting to your cloud provider’s API. This lets you dynamically provision persistent volumes (PVs) without manual intervention, adapting to your cluster’s storage needs as they arise.
+
+> [!IMPORTANT]
+> Any chosen provisioner plugin also requires configuration for the relevant cloud, host, or third-party provider as in the relevant documentation.
+
+| Storage type | Provisioner plugin name | Notes |
+|----|----|----|
+| Red Hat OpenStack Platform (RHOSP) Cinder | `kubernetes.io/cinder` |  |
+| RHOSP Manila Container Storage Interface (CSI) | `manila.csi.openstack.org` | After being installed, the OpenStack Manila CSI Driver Operator and ManilaDriver automatically create the required storage classes for all available Manila share types needed for dynamic provisioning. |
+| Amazon Elastic Block Store (Amazon EBS) | `ebs.csi.aws.com` | For dynamic provisioning when using multiple clusters in different zones, tag each node with `Key=kubernetes.io/cluster/<cluster_name>,Value=<cluster_id>` where `<cluster_name>` and `<cluster_id>` are unique per cluster. |
+| Azure Disk | `kubernetes.io/azure-disk` |  |
+| Azure File | `kubernetes.io/azure-file` | The `persistent-volume-binder` service account requires permissions to create and get secrets to store the Azure storage account and keys. |
+| GCE Persistent Disk (gcePD) | `kubernetes.io/gce-pd` | In multi-zone configurations, it is advisable to run one OpenShift Container Platform cluster per GCE project to avoid persistent volumes (PVs) from being created in zones where no node exists in the current cluster. |
+| IBM Power® Virtual Server Block | `powervs.csi.ibm.com` | After installation, the IBM Power® Virtual Server Block CSI Driver Operator and IBM Power® Virtual Server Block CSI Driver automatically create the required storage classes for dynamic provisioning. |
+| VMware vSphere | `kubernetes.io/vsphere-volume` |  |
+
+# Defining a storage class
+
+`StorageClass` objects apply cluster-wide and are available to all namespaces. Only users with cluster-admin or storage-admin privileges can create or modify them. This centralized control ensures consistent storage policies across your cluster while requiring application teams to coordinate with administrators for custom storage configurations.
+
+> [!IMPORTANT]
+> The Cluster Storage Operator might install a default storage class depending on the platform in use. This storage class is owned and controlled by the Operator. It cannot be deleted or modified beyond defining annotations and labels. If different behavior is required, you must define a custom storage class.
+
+The following sections describe the basic definition for a `StorageClass` object and specific examples for each of the supported plugin types.
+
+## Basic StorageClass object definition
+
+A `StorageClass` object defines the metadata, provisioner type, and plugin-specific parameters that determine how persistent volumes (PVs) are dynamically created in your cluster. Each storage provisioner type requires different parameters, and annotations control cluster-wide defaults, making this structure the foundation for all dynamic storage provisioning.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `StorageClass` definition
+
+</div>
+
+``` yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: <storage-class-name>
+  annotations:
+    storageclass.kubernetes.io/is-default-class: 'true'
+    ...
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp3
+...
+```
+
+</div>
+
+- `kind`: API object type.
+
+- `apiversion`: The current apiVersion.
+
+- `metadata.name`: The name of the storage class.
+
+- Optional: `metadata.annotations`: Annotations for the storage class.
+
+- `provisioner`: The type of provisioner associated with this storage class.
+
+- Optional: `parameters`: The parameters required for the specific provisioner. This is different for each plugin.
+
+## RHOSP Cinder StorageObject object definition
+
+This RHOSP Cinder storage class example demonstrates how to configure volume types for performance optimization, control availability zone placement for high availability, and specify filesystem types for your persistent volumes.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example Cinder storage class YAML file
+
+</div>
+
+``` yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: <storage-class-name>
+provisioner: kubernetes.io/cinder
+parameters:
+  type: fast
+  availability: nova
+  fsType: ext4
+```
+
+</div>
+
+- `metadata.name`: Name of the storage class. The persistent volume claim uses this storage class for provisioning the associated persistent volumes.
+
+- `parameter.type`: Volume type created in Cinder. Default is empty.
+
+- `parameters.availability`: Availability Zone. If not specified, volumes are generally round-robined across all active zones where theOpenShift Container Platform cluster has a node.
+
+- `parameters.fsType`: File system that is created on dynamically provisioned volumes. This value is copied to the `fsType` field of dynamically provisioned persistent volumes, and the file system is created when the volume is mounted for the first time. The default value is `ext4`. The following is a RHOSP Cinder example storage class object definition.
+
+## RHOSP Manila Container Storage Interface (CSI) object definition
+
+The OpenStack Manila CSI Driver Operator automatically creates storage classes for all available Manila share types immediately after installation, eliminating manual configuration. This automation ensures you can start provisioning persistent volumes right away without needing to understand Manila share type details or write custom `StorageClass` definitions.
+
+## AWS Elastic Block Store (EBS) StorageObject object definition
+
+This AWS EBS storage class example shows how to configure volume type, IOPS performance, encryption settings, and filesystem type for dynamically provisioned persistent volumes.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example AWS EBS storage class YAML file
+
+</div>
+
+``` yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: <storage-class-name>
+provisioner: ebs.csi.aws.com
+parameters:
+  type: io1
+  iopsPerGB: "10"
+  encrypted: "true"
+  kmsKeyId: keyvalue
+  fsType: ext4
+```
+
+</div>
+
+- `metadata.name`: Name of the storage class. The persistent volume claim uses this storage class for provisioning the associated persistent volumes.
+
+- `parameters.type`: Select from `io1`, `gp3`, `sc1`, `st1`. The default is `gp3`. For valid Amazon Resource Name (ARN) values, see the AWS documentation, *Identify AWS resources with Amazon Resource Names (ARNs)*.
+
+- Optional: `parameters.iopsPerGB`. Only for **io1** volumes. I/O operations per second per GiB.
+
+  The AWS volume plugin multiplies this with the size of the requested volume to compute IOPS of the volume. The maximum value is 20,000 IOPS, which is the maximum supported by AWS.
+
+  For more information, see the AWS documentation, *Identify AWS resources with Amazon Resource Names (ARNs)*.
+
+- Optional: `parameters.encrypted`. Indicates whether to encrypt the EBS volume. Valid values are `true` or `false`.
+
+- Optional: `parameters.kmsKeyId`. The full ARN of the key to use when encrypting the volume. If none is supplied, but `encypted` is set to `true`, then AWS generates a key.
+
+  For valid ARN values, see the AWS documentation, *Identify AWS resources with Amazon Resource Names (ARNs)*.
+
+- Optional: `parameters.fsType`. File system that is created on dynamically provisioned volumes. This value is copied to the `fsType` field of dynamically provisioned persistent volumes, and the file system is created when the volume is mounted for the first time. The default value is `ext4`.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [AWS documentation](http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+
+</div>
+
+## Azure Disk StorageClass object definition
+
+This Azure Disk storage class example demonstrates how to configure managed disks with delayed volume binding for optimal zone placement, volume expansion, and performance tiers. Key parameters ensure compatibility with OpenShift nodes, which require managed disks rather than shared or dedicated storage accounts.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example Azure Disk storage class YAML file
+
+</div>
+
+``` yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: <storage-class-name>
+provisioner: kubernetes.io/azure-disk
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+parameters:
+  kind: Managed
+  storageaccounttype: Premium_LRS
+reclaimPolicy: Delete
+```
+
+</div>
+
+- `metadata.name`: Name of the storage class. The persistent volume claim uses this storage class for provisioning the associated persistent volumes.
+
+- `volumeBindingMode`: Using `WaitForFirstConsumer` is strongly recommended. This provisions the volume while allowing enough storage to schedule the pod on a free worker node from an available zone.
+
+- `parameters.kind`: Possible values are `Shared` (default), `Managed`, and `Dedicated`.
+
+  > [!IMPORTANT]
+  > Red Hat only supports the use of `Managed`.
+  >
+  > With `Shared` and `Dedicated`, Azure creates unmanaged disks, while OpenShift Container Platform creates a managed disk for machine operating system (root) disks. But because Azure Disk does not allow the use of both managed and unmanaged disks on a node, unmanaged disks created with `Shared` or `Dedicated` cannot be attached to OpenShift Container Platform nodes.
+
+- `parameters.storageaccounttype`: Azure storage account SKU tier. Default is empty. Note that Premium VMs can attach both `Standard_LRS` and `Premium_LRS` disks. Standard VMs can only attach `Standard_LRS` disks. Managed VMs can only attach managed disks. Unmanaged VMs can only attach unmanaged disks.
+
+  - `Shared`: Azure creates all unmanaged disks in a few shared storage accounts in the same resource group as the cluster.
+
+  - `Managed`: Azure creates new managed disks.
+
+  - `Dedicated`, and a `storageAccount` is not specified: Azure creates a new dedicated storage account for the new unmanaged disk in the same resource group as the cluster.
+
+  - `Dedicated`, and a `storageAccount` is specified: Azure uses the specified storage account for the new unmanaged disk in the same resource group as the cluster. For this to work, the specified storage account must be in the same region, and Azure Cloud Provider must have write access to the storage account.
+
+## Azure File object definition
+
+To enable Azure File storage classes to dynamically provision file shares, grant the persistent volume binder permissions to create and manage secrets containing Azure storage credentials. This allows the provisioner to securely store and access the Azure storage account name and key required for file share creation.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Define a `ClusterRole` object that allows access to create and view secrets as in the following example file:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Cluster role example YAML file
+
+    </div>
+
+    ``` yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      name: <persistent_volume_binder_role>
+    rules:
+    - apiGroups: ['']
+      resources: ['secrets']
+      verbs:     ['get','create']
+    ```
+
+    </div>
+
+    - `Metadata.name`: The name of the cluster role to view and create secrets.
+
+2.  Add the cluster role to the service account by running the following command:
+
+    ``` terminal
+    $ oc adm policy add-cluster-role-to-user <persistent-volume-binder-role> system:serviceaccount:kube-system:persistent-volume-binder
+    ```
+
+    Where `<persistent-volume-binder-role>` is the name of the cluster role you provided in the preceding step.
+
+3.  Create the Azure File `StorageClass` object as in the following example file:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example Azure File storage class YAML file
+
+    </div>
+
+    ``` yaml
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: <azure-file>
+    provisioner: kubernetes.io/azure-file
+    parameters:
+      location: eastus
+      skuName: Standard_LRS
+      storageAccount: <storage-account>
+    reclaimPolicy: Delete
+    volumeBindingMode: Immediate
+    ```
+
+    </div>
+
+    - `metadata.name`: Name of the storage class. The persistent volume claim uses this storage class for provisioning the associated persistent volumes.
+
+    - `parameters.location`: Location of the Azure storage account, such as `eastus`. The default is empty, meaning that a new Azure storage account is created in the OpenShift Container Platform cluster’s location.
+
+    - `parameters.skuName`: SKU tier of the Azure storage account, such as `Standard_LRS`. The default is empty, meaning that a new Azure storage account is created with the `Standard_LRS` SKU.
+
+    - `parameters.storageAccount`: Name of the Azure storage account. If a storage account is provided, then `skuName` and `location` are ignored. If no storage account is provided, the storage class searches for storage accounts associated with the resource group for accounts that match the defined `skuName` and `location`.
+
+</div>
+
+### Considerations when using Azure File
+
+Azure File storage has inherent file system limitations, including lack of support for symlinks, hard links, and sparse files by default, plus ownership mismatches between mounted directories and container processes. Understanding these constraints and using mount options such as uid, gid, and mfsymlinks helps you configure Azure File storage classes that work correctly with your containerized applications.
+
+The following features are not supported:
+
+- Symlinks
+
+- Hard links
+
+- Extended attributes
+
+- Sparse files
+
+- Named pipes
+
+Additionally, the owner user identifier (UID) of the Azure File mounted directory is different from the process UID of the container. You can specify the `uid` mount option in the `StorageClass` object to define a specific user identifier to use for the mounted directory.
+
+The following `StorageClass` object demonstrates modifying the `uid` and group identifier (`gid`), along with enabling symlinks for the mounted directory.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example Azure File storage class YAML file with modified `uid` and `gid`
+
+</div>
+
+``` yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azure-file
+mountOptions:
+  - uid=1500
+  - gid=1500
+  - mfsymlinks
+provisioner: kubernetes.io/azure-file
+parameters:
+  location: eastus
+  skuName: Standard_LRS
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+```
+
+</div>
+
+- `mountOptions.uid`: Specifies the user identifier to use for the mounted directory.
+
+- `mountOptions.gid`: Specifies the group identifier to use for the mounted directory.
+
+- `mountOptions.mfsymlinks`: Enables symlinks.
+
+## GCE PersistentDisk (gcePD) object definition
+
+This Google Compute Engine Persistent Disk (GCE PD) storage class example shows how to configure disk performance tiers (SSD, standard, or hyperdisk-balanced), enable volume expansion, and use delayed binding to optimize zone placement for your workloads.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example GCE PD storage class YAML file
+
+</div>
+
+``` yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: <storage-class-name>
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+  replication-type: none
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+```
+
+</div>
+
+- `metadata.name`: The name of the storage class. The persistent volume claim uses this storage class for provisioning the associated persistent volumes.
+
+- `parameters.type`: Select `pd-ssd`, `pd-standard`, or `hyperdisk-balanced`. The default is `pd-ssd`.
+
+## VMware vSphere object definition
+
+This VMware vSphere storage class example demonstrates the basic structure and Container Storage Interface (CSI) provisioner configuration required to enable dynamic storage provisioning on vSphere infrastructure. This minimal definition provides the foundation for vSphere storage integration, which you can extend with storage policies, datastore preferences, and other vSphere-specific parameters.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example vSphere storage class YAML file
+
+</div>
+
+``` yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: <storage-class-name>
+provisioner: csi.vsphere.vmware.com
+```
+
+</div>
+
+- `metadata.name`: Name of the storage class. The persistent volume claim uses this storage class for provisioning the associated persistent volumes.
+
+- `provisioner`: The name of the provisioner for the storage class. For vSphere, this is `csi.vsphere.vmware.com`.
+
+# Setting the default storage class
+
+A default storage class automatically provisions persistent volumes when you create persistent volume claims (PVCs) without specifying a storage class. This simplifies storage management by removing the need for users to select a storage class for each claim. To designate a storage class as the cluster-wide default, add an annotation to the storage class metadata.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Logged in to a running OpenShift Container Platform cluster with administrator privileges.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  For your required storage class, set the `metadata.annotations.storageclass.kubernetes.io/is-default-class` field to `true` as in the following example:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example storage class YAML file
+
+    </div>
+
+    ``` yaml
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    ...
+    ```
+
+    </div>
+
+    > [!NOTE]
+    > The beta annotation `storageclass.beta.kubernetes.io/is-default-class` is still working; however, it will be removed in a future release.
+
+2.  Optional: Create a storage class description in the `metadata.annotations.kubernetes.io/description` field as in the following example:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example storage class YAML file
+
+    </div>
+
+    ``` yaml
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      annotations:
+        kubernetes.io/description: My Storage Class Description
+    ...
+    ```
+
+    </div>
+
+</div>
+
+# Changing the default storage class
+
+Change the default storage class to ensure new persistent volume claims (PVCs) automatically use your preferred storage backend. This helps you optimize costs, align with infrastructure changes, or ensure consistent storage types across new deployments without requiring users to specify a storage class for each claim.
+
+In this example, you have two defined storage classes, `gp3` and `standard`, and you want to change the default storage class from `gp3` to `standard`.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Access to the cluster with cluster-admin privileges.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  List the storage classes by running the following command:
+
+    ``` terminal
+    $ oc get storageclass
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME                 TYPE
+    gp3 (default)        ebs.csi.aws.com
+    standard             ebs.csi.aws.com
+    ```
+
+    </div>
+
+    The text `(default)` indicates the default storage class. In this example `gp3` is the current default storage class.
+
+2.  Make the desired storage class the default.
+
+    For the desired storage class, set the `storageclass.kubernetes.io/is-default-class` annotation to `true` by running the following command:
+
+    ``` terminal
+    $ oc patch storageclass standard -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
+    ```
+
+    > [!NOTE]
+    > You can have multiple default storage classes for a short time. However, you should ensure that only one default storage class exists eventually.
+    >
+    > With multiple default storage classes present, any persistent volume claim (PVC) requesting the default storage class (`pvc.spec.storageClassName`=nil) gets the most recently created default storage class, regardless of the default status of that storage class, and the administrator receives an alert in the alerts dashboard that there are multiple default storage classes, `MultipleDefaultStorageClasses`.
+
+3.  Remove the default storage class setting from the old default storage class.
+
+    For the old default storage class, change the value of the `storageclass.kubernetes.io/is-default-class` annotation to `false` by running the following command:
+
+    ``` terminal
+    $ oc patch storageclass gp3 -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "false"}}}'
+    ```
+
+4.  Verify the changes by running the following command:
+
+    ``` terminal
+    $ oc get storageclass
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME                 TYPE
+    gp3                  ebs.csi.aws.com
+    standard (default)   ebs.csi.aws.com
+    ```
+
+    </div>
+
+    The `standard` storage class is now the default.
+
+</div>

@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift API Discovery"
+  short_description: "Discover OpenShift resources and schemas"
+  default_prompt: "Use $openshift-api to discover the authoritative API version, resource, and fields for this OpenShift task."

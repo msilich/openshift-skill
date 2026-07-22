@@ -1,0 +1,45 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To stop external route advertisement and restore standard cluster networking behavior, disable OVN-Kubernetes Border Gateway Protocol (BGP) routing.
+
+As a cluster administrator, you can disable OVN-Kubernetes BGP routing support for your cluster.
+
+# Disabling Border Gateway Protocol (BGP) routing
+
+Disable Border Gateway Protocol (BGP) routing for your cluster by removing additional routing capabilities from the network configuration.
+
+As a cluster administrator, you can disable BGP routing support for your cluster on bare-metal infrastructure.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You are logged in to the cluster as a user with the `cluster-admin` role.
+
+- The cluster is installed on compatible infrastructure.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To disable dynamic routing, enter the following command:
+
+  ``` terminal
+  $ oc patch Network.operator.openshift.io/cluster --type=merge -p '{
+    "spec": { "additionalRoutingCapabilities": null }
+  }'
+  ```
+
+</div>

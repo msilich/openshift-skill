@@ -1,0 +1,218 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+In OpenShift Container Platform, you can configure `AdminNetworkPolicy` resources to enforce cluster-wide ingress and egress rules that namespace-scoped `NetworkPolicy` objects cannot override, which preserves administrative control over multi-tenant isolation and platform security.
+
+# AdminNetworkPolicy
+
+An `AdminNetworkPolicy` (ANP) is a cluster-scoped custom resource definition (CRD) that you can define to establish ingress and egress rules before namespaces are created. You can use ANPs to ensure tenant `NetworkPolicy` objects cannot override your administrative controls.
+
+The key difference between `AdminNetworkPolicy` and `NetworkPolicy` objects is that the former is for administrators and is cluster scoped, while the latter is for tenant owners and is namespace scoped.
+
+An ANP allows administrators to specify the following:
+
+- A `priority` value that determines the order of its evaluation. The lower the value the higher the precedence.
+
+- A set of pods that consists of a set of namespaces or namespace on which the policy is applied.
+
+- A list of ingress rules to be applied for all ingress traffic towards the `subject`.
+
+- A list of egress rules to be applied for all egress traffic from the `subject`.
+
+## AdminNetworkPolicy example
+
+<div class="formalpara">
+
+<div class="title">
+
+Example YAML file for an ANP
+
+</div>
+
+``` yaml
+apiVersion: policy.networking.k8s.io/v1alpha1
+kind: AdminNetworkPolicy
+metadata:
+  name: sample-anp-deny-pass-rules
+spec:
+  priority: 50
+  subject:
+    namespaces:
+      matchLabels:
+          kubernetes.io/metadata.name: example.name
+  ingress:
+  - name: "deny-all-ingress-tenant-1"
+    action: "Deny"
+    from:
+    - pods:
+        namespaceSelector:
+          matchLabels:
+            custom-anp: tenant-1
+        podSelector:
+          matchLabels:
+            custom-anp: tenant-1
+  egress:
+  - name: "pass-all-egress-to-tenant-1"
+    action: "Pass"
+    to:
+    - pods:
+        namespaceSelector:
+          matchLabels:
+            custom-anp: tenant-1
+        podSelector:
+          matchLabels:
+            custom-anp: tenant-1
+```
+
+</div>
+
+where:
+
+`metadata.name`
+Specifies a name for your ANP.
+
+`spec.priority`
+Specifies the priority of the ANP. Supports a maximum of 100 ANPs in the range of values `0-99` in a cluster. The lower the value, the higher the precedence because the range is read in order from the lowest to highest value. Because there is no guarantee which policy takes precedence when ANPs are created at the same priority, set ANPs at different priorities so that precedence is deliberate.
+
+`spec.subject.namespaces.matchLabels`
+Specifies the namespace to apply the ANP resource.
+
+`spec.ingress.name`
+Specifies a name for the `ingress.name`.
+
+`spec.ingress.action`
+Specifies an ingress rule for the ANP. ANP have both ingress and egress rules. Accepts values of `Pass`, `Deny`, and `Allow`.
+
+`spec.ingress.from.pods.namespaceSelector.matchLabels`
+Specifies `podSelector.matchLabels` to select pods within the namespaces selected by `namespaceSelector.matchLabels` as ingress peers.
+
+`spec.egress.action`
+Specifies an egress rule for the ANP. Accepts values of `Pass`, `Deny`, and `Allow`.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Network Policy API Working Group](https://network-policy-api.sigs.k8s.io/)
+
+</div>
+
+## AdminNetworkPolicy actions for rules
+
+You can set the `action` field to `Allow`, `Deny`, or `Pass` on each `AdminNetworkPolicy`(ANP) custom resource rule so OVN-Kubernetes tiered ACLs apply administrative decisions before lower-tier networkpolicies can take effect.
+
+Because OVN-Kubernetes uses tiered ACLs to evaluate network traffic rules, an ANP CR lets you define strong policy rules that can only be changed by an administrator modifying them, deleting the rule, or overriding them by setting a higher priority rule.
+
+### AdminNetworkPolicy Allow example
+
+The following ANP that is defined at priority 9 ensures all ingress traffic is allowed from the `monitoring` namespace towards any tenant (all other namespaces) in the cluster.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example YAML file for a strong `Allow` ANP
+
+</div>
+
+``` yaml
+apiVersion: policy.networking.k8s.io/v1alpha1
+kind: AdminNetworkPolicy
+metadata:
+  name: allow-monitoring
+spec:
+  priority: 9
+  subject:
+    namespaces: {} # Use the empty selector with caution because it also selects OpenShift namespaces as well.
+  ingress:
+  - name: "allow-ingress-from-monitoring"
+    action: "Allow"
+    from:
+    - namespaces:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+# ...
+```
+
+</div>
+
+This is an example of a strong `Allow` ANP because it is non-overridable by all the parties involved. No tenants can block themselves from being monitored using `NetworkPolicy` objects and the monitoring tenant also has no say in what it can or cannot monitor.
+
+### AdminNetworkPolicy Deny example
+
+The following ANP that is defined at priority 5 ensures all ingress traffic from the `monitoring` namespace is blocked towards restricted tenants (namespaces that have labels `security: restricted`).
+
+<div class="formalpara">
+
+<div class="title">
+
+Example YAML file for a strong `Deny` ANP
+
+</div>
+
+``` yaml
+apiVersion: policy.networking.k8s.io/v1alpha1
+kind: AdminNetworkPolicy
+metadata:
+  name: block-monitoring
+spec:
+  priority: 5
+  subject:
+    namespaces:
+      matchLabels:
+        security: restricted
+  ingress:
+  - name: "deny-ingress-from-monitoring"
+    action: "Deny"
+    from:
+    - namespaces:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+# ...
+```
+
+</div>
+
+This is a strong `Deny` ANP that is non-overridable by all the parties involved. The restricted tenant owners cannot authorize themselves to allow monitoring traffic, and the infrastructure’s monitoring service cannot scrape anything from these sensitive namespaces.
+
+When combined with the strong `Allow` example, the `block-monitoring` ANP has a lower priority value giving it higher precedence, which ensures `restricted` tenants are never monitored.
+
+### AdminNetworkPolicy Pass example
+
+The following ANP that is defined at priority 7 ensures all ingress traffic from the `monitoring` namespace towards internal infrastructure tenants (namespaces that have labels `security: internal`) are passed on to tier 2 of the ACLs and evaluated by the namespaces’ `NetworkPolicy` objects.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example YAML file for a strong `Pass` ANP
+
+</div>
+
+``` yaml
+apiVersion: policy.networking.k8s.io/v1alpha1
+kind: AdminNetworkPolicy
+metadata:
+  name: pass-monitoring
+spec:
+  priority: 7
+  subject:
+    namespaces:
+      matchLabels:
+        security: internal
+  ingress:
+  - name: "pass-ingress-from-monitoring"
+    action: "Pass"
+    from:
+    - namespaces:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
+# ...
+```
+
+</div>
+
+This example is a strong `Pass` action ANP because it delegates the decision to `NetworkPolicy` objects defined by tenant owners. This `pass-monitoring` ANP allows all tenant owners grouped at security level `internal` to choose if their metrics should be scraped by the infrastructures' monitoring service using namespace scoped `NetworkPolicy` objects.

@@ -1,0 +1,279 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can configure eviction strategies for virtual machines (VMs) or for the cluster. The default eviction strategy is `LiveMigrate`, which ensures that a virtual machine instance (VMI) is not interrupted if the node is placed into maintenance or drained.
+
+| Eviction strategy | Description | Interrupts workflow | Blocks upgrades |
+|----|----|----|----|
+| `LiveMigrate` <sup>1</sup> | Prioritizes workload continuity over upgrades. | No | Yes <sup>2</sup> |
+| `LiveMigrateIfPossible` | Prioritizes upgrades over workload continuity to ensure that the environment is updated. | Yes | No |
+| `None` <sup>3</sup> | Shuts down VMs with no eviction strategy. | Yes | No |
+
+Cluster eviction strategies
+
+1.  Default eviction strategy for multi-node clusters.
+
+2.  If a VM blocks an upgrade, you must shut down the VM manually.
+
+3.  Default eviction strategy for single-node OpenShift.
+
+# Configuring a VM eviction strategy using the CLI
+
+You can configure an eviction strategy for a virtual machine (VM) by using the command line.
+
+> [!IMPORTANT]
+> The default eviction strategy is `LiveMigrate`. A non-migratable VM with a `LiveMigrate` eviction strategy might prevent nodes from draining or block an infrastructure upgrade because the VM is not evicted from the node. This situation causes a migration to remain in a `Pending` or `Scheduling` state unless you shut down the VM manually.
+>
+> You must set the eviction strategy of non-migratable VMs to `LiveMigrateIfPossible`, which does not block an upgrade, or to `None`, for VMs that should not be migrated.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit the `VirtualMachine` resource by running the following command:
+
+    ``` terminal
+    $ oc edit vm <vm_name> -n <namespace>
+    ```
+
+    Example eviction strategy:
+
+    ``` yaml
+    apiVersion: kubevirt.io/v1
+    kind: VirtualMachine
+    metadata:
+      name: <vm_name>
+    spec:
+      template:
+        spec:
+          evictionStrategy: LiveMigrateIfPossible
+    # ...
+    ```
+
+    - `spec.template.spec.evictionStrategy` defines the eviction strategy. The default value is `LiveMigrate`.
+
+2.  Restart the VM to apply the changes:
+
+    ``` terminal
+    $ virtctl restart <vm_name> -n <namespace>
+    ```
+
+</div>
+
+# Configuring a cluster eviction strategy by using the CLI
+
+You can configure an eviction strategy for a cluster by using the command line.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit the `hyperconverged` resource by running the following command:
+
+    ``` terminal
+    $ oc edit hyperconverged kubevirt-hyperconverged -n openshift-cnv
+    ```
+
+2.  Set the cluster eviction strategy as shown in the following example:
+
+    Example cluster eviction strategy:
+
+    ``` yaml
+    apiVersion: hco.kubevirt.io/v1beta1
+    kind: HyperConverged
+    metadata:
+      name: kubevirt-hyperconverged
+    spec:
+      evictionStrategy: LiveMigrate
+    # ...
+    ```
+
+</div>
+
+# Run strategies
+
+The `spec.runStrategy` key determines how a VM behaves under certain conditions. This key has four possible values: `Always`, `RerunOnFailure`, `Manual`, and `Halted`.
+
+`Always`
+The virtual machine instance (VMI) is always present when a virtual machine (VM) is created on another node. A new VMI is created if the original stops for any reason.
+
+`RerunOnFailure`
+The VMI is re-created on another node if the previous instance fails. The instance is not re-created if the VM stops successfully, such as when it is shut down.
+
+> [!IMPORTANT]
+> Setting `spec.runStrategy: RerunOnFailure` is an explicit command to start the VM. If the VM is intentionally stopped and you do not want it to start, do not change the run strategy value to `RerunOnFailure`.
+
+`Manual`
+You control the VMI state manually with the `start`, `stop`, and `restart` virtctl client commands. The VM is not automatically restarted.
+
+`Halted`
+No VMI is present when a VM is created.
+
+Different combinations of the `virtctl start`, `stop` and `restart` commands affect the run strategy.
+
+The following table describes a VM’s transition between states. The first column shows the VM’s initial run strategy. The remaining columns show a virtctl command and the new run strategy after that command is run.
+
+| Initial run strategy | Start          | Stop           | Restart        |
+|----------------------|----------------|----------------|----------------|
+| Always               | \-             | Halted         | Always         |
+| RerunOnFailure       | RerunOnFailure | RerunOnFailure | RerunOnFailure |
+| Manual               | Manual         | Manual         | Manual         |
+| Halted               | Always         | \-             | \-             |
+
+Run strategy before and after `virtctl` commands
+
+> [!NOTE]
+> If a node in a cluster installed by using installer-provisioned infrastructure fails the machine health check and is unavailable, VMs with `runStrategy: Always` or `runStrategy: RerunOnFailure` are rescheduled on a new node.
+
+# Configuring a VM run strategy by using the CLI
+
+You can configure a run strategy for a virtual machine (VM) by using the command line.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Edit the `VirtualMachine` resource by running the following command:
+
+  ``` terminal
+  $ oc edit vm <vm_name> -n <namespace>
+  ```
+
+  Example run strategy:
+
+  ``` yaml
+  apiVersion: kubevirt.io/v1
+  kind: VirtualMachine
+  spec:
+    runStrategy: Always
+  # ...
+  ```
+
+</div>
+
+# Delete a failed node to trigger virtual machine failover
+
+If a node fails and machine health checks are not deployed on your cluster, virtual machines (VMs) with `runStrategy: Always` configured are not automatically relocated to healthy nodes. To trigger VM failover, you must manually delete the `Node` object.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- A node where a virtual machine was running has the `NotReady` condition.
+
+- The virtual machine that was running on the failed node has `runStrategy` set to `Always`.
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Mark the node as unschedulable:
+
+    ``` terminal
+    $ oc adm cordon <node_name>
+    ```
+
+2.  Drain all pods on the node:
+
+    ``` terminal
+    $ oc adm drain <node_name> --force=true
+    ```
+
+    This step might fail if the node is offline or unresponsive. Even if the node does not respond, the node might still be running a workload that writes to shared storage. To avoid data corruption, power down the physical hardware before you proceed.
+
+3.  Delete the node from the cluster:
+
+    ``` terminal
+    $ oc delete node <node_name>
+    ```
+
+    Although the node object is now deleted from the cluster, it can still rejoin the cluster after reboot or if the kubelet service is restarted. To permanently delete the node and all its data, you must decommission the node.
+
+4.  If you powered down the physical hardware, turn it back on so that the node can rejoin the cluster.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- After all resources are terminated on the unhealthy node, a new virtual machine instance (VMI) is automatically created on a healthy node for each relocated VM. To confirm that the VMI was created, view all VMIs by using the OpenShift CLI (`oc`).
+
+</div>
+
+# Additional resources
+
+- [Live migration policies](../live_migration/virt-configuring-live-migration.md#virt-live-migration-policies_virt-configuring-live-migration)
+
+- [About listing all the nodes in a cluster](../../nodes/nodes/nodes-nodes-viewing.md#nodes-nodes-viewing-listing_nodes-nodes-viewing)
+
+- [OpenShift Virtualization - Fencing and VM High Availability Guide](https://access.redhat.com/articles/7057929)
+
+- [How to destroy all the data from server for decommission?](https://access.redhat.com/solutions/84663)
+
+- [Listing all virtual machine instances using the CLI](../managing_vms/virt-manage-vmis.md#virt-listing-vmis-cli_virt-manage-vmis)
+
+- [Deleting nodes from a bare-metal cluster](../../nodes/nodes/nodes-nodes-working.md#nodes-nodes-working-deleting-bare-metal_nodes-nodes-working)

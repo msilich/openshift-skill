@@ -1,0 +1,107 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Install the JobSet Operator on OpenShift Container Platform to enable management of large-scale, coordinated computing workloads, giving your applications a unified API and failure recovery.
+
+# Installing the JobSet Operator
+
+Install the JobSet Operator on OpenShift Container Platform using the web console to begin managing large-scale, coordinated computing workloads.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to the cluster with `cluster-admin` privileges.
+
+- You have access to the OpenShift Container Platform web console.
+
+- You have installed the cert-manager Operator for Red Hat OpenShift.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Log in to the OpenShift Container Platform web console.
+
+2.  Verify that the cert-manager Operator for Red Hat OpenShift is installed.
+
+3.  Install the JobSet Operator.
+
+    1.  Navigate to **Ecosystem** → **Software Catalog**.
+
+    2.  Search for and select the **`openshift-operators`** project.
+
+    3.  Enter **JobSet Operator** into the filter box.
+
+    4.  Select the **JobSet Operator** and click **Install**.
+
+    5.  On the **Install Operator** page:
+
+        1.  The **Update channel** is set to **stable-v1.0**, which installs the latest stable release of JobSet Operator.
+
+        2.  Under **Installation mode**, select **A specific namespace on the cluster**.
+
+        3.  Under **Installed Namespace**, select **Operator recommended Namespace: openshift-jobset-operator**.
+
+        4.  Under **Update approval**, select one of the following update strategies:
+
+            - The **Automatic** strategy allows Operator Lifecycle Manager (OLM) to automatically update the Operator when a new version is available.
+
+            - The **Manual** strategy requires a user with appropriate credentials to approve the Operator update.
+
+        5.  Click **Install**.
+
+4.  Create the custom resource (CR) for the JobSet Operator:
+
+    1.  Navigate to **Installed Operators** → **JobSet Operator**.
+
+    2.  Under **Provided APIs**, click **Create instance** in the **JobSetOperator** pane.
+
+    3.  Set the name to **cluster**.
+
+    4.  Set the **managementState** to **Managed**.
+
+    5.  Click **Create**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Check that the JobSet Operator and operand pods are running by entering the following command:
+
+  ``` terminal
+  $ oc get pod -n openshift-jobset-operator
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` terminal
+  NAME                                        READY   STATUS    RESTARTS   AGE
+  jobset-controller-manager-5595547fb-b4g2x   1/1     Running   0          48s
+  jobset-operator-596cb848c6-q2dmp            1/1     Running   0          2m33s
+  ```
+
+  </div>
+
+</div>

@@ -1,0 +1,121 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Description
+SelfSubjectRulesReview is a resource you can create to determine which actions you can perform in a namespace
+
+Compatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).
+
+Type
+`object`
+
+Required
+- `spec`
+
+# Specification
+
+| Property | Type | Description |
+|----|----|----|
+| `apiVersion` | `string` | APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: <https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources> |
+| `kind` | `string` | Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: <https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds> |
+| `spec` | `object` | SelfSubjectRulesReviewSpec adds information about how to conduct the check |
+| `status` | `object` | SubjectRulesReviewStatus is contains the result of a rules check |
+
+## .spec
+
+Description
+SelfSubjectRulesReviewSpec adds information about how to conduct the check
+
+Type
+`object`
+
+Required
+- `scopes`
+
+| Property | Type | Description |
+|----|----|----|
+| `scopes` | `array (string)` | Scopes to use for the evaluation. Empty means "use the unscoped (full) permissions of the user/groups". Nil means "use the scopes on this request". |
+
+## .status
+
+Description
+SubjectRulesReviewStatus is contains the result of a rules check
+
+Type
+`object`
+
+Required
+- `rules`
+
+| Property | Type | Description |
+|----|----|----|
+| `evaluationError` | `string` | EvaluationError can appear in combination with Rules. It means some error happened during evaluation that may have prevented additional rules from being populated. |
+| `rules` | `array` | Rules is the list of rules (no particular sort) that are allowed for the subject |
+| `rules[]` | `object` | PolicyRule holds information that describes a policy rule, but does not contain information about who the rule applies to or which namespace the rule applies to. |
+
+## .status.rules
+
+Description
+Rules is the list of rules (no particular sort) that are allowed for the subject
+
+Type
+`array`
+
+## .status.rules\[\]
+
+Description
+PolicyRule holds information that describes a policy rule, but does not contain information about who the rule applies to or which namespace the rule applies to.
+
+Type
+`object`
+
+Required
+- `verbs`
+
+- `resources`
+
+| Property | Type | Description |
+|----|----|----|
+| `apiGroups` | `array (string)` | APIGroups is the name of the APIGroup that contains the resources. If this field is empty, then both kubernetes and origin API groups are assumed. That means that if an action is requested against one of the enumerated resources in either the kubernetes or the origin API group, the request will be allowed |
+| `attributeRestrictions` | [`RawExtension`](../objects/index.md#io-k8s-apimachinery-pkg-runtime-RawExtension) | AttributeRestrictions will vary depending on what the Authorizer/AuthorizationAttributeBuilder pair supports. If the Authorizer does not recognize how to handle the AttributeRestrictions, the Authorizer should report an error. |
+| `nonResourceURLs` | `array (string)` | NonResourceURLsSlice is a set of partial urls that a user should have access to. \*s are allowed, but only as the full, final step in the path This name is intentionally different than the internal type so that the DefaultConvert works nicely and because the ordering may be different. |
+| `resourceNames` | `array (string)` | ResourceNames is an optional white list of names that the rule applies to. An empty set means that everything is allowed. |
+| `resources` | `array (string)` | Resources is a list of resources this rule applies to. ResourceAll represents all resources. |
+| `verbs` | `array (string)` | Verbs is a list of Verbs that apply to ALL the ResourceKinds and AttributeRestrictions contained in this rule. VerbAll represents all kinds. |
+
+# API endpoints
+
+The following API endpoints are available:
+
+- `/apis/authorization.openshift.io/v1/namespaces/{namespace}/selfsubjectrulesreviews`
+
+  - `POST`: create a SelfSubjectRulesReview
+
+## /apis/authorization.openshift.io/v1/namespaces/{namespace}/selfsubjectrulesreviews
+
+| Parameter | Type | Description |
+|----|----|----|
+| `dryRun` | `string` | When present, indicates that modifications should not be persisted. An invalid or unrecognized dryRun directive will result in an error response and no further processing of the request. Valid values are: - All: all dry run stages will be processed |
+| `fieldValidation` | `string` | fieldValidation instructs the server on how to handle objects in the request (POST/PUT/PATCH) containing unknown or duplicate fields. Valid values are: - Ignore: This will ignore any unknown fields that are silently dropped from the object, and will ignore all but the last duplicate field that the decoder encounters. This is the default behavior prior to v1.23. - Warn: This will send a warning via the standard warning response header for each unknown field that is dropped from the object, and for each duplicate field that is encountered. The request will still succeed if there are no other errors, and will only persist the last of any duplicate fields. This is the default in v1.23+ - Strict: This will fail the request with a BadRequest error if any unknown fields would be dropped from the object, or if any duplicate fields are present. The error returned from the server will contain all unknown and duplicate fields encountered. |
+
+Global query parameters
+
+HTTP method
+`POST`
+
+Description
+create a SelfSubjectRulesReview
+
+| Parameter | Type | Description |
+|----|----|----|
+| `body` | [`SelfSubjectRulesReview`](selfsubjectrulesreview-authorization-openshift-io-v1.md#selfsubjectrulesreview-authorization-openshift-io-v1) schema |  |
+
+Body parameters
+
+| HTTP code | Reponse body |
+|----|----|
+| 200 - OK | [`SelfSubjectRulesReview`](selfsubjectrulesreview-authorization-openshift-io-v1.md#selfsubjectrulesreview-authorization-openshift-io-v1) schema |
+| 201 - Created | [`SelfSubjectRulesReview`](selfsubjectrulesreview-authorization-openshift-io-v1.md#selfsubjectrulesreview-authorization-openshift-io-v1) schema |
+| 202 - Accepted | [`SelfSubjectRulesReview`](selfsubjectrulesreview-authorization-openshift-io-v1.md#selfsubjectrulesreview-authorization-openshift-io-v1) schema |
+| 401 - Unauthorized | Empty |
+
+HTTP responses

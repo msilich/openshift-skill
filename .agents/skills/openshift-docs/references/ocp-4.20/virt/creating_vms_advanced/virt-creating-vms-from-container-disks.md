@@ -1,0 +1,291 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can create virtual machines (VMs) by using container disks built from operating system images.
+
+You can enable auto updates for your container disks. For more information, see "Additional resources".
+
+> [!IMPORTANT]
+> If the container disks are large, the I/O traffic might increase and cause worker nodes to be unavailable. You can perform the following tasks to reclaim resources:
+>
+> - Prune `DeploymentConfig` objects.
+>
+> - Configure garbage collection.
+
+You create a VM from a container disk by performing the following steps:
+
+1.  Build an operating system image into a container disk and upload it to your container registry.
+
+2.  If your container registry does not have TLS, configure your environment to disable TLS for your registry.
+
+3.  Create a VM with the container disk as the disk source by using the OpenShift Container Platform web console or the command line.
+
+> [!IMPORTANT]
+> You must install the QEMU guest agent on VMs created from operating system images that are not provided by Red Hat.
+
+# Building and uploading a container disk
+
+You can build a virtual machine (VM) image into a container disk and upload it to a registry.
+
+The size of a container disk is limited by the maximum layer size of the registry where the container disk is hosted.
+
+> [!NOTE]
+> For [Red Hat Quay](https://access.redhat.com/documentation/en-us/red_hat_quay/), you can change the maximum layer size by editing the YAML configuration file that is created when Red Hat Quay is first deployed.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have `podman` installed.
+
+- You must have a QCOW2 or RAW image file.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a Dockerfile to build the VM image into a container image. The VM image must be owned by QEMU, which has a UID of `107`, and placed in the `/disk/` directory inside the container. Permissions for the `/disk/` directory must then be set to `0440`.
+
+    The following example uses the Red Hat Universal Base Image (UBI) to handle these configuration changes in the first stage, and uses the minimal `scratch` image in the second stage to store the result:
+
+    ``` terminal
+    $ cat > Dockerfile << EOF
+    FROM registry.access.redhat.com/ubi8/ubi:latest AS builder
+    ADD --chown=107:107 <vm_image>.qcow2 /disk/ //
+    RUN chmod 0440 /disk/*
+
+    FROM scratch
+    COPY --from=builder /disk/* /disk/
+    EOF
+    ```
+
+    where:
+
+    `<vm_image>`
+    Specifies the image in either QCOW2 or RAW format. If you use a remote image, replace `<vm_image>.qcow2` with the complete URL.
+
+2.  Build and tag the container:
+
+    ``` terminal
+    $ podman build -t <registry>/<container_disk_name>:latest .
+    ```
+
+3.  Push the container image to the registry:
+
+    ``` terminal
+    $ podman push <registry>/<container_disk_name>:latest
+    ```
+
+</div>
+
+# Disabling TLS for a container registry
+
+You can disable TLS (transport layer security) for one or more container registries by editing the `insecureRegistries` field of the `HyperConverged` custom resource.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Open the `HyperConverged` CR in your default editor by running the following command:
+
+    ``` terminal
+    $ oc edit hyperconverged kubevirt-hyperconverged -n openshift-cnv
+    ```
+
+2.  Add a list of insecure registries to the `spec.storageImport.insecureRegistries` field.
+
+    Example `HyperConverged` custom resource:
+
+    ``` yaml
+    apiVersion: hco.kubevirt.io/v1beta1
+    kind: HyperConverged
+    metadata:
+      name: kubevirt-hyperconverged
+      namespace: openshift-cnv
+    spec:
+      storageImport:
+        insecureRegistries:
+          - "private-registry-example-1:5000"
+          - "private-registry-example-2:5000"
+    ```
+
+    Replace the examples in the `insecureRegistries` list with valid registry hostnames.
+
+</div>
+
+# Creating a VM from a container disk by using the web console
+
+You can create a virtual machine (VM) by importing a container disk from a container registry by using the OpenShift Container Platform web console.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Navigate to **Virtualization** → **Catalog** in the web console.
+
+2.  Click a template tile without an available boot source.
+
+3.  Click **Customize VirtualMachine**.
+
+4.  On the **Customize template parameters** page, expand **Storage** and select **Registry (creates PVC)** from the **Disk source** list.
+
+5.  Enter the container image URL. Example: `https://mirror.arizona.edu/fedora/linux/releases/38/Cloud/x86_64/images/Fedora-Cloud-Base-38-1.6.x86_64.qcow2`
+
+6.  Set the disk size.
+
+7.  Click **Next**.
+
+8.  Click **Create VirtualMachine**.
+
+</div>
+
+# Creating a VM from a container disk by using the CLI
+
+You can create a virtual machine (VM) from a container disk by using the command line.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have access credentials for the container registry that contains the container disk.
+
+- You have installed the `virtctl` CLI.
+
+- You have installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a `VirtualMachine` manifest for your VM and save it as a YAML file. For example, to create a minimal Red Hat Enterprise Linux (RHEL) VM from a container disk, run the following command:
+
+    ``` terminal
+    $ virtctl create vm --name vm-rhel-9 --instancetype u1.small --preference rhel.9 --volume-containerdisk src:registry.redhat.io/rhel9/rhel-guest-image:9.5
+    ```
+
+2.  Review the `VirtualMachine` manifest for your VM:
+
+    ``` yaml
+    apiVersion: kubevirt.io/v1
+    kind: VirtualMachine
+    metadata:
+      name: vm-rhel-9
+    spec:
+      instancetype:
+        name: u1.small
+      preference:
+        name: rhel.9
+      runStrategy: Always
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          domain:
+            devices: {}
+            resources: {}
+          terminationGracePeriodSeconds: 180
+          volumes:
+          - containerDisk:
+              image: registry.redhat.io/rhel9/rhel-guest-image:9.5
+            name: vm-rhel-9-containerdisk-0
+    ```
+
+    - `metadata.name` defines the VM name.
+
+    - `spec.instancetype.name` defines the instance type to use to control resource sizing of the VM.
+
+    - `spec.preference.name` defines the preference to use.
+
+    - `spec.template.spec.volumes.containerDisk.image` defines the URL of the container disk.
+
+3.  Create the VM by running the following command:
+
+    ``` terminal
+    $ oc create -f <vm_manifest_file>.yaml
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Monitor the status of the VM:
+
+    ``` terminal
+    $ oc get vm <vm_name>
+    ```
+
+    If the provisioning is successful, the VM status is `Running`. Example output:
+
+    ``` terminal
+    NAME        AGE   STATUS    READY
+    vm-rhel-9   18s   Running   True
+    ```
+
+2.  Verify that provisioning is complete and that the VM has started by accessing its serial console:
+
+    ``` terminal
+    $ virtctl console <vm_name>
+    ```
+
+    If the VM is running and the serial console is accessible, the output looks as follows:
+
+    ``` terminal
+    Successfully connected to vm-rhel-9 console. The escape sequence is ^]
+    ```
+
+</div>
+
+# Additional resources
+
+- [Managing automatic boot source updates](../storage/virt-automatic-bootsource-updates.md#virt-automatic-bootsource-updates)
+
+- [Installing the QEMU guest agent](../managing_vms/virt-installing-qemu-guest-agent.md#virt-installing-qemu-guest-agent)
+
+- [Pruning objects to reclaim resources](../../applications/pruning-objects.md#pruning-deployments_pruning-objects)
+
+- [Configuring garbage collection for containers and images](../../nodes/nodes/nodes-nodes-garbage-collection.md#nodes-nodes-garbage-collection-configuring_nodes-nodes-configuring)

@@ -1,0 +1,64 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To trust custom certificate authorities for egress connections in OpenShift Container Platform, you can update the CA bundle by specifying custom CA certificates in the cluster-wide proxy configuration.
+
+# Understanding the CA Bundle certificate
+
+Proxy certificates allow users to specify one or more custom certificate authority (CA) used by platform components when making egress connections.
+
+The `trustedCA` field of the Proxy object is a reference to a config map that contains a user-provided trusted certificate authority (CA) bundle. This bundle is merged with the Red Hat Enterprise Linux CoreOS (RHCOS) trust bundle and injected into the trust store of platform components that make egress HTTPS calls. For example, `image-registry-operator` calls an external image registry to download images. If `trustedCA` is not specified, only the RHCOS trust bundle is used for proxied HTTPS connections. Provide custom CA certificates to the RHCOS trust bundle if you want to use your own certificate infrastructure.
+
+The `trustedCA` field should only be consumed by a proxy validator. The validator is responsible for reading the certificate bundle from required key `ca-bundle.crt` and copying it to a config map named `trusted-ca-bundle` in the `openshift-config-managed` namespace. The namespace for the config map referenced by `trustedCA` is `openshift-config`:
+
+``` yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-ca-bundle
+  namespace: openshift-config
+data:
+  ca-bundle.crt: |
+    -----BEGIN CERTIFICATE-----
+    Custom CA certificate bundle.
+    -----END CERTIFICATE-----
+```
+
+# Replacing the CA Bundle certificate
+
+To trust a custom certificate authority for egress connections in OpenShift Container Platform, you can replace the CA bundle by creating a config map with your root CA certificate and updating the cluster proxy configuration.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a config map that includes the root CA certificate used to sign the wildcard certificate:
+
+    ``` terminal
+    $ oc create configmap custom-ca \
+         --from-file=ca-bundle.crt=</path/to/example-ca.crt> \
+         -n openshift-config
+    ```
+
+    `</path/to/example-ca.crt>` is the path to the CA certificate bundle on your local file system.
+
+2.  Update the cluster-wide proxy configuration with the newly created config map:
+
+    ``` terminal
+    $ oc patch proxy/cluster \
+         --type=merge \
+         --patch='{"spec":{"trustedCA":{"name":"custom-ca"}}}'
+    ```
+
+</div>
+
+# Additional resources
+
+- [Replacing the default ingress certificate](replacing-default-ingress-certificate.md#replacing-default-ingress_replacing-default-ingress)
+
+- [Enabling the cluster-wide proxy](../../networking/configuring_network_settings/enable-cluster-wide-proxy.md#nw-proxy-configure-object_config-cluster-wide-proxy)
+
+- [Proxy certificate customization](../certificate_types_descriptions/proxy-certificates.md#customization)

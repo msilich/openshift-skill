@@ -1,0 +1,91 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Automatic volume detachment after non-graceful node shutdowns prevents volumes from remaining attached to failed nodes, enabling faster workload recovery by allowing pods to reschedule and reattach volumes on healthy nodes without manual intervention.
+
+# Overview
+
+Non-graceful node shutdowns from hardware failures or system crashes leave volumes attached to failed nodes, blocking pod rescheduling. Applying an out-of-service taint triggers automatic volume detachment from failed nodes, enabling workload recovery without manual volume management.
+
+A graceful node shutdown occurs when the kubelet’s node shutdown manager detects the upcoming node shutdown action. Non-graceful shutdowns occur when the kubelet does not detect a node shutdown action, which can occur because of system or hardware failures. Also, the kubelet might not detect a node shutdown action when the shutdown command does not trigger the Inhibitor Locks mechanism used by the kubelet on Linux, or because of a user error, for example, if the shutdownGracePeriod and shutdownGracePeriodCriticalPods details are not configured correctly for that node.
+
+# Adding an out-of-service taint manually for automatic volume detachment
+
+After non-graceful shutdowns, to trigger automatic volume detachment and enable pod rescheduling, apply an out-of-service taint to the node. This recovers workloads faster than manually detaching volumes from failed nodes.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Access to the cluster with cluster-admin privileges.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  After a node is detected as unhealthy, shut down the worker node.
+
+2.  Ensure that the node is shutdown by running the following command and checking the status:
+
+    ``` terminal
+    $ oc get node <node_name>
+    ```
+
+    - Use the `<node_name>` to specify the node that shut down non-gracefully.
+
+      > [!IMPORTANT]
+      > If the node is not completely shut down, do not proceed with tainting the node. If the node is still up and the taint is applied, filesystem corruption can occur.
+
+3.  Taint the corresponding node object by running the following command:
+
+    > [!IMPORTANT]
+    > Tainting a node this way deletes all pods on that node. This also causes any pods that are backed by statefulsets to be evicted, and replacement pods to be created on a different node.
+
+    ``` terminal
+    $ oc adm taint node <node_name> node.kubernetes.io/out-of-service=nodeshutdown:NoExecute
+    ```
+
+    - Use the `<node_name>` to specify the node that shut down non-gracefully.
+
+      After the taint is applied, the volumes detach from the shutdown node allowing their disks to be attached to a different node.
+
+      The resulting YAML file resembles the following example file:
+
+      <div class="formalpara">
+
+      <div class="title">
+
+      Example node YAML file with out-of-service taint applied
+
+      </div>
+
+      ``` yaml
+      spec:
+        taints:
+        - effect: NoExecute
+          key: node.kubernetes.io/out-of-service
+          value: nodeshutdown
+      ```
+
+      </div>
+
+4.  Restart the node.
+
+5.  Remove the taint from the corresponding node object by running the following command:
+
+    ``` terminal
+    $ oc adm taint node <node_name> node.kubernetes.io/out-of-service=nodeshutdown:NoExecute-
+    ```
+
+    - Use the `<node_name>` to specify the node that shut down non-gracefully
+
+</div>

@@ -1,0 +1,158 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To expand the cluster network range in OpenShift Container Platform to support more nodes and IP addresses, you can modify the cluster network CIDR mask after cluster installation. This procedure requires the OVN-Kubernetes network plugin and provides more IP space for additional nodes.
+
+For example, if you deployed a cluster and specified `10.128.0.0/19` as the cluster network range and a host prefix of `23`, you are limited to 16 nodes. You can expand that to 510 nodes by changing the CIDR mask on a cluster to `/14`.
+
+The following limitations apply when modifying the cluster network IP address range:
+
+- The CIDR mask size specified must always be smaller than the currently configured CIDR mask size, because you can only increase IP space by adding more nodes to an installed cluster
+
+- The host prefix cannot be modified
+
+- Pods that are configured with an overridden default gateway must be recreated after the cluster network expands
+
+> [!IMPORTANT]
+> You cannot expand the service network CIDR range after installing the cluster, either directly or through the ServiceCIDR API. You must configure the service network CIDR during installation using the `install-config.yaml` file. To avoid service IP address exhaustion, ensure that your initial service network range is large enough to accommodate future growth.
+
+# Expanding the cluster network IP address range
+
+To expand the cluster network IP address range in OpenShift Container Platform to support more nodes, you can modify the cluster network CIDR mask using the `oc patch` command.
+
+> [!NOTE]
+> This change requires rolling out a new Operator configuration across the cluster, and can take up to 30 minutes to take effect.
+>
+> For clusters configured with cluster proxy, expanding the cluster network range also triggers a MachineConfigPool update that reboots all nodes. Plan this operation during a maintenance window to avoid service disruption.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You have logged in to the cluster with a user with `cluster-admin` privileges.
+
+- You have ensured that the cluster uses the OVN-Kubernetes network plugin.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  To obtain the cluster network range and host prefix for your cluster, enter the following command:
+
+    ``` terminal
+    $ oc get network.operator.openshift.io \
+      -o jsonpath="{.items[0].spec.clusterNetwork}"
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` text
+    [{"cidr":"10.217.0.0/22","hostPrefix":23}]
+    ```
+
+    </div>
+
+2.  To expand the cluster network IP address range, enter the following command. Use the CIDR IP address range and host prefix returned from the output of the previous command.
+
+    ``` terminal
+    $ oc patch Network.config.openshift.io cluster --type='merge' --patch \
+      '{
+        "spec":{
+          "clusterNetwork": [ {"cidr":"<network>/<cidr>","hostPrefix":<prefix>} ],
+          "networkType": "OVNKubernetes"
+        }
+      }'
+    ```
+
+    where:
+
+    `<network>`
+    Specifies the network part of the `cidr` field that you obtained from the previous step. You cannot change this value.
+
+    `<cidr>`
+    Specifies the network prefix length. For example, `14`. Change this value to a smaller number than the value from the output in the previous step to expand the cluster network range.
+
+    `<prefix>`
+    Specifies the current host prefix for your cluster. This value must be the same value for the `hostPrefix` field that you obtained from the previous step.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example command
+
+    </div>
+
+    ``` terminal
+    $ oc patch Network.config.openshift.io cluster --type='merge' --patch \
+      '{
+        "spec":{
+          "clusterNetwork": [ {"cidr":"10.217.0.0/14","hostPrefix": 23} ],
+          "networkType": "OVNKubernetes"
+        }
+      }'
+    ```
+
+    </div>
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` text
+    network.config.openshift.io/cluster patched
+    ```
+
+    </div>
+
+3.  To confirm that the configuration is active, enter the following command. It can take up to 30 minutes for this change to take effect.
+
+    ``` terminal
+    $ oc get network.operator.openshift.io \
+      -o jsonpath="{.items[0].spec.clusterNetwork}"
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` text
+    [{"cidr":"10.217.0.0/14","hostPrefix":23}]
+    ```
+
+    </div>
+
+</div>
+
+# Additional resources
+
+- [OVN-Kubernetes network plugin](../ovn_kubernetes_network_provider/about-ovn-kubernetes.md#about-ovn-kubernetes)
+
+- [Red Hat OpenShift Network Calculator](https://access.redhat.com/labs/ocpnc/)
+
+- [About the OVN-Kubernetes network plugin](../ovn_kubernetes_network_provider/about-ovn-kubernetes.md#about-ovn-kubernetes)

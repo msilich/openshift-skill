@@ -1,0 +1,443 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can create a *node disruption policy* to define the configuration changes that cause a disruption to your cluster, and which changes do not.
+
+> [!NOTE]
+> Node disruption policies are not supported for on-cluster custom layered images.
+
+By default, when you make certain changes to the Ignition config objects fields by using a `MachineConfig` object, the Machine Config Operator (MCO) drains and reboots the nodes associated with that machine config.
+
+By using a node disruption policy, you can define the configuration changes that require actions such as node reboots, node drains, or service restarts, and which changes do not. This reduces node downtime when making small machine configuration changes in your cluster. To configure the policy, you modify the `MachineConfiguration` object, which is in the `openshift-machine-config-operator` namespace. See the example node disruption policies in the `MachineConfiguration` objects in "Example node disruption policies".
+
+> [!NOTE]
+> There are machine configuration changes that always require a reboot, regardless of any node disruption policies. For more information, see *About the Machine Config Operator*.
+
+After you create the node disruption policy, the MCO validates the policy to search for potential issues in the file, such as problems with formatting. The MCO then merges the policy with the cluster defaults and populates the `status.nodeDisruptionPolicyStatus` fields in the machine config with the actions to be performed upon future changes to the machine config. The configurations in your policy always overwrite the cluster defaults.
+
+> [!IMPORTANT]
+> The MCO does not validate whether a change can be successfully applied by your node disruption policy. Therefore, you are responsible to ensure the accuracy of your node disruption policies.
+
+For example, you can configure a node disruption policy so that sudo configurations do not require a node drain and reboot. Or, you can configure your cluster so that updates to `sshd` are applied with only a reload of that one service.
+
+You can control the behavior of the MCO when making the changes to the following Ignition configuration objects:
+
+- **configuration files**: You add to or update the files in the `/var` or `/etc` directory. You can configure a policy for a specific file anywhere in the directory or for a path to a specific directory. For a path, a change or addition to any file in that directory triggers the policy.
+
+  > [!NOTE]
+  > If a file is included in more than one policy, only the policy with the best match to that file is applied.
+  >
+  > For example, if you have a policy for the `/etc/` directory and a policy for the `/etc/pki/` directory, a change to the `/etc/pki/tls/certs/ca-bundle.crt` file would apply the `etc/pki` policy.
+
+- **systemd units**: You create and set the status of a systemd service or modify a systemd service.
+
+- **users and groups**: You change SSH keys in the `passwd` section postinstallation.
+
+- **ICSP**, **ITMS**, **IDMS** objects: You can remove mirroring rules from an `ImageContentSourcePolicy` (ICSP), `ImageTagMirrorSet` (ITMS), and `ImageDigestMirrorSet` (IDMS) object.
+
+When you make any of these changes, the node disruption policy determines which of the following actions are required when the MCO implements the changes:
+
+- **Reboot**: The MCO drains and reboots the nodes. This is the default behavior.
+
+- **None**: The MCO does not drain or reboot the nodes. The MCO applies the changes with no further action.
+
+- **Drain**: The MCO cordons and drains the nodes of their workloads. The workloads restart with the new configurations.
+
+- **Reload**: For services, the MCO reloads the specified services without restarting the service.
+
+- **Restart**: For services, the MCO fully restarts the specified services.
+
+- **DaemonReload**: The MCO reloads the systemd manager configuration.
+
+- **Special**: This is an internal MCO-only action that is set by default for changes to the `/etc/containers/registries.conf` file. When this action is set, the MCO determines if a node cordon and drain is required, based on the changed content in the `registries.conf` file. You can override this setting. However, this is not recommended. You cannot set this action for another path or service.
+
+<div class="note">
+
+<div class="title">
+
+</div>
+
+- The `Reboot` and `None` actions cannot be used with any other actions, as the `Reboot` and `None` actions override the others.
+
+- Actions are applied in the order that they are set in the node disruption policy list.
+
+- If you make other machine config changes that do require a reboot or other disruption to the nodes, that reboot supercedes the node disruption policy actions.
+
+</div>
+
+# Example node disruption policies
+
+You can use the following example `MachineConfiguration` objects to help you create a node disruption policy that can help reduce disruption to the workloads in your cluster.
+
+> [!TIP]
+> A `MachineConfiguration` object and a `MachineConfig` object are different objects. A `MachineConfiguration` object is a singleton object in the MCO namespace that contains configuration parameters for the MCO operator. A `MachineConfig` object defines changes that are applied to a machine config pool.
+
+The following example `MachineConfiguration` object shows no user defined policies. The default node disruption policy values are shown in the `status` stanza.
+
+<div class="formalpara">
+
+<div class="title">
+
+Default node disruption policy
+
+</div>
+
+``` yaml
+apiVersion: operator.openshift.io/v1
+kind: MachineConfiguration
+metadata:
+  name: cluster
+spec:
+  logLevel: Normal
+  managementState: Managed
+  operatorLogLevel: Normal
+status:
+  nodeDisruptionPolicyStatus:
+    clusterPolicies:
+      files:
+      - actions:
+        - type: None
+        path: /etc/mco/internal-registry-pull-secret.json
+      - actions:
+        - type: None
+        path: /var/lib/kubelet/config.json
+      - actions:
+        - reload:
+            serviceName: crio.service
+          type: Reload
+        path: /etc/machine-config-daemon/no-reboot/containers-gpg.pub
+      - actions:
+        - reload:
+            serviceName: crio.service
+          type: Reload
+        path: /etc/containers/policy.json
+      - actions:
+        - type: Special
+        path: /etc/containers/registries.conf
+      - actions:
+        - reload:
+            serviceName: crio.service
+          type: Reload
+        path: /etc/containers/registries.d
+      - actions:
+        - type: None
+        path: /etc/nmstate/openshift
+      - actions:
+        - restart:
+            serviceName: coreos-update-ca-trust.service
+          type: Restart
+        - restart:
+            serviceName: crio.service
+          type: Restart
+        path: /etc/pki/ca-trust/source/anchors/openshift-config-user-ca-bundle.crt
+      sshkey:
+        actions:
+        - type: None
+  observedGeneration: 9
+```
+
+</div>
+
+The default node disruption policy does not contain a policy for changes to the `/etc/containers/registries.conf.d` file. This is because both OpenShift Container Platform and Red Hat Enterprise Linux (RHEL) use the `registries.conf.d` file to specify aliases for image short names. It is recommended that you always pull an image by its fully-qualified name. This is particularly important with public registries, because the image might not deploy if the public registry requires authentication. You can create a user-defined policy to use with the `/etc/containers/registries.conf.d` file, if you need to use image short names.
+
+In the following example, when changes are made to the `registries.conf.d` file, the MCO restarts the `crio-service`.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example node disruption policy for a change to the `registries.conf.d` file
+
+</div>
+
+``` yaml
+apiVersion: operator.openshift.io/v1
+kind: MachineConfiguration
+metadata:
+  name: cluster
+  namespace: openshift-machine-config-operator
+spec:
+  nodeDisruptionPolicy:
+    files:
+      - path: /etc/containers/registries.conf.d
+        actions:
+          - type: Restart
+            restart:
+              serviceName: crio.service
+```
+
+</div>
+
+In the following example, when changes are made to the SSH keys, the MCO reloads the systemd manager configuration, and restarts the `crio-service`.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example node disruption policy for an SSH key change
+
+</div>
+
+``` yaml
+apiVersion: operator.openshift.io/v1
+kind: MachineConfiguration
+metadata:
+  name: cluster
+# ...
+spec:
+  nodeDisruptionPolicy:
+    sshkey:
+      actions:
+      - type: DaemonReload
+      - type: Restart
+          restart:
+            serviceName: crio.service
+
+# ...
+```
+
+</div>
+
+In the following example, when changes are made to the `/etc/chrony.conf` file, the MCO restarts the `chronyd.service` on the cluster nodes. If files are added to or modified in the `/var/run` directory, the MCO applies the changes with no further action.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example node disruption policy for a configuration file change
+
+</div>
+
+``` yaml
+apiVersion: operator.openshift.io/v1
+kind: MachineConfiguration
+metadata:
+  name: cluster
+# ...
+spec:
+  nodeDisruptionPolicy:
+    files:
+    - actions:
+      - restart:
+          serviceName: chronyd.service
+        type: Restart
+      path: /etc/chrony.conf
+    - actions:
+      - type: None
+      path: /var/run
+```
+
+</div>
+
+In the following example, when changes are made to the `auditd.service` systemd unit, the MCO drains the cluster nodes, reloads the `crio.service`, reloads the systemd manager configuration, and restarts the `crio.service`.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example node disruption policy for a systemd unit change
+
+</div>
+
+``` yaml
+apiVersion: operator.openshift.io/v1
+kind: MachineConfiguration
+metadata:
+  name: cluster
+# ...
+spec:
+  nodeDisruptionPolicy:
+    units:
+      - name: auditd.service
+        actions:
+          - type: Drain
+          - type: Reload
+            reload:
+              serviceName: crio.service
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: crio.service
+```
+
+</div>
+
+# Configuring node restart behaviors upon machine config changes
+
+You can create a node disruption policy to define the machine configuration changes that cause a disruption to your cluster, and which changes do not.
+
+You can control how your nodes respond to changes in the files in the `/var` or `/etc` directory, the systemd units, the SSH keys, and the `registries.conf` file.
+
+When you make any of these changes, the node disruption policy determines which of the following actions are required when the MCO implements the changes:
+
+- **Reboot**: The MCO drains and reboots the nodes. This is the default behavior.
+
+- **None**: The MCO does not drain or reboot the nodes. The MCO applies the changes with no further action.
+
+- **Drain**: The MCO cordons and drains the nodes of their workloads. The workloads restart with the new configurations.
+
+- **Reload**: For services, the MCO reloads the specified services without restarting the service.
+
+- **Restart**: For services, the MCO fully restarts the specified services.
+
+- **DaemonReload**: The MCO reloads the systemd manager configuration.
+
+- **Special**: This is an internal MCO-only action that is set by default for changes to the `/etc/containers/registries.conf` file. When this action is set, the MCO determines if a node cordon and drain is required, based on the changed content in the `registries.conf` file. You can override this setting. However, this is not recommended. You cannot set this action for another path or service.
+
+<div class="note">
+
+<div class="title">
+
+</div>
+
+- The `Reboot` and `None` actions cannot be used with any other actions, as the `Reboot` and `None` actions override the others.
+
+- Actions are applied in the order that they are set in the node disruption policy list.
+
+- If you make other machine config changes that do require a reboot or other disruption to the nodes, that reboot supercedes the node disruption policy actions.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit the `machineconfigurations.operator.openshift.io` object to define the node disruption policy:
+
+    ``` terminal
+    $ oc edit MachineConfiguration cluster -n openshift-machine-config-operator
+    ```
+
+2.  Add a node disruption policy similar to the following:
+
+    ``` yaml
+    apiVersion: operator.openshift.io/v1
+    kind: MachineConfiguration
+    metadata:
+      name: cluster
+    # ...
+    spec:
+      nodeDisruptionPolicy:
+        files:
+        - actions:
+          - restart:
+              serviceName: chronyd.service
+            type: Restart
+          path: /etc/chrony.conf
+        sshkey:
+          actions:
+          - type: Drain
+          - reload:
+              serviceName: crio.service
+            type: Reload
+          - type: DaemonReload
+          - restart:
+              serviceName: crio.service
+            type: Restart
+        units:
+        - actions:
+          - type: Drain
+          - reload:
+              serviceName: crio.service
+            type: Reload
+          - type: DaemonReload
+          - restart:
+              serviceName: crio.service
+            type: Restart
+          name: sshd.service
+    ```
+
+    where:
+
+    `spec.nodeDisruptionPolicy`
+    Specifies the node disruption policy.
+
+    `spec.nodeDisruptionPolicy.files`
+    Specifies a list of machine config file definitions and actions to take to changes on those paths. This list supports a maximum of 50 entries.
+
+    `spec.nodeDisruptionPolicy.files.actions`
+    Specifies the series of actions to be executed upon changes to the specified files. Actions are applied in the order that they are set in this list. This list supports a maximum of 10 entries. Specify the following parameters:
+
+    `restart`. Specifies that the listed service is to be reloaded upon changes to the specified files. `restart.serviceName`. Specifies the full name of the service to be acted upon.
+
+    `spec.nodeDisruptionPolicy.files.path`
+    Specifies the location of a file that is managed by a machine config. The actions in the policy apply when changes are made to the file in `path`.
+
+    `spec.nodeDisruptionPolicy.sshkey`
+    Specifies a list of service names and actions to take upon changes to the SSH keys in the cluster.
+
+    `spec.nodeDisruptionPolicy.units`
+    Specifies a list of systemd unit names and actions to take upon changes to those units.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- View the `MachineConfiguration` object file that you created:
+
+      $ oc get MachineConfiguration/cluster -o yaml
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` yaml
+  apiVersion: operator.openshift.io/v1
+  kind: MachineConfiguration
+  metadata:
+    labels:
+      machineconfiguration.openshift.io/role: worker
+    name: cluster
+  # ...
+  status:
+    nodeDisruptionPolicyStatus:
+      clusterPolicies:
+        files:
+  # ...
+        - actions:
+          - restart:
+              serviceName: chronyd.service
+            type: Restart
+          path: /etc/chrony.conf
+        sshkey:
+          actions:
+          - type: Drain
+          - reload:
+              serviceName: crio.service
+            type: Reload
+          - type: DaemonReload
+          - restart:
+              serviceName: crio.service
+            type: Restart
+        units:
+        - actions:
+          - type: Drain
+          - reload:
+              serviceName: crio.service
+            type: Reload
+          - type: DaemonReload
+          - restart:
+              serviceName: crio.service
+            type: Restart
+          name: sshd.service
+  # ...
+  ```
+
+  </div>
+
+  The `nodeDisruptionPolicyStatus` parameter specifies the current cluster-validated policies.
+
+</div>

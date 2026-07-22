@@ -1,0 +1,21 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+*.log
+.env
+.env.*
+*.kubeconfig
+kubeconfig
+kubeconfig.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local binaries and source checkouts
+kubernetes-mcp-server
+kubernetes-mcp-server-*
+openshift-mcp-server/
+
+# Local OpenCode state
+.opencode/

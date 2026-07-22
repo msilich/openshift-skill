@@ -1,0 +1,168 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can use the control plane machine set to improve the resiliency of the control plane for your OpenShift Container Platform cluster.
+
+# High availability and fault tolerance with failure domains
+
+When possible, the control plane machine set spreads the control plane machines across multiple failure domains. This configuration provides high availability and fault tolerance within the control plane. This strategy can help protect the control plane when issues arise within the infrastructure provider.
+
+## Failure domain platform support and configuration
+
+Review failure domain support for your cloud provider to determine how to configure high availability for your control plane.
+
+| Cloud provider | Support for failure domains | Provider nomenclature |
+|----|----|----|
+| Amazon Web Services (AWS) | X | [Availability Zone (AZ)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones) |
+| Google Cloud | X | [zone](https://cloud.google.com/compute/docs/regions-zones) |
+| Microsoft Azure | X | [Azure availability zone](https://learn.microsoft.com/en-us/azure/azure-web-pubsub/concept-availability-zones) |
+| Nutanix | X | [failure domain](https://portal.nutanix.com/page/documents/solutions/details?targetId=RA-2147-Nutanix-for-Enterprise-Edge:failure-domain-considerations.html) |
+| Red Hat OpenStack Platform (RHOSP) | X | [OpenStack Nova availability zones](https://docs.openstack.org/nova/2023.2/admin/availability-zones.html) and [OpenStack Cinder availability zones](https://docs.openstack.org/cinder/2023.2/admin/availability-zone-type.html) |
+| VMware vSphere | X | failure domain mapped to a vSphere Zone <sup>\[1\]</sup> |
+
+Failure domain support matrix
+
+1.  For more information, see "Regions and zones for a VMware vCenter".
+
+The failure domain configuration in the control plane machine set custom resource (CR) is platform-specific. For more information about failure domain parameters in the CR, see the sample failure domain configuration for your provider.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Sample Amazon Web Services failure domain configuration](cpmso_provider_configurations/cpmso-config-options-aws.md#cpmso-yaml-failure-domain-aws_cpmso-config-options-aws)
+
+- [Sample Google Cloud failure domain configuration](cpmso_provider_configurations/cpmso-config-options-gcp.md#cpmso-yaml-failure-domain-gcp_cpmso-config-options-gcp)
+
+- [Sample Microsoft Azure failure domain configuration](cpmso_provider_configurations/cpmso-config-options-azure.md#cpmso-yaml-failure-domain-azure_cpmso-config-options-azure)
+
+- [Adding failure domains to an existing Nutanix cluster](../../installing/installing_nutanix/nutanix-failure-domains.md#nutanix-failure-domains-adding-to-existing-cluster_nutanix-failure-domains)
+
+- [Sample Red Hat OpenStack Platform (RHOSP) failure domain configuration](cpmso_provider_configurations/cpmso-config-options-openstack.md#cpmso-yaml-failure-domain-openstack_cpmso-config-options-openstack)
+
+- [Sample VMware vSphere failure domain configuration](cpmso_provider_configurations/cpmso-config-options-vsphere.md#cpmso-yaml-failure-domain-vsphere_cpmso-config-options-vsphere)
+
+- [Regions and zones for a VMware vCenter](../../installing/installing_vsphere/post-install-vsphere-zones-regions-configuration.md#post-install-vsphere-zones-regions-configuration)
+
+</div>
+
+## Balancing control plane machines
+
+The control plane machine set balances control plane machines across failure domains to ensure fault tolerance and high availability.
+
+When possible, the control plane machine set uses each failure domain equally to ensure appropriate fault tolerance. If there are fewer failure domains than control plane machines, failure domains are selected for reuse alphabetically by name. For clusters with no failure domains specified, all control plane machines are placed within a single failure domain.
+
+Some changes to the failure domain configuration cause the control plane machine set to rebalance the control plane machines. For example, if you add failure domains to a cluster with fewer failure domains than control plane machines, the control plane machine set rebalances the machines across all available failure domains.
+
+# Recovery of failed control plane machines
+
+The Control Plane Machine Set Operator automates the recovery of control plane machines to maintain cluster availability without manual intervention. When a control plane machine is deleted, the Operator creates a replacement with the configuration that is specified in the `ControlPlaneMachineSet` custom resource (CR).
+
+For clusters that use control plane machine sets, you can configure a machine health check. The machine health check deletes unhealthy control plane machines so that they are replaced.
+
+> [!IMPORTANT]
+> If you configure a `MachineHealthCheck` resource for the control plane, set the value of `maxUnhealthy` to `1`.
+>
+> This configuration ensures that the machine health check takes no action when multiple control plane machines appear to be unhealthy. Multiple unhealthy control plane machines can indicate that the etcd cluster is degraded or that a scaling operation to replace a failed machine is in progress.
+>
+> If the etcd cluster is degraded, manual intervention might be required. If a scaling operation is in progress, the machine health check should allow it to finish.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Deploying machine health checks](../deploying-machine-health-checks.md#deploying-machine-health-checks)
+
+</div>
+
+# Quorum protection with machine lifecycle hooks
+
+To protect etcd quorum on OpenShift Container Platform clusters that use the Machine API Operator, the etcd Operator uses lifecycle hooks for the machine deletion phase to implement a quorum protection mechanism.
+
+By using a `preDrain` lifecycle hook, the etcd Operator can control when the pods on a control plane machine are drained and removed. To protect etcd quorum, the etcd Operator prevents the removal of an etcd member until it migrates that member onto a new node within the cluster.
+
+This mechanism allows the etcd Operator precise control over the members of the etcd quorum and allows the Machine API Operator to safely create and remove control plane machines without specific operational knowledge of the etcd cluster.
+
+## Control plane deletion with quorum protection processing order
+
+When a control plane machine is replaced on a cluster that uses a control plane machine set, the cluster temporarily has four control plane machines. When the fourth control plane node joins the cluster, the etcd Operator starts a new etcd member on the replacement node. When the etcd Operator observes that the old control plane machine is marked for deletion, it stops the etcd member on the old node and promotes the replacement etcd member to join the quorum of the cluster.
+
+The control plane machine `Deleting` phase proceeds in the following order:
+
+1.  A control plane machine is slated for deletion.
+
+2.  The control plane machine enters the `Deleting` phase.
+
+3.  To satisfy the `preDrain` lifecycle hook, the etcd Operator takes the following actions:
+
+    1.  The etcd Operator waits until a fourth control plane machine is added to the cluster as an etcd member. This new etcd member has a state of `Running` but not `ready` until it receives the full database update from the etcd leader.
+
+    2.  When the new etcd member receives the full database update, the etcd Operator promotes the new etcd member to a voting member and removes the old etcd member from the cluster.
+
+    After this transition is complete, it is safe for the old etcd pod and its data to be removed, so the `preDrain` lifecycle hook is removed.
+
+4.  The control plane machine status condition `Drainable` is set to `True`.
+
+5.  The machine controller attempts to drain the node that is backed by the control plane machine.
+
+    - If draining fails, `Drained` is set to `False` and the machine controller attempts to drain the node again.
+
+    - If draining succeeds, `Drained` is set to `True`.
+
+6.  The control plane machine status condition `Drained` is set to `True`.
+
+7.  If no other Operators have added a `preTerminate` lifecycle hook, the control plane machine status condition `Terminable` is set to `True`.
+
+8.  The machine controller removes the instance from the infrastructure provider.
+
+9.  The machine controller deletes the `Node` object.
+
+<div class="formalpara">
+
+<div class="title">
+
+YAML snippet demonstrating the etcd quorum protection `preDrain` lifecycle hook
+
+</div>
+
+``` yaml
+apiVersion: machine.openshift.io/v1beta1
+kind: Machine
+metadata:
+  ...
+spec:
+  lifecycleHooks:
+    preDrain:
+    - name: EtcdQuorumOperator
+      owner: clusteroperator/etcd
+  ...
+```
+
+</div>
+
+where:
+
+`spec.lifecycleHooks.preDrain.name`
+Specifies the name of the `preDrain` lifecycle hook.
+
+`spec.lifecycleHooks.preDrain.owner`
+Specifies the hook-implementing controller that manages the `preDrain` lifecycle hook.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Lifecycle hooks for the machine deletion phase](../deleting-machine.md#machine-lifecycle-hook-deletion_deleting-machine)
+
+</div>

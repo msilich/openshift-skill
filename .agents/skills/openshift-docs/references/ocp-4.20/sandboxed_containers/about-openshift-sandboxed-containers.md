@@ -1,0 +1,8 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+OpenShift sandboxed containers provide security by running containerized applications in lightweight virtual machines. This architecture isolates your workloads from other workloads on the cluster and does not require significant changes to your existing workflows.
+
+Confidential Containers extend OpenShift sandboxed containers and provide an additional layer of security. They ensure that your workloads are isolated from hypervisors and cloud providers. Confidential Containers protect data in use by leveraging hardware-based Trusted Execution Environments, which are verified by the Trustee attestation service.
+
+> [!NOTE]
+> Because OpenShift sandboxed containers releases on a different cadence from OpenShift Container Platform, its documentation is now available as a separate documentation set at [Red Hat OpenShift sandboxed containers](https://docs.redhat.com/en/documentation/openshift_sandboxed_containers).
