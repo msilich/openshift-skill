@@ -29,6 +29,7 @@ The following projects are referenced by configuration and documentation, but
 their binaries and source trees are not redistributed here:
 
 - `openshift/openshift-mcp-server`, Apache License 2.0
+- `argoproj-labs/mcp-for-argocd`, Apache License 2.0
 - OpenCode (`anomalyco/opencode` at the tested baseline), MIT License
 
 OpenShift and Red Hat are trademarks of Red Hat, Inc. This project is an

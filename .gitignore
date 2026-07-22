@@ -14,11 +14,13 @@ kubeconfig.*
 *.p12
 *.pfx
 *.token
+argocd-token-registry*.json
 
 # Local binaries and source checkouts
 kubernetes-mcp-server
 kubernetes-mcp-server-*
 openshift-mcp-server/
+mcp-for-argocd/
 
 # Local OpenCode state
 .opencode/

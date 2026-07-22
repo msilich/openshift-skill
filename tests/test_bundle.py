@@ -105,6 +105,10 @@ class SkillBundleTest(unittest.TestCase):
             "a0a1c370fcce18f76cecdbb2e07d8f4dbafe92dd",
         )
         self.assertEqual(
+            sources["argocd_mcp_server"]["commit"],
+            "1bb80b2816f0c8810efedc2fdcf318fd18ce214d",
+        )
+        self.assertEqual(
             sources["agentic_skills"]["commit"],
             "b09c2e645940b945c5a224a8f14927e10216ba07",
         )
@@ -135,6 +139,36 @@ class SkillBundleTest(unittest.TestCase):
         self.assertIn("{env:QWEN_BASE_URL}", rendered)
         self.assertIn("{env:QWEN_API_KEY}", rendered)
         self.assertIn("REPLACE_WITH_QWEN_MODEL_ID", rendered)
+
+    def test_optional_argocd_profile_is_separate_and_read_only(self) -> None:
+        config = load_jsonc(EXAMPLES / "opencode.readonly-with-argocd.jsonc")
+        self.assertEqual(set(config["mcp"]), {"ocp_read", "argocd_read"})
+        self.assertEqual(
+            config["mcp"]["argocd_read"]["command"],
+            ["{env:ARGOCD_MCP_NODE}", "{env:ARGOCD_MCP_ENTRYPOINT}", "stdio"],
+        )
+        self.assertEqual(config["permission"]["ocp_read_*"], "allow")
+        self.assertEqual(config["permission"]["argocd_read_*"], "allow")
+        rendered = json.dumps(config)
+        self.assertNotIn("ARGOCD_API_TOKEN", rendered)
+        self.assertNotIn("NODE_TLS_REJECT_UNAUTHORIZED", rendered)
+
+    def test_argocd_account_policy_allows_only_reads(self) -> None:
+        directory = EXAMPLES / "argocd-readonly-rbac"
+        account = json.loads((directory / "argocd-cm.merge.json").read_text(encoding="utf-8"))
+        self.assertEqual(account["data"]["accounts.opencode-mcp"], "apiKey")
+        policy_patch = json.loads(
+            (directory / "argocd-rbac-cm.merge.json").read_text(encoding="utf-8")
+        )
+        policy = policy_patch["data"]["policy.opencode-mcp.csv"]
+        rules = [[part.strip() for part in line.split(",")] for line in policy.splitlines()]
+        self.assertTrue(rules)
+        self.assertTrue(all(len(rule) == 6 and rule[0] == "p" for rule in rules))
+        allowed = [rule for rule in rules if rule[5] == "allow"]
+        denied = [rule for rule in rules if rule[5] == "deny"]
+        self.assertTrue(all(rule[3] == "get" for rule in allowed))
+        self.assertIn(["p", "opencode-mcp", "applications", "sync", "*", "deny"], denied)
+        self.assertIn(["p", "opencode-mcp", "exec", "create", "*", "deny"], denied)
 
     def test_readonly_profile_has_no_generic_oc_escape(self) -> None:
         config = load_jsonc(EXAMPLES / "opencode.readonly.jsonc")

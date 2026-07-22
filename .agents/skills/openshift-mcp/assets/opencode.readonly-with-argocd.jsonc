@@ -1,0 +1,75 @@
+// Provider-independent read-only profile with separate OpenShift and Argo CD
+// MCP identities. Configure a model in the normal OpenCode configuration.
+// Argo CD source: argoproj-labs/mcp-for-argocd@1bb80b2816f0c8810efedc2fdcf318fd18ce214d
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": false,
+  "share": "disabled",
+  "mcp": {
+    "ocp_read": {
+      "type": "local",
+      "command": [
+        "{env:OPENSHIFT_MCP_BINARY}",
+        "--config",
+        "{env:OPENSHIFT_MCP_READ_CONFIG}",
+        "--kubeconfig",
+        "{env:OPENSHIFT_MCP_READ_KUBECONFIG}",
+        "--cluster-provider",
+        "disabled"
+      ],
+      "enabled": true
+    },
+    "argocd_read": {
+      "type": "local",
+      "command": [
+        "{env:ARGOCD_MCP_NODE}",
+        "{env:ARGOCD_MCP_ENTRYPOINT}",
+        "stdio"
+      ],
+      "enabled": true
+    }
+  },
+  "permission": {
+    "*": "deny",
+    "skill": {
+      "*": "deny",
+      "openshift-api": "allow",
+      "openshift-docs": "allow",
+      "openshift-mcp": "allow"
+    },
+    "read": {
+      "*": "deny",
+      ".agents/skills/**": "allow"
+    },
+    "grep": "allow",
+    "glob": "allow",
+    "question": "allow",
+    "ocp_read_*": "allow",
+    "argocd_read_*": "allow",
+    "bash": {
+      "*": "deny",
+      "bash *openshift-api/scripts/collect-discovery.sh *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} api-resources": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} api-resources *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} api-versions": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} auth can-i": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} auth can-i *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} cluster-info": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} describe *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} events *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} explain *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} get *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} logs *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} rollout history *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} rollout status *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} status": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} status *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} top *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} adm inspect *": "ask",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} config current-context": "allow",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} whoami": "allow",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} whoami --show-server": "allow"
+    },
+    "doom_loop": "ask"
+  }
+}
