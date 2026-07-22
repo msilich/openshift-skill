@@ -59,9 +59,10 @@ done
 [[ -n "$cluster_ca" ]] || { usage >&2; die "--cluster-ca is required"; }
 [[ -r "$admin_kubeconfig" ]] || die "Admin kubeconfig is not readable: $admin_kubeconfig"
 [[ -r "$cluster_ca" ]] || die "CA file is not readable: $cluster_ca"
-[[ ! -e "$output_kubeconfig" ]] || die "Output already exists; use the token update script: $output_kubeconfig"
+[[ ! -e "$output_kubeconfig" && ! -L "$output_kubeconfig" ]] || \
+  die "Output already exists; use the token update script: $output_kubeconfig"
 
-for command_name in oc grep base64 cmp mktemp chmod mkdir dirname rm; do
+for command_name in oc grep base64 cmp mktemp chmod mkdir dirname mv rm; do
   require_command "$command_name"
 done
 
@@ -89,16 +90,15 @@ oc --kubeconfig "$admin_kubeconfig" --request-timeout=8s \
   get serviceaccount "$service_account" --namespace "$namespace" -o name >/dev/null
 
 token=""
-created_output=0
-success=0
 embedded_ca_file=""
+working_kubeconfig=""
 cleanup() {
   unset token
   if [[ -n "$embedded_ca_file" && -e "$embedded_ca_file" ]]; then
     rm -f -- "$embedded_ca_file"
   fi
-  if [[ "$success" -ne 1 && "$created_output" -eq 1 && -e "$output_kubeconfig" ]]; then
-    rm -f -- "$output_kubeconfig"
+  if [[ -n "$working_kubeconfig" && -e "$working_kubeconfig" ]]; then
+    rm -f -- "$working_kubeconfig"
   fi
 }
 trap cleanup EXIT
@@ -108,33 +108,33 @@ token="$(oc --kubeconfig "$admin_kubeconfig" --request-timeout=30s \
 [[ -n "$token" ]] || die "TokenRequest returned an empty token"
 
 mkdir -p -- "$(dirname -- "$output_kubeconfig")"
-created_output=1
+working_kubeconfig="$(mktemp "$(dirname -- "$output_kubeconfig")/.read-all.kubeconfig.XXXXXX")"
+chmod 600 -- "$working_kubeconfig"
 oc config set-cluster openshift-mcp-cluster \
   --server="$api_server" \
   --certificate-authority="$cluster_ca" \
   --embed-certs=true \
-  --kubeconfig="$output_kubeconfig" >/dev/null
+  --kubeconfig="$working_kubeconfig" >/dev/null
 oc config set-credentials "$service_account" \
   --token="$token" \
-  --kubeconfig="$output_kubeconfig" >/dev/null
-chmod 600 -- "$output_kubeconfig"
+  --kubeconfig="$working_kubeconfig" >/dev/null
 oc config set-context "$context_name" \
   --cluster=openshift-mcp-cluster \
   --user="$service_account" \
   --namespace="$default_namespace" \
-  --kubeconfig="$output_kubeconfig" >/dev/null
-oc config use-context "$context_name" --kubeconfig="$output_kubeconfig" >/dev/null
+  --kubeconfig="$working_kubeconfig" >/dev/null
+oc config use-context "$context_name" --kubeconfig="$working_kubeconfig" >/dev/null
 
 read -r context_count cluster_count user_count < <(
-  oc --kubeconfig "$output_kubeconfig" config view --raw \
+  oc --kubeconfig "$working_kubeconfig" config view --raw \
     -o go-template='{{len .contexts}} {{len .clusters}} {{len .users}}{{"\n"}}'
 )
 [[ "$context_count" == 1 && "$cluster_count" == 1 && "$user_count" == 1 ]] || \
   die "Generated kubeconfig is not limited to one context, cluster and user"
 
-embedded_ca_data="$(oc --kubeconfig "$output_kubeconfig" config view --raw \
+embedded_ca_data="$(oc --kubeconfig "$working_kubeconfig" config view --raw \
   -o jsonpath='{.clusters[0].cluster.certificate-authority-data}')"
-insecure_tls="$(oc --kubeconfig "$output_kubeconfig" config view --raw \
+insecure_tls="$(oc --kubeconfig "$working_kubeconfig" config view --raw \
   -o jsonpath='{.clusters[0].cluster.insecure-skip-tls-verify}')"
 [[ -n "$embedded_ca_data" ]] || die "Customer CA was not embedded"
 [[ "$insecure_tls" != "true" ]] || die "Generated kubeconfig disables TLS verification"
@@ -144,22 +144,25 @@ printf '%s' "$embedded_ca_data" | base64 --decode >"$embedded_ca_file"
 cmp -s -- "$cluster_ca" "$embedded_ca_file" || die "Embedded CA differs from the supplied CA file"
 
 expected_identity="system:serviceaccount:${namespace}:${service_account}"
-actual_identity="$(oc --kubeconfig "$output_kubeconfig" --request-timeout=8s whoami)"
-actual_server="$(oc --kubeconfig "$output_kubeconfig" --request-timeout=8s whoami --show-server)"
+actual_identity="$(oc --kubeconfig "$working_kubeconfig" --request-timeout=8s whoami)"
+actual_server="$(oc --kubeconfig "$working_kubeconfig" --request-timeout=8s whoami --show-server)"
 [[ "$actual_identity" == "$expected_identity" ]] || die "Unexpected ServiceAccount identity: $actual_identity"
 [[ "$actual_server" == "$api_server" ]] || die "Generated kubeconfig points to an unexpected API server"
 
-can_read_secrets="$(oc --kubeconfig "$output_kubeconfig" --request-timeout=8s \
+can_read_secrets="$(oc --kubeconfig "$working_kubeconfig" --request-timeout=8s \
   auth can-i get secrets --all-namespaces)"
-can_create="$(oc --kubeconfig "$output_kubeconfig" --request-timeout=8s \
+can_create="$(oc --kubeconfig "$working_kubeconfig" --request-timeout=8s \
   auth can-i create deployments.apps --all-namespaces)"
-can_delete="$(oc --kubeconfig "$output_kubeconfig" --request-timeout=8s \
+can_delete="$(oc --kubeconfig "$working_kubeconfig" --request-timeout=8s \
   auth can-i delete pods --all-namespaces)"
 [[ "$can_read_secrets" == "yes" ]] || die "Read-all check failed: cannot read Secrets"
 [[ "$can_create" == "no" && "$can_delete" == "no" ]] || \
   die "Write-none check failed: create or delete is unexpectedly allowed"
 
-success=1
+mv -- "$working_kubeconfig" "$output_kubeconfig"
+working_kubeconfig=""
+chmod 600 -- "$output_kubeconfig"
+
 printf 'Kubeconfig: %s\n' "$output_kubeconfig"
 printf 'API server: %s\n' "$actual_server"
 printf 'Admin identity used for TokenRequest: %s\n' "$admin_identity"
