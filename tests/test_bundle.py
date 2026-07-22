@@ -346,6 +346,35 @@ class SkillBundleTest(unittest.TestCase):
         self.assertIn("`oc config view --raw`", normalized)
         self.assertNotIn("node generate-opencode", normalized)
 
+    def test_deterministic_read_all_bootstrap_is_wired_into_the_skill(self) -> None:
+        skill = SKILLS_ROOT / "openshift-mcp"
+        script = skill / "scripts" / "bootstrap-read-all.sh"
+        self.assertTrue(script.is_file())
+        text = script.read_text(encoding="utf-8")
+        for phase in ("preview", "apply-rbac", "create-kubeconfig"):
+            self.assertIn(phase, text)
+        for required in (
+            "--admin-kubeconfig",
+            "--cluster-ca",
+            "--expected-server",
+            "--expected-admin-identity",
+            "--output",
+        ):
+            self.assertIn(required, text)
+        self.assertIn("--insecure-skip-tls-verify=false", text)
+        self.assertIn("new-read-all-kubeconfig.sh", text)
+        self.assertNotIn("oc login", text)
+        self.assertNotIn("--insecure-skip-tls-verify=true", text)
+
+        skill_text = (skill / "SKILL.md").read_text(encoding="utf-8")
+        bootstrap_text = (skill / "references" / "bootstrap-readonly.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("bootstrap-read-all.sh", skill_text)
+        self.assertIn("bootstrap-read-all.sh preview", bootstrap_text)
+        self.assertIn("bootstrap-read-all.sh apply-rbac", bootstrap_text)
+        self.assertIn("bootstrap-read-all.sh create-kubeconfig", bootstrap_text)
+
     def test_docs_defers_to_the_connected_cluster_api(self) -> None:
         text = (SKILLS_ROOT / "openshift-docs" / "SKILL.md").read_text(encoding="utf-8")
         self.assertIn("live discovery through `openshift-api` as authoritative", text)

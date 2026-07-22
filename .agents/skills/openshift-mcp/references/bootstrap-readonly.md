@@ -24,13 +24,15 @@ a verified read-only kubeconfig already exists.
 
 Obtain and restate these values before running a command:
 
-- absolute skill checkout path;
+- absolute skill directory: either the checkout's
+  `.agents/skills/openshift-mcp` directory or the global
+  `~/.config/opencode/skills/openshift-mcp` directory;
 - either an existing dedicated read-only kubeconfig, or an explicit
   administrative kubeconfig used only for provisioning;
 - expected OpenShift API URL and expected selected-kubeconfig identity, plus
   the expected administrative identity only when provisioning;
-- readable customer API CA PEM bundle and a new output kubeconfig path when
-  provisioning;
+- either a CA embedded in the administrative kubeconfig or a readable customer
+  API CA PEM bundle, plus a new output kubeconfig path when provisioning;
 - desired authorization scope, including whether raw Secret reads are required;
 - existing plain-JSON OpenCode config path;
 - exact OpenShift MCP command array already installed in the DevSpace and, for
@@ -90,37 +92,47 @@ Require `no` for create, patch, and delete. Require the Secret result to match
 the user's selected scope. Stop rather than broadening an existing identity.
 
 When provisioning the bundled read-all/write-none identity, inspect the exact
-files under `assets/read-all-rbac/`. Preview them with the same admin
-kubeconfig. `oc diff` exit code `1` means a difference was found, not a failed
-preview:
+files under `<skill-dir>/assets/read-all-rbac/`. Use the deterministic Linux
+bootstrap script for target validation, CA validation, RBAC preview, RBAC
+application, permission checks, TokenRequest, and protected kubeconfig
+creation. Its default first phase is read-only:
 
 ```text
-oc --kubeconfig <admin-kubeconfig> diff \
-  -f <skill-root>/.agents/skills/openshift-mcp/assets/read-all-rbac
-oc --kubeconfig <admin-kubeconfig> apply --dry-run=server -o name \
-  -f <skill-root>/.agents/skills/openshift-mcp/assets/read-all-rbac
+<skill-dir>/scripts/bootstrap-read-all.sh preview \
+  --admin-kubeconfig <admin-kubeconfig> \
+  --expected-server <expected-api-url> \
+  --expected-admin-identity <expected-admin-identity> \
+  --output <new-read-kubeconfig>
 ```
+
+The script runs `oc diff` and `oc apply --dry-run=server`; `oc diff` exit code
+`1` means a difference was found, not a failed preview. It refuses relative
+paths, an existing output, a target mismatch, an identity mismatch, or a CA
+that cannot validate the expected API endpoint.
+
+By default, the script copies only the flattened CA field from the
+administrative kubeconfig. This is appropriate when that kubeconfig was
+created with the customer-approved CA. Add `--cluster-ca
+<customer-api-ca.pem>` to every phase to override it with an explicit PEM
+bundle. The script never copies the administrative credential.
 
 Explain the exact four objects, cluster-wide read scope, Secret exposure, and
 write prohibition. Request a fresh `once` approval for
-**Gate 1: cluster RBAC approval**. Do not combine it with credential creation. After approval, apply
-only that directory with the explicit admin kubeconfig, then verify the
-ServiceAccount through impersonation:
+**Gate 1: cluster RBAC approval**. Do not combine it with credential creation.
+After approval, repeat the exact reviewed arguments with the `apply-rbac`
+command:
 
 ```text
-oc --kubeconfig <admin-kubeconfig> apply \
-  -f <skill-root>/.agents/skills/openshift-mcp/assets/read-all-rbac
-oc --kubeconfig <admin-kubeconfig> auth can-i get secrets --all-namespaces \
-  --as=system:serviceaccount:openshift-mcp:opencode-admin-readonly
-oc --kubeconfig <admin-kubeconfig> auth can-i create deployments.apps --all-namespaces \
-  --as=system:serviceaccount:openshift-mcp:opencode-admin-readonly
-oc --kubeconfig <admin-kubeconfig> auth can-i patch deployments.apps --all-namespaces \
-  --as=system:serviceaccount:openshift-mcp:opencode-admin-readonly
-oc --kubeconfig <admin-kubeconfig> auth can-i delete pods --all-namespaces \
-  --as=system:serviceaccount:openshift-mcp:opencode-admin-readonly
+<skill-dir>/scripts/bootstrap-read-all.sh apply-rbac \
+  --admin-kubeconfig <admin-kubeconfig> \
+  --expected-server <expected-api-url> \
+  --expected-admin-identity <expected-admin-identity> \
+  --output <new-read-kubeconfig>
 ```
 
-Require `yes`, `no`, `no`, and `no` in that order.
+The script applies only the bundled four objects and uses impersonation to
+require `yes` for namespace, Pod, and Secret reads and `no` for create, patch,
+and delete. It does not request a token in this phase.
 
 ## 4. Create the protected kubeconfig
 
@@ -130,18 +142,22 @@ ServiceAccount token, embeds the named CA, writes mode `0600`, and does not
 print the token. Request a fresh `once` approval for
 **Gate 2: credential creation approval**. Do not reuse Gate 1.
 
-After approval, run exactly:
+After approval, repeat the same reviewed arguments with the
+`create-kubeconfig` command:
 
 ```text
-<skill-root>/.agents/skills/openshift-mcp/scripts/new-read-all-kubeconfig.sh \
+<skill-dir>/scripts/bootstrap-read-all.sh create-kubeconfig \
   --admin-kubeconfig <admin-kubeconfig> \
-  --cluster-ca <customer-api-ca.pem> \
+  --expected-server <expected-api-url> \
+  --expected-admin-identity <expected-admin-identity> \
   --output <new-read-kubeconfig>
 ```
 
-Do not enable shell tracing. Do not capture, print, decode, or return the token.
-Use only the script's non-sensitive summary. Re-run the context, identity,
-server, TLS, and representative permission checks against the new kubeconfig.
+The script revalidates live RBAC before it delegates to the lower-level
+`new-read-all-kubeconfig.sh`. Do not enable shell tracing. Do not capture,
+print, decode, or return the token. Use only the script's non-sensitive
+summary. Re-run the context, identity, server, TLS, and representative
+permission checks against the new kubeconfig.
 
 ## 5. Preview the OpenCode configuration
 
@@ -152,13 +168,13 @@ array like this, replacing the package command and path placeholders. Prefer
 absolute non-secret paths here so no shell profile needs modification:
 
 ```json
-["npx","--no-install","<openshift-mcp-command>","--config","<skill-root>/.agents/skills/openshift-mcp/assets/openshift-mcp.readonly.toml","--kubeconfig","<absolute-read-kubeconfig>","--cluster-provider","disabled"]
+["npx","--no-install","<openshift-mcp-command>","--config","<skill-dir>/assets/openshift-mcp.readonly.toml","--kubeconfig","<absolute-read-kubeconfig>","--cluster-provider","disabled"]
 ```
 
 Run the Python 3.9 generator without `--apply`:
 
 ```text
-python3 <skill-root>/.agents/skills/openshift-mcp/scripts/generate-opencode-mcp-config.py \
+python3 <skill-dir>/scripts/generate-opencode-mcp-config.py \
   --config <opencode.json> \
   --profile openshift \
   --openshift-command-json '<reviewed-json-array>'

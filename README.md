@@ -157,43 +157,63 @@ oc --kubeconfig /secure/path/read-only.kubeconfig whoami --show-server
 
 The bundled `read-all-rbac` manifests grant only `get`, `list`, and `watch` on
 all API resources, plus `get` on non-resource URLs. They grant no create,
-update, patch, or delete verbs. Install them with an explicit admin kubeconfig:
+update, patch, or delete verbs. Use the deterministic Linux bootstrap with an
+explicit admin kubeconfig, expected identity, and expected API URL. The script
+never modifies the admin kubeconfig and never accepts a login token. Run
+`oc login` separately before this workflow.
 
 ```bash
 export OPENSHIFT_SKILL_DIR=/absolute/path/to/openshift-skill
+export OPENSHIFT_MCP_SKILL="$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp"
 
-oc --kubeconfig /secure/path/admin.kubeconfig whoami
-oc --kubeconfig /secure/path/admin.kubeconfig whoami --show-server
-oc --kubeconfig /secure/path/admin.kubeconfig apply \
-  -f "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/assets/read-all-rbac"
-```
-
-On the air-gapped Linux client, create a single-context kubeconfig with the
-customer's API CA embedded as `certificate-authority-data`:
-
-```bash
 chmod 700 \
-  "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/new-read-all-kubeconfig.sh" \
-  "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/update-read-all-token.sh"
+  "$OPENSHIFT_MCP_SKILL/scripts/bootstrap-read-all.sh" \
+  "$OPENSHIFT_MCP_SKILL/scripts/new-read-all-kubeconfig.sh" \
+  "$OPENSHIFT_MCP_SKILL/scripts/update-read-all-token.sh"
 
-"$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/new-read-all-kubeconfig.sh" \
+"$OPENSHIFT_MCP_SKILL/scripts/bootstrap-read-all.sh" preview \
   --admin-kubeconfig /secure/path/admin.kubeconfig \
-  --cluster-ca /secure/path/customer-api-ca.pem \
+  --expected-server https://api.example.test:6443 \
+  --expected-admin-identity customer-admin \
   --output /secure/path/read-all.kubeconfig
 ```
 
-The creation script validates the supplied CA against the actual API endpoint,
-refuses insecure TLS, embeds the exact CA file, sets mode `0600`, verifies the
-ServiceAccount identity, confirms Secret read access, and confirms that create
-and delete are denied. It never overwrites an existing target. A PEM bundle may
-contain the required root and intermediate CAs; for a truly self-signed API
-certificate, that certificate itself can be supplied.
+The preview performs `oc diff` and a server-side dry-run without persistent
+changes. After a separate RBAC approval, repeat the exact arguments with
+`apply-rbac`. After a separate credential approval, repeat them with
+`create-kubeconfig`:
+
+```bash
+"$OPENSHIFT_MCP_SKILL/scripts/bootstrap-read-all.sh" apply-rbac \
+  --admin-kubeconfig /secure/path/admin.kubeconfig \
+  --expected-server https://api.example.test:6443 \
+  --expected-admin-identity customer-admin \
+  --output /secure/path/read-all.kubeconfig
+
+"$OPENSHIFT_MCP_SKILL/scripts/bootstrap-read-all.sh" create-kubeconfig \
+  --admin-kubeconfig /secure/path/admin.kubeconfig \
+  --expected-server https://api.example.test:6443 \
+  --expected-admin-identity customer-admin \
+  --output /secure/path/read-all.kubeconfig
+```
+
+The bootstrap applies the Namespace, ServiceAccount, ClusterRole, and
+ClusterRoleBinding before requesting a TokenRequest credential. By default it
+copies the flattened CA field from the already authenticated admin kubeconfig.
+Use `--cluster-ca /secure/path/customer-api-ca.pem` in every phase to provide
+an explicit CA bundle instead. It validates the selected CA against the
+expected API endpoint, refuses insecure TLS, embeds that CA, sets mode `0600`,
+verifies the ServiceAccount
+identity, confirms cluster-wide reads including Secrets, and confirms that
+create, patch, and delete are denied. It never overwrites an existing target.
+A PEM bundle may contain the required root and intermediate CAs; for a truly
+self-signed API certificate, that certificate itself can be supplied.
 
 The default requested TokenRequest lifetime is `24h`; the API server can cap
 it. Refresh the token without replacing the embedded CA:
 
 ```bash
-"$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/update-read-all-token.sh" \
+"$OPENSHIFT_MCP_SKILL/scripts/update-read-all-token.sh" \
   --admin-kubeconfig /secure/path/admin.kubeconfig \
   --target /secure/path/read-all.kubeconfig
 ```
