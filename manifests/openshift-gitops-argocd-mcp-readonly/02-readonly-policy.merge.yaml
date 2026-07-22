@@ -1,0 +1,38 @@
+spec:
+  rbac:
+    policy: |
+      g, system:cluster-admins, role:admin
+      g, cluster-admins, role:admin
+
+      p, opencode-mcp, applications, get, *, allow
+      p, opencode-mcp, projects, get, *, allow
+      p, opencode-mcp, clusters, get, *, allow
+      p, opencode-mcp, logs, get, *, allow
+
+      p, opencode-mcp, applications, create, *, deny
+      p, opencode-mcp, applications, update, *, deny
+      p, opencode-mcp, applications, update/*, *, deny
+      p, opencode-mcp, applications, delete, *, deny
+      p, opencode-mcp, applications, delete/*, *, deny
+      p, opencode-mcp, applications, sync, *, deny
+      p, opencode-mcp, applications, override, *, deny
+      p, opencode-mcp, applications, action/*, *, deny
+      p, opencode-mcp, applicationsets, create, *, deny
+      p, opencode-mcp, applicationsets, update, *, deny
+      p, opencode-mcp, applicationsets, delete, *, deny
+      p, opencode-mcp, clusters, create, *, deny
+      p, opencode-mcp, clusters, update, *, deny
+      p, opencode-mcp, clusters, delete, *, deny
+      p, opencode-mcp, projects, create, *, deny
+      p, opencode-mcp, projects, update, *, deny
+      p, opencode-mcp, projects, delete, *, deny
+      p, opencode-mcp, repositories, create, *, deny
+      p, opencode-mcp, repositories, update, *, deny
+      p, opencode-mcp, repositories, delete, *, deny
+      p, opencode-mcp, certificates, create, *, deny
+      p, opencode-mcp, certificates, delete, *, deny
+      p, opencode-mcp, accounts, update, *, deny
+      p, opencode-mcp, gpgkeys, create, *, deny
+      p, opencode-mcp, gpgkeys, delete, *, deny
+      p, opencode-mcp, exec, create, *, deny
+      p, opencode-mcp, extensions, invoke, *, deny

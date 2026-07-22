@@ -172,6 +172,49 @@ class SkillBundleTest(unittest.TestCase):
         self.assertIn(["p", "opencode-mcp", "applications", "sync", "*", "deny"], denied)
         self.assertIn(["p", "opencode-mcp", "exec", "create", "*", "deny"], denied)
 
+    def test_simple_argocd_customer_patches_are_guarded_and_read_only(self) -> None:
+        directory = ROOT / "manifests" / "openshift-gitops-argocd-mcp-readonly"
+        account = (directory / "01-api-user.merge.yaml").read_text(encoding="utf-8")
+        policy_patch = (directory / "02-readonly-policy.merge.yaml").read_text(
+            encoding="utf-8"
+        )
+        instructions = (directory / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn("name: opencode-mcp", account)
+        self.assertIn("apiKey: true", account)
+        self.assertIn("login: false", account)
+        self.assertNotIn("apiToken", account)
+        self.assertIn("Do not run `oc apply -f .`", instructions)
+        self.assertIn("--dry-run=server", instructions)
+        self.assertIn("configure-argocd-mcp-opencode.mjs", instructions)
+
+        policy_lines = [
+            line.strip()
+            for line in policy_patch.splitlines()
+            if line.strip().startswith(("g,", "p,"))
+        ]
+        self.assertEqual(
+            policy_lines[:2],
+            [
+                "g, system:cluster-admins, role:admin",
+                "g, cluster-admins, role:admin",
+            ],
+        )
+        expected_rules = [
+            line.strip()
+            for line in (EXAMPLES / "argocd-readonly-rbac" / "policy.csv")
+            .read_text(encoding="utf-8")
+            .splitlines()
+            if line.strip()
+        ]
+        self.assertEqual(policy_lines[2:], expected_rules)
+        rules = [[part.strip() for part in line.split(",")] for line in policy_lines[2:]]
+        self.assertTrue(all(rule[3] == "get" for rule in rules if rule[5] == "allow"))
+
+        rollback = directory / "rollback"
+        self.assertTrue((rollback / "01-remove-api-user.merge.yaml").is_file())
+        self.assertTrue((rollback / "02-restore-default-policy.merge.yaml").is_file())
+
     def test_argocd_operator_bootstrap_is_dry_run_first_and_secret_scoped(self) -> None:
         script = (
             SKILLS_ROOT / "openshift-mcp" / "scripts" / "configure-argocd-mcp-opencode.mjs"
