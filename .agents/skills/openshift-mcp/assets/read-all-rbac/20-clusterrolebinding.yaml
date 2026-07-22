@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: opencode-admin-read-all
+  labels:
+    app.kubernetes.io/name: opencode-admin-readonly
+    app.kubernetes.io/part-of: openshift-mcp
+    app.kubernetes.io/managed-by: oc
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: opencode-admin-read-all
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: opencode-admin-readonly
+    namespace: openshift-mcp

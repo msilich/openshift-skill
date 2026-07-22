@@ -8,9 +8,12 @@ __pycache__/
 kubeconfig
 kubeconfig.*
 *.pem
+*.crt
+*.cer
 *.key
 *.p12
 *.pfx
+*.token
 
 # Local binaries and source checkouts
 kubernetes-mcp-server
