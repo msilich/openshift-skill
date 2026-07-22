@@ -24,6 +24,8 @@ provider example is included for local and air-gapped deployments.
 | Path | Purpose |
 | --- | --- |
 | `.agents/skills/openshift-mcp/` | MCP operation, safety, and configuration skill |
+| `.agents/skills/openshift-mcp/assets/read-all-rbac/` | Optional cluster-wide read-all/write-none RBAC, including Secrets |
+| `.agents/skills/openshift-mcp/scripts/` | CA-aware kubeconfig and token bootstrap scripts for Linux and Windows |
 | `.agents/skills/openshift-api/` | Live API/schema discovery skill and helper |
 | `.agents/skills/openshift-docs/` | Offline OCP 4.20 documentation skill |
 | `sources.lock.json` | Exact source and compatibility baselines |
@@ -132,6 +134,80 @@ oc --kubeconfig /secure/path/read-only.kubeconfig config current-context
 oc --kubeconfig /secure/path/read-only.kubeconfig whoami
 oc --kubeconfig /secure/path/read-only.kubeconfig whoami --show-server
 ```
+
+#### Optional cluster-wide read-all/write-none identity
+
+> [!CAUTION]
+> This optional profile can read every resource in every namespace, including
+> raw Secret values and resources from current or future CRDs. Treat its
+> kubeconfig, MCP process, model context, and OpenCode session data as
+> privileged. Use it only when this broad access is an explicit requirement.
+
+The bundled `read-all-rbac` manifests grant only `get`, `list`, and `watch` on
+all API resources, plus `get` on non-resource URLs. They grant no create,
+update, patch, or delete verbs. Install them with an explicit admin kubeconfig:
+
+```bash
+export OPENSHIFT_SKILL_DIR=/absolute/path/to/openshift-skill
+
+oc --kubeconfig /secure/path/admin.kubeconfig whoami
+oc --kubeconfig /secure/path/admin.kubeconfig whoami --show-server
+oc --kubeconfig /secure/path/admin.kubeconfig apply \
+  -f "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/assets/read-all-rbac"
+```
+
+On the air-gapped Linux client, create a single-context kubeconfig with the
+customer's API CA embedded as `certificate-authority-data`:
+
+```bash
+chmod 700 \
+  "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/new-read-all-kubeconfig.sh" \
+  "$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/update-read-all-token.sh"
+
+"$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/new-read-all-kubeconfig.sh" \
+  --admin-kubeconfig /secure/path/admin.kubeconfig \
+  --cluster-ca /secure/path/customer-api-ca.pem \
+  --output /secure/path/read-all.kubeconfig
+```
+
+The creation script validates the supplied CA against the actual API endpoint,
+refuses insecure TLS, embeds the exact CA file, sets mode `0600`, verifies the
+ServiceAccount identity, confirms Secret read access, and confirms that create
+and delete are denied. It never overwrites an existing target. A PEM bundle may
+contain the required root and intermediate CAs; for a truly self-signed API
+certificate, that certificate itself can be supplied.
+
+The default requested TokenRequest lifetime is `24h`; the API server can cap
+it. Refresh the token without replacing the embedded CA:
+
+```bash
+"$OPENSHIFT_SKILL_DIR/.agents/skills/openshift-mcp/scripts/update-read-all-token.sh" \
+  --admin-kubeconfig /secure/path/admin.kubeconfig \
+  --target /secure/path/read-all.kubeconfig
+```
+
+The updater verifies a protected temporary copy before atomically replacing the
+target. Restart OpenCode or its MCP child after refresh. Do not leave the admin
+kubeconfig on the MCP host unless the customer's security design explicitly
+requires and protects it.
+
+Equivalent PowerShell scripts are included for preparation or testing on
+Windows:
+
+```powershell
+& "$env:OPENSHIFT_SKILL_DIR\.agents\skills\openshift-mcp\scripts\New-ReadAllKubeconfig.ps1" `
+  -AdminKubeconfig C:\Secure\admin.kubeconfig `
+  -ClusterCAPath C:\Secure\customer-api-ca.pem `
+  -OutputKubeconfig C:\Secure\read-all.kubeconfig
+
+& "$env:OPENSHIFT_SKILL_DIR\.agents\skills\openshift-mcp\scripts\Update-ReadAllToken.ps1" `
+  -AdminKubeconfig C:\Secure\admin.kubeconfig `
+  -TargetKubeconfig C:\Secure\read-all.kubeconfig
+```
+
+Point `OPENSHIFT_MCP_READ_KUBECONFIG` at the resulting read-all kubeconfig when
+starting the existing read-only MCP/OpenCode profile. The MCP process remains
+read-only; the broader scope comes from cluster RBAC.
 
 ### 4. Configure OpenCode read-only mode
 

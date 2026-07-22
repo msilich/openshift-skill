@@ -73,3 +73,13 @@ The choice applies only to the current task unless the user explicitly sets it f
 - Read-only MCP: [openshift-mcp.readonly.toml](assets/openshift-mcp.readonly.toml)
 - Day-2 MCP: [openshift-mcp.day2.toml](assets/openshift-mcp.day2.toml)
 - Optional Secret block: [openshift-mcp.deny-secrets.toml](assets/openshift-mcp.deny-secrets.toml)
+- Optional cluster-wide read-all/write-none RBAC: [read-all-rbac](assets/read-all-rbac/)
+- Linux CA-aware kubeconfig bootstrap: [new-read-all-kubeconfig.sh](scripts/new-read-all-kubeconfig.sh)
+- Linux token refresh: [update-read-all-token.sh](scripts/update-read-all-token.sh)
+- Windows CA-aware kubeconfig bootstrap: [New-ReadAllKubeconfig.ps1](scripts/New-ReadAllKubeconfig.ps1)
+- Windows token refresh: [Update-ReadAllToken.ps1](scripts/Update-ReadAllToken.ps1)
+
+The optional read-all RBAC includes raw Secret access. Use it only when the user
+explicitly requires cluster-wide reads including Secrets, after loading
+`references/safety.md` and warning that values can enter model context and
+local session data. It does not grant create, update, patch, or delete verbs.

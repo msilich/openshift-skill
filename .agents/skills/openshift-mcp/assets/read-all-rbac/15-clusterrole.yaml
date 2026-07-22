@@ -1,0 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opencode-admin-read-all
+  labels:
+    app.kubernetes.io/name: opencode-admin-readonly
+    app.kubernetes.io/part-of: openshift-mcp
+    app.kubernetes.io/managed-by: oc
+rules:
+  - apiGroups:
+      - "*"
+    resources:
+      - "*"
+    verbs:
+      - get
+      - list
+      - watch
+  - nonResourceURLs:
+      - "*"
+    verbs:
+      - get
