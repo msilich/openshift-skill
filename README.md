@@ -133,6 +133,12 @@ Use a minified, single-context kubeconfig and keep it outside the repository
 with mode `0600`. Prefer a dedicated, least-privilege ServiceAccount for the
 read profile. Use a separate personal kubeconfig for Day-2 work.
 
+OpenCode can guide and execute steps 3 and 4 when invoked with
+`$openshift-mcp`. The skill loads
+[bootstrap-readonly.md](.agents/skills/openshift-mcp/references/bootstrap-readonly.md),
+previews every persistent delta, and pauses for separate approvals before
+cluster RBAC, credential creation, and the local OpenCode config write.
+
 Verify the exact target without printing tokens or full kubeconfig contents:
 
 ```bash

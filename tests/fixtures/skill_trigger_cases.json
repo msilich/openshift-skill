@@ -8,6 +8,14 @@
     "expected_skill": "openshift-mcp"
   },
   {
+    "prompt": "Richte in diesem DevSpace einen CA-geprueften read-only OpenShift MCP Zugang fuer OpenCode ein.",
+    "expected_skill": "openshift-mcp"
+  },
+  {
+    "prompt": "Configure an existing OpenShift read-only kubeconfig as ocp_read in OpenCode.",
+    "expected_skill": "openshift-mcp"
+  },
+  {
     "prompt": "Welche Felder unter Route.spec.tls stellt dieser Cluster bereit?",
     "expected_skill": "openshift-api"
   },
