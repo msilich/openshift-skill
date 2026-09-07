@@ -23,9 +23,27 @@ and the referenced `SOURCE.json` file.
 - Bundled converter: `tools/docs/convert.py`
 - Bundled license: `tools/docs/LICENSE.agentic-skills`
 - Local modification: derive the product version from an explicit
-  `enterprise-X.Y` branch when the distro map is stale; reject missing or
+  `enterprise-X.Y` or `gitops-docs-X.Y` branch when the distro map is stale; reject missing or
   conflicting versions instead of falling back to 4.17. The original and
   modified converter checksums are recorded in `tools/docs/build.lock.json`.
+
+## Additional GitOps documentation and adapted workflows
+
+- GitOps 1.21 documentation: `openshift/openshift-docs`, branch `gitops-docs-1.21`,
+  commit `ca5db8539a097b38e2975980963e0959782d105f`, Apache-2.0. The full topic map is
+  converted to Markdown in the documentation skill's `references/gitops-1.21/`.
+  Local changes include format notices, product-specific navigation titles and
+  offline cross-references. License and exact build metadata accompany the snapshot.
+- Workflow adaptations: `openshift/agentic-skills`, commit
+  `7aca4bee317cd70a4204795db6b1d7b9eb78f48c`, Apache-2.0; source paths
+  `cluster-troubleshoot/investigate-alert/SKILL.md` and
+  `cluster-update/cluster-update-advisor/SKILL.md`. The local troubleshooting and
+  upgrade skills adapt causal investigation and readiness assessment. They replace
+  the upstream execution environment with MCP-first, offline, user-approved access.
+  No upstream diagnostic/token scripts are redistributed. The Apache-2.0 license
+  text is retained in `tools/docs/LICENSE.agentic-skills`.
+- Each domain skill's source map identifies the documentation used. These skills
+  and their MCP mappings are project-authored adaptations, not vendor certification.
 
 ## Referenced but not redistributed
 

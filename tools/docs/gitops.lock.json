@@ -1,0 +1,41 @@
+{
+  "format_version": 1,
+  "sources": {
+    "agentic_skills_converter": {
+      "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.agentic-skills",
+      "path": "documentation/openshift-docs/convert.py",
+      "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "sha256": "498468d67bbb9c0e05c8b0df77b807a1d56277bf0ed54801150ab21c2a32efd8",
+      "modifications": [
+        "Resolve product versions from explicit enterprise-X.Y and gitops-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions."
+      ],
+      "url": "https://github.com/openshift/agentic-skills"
+    },
+    "openshift_docs": {
+      "branch_hint": "gitops-docs-1.21",
+      "commit": "ca5db8539a097b38e2975980963e0959782d105f",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.openshift-docs",
+      "url": "https://github.com/openshift/openshift-docs"
+    }
+  },
+  "dependencies": {
+    "asciidoctor": "2.0.23",
+    "pandoc": "3.7.0.2",
+    "python_minimum": "3.12",
+    "pyyaml": "6.0.3"
+  },
+  "expected_output": {
+    "converted_topics": 56,
+    "markdown_files": 58,
+    "markdown_manifest_sha256": "37c8c3d0bcc9fad75c666c71a73f67f10080e16e2aebef744b29137aa1be5b6e"
+  },
+  "document": {
+    "product": "Red Hat OpenShift GitOps",
+    "version": "1.21",
+    "distro": "openshift-gitops",
+    "branch": "gitops-docs-1.21"
+  }
+}

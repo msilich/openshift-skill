@@ -1,6 +1,6 @@
 # OpenShift Agent Skills for OpenCode
 
-Three portable, English-language agent skills for operating and researching
+Eight portable, English-language agent skills for operating and researching
 OpenShift with [OpenCode](https://opencode.ai/):
 
 - `openshift-mcp` — MCP-first diagnosis and controlled Day-2 operations with
@@ -8,7 +8,12 @@ OpenShift with [OpenCode](https://opencode.ai/):
 - `openshift-api` — live API discovery with `oc api-resources`, `oc explain`,
   OpenAPI v3, and CRD schemas.
 - `openshift-docs` — a complete, searchable, offline OpenShift Container
-  Platform 4.22 documentation snapshot.
+  Platform 4.22 and OpenShift GitOps 1.21 documentation snapshot.
+- `openshift-troubleshooting` — evidence-led workload, service, storage, node and Operator diagnosis.
+- `openshift-disconnected` — oc-mirror v2, internal registries, transfer workflows and image-pull diagnosis.
+- `openshift-gitops` — Application/ApplicationSet reconciliation, access, trust and reviewed configuration changes.
+- `openshift-upgrade` — update readiness, supported paths, disruption constraints and completion checks.
+- `openshift-backup-restore` — OADP coverage and documented application/control-plane recovery.
 
 The skills are model-provider independent. An optional OpenAI-compatible Qwen
 provider example is included for local and air-gapped deployments.
@@ -31,7 +36,8 @@ The `main` branch retains the 4.20 snapshot.
 | `.agents/skills/openshift-mcp/assets/argocd-readonly-rbac/` | Optional additive Argo CD account and read-only RBAC patches |
 | `.agents/skills/openshift-mcp/scripts/` | CA-aware OpenShift and Argo CD/OpenCode bootstrap scripts |
 | `.agents/skills/openshift-api/` | Live API/schema discovery skill and helper |
-| `.agents/skills/openshift-docs/` | Offline OCP 4.22 documentation skill |
+| `.agents/skills/openshift-docs/` | Offline OCP 4.22 and GitOps 1.21 documentation skill |
+| `.agents/skills/openshift-{troubleshooting,disconnected,gitops,upgrade,backup-restore}/` | Documentation-based operational workflows |
 | `manifests/openshift-gitops-argocd-mcp-readonly/` | Simple reviewed merge-patch YAMLs for an unchanged default OpenShift GitOps instance |
 | `sources.lock.json` | Exact source and compatibility baselines |
 | `tools/docs/` | Reproducible documentation conversion inputs |
@@ -69,6 +75,9 @@ cd openshift-skill
 OpenCode discovers `.agents/skills/*/SKILL.md` when it is started in this
 repository. Keeping the full checkout is recommended because it preserves the
 offline documentation, tests, and configuration templates.
+
+Install all eight complete skill directories as siblings. Domain skills depend
+on the shared MCP, API and documentation skills and their relative paths.
 
 For a global installation, copy each complete skill directory—not only its
 `SKILL.md`—to an OpenCode global skill location such as
@@ -318,6 +327,11 @@ Expected skills:
 openshift-api
 openshift-docs
 openshift-mcp
+openshift-troubleshooting
+openshift-disconnected
+openshift-gitops
+openshift-upgrade
+openshift-backup-restore
 ```
 
 Safe first prompts:
@@ -327,6 +341,21 @@ Use $openshift-docs to find the OCP 4.22 documentation for Routes.
 Use $openshift-api to verify the fields of route.spec.tls from the live cluster.
 Use $openshift-mcp to confirm the current cluster identity and list namespaces. Read-only only.
 ```
+
+Domain examples (diagnosis alone never authorizes a repair):
+
+```text
+Use $openshift-troubleshooting to diagnose Pending pods in namespace payments.
+Use $openshift-disconnected to investigate an ImagePullBackOff against our internal mirror.
+Use $openshift-gitops to explain why Application shop is OutOfSync after a successful sync.
+Use $openshift-upgrade to assess readiness for the target release, including PDBs and mirror content.
+Use $openshift-backup-restore to check whether backup orders includes its persistent data.
+```
+
+The read-only profile adds only the non-mutating `oc adm upgrade` report and
+`oc-mirror --help`. The Day-2 profile also asks for each `oc-mirror --v2 ...`
+invocation. Mirror import is a write and must target the explicitly selected
+internal registry. Argo CD MCP remains read-only in every supplied profile.
 
 ### Optional: Argo CD MCP in read-only mode
 
@@ -610,6 +639,29 @@ python3 tools/docs/build.py \
 The build checks the source revision, converter checksum, topic count, and
 complete Markdown content manifest against `tools/docs/build.lock.json`.
 
+## Offline GitOps documentation and procedure sources
+
+Both OCP branches additionally bundle all 56 GitOps 1.21 topics (58 Markdown files)
+from `openshift/openshift-docs` at `ca5db8539a097b38e2975980963e0959782d105f`.
+GitOps 1.21 is a separate product baseline, not inferred from the OCP version.
+Use `search_docs.py "repo server" --product gitops`; the default search remains OCP.
+The product's `SOURCE.json`, licenses and navigation files are under the
+documentation skill's `references/gitops-1.21/` directory.
+
+Rebuild with the same pinned build dependencies and a clean checkout of that commit:
+
+```bash
+python3 tools/docs/build.py --lock tools/docs/gitops.lock.json \
+  --source-dir /path/to/gitops-docs \
+  --output-dir .agents/skills/openshift-docs/references/gitops-1.21
+```
+
+Each domain skill's `references/sources.md` maps its procedures to local chapters,
+sections and source revisions. Diagnostic/readiness reasoning also adapts two
+`openshift/agentic-skills` workflows at `7aca4bee317cd70a4204795db6b1d7b9eb78f48c`.
+MCP mappings and OpenCode permission handling are project adaptations. No upstream
+token helpers, online lifecycle/Jira calls or automatic privilege escalation are imported.
+
 When the bundled documentation and a connected cluster disagree about an API,
 the API actually served by the cluster is authoritative.
 
@@ -634,6 +686,10 @@ python3 -m unittest discover -s tests -v
 ```
 
 The tests use a fake kubeconfig endpoint and do not modify a live cluster.
+
+See [domain skill evaluation](tests/DOMAIN_EVALUATION.md) for fake MCP/oc scenarios
+and optional actual OpenCode/model evaluation. Fixture and integrity checks do
+not establish that a model follows the skills. Report missing runtime tests explicitly.
 
 ## Sources and licensing
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Search the bundled OCP 4.22 Markdown snapshot without external tools."""
+"""Search a bundled OpenShift product snapshot without external tools."""
 
 from __future__ import annotations
 
@@ -10,13 +10,15 @@ from pathlib import Path
 
 
 DOCS_ROOT = Path(__file__).resolve().parent.parent / "references" / "ocp-4.22"
+GITOPS_ROOT = Path(__file__).resolve().parent.parent / "references" / "gitops-1.21"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Search bundled OpenShift Container Platform 4.22 Markdown files."
+        description="Search bundled OpenShift Markdown files (OCP by default)."
     )
     parser.add_argument("query", help="Literal text to find, or a regular expression with --regex")
+    parser.add_argument("--product", choices=("ocp", "gitops"), default="ocp", help="Select the local product snapshot")
     parser.add_argument(
         "--regex",
         action="store_true",
@@ -43,11 +45,12 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    docs_root = DOCS_ROOT if args.product == "ocp" else GITOPS_ROOT
     if args.max_results < 1:
         print("error: --max-results must be at least 1", file=sys.stderr)
         return 2
-    if not DOCS_ROOT.is_dir():
-        print(f"error: documentation directory not found: {DOCS_ROOT}", file=sys.stderr)
+    if not docs_root.is_dir():
+        print(f"error: documentation directory not found: {docs_root}", file=sys.stderr)
         return 2
 
     flags = 0 if args.case_sensitive else re.IGNORECASE
@@ -60,8 +63,8 @@ def main() -> int:
 
     path_filter = args.path if args.case_sensitive else args.path.casefold()
     matches = 0
-    for document in sorted(DOCS_ROOT.rglob("*.md")):
-        relative = document.relative_to(DOCS_ROOT).as_posix()
+    for document in sorted(docs_root.rglob("*.md")):
+        relative = document.relative_to(docs_root).as_posix()
         comparable_path = relative if args.case_sensitive else relative.casefold()
         if path_filter and path_filter not in comparable_path:
             continue

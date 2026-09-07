@@ -7,9 +7,9 @@
       "license_file": "LICENSE.agentic-skills",
       "path": "documentation/openshift-docs/convert.py",
       "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
-      "sha256": "8cade26df02b28923235698b5932adcdf16ff9dd1a9b72c525e574a664bd4060",
+      "sha256": "498468d67bbb9c0e05c8b0df77b807a1d56277bf0ed54801150ab21c2a32efd8",
       "modifications": [
-        "Resolve the product version from explicit enterprise-X.Y branches when the distro map is stale; reject missing or conflicting versions."
+        "Resolve product versions from explicit enterprise-X.Y and gitops-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions."
       ],
       "url": "https://github.com/openshift/agentic-skills"
     },
@@ -31,5 +31,11 @@
     "converted_topics": 1797,
     "markdown_files": 1799,
     "markdown_manifest_sha256": "763189217746ca7d24d66abe304dbb7d77cbcc23aa276ff88c52b5b5b18a7b0b"
+  },
+  "document": {
+    "product": "OpenShift Container Platform",
+    "version": "4.22",
+    "distro": "openshift-enterprise",
+    "branch": "enterprise-4.22"
   }
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild the pinned, Markdown-only OpenShift 4.22 documentation snapshot."""
+"""Rebuild a pinned, Markdown-only OpenShift product documentation snapshot."""
 
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
+from convert import get_distro_attributes, parse_distro_map
 
 
 TOOLS_DIR = Path(__file__).resolve().parent
@@ -114,7 +115,20 @@ def verify_converter(lock: dict[str, object]) -> None:
         raise RuntimeError(f"converter checksum mismatch: expected {expected}; found {actual}")
 
 
-def post_process(output_dir: Path) -> None:
+def document_definition(lock: dict) -> dict:
+    document = lock.get("document", {})
+    for field in ("product", "version", "distro", "branch"):
+        if not isinstance(document.get(field), str) or not document[field].strip():
+            raise RuntimeError(f"lock document.{field} is required")
+    if not re.fullmatch(r"\d+\.\d+", document["version"]):
+        raise RuntimeError("lock document.version must be an explicit major.minor version")
+    if document["branch"] != lock["sources"]["openshift_docs"]["branch_hint"]:
+        raise RuntimeError("document branch and source branch_hint disagree")
+    return document
+
+
+def post_process(output_dir: Path, product: str = "OpenShift Container Platform") -> None:
+    output_dir = output_dir.resolve()
     for html_file in (output_dir / "index.html", output_dir / "viewer.html"):
         html_file.unlink(missing_ok=True)
 
@@ -129,6 +143,13 @@ def post_process(output_dir: Path) -> None:
         index_path.write_text(index_text.replace(old, new, 1), encoding="utf-8")
     elif new not in index_text:
         raise RuntimeError("expected generated update marker is missing from index.md")
+
+    if product != "OpenShift Container Platform":
+        for navigation in (index_path, output_dir / "AGENTS.md"):
+            content = navigation.read_text(encoding="utf-8")
+            navigation.write_text(content.replace(
+                "# OpenShift Container Platform Documentation", f"# {product} Documentation", 1
+            ), encoding="utf-8")
 
     for document in sorted(output_dir.rglob("*.md")):
         content = document.read_text(encoding="utf-8")
@@ -167,6 +188,21 @@ def post_process(output_dir: Path) -> None:
             document.write_text(rewritten, encoding="utf-8")
 
 
+def verify_local_links(root: Path) -> int:
+    root = root.resolve()
+    checked = 0
+    for document in root.rglob("*.md"):
+        for target in re.findall(r"\[[^]]*\]\(([^)]+)\)", document.read_text(encoding="utf-8")):
+            path = target.split("#", 1)[0]
+            if not path or "://" in path or not path.endswith(".md"):
+                continue
+            resolved = (document.parent / path).resolve()
+            if not resolved.is_relative_to(root) or not resolved.is_file():
+                raise RuntimeError(f"broken or escaping local link: {document.relative_to(root)} -> {target}")
+            checked += 1
+    return checked
+
+
 def write_source_metadata(
     output_dir: Path,
     lock: dict[str, object],
@@ -178,33 +214,35 @@ def write_source_metadata(
 ) -> None:
     source_time = datetime.fromisoformat(source_commit_time).astimezone(timezone.utc)
     sources = lock["sources"]
+    definition = document_definition(lock)
     metadata = {
         "schema_version": 1,
         "artifact": {
-            "product": "OpenShift Container Platform",
-            "version": "4.22",
+            "product": definition["product"],
+            "version": definition["version"],
             "format": "GitHub-Flavored Markdown",
-            "scope": "Complete openshift-enterprise topic map at the pinned revision",
+            "scope": f"Complete {definition['distro']} topic map at the pinned revision",
             "markdown_files": markdown_files,
             "converted_topics": topics,
         },
         "sources": sources,
         "conversion": {
             "arguments": {
-                "distro": "openshift-enterprise",
-                "branch": "enterprise-4.22",
-                "product-version": "4.22",
+                "distro": definition["distro"],
+                "branch": definition["branch"],
+                "product-version": definition["version"],
                 "topics": "all",
             },
             "successful_topics": topics,
             "failed_topics": 0,
             "modifications": [
-                "Resolved product-version=4.22 from the explicit enterprise-4.22 branch because the source distro map is stale.",
+                f"Resolved product-version={definition['version']} from the explicit {definition['branch']} branch because the source distro map is stale.",
                 "Converted the source AsciiDoc files to GitHub-Flavored Markdown.",
                 "Removed the generated HTML index and CDN-dependent viewer.",
                 "Replaced the rolling weekly-update statement with pinned-snapshot provenance.",
                 "Added a format-modification notice to every Markdown file.",
                 "Rewrote DocBook .xml cross-references to bundled Markdown targets.",
+                "Verified local Markdown links; set navigation titles to the selected product.",
             ],
             "build_tools": tool_versions,
         },
@@ -229,7 +267,7 @@ def write_source_metadata(
     )
 
 
-def replace_output(staged: Path, output_dir: Path) -> None:
+def replace_output(staged: Path, output_dir: Path, definition: dict) -> None:
     if output_dir.exists():
         marker = output_dir / "SOURCE.json"
         if not marker.is_file():
@@ -237,14 +275,15 @@ def replace_output(staged: Path, output_dir: Path) -> None:
                 f"refusing to replace unrecognized output directory without SOURCE.json: {output_dir}"
             )
         existing = json.loads(marker.read_text(encoding="utf-8"))
-        if existing.get("artifact", {}).get("version") != "4.22":
-            raise RuntimeError(f"refusing to replace non-OCP-4.22 output: {output_dir}")
+        if any(existing.get("artifact", {}).get(key) != definition[key] for key in ("product", "version")):
+            raise RuntimeError(f"refusing to replace a different product/version: {output_dir}")
         shutil.rmtree(output_dir)
     os.replace(staged, output_dir)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--lock", type=Path, default=LOCK_PATH, help="Build definition (default: OCP build.lock.json)")
     parser.add_argument("--source-dir", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--workers", type=int, default=4)
@@ -260,14 +299,18 @@ def main() -> int:
     if output_dir == Path("/") or output_dir == Path.home() or output_dir == source_dir:
         raise RuntimeError(f"unsafe output directory: {output_dir}")
 
-    lock = json.loads(LOCK_PATH.read_text(encoding="utf-8"))
+    lock = json.loads(args.lock.read_text(encoding="utf-8"))
+    definition = document_definition(lock)
     source_commit_time = verify_source(source_dir, lock)
     verify_converter(lock)
     tool_versions = verify_tool_versions(lock)
+    attributes = get_distro_attributes(parse_distro_map(str(source_dir)), definition["distro"], definition["branch"])
+    if attributes["product-version"] != definition["version"] or attributes["product-title"] != definition["product"]:
+        raise RuntimeError("source product/version attributes disagree with the build definition")
 
     output_dir.parent.mkdir(parents=True, exist_ok=True)
-    staging_root = Path(tempfile.mkdtemp(prefix="ocp-4.22-build-", dir=output_dir.parent))
-    staged_output = staging_root / "ocp-4.22"
+    staging_root = Path(tempfile.mkdtemp(prefix="docs-build-", dir=output_dir.parent))
+    staged_output = staging_root / "snapshot"
     try:
         process = run(
             [
@@ -278,9 +321,9 @@ def main() -> int:
                 "--output-dir",
                 str(staged_output),
                 "--distro",
-                "openshift-enterprise",
+                definition["distro"],
                 "--branch",
-                "enterprise-4.22",
+                definition["branch"],
                 "--workers",
                 str(args.workers),
             ],
@@ -300,7 +343,8 @@ def main() -> int:
                 f"{failed_topics} failed; expected {expected_topics} succeeded"
             )
 
-        post_process(staged_output)
+        post_process(staged_output, definition["product"])
+        print(f"Verified {verify_local_links(staged_output)} local Markdown links")
         shutil.copy2(source_dir / "LICENSE", staged_output / "LICENSE.openshift-docs")
         shutil.copy2(CONVERTER_LICENSE_PATH, staged_output / "LICENSE.agentic-skills")
         markdown_files, manifest_sha256 = markdown_manifest(staged_output)
@@ -326,11 +370,11 @@ def main() -> int:
             markdown_files,
             manifest_sha256,
         )
-        replace_output(staged_output, output_dir)
+        replace_output(staged_output, output_dir, definition)
     finally:
         shutil.rmtree(staging_root, ignore_errors=True)
 
-    print(f"Pinned OCP 4.22 documentation written to {output_dir}")
+    print(f"Pinned {definition['product']} {definition['version']} documentation written to {output_dir}")
     return 0
 
 

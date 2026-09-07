@@ -1,9 +1,19 @@
 ---
 name: openshift-mcp
-description: Configure, operate, and troubleshoot OpenShift through openshift/openshift-mcp-server with MCP-first execution and controlled oc fallback. Use for read-only OpenCode or DevSpaces bootstrap, CA-aware kubeconfig creation, MCP configuration, cluster inspection, incident diagnosis, workload or administrative Day-2 changes, target-context and RBAC verification, rollout or recovery work where namespaces, secrets, credentials, or destructive actions must be handled safely.
+description: Configure OpenShift MCP access for OpenCode or DevSpaces and execute scoped cluster reads or approved Day-2 changes with controlled oc fallback. Use for connection setup, CA-aware kubeconfigs, identity checks and generic operations. Specialized incident, mirror, GitOps, update and backup tasks use their domain skill with this execution contract.
 ---
 
 # OpenShift MCP operations
+
+## Domain routing
+
+Use [openshift-troubleshooting](../openshift-troubleshooting/SKILL.md) for live failures,
+[openshift-disconnected](../openshift-disconnected/SKILL.md) for mirrors,
+[openshift-gitops](../openshift-gitops/SKILL.md) for reconciliation,
+[openshift-upgrade](../openshift-upgrade/SKILL.md) for cluster updates, and
+[openshift-backup-restore](../openshift-backup-restore/SKILL.md) for data protection.
+Those skills load [the shared domain contract](references/domain-contract.md)
+and this skill for execution. Keep connection/bootstrap tasks here.
 
 ## Operating contract
 
@@ -98,7 +108,7 @@ The choice applies only to the current task unless the user explicitly sets it f
 - Python 3.9 OpenCode MCP configuration generator: [generate-opencode-mcp-config.py](scripts/generate-opencode-mcp-config.py)
 - Cross-platform OpenShift GitOps and OpenCode bootstrap: [configure-argocd-mcp-opencode.mjs](scripts/configure-argocd-mcp-opencode.mjs)
 - Argo CD read-only policy and unmanaged-install merge patches: [argocd-readonly-rbac](assets/argocd-readonly-rbac/)
-- Simple default OpenShift GitOps customer YAMLs: [manifests/openshift-gitops-argocd-mcp-readonly](../../../manifests/openshift-gitops-argocd-mcp-readonly/)
+- Optional default-instance YAMLs are available under `manifests/openshift-gitops-argocd-mcp-readonly/` in the full repository. A standalone skill installation does not require them; use the bundled [Operator-aware bootstrap](scripts/configure-argocd-mcp-opencode.mjs) and its preconditions instead.
 
 The optional read-all RBAC includes raw Secret access. Use it only when the user
 explicitly requires cluster-wide reads including Secrets, after loading
