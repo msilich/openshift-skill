@@ -11,7 +11,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 NAMES = (
     "openshift-api", "openshift-docs", "openshift-mcp", "openshift-troubleshooting",
-    "openshift-disconnected", "openshift-gitops", "openshift-upgrade", "openshift-backup-restore",
+    "openshift-disconnected", "openshift-gitops", "openshift-upgrade", "openshift-backup-restore", "openshift-devspaces",
 )
 
 
@@ -85,7 +85,7 @@ class SkillInstallerTest(unittest.TestCase):
         self.assertEqual((backups[0] / "openshift-docs/custom.md").read_text(), "local change")
         self.assertFalse((old / "custom.md").exists())
         self.assertTrue(unrelated.is_dir())
-        self.assertEqual(len(list(backups[0].iterdir())), 8)
+        self.assertEqual(len(list(backups[0].iterdir())), len(NAMES))
 
     def test_sudo_is_rejected(self):
         result = self.run_installer(env={**self.env, "SUDO_USER": "somebody"})

@@ -13,7 +13,7 @@ usage() {
     '--replace          Replace existing named skills, retaining a full backup.' \
     '--target-dir PATH  Override the destination with an absolute skill-directory path.' \
     '' \
-    'Copies all eight skills and offline docs from this checkout. No downloads,' \
+    'Copies all nine skills and offline docs from this checkout. No downloads,' \
     'OpenCode configuration changes, MCP setup, login, or cluster operations.'
 }
 fail() { printf 'Error: %s\n' "$*" >&2; exit 1; }
@@ -69,7 +69,7 @@ case "$target_dir/" in "$source_dir/"*) fail 'Target overlaps the source skills.
 case "$source_dir/" in "$target_dir/"*) fail 'Target is an ancestor of the source skills.' ;; esac
 
 skills=(openshift-api openshift-docs openshift-mcp openshift-troubleshooting
-        openshift-disconnected openshift-gitops openshift-upgrade openshift-backup-restore)
+        openshift-disconnected openshift-gitops openshift-upgrade openshift-backup-restore openshift-devspaces)
 printf 'Source: %s\nTarget: %s\n' "$source_dir" "$target_dir"
 for skill in "${skills[@]}"; do
   [[ -f $source_dir/$skill/SKILL.md && ! -L $source_dir/$skill ]] ||
@@ -143,7 +143,7 @@ if ((${#backed_up[@]})); then
 else
   rmdir "$stage_dir/previous" "$stage_dir"
 fi
-printf '\nInstalled all eight skills in: %s\n' "$target_dir"
+printf '\nInstalled all nine skills in: %s\n' "$target_dir"
 printf '%s\n' \
   'Restart OpenCode. Test from a directory outside this repository to avoid duplicate skill names.' \
   'Existing model, MCP, kubeconfig and permission settings were not changed.' \

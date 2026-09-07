@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "document": {
+    "product": "Red Hat OpenShift Dev Spaces",
+    "version": "3.29",
+    "base_url": "https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29/",
+    "toc_url": "https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29/install-con_installation_overview",
+    "legal_url": "https://docs.redhat.com/en/legal-notice",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/legalcode.en",
+    "license": "CC-BY-SA-3.0"
+  },
+  "dependencies": {
+    "python_minimum": "3.9",
+    "beautifulsoup4": "4.13.4",
+    "soupsieve": "2.7",
+    "typing_extensions": "4.14.1",
+    "pandoc": "3.7.0.2"
+  },
+  "archive": "snapshots/devspaces-3.29.zip",
+  "archive_sha256": "995e09d2a2796f05c9285d54c79be3bc373552efb2536468f3df2dcb3d2621a2",
+  "expected_output": {
+    "topics": 302,
+    "content_manifest_sha256": "1177aa97b5cd575689ec644df2f20ed7d2bba4d0b05e1478c89af5859de66d7f"
+  }
+}

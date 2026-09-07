@@ -1,4 +1,4 @@
 interface:
-  display_name: "OpenShift 4.22 and GitOps Documentation"
-  short_description: "Search offline OCP 4.22 and GitOps 1.21 docs"
-  default_prompt: "Use $openshift-docs to answer this question from the matching local OCP 4.22 or GitOps 1.21 documentation."
+  display_name: "OpenShift Product Documentation"
+  short_description: "Search offline OCP, GitOps and Dev Spaces docs"
+  default_prompt: "Use $openshift-docs to answer this question from the matching local OCP 4.22, GitOps 1.21 or Dev Spaces 3.29 documentation."

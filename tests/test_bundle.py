@@ -16,7 +16,7 @@ SKILLS_ROOT = ROOT / ".agents" / "skills"
 SKILL_NAMES = (
     "openshift-mcp", "openshift-api", "openshift-docs",
     "openshift-troubleshooting", "openshift-disconnected", "openshift-gitops",
-    "openshift-upgrade", "openshift-backup-restore",
+    "openshift-upgrade", "openshift-backup-restore", "openshift-devspaces",
 )
 EXAMPLES = SKILLS_ROOT / "openshift-mcp" / "assets"
 

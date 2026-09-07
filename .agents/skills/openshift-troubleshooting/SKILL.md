@@ -14,7 +14,7 @@ Find the cause of the reported failure and verify any requested repair against t
 3. Use [workloads.md](references/workloads.md) for pod startup, scheduling and service reachability. Use [infrastructure.md](references/infrastructure.md) for storage, nodes, Operators and alert correlation.
 4. Use [openshift-api](../openshift-api/SKILL.md) to verify schemas and [openshift-mcp](../openshift-mcp/SKILL.md) to perform permitted operations.
 
-This skill depends on the other seven skills being installed as sibling directories.
+This skill depends on the other eight skills being installed as sibling directories.
 Resolve every path from this file. Missing documentation, a version mismatch, a
 denied access or an unknown schema must remain explicit; do not silently proceed
 with a substitute. Pure document lookup belongs to [openshift-docs](../openshift-docs/SKILL.md).

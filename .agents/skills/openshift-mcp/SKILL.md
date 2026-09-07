@@ -11,7 +11,8 @@ Use [openshift-troubleshooting](../openshift-troubleshooting/SKILL.md) for live 
 [openshift-disconnected](../openshift-disconnected/SKILL.md) for mirrors,
 [openshift-gitops](../openshift-gitops/SKILL.md) for reconciliation,
 [openshift-upgrade](../openshift-upgrade/SKILL.md) for cluster updates, and
-[openshift-backup-restore](../openshift-backup-restore/SKILL.md) for data protection.
+[openshift-backup-restore](../openshift-backup-restore/SKILL.md) for data protection,
+and [openshift-devspaces](../openshift-devspaces/SKILL.md) for Dev Spaces platform and workspace operations.
 Those skills load [the shared domain contract](references/domain-contract.md)
 and this skill for execution. Keep connection/bootstrap tasks here.
 

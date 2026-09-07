@@ -1,0 +1,4 @@
+# Connected preparation/build only; not required to use the installed skills.
+beautifulsoup4==4.13.4
+soupsieve==2.7
+typing_extensions==4.14.1

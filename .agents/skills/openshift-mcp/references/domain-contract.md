@@ -1,8 +1,8 @@
 # Contract for documentation-based workflows
 
 This is project-authored OpenCode/MCP integration guidance, not a Red Hat procedure.
-The five domain skills depend on the sibling `openshift-mcp`, `openshift-api`, and
-`openshift-docs` directories. Install all eight complete directories together.
+The six domain skills depend on the sibling `openshift-mcp`, `openshift-api`, and
+`openshift-docs` directories. Install all nine complete directories together.
 
 ## Establish evidence
 
@@ -13,7 +13,7 @@ The five domain skills depend on the sibling `openshift-mcp`, `openshift-api`, a
 2. Read [the MCP contract](../SKILL.md) before cluster access. Establish the explicit
    cluster, kubeconfig, identity and namespace. For GitOps also establish the Argo CD
    instance and destination cluster; its API server is not necessarily that cluster.
-3. Compare observed OCP, GitOps, OADP and CLI versions with the selected source.
+3. Compare observed OCP, GitOps, Dev Spaces, Dev Workspace Operator, OADP and CLI versions with the selected source.
    An API may exist without the combination being supported. Continue only generic
    read-only investigation across a version mismatch; mark version-specific advice
    unverified until matching local evidence is supplied.

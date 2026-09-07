@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift Dev Spaces"
+  short_description: "Operate Dev Spaces with offline docs and MCP"
+  default_prompt: "Use $openshift-devspaces to investigate this platform or workspace using local documentation and permitted MCP tools."
