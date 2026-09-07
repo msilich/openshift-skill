@@ -1,0 +1,826 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To install a customized OpenShift Container Platform cluster on IBM PowerVC, change the parameters in the `install-config.yaml` file before you run the installation program.
+
+# Prerequisites for installing a cluster on IBM® Power® Virtualization Center
+
+Before you install a OpenShift Container Platform cluster on IBM PowerVC, verify that you have a load balancer and a DHCP server available on the target network.
+
+- You reviewed details about the OpenShift Container Platform installation and update processes.
+
+- You read the documentation on selecting a cluster installation method and preparing it for users.
+
+- You have a load balancing service you can use with the IBM PowerVC network you intend to use.
+
+- You have a DHCP server backing the IBM PowerVC network you intend to use.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [OpenShift Container Platform installation and update](../../architecture/architecture-installation.md#architecture-installation)
+
+- [Selecting a cluster installation method and preparing it for users](../overview/installing-preparing.md#installing-preparing)
+
+</div>
+
+# Infrastructure requirements for installing OpenShift Container Platform on IBM PowerVC
+
+To support an OpenShift Container Platform installation by using the installation program, you need to prepare your IBM PowerVC environment.
+
+## IBM PowerVC account privilege requirements
+
+When installing OpenShift Container Platform on IBM PowerVC by using the installation program, you must use an administrative account to ensure that you have all required permissions.
+
+## IBM PowerVC image requirements
+
+You must import a Red Hat Enterprise Linux CoreOS (RHCOS) image. This can be found by using the installation program.
+
+``` terminal
+$ openshift-install coreos print-stream-json | jq -r '.architectures.ppc64le.artifacts.openstack' | jq -r '.formats."qcow2.gz".disk.location'
+```
+
+After downloading the image from the resultant URL, you can import the image into IBM PowerVC by using the `powervc-image-import` tool.
+
+## Networking requirements
+
+## IBM PowerVC network
+
+Installation requires at least one PowerVC network. Ideally the network should be dedicated to your OpenShift Container Platform cluster and not shared with other workloads.
+
+IBM recommends that the network is set as a DHCP network in IBM PowerVC. You must have a DHCP server set up to assign addresses for this network. When using this type of network, IBM PowerVC is not aware of the IP address that is assigned to the created servers.
+
+## DNS records
+
+DNS records pointing to a `LoadBalancer` service are required for installation. In each record, `<cluster_name>` is the cluster name and `<base_domain>` is the cluster base domain that you specify when you install the cluster. A complete DNS record takes the form: `<component>.<cluster_name>.<base_domain>.`.
+
+| Component | Record | Description |
+|----|----|----|
+| API VIP | `api.<cluster_name>.<base_domain>.` | This DNS A/AAAA or CNAME (Canonical Name) record must point to the load balancer for the cluster. This record must be resolvable by both clients external to the cluster and from all the nodes within the cluster. |
+| API VIP | `api-int.<cluster_name>.<base_domain>.` | This DNS A/AAAA or CNAME (Canonical Name) record must point to the load balancer for the cluster. This record must be resolvable by all the nodes within the cluster. |
+| Ingress VIP | `*.apps.<cluster_name>.<base_domain>.` | A wildcard DNS A/AAAA or CNAME record that points to the load balancer that targets the machines that run the Ingress router pods, which are the compute nodes by default. This record must be resolvable by both clients external to the cluster and from all the nodes within the cluster. |
+
+Required DNS records
+
+# Resource guidelines for installing OpenShift Container Platform on IBM PowerVC
+
+To support an OpenShift Container Platform installation, it is recommended that your IBM PowerVC has room for the following resources available:
+
+| Resource       | Value  |
+|----------------|--------|
+| Subnets        | 1      |
+| RAM            | 88 GB  |
+| vCPUs          | 22     |
+| Volume storage | 275 GB |
+| Instances      | 7      |
+
+Recommended resources for a default OpenShift Container Platform cluster on IBM PowerVC
+
+A cluster might function with fewer than recommended resources.
+
+## Load balancing requirements for user-provisioned infrastructure
+
+Before you install OpenShift Container Platform, you must provision the API and application Ingress load balancing infrastructure. In production scenarios, you can deploy the API and application Ingress load balancers separately so that you can scale the load balancer infrastructure for each in isolation.
+
+> [!NOTE]
+> If you want to deploy the API and application Ingress load balancers with a Red Hat Enterprise Linux (RHEL) instance, you must purchase the RHEL subscription separately.
+
+The load balancing infrastructure must meet the following requirements:
+
+- API load balancer: Provides a common endpoint for users, both human and machine, to interact with and configure the platform. Configure the following conditions:
+
+  - Layer 4 load balancing only. This can be referred to as Raw TCP or SSL Passthrough mode.
+
+  - A stateless load balancing algorithm. The options vary based on the load balancer implementation.
+
+> [!IMPORTANT]
+> Do not configure session persistence for an API load balancer. Configuring session persistence for a Kubernetes API server might cause performance issues from excess application traffic for your OpenShift Container Platform cluster and the Kubernetes API that runs inside the cluster.
+
+Configure the following ports on both the front and back of the API load balancers:
+
+| Port | Back-end machines (pool members) | Internal | External | Description |
+|----|----|----|----|----|
+| `6443` | Bootstrap and control plane. You remove the bootstrap machine from the load balancer after the bootstrap machine initializes the cluster control plane. You must configure the `/readyz` endpoint for the API server health check probe. | X | X | Kubernetes API server |
+| `22623` | Bootstrap and control plane. You remove the bootstrap machine from the load balancer after the bootstrap machine initializes the cluster control plane. | X |  | Machine config server |
+
+> [!NOTE]
+> The load balancer must be configured to take a maximum of 30 seconds from the time the API server turns off the `/readyz` endpoint to the removal of the API server instance from the pool. Within the time frame after `/readyz` returns an error or becomes healthy, the endpoint must have been removed or added. Probing every 5 or 10 seconds, with two successful requests to become healthy and three to become unhealthy, are well-tested values.
+
+- Application Ingress load balancer: Provides an ingress point for application traffic flowing in from outside the cluster. A working configuration for the Ingress router is required for an OpenShift Container Platform cluster. Configure the following conditions:
+
+  - Layer 4 load balancing only. This can be referred to as Raw TCP or SSL Passthrough mode.
+
+  - A connection-based or session-based persistence is recommended, based on the options available and types of applications that will be hosted on the platform.
+
+> [!TIP]
+> If the true IP address of the client can be seen by the application Ingress load balancer, enabling source IP-based session persistence can improve performance for applications that use end-to-end TLS encryption.
+
+Configure the following ports on both the front and back of the load balancers:
+
+| Port | Back-end machines (pool members) | Internal | External | Description |
+|----|----|----|----|----|
+| `443` | The machines that run the Ingress Controller pods, compute, or worker, by default. | X | X | HTTPS traffic |
+| `80` | The machines that run the Ingress Controller pods, compute, or worker, by default. | X | X | HTTP traffic |
+
+Application Ingress load balancer
+
+> [!NOTE]
+> If you are deploying a three-node cluster with zero compute nodes, the Ingress Controller pods run on the control plane nodes. In three-node cluster deployments, you must configure your application Ingress load balancer to route HTTP and HTTPS traffic to the control plane nodes.
+
+### Example load balancer configuration for user-provisioned clusters
+
+Reference the example API and application Ingress load balancer configuration so that you can understand how to meet the load balancing requirements for user-provisioned clusters.
+
+The sample is an `/etc/haproxy/haproxy.cfg` configuration for an HAProxy load balancer. The example is not meant to provide advice for choosing one load balancing solution over another.
+
+> [!TIP]
+> If you are using HAProxy as a load balancer, you can check that the `haproxy` process is listening on ports `6443`, `22623`, `443`, and `80` by running `netstat -nltupe` on the HAProxy node.
+
+In the example, the same load balancer is used for the Kubernetes API and application ingress traffic. In production scenarios, you can deploy the API and application ingress load balancers separately so that you can scale the load balancer infrastructure for each in isolation.
+
+> [!NOTE]
+> If you are using HAProxy as a load balancer and SELinux is set to `enforcing`, you must ensure that the HAProxy service can bind to the configured TCP port by running `setsebool -P haproxy_connect_any=1`.
+
+<div class="formalpara">
+
+<div class="title">
+
+Sample API and application Ingress load balancer configuration
+
+</div>
+
+``` text
+global
+  log         127.0.0.1 local2
+  pidfile     /var/run/haproxy.pid
+  maxconn     4000
+  daemon
+defaults
+  mode                    http
+  log                     global
+  option                  dontlognull
+  option http-server-close
+  option                  redispatch
+  retries                 3
+  timeout http-request    10s
+  timeout queue           1m
+  timeout connect         10s
+  timeout client          1m
+  timeout server          1m
+  timeout http-keep-alive 10s
+  timeout check           10s
+  maxconn                 3000
+listen api-server-6443
+  bind *:6443
+  mode tcp
+  option  httpchk GET /readyz HTTP/1.0
+  option  log-health-checks
+  balance roundrobin
+  server bootstrap bootstrap.ocp4.example.com:6443 verify none check check-ssl inter 10s fall 2 rise 3 backup
+  server master0 master0.ocp4.example.com:6443 weight 1 verify none check check-ssl inter 10s fall 2 rise 3
+  server master1 master1.ocp4.example.com:6443 weight 1 verify none check check-ssl inter 10s fall 2 rise 3
+  server master2 master2.ocp4.example.com:6443 weight 1 verify none check check-ssl inter 10s fall 2 rise 3
+listen machine-config-server-22623
+  bind *:22623
+  mode tcp
+  server bootstrap bootstrap.ocp4.example.com:22623 check inter 1s backup
+  server master0 master0.ocp4.example.com:22623 check inter 1s
+  server master1 master1.ocp4.example.com:22623 check inter 1s
+  server master2 master2.ocp4.example.com:22623 check inter 1s
+listen ingress-router-443
+  bind *:443
+  mode tcp
+  balance source
+  server compute0 compute0.ocp4.example.com:443 check inter 1s
+  server compute1 compute1.ocp4.example.com:443 check inter 1s
+listen ingress-router-80
+  bind *:80
+  mode tcp
+  balance source
+  server compute0 compute0.ocp4.example.com:80 check inter 1s
+  server compute1 compute1.ocp4.example.com:80 check inter 1s
+```
+
+</div>
+
+where:
+
+`listen api-server-6443`
+Port `6443` handles the Kubernetes API traffic and points to the control plane machines. You must configure health checks on this port to ensure that the API server is available before routing traffic.
+
+`server bootstrap bootstrap.ocp4.example.com`
+The bootstrap entries must be in place before the OpenShift Container Platform cluster installation and they must be removed after the bootstrap process is complete.
+
+`listen machine-config-server`
+Port `22623` handles the machine config server traffic and points to the control plane machines.
+
+`listen ingress-router-443`
+Port `443` handles the HTTPS traffic and points to the machines that run the Ingress Controller pods. The Ingress Controller pods run on the compute machines by default.
+
+`listen ingress-router-80`
+Port `80` handles the HTTP traffic and points to the machines that run the Ingress Controller pods. The Ingress Controller pods run on the compute machines by default.
+
+> [!NOTE]
+> If you are deploying a compact three-node cluster with zero compute nodes, the Ingress Controller pods run on the control plane nodes. In three-node cluster deployments, you must configure your application Ingress load balancer to route HTTP and HTTPS traffic to the control plane nodes.
+
+# Obtaining the installation program
+
+Before you install OpenShift Container Platform, download the installation file on the host you are using for installation, so that installation assets exist for deployment in your environment.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have a computer that runs Linux or macOS, with 500 MB of local disk space.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Go to the [Cluster Type](https://console.redhat.com/openshift/install) page on the Red Hat Hybrid Cloud Console. If you have a Red Hat account, log in with your credentials. If you do not, create an account.
+
+    > [!TIP]
+    > You can also [download the binaries for a specific OpenShift Container Platform release](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/).
+
+2.  Select your infrastructure provider from the **Run it yourself** section of the page.
+
+3.  Select your host operating system and architecture from the dropdown menus under **OpenShift Installer** and click **Download Installer**.
+
+4.  Place the downloaded file in the directory where you want to store the installation configuration files.
+
+    <div class="important">
+
+    <div class="title">
+
+    </div>
+
+    - The installation program creates several files on the computer that you use to install your cluster. You must keep the installation program and the files that the installation program creates after you finish installing the cluster. Both of the files are required to delete the cluster.
+
+    - Deleting the files created by the installation program does not remove your cluster, even if the cluster failed during installation. To remove your cluster, complete the OpenShift Container Platform uninstallation procedures for your specific cloud provider.
+
+    </div>
+
+5.  Extract the installation program. For example, on a computer that uses a Linux operating system, run the following command:
+
+    ``` terminal
+    $ tar -xvf openshift-install-linux.tar.gz
+    ```
+
+6.  Download your installation [pull secret from Red Hat OpenShift Cluster Manager](https://console.redhat.com/openshift/install/pull-secret). This pull secret allows you to authenticate with the services that are provided by the included authorities, including Quay.io, which serves the container images for OpenShift Container Platform components.
+
+    > [!TIP]
+    > Alternatively, you can retrieve the installation program from the [Red Hat Customer Portal](https://access.redhat.com/downloads/content/290/), where you can specify a version of the installation program to download. However, you must have an active subscription to access this page.
+
+</div>
+
+# Creating the installation configuration file
+
+You can customize the OpenShift Container Platform cluster you install on IBM PowerVC.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have the OpenShift Container Platform installation program and the pull secret for your cluster.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create the `install-config.yaml` file.
+
+    1.  Change to the directory that contains the installation program and run the following command:
+
+        ``` terminal
+        $ ./openshift-install create install-config --dir <installation_directory>
+        ```
+
+        - `<installation_directory>`: For `<installation_directory>`, specify the directory name to store the files that the installation program creates.
+
+          When specifying the directory:
+
+        - Verify that the directory has the `execute` permission. This permission is required to run Terraform binaries under the installation directory.
+
+        - Use an empty directory. Some installation assets, such as bootstrap X.509 certificates, have short expiration intervals, therefore you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
+
+    2.  At the prompts, provide the configuration details for your cloud:
+
+        1.  Optional: Select an SSH key to use to access your cluster machines.
+
+            > [!NOTE]
+            > For production OpenShift Container Platform clusters on which you want to perform installation debugging or disaster recovery, specify an SSH key that your `ssh-agent` process uses.
+
+        2.  Enter a descriptive name for your cluster.
+
+2.  Modify the `install-config.yaml` file. You can find more information about the available parameters in the "Installation configuration parameters" section.
+
+3.  Back up the `install-config.yaml` file so that you can use it to install multiple clusters.
+
+    > [!IMPORTANT]
+    > The `install-config.yaml` file is consumed during the installation process. If you want to reuse the file, you must back it up now.
+
+</div>
+
+## Installation configuration for a cluster on IBM PowerVC with a user-managed load balancer
+
+The `install-config.yaml` parameters required to deploy an OpenShift Container Platform cluster on IBM PowerVC using an external, user-managed load balancer help you configure networking, compute, and platform settings for this setup.
+
+The following example `install-config.yaml` file demonstrates this configuration.
+
+> [!IMPORTANT]
+> This sample file is provided for reference only. You must obtain your `install-config.yaml` file by using the installation program.
+
+``` yaml
+apiVersion: v1
+baseDomain: mydomain.test
+compute:
+- architecture: ppc64le
+  hyperthreading: Enabled
+  name: worker
+  platform:
+    powervc:
+      zones:
+        - powervc-sample-project
+  replicas: 3
+controlPlane:
+  architecture: ppc64le
+  name: master
+  platform:
+    powervc:
+      zones:
+        - s1122
+  replicas: 3
+metadata:
+  creationTimestamp: null
+  name: ocp-on-powervc
+networking:
+  clusterNetwork:
+  - cidr: 10.100.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.100.32.0/20
+  networkType: OVNKubernetes
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  powervc:
+    apiVIPs:
+    - 10.20.188.52
+    cloud: powervc
+    clusterOSImage: my-rhcos-image
+    defaultMachinePlatform:
+      type: my-powervc-project
+    ingressVIPs:
+    - 10.20.188.52
+    controlPlanePort:
+      fixedIPs:
+        - subnet:
+            id: ae643a65-d0fc-4408-90c6-a820340bfade
+```
+
+- `apiVIPs`: Specifies the address of the user-managed load balancer.
+
+- `ingressVIPs`: Specifies the address of the user-managed load balancer.
+
+- `controlPlanePort.fixedIPs.subnet.id`: Specifies the subnet that is served by the user-managed DHCP server.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installation configuration parameters for IBM PowerVC](installation-config-parameters-ibm-powervc.md#installation-config-parameters-ibm-powervc)
+
+</div>
+
+# Deploying the cluster
+
+To deploy your OpenShift Container Platform cluster, you initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions the required infrastructure and completes the cluster setup.
+
+> [!IMPORTANT]
+> You can run the `create cluster` command of the installation program only once, during initial installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have configured an account with the cloud platform that hosts your cluster.
+
+- You have the OpenShift Container Platform installation program and the pull secret for your cluster.
+
+- You have verified that the cloud provider account on your host has the correct permissions to deploy the cluster. An account with incorrect permissions causes the installation process to fail with an error message that displays the missing permissions.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- In the directory that contains the installation program, initialize the cluster deployment by running the following command:
+
+  ``` terminal
+  $ ./openshift-install create cluster --dir <installation_directory> \
+      --log-level=info
+  ```
+
+  where:
+
+  - `<installation_directory>`: Specifies the location of your customized `./install-config.yaml` file.
+
+  - `--log-level`: Specifies the log level. To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
+
+</div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Verification
+
+</div>
+
+When the cluster deployment completes successfully:
+
+</div>
+
+- The terminal displays directions for accessing your cluster, including a link to the web console and credentials for the `kubeadmin` user.
+
+- Credential information also outputs to `<installation_directory>/.openshift_install.log`.
+
+  > [!IMPORTANT]
+  > Do not delete the installation program or the files that the installation program creates. Both are required to delete the cluster.
+
+  The following example shows the expected output:
+
+  ``` terminal
+  ...
+  INFO Install complete!
+  INFO To access the cluster as the system:admin user when using 'oc', run 'export KUBECONFIG=/home/myuser/install_dir/auth/kubeconfig'
+  INFO Access the OpenShift web-console here: https://console-openshift-console.apps.mycluster.example.com
+  INFO Login to the console with user: "kubeadmin", and password: "password"
+  INFO Time elapsed: 36m22s
+  ```
+
+  <div class="important">
+
+  <div class="title">
+
+  </div>
+
+  - The Ignition config files that the installation program generates contain certificates that expire after 24 hours, which are then renewed at that time. If the cluster is shut down before renewing the certificates and the cluster is later restarted after the 24 hours have elapsed, the cluster automatically recovers the expired certificates. The exception is that you must manually approve the pending `node-bootstrapper` certificate signing requests (CSRs) to recover kubelet certificates. See the documentation for *Recovering from expired control plane certificates* for more information.
+
+  - It is recommended that you use Ignition config files within 12 hours after they are generated because the 24-hour certificate rotates from 16 to 22 hours after the cluster is installed. By using the Ignition config files within 12 hours, you can avoid installation failure if the certificate update runs during installation.
+
+  </div>
+
+# Installing the OpenShift CLI on Linux
+
+To manage your cluster and deploy applications from the command line on Linux, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
+
+> [!IMPORTANT]
+> If you installed an earlier version of `oc`, you cannot use it to complete all of the commands in OpenShift Container Platform.
+>
+> Download and install the new version of `oc`.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Navigate to the [Download OpenShift Container Platform](https://access.redhat.com/downloads/content/290) page on the Red Hat Customer Portal.
+
+2.  Select the architecture from the **Product Variant** list.
+
+3.  Select the appropriate version from the **Version** list.
+
+4.  Click **Download Now** next to the **OpenShift v4.22 Linux Clients** entry and save the file.
+
+5.  Unpack the archive:
+
+    ``` terminal
+    $ tar xvf <file>
+    ```
+
+6.  Place the `oc` binary in a directory that is on your `PATH`.
+
+    To check your `PATH`, run the following command:
+
+    ``` terminal
+    $ echo $PATH
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- After you install the OpenShift CLI, it is available using the `oc` command:
+
+  ``` terminal
+  $ oc <command>
+  ```
+
+</div>
+
+# Installing the OpenShift CLI on Windows
+
+To manage your cluster and deploy applications from the command line on Windows, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
+
+> [!IMPORTANT]
+> If you installed an earlier version of `oc`, you cannot use it to complete all of the commands in OpenShift Container Platform.
+>
+> Download and install the new version of `oc`.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Navigate to the [Download OpenShift Container Platform](https://access.redhat.com/downloads/content/290) page on the Red Hat Customer Portal.
+
+2.  Select the appropriate version from the **Version** list.
+
+3.  Click **Download Now** next to the **OpenShift v4.22 Windows Client** entry and save the file.
+
+4.  Extract the archive with a ZIP program.
+
+5.  Move the `oc` binary to a directory that is on your `PATH` variable.
+
+    To check your `PATH` variable, open the Command Prompt and run the following command:
+
+    ``` terminal
+    C:\> path
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- After you install the OpenShift CLI, it is available using the `oc` command:
+
+  ``` terminal
+  C:\> oc <command>
+  ```
+
+</div>
+
+# Installing the OpenShift CLI on macOS
+
+To manage your cluster and deploy applications from the command line on macOS, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
+
+> [!IMPORTANT]
+> If you installed an earlier version of `oc`, you cannot use it to complete all of the commands in OpenShift Container Platform.
+>
+> Download and install the new version of `oc`.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Navigate to the [Download OpenShift Container Platform](https://access.redhat.com/downloads/content/290) page on the Red Hat Customer Portal.
+
+2.  Select the architecture from the **Product Variant** list.
+
+3.  Select the appropriate version from the **Version** list.
+
+4.  Click **Download Now** next to the **OpenShift v4.22 macOS Clients** entry and save the file.
+
+    > [!NOTE]
+    > For macOS arm64, choose the **OpenShift v4.22 macOS arm64 Client** entry.
+
+5.  Extract the archive.
+
+6.  Move the `oc` binary to a directory on your `PATH` variable.
+
+    To check your `PATH` variable, open a terminal and run the following command:
+
+    ``` terminal
+    $ echo $PATH
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Verify your installation by using an `oc` command:
+
+  ``` terminal
+  $ oc <command>
+  ```
+
+</div>
+
+# Verifying cluster status
+
+You can verify your OpenShift Container Platform cluster’s status during or after installation.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In the cluster environment, export the administrator’s kubeconfig file by entering the following command:
+
+    ``` terminal
+    $ export KUBECONFIG=<installation_directory>/auth/kubeconfig
+    ```
+
+    - For `<installation_directory>`, specify the path to the directory that you stored the installation files in.
+
+      The `kubeconfig` file contains information about the cluster that is used by the CLI to connect a client to the correct cluster and API server.
+
+2.  View the control plane and compute machines created after a deployment by entering the following command:
+
+    ``` terminal
+    $ oc get nodes
+    ```
+
+3.  View the version of your cluster by entering the following command:
+
+    ``` terminal
+    $ oc get clusterversion
+    ```
+
+4.  View the status of the cluster Operators by entering the following command:
+
+    ``` terminal
+    $ oc get clusteroperator
+    ```
+
+5.  View all running pods in the cluster by entering the following command:
+
+    ``` terminal
+    $ oc get pods -A
+    ```
+
+</div>
+
+# Logging in to the cluster by using the CLI
+
+To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
+
+The `kubeconfig` file is specific to a cluster and OpenShift Container Platform generates it during installation.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You deployed an OpenShift Container Platform cluster.
+
+- You installed the OpenShift CLI (`oc`).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Export the `kubeadmin` credentials by running the following command:
+
+    ``` terminal
+    $ export KUBECONFIG=<installation_directory>/auth/kubeconfig
+    ```
+
+    where:
+
+    `<installation_directory>`
+    Specifies the path to the directory that stores the installation files.
+
+2.  Verify you can run `oc` commands successfully using the exported configuration by running the following command:
+
+    ``` terminal
+    $ oc whoami
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    system:admin
+    ```
+
+    </div>
+
+</div>
+
+<div>
+
+<div class="title">
+
+Next steps
+
+</div>
+
+- "Customize your cluster"
+
+- "Remote health reporting"
+
+</div>
+
+<div id="additional-resources_installing-ibm-powervc-customizations-console">
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Accessing the web console](../../web_console/web-console.md#web-console)
+
+</div>
+
+# Telemetry access for OpenShift Container Platform
+
+To provide metrics about cluster health and the success of updates, the Telemetry service requires internet access. When connected, this service runs automatically by default and registers your cluster to [OpenShift Cluster Manager](https://console.redhat.com/openshift).
+
+After you confirm that your [OpenShift Cluster Manager](https://console.redhat.com/openshift) inventory is correct, either maintained automatically by Telemetry or manually by using OpenShift Cluster Manager,use subscription watch to track your OpenShift Container Platform subscriptions at the account or multi-cluster level. For more information about subscription watch, see "Data Gathered and Used by Red Hat’s subscription services" in the *Additional resources* section.
+
+<div id="additional-resources_installing-ibm-powervc-customizations-telemetry">
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [About remote health monitoring](../../support/remote_health_monitoring/about-remote-health-monitoring.md#about-remote-health-monitoring)
+
+</div>

@@ -32,11 +32,11 @@
     "expected_skill": "openshift-api"
   },
   {
-    "prompt": "Find the OCP 4.20 procedure for configuring a custom ingress certificate.",
+    "prompt": "Find the OCP 4.22 procedure for configuring a custom ingress certificate.",
     "expected_skill": "openshift-docs"
   },
   {
-    "prompt": "Wie funktioniert ein disconnected Cluster-Update in OpenShift 4.20?",
+    "prompt": "Wie funktioniert ein disconnected Cluster-Update in OpenShift 4.22?",
     "expected_skill": "openshift-docs"
   }
 ]

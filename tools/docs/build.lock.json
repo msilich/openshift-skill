@@ -6,12 +6,16 @@
       "license": "Apache-2.0",
       "license_file": "LICENSE.agentic-skills",
       "path": "documentation/openshift-docs/convert.py",
-      "sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "sha256": "8cade26df02b28923235698b5932adcdf16ff9dd1a9b72c525e574a664bd4060",
+      "modifications": [
+        "Resolve the product version from explicit enterprise-X.Y branches when the distro map is stale; reject missing or conflicting versions."
+      ],
       "url": "https://github.com/openshift/agentic-skills"
     },
     "openshift_docs": {
-      "branch_hint": "enterprise-4.20",
-      "commit": "5aee2719f9ad01a82bb80b391e5af25f566c73c0",
+      "branch_hint": "enterprise-4.22",
+      "commit": "d8cc5bae880cc93ecd22fecd660c1b3a7f1358ff",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"
@@ -24,8 +28,8 @@
     "pyyaml": "6.0.3"
   },
   "expected_output": {
-    "converted_topics": 1746,
-    "markdown_files": 1748,
-    "markdown_manifest_sha256": "5d09522a8edf3ba39fabe2e61c2c38bfc6ff0e60f675a1c5aba33de9f4730636"
+    "converted_topics": 1797,
+    "markdown_files": 1799,
+    "markdown_manifest_sha256": "763189217746ca7d24d66abe304dbb7d77cbcc23aa276ff88c52b5b5b18a7b0b"
   }
 }

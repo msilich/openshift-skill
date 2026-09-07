@@ -1,0 +1,382 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+By default, upon node start up OpenShift Container Platform automatically calculates and reserves a portion of the CPU and memory resources for use by the underlying node components, such as `kubelet` and `kube-proxy`, and the remaining system components, such as `sshd` and `NetworkManager`. Review the information in this section to determine if these automatic settings are appropriate for your cluster.
+
+You can modify the CPU and memory resources for these node and system components, as needed, by creating a `Kubelet Config` CR.
+
+> [!IMPORTANT]
+> If you updated your cluster from a version earlier than 4.21, automatic allocation of system resources is disabled by default. To enable the feature, delete the `50-worker-auto-sizing-disabled` machine config.
+
+# Understanding how resources are allocated to nodes
+
+OpenShift Container Platform uses a script to determine optimal CPU and memory resources for the node and system components on your nodes. Or, you can manually set these values as needed. Ensuring proper resources for these services can help ensure that your cluster is operating efficiently.
+
+These resource calculations are based on the installed CPU and memory capacity on each node and assigned upon node start up. These resources are reserved for the node and system components in the systemd `system.slice` cgroup, such as CRI-O and kubelet. By default, before the scripts runs, OpenShift Container Platform reserves 500m for CPU and 1 Gi of memory for the node and system components.
+
+> [!NOTE]
+> The Kubernetes `kubeReserved` parameter is not supported in OpenShift Container Platform.
+
+The script uses the following calculations by default.
+
+Memory reservation
+The memory reservation is weighted. For smaller nodes, OpenShift Container Platform reserves a higher percentage of memory. For larger nodes, OpenShift Container Platform reserves a smaller percentage of the remaining capacity.
+
+OpenShift Container Platform uses the following calculations to determine how much memory to reserve for node and system components:
+
+- 25% of the first 4 GiB of memory
+
+- 20% of the next 4 GiB of memory (up to 8 GiB)
+
+- 10% of the next 8 GiB of memory (up to 16 GiB)
+
+- 6% of the next 112 GiB of memory (up to 128 GiB)
+
+- 2% of any memory above 128 GiB
+
+For example, on node with 16 GiB of memory, OpenShift Container Platform reserves 2.6 GiB for node and system components, leaving approximately 13.4 GiB for workloads.
+
+CPU reservation
+OpenShift Container Platform uses the following logic to determine how much CPU to reserve for node and system components:
+
+- OpenShift Container Platform starts with a base allocation for 1 CPU in fractions of a core (60 millicores = 0.06 CPU core).
+
+- Then, it increments 12 millicores (0.012 CPU) for every additional core beyond the first.
+
+- The result is compared against a minimum floor of 0.5 CPU. If the calculated value is less than 0.5, the system enforces a reservation of 0.5 CPU.
+
+For example, on a 4-core node, 0.5 vCPU is reserved for node and system components, leaving 3.5 vCPUs for workloads. Note that 1000 millicores is equal to 1CPU/vCPU.
+
+> [!NOTE]
+> Any CPUs specifically reserved using the `reservedSystemCPUs` parameter in a `KubeletConfig` object are not available for allocation using `system-reserved`.
+
+You can manually manage CPU and memory reservations for the node and system components by configuring the `system-reserved` parameter in a `KubeletConfig` object, as described in "Manually allocating resources for nodes".
+
+## How OpenShift Container Platform computes allocated resources
+
+An allocated amount of a resource is computed based on the following formula:
+
+    [Allocatable] = [Node Capacity] - [system-reserved] - [Hard-Eviction-Thresholds]
+
+> [!NOTE]
+> The withholding of `Hard-Eviction-Thresholds` from `Allocatable` improves system reliability because the value for `Allocatable` is enforced for pods at the node level.
+
+If `Allocatable` is negative, it is set to `0`.
+
+Each node reports the system resources that are used by the container runtime and kubelet. To simplify configuring the `system-reserved` parameter, view the resource use for the node by using the node summary API. The node summary is available at `/api/v1/nodes/<node>/proxy/stats/summary`. For more information, see "Node metrics data".
+
+## How OpenShift Container Platform enforces system-reserved CPU
+
+By default, OpenShift Container Platform calculates how much CPU should be reserved for system processes and uses cgroup controls to ensure that CPU is distributed according to configured weights and limits.
+
+This enforcement is applied in times of CPU contention within a node. When a node is not under CPU pressure, system processes can use more than the reserved share if the unused CPU is available.
+
+OpenShift Container Platform uses the `systemReservedCgroup` and `enforceNodeAllocatable` parameters in the kubelet configuration to perform this CPU enforcement.
+
+By default, the `systemReservedCgroup` parameter is set to `/system.slice`, which enforces CPU limits on the systemd `system.slice` cgroup, which includes kubelet, CRI-O, and other system services. The `enforceNodeAllocatable` parameter is set to `pods` and `system-reserved-compressible`, which enforce node allocatable limits across both pods and the `system-reserved` resources.
+
+As an example of this enforcement, if 0.5 CPU is reserved for system daemons on a four-core node, the systemd `system.slice` cgroup receives approximately that much CPU during contention and workload pods receive their expected share of the remaining 3.5 CPUs. If the system daemons hit the CPU limit, the OpenShift Container Platform throttles, but does not kill, the daemons. The OpenShift Container Platform reduces the CPU time allocated to processes in the `system.slice` cgroup, spreading their work over a longer period.
+
+> [!IMPORTANT]
+> If other systemd slices are running CPU-intensive workloads, contention from slices other than `system.slice` could still impact overall CPU allocation.
+
+However, the kubelet cannot simultaneously enforce both the `systemReservedCgroup` setting and the `reservedSystemCPUs` setting used by Performance Profiles. If you apply a Performance Profile configured with `reservedSystemCPUs`, OpenShift Container Platform takes the following actions:
+
+- The `systemReservedCgroup` setting is automatically cleared.
+
+- The `enforceNodeAllocatable` parameter is set to `pods` only.
+
+- The existing Performance Profile behavior is preserved without requiring any changes.
+
+You can disable the default enforcement behavior for nodes in specific machine config pools, if needed, by using a `KubeletConfig` object. You might disable the feature for the following reasons:
+
+- You have specific system daemon resource management requirements.
+
+- You want to perform troubleshooting if system daemons are being throttled unexpectedly.
+
+The following kubelet config disables CPU reservation enforcement:
+
+``` yaml
+apiVersion: machineconfiguration.openshift.io/v1
+kind: KubeletConfig
+metadata:
+  name: 80-custom-system-reserved
+spec:
+  machineConfigPoolSelector:
+    matchLabels:
+      pools.operator.machineconfiguration.openshift.io/worker: ""
+  kubeletConfig:
+    apiVersion: kubelet.config.k8s.io/v1beta1
+    kind: KubeletConfiguration
+    systemReservedCgroup: ""
+    enforceNodeAllocatable:
+      - "pods"
+```
+
+where:
+
+`metadata.name`
+Specifies a name for the kubelet config. Use a high number prefix to ensure it merges last.
+
+`spec.machineConfigPoolSelector.matchLabels`
+Specifies a label for the machine config pool that you want to modify.
+
+`spec.kubeletConfig.systemReservedCgroup`
+When set to `""`, specifies that the cgroup enforcement is disabled.
+
+`spec.kubeletConfig.enforceNodeAllocatable`
+When set only to `"pods"`, specifies that node allocatable enforcement applies only across pods and not across the `system-reserved` resources.
+
+## How nodes enforce resource constraints
+
+The node is able to limit the total amount of resources that pods can consume based on the configured allocatable value. This feature significantly improves the reliability of the node by preventing pods from using CPU and memory resources that are needed by system services such as the container runtime and node agent. To improve node reliability, administrators should reserve resources based on a target for resource use.
+
+The node enforces resource constraints by using a new cgroup hierarchy that enforces quality of service. All pods are launched in a dedicated cgroup hierarchy that is separate from system daemons.
+
+Administrators should treat system daemons similar to pods that have a guaranteed quality of service. System daemons can burst within their bounding control groups and this behavior must be managed as part of cluster deployments. Reserve CPU and memory resources for system daemons by specifying the amount of CPU and memory resources in `system-reserved`.
+
+> [!NOTE]
+> Enforcing `system-reserved` limits can prevent critical system services from receiving CPU and memory resources. As a result, a critical system service can be ended by the out-of-memory killer. The recommendation is to enforce `system-reserved` only if you have profiled the nodes exhaustively to determine precise estimates and you are confident that critical system services can recover if any process in that group is ended by the out-of-memory killer.
+
+## Understanding Eviction Thresholds
+
+If a node is under memory pressure, it can impact the entire node and all pods running on the node. For example, a system daemon that uses more than its reserved amount of memory can trigger an out-of-memory event. To avoid or reduce the probability of system out-of-memory events, the node provides out-of-resource handling.
+
+You can reserve some memory using the `--eviction-hard` flag. The node attempts to evict pods whenever memory availability on the node drops below the absolute value or percentage. If system daemons do not exist on a node, pods are limited to the memory `capacity - eviction-hard`. For this reason, resources set aside as a buffer for eviction before reaching out of memory conditions are not available for pods.
+
+The following is an example to illustrate the impact of node allocatable for memory:
+
+- Node capacity is `32Gi`
+
+- --system-reserved is `3Gi`
+
+- --eviction-hard is set to `100Mi`.
+
+For this node, the effective node allocatable value is `28.9Gi`. If the node and system components use all their reservation, the memory available for pods is `28.9Gi`, and kubelet evicts pods when it exceeds this threshold.
+
+If you enforce node allocatable, `28.9Gi`, with top-level cgroups, then pods can never exceed `28.9Gi`. Evictions are not performed unless system daemons consume more than `3.1Gi` of memory.
+
+If system daemons do not use up all their reservation, with the above example, pods would face memcg OOM kills from their bounding cgroup before node evictions kick in. To better enforce QoS under this situation, the node applies the hard eviction thresholds to the top-level cgroup for all pods to be `Node Allocatable + Eviction Hard Thresholds`.
+
+If system daemons do not use up all their reservation, the node will evict pods whenever they consume more than `28.9Gi` of memory. If eviction does not occur in time, a pod will be OOM killed if pods consume `29Gi` of memory.
+
+## How the scheduler determines resource availability
+
+The scheduler uses the value of `node.Status.Allocatable` instead of `node.Status.Capacity` to decide if a node will become a candidate for pod scheduling.
+
+By default, the node will report its machine capacity as fully schedulable by the cluster.
+
+# Understanding process ID limits
+
+You can review the following information to learn how to limit the number of processes running on your nodes. Configuring an appropriate number of processes can help keep the nodes in your cluster running efficiently.
+
+A process identifier (PID) is a unique identifier assigned by the Linux kernel to each process or thread currently running on a system. The number of processes that can run simultaneously on a system is limited to 4,194,304 by the Linux kernel. This number might also be affected by limited access to other system resources such as memory, CPU, and disk space.
+
+In OpenShift Container Platform, consider these two supported limits for process ID (PID) usage before you schedule work on your cluster:
+
+- Maximum number of PIDs per pod.
+
+  The default value is 4,096 in OpenShift Container Platform 4.11 and later. This value is controlled by the `podPidsLimit` parameter set on the node.
+
+  You can view the current PID limit on a node by running the following command in a `chroot` environment:
+
+  ``` terminal
+  sh-5.1# cat /etc/kubernetes/kubelet.conf | grep -i pids
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` terminal
+  "podPidsLimit": 4096,
+  ```
+
+  </div>
+
+  You can change the `podPidsLimit` by using a `KubeletConfig` object. See "Creating a KubeletConfig CR to edit kubelet parameters".
+
+  Containers inherit the `podPidsLimit` value from the parent pod, so the kernel enforces the lower of the two limits. For example, if the container PID limit is set to the maximum, but the pod PID limit is `4096`, the PID limit of each container in the pod is confined to 4096.
+
+- Maximum number of PIDs per node.
+
+  The default value depends on node resources. In OpenShift Container Platform, this value is controlled by the `systemReserved` parameter in a kubelet configuration, which reserves PIDs on each node based on the total resources of the node. For more information, see "Allocating resources for nodes in an OpenShift Container Platform cluster".
+
+When a pod exceeds the allowed maximum number of PIDs per pod, the pod might stop functioning correctly and might be evicted from the node. For more information about eviction signals and thresholds, see *Additional resources*.
+
+When a node exceeds the allowed maximum number of PIDs per node, the node can become unstable because new processes cannot have PIDs assigned. If existing processes cannot complete without creating additional processes, the entire node can become unusable and require reboot. This situation can result in data loss, depending on the processes and applications being run. Customer administrators and Red Hat Site Reliability Engineering are notified when this threshold is reached, and a `Worker node is experiencing PIDPressure` warning will appear in the cluster logs.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Configuring node resources](https://access.redhat.com/documentation/en-us/openshift_container_platform/latest/html-single/nodes/index#nodes-nodes-resources-configuring)
+
+- [Kubernetes system-reserved parameter](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#system-reserved)
+
+- [Kubernetes eviction signals and thresholds](https://kubernetes.io/docs/concepts/scheduling-eviction/node-pressure-eviction/#eviction-signals-and-thresholds)
+
+</div>
+
+## Risks of setting higher process ID limits for OpenShift Container Platform pods
+
+You can review the following information to learn about some considerations about allowing a high maximum number of processes to run on your nodes. Configuring an appropriate number of processes can help keep the nodes in your cluster running efficiently.
+
+You can increase the value for `podPidsLimit` from the default of 4,096 to a maximum of 16,384. Changing this value might incur downtime for applications, because changing the `podPidsLimit` requires rebooting the affected node.
+
+If you are running a large number of pods per node, and you have a high `podPidsLimit` value on your nodes, you risk exceeding the PID maximum for the node.
+
+To find the maximum number of pods that you can run simultaneously on a single node without exceeding the PID maximum for the node, divide 3,650,000 by your `podPidsLimit` value. For example, if your `podPidsLimit` value is 16,384, and you expect the pods to use close to that number of process IDs, you can safely run 222 pods on a single node.
+
+> [!NOTE]
+> Memory, CPU, and available storage can also limit the maximum number of pods that can run simultaneously, even when the `podPidsLimit` value is set appropriately.
+
+# Manually allocating resources for nodes
+
+As an administrator, you can manually set `system-reserved` CPU and memory resources for your nodes. Setting these values ensures that your cluster is running efficiently and prevents node failure due to resource starvation of system components.
+
+By default, OpenShift Container Platform uses a script on each worker node to automatically determine the optimal `system-reserved` CPU and memory resources for nodes associated with a specific machine config pool and update the nodes with those values. The script runs on node start up.
+
+> [!IMPORTANT]
+> If you updated your cluster from a version earlier than 4.21, automatic allocation of system resources is disabled by default. To enable the feature, delete the `50-worker-auto-sizing-disabled` machine config.
+
+However, you can manually set these values by using a `KubeletConfig` custom resource (CR) that includes a set of `<resource_type>=<resource_quantity>` pairs (for example, `cpu=200m,memory=512Mi`). You must use the `spec.autoSizingReserved: false` parameter in the `KubeletConfig` CR to override the default OpenShift Container Platform behavior of automatically setting the `systemReserved` values.
+
+For `memory` and `ephemeral-storage`, you specify the resource quantity in units of bytes, such as `200Ki`, `50Mi`, or `5Gi`. By default, the `system-reserved` CPU is `500m` and `system-reserved` memory is `1Gi`. For the `cpu` type, you specify the resource quantity in units of cores, such as `200m`, `0.5`, or `1`. Note that 1000 millicores is equal to 1CPU/vCPU.
+
+<div class="important">
+
+<div class="title">
+
+</div>
+
+- For details on the recommended `system-reserved` values, refer to the [recommended system-reserved values](https://access.redhat.com/solutions/5843241).
+
+- To manually set resource values, you must use a kubelet configuration. You cannot use a machine config.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Obtain the label associated with the static `MachineConfigPool` CRD for the type of node you want to configure by entering the following command:
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a custom resource (CR) for your configuration change.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample configuration for a resource allocation CR
+
+    </div>
+
+    ``` yaml
+    apiVersion: machineconfiguration.openshift.io/v1
+    kind: KubeletConfig
+    metadata:
+      name: set-allocatable
+    spec:
+      autoSizingReserved: false
+      machineConfigPoolSelector:
+        matchLabels:
+          pools.operator.machineconfiguration.openshift.io/worker: ""
+      kubeletConfig:
+        systemReserved:
+          cpu: 1000m
+          memory: 4Gi
+          ephemeral-storage: 50Mi
+    #...
+    ```
+
+    </div>
+
+    `metadata.name`
+    Specifies a name for the CR.
+
+    `spec.autoSizingReserved`
+    Specify `false` to override the default OpenShift Container Platform behavior of automatically setting the `systemReserved` values.
+
+    `spec.machineConfigPoolSelector.matchLabels`
+    Specifies a label from the machine config pool.
+
+    `spec.kubeletConfig.systemReserved`
+    Specifies the resources to reserve for the node components and system components.
+
+2.  Run the following command to create the CR:
+
+    ``` terminal
+    $ oc create -f <file_name>.yaml
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Log in to a node you configured by entering the following command:
+
+    ``` terminal
+    $ oc debug node/<node_name>
+    ```
+
+2.  Set `/host` as the root directory within the debug shell:
+
+    ``` terminal
+    # chroot /host
+    ```
+
+3.  View the `/etc/node-sizing.env` file:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    SYSTEM_RESERVED_MEMORY=4Gi
+    SYSTEM_RESERVED_CPU=1000m
+    SYSTEM_RESERVED_ES=50Mi
+    ```
+
+    </div>
+
+    The kubelet uses the `system-reserved` values in the `/etc/node-sizing.env` file.
+
+</div>
+
+# Additional resources
+
+- [Creating a KubeletConfig CR to edit kubelet parameters](../../machine_configuration/machine-configs-custom.md#create-a-kubeletconfig-crd-to-edit-kubelet-parameters_machine-configs-custom)
+
+- [Node metrics data (Kubernetes documentation)](https://kubernetes.io/docs/reference/instrumentation/node-metrics/)

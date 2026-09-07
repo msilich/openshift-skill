@@ -1,0 +1,282 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Operator Controller is the central component of Operator Lifecycle Manager (OLM) v1 and consumes the other OLM v1 component, catalogd. It extends Kubernetes with an API through which users can install Operators and extensions.
+
+# ClusterExtension API
+
+To manage installed extensions in OLM v1, use the `ClusterExtension` API. This consolidated API simplifies extension management by replacing multiple OLM (Classic) objects with a single cluster-scoped resource.
+
+> [!IMPORTANT]
+> In OLM v1, `ClusterExtension` objects are cluster-scoped. This differs from OLM (Classic) where Operators can be either namespace-scoped or cluster-scoped. In OLM (Classic), the scope depends on the configuration of related `Subscription` and `OperatorGroup` objects.
+>
+> For more information about OLM (Classic) behavior, see *Multitenancy and Operator colocation*.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `ClusterExtension` object
+
+</div>
+
+``` yaml
+apiVersion: olm.operatorframework.io/v1
+kind: ClusterExtension
+metadata:
+  name: <extension_name>
+spec:
+  namespace: <namespace_name>
+  config:
+    configType: Inline
+    inline:
+      watchNamespace: <namespace_name>
+  serviceAccount:
+    name: <service_account_name>
+  source:
+    sourceType: Catalog
+    catalog:
+      packageName: <package_name>
+      channels:
+        - <channel>
+      version: "<version>"
+```
+
+</div>
+
+`config`
+If the extension supports watching a specific namespace, use this field to configure extension behavior. For more information, see "Extension configuration".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Operator Lifecycle Manager (OLM) → Multitenancy and Operator colocation](../../operators/understanding/olm/olm-colocation.md#olm-colocation)
+
+- [Supported extensions](../ce/olmv1-supported-extensions.md#olmv1-supported-extensions)
+
+</div>
+
+## Example custom resources (CRs) that specify a target version
+
+In Operator Lifecycle Manager (OLM) v1, cluster administrators can declaratively set the target version of an Operator or extension in the custom resource (CR).
+
+You can define a target version by specifying any of the following fields:
+
+- Channel
+
+- Version number
+
+- Version range
+
+If you specify a channel in the CR, OLM v1 installs the latest version of the Operator or extension that can be resolved within the specified channel. When updates are published to the specified channel, OLM v1 automatically updates to the latest release that can be resolved from the channel.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example CR with a specified channel
+
+</div>
+
+``` yaml
+apiVersion: olm.operatorframework.io/v1
+  kind: ClusterExtension
+  metadata:
+    name: <clusterextension_name>
+  spec:
+    namespace: <installed_namespace>
+    serviceAccount:
+      name: <service_account_installer_name>
+    source:
+      sourceType: Catalog
+      catalog:
+        packageName: <package_name>
+        channels:
+          - latest
+```
+
+</div>
+
+Installs the latest release that can be resolved from the specified channel. Updates to the channel are automatically installed. Specify the value of the `channels` parameter as an array. This field is optional
+
+If you specify the Operator or extension’s target version in the CR, OLM v1 installs the specified version. When the target version is specified in the CR, OLM v1 does not change the target version when updates are published to the catalog.
+
+If you want to update the version of the Operator that is installed on the cluster, you must manually edit the Operator’s CR. Specifying an Operator’s target version pins the Operator’s version to the specified release.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example CR with the target version specified
+
+</div>
+
+``` yaml
+apiVersion: olm.operatorframework.io/v1
+  kind: ClusterExtension
+  metadata:
+    name: <clusterextension_name>
+  spec:
+    namespace: <installed_namespace>
+    serviceAccount:
+      name: <service_account_installer_name>
+    source:
+      sourceType: Catalog
+      catalog:
+        packageName: <package_name>
+        version: "1.11.1"
+```
+
+</div>
+
+Specifies the target version. If you want to update the version of the Operator or extension that is installed, you must manually update this field the CR to the desired target version. This field is optional.
+
+If you want to define a range of acceptable versions for an Operator or extension, you can specify a version range by using a comparison string. When you specify a version range, OLM v1 installs the latest version of an Operator or extension that can be resolved by the Operator Controller.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example CR with a version range specified
+
+</div>
+
+``` yaml
+apiVersion: olm.operatorframework.io/v1
+  kind: ClusterExtension
+  metadata:
+    name: <clusterextension_name>
+  spec:
+    namespace: <installed_namespace>
+    serviceAccount:
+      name: <service_account_installer_name>
+    source:
+      sourceType: Catalog
+      catalog:
+        packageName: <package_name>
+        version: ">1.11.1"
+```
+
+</div>
+
+Specifies that the desired version range is greater than version `1.11.1`. This field is optional.
+
+After you create or update a CR, apply the configuration file by running the following command:
+
+<div class="formalpara">
+
+<div class="title">
+
+Command syntax
+
+</div>
+
+``` terminal
+$ oc apply -f <extension_name>.yaml
+```
+
+</div>
+
+# Object ownership for cluster extensions
+
+In Operator Lifecycle Manager (OLM) v1, a Kubernetes object can only be owned by a single `ClusterExtension` object at a time. This ensures that objects within an OpenShift Container Platform cluster are managed consistently and prevents conflicts between multiple cluster extensions attempting to control the same object.
+
+## Single ownership
+
+The core ownership principle enforced by OLM v1 is that each object can only have one cluster extension as its owner. This prevents overlapping or conflicting management by multiple cluster extensions, ensuring that each object is uniquely associated with only one bundle. Single ownership has the following implications:
+
+- Bundles that provide a `CustomResourceDefinition` (CRD) object can only be installed once.
+
+  Bundles provide CRDs, which are part of a `ClusterExtension` object. This means you can install a bundle only once in a cluster. Attempting to install another bundle that provides the same CRD results in failure, as each custom resource can have only one cluster extension as its owner.
+
+- Cluster extensions cannot share objects.
+
+  The single-owner policy of OLM v1 means that cluster extensions cannot share ownership of any objects. If one cluster extension manages a specific object, such as a `Deployment`, `CustomResourceDefinition`, or `Service` object, another cluster extension cannot claim ownership of the same object. Any attempt to do so is blocked by OLM v1.
+
+## Error messages
+
+When a conflict occurs due to multiple cluster extensions attempting to manage the same object, Operator Controller returns an error message indicating the ownership conflict, such as the following:
+
+<div class="formalpara">
+
+<div class="title">
+
+Example error message
+
+</div>
+
+``` text
+CustomResourceDefinition 'logfilemetricexporters.logging.kubernetes.io' already exists in namespace 'kubernetes-logging' and cannot be managed by operator-controller
+```
+
+</div>
+
+This error message signals that the object is already being managed by another cluster extension and cannot be reassigned or shared.
+
+## Considerations
+
+As a cluster or extension administrator, review the following considerations:
+
+Uniqueness of bundles
+Ensure that Operator bundles providing the same CRDs are not installed more than once. This can prevent potential installation failures due to ownership conflicts.
+
+Avoid object sharing
+If you need different cluster extensions to interact with similar resources, ensure they are managing separate objects. Cluster extensions cannot jointly manage the same object due to the single-owner enforcement.
+
+# ClusterObjectSets
+
+> [!IMPORTANT]
+> ClusterObjectSets is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+>
+> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
+As part of Operator Lifecycle Manager (OLM) v1, the operator-controller creates `ClusterObjectSet` resources when you install or upgrade content with a `ClusterExtension` object. `ClusterObjectSet` objects enable safe, phased rollouts of Kubernetes resources.
+
+A `ClusterObjectSet` object is a cluster-scoped resource. It is not content that you install. It is the controller’s internal record for one revision of your `ClusterExtension` object. It rolls out related resources sequentially with built-in readiness checks between phases.
+
+A `ClusterObjectSet` object solves several problems when managing sets of related Kubernetes resources:
+
+Immutable revision content
+The revision number, phases, objects, and collision protection strategy are immutable, that is, they cannot change once set. This provides a clear audit trail of what was deployed at each revision.
+
+Phased rollout
+Resources are grouped into phases, for example, CRDs before Deployments, and are deployed sequentially. A phase only progresses after all its objects pass readiness probes. Manifests are organized into phases, applied to the cluster, and must pass some status probes before they progress to the next phase. This avoids incomplete installs.
+
+Safe transitions
+During upgrades, both old and new revisions remain active until the new revision succeeds. Object ownership transitions between revisions automatically.
+
+Single ownership
+Each resource can only be managed by one `ClusterObjectSet` at a time, preventing conflicts.
+
+Large resource support
+Object manifests can be stored inline or externalized into secrets, allowing bundles larger than the etcd 1.5 MiB object size limit.
+
+> [!NOTE]
+> Archived `ClusterObjectSet` revisions stay on the cluster as a history of what was applied for that `ClusterExtension` object.
+
+Each `ClusterObjectSet` contains the following content:
+
+A revision number
+A permanent, sequential integer that identifies the version. When the bundle version changes, it creates a new revision. During an upgrade, the old and new revision can both be active until the new one finishes. Older revisions are archived.
+
+A lifecycle state
+This shows the status of the `ClusterObjectSet`, which can be `Active` (managed and reconciled) or `Archived`. The `lifecycleState` transitions from `Active` to `Archived` but not back.
+
+A list of phases
+Objects within a `ClusterObjectSet` are organized into phases. Each phase groups related resources, and phases are applied sequentially. Within a phase, all objects are applied simultaneously in no particular order.
+
+A collision protection strategy
+Controls whether a `ClusterObjectSet` can adopt pre-existing objects on the cluster.
+
+Status conditions
+Indicates whether the revision is actively rolling out and reports rollout progress, availability, and success.
+
+At most, one `ClusterObjectSet` manages a given cluster object at a time. Very large bundles store manifests in `Secret` objects so that size limits do not block installs or upgrades.
+
+Additionally, support for management of large object bundles created by `ClusterObjectSet` is provided. `ClusterObjectSet` embeds Kubernetes manifests in `.spec.phases[].objects[].object`. Currently, with up to 20 phases and 50 objects per phase, they can exceed the etcd 1.5 MiB object size limit. Large Operators with many CRDs, Deployments, RBAC rules, and webhook configurations frequently hit this limit, causing the API server to reject the `ClusterObjectSet` and fail installation or upgrade.
+
+To solve this, objects can be externalized into `Secret` resources using per-object references. The phases data is immutable and only consumed by the revision reconciler, making it suitable for externalization.

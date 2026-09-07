@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Search the bundled OCP 4.20 Markdown snapshot without external tools."""
+"""Search the bundled OCP 4.22 Markdown snapshot without external tools."""
 
 from __future__ import annotations
 
@@ -9,12 +9,12 @@ import sys
 from pathlib import Path
 
 
-DOCS_ROOT = Path(__file__).resolve().parent.parent / "references" / "ocp-4.20"
+DOCS_ROOT = Path(__file__).resolve().parent.parent / "references" / "ocp-4.22"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Search bundled OpenShift Container Platform 4.20 Markdown files."
+        description="Search bundled OpenShift Container Platform 4.22 Markdown files."
     )
     parser.add_argument("query", help="Literal text to find, or a regular expression with --regex")
     parser.add_argument(

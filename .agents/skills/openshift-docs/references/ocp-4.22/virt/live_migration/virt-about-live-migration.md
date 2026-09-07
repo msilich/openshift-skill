@@ -1,0 +1,211 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Live migration moves a running virtual machine to another node without interrupting the workload. It enables smooth transitions during cluster upgrades and node maintenance. Traffic is encrypted using TLS by default.
+
+# Live migration requirements
+
+Live migration requires shared storage, sufficient resources, and compatible CPUs across nodes.
+
+Live migration requirements
+- Shared storage with `ReadWriteMany` (RWX) access mode.
+
+- Sufficient RAM and network bandwidth.
+
+  > [!NOTE]
+  > You must ensure that there is enough memory request capacity in the cluster to support node drains that result in live migrations. You can determine the approximate required spare memory by using the following calculation:
+  >
+  >     Product of (Maximum number of nodes that can drain in parallel) and (Highest total VM memory request allocations across nodes)
+  >
+  > The default number of migrations that can run in parallel in the cluster is 5. For more information, see "Configuring live migration" in the Additional resources section.
+
+- If the virtual machine uses a host model CPU, the nodes must support the virtual machine’s host model CPU.
+
+> [!NOTE]
+> A dedicated Multus network for live migration is highly recommended. For more information, see "Using a dedicated network for live migration" in the Additional resources section. A dedicated network minimizes the effects of network saturation on tenant workloads during migration.
+
+# About live migration permissions
+
+In OpenShift Virtualization 4.19 and later, live migration operations are restricted to users who are explicitly granted the `kubevirt.io:migrate` cluster role. Users with this role can create, delete, and update virtual machine (VM) live migration requests.
+
+The live migration requests are represented by `VirtualMachineInstanceMigration` (VMIM) custom resources. Cluster administrators can bind the `kubevirt.io:migrate` role to trusted users or groups at either the namespace or cluster level.
+
+Before OpenShift Virtualization 4.19, namespace administrators had live migration permissions by default. This behavior changed in version 4.19 to prevent unintended or malicious disruptions to infrastructure-critical migration operations.
+
+As a cluster administrator, you can preserve the old behavior by creating a temporary cluster role before updating. After assigning the new role to users, delete the temporary role to enforce the more restrictive permissions. If you have already updated, you can still revert to the old behavior by aggregating the `kubevirt.io:migrate` role into the `admin` cluster role.
+
+# Preserving pre-4.19 live migration permissions during update
+
+Before you update to OpenShift Virtualization 4.22, you can create a temporary cluster role to preserve the previous live migration permissions until you are ready for the more restrictive default permissions to take effect.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- The OpenShift CLI (`oc`) is installed.
+
+- You have cluster administrator permissions.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Before updating to OpenShift Virtualization 4.22, create a temporary `ClusterRole` object. For example:
+
+    ``` yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      labels:
+        rbac.authorization.k8s.io/aggregate-to-admin=true
+      name: kubevirt.io:upgrademigrate
+    rules:
+    - apiGroups:
+      - subresources.kubevirt.io
+      resources:
+      - virtualmachines/migrate
+      verbs:
+      - update
+    - apiGroups:
+      - kubevirt.io
+      resources:
+      - virtualmachineinstancemigrations
+      verbs:
+      - get
+      - delete
+      - create
+      - update
+      - patch
+      - list
+      - watch
+      - deletecollection
+    ```
+
+    This cluster role is aggregated into the `admin` role before you update OpenShift Virtualization. The update process does not modify it, ensuring the previous behavior is maintained.
+
+2.  Add the cluster role manifest to the cluster by running the following command:
+
+    ``` terminal
+    $ oc apply -f <cluster_role_file_name>.yaml
+    ```
+
+3.  Update OpenShift Virtualization to version 4.22.
+
+4.  Bind the `kubevirt.io:migrate` cluster role to trusted users or groups by running one of the following commands, replacing `<namespace>`, `<first_user>`, `<second_user>`, and `<group_name>` with your own values.
+
+    - To bind the role at the namespace level, run the following command:
+
+      ``` terminal
+      $ oc create -n <namespace> rolebinding kvmigrate --clusterrole=kubevirt.io:migrate --user=<first_user> --user=<second_user> --group=<group_name>
+      ```
+
+    - To bind the role at the cluster level, run the following command:
+
+      ``` terminal
+      $ oc create clusterrolebinding kvmigrate --clusterrole=kubevirt.io:migrate --user=<first_user> --user=<second_user> --group=<group_name>
+      ```
+
+5.  When you have bound the `kubevirt.io:migrate` role to all necessary users, delete the temporary `ClusterRole` object by running the following command:
+
+    ``` terminal
+    $ oc delete clusterrole kubevirt.io:upgrademigrate
+    ```
+
+    After you delete the temporary cluster role, only users with the `kubevirt.io:migrate` role can create, delete, and update live migration requests.
+
+</div>
+
+# Granting live migration permissions
+
+You can grant trusted users or groups the ability to create, delete, and update live migration instances.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- The OpenShift CLI (`oc`) is installed.
+
+- You have cluster administrator permissions.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- (Optional) To change the default behavior so that namespace administrators always have permission to create, delete, and update live migrations, aggregate the `kubevirt.io:migrate` role into the `admin` cluster role by running the following command:
+
+  ``` terminal
+  $ oc label --overwrite clusterrole kubevirt.io:migrate rbac.authorization.k8s.io/aggregate-to-admin=true
+  ```
+
+- Bind the `kubevirt.io:migrate` cluster role to trusted users or groups by running one of the following commands, replacing `<namespace>`, `<first_user>`, `<second_user>`, and `<group_name>` with your own values.
+
+  - To bind the role at the namespace level, run the following command:
+
+    ``` terminal
+    $ oc create -n <namespace> rolebinding kvmigrate --clusterrole=kubevirt.io:migrate --user=<first_user> --user=<second_user> --group=<group_name>
+    ```
+
+  - To bind the role at the cluster level, run the following command:
+
+    ``` terminal
+    $ oc create clusterrolebinding kvmigrate --clusterrole=kubevirt.io:migrate --user=<first_user> --user=<second_user> --group=<group_name>
+    ```
+
+</div>
+
+# VM migration tuning
+
+You can adjust your cluster-wide live migration settings based on the type of workload and migration scenario.
+
+This enables you to control how many VMs migrate at the same time, the network bandwidth you want to use for each migration, and how long OpenShift Virtualization attempts to complete the migration before canceling the process. Configure these settings in the `HyperConverged` custom resource (CR).
+
+If you are migrating multiple VMs per node at the same time, set a `bandwidthPerMigration` limit to prevent a large or busy VM from using a large portion of the node’s network bandwidth. By default, the `bandwidthPerMigration` value is `0`, which means unlimited.
+
+A large VM running a heavy workload (for example, database processing), with higher memory dirty rates, requires a higher bandwidth to complete the migration.
+
+> [!NOTE]
+> Post copy mode, when enabled, triggers if the initial pre-copy phase does not complete within the defined timeout. During post copy, the VM CPUs pause on the source host while transferring the minimum required memory pages. Then the VM CPUs activate on the destination host, and the remaining memory pages transfer into the destination node at runtime. This can impact performance during the transfer.
+>
+> Post copy mode should not be used for critical data, or with unstable networks.
+
+# VM migration support for RHCOS 10.x
+
+> [!IMPORTANT]
+> Live migration support for RHCOS 10.x is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+>
+> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
+OpenShift Virtualization 4.22 and later versions supports live migration with RHCOS 10.x worker nodes as a Technology Preview feature.
+
+For information on configuring your cluster to use RHCOS 10.x, refer to the OpenShift Container Platform documentation.
+
+When performing live migration on a cluster using RHCOS 10.x, the migration does not complete successfully when the migration policy uses the attribute `allowPostCopy: true`. This is a known limitation.
+
+Live migration is supported across both RHCOS 9.x and 10.x worker nodes when both versions are present in a cluster. Any VM live migration from RHCOS 10.x to RHCOS 9.x and from RHCOS 9.x to RHCOS 10.x worker nodes, is a Technology Preview feature in OpenShift Container Platform 4.22.
+
+# Additional resources
+
+- [Default cluster roles for OpenShift Virtualization](../about_virt/virt-security-policies.md#default-cluster-roles-for-virt_virt-security-policies)
+
+- [Prometheus queries for live migration](../monitoring/virt-prometheus-queries.md#virt-live-migration-metrics_virt-prometheus-queries)
+
+- [Configure eviction and run strategies](../nodes/virt-eviction-strategies.md#virt-eviction-strategies)

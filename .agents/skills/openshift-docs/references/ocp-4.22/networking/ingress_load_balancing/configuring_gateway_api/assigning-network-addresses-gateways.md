@@ -1,0 +1,297 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can configure network addresses for your gateway to provide a predictable entry point for external and internal traffic. This ensures that clients can reliably resolve and route requests to your load balancers.
+
+Gateway API uses addresses to define the specific network locations that are assigned to your `Gateway` resource. In OpenShift Container Platform, you rely on the gateway controller to automatically provision and bind the necessary network addresses, such as an external or internal load balancer IP, to your gateway. On on-premise environments, this automatic provisioning requires a configured load balancer controller.
+
+To successfully assign network addresses to your gateway, complete the following tasks:
+
+- Understand gateway address assignment and types to plan your DNS and load balancer configuration.
+
+- Understand on-premise gateway routing requirements to ensure your infrastructure can support Gateway API.
+
+- Configure automatic address assignment for a gateway to successfully deploy it without violating manual address constraints.
+
+- Configure an internal load balancer to restrict your gateway traffic to your private network.
+
+- Review cloud provider annotations to ensure your internal load balancer provisions correctly on your specific infrastructure.
+
+- Configure DNS for on-premise gateways to ensure clients can reliably resolve your gateway.
+
+# Understand gateway address assignment and types
+
+OpenShift Container Platform automatically handles address assignment by provisioning a `LoadBalancer` service when you create a `Gateway` resource. The network address assigned to your gateway corresponds to the IP address or hostname of this underlying load balancer.
+
+> [!IMPORTANT]
+> Do not define the `spec.addresses` field. Manually requesting specific network addresses is not currently supported in OpenShift Container Platform. If you attempt to request a specific address manually, the gateway enters an error state.
+>
+> The `status.addresses` field is populated automatically by the gateway controller. This field lists the actual, active network address assigned to your gateway by the load balancing infrastructure.
+
+## Address types
+
+When the controller dynamically assigns an address to your gateway and populates the `status.addresses` field, it uses one of the following primary types to reflect the underlying load balancer:
+
+`Hostname`
+Represents a DNS-based ingress point. This concept is typically used for cloud load balancers where a DNS name exposes the load balancer.
+
+`IPAddress`
+A textual representation of a numeric IP address (IPv4 or IPv6) assigned by the load balancing infrastructure.
+
+# On-premise gateway routing requirements
+
+Understand the specific routing and load balancing requirements for on-premise Gateway API deployments to ensure your gateway functions correctly.
+
+Unlike cloud environments where load balancers are dynamically provisioned, on-premise clusters require a preconfigured load balancer controller. Red Hat tests and certifies Gateway API on on-premise platforms specifically with MetalLB.
+
+> [!WARNING]
+> If you attempt to use Gateway API on an on-premise cluster without a functional load balancer controller, the gateway service will remain in a "pending" state indefinitely.
+
+Additionally, be aware of the following topology and load balancer limitations for on-premise environments:
+
+- Third-party load balancers: Red Hat does not currently test Gateway API with third-party load balancers such as F5 or Avi Kubernetes Operator (AKO). If you use an untested load balancer, the cluster administrator is responsible for ensuring it is configured and working properly.
+
+- Unsupported topologies: Environments without a load balancer controller are not supported. For example, you cannot use annotations to enforce a `NodePort` service type in place of a load balancer.
+
+# Configure automatic address assignment for a gateway
+
+When you create a gateway resource, you must configure it for automatic address provisioning to successfully deploy the gateway without violating OpenShift Container Platform manual address constraints. By intentionally omitting the addresses field, you allow the controller to seamlessly provision and bind the necessary external network addresses to your gateway.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to the cluster as a user with the `cluster-admin` role.
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You have an existing `GatewayClass` custom resource, such as `openshift-default`.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a YAML file, such as `hello-gateway.yaml`, that defines your `Gateway` object.
+
+    ``` yaml
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: Gateway
+    metadata:
+      name: sample-gateway
+      namespace: openshift-ingress
+    spec:
+      gatewayClassName: openshift-default
+      listeners:
+      - name: http
+        hostname: "*.gwapi.<cluster_domain>"
+        port: 80
+        protocol: HTTP
+        allowedRoutes:
+          namespaces:
+            from: Selector
+            selector:
+              matchLabels:
+                shared-gateway-access: "true"
+    ```
+
+    - `metadata.name`: Specify the name of your `Gateway` object. The name must consist of a maximum of 63 lowercase alphanumeric characters or hyphens (`-`). The name must also start and end with an alphanumeric character.
+
+    - `spec.gatewayClassName`: Specify the `GatewayClass` object whose controller provisions the address and populates the `status.addresses` field.
+
+    - `spec.listeners[].hostname`: Specify the listener hostname. Replace `<cluster_domain>` with your actual cluster ingress domain (for example, `example.com`). Setting a hostname limits which route hostnames can match this listener.
+
+    - `spec.listeners[].allowedRoutes.namespaces`: Allow route attachment only from namespaces that have the `shared-gateway-access: "true"` label.
+
+2.  Apply the `Gateway` configuration by running the following command:
+
+    ``` terminal
+    $ oc apply -f hello-gateway.yaml
+    ```
+
+3.  Verify that the controller automatically assigned an address to your gateway by running the following command:
+
+    ``` terminal
+    $ oc -n openshift-ingress get gateway sample-gateway
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME             CLASS               ADDRESS             PROGRAMMED   AGE
+    sample-gateway   openshift-default   <gateway_address>   True         6m16s
+    ```
+
+    </div>
+
+    The `ADDRESS` column in the output displays the dynamically provisioned network address for your gateway.
+
+</div>
+
+# Configure an internal load balancer for a gateway
+
+By default, Gateway API provisions an external load balancer. To restrict your gateway traffic to your private network, you can configure Gateway API to provision an internal load balancer by adding a cloud-specific annotation to your `Gateway` custom resource (CR).
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to the cluster as a user with the `cluster-admin` role.
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You have configured a `GatewayClass` object.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create or edit your `Gateway` CR to include the cloud-specific annotation under `spec.infrastructure.annotations`.
+
+    The following example provisions an internal load balancer for an AWS cluster:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example `Gateway` CR for an AWS internal load balancer
+
+    </div>
+
+    ``` yaml
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: Gateway
+    metadata:
+      name: mygateway
+      namespace: openshift-ingress
+    spec:
+      gatewayClassName: openshift-default
+      infrastructure:
+        annotations:
+        # Specifies the cloud provider annotation and value required to provision an internal load balancer:
+          service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+      listeners:
+      - name: https
+        hostname: "*.example.com"
+        port: 443
+        protocol: HTTPS
+        tls:
+          mode: Terminate
+          certificateRefs:
+          - name: gateway-tls-secret
+    # ...
+    ```
+
+    </div>
+
+2.  Apply the updated `Gateway` CR by running the following command:
+
+    ``` terminal
+    $ oc apply -f <gateway_filename>.yaml
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Verify that the load balancer service is provisioned and has an internal IP address by running the following command:
+
+  ``` terminal
+  $ oc -n openshift-ingress get svc
+  ```
+
+</div>
+
+## Cloud provider annotations for internal load balancers
+
+To provision an internal load balancer for clusters deployed in private environments, you must add specific annotations to the `spec.infrastructure.annotations` field of your `Gateway` custom resource (CR).
+
+This configuration is supported on Amazon Web Services (AWS), Microsoft Azure, Google Cloud, Red Hat OpenStack Platform (RHOSP), and IBM Cloud. The following table details the required cloud-specific annotations and their corresponding values.
+
+| Cloud Provider | Annotation | Value |
+|----|----|----|
+| AWS | `service.beta.kubernetes.io/aws-load-balancer-internal` | `"true"` |
+| Azure | `service.beta.kubernetes.io/azure-load-balancer-internal` | `"true"` |
+| Google Cloud | `cloud.google.com/load-balancer-type` | `"Internal"` |
+| RHOSP | `service.beta.kubernetes.io/openstack-internal-load-balancer` | `"true"` |
+| IBM Cloud/ IBM Power Virtual Server | `service.kubernetes.io/ibm-load-balancer-cloud-provider-ip-type` | `"private"` |
+
+Internal load balancer annotations by cloud provider
+
+# Configuring DNS for on-premise gateways
+
+Configure DNS records manually on on-premise environments to ensure clients can reliably resolve your gateway.
+
+Although the Ingress Operator automatically creates a `DNSRecord` custom resource (CR) using the hostname from the listener, this record is marked as "unmanaged" on on-premise platforms because the cluster Ingress Operator does not implement on-premise DNS providers. You must manually configure DNS records to point to the IP address of your load balancer.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to the cluster as a user with the `cluster-admin` role.
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You have configured a load balancer controller, such as MetalLB, for your cluster.
+
+- Your gateway has been assigned an external network address by the load balancer.
+
+- Your gateway is located in the `openshift-ingress` namespace.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Retrieve the external IP address assigned to your gateway by the load balancer by running the following command:
+
+    ``` terminal
+    $ oc -n openshift-ingress get gateway <gateway_name>
+    ```
+
+    Note the IP address listed in the `ADDRESS` column.
+
+2.  Access your organization’s DNS provider or server.
+
+3.  Create a DNS record, such as an A record or wildcard A record, that maps the listener’s hostname to the external IP address of your gateway.
+
+</div>

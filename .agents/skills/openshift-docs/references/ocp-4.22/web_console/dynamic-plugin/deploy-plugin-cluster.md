@@ -1,0 +1,379 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+You can deploy the plugin to an OpenShift Container Platform cluster.
+
+# Build an image with Docker
+
+To deploy your plugin on a cluster, you need to build an image and push it to an image registry first.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Build the image with the following command:
+
+    ``` terminal
+    $ docker build -t quay.io/my-repositroy/my-plugin:latest .
+    ```
+
+2.  Optional: If you want to test your image, run the following command:
+
+    ``` terminal
+    $ docker run -it --rm -d -p 9001:80 quay.io/my-repository/my-plugin:latest
+    ```
+
+3.  Push the image by running the following command:
+
+    ``` terminal
+    $ docker push quay.io/my-repository/my-plugin:latest
+    ```
+
+</div>
+
+# Deploy your plugin on a cluster
+
+After pushing an image with your changes to a registry, you can deploy the plugin to a cluster by using a Helm chart.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have the location of the image containing the plugin that was previously pushed.
+
+  > [!NOTE]
+  > You can specify additional parameters based on the needs of your plugin. The [`values.yaml`](https://github.com/openshift/console-plugin-template/blob/main/charts/openshift-console-plugin/values.yaml) file provides a full set of supported parameters.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  To deploy your plugin to a cluster, install a Helm chart with the name of the plugin as the Helm release name into a new namespace or an existing namespace as specified by the `-n` command-line option. Provide the location of the image within the `plugin.image` parameter by using the following command:
+
+    ``` terminal
+    $ helm upgrade -i  my-plugin charts/openshift-console-plugin -n my-plugin-namespace --create-namespace --set plugin.image=my-plugin-image-location
+    ```
+
+    Where:
+
+    `n <my-plugin-namespace>`
+    Specifies an existing namespace to deploy your plugin into.
+
+    `--create-namespace`
+    Optional: If deploying to a new namespace, use this parameter.
+
+    `--set plugin.image=my-plugin-image-location`
+    Specifies the location of the image within the `plugin.image` parameter.
+
+    > [!NOTE]
+    > If you are deploying on OpenShift Container Platform 4.10 and later, it is recommended to exclude configurations related to pod security by adding the parameter `--set plugin.securityContext.enabled=false`.
+
+2.  Optional: You can specify any additional parameters by using the set of supported parameters in the `charts/openshift-console-plugin/values.yaml` file.
+
+    ``` yaml
+    plugin:
+      name: ""
+      description: ""
+      image: ""
+      imagePullPolicy: IfNotPresent
+      replicas: 2
+      port: 9443
+      securityContext:
+        enabled: true
+      podSecurityContext:
+        enabled: true
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containerSecurityContext:
+        enabled: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+      resources:
+        requests:
+          cpu: 10m
+          memory: 50Mi
+      basePath: /
+      certificateSecretName: ""
+      serviceAccount:
+        create: true
+        annotations: {}
+        name: ""
+      patcherServiceAccount:
+        create: true
+        annotations: {}
+        name: ""
+      jobs:
+        patchConsoles:
+          enabled: true
+          image: "registry.redhat.io/openshift4/ose-tools-rhel8@sha256:e44074f21e0cca6464e50cb6ff934747e0bd11162ea01d522433a1a1ae116103"
+          podSecurityContext:
+            enabled: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          containerSecurityContext:
+            enabled: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- View the list of enabled plugins by navigating from **Administration** → **Cluster Settings** → **Configuration** → **Console** `operator.openshift.io` → **Console plugins** or by visiting the **Overview** page.
+
+</div>
+
+> [!NOTE]
+> It can take a few minutes for the new plugin configuration to appear. If you do not see your plugin, you might need to refresh your browser if the plugin was recently enabled. If you receive any errors at runtime, check the JS console in browser developer tools to look for any errors in your plugin code.
+
+# Plugin service proxy
+
+If you need to make HTTP requests to an in-cluster service from your plugin, you can declare a service proxy in its `ConsolePlugin` resource by using the `spec.proxy` array field. The console backend exposes the `/api/proxy/plugin/<plugin-name>/<proxy-alias>/<request-path>?<optional-query-parameters>` endpoint to proxy the communication between the plugin and the service. A proxied request uses a *service CA bundle* by default. The service must use HTTPS.
+
+> [!NOTE]
+> The plugin must use the `consolefetch` API to make requests from its JavaScript code or some requests might fail. For more information, see "Dynamic plugin API".
+
+For each entry, you must specify an endpoint and alias of the proxy under the `endpoint` and `alias` fields. For the Service proxy type, you must set the endpoint `type` field to `Service` and the `service` must include values for the `name`, `namespace`, and `port` fields. For example, `/api/proxy/plugin/helm/helm-charts/releases?limit=10` is a proxy request path from the `helm` plugin with a `helm-charts` service that lists ten helm releases.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example service proxy
+
+</div>
+
+``` YAML
+apiVersion: console.openshift.io/v1
+kind: ConsolePlugin
+metadata:
+  name:<plugin-name>
+spec:
+  proxy:
+  - alias: helm-charts
+    authorization: UserToken
+    caCertificate: '-----BEGIN CERTIFICATE-----\nMIID....'en
+    endpoint:
+      service:
+        name: <service-name>
+        namespace: <service-namespace>
+        port: <service-port>
+      type: Service
+```
+
+</div>
+
+where:
+
+`spec.proxy.alias.helm-charts`
+Alias of the proxy.
+
+`spec.proxy.authorization.UserToken`
+If the service proxy request must contain the logged-in user’s OpenShift Container Platform access token, you must set the authorization field to `UserToken`.
+
+> [!NOTE]
+> If the service proxy request does not contain the logged-in user’s OpenShift Container Platform access token, set the authorization field to `None`.
+
+`spec.proxy.caCertificate.'-----BEGIN CERTIFICATE-----\nMIID....'en`
+If the service uses a custom service CA, the `caCertificate` field must contain the certificate bundle.
+
+`spec.proxy.endpoint`
+Endpoint of the proxy.
+
+# Enabling a dynamic plugin with the CLI
+
+You can enable a dynamic plugin to extend the core web console with more features, such as additional pages, perspectives, or dashboard items. Use the OpenShift CLI (`oc`) after a scripted installation, such as an Operator or Helm-based install. Add the `ConsolePlugin` name to `spec.plugins` in the console Operator configuration (`console.operator.openshift.io/cluster`) so the web console loads it.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You logged in to the cluster as a user with `cluster-admin` privileges.
+
+- You installed the dynamic plugin using a scripted installation, such as an Operator or Helm chart.
+
+- A `ConsolePlugin` custom resource (CR) exists on the cluster.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Confirm the name of the `ConsolePlugin` resource by running the following command:
+
+    ``` terminal
+    $ oc get consoleplugin
+    ```
+
+2.  Optional: View details for a specific `ConsolePlugin` resource by running the following commands:
+
+    1.  Set the plugin name as an environment variable:
+
+        ``` terminal
+        $ PLUGIN_NAME="<plugin_name>"
+        ```
+
+        where `<plugin_name>` is the name of the `ConsolePlugin` resource.
+
+    2.  Verify the plugin details:
+
+        ``` terminal
+        $ oc get consoleplugin "${PLUGIN_NAME}" -o yaml
+        ```
+
+        The following example shows a `ConsolePlugin` YAML with the plugin listed in `spec.plugins`:
+
+        ``` yaml
+        apiVersion: operator.openshift.io/v1
+        kind: Console
+        metadata:
+          name: cluster
+        spec:
+          plugins:
+            - <plugin_name>
+            # ...
+        ```
+
+        Replace `<plugin_name>` with the name of your plugin.
+
+3.  Enable the dynamic plugin by adding the `ConsolePlugin` name to the console Operator configuration.
+
+    > [!NOTE]
+    > Make sure the Operator finishes installing the dynamic plugin before you run the following patch command.
+
+    1.  Set the plugin patch as an environment variable:
+
+        ``` terminal
+        $ PLUGIN_PATCH=$(cat <<EOF
+        [
+          {
+            "op": "add",
+            "path": "/spec/plugins/-",
+            "value": "<plugin_name>"
+          }
+        ]
+        EOF
+        )
+        ```
+
+    2.  Patch the console Operator configuration:
+
+        ``` terminal
+        $ oc patch consoles.operator.openshift.io cluster --type=json -p "${PLUGIN_PATCH}"
+        ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Confirm that the console Operator configuration includes the `ConsolePlugin` name by running the following command:
+
+    ``` terminal
+    $ oc get console.operator.openshift.io cluster -o jsonpath='{.spec.plugins}{"\n"}'
+    ```
+
+2.  Refresh the OpenShift Container Platform web console.
+
+    The console can take a few minutes to apply the updated configuration.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Upstream demo instructions for enabling a plugin](https://github.com/openshift/console/tree/main/dynamic-demo-plugin#enabling-the-plugin)
+
+- [Helm template that patches the console Operator configuration](https://github.com/openshift/console-plugin-template/blob/3a06152cffdd10ad9654b6b607cb00a055f29733/charts/openshift-console-plugin/templates/patch-consoles-job.yaml)
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Service CA certificates](../../security/certificate_types_descriptions/service-ca-certificates.md#service-ca-certificates)
+
+- [Securing service traffic using service serving certificate secrets](../../security/certificates/service-serving-certificate.md#service-serving-certificate)
+
+- [Dynamic plugin API](dynamic-plugins-reference.md#dynamic-plugin-api_dynamic-plugins-reference)
+
+</div>
+
+# Disabling your plugin in the browser
+
+Console users can use the `disable-plugins` query parameter to disable specific or all dynamic plugins that would normally get loaded at runtime.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To disable a specific plugin(s), remove the plugin you want to disable from the comma-separated list of plugin names.
+
+- To disable all plugins, leave an empty string in the `disable-plugins` query parameter.
+
+  > [!NOTE]
+  > Cluster administrators can disable plugins in the **Cluster Settings** page of the web console.
+
+</div>
+
+# Additional resources
+
+- [Understanding Helm](../../applications/working_with_helm_charts/understanding-helm.md#understaning-helm)

@@ -1,0 +1,235 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+To restrict traffic between workloads and improve application security, configure `NetworkPolicy` objects for your cluster. Network policies define the allowed ingress and egress connections for selected pods and help isolate applications within namespaces.
+
+As a developer, you can define network policies that restrict traffic to pods in your cluster.
+
+# About network policy
+
+To control traffic between workloads and improve network isolation, configure `NetworkPolicy` objects for your projects. Network policies define the allowed ingress and egress connections for selected pods and help secure applications in your cluster.
+
+By default, all pods in a project are accessible from other pods and network endpoints. To isolate one or more pods in a project, you can create `NetworkPolicy` objects in that project to indicate the allowed incoming connections. Project administrators can create and delete `NetworkPolicy` objects within their own project.
+
+> [!IMPORTANT]
+> From OpenShift Container Platform 4.22, OpenShift Container Platform now includes `NetworkPolicy` objects in some of its own namespaces by default. This inclusion improves overall security and better protects control plane components. Do not modify the `NetworkPolicy` objects that OpenShift Container Platform includes in its own namespaces by default. To check the namespaces that include the objects by default, you can run the following command:
+>
+> ``` terminal
+> $ oc get networkpolicies --all-namespaces
+> ```
+>
+> The OpenShift Container Platform 4.22 release does not include these objects in all OpenShift Container Platform namespaces; later OpenShift Container Platform releases might include the objects in additional namespaces.
+
+By default, all pods in a project are accessible from any network endpoint.
+
+If a pod is matched by selectors in one or more `NetworkPolicy` objects, then the pod accepts only connections that are allowed by at least one of those `NetworkPolicy` objects. A pod that is not selected by any `NetworkPolicy` objects remains fully accessible.
+
+## Policy additivity
+
+`NetworkPolicy` objects are additive, which means you can combine multiple `NetworkPolicy` objects together to satisfy complex network requirements.
+
+For example, if you define both an `allow-same-namespace` policy and an `allow-http-and-https` policy within the same project, pods with the `role=frontend` label accept any connection allowed by either policy.
+
+This means the pods accept:
+
+- Connections on any port from pods in the same namespace.
+
+- Connections on ports `80` and `443` from pods in any namespace.
+
+``` yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-router
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          policy-group.network.openshift.io/ingress: ""
+  podSelector: {}
+  policyTypes:
+  - Ingress
+```
+
+The `policy-group.network.openshift.io/ingress:""` label supports OVN-Kubernetes.
+
+To reduce the cluster attack surface and ensure predictable network behavior, OpenShift Container Platform enforces least-privilege network policies on critical networking components.
+
+The operators that manage cluster DNS and cluster Ingress automatically install and maintain default "deny-all" `NetworkPolicy` objects in their respective namespaces.
+
+Traffic is controlled using targeted "allow" policies in the following namespaces:
+
+- DNS component namespaces (`openshift-dns` and `openshift-dns-operator`):
+
+  - Egress is limited to the API server and required DNS ports.
+
+  - Ingress is restricted to essential DNS traffic and metrics.
+
+- Ingress component namespaces (`openshift-ingress` and `openshift-ingress-operator`):
+
+  - Egress is limited to the API server, DNS ports, and route endpoints.
+
+  - Ingress is restricted to HTTP/HTTPS traffic and metrics.
+
+> [!IMPORTANT]
+> Do not run unmanaged or custom pods in these namespaces. Because these namespaces operate on a deny-by-default model, network traffic for any unmanaged containers running in these namespaces will be blocked.
+
+# Optimizations for network policy with OVN-Kubernetes network plugin
+
+Learn how to optimize OVN-Kubernetes network policies to reduce flow count and ensure external IP traffic is allowed when needed.
+
+When designing your network policy, refer to the following guidelines:
+
+- For network policies with the same `spec.podSelector` spec, it is more efficient to use one network policy with multiple `ingress` or `egress` rules, than multiple network policies with subsets of `ingress` or `egress` rules.
+
+- Every `ingress` or `egress` rule based on the `podSelector` or `namespaceSelector` spec generates the number of OVS flows proportional to `number of pods selected by network policy + number of pods selected by ingress or egress rule`. Therefore, it is preferable to use the `podSelector` or `namespaceSelector` spec that can select as many pods as you need in one rule, instead of creating individual rules for every pod.
+
+  For example, the following policy contains two rules:
+
+  ``` yaml
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: test-network-policy
+  spec:
+    podSelector: {}
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            role: frontend
+    - from:
+      - podSelector:
+          matchLabels:
+            role: backend
+  ```
+
+  The following policy expresses those same two rules as one:
+
+  ``` yaml
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: test-network-policy
+  spec:
+    podSelector: {}
+    ingress:
+    - from:
+      - podSelector:
+          matchExpressions:
+          - {key: role, operator: In, values: [frontend, backend]}
+  ```
+
+  The same guideline applies to the `spec.podSelector` spec. If you have the same `ingress` or `egress` rules for different network policies, it might be more efficient to create one network policy with a common `spec.podSelector` spec. For example, the following two policies have different rules:
+
+  ``` yaml
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: policy1
+  spec:
+    podSelector:
+      matchLabels:
+        role: db
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            role: frontend
+  ---
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: policy2
+  spec:
+    podSelector:
+      matchLabels:
+        role: client
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            role: frontend
+  ```
+
+  The following network policy expresses those same two rules as one:
+
+  ``` yaml
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: policy3
+  spec:
+    podSelector:
+      matchExpressions:
+      - {key: role, operator: In, values: [db, client]}
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            role: frontend
+  ```
+
+  You can apply this optimization when only multiple selectors are expressed as one. In cases where selectors are based on different labels, it may not be possible to apply this optimization. In those cases, consider applying some new labels for network policy optimization specifically.
+
+## NetworkPolicy CR and external IPs in OVN-Kubernetes
+
+In OVN-Kubernetes, the `NetworkPolicy` custom resource (CR) enforces strict isolation rules. If a service is exposed using an external IP, a network policy can block access from other namespaces unless explicitly configured to allow traffic.
+
+To allow access to external IPs across namespaces, create a `NetworkPolicy` CR that explicitly permits ingress from the required namespaces and ensures traffic is allowed to the designated service ports. Without allowing traffic to the required ports, access might still be restricted.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example output
+
+</div>
+
+``` yaml
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    annotations:
+    name: <policy_name>
+    namespace: openshift-ingress
+  spec:
+    ingress:
+    - ports:
+      - port: 80
+        protocol: TCP
+    - ports:
+      - port: 443
+        protocol: TCP
+    - from:
+      - namespaceSelector:
+          matchLabels:
+          kubernetes.io/metadata.name: <my_namespace>
+    podSelector: {}
+    policyTypes:
+    - Ingress
+```
+
+</div>
+
+where:
+
+`<policy_name>`
+Specifies your name for the policy.
+
+`<my_namespace>`
+Specifies the name of the namespace where the policy is deployed.
+
+For more details, see "About network policy".
+
+# Additional resources
+
+- [Creating a network policy](creating-network-policy.md#creating-network-policy)
+
+- [Defining a default network policy for projects](default-network-policy.md#default-network-policy)
+
+- [Projects and namespaces](../../../authentication/using-rbac.md#rbac-projects-namespaces_using-rbac)
+
+- [Configuring multitenant isolation with network policy](multitenant-network-policy.md#multitenant-network-policy)
+
+- [NetworkPolicy API](../../../rest_api/network_apis/networkpolicy-networking-k8s-io-v1.md#networkpolicy-networking-k8s-io-v1)

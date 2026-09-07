@@ -1,0 +1,919 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+If you use a firewall, you must configure your allowlist for the firewall to ensure OpenShift Container Platform has access to the URLs it requires to pull container images and access Red Hat services. Additional URLs are required for features such as Telemetry, Red Hat Lightspeed, cloud provider integrations, or certain build strategies.
+
+# Configuring your firewall for OpenShift Container Platform
+
+Before you install OpenShift Container Platform, you must configure your firewall to grant access to the sites that OpenShift Container Platform requires.
+
+There are no special configuration considerations for services running on only controller nodes compared to compute nodes.
+
+> [!NOTE]
+> If your environment has a dedicated load balancer in front of your OpenShift Container Platform cluster, review the allowlists between your firewall and load balancer to prevent unwanted network restrictions to your cluster.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Allowlist the following container registry URLs for cluster installation and upgrades:
+
+    | URL | Port | Function |
+    |----|----|----|
+    | `registry.redhat.io` | 443 | Provides core container images |
+    | `access.redhat.com` | 443 | Hosts a signature store that a container client requires for verifying images pulled from `registry.access.redhat.com`. In a firewall environment, ensure that this resource is on the allowlist. |
+    | `registry.access.redhat.com` | 443 | Hosts all the container images that are stored on the Red Hat Ecosystem Catalog, including core container images. |
+    | `quay.io` | 443 | Provides core container images |
+    | `cdn.quay.io` | 443 | Provides core container images |
+    | `cdn01.quay.io` | 443 | Provides core container images |
+    | `cdn02.quay.io` | 443 | Provides core container images |
+    | `cdn03.quay.io` | 443 | Provides core container images |
+    | `cdn04.quay.io` | 443 | Provides core container images |
+    | `cdn05.quay.io` | 443 | Provides core container images |
+    | `cdn06.quay.io` | 443 | Provides core container images |
+    | `icr.io` | 443 | Provides IBM Cloud Pak container images. This domain is only required if you use IBM Cloud Paks. |
+    | `cp.icr.io` | 443 | Provides IBM Cloud Pak container images. This domain is only required if you use IBM Cloud Paks. |
+
+    - You can use the wildcard `*.quay.io` instead of `cdn.quay.io` and `cdn0[1-6].quay.io` in your allowlist.
+
+    - You can use the wildcard `*.access.redhat.com` to simplify the configuration and ensure that all subdomains, including `registry.access.redhat.com`, are allowed.
+
+    - When adding a site such as `quay.io` to your allowlist, do not add a wildcard entry such as `*.quay.io` to your denylist. In most cases, image registries use a content delivery network (CDN) to serve images. If a firewall blocks access, image downloads are denied when the initial download request redirects to a hostname such as `cdn01.quay.io`.
+
+2.  Allowlist the following URLs to enable cluster access, authentication, and updates:
+
+    | URL | Port | Function |
+    |----|----|----|
+    | `*.apps.<cluster_name>.<base_domain>` | 443 | Allowlist these URLs to enable cluster access, authentication, and updates. |
+    | `api.openshift.com` | 443 | API endpoint for cluster tokens and update checks. |
+    | `console.redhat.com` | 443 | Authentication service for cluster tokens. |
+    | `sso.redhat.com` | 443 | The `https://console.redhat.com` site uses authentication from `sso.redhat.com` |
+
+    For egress traffic, Operators require route access to perform health checks to establish a connection for reaching endpoints. The authentication and web console Operators connect to two routes to verify functionality. Cluster administrators who do not want to allow `*.apps.<cluster_name>.<base_domain>`, must allow the following routes:
+
+    - `oauth-openshift.apps.<cluster_name>.<base_domain>`
+
+    - `canary-openshift-ingress-canary.apps.<cluster_name>.<base_domain>`
+
+    - `console-openshift-console.apps.<cluster_name>.<base_domain>`, or the hostname that is specified in the `spec.route.hostname` field of the `consoles.operator/cluster` object if the field is not empty.
+
+3.  Allowlist the following registry URLs that host related artifacts for cluster installation and upgrades, such as installation content, release images, and client tools:
+
+    | URL | Port | Function |
+    |----|----|----|
+    | `mirror.openshift.com` | 443 | Required to access mirrored installation content and images. This site is also a source of release image signatures, although the Cluster Version Operator needs only a single functioning source. |
+    | `quayio-production-s3.s3.amazonaws.com` | 443 | Required to access Quay image content in AWS. |
+    | `rhcos.mirror.openshift.com` | 443 | Required to download Red Hat Enterprise Linux CoreOS (RHCOS) images. |
+    | `storage.googleapis.com/openshift-release` | 443 | A source of release image signatures, although the Cluster Version Operator needs only a single functioning source. |
+
+4.  Set your firewall’s allowlist to include any site that provides resources for a language or framework that your builds require.
+
+5.  If you do not disable Telemetry, you must grant access to the following URLs to access Telemetry and Red Hat Lightspeed:
+
+    | URL | Port | Function |
+    |----|----|----|
+    | `cert-api.access.redhat.com` | 443 | Required for Telemetry |
+    | `api.access.redhat.com` | 443 | Required for Telemetry |
+    | `infogw.api.openshift.com` | 443 | Required for Telemetry |
+    | `console.redhat.com` | 443 | Required for Telemetry and for `insights-operator` |
+
+6.  If you use Alibaba Cloud, Amazon Web Services (AWS), Microsoft Azure, or Google Cloud to host your cluster, you must grant access to the URLs that offer the cloud provider API and DNS for that cloud:
+
+    <table>
+    <colgroup>
+    <col style="width: 10%" />
+    <col style="width: 40%" />
+    <col style="width: 10%" />
+    <col style="width: 40%" />
+    </colgroup>
+    <thead>
+    <tr>
+    <th style="text-align: left;">Cloud</th>
+    <th style="text-align: left;">URL</th>
+    <th style="text-align: left;">Port</th>
+    <th style="text-align: left;">Function</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;"><p>Alibaba</p></td>
+    <td style="text-align: left;"><p><code>*.aliyuncs.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Required to access Alibaba Cloud services and resources. Review the <a href="https://github.com/aliyun/alibaba-cloud-sdk-go/blob/master/sdk/endpoints/endpoints_config.go?spm=a2c4g.11186623.0.0.47875873ciGnC8&amp;file=endpoints_config.go">Alibaba endpoints_config.go file</a> to find the exact endpoints to allow for the regions that you use.</p></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p>AWS</p></td>
+    <td style="text-align: left;"><p><code>aws.amazon.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>*.amazonaws.com</code></p>
+    <p>Alternatively, if you choose to not use a wildcard for AWS APIs, you must include the following URLs in your allowlist:</p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Required to access AWS services and resources. Review the <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">AWS Service Endpoints</a> in the AWS documentation to find the exact endpoints to allow for the regions that you use.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>ec2.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>ec2.us-east-1.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to get the list of available regions when interactively generating the <code>install-config.yaml</code> file.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>events.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>iam.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>route53.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>*.s3.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>*.s3.&lt;aws_region&gt;.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>*.s3.dualstack.&lt;aws_region&gt;.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>sts.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>sts.&lt;aws_region&gt;.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>tagging.us-east-1.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment. This endpoint is always <code>us-east-1</code>, regardless of the region the cluster is deployed in.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>ec2.&lt;aws_region&gt;.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>elasticloadbalancing.&lt;aws_region&gt;.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to install and manage clusters in an AWS environment.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>servicequotas.&lt;aws_region&gt;.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Required. Used to confirm quotas for deploying the service.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>tagging.&lt;aws_region&gt;.amazonaws.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Allows the assignment of metadata about AWS resources in the form of tags.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>*.cloudfront.net</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Used to provide access to CloudFront. If you use the AWS Security Token Service (STS) and the private S3 bucket, you must provide access to CloudFront.</p></td>
+    <td style="text-align: left;"><p>GCP</p></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>*.googleapis.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Required to access Google Cloud services and resources. Review <a href="https://cloud.google.com/endpoints/">Cloud Endpoints</a> in the Google Cloud documentation to find the endpoints to allow for your APIs.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>accounts.google.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Required to access your Google Cloud account.</p></td>
+    <td style="text-align: left;"><p>Microsoft Azure</p></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>management.azure.com</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Required to access Microsoft Azure services and resources. Review the <a href="https://docs.microsoft.com/en-us/rest/api/azure/">Microsoft Azure REST API reference</a> in the Microsoft Azure documentation to find the endpoints to allow for your APIs.</p></td>
+    <td></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><p><code>*.blob.core.windows.net</code></p></td>
+    <td style="text-align: left;"><p>443</p></td>
+    <td style="text-align: left;"><p>Required to download Ignition files.</p></td>
+    <td></td>
+    </tr>
+    </tbody>
+    </table>
+
+7.  Allowlist the following URL for optional third-party content:
+
+    | URL | Port | Function |
+    |----|----|----|
+    | `registry.connect.redhat.com` | 443 | Required for all third-party images and certified operators. |
+
+8.  If you use a default Red Hat Network Time Protocol (NTP) server, allow the following URLs. NTP operates on User Datagram Protocol (UDP) port 123, so this port must be opened on the firewall.
+
+    | URL                   | Port | Function                                        |
+    |-----------------------|------|-------------------------------------------------|
+    | `1.rhel.pool.ntp.org` | 123  | Provides NTP services for time synchronization. |
+    | `2.rhel.pool.ntp.org` | 123  | Provides NTP services for time synchronization. |
+    | `3.rhel.pool.ntp.org` | 123  | Provides NTP services for time synchronization. |
+
+    > [!NOTE]
+    > If you do not use a default Red Hat NTP server, verify the NTP server for your platform and allow it in your firewall.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [OpenID Connect requirements for AWS STS](../../authentication/managing_cloud_provider_credentials/cco-short-term-creds.md#cco-short-term-creds-auth-flow-aws-oidc_cco-short-term-creds)
+
+</div>
+
+# OpenShift Container Platform network flow matrix
+
+You can use the information in the appropriate network flow matrix to manage ingress traffic for your specific environment. You can restrict ingress traffic to essential flows to improve network security.
+
+The following network flow matrixes describe the ingress flows to OpenShift Container Platform services for the following environments:
+
+- OpenShift Container Platform on bare metal
+
+- Single-node OpenShift with other platforms
+
+- OpenShift Container Platform on Amazon Web Services (AWS)
+
+- Single-node OpenShift on AWS
+
+> [!NOTE]
+> You can use the `commatrix` plugin for the `oc` command to generate local network flow data for your cluster. For more information see "Generating ingress network flow data using the `commatrix` plugin".
+
+Additionally, consider the following dynamic port ranges when managing ingress traffic for both bare metal and cloud environments:
+
+- `9000-9999`: Reserved for internal OpenShift Container Platform components. Do not assign user workloads or services to ports in this range.
+
+- `30000-32767`: Kubernetes `NodePort` service ports. These ports are required only if you expose services by using the `NodePort` service type. If `NodePort` services are not used, you can block this port range.
+
+To view or download the complete raw CSV content for an environment, see the following resources:
+
+- [OpenShift Container Platform on bare metal](https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/raw/bm.csv)
+
+- [Single-node OpenShift with other platforms](https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/raw/none-sno.csv)
+
+- [OpenShift Container Platform on AWS](https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/raw/aws.csv)
+
+- [Single-node OpenShift on AWS](https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/raw/aws-sno.csv)
+
+> [!NOTE]
+> The network flow matrixes describe ingress traffic flows for a base OpenShift Container Platform or single-node OpenShift installation. The matrixes do not apply for hosted control planes, Red Hat build of MicroShift, or standalone clusters.
+
+## Base network flows
+
+The following matrixes describe the base ingress flows to OpenShift Container Platform services.
+
+> [!NOTE]
+> For base ingress flows to single-node OpenShift clusters, see the *Control plane node base flows* matrix only.
+
+| <https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/unique/common-master.csv> |
+|----|
+
+Control plane node base flows {#network-flow-matrix-control_configuring-firewall}
+
+| <https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/unique/common-worker.csv> |
+|----|
+
+Worker node base flows {#network-flow-matrix-worker_configuring-firewall}
+
+## Additional network flows for OpenShift Container Platform on bare metal
+
+In addition to the base network flows, the following matrix describes the ingress flows to OpenShift Container Platform services that are specific to OpenShift Container Platform on bare metal.
+
+| <https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/unique/bm.csv> |
+|----|
+
+OpenShift Container Platform on bare metal
+
+## Additional network flows for single-node OpenShift with other platforms
+
+In addition to the base network flows, the following matrix describes the ingress flows to OpenShift Container Platform services that are specific to single-node OpenShift configured with `platform: none` in the installation manifest.
+
+| <https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/unique/none-sno.csv> |
+|----|
+
+Single-node OpenShift with other platforms
+
+## Additional network flows for OpenShift Container Platform on AWS
+
+In addition to the base network flows, the following matrix describes the ingress flows to OpenShift Container Platform services that are specific to OpenShift Container Platform on AWS.
+
+| <https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/unique/aws.csv> |
+|----|
+
+OpenShift Container Platform on AWS
+
+## Additional network flows for single-node OpenShift on AWS
+
+In addition to the base network flows, the following matrix describes the ingress flows to OpenShift Container Platform services that are specific to single-node OpenShift on AWS.
+
+| <https://raw.githubusercontent.com/openshift-kni/commatrix/release-4.22/docs/stable/unique/aws-sno.csv> |
+|----|
+
+Single-node OpenShift on AWS
+
+# Ingress network flow management with the commatrix plugin
+
+Use the `commatrix` plugin for the `oc` command to analyze ingress network traffic and generate firewall rules for live clusters.
+
+For ingress network analysis, the plugin reads the services deployed in a target cluster and generates a communication matrix of expected ingress flows. You can export the data in formats such as CSV, JSON, or YAML for audits, documentation, or configuring external firewalls.
+
+For firewall configuration, the plugin generates `nftables` rules in Butane format that restrict ingress traffic to only the flows required by your cluster. The plugin also generates a `NodeDisruptionPolicy` patch to apply updates without triggering node reboots.
+
+The communication matrix uses `EndpointSlice` objects to discover exposed ports. Kubernetes automatically creates `EndpointSlice` objects for each `Service` object. Starting with OpenShift Container Platform 4.22, the matrix fully covers all core OpenShift Container Platform ports. However, non-core Operators or other software that expose ports without a corresponding `Service` object do not appear in the matrix, such as host-level services, monitoring agents, or third-party software.
+
+To discover all listening ports on cluster nodes, use the `--host-open-ports` flag. This flag captures ports that are open on the hosts but are not defined through `Service` or `EndpointSlice` objects. You can compare this output with the declared ports by using the diff file generated by the plugin, which shows the differences between the intended and actual state.
+
+# Installing the commatrix plugin
+
+You can install the `commatrix` plugin from the Red Hat Ecosystem Catalog.
+
+<div class="note">
+
+<div class="title">
+
+</div>
+
+- You can also install the `commatrix` plugin by using Krew. For more information, see "CLI Manager Operator overview".
+
+- The communication matrix does not include ports from non-core Operators or other software that do not expose a `Service` object. For a complete view of listening ports, run the `generate` command with the `--host-open-ports` flag.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You installed the OpenShift CLI (`oc`).
+
+- You installed Podman.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Log in to the Red Hat Ecosystem Catalog registry by running the following command and entering your credentials:
+
+    ``` bash
+    $ podman login registry.redhat.io
+    ```
+
+2.  Extract the `commatrix` binary from the plugin image by running the following commands:
+
+    ``` bash
+    $ podman create --name oc-commatrix registry.redhat.io/openshift-kni/commatrix:v4.22
+    $ podman cp oc-commatrix:/oc-commatrix .
+    $ podman rm oc-commatrix
+    ```
+
+3.  Move the extracted binary to a directory in your system `PATH`, such as `/usr/local/bin/`, by running the following command:
+
+    ``` bash
+    sudo mv oc-commatrix /usr/local/bin/
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Run the following command to verify that the plugin is available locally:
+
+  ``` bash
+  $ oc commatrix
+  ```
+
+  ``` bash
+  Generate an up-to-date communication flows matrix for all ingress flows of openshift (multi-node and single-node in OpenShift) and Operators.
+
+   Optionally, generate a host open ports matrix and the difference with the communication matrix.
+
+   For additional details, please refer to the communication matrix documentation(https://github.com/openshift-kni/commatrix/blob/main/README.md).
+
+  Usage:
+    commatrix [command]
+
+  Available Commands:
+    completion  Generate the autocompletion script for the specified shell
+    generate    Generate an up-to-date communication flows matrix for all ingress flows.
+    help        Help about any command
+
+  Flags:
+    -h, --help   help for commatrix
+
+  Use "commatrix [command] --help" for more information about a command.
+  ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [CLI Manager Operator overview](../../cli_reference/cli_manager/index.md#cli-manager-overview)
+
+</div>
+
+# Generate ingress network flow data using the `commatrix` plugin
+
+Use the `commatrix` plugin for the `oc` command to generate ingress network flow data from your cluster and identify any differences between open ports on the host and expected ingress flows for your environment.
+
+The plugin generates ingress flows to OpenShift Container Platform services for the following environments:
+
+- OpenShift Container Platform on bare metal
+
+- Single-node OpenShift with other platforms
+
+- OpenShift Container Platform on Amazon Web Services (AWS)
+
+- Single-node OpenShift on AWS
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You installed the OpenShift CLI (`oc`).
+
+- You logged in as a user with `cluster-admin` privileges.
+
+- You installed Podman.
+
+- You installed the `commatrix` plugin.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Generate network flow data by running the following command:
+
+    ``` bash
+    $ oc commatrix generate
+    ```
+
+    > [!NOTE]
+    > By default, the plugin generates the network flow data in CSV format in a `communication-matrix` directory in your current working directory.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- View the generated network flow data in the `communication-matrix` directory by running the following command:
+
+  ``` bash
+  $ cat communication-matrix/communication-matrix.csv
+  ```
+
+  ``` bash
+  Direction,Protocol,Port,Namespace,Service,Pod,Container,Node Role,Optional
+  Ingress,TCP,4194,kube-system,kubelet,konnectivity-agent,,,false
+  Ingress,TCP,9100,openshift-monitoring,node-exporter,node-exporter,kube-rbac-proxy,,false
+  Ingress,TCP,9103,openshift-ovn-kubernetes,ovn-kubernetes-node,ovnkube-node,kube-rbac-proxy-node,,false
+
+  ...
+  ```
+
+</div>
+
+# Ingress traffic configuration with the commatrix plugin
+
+You can use the `commatrix` plugin to generate `nftables` rules that configure the firewall on cluster nodes to permit only the ingress traffic defined in the communication matrix.
+
+`nftables` is the packet filtering framework in the Linux kernel that replaces `iptables`. OpenShift Container Platform cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) use `nftables` for packet filtering. The `commatrix` plugin generates `nftables` rules and packages them as `MachineConfig` resources that the Machine Config Operator applies to your nodes.
+
+When you generate firewall rules with the `commatrix` plugin in Butane format, the plugin also generates a `NodeDisruptionPolicy` patch. This patch enables the Machine Config Operator to apply `nftables` rule updates without triggering a full node reboot, minimizing disruption to running workloads.
+
+> [!IMPORTANT]
+> When operators or components are installed, enabled, uninstalled, or disabled, you must regenerate the firewall rules to reflect the new configuration. Failure to regenerate and apply firewall rules in this scenario might have the following consequences:
+>
+> - Unnecessary ports might remain open, which increases the attack surface of your cluster.
+>
+> - Services might fail to function correctly if required ports remain blocked by outdated firewall rules.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Minimizing node disruption with MachineConfig changes](../../machine_configuration/machine-config-node-disruption.md#machine-config-node-disruption)
+
+</div>
+
+# Generate nftables firewall rules in Butane format
+
+You can generate `nftables` firewall rules in Butane format by using the `commatrix` plugin. The generated Butane configs contain `nftables` rules that allow the ingress flows defined in the communication matrix and block all other ingress flows.
+
+> [!WARNING]
+> Errors in `nftables` rules can block legitimate traffic and isolate nodes from the cluster. Review all generated rules before applying them.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You installed the OpenShift CLI (`oc`).
+
+- You logged in as a user with `cluster-admin` privileges.
+
+- You installed Podman.
+
+- You installed the `commatrix` plugin.
+
+- You installed the `butane` CLI.
+
+- For custom node groups, you need an existing machine config pool that you can target using node label selectors.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Generate firewall rules in Butane format by running the following command:
+
+    ``` terminal
+    $ oc commatrix generate --format butane
+    ```
+
+    By default, the plugin writes the output files to the `communication-matrix` directory in your current working directory.
+
+    The plugin generates one Butane config file per node pool, named `butane-<pool_name>.yaml`, and a `node-disruption-policy.yaml` patch file, for example:
+
+    ``` terminal
+    communication-matrix/
+    ├── butane-master.yaml
+    ├── butane-worker.yaml
+    └── node-disruption-policy.yaml
+    ```
+
+2.  Review the generated Butane config files by running the following command:
+
+    ``` terminal
+    $ cat communication-matrix/butane-<pool_name>.yaml
+    ```
+
+    See the following example of the `butane-master.yaml` file.
+
+    > [!NOTE]
+    > You can adjust the generated firewall rules in your YAML file to suit your network environment.
+
+    ``` yaml
+    variant: openshift
+    version: 4.22.0
+    metadata:
+      name: 98-nftables-commatrix-master
+      labels:
+        machineconfiguration.openshift.io/role: master
+    systemd:
+      units:
+        - name: "nftables.service"
+          enabled: true
+          contents: |
+            # ... systemd unit configuration ...
+    storage:
+      files:
+        - path: /etc/sysconfig/nftables.conf
+          mode: 0600
+          overwrite: true
+          contents:
+            inline: |
+              table inet openshift_filter {
+                  chain OPENSHIFT {
+                      type filter hook input priority 1; policy accept;
+
+                      # Allow loopback traffic
+                      iif lo accept
+
+                      # Allow established and related traffic
+                      ct state established,related accept
+
+                      # Allow ICMP on ipv4
+                      ip protocol icmp accept
+                      ip6 nexthdr ipv6-icmp accept
+
+                      # Allow specific TCP and UDP ports
+                      tcp dport { 22, 6443, 9100, 10250, 30000-60999 } accept
+                      udp dport { 6081, 30000-60999 } accept
+
+                      # Drop broadcast traffic with rate-limited logging
+                      ip daddr 255.255.255.255 jump { limit rate 1/minute log prefix "firewall "; drop; }
+
+                      # Rate-limited logging and default drop
+                      jump { limit rate 1/minute log prefix "firewall "; drop; }
+                  }
+              }
+    ```
+
+3.  Review the generated `NodeDisruptionPolicy` patch by running the following command:
+
+    ``` terminal
+    $ cat communication-matrix/node-disruption-policy.yaml
+    ```
+
+4.  Check whether your cluster already defines `NodeDisruptionPolicy` entries by running the following command:
+
+    ``` terminal
+    $ oc get -o yaml machineconfiguration cluster
+    ```
+
+5.  Apply the `NodeDisruptionPolicy` patch:
+
+    1.  If the `MachineConfiguration` resource does not define any `nodeDisruptionPolicy` entries, run the following command:
+
+        ``` terminal
+        $ oc patch machineconfiguration cluster --type=merge --patch-file=communication-matrix/node-disruption-policy.yaml
+        ```
+
+    2.  If the `MachineConfiguration` resource already contains `nodeDisruptionPolicy` entries, manually add the entries from `node-disruption-policy.yaml` to the existing `.spec.nodeDisruptionPolicy.units` and `.spec.nodeDisruptionPolicy.files` lists by running the following command:
+
+        ``` terminal
+        $ oc edit machineconfiguration cluster
+        ```
+
+6.  Convert each Butane config to a `MachineConfig` resource by running the following command:
+
+    ``` terminal
+    $ butane --strict -o mc-<pool_name>.yaml communication-matrix/butane-<pool_name>.yaml
+    ```
+
+    - `<pool_name>` is the name of the target node pool.
+
+7.  Apply the `MachineConfig` resources by running the following command for each node pool:
+
+    > [!IMPORTANT]
+    > You must apply the `NodeDisruptionPolicy` patch before applying `MachineConfig` resources. If you apply `MachineConfig` resources without the `NodeDisruptionPolicy` in place, the Machine Config Operator triggers a full node reboot.
+
+    ``` terminal
+    $ oc apply -f mc-<pool_name>.yaml
+    ```
+
+    The plugin generates `MachineConfig` resources with the naming pattern `98-nftables-commatrix-<pool_name>`.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Open a debug shell on a target node by running the following commands:
+
+    ``` terminal
+    $ oc debug node/<node_name>
+    sh-5.1# chroot /host
+    ```
+
+    - `<node_name>` is the name of a cluster node.
+
+    - `chroot /host` accesses the host filesystem.
+
+2.  Verify that the `nftables` rules are active on a node by running the following command:
+
+    ``` terminal
+    sh-5.1# nft list ruleset
+    ```
+
+    ``` terminal
+    ...
+    table inet openshift_filter {
+        chain OPENSHIFT {
+            type filter hook input priority filter + 1; policy accept;
+            iif "lo" accept
+            ct state established,related accept
+            ip protocol icmp accept
+            ip6 nexthdr ipv6-icmp accept
+            tcp dport { 22, 111, 2379-2380, 6080, 6443, 9001, 9099-9100, 9103-9105, 9107-9108, 9192, 9258, 9443, 9637, 9978-9980, 10250, 10256-10259, 17697, 22623-22624, 30000-60999 } accept
+            udp dport { 111, 6081, 30000-60999 } accept
+            ip daddr 255.255.255.255 jump {
+                limit rate 1/minute burst 5 packets log prefix "firewall "
+                drop
+            }
+            jump {
+                limit rate 1/minute burst 5 packets log prefix "firewall "
+                drop
+            }
+        }
+    }
+    ...
+    ```
+
+3.  Verify that denied traffic is logged with rate limiting by checking the node journal:
+
+    ``` terminal
+    $ oc debug node/<node_name> -- chroot /host journalctl -k --grep firewall
+    ```
+
+    Denied packets are logged, but log entries are rate-limited to one per minute with an initial burst of five entries.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installing Butane](installing-customizing.md#installation-special-config-butane-install_installing-customizing)
+
+</div>
+
+# Revert nftables firewall rules generated by the commatrix plugin
+
+If you need to remove the `nftables` firewall rules from your cluster nodes, delete the `MachineConfig` resources, and then clean up the `NodeDisruptionPolicy` entries.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You installed the OpenShift CLI (`oc`).
+
+- You logged in as a user with `cluster-admin` privileges.
+
+- You applied `nftables` firewall rules generated by the `commatrix` plugin.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Identify the `MachineConfig` resources created by the `commatrix` plugin by running the following command:
+
+    ``` terminal
+    $ oc get machineconfig | grep nftables
+    ```
+
+2.  Delete the `MachineConfig` resource for each node pool by running the following command:
+
+    ``` terminal
+    $ oc delete machineconfig 98-nftables-commatrix-<pool_name>
+    ```
+
+3.  Wait for all `MachineConfigPool` resources to return to the `UPDATED` state:
+
+    ``` terminal
+    $ oc get mcp
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output showing pools in `UPDATED` state
+
+    </div>
+
+    ``` terminal
+    NAME     CONFIG                                             UPDATED   UPDATING   DEGRADED   MACHINECOUNT   READYMACHINECOUNT   UPDATEDMACHINECOUNT   DEGRADEDMACHINECOUNT   AGE
+    master   rendered-master-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6   True      False      False      1              1                   1                     0                      160d
+    worker   rendered-worker-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6   True      False      False      0              0                   0                     0                      160d
+    ```
+
+    </div>
+
+4.  Open a debug shell on a target node by running the following commands:
+
+    ``` terminal
+    $ oc debug node/<node_name>
+    sh-5.1# chroot /host
+    ```
+
+    - `<node_name>` is the name of a cluster node.
+
+    - `chroot /host` accesses the host filesystem.
+
+5.  Verify that the custom `nftables` rules were removed by running the following command:
+
+    ``` terminal
+    sh-5.1# nft list ruleset 2>&1 | grep -q openshift_filter || echo "Custom rules removed"
+    ```
+
+6.  Remove the related `nftables` rules from the `NodeDisruptionPolicy` entries by editing the `MachineConfiguration` resource:
+
+    ``` terminal
+    $ oc edit machineconfiguration cluster
+    ```
+
+    Remove the `nftables.service` entry from `.spec.nodeDisruptionPolicy.units` and the `/etc/sysconfig/nftables.conf` entry from `.spec.nodeDisruptionPolicy.files`.
+
+</div>
+
+# Reference flags for the `commatrix` plugin
+
+The following table describes the flags for the `commatrix` plugin.
+
+| Flag | Type | Description |
+|----|----|----|
+| `--customEntriesFormat` | string | Define the format of a custom entries file. The plugin appends the entries in this file to the generated data. Supported values are `json`, `yaml`, or `csv`. |
+| `--customEntriesPath` | string | Define the file path to a custom entries file. The plugin appends the entries in this file to the generated data. |
+| `--debug` | boolean | Enable verbose logging for debugging. The default value is `false`. |
+| `--destDir` | string | Define the directory for output files. The default value is `communication-matrix`. |
+| `--custom-node-group` | string | Assign nodes matching a label selector to a custom group for separate firewall rule generation. Specify in `<group_name>=<label_selector>` format. You can specify this flag multiple times to define multiple custom groups. This flag applies only to `nft`, `butane`, and `mc` output formats. A `MachineConfigPool` custom group matching the custom group name must exist before you apply the generated `MachineConfig` resources. |
+| `--format` | string | Define the output format. Supported values are `json`, `yaml`, `csv`, `nft`, `butane`, or `mc`. The `butane` format generates Butane YAML configs containing nftables firewall rules. The `mc` format generates `MachineConfig` custom resources containing nftables firewall rules. The default value is `csv`. |
+| `--host-open-ports` | boolean | Generate the expected communication data for the cluster environment. Identify the actual open ports on the cluster node to compare the difference between the expected open ports and the actual open ports. You can view the differences in the generated `matrix-diff-ss` file in the destination directory. For `nft`, `butane`, and `mc` formats, host open ports are merged into the communication matrix instead of generating a separate diff file. |
+| `-h` | boolean | Display the plugin help information. |

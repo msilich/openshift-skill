@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild the pinned, Markdown-only OpenShift 4.20 documentation snapshot."""
+"""Rebuild the pinned, Markdown-only OpenShift 4.22 documentation snapshot."""
 
 from __future__ import annotations
 
@@ -182,7 +182,7 @@ def write_source_metadata(
         "schema_version": 1,
         "artifact": {
             "product": "OpenShift Container Platform",
-            "version": "4.20",
+            "version": "4.22",
             "format": "GitHub-Flavored Markdown",
             "scope": "Complete openshift-enterprise topic map at the pinned revision",
             "markdown_files": markdown_files,
@@ -192,12 +192,14 @@ def write_source_metadata(
         "conversion": {
             "arguments": {
                 "distro": "openshift-enterprise",
-                "branch": "enterprise-4.20",
+                "branch": "enterprise-4.22",
+                "product-version": "4.22",
                 "topics": "all",
             },
             "successful_topics": topics,
             "failed_topics": 0,
             "modifications": [
+                "Resolved product-version=4.22 from the explicit enterprise-4.22 branch because the source distro map is stale.",
                 "Converted the source AsciiDoc files to GitHub-Flavored Markdown.",
                 "Removed the generated HTML index and CDN-dependent viewer.",
                 "Replaced the rolling weekly-update statement with pinned-snapshot provenance.",
@@ -235,8 +237,8 @@ def replace_output(staged: Path, output_dir: Path) -> None:
                 f"refusing to replace unrecognized output directory without SOURCE.json: {output_dir}"
             )
         existing = json.loads(marker.read_text(encoding="utf-8"))
-        if existing.get("artifact", {}).get("version") != "4.20":
-            raise RuntimeError(f"refusing to replace non-OCP-4.20 output: {output_dir}")
+        if existing.get("artifact", {}).get("version") != "4.22":
+            raise RuntimeError(f"refusing to replace non-OCP-4.22 output: {output_dir}")
         shutil.rmtree(output_dir)
     os.replace(staged, output_dir)
 
@@ -264,8 +266,8 @@ def main() -> int:
     tool_versions = verify_tool_versions(lock)
 
     output_dir.parent.mkdir(parents=True, exist_ok=True)
-    staging_root = Path(tempfile.mkdtemp(prefix="ocp-4.20-build-", dir=output_dir.parent))
-    staged_output = staging_root / "ocp-4.20"
+    staging_root = Path(tempfile.mkdtemp(prefix="ocp-4.22-build-", dir=output_dir.parent))
+    staged_output = staging_root / "ocp-4.22"
     try:
         process = run(
             [
@@ -278,7 +280,7 @@ def main() -> int:
                 "--distro",
                 "openshift-enterprise",
                 "--branch",
-                "enterprise-4.20",
+                "enterprise-4.22",
                 "--workers",
                 str(args.workers),
             ],
@@ -328,7 +330,7 @@ def main() -> int:
     finally:
         shutil.rmtree(staging_root, ignore_errors=True)
 
-    print(f"Pinned OCP 4.20 documentation written to {output_dir}")
+    print(f"Pinned OCP 4.22 documentation written to {output_dir}")
     return 0
 
 

@@ -8,10 +8,13 @@ OpenShift with [OpenCode](https://opencode.ai/):
 - `openshift-api` — live API discovery with `oc api-resources`, `oc explain`,
   OpenAPI v3, and CRD schemas.
 - `openshift-docs` — a complete, searchable, offline OpenShift Container
-  Platform 4.20 documentation snapshot.
+  Platform 4.22 documentation snapshot.
 
 The skills are model-provider independent. An optional OpenAI-compatible Qwen
 provider example is included for local and air-gapped deployments.
+
+This `v4.22` branch bundles the OpenShift Container Platform 4.22 documentation.
+The `main` branch retains the 4.20 snapshot.
 
 > [!WARNING]
 > The OpenShift MCP server is Developer Preview at the pinned baseline and is
@@ -28,7 +31,7 @@ provider example is included for local and air-gapped deployments.
 | `.agents/skills/openshift-mcp/assets/argocd-readonly-rbac/` | Optional additive Argo CD account and read-only RBAC patches |
 | `.agents/skills/openshift-mcp/scripts/` | CA-aware OpenShift and Argo CD/OpenCode bootstrap scripts |
 | `.agents/skills/openshift-api/` | Live API/schema discovery skill and helper |
-| `.agents/skills/openshift-docs/` | Offline OCP 4.20 documentation skill |
+| `.agents/skills/openshift-docs/` | Offline OCP 4.22 documentation skill |
 | `manifests/openshift-gitops-argocd-mcp-readonly/` | Simple reviewed merge-patch YAMLs for an unchanged default OpenShift GitOps instance |
 | `sources.lock.json` | Exact source and compatibility baselines |
 | `tools/docs/` | Reproducible documentation conversion inputs |
@@ -37,7 +40,7 @@ provider example is included for local and air-gapped deployments.
 ## Tested baseline
 
 - OpenCode 1.18.4
-- OpenShift CLI and documentation 4.20
+- OpenShift CLI 4.20 (existing runtime baseline); bundled documentation 4.22
 - Optional OpenShift GitOps 1.21.1 / Argo CD 3.4.4 integration, validated with
   Argo CD CLI 3.4.5
 - RHEL 9-compatible Linux x86_64 as the primary client target
@@ -50,12 +53,16 @@ The skills themselves are text assets and can work on other OpenCode platforms.
 Revalidate OpenCode permissions, the MCP binary, and tool names after changing
 any pinned component.
 
+The documentation update does not establish live-cluster compatibility with
+OCP 4.22. Use the matching `oc` client and validate the existing MCP profiles
+against your target cluster before Day-2 use.
+
 ## Quick start
 
 ### 1. Clone the skills
 
 ```bash
-git clone https://github.com/msilich/openshift-skill.git
+git clone --branch v4.22 --single-branch https://github.com/msilich/openshift-skill.git
 cd openshift-skill
 ```
 
@@ -316,7 +323,7 @@ openshift-mcp
 Safe first prompts:
 
 ```text
-Use $openshift-docs to find the OCP 4.20 documentation for Routes.
+Use $openshift-docs to find the OCP 4.22 documentation for Routes.
 Use $openshift-api to verify the fields of route.spec.tls from the live cluster.
 Use $openshift-mcp to confirm the current cluster identity and list namespaces. Read-only only.
 ```
@@ -576,12 +583,32 @@ mode:
 The optional `openshift-mcp.deny-secrets.toml` drop-in can block Secret
 resources technically. It is not enabled automatically.
 
-## Offline OCP 4.20 documentation
+## Offline OCP 4.22 documentation
 
-The `openshift-docs` skill contains 1,746 converted OCP 4.20 topics and requires
+The `openshift-docs` skill contains 1,797 converted OCP 4.22 topics and requires
 no network access at runtime. Provenance, exact commits, licenses, conversion
 details, and the content manifest are recorded in
-`.agents/skills/openshift-docs/references/ocp-4.20/SOURCE.json`.
+`.agents/skills/openshift-docs/references/ocp-4.22/SOURCE.json`.
+
+The snapshot is pinned to `openshift/openshift-docs` branch `enterprise-4.22`,
+commit `d8cc5bae880cc93ecd22fecd660c1b3a7f1358ff` (September 7, 2026).
+The converter includes a small local correction: this source revision's distro
+map lacks a 4.22 entry, so the product version is derived from the explicit
+`enterprise-4.22` branch instead of silently using the upstream 4.17 fallback.
+
+To rebuild on a connected preparation host with Python 3.12+, PyYAML 6.0.3,
+Asciidoctor 2.0.23, and Pandoc 3.7.0.2 installed:
+
+```bash
+git clone --branch enterprise-4.22 --single-branch https://github.com/openshift/openshift-docs.git /path/to/openshift-docs
+git -C /path/to/openshift-docs checkout --detach d8cc5bae880cc93ecd22fecd660c1b3a7f1358ff
+python3 tools/docs/build.py \
+  --source-dir /path/to/openshift-docs \
+  --output-dir .agents/skills/openshift-docs/references/ocp-4.22
+```
+
+The build checks the source revision, converter checksum, topic count, and
+complete Markdown content manifest against `tools/docs/build.lock.json`.
 
 When the bundled documentation and a connected cluster disagree about an API,
 the API actually served by the cluster is authoritative.

@@ -1,6 +1,7 @@
 {
   "format_version": 1,
   "generated_for": "openshift-skill",
+  "documentation_version": "4.22",
   "tested_baseline": {
     "primary_platform": "linux-x86_64",
     "primary_distribution": "rhel-9-compatible",
@@ -36,8 +37,8 @@
       "license": "Apache-2.0"
     },
     "openshift_docs": {
-      "branch": "enterprise-4.20",
-      "commit": "5aee2719f9ad01a82bb80b391e5af25f566c73c0",
+      "branch": "enterprise-4.22",
+      "commit": "d8cc5bae880cc93ecd22fecd660c1b3a7f1358ff",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0"
     }
