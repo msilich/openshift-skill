@@ -75,11 +75,33 @@ offline documentation, tests, and configuration templates.
 Install all eight complete skill directories as siblings. Domain skills depend
 on the shared MCP, API and documentation skills and their relative paths.
 
-For a global installation, copy each complete skill directory—not only its
-`SKILL.md`—to an OpenCode global skill location such as
-`~/.config/opencode/skills/`. When using the supplied restrictive OpenCode
-profiles globally, adapt their file-read permissions to the selected global
-path.
+For a user-wide installation, run the bundled installer as the user who runs
+OpenCode, **without sudo**:
+
+```bash
+bash install-skills.sh --dry-run
+bash install-skills.sh
+```
+
+It copies all eight complete directories, including offline documentation, to
+`$HOME/.config/opencode/skills/`, the global location documented by
+[OpenCode](https://opencode.ai/docs/skills/#place-files). The source is resolved
+relative to the script, so an absolute script path works from any working directory.
+The documentation version comes from the current checkout; no download is needed.
+
+Existing skill directories cause a preflight error. To update after reviewing
+the source version, use `bash install-skills.sh --replace`. Original directories
+are retained at the printed backup path outside OpenCode's skill-discovery tree;
+unrelated skills are untouched. Keep OpenCode closed during replacement. Restore
+a backup by moving the corresponding new directory aside and moving its original
+from the printed `previous/` directory back into `skills/`.
+
+For a customized installation, use `--target-dir /absolute/path/to/skills`.
+A non-default `XDG_CONFIG_HOME` requires this explicit selection; match the path
+to your OpenCode deployment. No model, MCP or permission configuration is changed.
+When using the supplied restrictive profiles globally, adapt their file-read
+permissions to the selected path. Restart OpenCode and check discovery from a
+directory outside this repository to avoid duplicate project/global skill names.
 
 ### 2. Download and build the OpenShift MCP server
 
