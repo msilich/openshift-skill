@@ -40,7 +40,8 @@
       "openshift-disconnected": "allow",
       "openshift-gitops": "allow",
       "openshift-upgrade": "allow",
-      "openshift-backup-restore": "allow"
+      "openshift-backup-restore": "allow",
+      "openshift-devspaces": "allow"
     },
     "read": {
       "*": "deny",

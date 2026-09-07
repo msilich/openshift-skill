@@ -45,6 +45,27 @@ and the referenced `SOURCE.json` file.
 - Each domain skill's source map identifies the documentation used. These skills
   and their MCP mappings are project-authored adaptations, not vendor certification.
 
+## Red Hat OpenShift Dev Spaces 3.29 documentation
+
+- Source: https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29
+- License: Creative Commons Attribution-ShareAlike 3.0 Unported (CC-BY-SA-3.0),
+  with Red Hat's Section 4d waiver retained in the legal notice.
+- This snapshot is sourced from official HTML, not a claimed public Git revision.
+  All 302 TOC topics and 46 illustrations are bundled. Exact response/fragment
+  hashes, retrieval dates, exclusions and link adjustments are in the snapshot's
+  `SOURCE.json`; the archive is pinned by `tools/docs/devspaces.lock.json`.
+- HTML source fragments and illustrations: `tools/docs/snapshots/devspaces-3.29.zip`.
+  Adapted Markdown: `.agents/skills/openshift-docs/references/devspaces-3.29/`.
+  `LEGAL-NOTICE.md` preserves attribution and trademarks; `LICENSE.md` contains
+  the CC BY-SA 3.0 legal code. Each topic links to its original URL.
+- Modifications: extracted article content, removed site chrome/scripts, converted
+  to Markdown, retained original anchors, localized document/image links, added
+  navigation and integrity metadata. Missing upstream fragments link to the local
+  topic and are recorded explicitly. External references are not redistributed.
+- `openshift-devspaces` skill text and references are project-authored adaptations
+  under CC-BY-SA-3.0; MCP mappings are identified as project modifications. This
+  does not relicense other separately licensed code or documentation in the bundle.
+
 ## Referenced but not redistributed
 
 The following projects are referenced by configuration and documentation, but

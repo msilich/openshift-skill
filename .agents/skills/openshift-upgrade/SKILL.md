@@ -14,7 +14,7 @@ Assess the requested current-to-target update with evidence, then accompany exec
 3. Use [readiness.md](references/readiness.md) before an update. Use [execution.md](references/execution.md) for an approved update or a stalled update.
 4. Use [openshift-api](../openshift-api/SKILL.md) to verify schemas and [openshift-mcp](../openshift-mcp/SKILL.md) to perform permitted operations.
 
-This skill depends on the other seven skills being installed as sibling directories.
+This skill depends on the other eight skills being installed as sibling directories.
 Resolve every path from this file. Missing documentation, a version mismatch, a
 denied access or an unknown schema must remain explicit; do not silently proceed
 with a substitute. Pure document lookup belongs to [openshift-docs](../openshift-docs/SKILL.md).

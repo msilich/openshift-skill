@@ -11,6 +11,14 @@
     "notes": "Skills are text assets; adapt paths and revalidate binaries on other supported OpenCode platforms."
   },
   "sources": {
+    "devspaces_docs": {
+      "version": "3.29",
+      "url": "https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29",
+      "license": "CC-BY-SA-3.0",
+      "source_type": "official HTML snapshot; no public Git source revision asserted",
+      "archive_sha256": "995e09d2a2796f05c9285d54c79be3bc373552efb2536468f3df2dcb3d2621a2",
+      "build_lock": "tools/docs/devspaces.lock.json"
+    },
     "opencode": {
       "version": "1.18.4",
       "commit": "4872c48c230728150e8e3406722943450ed58dcb",

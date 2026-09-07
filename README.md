@@ -1,6 +1,6 @@
 # OpenShift Agent Skills for OpenCode
 
-Eight portable, English-language agent skills for operating and researching
+Nine portable, English-language agent skills for operating and researching
 OpenShift with [OpenCode](https://opencode.ai/):
 
 - `openshift-mcp` — MCP-first diagnosis and controlled Day-2 operations with
@@ -8,12 +8,13 @@ OpenShift with [OpenCode](https://opencode.ai/):
 - `openshift-api` — live API discovery with `oc api-resources`, `oc explain`,
   OpenAPI v3, and CRD schemas.
 - `openshift-docs` — a complete, searchable, offline OpenShift Container
-  Platform 4.20 and OpenShift GitOps 1.21 documentation snapshot.
+  Platform 4.20, OpenShift GitOps 1.21 and Dev Spaces 3.29 documentation snapshots.
 - `openshift-troubleshooting` — evidence-led workload, service, storage, node and Operator diagnosis.
 - `openshift-disconnected` — oc-mirror v2, internal registries, transfer workflows and image-pull diagnosis.
 - `openshift-gitops` — Application/ApplicationSet reconciliation, access, trust and reviewed configuration changes.
 - `openshift-upgrade` — update readiness, supported paths, disruption constraints and completion checks.
 - `openshift-backup-restore` — OADP coverage and documented application/control-plane recovery.
+- `openshift-devspaces` — CheCluster administration, workspaces, devfiles, airgap dependencies and startup/IDE diagnosis.
 
 The skills are model-provider independent. An optional OpenAI-compatible Qwen
 provider example is included for local and air-gapped deployments.
@@ -36,8 +37,8 @@ For OCP 4.22, use the [`v4.22` branch](https://github.com/msilich/openshift-skil
 | `.agents/skills/openshift-mcp/assets/argocd-readonly-rbac/` | Optional additive Argo CD account and read-only RBAC patches |
 | `.agents/skills/openshift-mcp/scripts/` | CA-aware OpenShift and Argo CD/OpenCode bootstrap scripts |
 | `.agents/skills/openshift-api/` | Live API/schema discovery skill and helper |
-| `.agents/skills/openshift-docs/` | Offline OCP 4.20 and GitOps 1.21 documentation skill |
-| `.agents/skills/openshift-{troubleshooting,disconnected,gitops,upgrade,backup-restore}/` | Documentation-based operational workflows |
+| `.agents/skills/openshift-docs/` | Offline OCP 4.20, GitOps 1.21 and Dev Spaces 3.29 documentation skill |
+| `.agents/skills/openshift-{troubleshooting,disconnected,gitops,upgrade,backup-restore,devspaces}/` | Documentation-based operational workflows |
 | `manifests/openshift-gitops-argocd-mcp-readonly/` | Simple reviewed merge-patch YAMLs for an unchanged default OpenShift GitOps instance |
 | `sources.lock.json` | Exact source and compatibility baselines |
 | `tools/docs/` | Reproducible documentation conversion inputs |
@@ -72,7 +73,7 @@ OpenCode discovers `.agents/skills/*/SKILL.md` when it is started in this
 repository. Keeping the full checkout is recommended because it preserves the
 offline documentation, tests, and configuration templates.
 
-Install all eight complete skill directories as siblings. Domain skills depend
+Install all nine complete skill directories as siblings. Domain skills depend
 on the shared MCP, API and documentation skills and their relative paths.
 
 For a user-wide installation, run the bundled installer as the user who runs
@@ -83,7 +84,7 @@ bash install-skills.sh --dry-run
 bash install-skills.sh
 ```
 
-It copies all eight complete directories, including offline documentation, to
+It copies all nine complete directories, including offline documentation, to
 `$HOME/.config/opencode/skills/`, the global location documented by
 [OpenCode](https://opencode.ai/docs/skills/#place-files). The source is resolved
 relative to the script, so an absolute script path works from any working directory.
@@ -350,6 +351,7 @@ openshift-disconnected
 openshift-gitops
 openshift-upgrade
 openshift-backup-restore
+openshift-devspaces
 ```
 
 Safe first prompts:
@@ -368,6 +370,7 @@ Use $openshift-disconnected to investigate an ImagePullBackOff against our inter
 Use $openshift-gitops to explain why Application shop is OutOfSync after a successful sync.
 Use $openshift-upgrade to assess readiness for the target release, including PDBs and mirror content.
 Use $openshift-backup-restore to check whether backup orders includes its persistent data.
+Use $openshift-devspaces to diagnose why workspace team-a/api is Pending without changing resources.
 ```
 
 The read-only profile adds only the non-mutating `oc adm upgrade` report and
@@ -682,6 +685,51 @@ token helpers, online lifecycle/Jira calls or automatic privilege escalation are
 
 When the bundled documentation and a connected cluster disagree about an API,
 the API actually served by the cluster is authoritative.
+
+## Offline Dev Spaces 3.29
+
+Both OCP branches include the same official Dev Spaces 3.29 HTML snapshot: all 302
+table-of-contents topics and 46 illustrations. Use `$openshift-devspaces` for platform
+and workspace operations, or search the documentation without accessing a cluster:
+
+```bash
+python3 .agents/skills/openshift-docs/scripts/search_docs.py 'CheCluster' --product devspaces
+```
+
+The source is the [official Red Hat portal](https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29),
+not upstream Eclipse Che or an assumed public product Git branch. The versioned
+source archive and [build lock](tools/docs/devspaces.lock.json) preserve the original
+document HTML fragments, illustrations, response hashes and retrieval dates.
+Website scripts/navigation are excluded. External product/support links and the
+duplicate PDF rendition are not bundled. Missing source fragments are mapped to
+the local topic; every such adjustment is recorded in the snapshot's `SOURCE.json`.
+Bundling this documentation does not certify an installed product combination.
+
+To rebuild the pinned snapshot, install Python 3.9+, Pandoc 3.7.0.2 and the packages
+in [requirements-devspaces.lock.txt](tools/docs/requirements-devspaces.lock.txt) on
+the preparation host. The build itself needs no network and refuses an existing
+output directory:
+
+```bash
+python3 tools/docs/import_devspaces.py build --output-dir /path/to/new-devspaces-docs
+```
+
+Only maintainers refreshing the source use the connected fetch operation. Use a
+fresh cache for a fresh retrieval; the cache resumes interrupted downloads:
+
+```bash
+python3 tools/docs/import_devspaces.py fetch \
+  --cache-dir /path/to/new-response-cache --archive /path/to/new-devspaces-source.zip
+```
+
+A new archive requires explicit review and a new lock checksum; it cannot silently
+replace the pinned input. Build and compare two outputs before publishing an update.
+Raw response caches are preparation artifacts and are not installed. The installed
+skills need neither Pandoc nor the importer dependencies and perform no downloads.
+
+Dev Spaces documentation and the new skill's adapted text use CC BY-SA 3.0, unlike
+the Apache-licensed OCP/GitOps snapshots. The complete legal notice, license and
+per-topic source URLs are retained; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
 ## Validation
 

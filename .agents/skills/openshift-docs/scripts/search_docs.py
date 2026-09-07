@@ -11,6 +11,7 @@ from pathlib import Path
 
 DOCS_ROOT = Path(__file__).resolve().parent.parent / "references" / "ocp-4.20"
 GITOPS_ROOT = Path(__file__).resolve().parent.parent / "references" / "gitops-1.21"
+DEVSPACES_ROOT = Path(__file__).resolve().parent.parent / "references" / "devspaces-3.29"
 
 
 def parse_args() -> argparse.Namespace:
@@ -18,7 +19,7 @@ def parse_args() -> argparse.Namespace:
         description="Search bundled OpenShift Markdown files (OCP by default)."
     )
     parser.add_argument("query", help="Literal text to find, or a regular expression with --regex")
-    parser.add_argument("--product", choices=("ocp", "gitops"), default="ocp", help="Select the local product snapshot")
+    parser.add_argument("--product", choices=("ocp", "gitops", "devspaces"), default="ocp", help="Select the local product snapshot")
     parser.add_argument(
         "--regex",
         action="store_true",
@@ -45,7 +46,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    docs_root = DOCS_ROOT if args.product == "ocp" else GITOPS_ROOT
+    docs_root = {"ocp": DOCS_ROOT, "gitops": GITOPS_ROOT, "devspaces": DEVSPACES_ROOT}[args.product]
     if args.max_results < 1:
         print("error: --max-results must be at least 1", file=sys.stderr)
         return 2
