@@ -17,7 +17,7 @@ If you are uncertain about the state of the `ControlPlaneMachineSet` CR in your 
 
 # Supported cloud providers
 
-In OpenShift Container Platform 4.17, the control plane machine set is supported for Amazon Web Services (AWS), Google Cloud, Microsoft Azure, Nutanix, and VMware vSphere clusters.
+In OpenShift Container Platform 4.20, the control plane machine set is supported for Amazon Web Services (AWS), Google Cloud, Microsoft Azure, Nutanix, and VMware vSphere clusters.
 
 The status of the control plane machine set after installation depends on your cloud provider and the version of OpenShift Container Platform that you installed on your cluster.
 
@@ -30,7 +30,7 @@ The status of the control plane machine set after installation depends on your c
 | Red Hat OpenStack Platform (RHOSP) | X <sup>\[3\]</sup> | X |  |
 | VMware vSphere | X <sup>\[4\]</sup> | X |  |
 
-Control plane machine set implementation for OpenShift Container Platform 4.17
+Control plane machine set implementation for OpenShift Container Platform 4.20
 
 1.  AWS clusters that are upgraded from version 4.11 or earlier require [CR activation](cpmso-getting-started.md#cpmso-activating_cpmso-getting-started).
 

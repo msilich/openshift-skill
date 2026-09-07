@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-In OpenShift Container Platform version 4.17, you can install a private cluster into an existing Azure Virtual Network (VNet) on Microsoft Azure. The installation program provisions the rest of the required infrastructure, which you can further customize. To customize the installation, you modify parameters in the `install-config.yaml` file before you install the cluster.
+In OpenShift Container Platform version 4.20, you can install a private cluster into an existing Azure Virtual Network (VNet) on Microsoft Azure. The installation program provisions the rest of the required infrastructure, which you can further customize. To customize the installation, you modify parameters in the `install-config.yaml` file before you install the cluster.
 
 # Private clusters
 
@@ -49,11 +49,11 @@ Private clusters on Azure are subject to only the limitations that are associate
 
 ## User-defined outbound routing
 
-In OpenShift Container Platform, you can choose your own outbound routing for a cluster to connect to the internet. This allows you to skip the creation of public IP addresses and the public load balancer.
+You can configure user-defined outbound routing for a OpenShift Container Platform cluster to reach the internet without public IP addresses or a public load balancer.
 
-You can configure user-defined routing by modifying parameters in the `install-config.yaml` file before installing your cluster. A pre-existing VNet is required to use outbound routing when installing a cluster; the installation program is not responsible for configuring this.
+You must use a pre-existing `VNet` for outbound routing when you install a cluster. The installation program does not configure this network.
 
-When configuring a cluster to use user-defined routing, the installation program does not create the following resources:
+When you configure a cluster to use user-defined routing, the installation program does not create the following resources:
 
 - Outbound rules for access to the internet.
 
@@ -61,37 +61,37 @@ When configuring a cluster to use user-defined routing, the installation program
 
 - Kubernetes Service object to add the cluster machines to the public load balancer for outbound requests.
 
-You must ensure the following items are available before setting user-defined routing:
+Before you set user-defined routing, ensure that the following items are available:
 
-- Egress to the internet is possible to pull container images, unless using an OpenShift image registry mirror.
+- Egress to the internet so that you can pull container images, unless you use an OpenShift image registry mirror.
 
-- The cluster can access Azure APIs.
+- Access from the cluster to Azure APIs.
 
-- Various allowlist endpoints are configured. You can reference these endpoints in the *Configuring your firewall* section.
+- Access to the required allowlist endpoints.
 
-There are several pre-existing networking setups that are supported for internet access using user-defined routing.
+Several pre-existing networking setups support internet access by using user-defined routing.
 
 ### Private cluster with network address translation
 
-You can use [Azure VNET network address translation (NAT)](https://docs.microsoft.com/en-us/azure/virtual-network/nat-overview) to provide outbound internet access for the subnets in your cluster. You can reference [Create a NAT gateway using Azure CLI](https://docs.microsoft.com/en-us/azure/virtual-network/quickstart-create-nat-gateway-cli) in the Azure documentation for configuration instructions.
+You can use Azure Virtual Network (`VNet`) network address translation (NAT) to provide outbound internet access for the subnets in your cluster.
 
-When using a VNet setup with Azure NAT and user-defined routing configured, you can create a private cluster with no public endpoints.
+When you use a `VNet` setup with Azure NAT and user-defined routing configured, you can create a private cluster with no public endpoints.
 
 ### Private cluster with Azure Firewall
 
-You can use Azure Firewall to provide outbound routing for the VNet used to install the cluster. You can learn more about [providing user-defined routing with Azure Firewall](https://docs.microsoft.com/en-us/azure/aks/egress-outboundtype#deploy-a-cluster-with-outbound-type-of-udr-and-azure-firewall) in the Azure documentation.
+You can use Azure Firewall to provide outbound routing for the `VNet` used to install the cluster.
 
-When using a VNet setup with Azure Firewall and user-defined routing configured, you can create a private cluster with no public endpoints.
+When you use a `VNet` setup with Azure Firewall and user-defined routing configured, you can create a private cluster with no public endpoints.
 
 ### Private cluster with a proxy configuration
 
-You can use a proxy with user-defined routing to allow egress to the internet. You must ensure that cluster Operators do not access Azure APIs using a proxy; Operators must have access to Azure APIs outside of the proxy.
+You can use a proxy with user-defined routing to allow egress to the internet. You must ensure that cluster Operators do not access Azure APIs by using a proxy; Operators must have access to Azure APIs outside of the proxy.
 
-When using the default route table for subnets, with `0.0.0.0/0` populated automatically by Azure, all Azure API requests are routed over Azure’s internal network even though the IP addresses are public. As long as the Network Security Group rules allow egress to Azure API endpoints, proxies with user-defined routing configured allow you to create private clusters with no public endpoints.
+When you use the default route table for subnets, with `0.0.0.0/0` populated automatically by Azure, all Azure API requests are routed over Azure’s internal network even though the IP addresses are public. As long as the Network Security Group rules allow egress to Azure API endpoints, proxies with user-defined routing configured allow you to create private clusters with no public endpoints.
 
 ### Private cluster with no internet access
 
-You can install a private network that restricts all access to the internet, except the Azure API. This is accomplished by mirroring the release image registry locally. Your cluster must have access to the following:
+You can install a private network that restricts all access to the internet, except the Azure API. Mirror the release image registry locally. Your cluster must have access to the following:
 
 - An OpenShift image registry mirror that allows for pulling container images
 
@@ -99,9 +99,25 @@ You can install a private network that restricts all access to the internet, exc
 
 With these requirements available, you can use user-defined routing to create private clusters with no public endpoints.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Azure VNet network address translation (NAT)](https://docs.microsoft.com/en-us/azure/virtual-network/nat-overview)
+
+- [Create a NAT gateway by using Azure CLI](https://docs.microsoft.com/en-us/azure/virtual-network/quickstart-create-nat-gateway-cli)
+
+- [Providing user-defined routing with Azure Firewall](https://docs.microsoft.com/en-us/azure/aks/egress-outboundtype#deploy-a-cluster-with-outbound-type-of-udr-and-azure-firewall)
+
+</div>
+
 # About reusing a VNet for your OpenShift Container Platform cluster
 
-In OpenShift Container Platform 4.17, you can deploy a cluster into an existing Microsoft Azure Virtual Network (VNet). Deployments in an existing VNet require existing subnets and routing rules.
+In OpenShift Container Platform 4.20, you can deploy a cluster into an existing Microsoft Azure Virtual Network (VNet). Deployments in an existing VNet require existing subnets and routing rules.
 
 By deploying OpenShift Container Platform into an existing Azure VNet, you might be able to avoid service limit constraints in new accounts or more easily abide by the operational constraints that your company’s guidelines set. This is a good option to use if you cannot obtain the infrastructure creation permissions that are required to create the VNet.
 
@@ -286,9 +302,9 @@ Additional resources
 
 ## Minimum resource requirements for cluster installation
 
-Each created cluster must meet minimum requirements so that the cluster runs as expected.
+To ensure that your OpenShift Container Platform cluster runs as expected, each cluster machine must meet minimum CPU, memory, and storage requirements.
 
-| Machine | Operating System | vCPU <sup>\[1\]</sup> | Virtual RAM | Storage | Input/Output Per Second (IOPS)<sup>\[2\]</sup> |
+| Machine | Operating system | vCPU | Virtual RAM | Storage | Input/Output Per Second (IOPS) |
 |----|----|----|----|----|----|
 | Bootstrap | RHCOS | 4 | 16 GB | 100 GB | 300 |
 | Control plane | RHCOS | 4 | 16 GB | 100 GB | 300 |
@@ -296,41 +312,29 @@ Each created cluster must meet minimum requirements so that the cluster runs as 
 
 Minimum resource requirements
 
-1.  One vCPU is equivalent to one physical core when simultaneous multithreading (SMT), or Hyper-Threading, is not enabled. When enabled, use the following formula to calculate the corresponding ratio: (threads per core × cores) × sockets = vCPUs.
+- One vCPU is equal to one physical core when simultaneous multithreading (SMT), or Hyper-Threading, is not enabled. When enabled, use the following formula to calculate the corresponding ratio: (threads per core × cores) × sockets = vCPUs.
 
-2.  OpenShift Container Platform and Kubernetes are sensitive to disk performance, and faster storage is recommended, particularly for etcd on the control plane nodes which require a 10 ms p99 fsync duration. Note that on many cloud platforms, storage size and IOPS scale together, so you might need to over-allocate storage volume to obtain sufficient performance.
+- OpenShift Container Platform and Kubernetes are sensitive to disk performance, and Red Hat recommends faster storage, particularly for etcd on the control plane nodes which require a 10 ms p99 fsync duration. On many cloud platforms, storage size and IOPS scale together, so you might need to provision more storage to get enough performance.
 
-3.  As with all user-provisioned installations, if you choose to use RHEL compute machines in your cluster, you take responsibility for all operating system life cycle management and maintenance, including performing system updates, applying patches, and completing all other required tasks. Use of RHEL 7 compute machines is deprecated and has been removed in OpenShift Container Platform 4.10 and later.
+- As with all user-provisioned installations, if you choose to use RHEL compute machines in your cluster, you take responsibility for all operating system life cycle management and maintenance, including performing system updates, applying patches, and completing all other required tasks. OpenShift Container Platform 4.10 and later do not support RHEL 7 compute machines.
 
 > [!NOTE]
-> For OpenShift Container Platform version 4.19, RHCOS is based on RHEL version 9.6, which updates the micro-architecture requirements. The following list contains the minimum instruction set architectures (ISA) that each architecture requires:
+> In OpenShift Container Platform version 4.19, RHCOS uses RHEL version 9.6, which updates the micro-architecture requirements. Each architecture requires the following minimum instruction set architectures (ISA):
 >
 > - x86-64 architecture requires x86-64-v2 ISA
 >
 > - ARM64 architecture requires ARMv8.0-A ISA
 >
-> - IBM Power architecture requires Power 9 ISA
+> - ppc64le architecture requires IBM® Power9 ISA
 >
-> - s390x architecture requires z14 ISA
+> - s390x architecture requires IBM® z14 ISA
 >
-> For more information, see "Architectures".
+> For more information, see [Architectures](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.8_release_notes/index#architectures) in the RHEL documentation.
 
 > [!IMPORTANT]
-> You are required to use Azure virtual machines that have the `premiumIO` parameter set to `true`.
+> You must use Azure virtual machines that have the `premiumIO` parameter set to `true`.
 
 If an instance type for your platform meets the minimum requirements for cluster machines, it is supported to use in OpenShift Container Platform.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Architectures (RHEL documentation)](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.2_release_notes/index#architectures)
-
-</div>
 
 <div>
 
@@ -348,33 +352,17 @@ Additional resources
 
 There are several Microsoft Azure instance types tested with OpenShift Container Platform. Choose a listed instance type when you install a cluster on 64-bit x86 infrastructure.
 
-<div class="example">
-
-<div class="title">
-
-Machine types based on 64-bit x86 architecture
-
-</div>
+See the following machine types based on 64-bit x86 architecture:
 
 <https://raw.githubusercontent.com/openshift/installer/release-4.20/docs/user/azure/tested_instance_types_x86_64.md>
-
-</div>
 
 ## Tested instance types for Azure on 64-bit ARM infrastructures
 
 There are several Microsoft Azure ARM64 instance types tested with OpenShift Container Platform. Choose a listed instance type when you install a cluster on 64-bit ARM infrastructure.
 
-<div class="example">
-
-<div class="title">
-
-Machine types based on 64-bit ARM architecture
-
-</div>
+See the following machine types based on 64-bit ARM architecture:
 
 <https://raw.githubusercontent.com/openshift/installer/release-4.20/docs/user/azure/tested_instance_types_aarch64.md>
-
-</div>
 
 ## Enabling trusted launch for Azure VMs
 
@@ -642,12 +630,12 @@ Prerequisites
 
 - You have an existing `install-config.yaml` file.
 
-- You have reviewed the sites that your cluster requires access to and determined whether any of them need to bypass the proxy. By default, all cluster egress traffic is proxied, including calls to hosting cloud provider APIs. You added sites to the `Proxy` object’s `spec.noProxy` field to bypass the proxy if necessary.
+- You have reviewed the sites that your cluster requires access to and determined whether any of them need to bypass the proxy. By default, the proxy handles all cluster egress traffic, including calls to hosting cloud provider APIs. You added sites to the `Proxy` object’s `spec.noProxy` field to bypass the proxy if necessary.
 
   > [!NOTE]
-  > The `Proxy` object `status.noProxy` field is populated with the values of the `networking.machineNetwork[].cidr`, `networking.clusterNetwork[].cidr`, and `networking.serviceNetwork[]` fields from your installation configuration.
+  > The `Proxy` object `status.noProxy` field includes the values of the `networking.machineNetwork[].cidr`, `networking.clusterNetwork[].cidr`, and `networking.serviceNetwork[]` fields from your installation configuration.
   >
-  > For installations on Amazon Web Services (AWS), Google Cloud, Microsoft Azure, and Red Hat OpenStack Platform (RHOSP), the `Proxy` object `status.noProxy` field is also populated with the instance metadata endpoint (`169.254.169.254`).
+  > For installations on Amazon Web Services (AWS), Google Cloud, Microsoft Azure, and Red Hat OpenStack Platform (RHOSP), the `Proxy` object `status.noProxy` field also includes the instance metadata endpoint (`169.254.169.254`).
 
 </div>
 
@@ -688,10 +676,10 @@ Procedure
     Specifies a comma-separated list of destination domain names, IP addresses, or other network CIDRs to exclude from proxying. Preface a domain with `.` to match subdomains only. For example, `.y.com` matches `x.y.com`, but not `y.com`. Use `*` to bypass the proxy for all destinations.
 
     `additionalTrustBundle`
-    If provided, the installation program generates a config map that is named `user-ca-bundle` in the `openshift-config` namespace to hold the additional CA certificates. If you provide `additionalTrustBundle` and at least one proxy setting, the `Proxy` object is configured to reference the `user-ca-bundle` config map in the `trustedCA` field. The Cluster Network Operator then creates a `trusted-ca-bundle` config map that merges the contents specified for the `trustedCA` parameter with the RHCOS trust bundle. The `additionalTrustBundle` field is required unless the proxy’s identity certificate is signed by an authority from the RHCOS trust bundle.
+    If you specify this value, the installation program generates a config map named `user-ca-bundle` in the `openshift-config` namespace to hold the additional CA certificates. If you specify `additionalTrustBundle` and at least one proxy setting, the `Proxy` object references the `user-ca-bundle` config map in the `trustedCA` field. The Cluster Network Operator then creates a `trusted-ca-bundle` config map that merges the contents specified for the `trustedCA` parameter with the RHCOS trust bundle. You must set the `additionalTrustBundle` field unless an authority from the RHCOS trust bundle signs the proxy’s identity certificate.
 
     `additionalTrustBundlePolicy`
-    Specifies the policy that determines the configuration of the `Proxy` object to reference the `user-ca-bundle` config map in the `trustedCA` field. The allowed values are `Proxyonly` and `Always`. Use `Proxyonly` to reference the `user-ca-bundle` config map only when `http/https` proxy is configured. Use `Always` to always reference the `user-ca-bundle` config map. The default value is `Proxyonly`. Optional parameter.
+    Specifies the policy that determines the configuration of the `Proxy` object to reference the `user-ca-bundle` config map in the `trustedCA` field. The allowed values are `Proxyonly` and `Always`. Use `Proxyonly` to reference the `user-ca-bundle` config map only when you configure an `http/https` proxy. Use `Always` to always reference the `user-ca-bundle` config map. The default value is `Proxyonly`. Optional parameter.
 
     > [!NOTE]
     > The installation program does not support the proxy `readinessEndpoints` field.
@@ -705,10 +693,10 @@ Procedure
 
 2.  Save the file and reference it when installing OpenShift Container Platform.
 
-    The installation program creates a cluster-wide proxy that is named `cluster` that uses the proxy settings in the provided `install-config.yaml` file. If no proxy settings are provided, a `cluster` `Proxy` object is still created, but it will have a nil `spec`.
+    The installation program creates a cluster-wide proxy named `cluster` that uses the proxy settings in the `install-config.yaml` file. If you do not give proxy settings, the installation program still creates a `cluster` `Proxy` object, but it has a nil `spec`.
 
     > [!NOTE]
-    > Only the `Proxy` object named `cluster` is supported, and no additional proxies can be created.
+    > Only the `Proxy` object named `cluster` is supported, and you cannot create additional proxies.
 
 </div>
 
@@ -734,7 +722,7 @@ By default, administrator secrets are stored in the `kube-system` project. If yo
 
 ## Manually creating long-term credentials
 
-The Cloud Credential Operator (CCO) can be put into manual mode prior to installation in environments where the cloud identity and access management (IAM) APIs are not reachable, or the administrator prefers not to store an administrator-level credential secret in the cluster `kube-system` namespace.
+You can put the Cloud Credential Operator (CCO) into manual mode before OpenShift Container Platform installation if the cloud identity and access management (IAM) APIs are not reachable, or if you prefer not to store an administrator-level credential secret in the cluster `kube-system` namespace.
 
 <div>
 
@@ -1217,7 +1205,7 @@ Verification
 
 ### Incorporating the Cloud Credential Operator utility manifests
 
-To implement short-term security credentials managed outside the cluster for individual components, you must move the manifest files that the Cloud Credential Operator utility (`ccoctl`) created to the correct directories for the installation program.
+To implement short-term security credentials managed outside the cluster for individual OpenShift Container Platform components, you must move the manifest files that the Cloud Credential Operator utility (`ccoctl`) created to the correct directories for the installation program.
 
 <div>
 
@@ -1436,7 +1424,7 @@ Additional resources
 
 # Deploying the cluster
 
-To deploy your OpenShift Container Platform cluster, you can initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions infrastructure and completes cluster setup.
+To deploy your OpenShift Container Platform cluster, you initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions the required infrastructure and completes the cluster setup.
 
 > [!IMPORTANT]
 > You can run the `create cluster` command of the installation program only once, during initial installation.
@@ -1486,9 +1474,11 @@ Procedure
         --log-level=info
     ```
 
-    - For `<installation_directory>`, specify the location of your customized `./install-config.yaml` file.
+    where:
 
-    - To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
+    - `<installation_directory>`: Specifies the location of your customized `./install-config.yaml` file.
+
+    - `--log-level`: Specifies the log level. To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
 
     If the installation program cannot locate the `osServicePrincipal.json` configuration file from a previous installation, you are prompted for Azure subscription and authentication values.
 
@@ -1538,13 +1528,7 @@ When the cluster deployment completes successfully:
   > [!IMPORTANT]
   > Do not delete the installation program or the files that the installation program creates. Both are required to delete the cluster.
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  The following example shows the expected output:
 
   ``` terminal
   ...
@@ -1554,8 +1538,6 @@ When the cluster deployment completes successfully:
   INFO Login to the console with user: "kubeadmin", and password: "password"
   INFO Time elapsed: 36m22s
   ```
-
-  </div>
 
   <div class="important">
 
@@ -1573,7 +1555,7 @@ When the cluster deployment completes successfully:
 
 To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
 
-The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+The `kubeconfig` file is specific to a cluster and OpenShift Container Platform generates it during installation.
 
 <div>
 

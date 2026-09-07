@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can run Kubernetes jobs with Red Hat build of Kueue enabled to manage resource allocation within defined quota limits. This can help to ensure predictable resource availability, cluster stability, and optimized performance.
+You can run Kubernetes jobs with Red Hat build of Kueue enabled to manage resource allocation within defined quota limits. Running jobs with quota limits provides predictable resource availability, cluster stability, and optimized performance.
 
 # Identifying available local queues
 
@@ -55,7 +55,9 @@ Procedure
 
 # Defining a job to run with Red Hat build of Kueue
 
-When you are defining a job to run with Red Hat build of Kueue, ensure that it meets the following criteria:
+When you are defining a job to run with Red Hat build of Kueue, ensure that it meets the required criteria.
+
+The job must:
 
 - Specify the local queue to submit the job to, by using the `kueue.x-k8s.io/queue-name` label.
 
@@ -125,13 +127,19 @@ Procedure
 
     </div>
 
-    - Defines the resource type as a `Job` object, which represents a batch computation task.
+    where:
 
-    - Provides a prefix for generating a unique name for the job.
+    `kind`
+    Defines the resource type as a `Job` object, which represents a batch computation task.
 
-    - Identifies the queue to send the job to.
+    `metadata.generateName`
+    Provides a prefix for generating a unique name for the job.
 
-    - Defines the resource requests for each pod.
+    `metadata.labels.kueue.x-k8s.io/queue-name`
+    Identifies the queue to send the job to.
+
+    `spec.template.spec.containers[].resources`
+    Defines the resource requests for each pod.
 
 2.  Run the job by running the following command:
 

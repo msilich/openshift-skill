@@ -4,7 +4,7 @@ Before you deploy an OpenShift Container Platform cluster on vSphere, you can co
 
 # Available installation configuration parameters for vSphere
 
-To customize your cluster installation, configuration parameters are available to use in the `install-config.yaml` file.
+To customize your cluster installation, you can use configuration parameters in the `install-config.yaml` file.
 
 The following tables specify the required, optional, and vSphere-specific installation configuration parameters that you can set as part of the installation process.
 
@@ -198,7 +198,7 @@ If you configure your cluster to use both IP address families, review the follow
 <div class="note">
 <div class="title">
 &#10;</div>
-<p>Set the <code>networking.machineNetwork</code> to match the CIDR that the preferred NIC resides in.</p>
+<p>Set the <code>networking.machineNetwork</code> to match the CIDR of the preferred NIC.</p>
 </div></td>
 </tr>
 <tr>

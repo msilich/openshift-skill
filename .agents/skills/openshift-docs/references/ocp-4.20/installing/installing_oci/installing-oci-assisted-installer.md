@@ -2,9 +2,11 @@
 
 You can use the Assisted Installer to install a cluster on Oracle® Distributed Cloud. This method is recommended for most users, and requires an internet connection.
 
-If you want to set up the cluster manually or using other automation tools, or if you are working in a disconnected environment, you can use the Red Hat Agent-based Installer for the installation. For details, see [Installing a cluster on Oracle Distributed Cloud by using the Agent-based Installer](installing-oci-agent-based-installer.md#installing-oci-agent-based-installer).
+If you want to set up the cluster manually or using other automation tools, or if you are working in a disconnected environment, you can use the Red Hat Agent-based Installer for the installation. For details, see "Installing a cluster on Oracle Distributed Cloud by using the Agent-based Installer".
 
 # Supported Oracle Distributed Cloud infrastructures
+
+There are several different Oracle® Distributed Cloud infrastructure offerings you can choose for your installation.
 
 The following table describes the support status of each Oracle® Distributed Cloud infrastructure offering:
 
@@ -32,33 +34,13 @@ The installation process uses the OpenShift Container Platform discovery ISO ima
 
 Before installing OpenShift Container Platform on Oracle Distributed Cloud, you must consider the following configuration choices.
 
-<div class="formalpara">
-
-<div class="title">
-
 Deployment platforms
-
-</div>
-
 The integration between OpenShift Container Platform and Oracle Distributed Cloud is certified on both virtual machines (VMs) and bare-metal (BM) machines. Bare-metal installations using iSCSI boot drives require a secondary vNIC that is automatically created in the Terraform stack provided by Oracle.
 
-</div>
-
-Before you create a virtual machine (VM) or bare-metal (BM) machine, you must identify the relevant OCI shape. For details, see the following resource:
-
-- [Cloud instance types (Red Hat Ecosystem Catalog portal)](https://catalog.redhat.com/cloud/detail/216977).
-
-<div class="formalpara">
-
-<div class="title">
+Before you create a virtual machine (VM) or bare-metal (BM) machine, you must identify the relevant OCI shape. For details, see "Cloud instance types".
 
 VPU sizing recommendations
-
-</div>
-
 To ensure the best performance conditions for your cluster workloads that operate on Oracle Distributed Cloud, ensure that volume performance units (VPUs) for your block volume are sized for your workloads. The following list provides guidance for selecting the VPUs needed for specific performance needs:
-
-</div>
 
 - Test or proof of concept environment: 100 GB, and 20 to 30 VPUs.
 
@@ -66,19 +48,10 @@ To ensure the best performance conditions for your cluster workloads that operat
 
 - Heavy production environment: More than 500 GB, and 100 or more VPUs.
 
-Consider reserving additional VPUs to provide sufficient capacity for updates and scaling activities. For more information about VPUs, see [Volume Performance Units (Oracle documentation)](https://docs.oracle.com/en-us/iaas/Content/Block/Concepts/blockvolumeperformance.htm#vpus).
-
-<div class="formalpara">
-
-<div class="title">
+Consider reserving additional VPUs to provide sufficient capacity for updates and scaling activities. For more information about VPUs, see "Volume Performance Units".
 
 Instance sizing recommendations
-
-</div>
-
-Find recommended values for compute instance CPU, memory, VPU, and volume size for OpenShift Container Platform nodes. For details, see [Instance Sizing Recommendations for OpenShift Container Platform Nodes (Oracle documentation)](https://docs.oracle.com/en-us/iaas/Content/openshift-on-oci/installing-agent-about-instance-configurations.htm).
-
-</div>
+Find recommended values for compute instance CPU, memory, VPU, and volume size for OpenShift Container Platform nodes. For details, see "Instance Sizing Recommendations for OpenShift Container Platform Nodes".
 
 ## Workflow
 
@@ -131,6 +104,12 @@ The procedure for using the Assisted Installer in a connected environment to ins
 Additional resources
 
 </div>
+
+- [Cloud instance types (Red Hat Ecosystem Catalog portal)](https://catalog.redhat.com/cloud/detail/216977)
+
+- [Volume Performance Units (Oracle documentation)](https://docs.oracle.com/en-us/iaas/Content/Block/Concepts/blockvolumeperformance.htm#vpus)
+
+- [Instance Sizing Recommendations for OpenShift Container Platform Nodes (Oracle documentation)](https://docs.oracle.com/en-us/iaas/Content/openshift-on-oci/installing-agent-about-instance-configurations.htm)
 
 - [Assisted Installer for OpenShift Container Platform](https://access.redhat.com/documentation/en-us/assisted_installer_for_openshift_container_platform/)
 
@@ -191,6 +170,10 @@ Procedure
 
 Create the cluster configuration and generate the discovery ISO image in the Assisted Installer web console.
 
+## Creating the cluster
+
+To begin creating the cluster, set the cluster details.
+
 <div>
 
 <div class="title">
@@ -204,10 +187,6 @@ Prerequisites
 - You reviewed details about the OpenShift Container Platform installation and update processes.
 
 </div>
-
-## Creating the cluster
-
-Set the cluster details.
 
 <div>
 
@@ -275,7 +254,7 @@ Procedure
 
 ## Generating the Discovery ISO image
 
-Generate and download the Discovery ISO image.
+After setting cluster details, generate and download the Discovery ISO image.
 
 <div>
 
@@ -319,7 +298,9 @@ Additional resources
 
 # Provisioning OCI infrastructure for your cluster
 
-When using the Assisted Installer to create details for your OpenShift Container Platform cluster, you specify these details in a Terraform stack. A stack is an Oracle Cloud Infrastructure (OCI) feature that automates the provisioning of all necessary OCI infrastructure resources that are required for installing an OpenShift Container Platform cluster on Oracle Distributed Cloud.
+When using the Assisted Installer to create details for your OpenShift Container Platform cluster, you specify these details in a Terraform stack.
+
+A stack is an Oracle Cloud Infrastructure (OCI) feature that automates the provisioning of all necessary OCI infrastructure resources that are required for installing an OpenShift Container Platform cluster on Oracle Distributed Cloud.
 
 <div>
 
@@ -441,7 +422,9 @@ Procedure
 
 ## Adding custom manifests
 
-Add the mandatory custom manifests provided by Oracle. For details, see [Custom Manifests (Oracle documentation).](https://github.com/dfoster-oracle/oci-openshift/blob/v1.0.0-release-preview/custom_manifests/README.md)
+Add the mandatory custom manifests provided by Oracle.
+
+For details, see [Custom Manifests (Oracle documentation).](https://github.com/dfoster-oracle/oci-openshift/blob/v1.0.0-release-preview/custom_manifests/README.md)
 
 <div>
 
@@ -477,9 +460,9 @@ Procedure
 
 5.  From the **Review and create** page, click **Install cluster** to create your OpenShift Container Platform cluster on Oracle Distributed Cloud.
 
-</div>
+    After the cluster installation and initialization operations, the Assisted Installer indicates the completion of the cluster installation operation. For more information, see "Completing the installation" section in the Assisted Installer for OpenShift Container Platform document.
 
-After the cluster installation and initialization operations, the Assisted Installer indicates the completion of the cluster installation operation. For more information, see "Completing the installation" section in the Assisted Installer for OpenShift Container Platform document.
+</div>
 
 <div>
 
@@ -534,11 +517,23 @@ Procedure
 
 After creating a cluster with the Assisted Installer, you can use the Red Hat Hybrid Cloud Console to add new host nodes to the cluster and approve their certificate signing requests (CSRs).
 
-For details, see [Adding Nodes to a Cluster (Oracle documentation)](https://docs.oracle.com/en-us/iaas/Content/openshift-on-oci/adding-nodes.htm).
+<div>
 
-# Troubleshooting the installation of a cluster on Oracle Distributed Cloud
+<div class="title">
 
-If you experience issues with using the Assisted Installer to install an OpenShift Container Platform cluster on Oracle® Distributed Cloud, read the following sections to troubleshoot common problems.
+Procedure
+
+</div>
+
+- See the instructions in [Adding Nodes to a Cluster (Oracle documentation)](https://docs.oracle.com/en-us/iaas/Content/openshift-on-oci/adding-nodes.htm).
+
+</div>
+
+# Installation troubleshooting of a cluster on Oracle Distributed Cloud
+
+If you experience issues with using the Assisted Installer to install an OpenShift Container Platform cluster on Oracle® Distributed Cloud, you can troubleshoot the installation.
+
+Read the following sections to troubleshoot common problems.
 
 ## The Ingress Load Balancer in Oracle Distributed Cloud is not at a healthy status
 
@@ -561,18 +556,16 @@ Suggestion: Please update the parameter(s) in the Terraform config as per error 
 Documentation: https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_vcn
 ```
 
-Go to the [**Install OpenShift with the Assisted Installer**](https://console.redhat.com/openshift/assisted-installer/clusters/~new) page on the Hybrid Cloud Console, and check the **Cluster name** field on the **Cluster Details** step. Remove any special characters, such as a hyphen (`-`), from the name, because these special characters are not compatible with the OCI naming conventions. For example, change `oci-demo` to `ocidemo`.
+Go to the **Install OpenShift with the Assisted Installer** page on the Hybrid Cloud Console, and check the **Cluster name** field on the **Cluster Details** step. Remove any special characters, such as a hyphen (`-`), from the name, because these special characters are not compatible with the OCI naming conventions. For example, change `oci-demo` to `ocidemo`.
 
-<div>
+For more information, see "Red Hat Hybrid Cloud Console".
 
-<div class="title">
+# Additional resources
 
-Additional resources
+- [Installing a cluster on Oracle Distributed Cloud by using the Agent-based Installer](installing-oci-agent-based-installer.md#installing-oci-agent-based-installer)
 
-</div>
+- [Red Hat Hybrid Cloud Console](https://console.redhat.com/openshift/assisted-installer/clusters/~new)
 
 - [Troubleshooting OpenShift Container Platform on OCI (Oracle documentation)](https://docs.oracle.com/iaas/Content/openshift-on-oci/openshift-troubleshooting.htm)
 
 - [Installing an on-premise cluster using the Assisted Installer](../installing_on_prem_assisted/installing-on-prem-assisted.md#using-the-assisted-installer_installing-on-prem-assisted)
-
-</div>

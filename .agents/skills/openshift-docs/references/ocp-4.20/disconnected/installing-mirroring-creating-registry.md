@@ -2,12 +2,18 @@
 
 The *mirror registry for Red Hat OpenShift* is a small and streamlined container registry that you can use as a target for mirroring the required container images of OpenShift Container Platform for disconnected installations.
 
-If you already have a container image registry, such as [Red Hat Quay](https://www.redhat.com/en/technologies/cloud-computing/quay), you can skip this section and go straight to [Mirroring the OpenShift Container Platform image repository](installing-mirroring-installation-images.md#installation-mirror-repository_installing-mirroring-installation-images).
+If you already have a container image registry, such as Red Hat Quay, you can skip this section and go straight to "Mirroring the OpenShift Container Platform image repository".
+
+For more information, see "Red Hat Quay".
 
 > [!IMPORTANT]
 > The *mirror registry for Red Hat OpenShift* is not intended to be a substitute for a production deployment of Red Hat Quay.
 
 # Prerequisites
+
+There are several prerequisites that you must meet before you can create a mirror registry.
+
+The following prerequisites must be met:
 
 - An OpenShift Container Platform subscription.
 
@@ -21,7 +27,7 @@ If you already have a container image registry, such as [Red Hat Quay](https://
 
 - 8 GB of RAM.
 
-- About 12 GB for OpenShift Container Platform 4.17 release images, or about 358 GB for OpenShift Container Platform 4.17 release images and OpenShift Container Platform 4.17 Red Hat Operator images.
+- About 12 GB for OpenShift Container Platform 4.20 release images, or about 358 GB for OpenShift Container Platform 4.20 release images and OpenShift Container Platform 4.20 Red Hat Operator images.
 
   <div class="important">
 
@@ -37,7 +43,7 @@ If you already have a container image registry, such as [Red Hat Quay](https://
 
 # Mirror registry for Red Hat OpenShift introduction
 
-For disconnected deployments of OpenShift Container Platform, a container registry is required to carry out the installation of the clusters. To run a production-grade registry service on such a cluster, you must create a separate registry deployment to install the first cluster. The *mirror registry for Red Hat OpenShift* addresses this need and is included in every OpenShift Container Platform subscription. It is available for download on the [OpenShift console **Downloads**](https://console.redhat.com/openshift/downloads#tool-mirror-registry) page.
+For disconnected deployments of OpenShift Container Platform, a container registry is required to carry out the installation of the clusters. To run a production-grade registry service on such a cluster, you must create a separate registry deployment to install the first cluster. The *mirror registry for Red Hat OpenShift* addresses this need and is included in every OpenShift Container Platform subscription. It is available for download on the "OpenShift console Downloads" page.
 
 The *mirror registry for Red Hat OpenShift* allows users to install a small-scale version of Red Hat Quay and its required components by using the `mirror-registry` command-line interface (CLI) tool. The *mirror registry for Red Hat OpenShift* is deployed automatically with pre-configured local storage and a local database. It also includes auto-generated user credentials and access permissions with a single set of inputs and no additional configuration choices to get started.
 
@@ -58,11 +64,25 @@ The following limitations apply to the *mirror registry for Red Hat OpenShift*:
   > [!NOTE]
   > Because the *mirror registry for Red Hat OpenShift* uses local storage, you should remain aware of the storage usage consumed when mirroring images and use Red Hat Quay’s garbage collection feature to mitigate potential issues. For more information about this feature, see "Red Hat Quay garbage collection".
 
-- Support for Red Hat product images that are pushed to the *mirror registry for Red Hat OpenShift* for bootstrapping purposes are covered by valid subscriptions for each respective product. A list of exceptions to further enable the bootstrap experience can be found on the [Self-managed Red Hat OpenShift sizing and subscription guide](https://www.redhat.com/en/resources/self-managed-openshift-sizing-subscription-guide).
+- Support for Red Hat product images that are pushed to the *mirror registry for Red Hat OpenShift* for bootstrapping purposes are covered by valid subscriptions for each respective product. For a list of exceptions to further enable the bootstrap experience, see "Self-managed Red Hat OpenShift sizing and subscription guide".
 
 - Content built by customers should not be hosted by the *mirror registry for Red Hat OpenShift*.
 
 - Using the *mirror registry for Red Hat OpenShift* with more than one cluster is discouraged because multiple clusters can create a single point of failure when updating your cluster fleet. Instead, use the *mirror registry for Red Hat OpenShift* to install a cluster that can host a production-grade, highly-available registry such as Red Hat Quay, which can serve OpenShift Container Platform content to other clusters.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [OpenShift console Downloads](https://console.redhat.com/openshift/downloads#tool-mirror-registry)
+
+- [Self-managed Red Hat OpenShift sizing and subscription guide](https://www.redhat.com/en/resources/self-managed-openshift-sizing-subscription-guide)
+
+</div>
 
 # Configuring rootless Podman networking
 
@@ -128,7 +148,7 @@ Procedure
 
 # Mirroring on a local host with mirror registry for Red Hat OpenShift
 
-This procedure explains how to install the *mirror registry for Red Hat OpenShift* on a local host by using the `mirror-registry` installer tool. By doing so, users can create a local host registry running on port 443 for the purpose of storing a mirror of OpenShift Container Platform images.
+You can install the *mirror registry for Red Hat OpenShift* on a local host by using the `mirror-registry` installer tool. By doing so, users can create a local host registry running on port 443 for the purpose of storing a mirror of OpenShift Container Platform images.
 
 > [!NOTE]
 > Installing the *mirror registry for Red Hat OpenShift* using the `mirror-registry` CLI tool makes several changes to your machine. After installation, a `$HOME/quay-install` directory is created, which has installation files, local storage, and the configuration bundle. Trusted SSH keys are generated in case the deployment target is the local host, and systemd files on the host machine are set up to ensure that container runtimes are persistent. Additionally, an initial user named `init` is created with an automatically generated password. All access credentials are printed at the end of the install routine.
@@ -160,10 +180,10 @@ Procedure
       --tls-verify=false
     ```
 
-    - You can avoid running `--tls-verify=false` by configuring your system to trust the generated rootCA certificates. See "Securing Red Hat Quay" and "Configuring the system to trust the certificate authority" for more information.
+    You can avoid running `--tls-verify=false` by configuring your system to trust the generated rootCA certificates. See "Securing Red Hat Quay" and "Configuring the system to trust the certificate authority" for more information.
 
-      > [!NOTE]
-      > You can also log in by accessing the UI at `https://<host.example.com>:8443` after installation.
+    > [!NOTE]
+    > You can also log in by accessing the UI at `https://<host.example.com>:8443` after installation.
 
 4.  You can mirror OpenShift Container Platform images after logging in. Depending on your needs, see either the "Mirroring the OpenShift Container Platform image repository" or the "Mirroring Operator catalogs for use with disconnected clusters" sections of this document.
 
@@ -174,7 +194,7 @@ Procedure
 
 # Updating mirror registry for Red Hat OpenShift from a local host
 
-This procedure explains how to update the *mirror registry for Red Hat OpenShift* from a local host by using the `upgrade` command. Updating to the latest version ensures new features, bug fixes, and security vulnerability fixes.
+You can update the *mirror registry for Red Hat OpenShift* from a local host by using the `upgrade` command. Updating to the latest version ensures new features, bug fixes, and security vulnerability fixes.
 
 > [!IMPORTANT]
 > When upgrading from version 1 to version 2, be aware of the following constraints:
@@ -297,7 +317,7 @@ Verification
 
 # Mirroring on a remote host with mirror registry for Red Hat OpenShift
 
-This procedure explains how to install the *mirror registry for Red Hat OpenShift* on a remote host by using the `mirror-registry` tool. By doing so, users can create a registry to hold a mirror of OpenShift Container Platform images.
+You can install the *mirror registry for Red Hat OpenShift* on a remote host by using the `mirror-registry` tool. By doing so, users can create a registry to hold a mirror of OpenShift Container Platform images.
 
 > [!NOTE]
 > Installing the *mirror registry for Red Hat OpenShift* using the `mirror-registry` CLI tool makes several changes to your machine. After installation, a `$HOME/quay-install` directory is created, which has installation files, local storage, and the configuration bundle. Trusted SSH keys are generated in case the deployment target is the local host, and systemd files on the host machine are set up to ensure that container runtimes are persistent. Additionally, an initial user named `init` is created with an automatically generated password. All access credentials are printed at the end of the install routine.
@@ -332,10 +352,10 @@ Procedure
       --tls-verify=false
     ```
 
-    - You can avoid running `--tls-verify=false` by configuring your system to trust the generated rootCA certificates. See "Securing Red Hat Quay" and "Configuring the system to trust the certificate authority" for more information.
+    You can avoid running `--tls-verify=false` by configuring your system to trust the generated rootCA certificates. See "Securing Red Hat Quay" and "Configuring the system to trust the certificate authority" for more information.
 
-      > [!NOTE]
-      > You can also log in by accessing the UI at `https://<host.example.com>:8443` after installation.
+    > [!NOTE]
+    > You can also log in by accessing the UI at `https://<host.example.com>:8443` after installation.
 
 4.  You can mirror OpenShift Container Platform images after logging in. Depending on your needs, see either the "Mirroring the OpenShift Container Platform image repository" or the "Mirroring Operator catalogs for use with disconnected clusters" sections of this document.
 
@@ -346,7 +366,7 @@ Procedure
 
 # Updating mirror registry for Red Hat OpenShift from a remote host
 
-This procedure explains how to update the *mirror registry for Red Hat OpenShift* from a remote host by using the `upgrade` command. Updating to the latest version ensures bug fixes and security vulnerability fixes.
+You can update the *mirror registry for Red Hat OpenShift* from a remote host by using the `upgrade` command. Updating to the latest version ensures bug fixes and security vulnerability fixes.
 
 > [!IMPORTANT]
 > When upgrading from version 1 to version 2, be aware of the following constraints:
@@ -466,15 +486,15 @@ Verification
 
 # Replacing mirror registry for Red Hat OpenShift SSL/TLS certificates
 
-In some cases, you might want to update your SSL/TLS certificates for the *mirror registry for Red Hat OpenShift*. This is useful in the following scenarios:
+In some cases, you might want to update your SSL/TLS certificates for the *mirror registry for Red Hat OpenShift*.
+
+Use the following procedure to replace SSL/TLS certificates for the *mirror registry for Red Hat OpenShift* in the following scenarios:
 
 - If you are replacing the current *mirror registry for Red Hat OpenShift* certificate.
 
 - If you are using the same certificate as the previous *mirror registry for Red Hat OpenShift* installation.
 
 - If you are periodically updating the *mirror registry for Red Hat OpenShift* certificate.
-
-Use the following procedure to replace *mirror registry for Red Hat OpenShift* SSL/TLS certificates.
 
 <div>
 
@@ -536,7 +556,7 @@ Procedure
 
 # Uninstalling the mirror registry for Red Hat OpenShift
 
-Use the following procedure to uninstall the *mirror registry for Red Hat OpenShift* from your local host.
+You can uninstall the *mirror registry for Red Hat OpenShift* from your local host.
 
 <div>
 
@@ -581,6 +601,8 @@ Procedure
 
 # Mirror registry for Red Hat OpenShift flags
 
+You can use flags when managing the *mirror registry for Red Hat OpenShift*.
+
 The following flags are available for the *mirror registry for Red Hat OpenShift*:
 
 | Flags | Description |
@@ -613,6 +635,8 @@ The *mirror registry for Red Hat OpenShift* is a small and streamlined containe
 These release notes track the development of the *mirror registry for Red Hat OpenShift* in OpenShift Container Platform.
 
 ## Mirror registry for Red Hat OpenShift 2.0 release notes
+
+See the Mirror registry for Red Hat OpenShift 2.0 release notes for information about updates and changes in each release.
 
 The following sections provide details for each 2.0 release of the mirror registry for Red Hat OpenShift.
 
@@ -780,19 +804,27 @@ The following new features are available with *mirror registry for Red Hat Open
 
 ## Mirror registry for Red Hat OpenShift 1.3 release notes
 
+See the *mirror registry for Red Hat OpenShift* 1.3 release notes for information about updates and changes.
+
 To view the *mirror registry for Red Hat OpenShift* 1.3 release notes, see [Mirror registry for Red Hat OpenShift 1.3 release notes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.13/html/disconnected_installation_mirroring/installing-mirroring-creating-registry#mirror-registry-release-notes-1-3_installing-mirroring-creating-registry).
 
 ## Mirror registry for Red Hat OpenShift 1.2 release notes
+
+See the *mirror registry for Red Hat OpenShift* 1.2 release notes for information about updates and changes.
 
 To view the *mirror registry for Red Hat OpenShift* 1.2 release notes, see [Mirror registry for Red Hat OpenShift 1.2 release notes](https://docs.openshift.com/container-platform/4.13/installing/disconnected_install/installing-mirroring-creating-registry.html#mirror-registry-release-notes-1-2_installing-mirroring-creating-registry).
 
 ## Mirror registry for Red Hat OpenShift 1.1 release notes
 
+See the *mirror registry for Red Hat OpenShift* 1.1 release notes for information about updates and changes.
+
 To view the *mirror registry for Red Hat OpenShift* 1.1 release notes, see [Mirror registry for Red Hat OpenShift 1.1 release notes](https://docs.openshift.com/container-platform/4.13/installing/disconnected_install/installing-mirroring-creating-registry.html#mirror-registry-release-notes-1-1_installing-mirroring-creating-registry).
 
 # Troubleshooting mirror registry for Red Hat OpenShift
 
-To assist in troubleshooting *mirror registry for Red Hat OpenShift*, you can gather logs of systemd services installed by the mirror registry. The following services are installed:
+To assist in troubleshooting *mirror registry for Red Hat OpenShift*, you can gather logs of systemd services installed by the mirror registry.
+
+The following services are installed:
 
 - quay-app.service
 

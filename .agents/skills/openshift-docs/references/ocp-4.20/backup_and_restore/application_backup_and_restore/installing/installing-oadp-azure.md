@@ -216,7 +216,7 @@ You create a default `Secret` object and reference it in the backup storage loca
 The default name of the `Secret` is `cloud-credentials-azure`.
 
 > [!NOTE]
-> The `DataProtectionApplication` custom resource (CR) requires a default `Secret`. Otherwise, the installation will fail. If the name of the backup location `Secret` is not specified, the default name is used.
+> The `DataProtectionApplication` custom resource (CR) requires a default `Secret`. Otherwise, the installation fails. If the name of the backup location `Secret` is not specified, the default name is used.
 >
 > If you do not want to use the backup location credentials during the installation, you can create a `Secret` with the default name by using an empty `credentials-velero` file.
 
@@ -285,12 +285,13 @@ Procedure
       name: <dpa_sample>
       namespace: openshift-adp
     spec:
-    ...
+    # ...
       backupLocations:
         - velero:
             config:
               resourceGroup: <azure_resource_group>
               storageAccount: <azure_storage_account_id>
+              storageAccountURI: <storage_account_blob_endpoint>
               subscriptionId: <azure_subscription_id>
             credential:
               key: cloud
@@ -311,8 +312,14 @@ Procedure
 
     where:
 
+    `<storage_account_blob_endpoint>`
+    Optional. Specifies the Azure storage account blob endpoint, for example, `https://<storage_account_name>.blob.core.windows.net`. When you specify `storageAccountURI`, the `resourceGroup` and `storageAccount` fields are optional.
+
     `<custom_secret>`
     Specifies the backup location `Secret` with custom name.
+
+    > [!NOTE]
+    > If you experience Azure storage account throttling issues with HTTP 429 `TooManyRequests` errors in the Velero logs, add the `storageAccountURI` field to the backup storage location configuration. By providing the storage account blob endpoint directly, Velero bypasses the need to fetch the storage account properties. This also eliminates the need for Reader permission on the storage account.
 
 </div>
 
@@ -333,7 +340,7 @@ Prerequisites
 
 </div>
 
-- You have an OpenShift cluster installed on Microsoft Azure with Microsoft Entra Workload ID configured. For more details see, [Configuring an Azure cluster to use short-term credentials](https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/installing_on_azure/installer-provisioned-infrastructure#installing-azure-with-short-term-creds_installing-azure-customizations).
+- You have an OpenShift cluster installed on Microsoft Azure with Microsoft Entra Workload ID configured. For more details see, [Configuring an Azure cluster to use short-term credentials](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/installing_on_azure/installer-provisioned-infrastructure#installing-azure-with-short-term-creds_installing-azure-customizations).
 
 - You have the Azure CLI (`az`) installed and configured.
 
@@ -354,7 +361,7 @@ Procedure
 
 </div>
 
-1.  If your cluster was installed with long-term credentials, you can switch to Microsoft Entra Workload ID authentication after installation. For more details, see [Enabling Microsoft Entra Workload ID on an existing cluster](https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/postinstallation_configuration/changing-cloud-credentials-configuration#enabling-entra-workload-id-existing-cluster_changing-cloud-credentials-configuration).
+1.  If your cluster was installed with long-term credentials, you can switch to Microsoft Entra Workload ID authentication after installation. For more details, see [Enabling Microsoft Entra Workload ID on an existing cluster](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/postinstallation_configuration/changing-cloud-credentials-configuration#enabling-entra-workload-id-existing-cluster_changing-cloud-credentials-configuration).
 
     > [!IMPORTANT]
     > After enabling Microsoft Entra Workload ID on an existing Azure cluster, you must update all cluster components that use cloud credentials, including OADP, to use the new authentication method.

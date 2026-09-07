@@ -83,7 +83,7 @@ The following table describes the configuration fields for audit logging.
 </dd>
 <dt><code>unix:&lt;file&gt;</code></dt>
 <dd>
-<p>A Unix Domain Socket file specified by <code>&lt;file&gt;</code>.</p>
+<p>A UNIX Domain Socket file specified by <code>&lt;file&gt;</code>.</p>
 </dd>
 <dt><code>null</code></dt>
 <dd>

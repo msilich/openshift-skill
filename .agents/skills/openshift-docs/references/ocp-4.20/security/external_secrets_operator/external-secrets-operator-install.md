@@ -246,7 +246,7 @@ Procedure
 
     <div class="title">
 
-    Example `externalsecretsconfig.yaml` file.
+    Example `externalsecretsconfig.yaml` file
 
     </div>
 

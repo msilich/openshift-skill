@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This guide outlines dependency resolution and custom resource definition (CRD) upgrade lifecycles with Operator Lifecycle Manager (OLM) in OpenShift Container Platform.
+To keep installed Operators compatible with each other, Operator Lifecycle Manager (OLM) resolves dependencies and manages custom resource definition (CRD) upgrades in OpenShift Container Platform.
 
 # About dependency resolution
 
@@ -25,7 +25,7 @@ OLM converts these properties and constraints into a system of Boolean formulas 
 
 # Operator properties
 
-All Operators in a catalog have the following properties:
+OLM uses the `olm.package` and `olm.gvk` properties of every Operator in a catalog to identify the Operator and resolve its dependencies.
 
 `olm.package`
 Includes the name of the package and the version of the Operator
@@ -100,7 +100,7 @@ Additional resources
 
 # Operator dependencies
 
-The dependencies of an Operator are listed in a `dependencies.yaml` file in the `metadata/` folder of a bundle. This file is optional and currently only used to specify explicit Operator-version dependencies.
+Operator dependencies define relationships between Operators that Operator Lifecycle Manager (OLM) must resolve during installation on OpenShift Container Platform. You can list these dependencies in the optional `dependencies.yaml` file in a bundle’s `metadata/` folder.
 
 The dependency list contains a `type` field for each item to specify what kind of dependency this is. The following types of Operator dependencies are supported:
 
@@ -140,7 +140,7 @@ dependencies:
 
 # Generic constraints
 
-An `olm.constraint` property declares a dependency constraint of a particular type, differentiating non-constraint and constraint properties. Its `value` field is an object containing a `failureMessage` field holding a string-representation of the constraint message. This message is surfaced as an informative comment to users if the constraint is not satisfiable at runtime.
+An `olm.constraint` property declares a dependency constraint of a particular type. The `value` field is an object containing a `failureMessage` field holding a string-representation of the constraint message. If the constraint cannot be satisfied at runtime, OLM prints the message to users.
 
 The following keys denote the available constraint types:
 
@@ -158,7 +158,7 @@ Conjunction, disjunction, and negation constraints, respectively, containing one
 
 ## Common Expression Language (CEL) constraints
 
-The `cel` constraint type supports [Common Expression Language (CEL)](https://github.com/google/cel-go) as the expression language. The `cel` struct has a `rule` field which contains the CEL expression string that is evaluated against Operator properties at runtime to determine if the Operator satisfies the constraint.
+The `cel` constraint type supports Common Expression Language (CEL) as the expression language. The `cel` struct has a `rule` field which contains the CEL expression string that is evaluated against Operator properties at runtime to determine if the Operator satisfies the constraint.
 
 <div class="formalpara">
 
@@ -178,7 +178,7 @@ value:
 
 </div>
 
-The CEL syntax supports a wide range of logical operators, such as `AND` and `OR`. As a result, a single CEL expression can have multiple rules for multiple conditions that are linked together by these logical operators. These rules are evaluated against a dataset of multiple different properties from a bundle or any given source, and the output is solved into a single bundle or Operator that satisfies all of those rules within a single constraint.
+The CEL syntax supports a wide range of logical operators, such as `AND` and `OR`. As a result, a single CEL expression can have multiple rules for multiple conditions that are linked together by these logical operators. These rules are evaluated against a data set of multiple different properties from a bundle or any given source, and the output is solved into a single bundle or Operator that satisfies all of those rules within a single constraint.
 
 <div class="formalpara">
 
@@ -354,9 +354,21 @@ properties:
 > [!NOTE]
 > The maximum raw size of an `olm.constraint` type is 64KB to limit resource exhaustion attacks.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Common Expression Language (CEL)](https://github.com/google/cel-go)
+
+</div>
+
 # Dependency preferences
 
-There can be many options that equally satisfy a dependency of an Operator. The dependency resolver in Operator Lifecycle Manager (OLM) determines which option best fits the requirements of the requested Operator. As an Operator author or user, it can be important to understand how these choices are made so that dependency resolution is clear.
+To help predict and control the outcome of an installation or update, review the dependency resolver workflow in Operator Lifecycle Manager (OLM). The dependency resolver selects between multiple options that satisfy a dependency.
 
 ## Catalog priority
 
@@ -387,10 +399,10 @@ spec:
 
 </div>
 
-- Specify the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
+Specify the value of `legacy` or `restricted` for the `<security_mode>` variable. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
 
-  > [!NOTE]
-  > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
+> [!NOTE]
+> If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
 
 A `CatalogSource` object has a `priority` field, which is used by the resolver to know how to prefer options for a dependency.
 
@@ -420,35 +432,37 @@ Within a channel, newer Operators that are higher up in the update graph are pre
 
 In addition to the constraints supplied by package dependencies, OLM includes additional constraints to represent the desired user state and enforce resolution invariants.
 
-### Subscription constraint
-
+Subscription constraint
 A subscription constraint filters the set of Operators that can satisfy a subscription. Subscriptions are user-supplied constraints for the dependency resolver. They declare the intent to either install a new Operator if it is not already on the cluster, or to keep an existing Operator updated.
 
-### Package constraint
-
+Package constraint
 Within a namespace, no two Operators may come from the same package.
 
-## Additional resources
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Catalog health requirements](olm-understanding-olm.md#olm-cs-health_olm-understanding-olm)
 
+</div>
+
 # CRD upgrades
 
-OLM upgrades a custom resource definition (CRD) immediately if it is owned by a singular cluster service version (CSV). If a CRD is owned by multiple CSVs, then the CRD is upgraded when it has satisfied all of the following backward compatible conditions:
-
-- All existing serving versions in the current CRD are present in the new CRD.
-
-- All existing instances, or custom resources, that are associated with the serving versions of the CRD are valid when validated against the validation schema of the new CRD.
+Operator Lifecycle Manager (OLM) upgrades a custom resource definition (CRD) immediately if a single cluster service version (CSV) owns it. When multiple CSVs share ownership, OLM upgrades the CRD only after verifying compatibility with earlier versions.
 
 # Dependency best practices
 
-When specifying dependencies, there are best practices you should consider.
+A deliberate dependency management workflow helps you avoid update conflicts and keep your Operators compatible with each other.
 
 Depend on APIs or a specific version range of Operators
 Operators can add or remove APIs at any time; always specify an `olm.gvk` dependency on any APIs your Operators requires. The exception to this is if you are specifying `olm.package` constraints instead.
 
 Set a minimum version
-The Kubernetes documentation on API changes describes what changes are allowed for Kubernetes-style Operators. These versioning conventions allow an Operator to update an API without bumping the API version, as long as the API is backwards-compatible.
+The Kubernetes documentation on API changes describes what changes are allowed for Kubernetes-style Operators. These versioning conventions allow an Operator to update an API without bumping the API version, provided that the API is compatible with earlier versions.
 
 For Operator dependencies, this means that knowing the API version of a dependency might not be enough to ensure the dependent Operator works as intended.
 
@@ -482,16 +496,16 @@ Additional resources
 
 </div>
 
-- Kubernetes documentation: [Changing the API](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api_changes.md#readme)
+- [Changing the API (Kubernetes documentation)](https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api_changes.md#readme)
 
 </div>
 
 # Dependency caveats
 
-When specifying dependencies, there are caveats you should consider.
+To avoid unresolvable constraints and update deadlocks between Operators, review the dependency resolution caveats.
 
 No compound constraints (AND)
-There is currently no method for specifying an AND relationship between constraints. In other words, there is no way to specify that one Operator depends on another Operator that both provides a given API and has version `>1.1.0`.
+There is currently no method for specifying an AND relationship between constraints. That is, there is no way to specify that one Operator depends on another Operator that both provides a given API and has version `>1.1.0`.
 
 This means that when specifying a dependency such as:
 
@@ -515,7 +529,7 @@ OLM performs dependency resolution at the namespace scope. It is possible to get
 
 # Example dependency resolution scenarios
 
-In the following examples, a *provider* is an Operator which "owns" a CRD or API service.
+Reference example scenarios to understand how OLM prevents dependency conflicts and update deadlocks between Operators that provide or depend on the same API.
 
 ## Example: Deprecating dependent APIs
 

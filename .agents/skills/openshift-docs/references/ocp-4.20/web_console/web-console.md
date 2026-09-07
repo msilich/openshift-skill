@@ -4,9 +4,9 @@ The OpenShift Container Platform web console is a user interface accessible from
 
 # Prerequisites
 
-- You must use one of the following supported web browsers: Edge, Chrome, Safari, or Mozilla Firefox. IE 11 and earlier is not supported.
+- You must use one of the following supported web browsers: Edge, Chrome, Safari, or Mozilla Firefox. Internet Explorer 11 and earlier is not supported.
 
-- Review the [OpenShift ContainerPlatform 4.x Tested Integrations](https://access.redhat.com/articles/4128421) page before you create the supporting infrastructure for your cluster.
+- Review the OpenShift Container Platform 4.x Tested Integrations page before you create the supporting infrastructure for your cluster.
 
 # Understanding and accessing the web console
 
@@ -36,6 +36,8 @@ For existing clusters that you did not install, you can use `oc whoami --show-co
 Additional resources
 
 </div>
+
+- [OpenShift Container Platform 4.x Tested Integrations](https://access.redhat.com/articles/4128421)
 
 - [Enabling feature sets using the web console](../nodes/clusters/nodes-cluster-enabling-features.md#nodes-cluster-enabling-features)
 

@@ -1,28 +1,38 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-As a cluster administrator, you can update Operators that have been previously installed using Operator Lifecycle Manager (OLM) on your OpenShift Container Platform cluster.
+You can update Operators previously installed with Operator Lifecycle Manager (OLM) on your OpenShift Container Platform cluster.
 
 > [!NOTE]
-> For information on how OLM handles updates for installed Operators colocated in the same namespace, as well as an alternative method for installing Operators with custom global Operator groups, see [Multitenancy and Operator colocation](../understanding/olm/olm-colocation.md#olm-colocation).
+> For information on how OLM handles updates for installed Operators colocated in the same namespace, as well as an alternative method for installing Operators with custom global Operator groups, see "Multitenancy and Operator colocation".
 
-# Preparing for an Operator update
+# About preparing for an Operator update
 
-The subscription of an installed Operator specifies an update channel that tracks and receives updates for the Operator. You can change the update channel to start tracking and receiving updates from a newer channel.
+You can change the update channel to start tracking and receiving updates from a newer channel to access new features and bug fixes. The subscription of an installed Operator specifies an update channel that tracks and receives updates for the Operator.
 
 The names of update channels in a subscription can differ between Operators, but the naming scheme typically follows a common convention within a given Operator. For example, channel names might follow a minor release update stream for the application provided by the Operator (`1.2`, `1.3`) or a release frequency (`stable`, `fast`).
 
 > [!NOTE]
 > You cannot change installed Operators to a channel that is older than the current channel.
 
-Red Hat Customer Portal Labs include the following application that helps administrators prepare to update their Operators:
+Red Hat Customer Portal Labs include an application that helps administrators prepare to update their Operators.
 
-- [Red Hat OpenShift Container Platform Operator Update Information Checker](https://access.redhat.com/labs/ocpouic/)
+You can use these tools to search for Operators and verify the available Operator versions per update channel across different releases of OpenShift Container Platform. Operators managed by Cluster Version Operator (CVO) are not included.
 
-You can use the application to search for Operator Lifecycle Manager-based Operators and verify the available Operator version per update channel across different versions of OpenShift Container Platform. Cluster Version Operator-based Operators are not included.
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [OpenShift Container Platform Operator Update Information Checker](https://access.redhat.com/labs/ocpouic/)
+
+</div>
 
 # Changing the update channel for an Operator
 
-You can change the update channel for an Operator by using the OpenShift Container Platform web console.
+To change the update channel for an installed Operator, you can use the OpenShift Container Platform web console. The update channel determines which Operator versions your subscription tracks and receives.
 
 > [!TIP]
 > If the approval strategy in the subscription is set to **Automatic**, the update process initiates as soon as a new Operator version is available in the selected channel. If the approval strategy is set to **Manual**, you must manually approve pending updates.
@@ -47,7 +57,7 @@ Procedure
 
 </div>
 
-1.  In web console, navigate to **Ecosystem** → **Installed Operators**.
+1.  In the web console, navigate to **Ecosystem** → **Installed Operators**.
 
 2.  Click the name of the Operator you want to change the update channel for.
 
@@ -63,9 +73,9 @@ Procedure
 
 </div>
 
-# Manually approving a pending Operator update
+# Approving a pending Operator update manually
 
-If an installed Operator has the approval strategy in its subscription set to **Manual**, when new updates are released in its current update channel, the update must be manually approved before installation can begin.
+If an installed Operator has the approval strategy in its subscription set to **Manual**, you must manually approve the update before installation can begin. Manual approval reviews the changes and control when updates are applied to prevent unexpected downtime.
 
 <div>
 
@@ -102,5 +112,9 @@ Procedure
 </div>
 
 # Additional resources
+
+- [Red Hat OpenShift Container Platform Operator Update Information Checker](https://access.redhat.com/labs/ocpouic/)
+
+- [Multitenancy and Operator colocation](../understanding/olm/olm-colocation.md#olm-colocation)
 
 - [Using Operator Lifecycle Manager in disconnected environments](../../disconnected/using-olm.md#olm-restricted-networks)

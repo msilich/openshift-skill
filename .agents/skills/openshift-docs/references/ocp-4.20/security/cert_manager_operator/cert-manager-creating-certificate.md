@@ -201,8 +201,6 @@ You can create a certificate for the Ingress Controller and then replace bootstr
 > - When certificates are renewed or rotated by using the cert-manager Operator, only the contents of the secret, such as the certificate and key, are updated. The secret name remains unchanged. Kubelet automatically propagates these updates to the mounted volume, allowing the router to detect the file changes and hot-reload the new certificate and key. As a result, no rolling update of the router deployment is triggered or required.
 >
 > - The secret name is referenced in the Ingress Controller configuration. If you want to replace the default ingress certificate or use different secret name in Ingress Controller configuration, you must patch or edit the configuration to apply the change. This operation triggers a rolling update for router pods where new router pods load the new cert/key pair.
->
-> For more information, see this [Red Hat Knowledgebase Solution](https://access.redhat.com/solutions/4542531).
 
 <div>
 
@@ -314,6 +312,18 @@ Verification
     ```
 
     After the certificate is in `Ready` status, the Ingress Controller on your cluster can start using the generated certificate secret.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Knowledgebase solution](https://access.redhat.com/solutions/4542531)
 
 </div>
 

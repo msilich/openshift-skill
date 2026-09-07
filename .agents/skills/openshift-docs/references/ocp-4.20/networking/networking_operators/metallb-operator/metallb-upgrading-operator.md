@@ -58,7 +58,7 @@ Procedure
     # ...
     ```
 
-3.  Find the latest OpenShift Container Platform 4.17 version of the MetalLB Operator by entering the following command:
+3.  Find the latest OpenShift Container Platform 4.20 version of the MetalLB Operator by entering the following command:
 
     ``` terminal
     $ oc -n metallb-system get csv
@@ -74,8 +74,8 @@ Procedure
 
     ``` terminal
     NAME            CSV                                     APPROVAL    APPROVED
-    install-shpmd   metallb-operator.v4.17.0-202502261233   Automatic   true
-    install-tsz2g   metallb-operator.v4.17.0-202503102139   Manual      false
+    install-shpmd   metallb-operator.v4.20.0-202502261233   Automatic   true
+    install-tsz2g   metallb-operator.v4.20.0-202503102139   Manual      false
     ```
 
 5.  Edit the install plan that exists in the namespace by entering the following command. Ensure that you replace `<name_of_installplan>` with the name of the install plan, such as `install-tsz2g`.

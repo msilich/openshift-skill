@@ -14,6 +14,8 @@ Before beginning your cluster installation, you must complete prerequisite tasks
 
 - If you use a firewall or proxy, you configured it to allow the sites that your cluster requires access to. For more information, see "Configuring your firewall".
 
+- You configured your firewall to allow TCP traffic on port `8090` from all hosts to the rendezvous host so that hosts can reach the Assisted Service API during discovery and bootstrap. For more information, see "Port requirements for the rendezvous host".
+
 <div>
 
 <div class="title">
@@ -27,6 +29,8 @@ Additional resources
 - [Selecting a cluster installation method and preparing it for users](../overview/installing-preparing.md#installing-preparing)
 
 - [Configuring your firewall](../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall)
+
+- [Port requirements for the rendezvous host](preparing-to-install-with-agent-based-installer.md#agent-install-networking-ports_preparing-to-install-with-agent-based-installer)
 
 </div>
 
@@ -701,7 +705,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       labels:
         machineconfiguration.openshift.io/role: worker
@@ -903,6 +907,157 @@ Additional resources
 </div>
 
 - [About disk encryption](../install_config/installing-customizing.md#installation-special-config-storage_installing-customizing)
+
+</div>
+
+## Configuring cluster network MTU at installation time
+
+You can explicitly set the cluster network maximum transmission unit (MTU) during installation by placing a `Network` custom resource (CR) as an additional manifest in the `openshift` directory of your Agent-based Installer configuration.
+
+Setting the cluster network MTU with additional headroom during deployment prevents the need for a Day 2 MTU update that requires at least two rolling reboots of all cluster nodes.
+
+During installation, the Cluster Network Operator (CNO) automatically calculates the cluster network MTU based on the primary network interface MTU. When you enable IPsec at installation time, the calculation includes both the OVN-Kubernetes overhead of 100 bytes and the IPsec overhead. If you plan to enable IPsec or another encapsulation technology as a Day 2 operation, the calculated MTU includes only the OVN-Kubernetes overhead and might be insufficient.
+
+By explicitly setting the cluster network MTU at installation time, you can include additional headroom for those future needs and avoid a disruptive MTU migration.
+
+> [!IMPORTANT]
+> The cluster network MTU value must be lower than the machine network MTU by at least 100 bytes to account for OVN-Kubernetes overlay overhead. If you plan to enable IPsec as a Day 2 operation, allow an additional 46 bytes for IPsec headroom. For example, with a machine network MTU of `9100` bytes, set the cluster network MTU to `8900` bytes, which accounts for the following offset:
+>
+> - OVN-Kubernetes overhead: 100 bytes
+>
+> - IPsec headroom: 46 bytes
+>
+> - Extra headroom: 54 bytes
+>
+> - Total offset: 200 bytes
+>
+> To avoid selecting an MTU value that a node cannot support, verify the maximum MTU (`maxmtu`) that the network interface accepts by running the `ip -d link` command.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created the `install-config.yaml` and `agent-config.yaml` files for your installation.
+
+- You have created the `openshift` subdirectory within your installation directory as described in "Creating a directory to contain additional manifests".
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In your `agent-config.yaml` file, set the machine network MTU on the network interface for each host by using NMState configuration.
+
+    The following example configures an Ethernet interface with MTU `9100`:
+
+    ``` yaml
+    apiVersion: v1beta1
+    kind: AgentConfig
+    metadata:
+      name: sno-cluster
+    rendezvousIP: 192.168.111.80
+    hosts:
+      - hostname: master-0
+        interfaces:
+          - name: eno1
+            macAddress: 00:ef:44:21:e6:a5
+        networkConfig:
+          interfaces:
+            - name: eno1
+              type: ethernet
+              state: up
+              mtu: 9100
+              ipv4:
+                enabled: true
+                dhcp: false
+                address:
+                  - ip: "192.168.111.80"
+                    prefix-length: 24
+    ```
+
+2.  Create a `Network` CR manifest file named `set-cluster-mtu.yaml` that sets the cluster network MTU:
+
+    ``` yaml
+    apiVersion: operator.openshift.io/v1
+    kind: Network
+    metadata:
+      name: cluster
+    spec:
+      defaultNetwork:
+        ovnKubernetesConfig:
+          mtu: 8900
+    ```
+
+    where:
+
+    `mtu`
+    Specifies the cluster network MTU value. This value must be at least 100 bytes less than the machine network MTU. In this example, the value is 200 bytes less than the machine network MTU of 9100 to allow headroom for IPsec and other future requirements.
+
+3.  Place the `set-cluster-mtu.yaml` manifest file in the `openshift` subdirectory of your installation directory:
+
+    ``` text
+    <installation_directory>/
+    ├── install-config.yaml
+    ├── agent-config.yaml
+    └── openshift/
+        └── set-cluster-mtu.yaml
+    ```
+
+    > [!NOTE]
+    > Manifests in the `openshift` directory cannot override default cluster manifests. This restriction does not affect the `Network` CR for cluster network MTU because MTU configuration is not part of the default manifest set.
+
+4.  Create the agent image and boot your servers as described in "Creating and booting the agent image".
+
+    During cluster installation, the installation program applies the `Network` CR as an additional manifest, and the CNO uses the specified MTU value instead of auto-calculating it.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- After the cluster installation is complete, verify the cluster network MTU by running the following command:
+
+  ``` terminal
+  $ oc get networks.operator.openshift.io cluster -o yaml
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` yaml
+  apiVersion: operator.openshift.io/v1
+  kind: Network
+  metadata:
+    name: cluster
+  # ...
+  spec:
+    # ...
+    defaultNetwork:
+      ovnKubernetesConfig:
+        # ...
+        mtu: 8900
+  ```
+
+  </div>
 
 </div>
 
@@ -1244,7 +1399,7 @@ Procedure
     clusterDeploymentRef:
       name: mycluster
     imageSetRef:
-      name: openshift-4.17
+      name: openshift-4.20
     networking:
       clusterNetwork:
       - cidr: 172.21.0.0/16
@@ -1288,7 +1443,7 @@ Example `agent-cluster-install.yaml` file
     clusterDeploymentRef:
       name: ostest
     imageSetRef:
-      name: openshift-4.17
+      name: openshift-4.20
     networking:
       clusterNetwork:
       - cidr: 10.128.0.0/14
@@ -1350,9 +1505,9 @@ Example `cluster-image-set.yaml` file
 apiVersion: hive.openshift.io/v1
 kind: ClusterImageSet
 metadata:
-  name: openshift-4.17
+  name: openshift-4.20
 spec:
-  releaseImage: registry.ci.openshift.org/ocp/release:4.17.0-0.nightly-2022-06-06-025509
+  releaseImage: registry.ci.openshift.org/ocp/release:4.20.0-0.nightly-2022-06-06-025509
 ```
 
 </div>

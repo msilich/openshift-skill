@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+The software catalog in OpenShift Container Platform provides a web console interface for discovering, installing, and managing Operators through Operator Lifecycle Manager (OLM).
+
 # About the software catalog
 
 The *software catalog* is the web console interface in OpenShift Container Platform that cluster administrators use to discover and install Operators. With one click, an Operator can be pulled from its off-cluster source, installed and subscribed on the cluster, and made ready for engineering teams to self-service manage the product across deployment environments using Operator Lifecycle Manager (OLM).
@@ -10,7 +12,7 @@ Cluster administrators can choose from catalogs grouped into the following categ
 |----|----|
 | Red Hat Operators | Red Hat products packaged and shipped by Red Hat. Supported by Red Hat. |
 | Certified Operators | Products from leading independent software vendors (ISVs). Red Hat partners with ISVs to package and ship. Supported by the ISV. |
-| Community Operators | Optionally-visible software maintained by relevant representatives in the [redhat-openshift-ecosystem/community-operators-prod/operators](https://github.com/redhat-openshift-ecosystem/community-operators-prod/tree/main/operators) GitHub repository. No official support. |
+| Community Operators | Optionally-visible software maintained by relevant representatives in the community Operators GitHub repository. No official support. |
 | Custom Operators | Operators you add to the cluster yourself. If you have not added any custom Operators, the **Custom** category does not appear in the web console software catalog. |
 
 Operators in the software catalog are packaged to run on OLM. This includes a YAML file called a cluster service version (CSV) containing all of the CRDs, RBAC rules, deployments, and container images required to install and securely run the Operator. It also contains user-visible information like a description of its features and supported Kubernetes versions.

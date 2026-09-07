@@ -29,7 +29,7 @@ Procedure
 
 </div>
 
-1.  On a command line, add the repositories:
+1.  On a command line, add the following repositories:
 
     1.  Register with Red Hat Subscription Manager:
 
@@ -104,7 +104,7 @@ Procedure
 
 </div>
 
-1.  On a command line, run the playbooks that you downloaded:
+1.  On a command line, run the playbooks that you downloaded by entering the following command:
 
     ``` terminal
     $ ansible-playbook -i inventory.yaml  \
@@ -118,6 +118,6 @@ Procedure
 
 2.  Remove any DNS record changes you made for the OpenShift Container Platform installation.
 
-</div>
+    OpenShift Container Platform is removed from your infrastructure.
 
-OpenShift Container Platform is removed from your infrastructure.
+</div>

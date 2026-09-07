@@ -957,7 +957,7 @@ To provide more reliable scheduling and minimize node resource overcommitment, e
 > [!NOTE]
 > It is recommended that you reserve resources for incompressible resources such as memory.
 
-For more details, see Allocating Resources for Nodes in the *Additional resources* section.
+For more details, see "Allocating Resources for Nodes".
 
 ## Disabling overcommitment for a node
 

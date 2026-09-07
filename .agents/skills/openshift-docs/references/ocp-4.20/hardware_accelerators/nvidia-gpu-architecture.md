@@ -11,13 +11,17 @@ These components include the NVIDIA drivers (to enable CUDA), the Kubernetes dev
 
 # NVIDIA GPU prerequisites
 
-- A working OpenShift cluster with at least one GPU worker node.
+Before using graphics processing unit (GPU) resources on OpenShift Container Platform, you must meet certain prerequisites so that NVIDIA GPU resources can effectively accelerate workloads.
 
-- Access to the OpenShift cluster as a `cluster-admin` to perform the required steps.
+The following list details these prerequisites:
 
-- OpenShift CLI (`oc`) is installed.
+- You have a working OpenShift Container Platform cluster with at least one GPU worker node.
 
-- The node feature discovery (NFD) Operator is installed and a `nodefeaturediscovery` instance is created.
+- You have access to the OpenShift Container Platform cluster as a `cluster-admin` to perform the required steps.
+
+- You installed OpenShift CLI (`oc`).
+
+- You installed the node feature discovery (NFD) Operator and created a `nodefeaturediscovery` instance.
 
 # NVIDIA GPU enablement
 
@@ -33,7 +37,9 @@ The following diagram shows how the GPU architecture is enabled for OpenShift:
 
 ## GPUs and bare metal
 
-You can deploy OpenShift Container Platform on an NVIDIA-certified bare metal server but with some limitations:
+You can deploy OpenShift Container Platform on an NVIDIA-certified bare-metal server. However, consider several limitations that might affect your objectives.
+
+The following list details these limitations:
 
 - Control plane nodes can be CPU nodes.
 
@@ -41,7 +47,7 @@ You can deploy OpenShift Container Platform on an NVIDIA-certified bare metal se
 
   In addition, the worker nodes can host one or more GPUs, but they must be of the same type. For example, a node can have two NVIDIA A100 GPUs, but a node with one A100 GPU and one T4 GPU is not supported. The NVIDIA Device Plugin for Kubernetes does not support mixing different GPU models on the same node.
 
-- When using OpenShift, note that one or three or more servers are required. Clusters with two servers are not supported. The single server deployment is called single node openShift (SNO) and using this configuration results in a non-high availability OpenShift environment.
+- When using OpenShift Container Platform, note that one or three or more servers are required. Clusters with two servers are not supported. The single server deployment is called single-node OpenShift and using this configuration results in a non-high availability OpenShift Container Platform environment.
 
 You can choose one of the following methods to access the containerized GPUs:
 
@@ -63,11 +69,13 @@ Additional resources
 
 ## GPUs and virtualization
 
-Many developers and enterprises are moving to containerized applications and serverless infrastructures, but there is still a lot of interest in developing and maintaining applications that run on virtual machines (VMs). Red Hat OpenShift Virtualization provides this capability, enabling enterprises to incorporate VMs into containerized workflows within clusters.
+With OpenShift Virtualization, you can develop and maintain applications that run on virtual machines (VMs). These capabilities enable enterprises to incorporate VMs into containerized workflows within clusters.
+
+Many developers and enterprises are moving to containerized applications and serverless infrastructures, but interest exists in developing and maintaining applications that run on virtual machines (VMs).
 
 You can choose one of the following methods to connect the worker nodes to the GPUs:
 
-- GPU passthrough to access and use GPU hardware within a virtual machine (VM).
+- GPU passthrough to access and use GPU hardware within a VM.
 
 - GPU (vGPU) time-slicing, when GPU compute capacity is not saturated by workloads.
 
@@ -87,16 +95,16 @@ Additional resources
 
 You can deploy OpenShift Container Platform on an NVIDIA-certified VMware vSphere server that can host different GPU types.
 
-An NVIDIA GPU driver must be installed in the hypervisor in case vGPU instances are used by the VMs. For VMware vSphere, this host driver is provided in the form of a VIB file.
+An NVIDIA GPU driver must be installed in the hypervisor if vGPU instances are used by the VMs. For vSphere, this host driver is provided in the form of a VIB file.
 
-The maximum number of vGPUS that can be allocated to worker node VMs depends on the version of vSphere:
+The maximum number of vGPUs that can be allocated to worker node VMs depends on the version of vSphere:
 
 - vSphere 7.0: maximum 4 vGPU per VM
 
 - vSphere 8.0: maximum 8 vGPU per VM
 
   > [!NOTE]
-  > vSphere 8.0 introduced support for multiple full or fractional heterogenous profiles associated with a VM.
+  > vSphere 8.0 introduced support for multiple full or fractional heterogeneous profiles associated with a VM.
 
 You can choose one of the following methods to attach the worker nodes to the GPUs:
 
@@ -104,7 +112,7 @@ You can choose one of the following methods to attach the worker nodes to the GP
 
 - GPU (vGPU) time-slicing, when not all of the GPU is needed
 
-Similar to bare metal deployments, one or three or more servers are required. Clusters with two servers are not supported.
+Similar to bare-metal deployments, one or three or more servers are required. Clusters with two servers are not supported.
 
 <div>
 
@@ -120,11 +128,11 @@ Additional resources
 
 ## GPUs and Red Hat KVM
 
-You can use OpenShift Container Platform on an NVIDIA-certified kernel-based virtual machine (KVM) server.
+You can use OpenShift Container Platform on an NVIDIA-certified kernel-based virtual machine (KVM) server. Similar to bare metal deployments, one or three or more servers are required.
 
-Similar to bare-metal deployments, one or three or more servers are required. Clusters with two servers are not supported.
+Clusters with two servers are not supported.
 
-However, unlike bare-metal deployments, you can use different types of GPUs in the server. This is because you can assign these GPUs to different VMs that act as Kubernetes nodes. The only limitation is that a Kubernetes node must have the same set of GPU types at its own level.
+However, unlike bare metal deployments, you can use different types of GPUs in the server. This is because you can assign these GPUs to different VMs that act as Kubernetes nodes. The only limitation is that a Kubernetes node must have the same set of GPU types at its own level.
 
 You can choose one of the following methods to access the containerized GPUs:
 
@@ -132,7 +140,7 @@ You can choose one of the following methods to access the containerized GPUs:
 
 - GPU (vGPU) time-slicing when not all of the GPU is needed
 
-To enable the vGPU capability, a special driver must be installed at the host level. This driver is delivered as a RPM package. This host driver is not required at all for GPU passthrough allocation.
+To enable the vGPU capability, a special driver must be installed at the host level. This driver is delivered as an RPM package. This host driver is not required for GPU passthrough allocation.
 
 ## GPUs and CSPs
 
@@ -140,11 +148,12 @@ You can deploy OpenShift Container Platform to one of the major cloud service pr
 
 Two modes of operation are available: a fully managed deployment and a self-managed deployment.
 
-- In a fully managed deployment, everything is automated by Red Hat in collaboration with CSP. You can request an OpenShift instance through the CSP web console, and the cluster is automatically created and fully managed by Red Hat. You do not have to worry about node failures or errors in the environment. Red Hat is fully responsible for maintaining the uptime of the cluster. The fully managed services are available on AWS, Azure, and Google Cloud. For AWS, the OpenShift service is called (Red Hat OpenShift Service on AWS). For Azure, the service is called Azure Red Hat OpenShift. For Google Cloud, the service is called OpenShift Dedicated on Google Cloud.
+- In a fully managed deployment, everything is automated by Red Hat in collaboration with CSP. You can request an OpenShift Container Platform instance through the CSP web console, and the cluster is automatically created and fully managed by Red Hat. Red Hat manages infrastructure operations, including node failure recovery and environment maintenance. Red Hat is fully responsible for maintaining the uptime of the cluster. The fully managed services are available on AWS, Azure, and Google Cloud. For AWS, the OpenShift Container Platform service is called (Red Hat OpenShift Container Platform Service on AWS). For Azure, the service is called Azure Red Hat OpenShift. For Google Cloud, the service is called OpenShift Dedicated on Google Cloud.
 
-- In a self-managed deployment, you are responsible for instantiating and maintaining the OpenShift cluster. Red Hat provides the OpenShift-install utility to support the deployment of the OpenShift cluster in this case. The self-managed services are available globally to all CSPs.
+- In a self-managed deployment, you are responsible for instantiating and maintaining the OpenShift Container Platform cluster. Red Hat provides the OpenShift Container Platform install utility to support the deployment of the OpenShift Container Platform cluster in this case. The self-managed services are available globally to all CSPs.
 
-It is important that this compute instance is a GPU-accelerated compute instance and that the GPU type matches the list of supported GPUs from NVIDIA AI Enterprise. For example, T4, V100, and A100 are part of this list.
+> [!IMPORTANT]
+> The compute instance must be a GPU-accelerated compute instance. Additionally, the GPU type must match the list of supported GPUs from NVIDIA AI Enterprise. For example, T4, V100, and A100 are part of this list.
 
 You can choose one of the following methods to access the containerized GPUs:
 
@@ -166,7 +175,9 @@ Additional resources
 
 ## GPUs and Red Hat Device Edge
 
-Red Hat Device Edge provides access to MicroShift. MicroShift provides the simplicity of a single-node deployment with the functionality and services you need for resource-constrained (edge) computing. Red Hat Device Edge meets the needs of bare-metal, virtual, containerized, or Kubernetes workloads deployed in resource-constrained environments.
+Red Hat Device Edge provides access to MicroShift. MicroShift provides the simplicity of a single-node deployment with the functionality and services you need for resource-constrained (edge) computing.
+
+Red Hat Device Edge meets the needs of bare-metal, virtual, containerized, or Kubernetes workloads deployed in resource-constrained environments.
 
 You can enable NVIDIA GPUs on containers in a Red Hat Device Edge environment.
 
@@ -190,7 +201,9 @@ Red Hat and NVIDIA have developed GPU concurrency and sharing mechanisms to sim
 
 Applications typically have different compute requirements that can leave GPUs underutilized. Providing the right amount of compute resources for each workload is critical to reduce deployment cost and maximize GPU utilization.
 
-Concurrency mechanisms for improving GPU utilization exist that range from programming model APIs to system software and hardware partitioning, including virtualization. The following list shows the GPU concurrency mechanisms:
+Concurrency mechanisms for improving GPU utilization exist in the range from programming model APIs to system software and hardware partitioning, including virtualization.
+
+The following list shows the GPU concurrency mechanisms:
 
 - Compute Unified Device Architecture (CUDA) streams
 
@@ -208,7 +221,7 @@ Bare metal
 vGPU is not available. Consider using MIG-enabled cards.
 
 VMs
-vGPU is the best choice.
+vGPU is the preferred choice.
 
 Older NVIDIA cards with no MIG on bare metal
 Consider using time-slicing.
@@ -237,7 +250,7 @@ Compute Unified Device Architecture (CUDA) is a parallel computing platform and 
 
 A stream is a sequence of operations that executes in issue-order on the GPU. CUDA commands are typically executed sequentially in a default stream and a task does not start until a preceding task has completed.
 
-Asynchronous processing of operations across different streams allows for parallel execution of tasks. A task issued in one stream runs before, during, or after another task is issued into another stream. This allows the GPU to run multiple tasks simultaneously in no prescribed order, leading to improved performance.
+Asynchronous processing of operations across different streams allows for parallel execution of tasks. A task issued in one stream runs before, during, or after another task is issued into another stream. This task process allows the GPU to run multiple tasks simultaneously in no prescribed order, leading to improved performance.
 
 <div>
 
@@ -255,7 +268,7 @@ Additional resources
 
 GPU time-slicing interleaves workloads scheduled on overloaded GPUs when you are running multiple CUDA applications.
 
-You can enable time-slicing of GPUs on Kubernetes by defining a set of replicas for a GPU, each of which can be independently distributed to a pod to run workloads on. Unlike multi-instance GPU (MIG), there is no memory or fault isolation between replicas, but for some workloads this is better than not sharing at all. Internally, GPU time-slicing is used to multiplex workloads from replicas of the same underlying GPU.
+You can enable time-slicing of GPUs on Kubernetes by defining a set of replicas for a GPU, each of which can be independently distributed to a pod to run workloads on. Unlike multi-instance GPU (MIG), no memory or fault isolation between replicas, but for some workloads this is better than not sharing at all. Internally, GPU time-slicing is used to multiplex workloads from replicas of the same underlying GPU.
 
 You can apply a cluster-wide default configuration for time-slicing. You can also apply node-specific configurations. For example, you can apply a time-slicing configuration only to nodes with Tesla T4 GPUs and not modify nodes with other GPU models.
 
@@ -263,7 +276,9 @@ You can combine these two approaches by applying a cluster-wide default configur
 
 ## CUDA Multi-Process Service
 
-CUDA Multi-Process Service (MPS) allows a single GPU to use multiple CUDA processes. The processes run in parallel on the GPU, eliminating saturation of the GPU compute resources. MPS also enables concurrent execution, or overlapping, of kernel operations and memory copying from different processes to enhance utilization.
+CUDA Multi-Process Service (MPS) allows a single GPU to use multiple CUDA processes. The processes run in parallel on the GPU, eliminating saturation of the GPU compute resources.
+
+MPS also enables concurrent execution, or overlapping, of kernel operations and memory copying from different processes to enhance utilization.
 
 <div>
 
@@ -279,11 +294,13 @@ Additional resources
 
 ## Multi-instance GPU
 
-Using Multi-instance GPU (MIG), you can split GPU compute units and memory into multiple MIG instances. Each of these instances represents a standalone GPU device from a system perspective and can be connected to any application, container, or virtual machine running on the node. The software that uses the GPU treats each of these MIG instances as an individual GPU.
+Using Multi-instance GPU (MIG), you can split GPU compute units and memory into multiple MIG instances. Each of these instances represents a standalone GPU device from a system perspective and can be connected to any application, container, or virtual machine running on the node.
 
-MIG is useful when you have an application that does not require the full power of an entire GPU. The MIG feature of the new NVIDIA Ampere architecture enables you to split your hardware resources into multiple GPU instances, each of which is available to the operating system as an independent CUDA-enabled GPU.
+The software that uses the GPU treats each of these MIG instances as an individual GPU.
 
-NVIDIA GPU Operator version 1.7.0 and higher provides MIG support for the A100 and A30 Ampere cards. These GPU instances are designed to support up to seven multiple independent CUDA applications so that they operate completely isolated with dedicated hardware resources.
+MIG is useful when you have an application that does not require the full power of an entire GPU. By using the MIG feature of the new NVIDIA Ampere architecture, you can split your hardware resources into multiple GPU instances, each of which is available to the operating system as an independent CUDA-enabled GPU.
+
+NVIDIA GPU Operator version 1.7.0 and later provides MIG support for the A100 and A30 Ampere cards. These GPU instances are designed to support up to seven independent CUDA applications so that they operate completely isolated with dedicated hardware resources.
 
 <div>
 
@@ -301,7 +318,13 @@ Additional resources
 
 Virtual machines (VMs) can directly access a single physical GPU using NVIDIA vGPU. You can create virtual GPUs that can be shared by VMs across the enterprise and accessed by other devices.
 
-This capability combines the power of GPU performance with the management and security benefits provided by vGPU. Additional benefits provided by vGPU includes proactive management and monitoring for your VM environment, workload balancing for mixed VDI and compute workloads, and resource sharing across multiple VMs.
+This capability combines the power of GPU performance with the management and security benefits that vGPU provides. The following list details additional benefits provided by vGPU:
+
+- Proactive management and monitoring for your VM environment
+
+- Workload balancing for mixed VDI and compute workloads
+
+- Resource sharing across multiple VMs
 
 <div>
 
@@ -317,8 +340,10 @@ Additional resources
 
 # NVIDIA GPU features for OpenShift Container Platform
 
+Learn about the NVIDIA GPU features, software components, and monitoring tools available to accelerate containerized workloads in OpenShift Container Platform.
+
 NVIDIA Container Toolkit
-NVIDIA Container Toolkit enables you to create and run GPU-accelerated containers. The toolkit includes a container runtime library and utilities to automatically configure containers to use NVIDIA GPUs.
+By using the NVIDIA Container Toolkit, you can create and run GPU-accelerated containers. The toolkit includes a container runtime library and utilities to automatically configure containers to use NVIDIA GPUs.
 
 NVIDIA AI Enterprise
 NVIDIA AI Enterprise is an end-to-end, cloud-native suite of AI and data analytics software optimized, certified, and supported with NVIDIA-Certified systems.
@@ -330,14 +355,14 @@ NVIDIA AI Enterprise includes support for Red Hat OpenShift Container Platform. 
 - OpenShift Container Platform on VMware vSphere with NVIDIA vGPU.
 
 GPU Feature Discovery
-NVIDIA GPU Feature Discovery for Kubernetes is a software component that enables you to automatically generate labels for the GPUs available on a node. GPU Feature Discovery uses node feature discovery (NFD) to perform this labeling.
+NVIDIA GPU Feature Discovery for Kubernetes is a software component that you can use to automatically generate labels for the GPUs available on a node. GPU Feature Discovery uses node feature discovery (NFD) to perform this labeling.
 
 The Node Feature Discovery Operator (NFD) manages the discovery of hardware features and configurations in an OpenShift Container Platform cluster by labeling nodes with hardware-specific information. NFD labels the host with node-specific attributes, such as PCI cards, kernel, OS version, and so on.
 
 You can find the NFD Operator in the Operator Hub by searching for “Node Feature Discovery”.
 
 NVIDIA GPU Operator with OpenShift Virtualization
-Up until this point, the GPU Operator only provisioned worker nodes to run GPU-accelerated containers. Now, the GPU Operator can also be used to provision worker nodes for running GPU-accelerated virtual machines (VMs).
+The GPU Operator only provisioned worker nodes to run GPU-accelerated containers. The GPU Operator can also provision worker nodes for running GPU-accelerated virtual machines (VMs).
 
 You can configure the GPU Operator to deploy different software components to worker nodes depending on which GPU workload is configured to run on those nodes.
 

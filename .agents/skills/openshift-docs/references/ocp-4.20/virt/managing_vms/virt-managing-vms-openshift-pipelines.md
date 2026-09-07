@@ -124,7 +124,7 @@ Procedure
             -   name: name
                 value: windows-efi-installer
             -   name: version
-                value: 4.17
+                value: 4.20
             resolver: hub
         taskRunSpecs:
         -   pipelineTaskName: modify-windows-iso-file

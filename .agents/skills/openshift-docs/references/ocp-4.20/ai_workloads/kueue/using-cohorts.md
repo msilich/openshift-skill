@@ -1,12 +1,16 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can use cohorts to group cluster queues and determine which cluster queues are able to share borrowable resources with each other. Borrowable resources are defined as the unused nominal quota of all the cluster queues in a cohort.
+You can use cohorts to group cluster queues and determine which cluster queues can share borrowable resources with each other.
 
-Using cohorts can help to optimize resource utilization by preventing under-utilization and enabling fair sharing configurations. Cohorts can also help to simplify resource management and allocation between teams, because you can group cluster queues for related workloads or for each team. You can also use cohorts to set resource quotas at a group level to define the limits for resources that a group of cluster queues can consume.
+Borrowable resources are defined as the unused nominal quota of all the cluster queues in a cohort.
 
-# Configuring cohorts within a cluster queue spec
+By using cohorts, you can optimize resource utilization, prevent under-utilization, and enable fair sharing configurations. In addition, you can simplify resource management and allocation between teams, because you can group cluster queues for related workloads or for each team. You can also use cohorts to set resource quotas at a group level to define the limits for resources that a group of cluster queues can consume.
 
-You can add a cluster queue to a cohort by specifying the name of the cohort in the `.spec.cohortName` field of the `ClusterQueue` object, as shown in the following example:
+# Cohort configuration within a cluster queue spec
+
+You can add a cluster queue to a cohort by specifying the cohort name in the `.spec.cohortName` field of the `ClusterQueue` object.
+
+The following example shows a `ClusterQueue` object with a cohort configured:
 
 ``` yaml
 apiVersion: kueue.x-k8s.io/v1beta2

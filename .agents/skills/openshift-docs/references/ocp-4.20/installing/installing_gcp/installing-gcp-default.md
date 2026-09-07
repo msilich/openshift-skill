@@ -1,20 +1,38 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-In OpenShift Container Platform version 4.17, you can install a cluster on Google Cloud that uses the default configuration options.
+In OpenShift Container Platform version 4.20, you can install a cluster on Google Cloud that uses the default configuration options.
 
 # Prerequisites
 
-- You reviewed details about the [OpenShift Container Platform installation and update](../../architecture/architecture-installation.md#architecture-installation) processes.
+- You reviewed details about the OpenShift Container Platform installation and update processes. For more information, see "Installation and update".
 
-- You read the documentation on [selecting a cluster installation method and preparing it for users](../overview/installing-preparing.md#installing-preparing).
+- You read the documentation on selecting a cluster installation method and preparing it for users. For more information, see "Selecting a cluster installation method and preparing it for users".
 
-- You [configured a Google Cloud project](installing-gcp-account.md#installing-gcp-account) to host the cluster.
+- You configured a Google Cloud project to host the cluster. For more information, see "Configuring a Google Cloud project".
 
-- If you use a firewall, you [configured it to allow the sites](../install_config/configuring-firewall.md#configuring-firewall) that your cluster requires access to.
+- If you use a firewall, you configured it to allow the sites that your cluster requires access to. For more information, see "Configuring your firewall for OpenShift Container Platform".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installation and update](../../architecture/architecture-installation.md#architecture-installation)
+
+- [Selecting a cluster installation method and preparing it for users](../overview/installing-preparing.md#installing-preparing)
+
+- [Configuring a Google Cloud project](installing-gcp-account.md#installing-gcp-account)
+
+- [Configuring your firewall for OpenShift Container Platform](../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall)
+
+</div>
 
 # Internet access for OpenShift Container Platform
 
-In OpenShift Container Platform 4.17, you require access to the internet to install your cluster.
+In OpenShift Container Platform 4.20, you require access to the internet to install your cluster.
 
 You must have internet access to perform the following actions:
 
@@ -106,7 +124,7 @@ Procedure
     $ ssh-add <path>/<file_name>
     ```
 
-    Specifies the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`
+    Specify the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`.
 
     <div class="formalpara">
 
@@ -138,7 +156,7 @@ Next steps
 
 # Obtaining the installation program
 
-Before you install OpenShift Container Platform, download the installation file on the host you are using for installation.
+Before you install OpenShift Container Platform, download the installation file on the host you are using for installation, so that installation assets exist for deployment in your environment.
 
 <div>
 
@@ -198,7 +216,7 @@ Procedure
 
 # Deploying the cluster
 
-To deploy your OpenShift Container Platform cluster, you can initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions infrastructure and completes cluster setup.
+To deploy your OpenShift Container Platform cluster, you initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions the required infrastructure and completes the cluster setup.
 
 > [!IMPORTANT]
 > You can run the `create cluster` command of the installation program only once, during initial installation.
@@ -242,15 +260,13 @@ Procedure
         --log-level=info
     ```
 
-    - For `<installation_directory>`, specify the directory name to store the files that the installation program creates.
+    where:
 
-    - To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
+    - `<installation_directory>`: Specifies the directory name to store the files that the installation program creates.
 
-    When specifying the directory:
+    - `--log-level`: Specifies the log level. To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
 
-    - Verify that the directory has the `execute` permission. This permission is required to run Terraform binaries under the installation directory.
-
-    - Use an empty directory. Some installation assets, such as bootstrap X.509 certificates, have short expiration intervals, therefore you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
+    When specifying the directory: \* Verify that the directory has the `execute` permission. This permission is required to run Terraform binaries under the installation directory. \* Use an empty directory. Some installation assets, such as bootstrap X.509 certificates, have short expiration intervals, therefore you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
 
 3.  Provide values at the prompts:
 
@@ -300,13 +316,7 @@ When the cluster deployment completes successfully:
   > [!IMPORTANT]
   > Do not delete the installation program or the files that the installation program creates. Both are required to delete the cluster.
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  The following example shows the expected output:
 
   ``` terminal
   ...
@@ -316,8 +326,6 @@ When the cluster deployment completes successfully:
   INFO Login to the console with user: "kubeadmin", and password: "password"
   INFO Time elapsed: 36m22s
   ```
-
-  </div>
 
   <div class="important">
 
@@ -354,7 +362,7 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 Linux Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 Linux Clients** entry and save the file.
 
 5.  Unpack the archive:
 
@@ -364,7 +372,7 @@ Procedure
 
 6.  Place the `oc` binary in a directory that is on your `PATH`.
 
-    To check your `PATH`, execute the following command:
+    To check your `PATH`, run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -409,13 +417,13 @@ Procedure
 
 2.  Select the appropriate version from the **Version** list.
 
-3.  Click **Download Now** next to the **OpenShift v4.17 Windows Client** entry and save the file.
+3.  Click **Download Now** next to the **OpenShift v4.20 Windows Client** entry and save the file.
 
 4.  Extract the archive with a ZIP program.
 
 5.  Move the `oc` binary to a directory that is on your `PATH` variable.
 
-    To check your `PATH` variable, open the command prompt and execute the following command:
+    To check your `PATH` variable, open the Command Prompt and run the following command:
 
     ``` terminal
     C:\> path
@@ -462,16 +470,16 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 macOS Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 macOS Clients** entry and save the file.
 
     > [!NOTE]
-    > For macOS arm64, choose the **OpenShift v4.17 macOS arm64 Client** entry.
+    > For macOS arm64, choose the **OpenShift v4.20 macOS arm64 Client** entry.
 
-5.  Unpack and unzip the archive.
+5.  Extract the archive.
 
 6.  Move the `oc` binary to a directory on your `PATH` variable.
 
-    To check your `PATH` variable, open a terminal and execute the following command:
+    To check your `PATH` variable, open a terminal and run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -499,7 +507,7 @@ Verification
 
 To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
 
-The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+The `kubeconfig` file is specific to a cluster and OpenShift Container Platform generates it during installation.
 
 <div>
 
@@ -578,7 +586,7 @@ Additional resources
 
 </div>
 
-- See [Accessing the web console](../../web_console/web-console.md#web-console) for more details about accessing and understanding the OpenShift Container Platform web console.
+- [Accessing the web console](../../web_console/web-console.md#web-console)
 
 </div>
 
@@ -588,20 +596,10 @@ To provide metrics about cluster health and the success of updates, the Telemetr
 
 After you confirm that your [OpenShift Cluster Manager](https://console.redhat.com/openshift) inventory is correct, either maintained automatically by Telemetry or manually by using OpenShift Cluster Manager,use subscription watch to track your OpenShift Container Platform subscriptions at the account or multi-cluster level. For more information about subscription watch, see "Data Gathered and Used by Red Hat’s subscription services" in the *Additional resources* section.
 
-<div>
+# Additional resources
 
-<div class="title">
+- [About remote health monitoring](../../support/remote_health_monitoring/about-remote-health-monitoring.md#about-remote-health-monitoring)
 
-Additional resources
+- [Customizing your cluster](../../post_installation_configuration/cluster-tasks.md#available_cluster_customizations)
 
-</div>
-
-- See [About remote health monitoring](../../support/remote_health_monitoring/about-remote-health-monitoring.md#about-remote-health-monitoring) for more information about the Telemetry service
-
-</div>
-
-# Next steps
-
-- [Customize your cluster](../../post_installation_configuration/cluster-tasks.md#available_cluster_customizations).
-
-- If necessary, you can [Remote health reporting](../../support/remote_health_monitoring/remote-health-reporting.md#remote-health-reporting).
+- [Remote health reporting](../../support/remote_health_monitoring/remote-health-reporting.md#remote-health-reporting)

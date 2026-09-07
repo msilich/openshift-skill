@@ -5,7 +5,7 @@ By enabling IPsec, you can encrypt both internal pod-to-pod cluster traffic betw
 IPsec is disabled by default. You can enable IPsec either during or after installing the cluster. For information about cluster installation, see [OpenShift Container Platform installation overview](../../installing/overview/index.md#ocp-installation-overview).
 
 > [!NOTE]
-> Upgrading your cluster to OpenShift Container Platform 4.17 when the `libreswan` and `NetworkManager-libreswan` packages have different OpenShift Container Platform versions causes two consecutive compute node reboot operations. For the first reboot, the Cluster Network Operator (CNO) applies the IPsec configuration to compute nodes. For the second reboot, the Machine Config Operator (MCO) applies the latest machine configs to the cluster.
+> Upgrading your cluster to OpenShift Container Platform 4.20 when the `libreswan` and `NetworkManager-libreswan` packages have different OpenShift Container Platform versions causes two consecutive compute node reboot operations. For the first reboot, the Cluster Network Operator (CNO) applies the IPsec configuration to compute nodes. For the second reboot, the Machine Config Operator (MCO) applies the latest machine configs to the cluster.
 >
 > To combine the CNO and MCO updates into a single node reboot, complete the following tasks:
 >
@@ -440,13 +440,13 @@ Procedure
 6.  To create Butane config files for the control plane and compute nodes, enter the following command:
 
     > [!NOTE]
-    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
     ``` terminal
     $ for role in master worker; do
       cat >> "99-ipsec-${role}-endpoint-config.bu" <<-EOF
       variant: openshift
-      version: 4.17.0
+      version: 4.20.0
       metadata:
         name: 99-${role}-import-certs
         labels:

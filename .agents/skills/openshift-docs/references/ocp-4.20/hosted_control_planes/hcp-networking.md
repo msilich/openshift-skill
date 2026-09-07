@@ -2,6 +2,42 @@
 
 Ensure optimal performance with hosted control planes by configuring network settings. Those settings include internal subnets and proxy support for control-plane workloads, compute nodes, management clusters, and hosted clusters.
 
+# Networking overview for hosted control planes
+
+Proper network design can ensure the performance, automation, and security of hosted control planes. Your network configuration depends on the segmentation that you need and the provider that you use, such as a cloud provider, bare metal on the Agent platform, or OpenShift Virtualization.
+
+For example, for hosted control planes on OpenShift Virtualization, you can create `NodePool` virtual machines (VMs) with different network configurations, including using the pod network and bridging an external network into the VMs. Network latency and throughput are important factors to ensure control-plane communication, workload traffic, and storage access. The use of dedicated physical network adapters can ensure adequate throughput and low latency for all components.
+
+## Control plane and data plane networking considerations
+
+When you consider your networking configuration for hosted control planes, remember the structure of the control plane and data plane:
+
+Control plane
+The control plane includes pods that run on the management cluster in a dedicated namespace. The pods expose the hosted control plane `kube-apiserver` component, OAuth, Ignition server, and Konnectivity service. Hosted cluster nodes access those services through the data plane network, so the services must be reachable from the data plane network, even if a firewall is in place.
+
+The management cluster hosts different control planes, and their services are exposed through its network. Network segmentation by API is not currently supported.
+
+Data plane
+The data plane includes the compute, storage, and networking where workloads and applications run. It has a minimum of 2 compute nodes.
+
+For example, the data plane includes compute nodes that are represented by bare-metal servers or VMs that are hosted on OpenShift Virtualization. For OpenShift Virtualization, you can host different data planes on the management cluster. For bare-metal servers or an external OpenShift Virtualization cluster, you can host data planes by external infrastructure.
+
+Some VLAN-based network segmentation is possible if the following conditions are true:
+
+- All of the configured VLANs can route traffic to the endpoints of the API, OAuth, Ignition server, and Konnectivity service.
+
+- Hosted cluster users can access the API and OAuth.
+
+The node pools in hosted clusters on the data plane depend on the components that run on the control plane, such as Konnectivity, Ignition, and OAuth. By default, you install those components by using a `Route` endpoint publishing strategy, and admit them on the default ingress controller, which is often installed on primary networks from the management cluster. To segment this implementation on a secondary network, you must change several network flows between the control plane and the data plane.
+
+## DHCP requirements for hosted control planes
+
+The requirements for Dynamic Host Configuration Protocol (DHCP) differ depending on your platform provider:
+
+- For bare metal providers, you can use dynamic or manual IP segmentation, so a DHCP server is not mandatory. Ensure that the same node always has the same IP address.
+
+- For OpenShift Virtualization, dynamic IP assignment is the only option, so a DHCP server is mandatory.
+
 # Network isolation for hosted clusters
 
 To provide distinct, secure environments for multiple hosted clusters that share the same management cluster, you can configure hosted clusters with specific network and virtual machine (VM) isolation levels.
@@ -31,7 +67,7 @@ Additional resources
 
 - [Control plane isolation](hcp-networking.md#hcp-isolation_hcp-networking)
 
-- [Node labeling for hosted control planes](hcp-prepare/hcp-distribute-workloads.md#hcp-node-labeling_hcp-distribute-workloads)
+- [Distributing hosted cluster workloads](hcp-prepare/hcp-distribute-workloads.md#hcp-distribute-workloads)
 
 </div>
 
@@ -88,6 +124,152 @@ The following SELinux labels are used for key processes and sockets:
 `system_u:system_r:container_t:s0:c14,c24`
 
 To achieve physical or virtual machine (VM) isolation, you need to use a "shared-nothing" approach, where each control plane has its own dedicated node. Nodes for a specific hosted cluster are tainted and labeled with a specific `hypershift.openshift.io/hosted-cluster` value. Security involves the use of a network policy and physical network access control lists (ACLs) across hosted clusters.
+
+# Firewall, port, and service requirements for hosted control planes
+
+Ensure that you meet the firewall, port, and service requirements so that ports can communicate between the management cluster, the control plane, and hosted clusters.
+
+## Bare metal firewall, port, and service requirements
+
+You must meet the firewall, port, and service requirements so that ports can communicate between the management cluster, the control plane, and hosted clusters.
+
+> [!NOTE]
+> Services run on their default ports. However, if you use the `NodePort` publishing strategy, services run on the port that is assigned by the `NodePort` service.
+
+Use firewall rules, security groups, or other access controls to restrict access to only required sources. Avoid exposing ports publicly unless necessary. For production deployments, use a load balancer to simplify access through a single IP address.
+
+If your hub cluster has a proxy configuration, ensure that it can reach the hosted cluster API endpoint by adding all hosted cluster API endpoints to the `noProxy` field on the `Proxy` object. For more information, see "Configuring the cluster-wide proxy".
+
+A hosted control plane exposes the following services on bare metal:
+
+- `APIServer`
+
+  - The `APIServer` service runs on port 6443 by default and requires ingress access for communication between the control plane components.
+
+  - If you use MetalLB load balancing, allow ingress access to the IP range that is used for load balancer IP addresses.
+
+- `OAuthServer`
+
+  - The `OAuthServer` service runs on port 443 by default when you use the route and ingress to expose the service.
+
+  - If you use the `NodePort` publishing strategy, use a firewall rule for the `OAuthServer` service.
+
+- `Konnectivity`
+
+  - The `Konnectivity` service runs on port 443 by default when you use the route and ingress to expose the service.
+
+  - The `Konnectivity` agent establishes a reverse tunnel to allow the control plane to access the network for the hosted cluster. The agent uses egress to connect to the `Konnectivity` server. The server is exposed by using either a route on port 443 or a manually assigned `NodePort`.
+
+  - If the cluster API server address is an internal IP address, allow access from the workload subnets to the IP address on port 6443.
+
+  - If the address is an external IP address, allow egress on port 6443 to that external IP address from the nodes.
+
+- `Ignition`
+
+  - The `Ignition` service runs on port 443 by default when you use the route and ingress to expose the service.
+
+  - If you use the `NodePort` publishing strategy, use a firewall rule for the `Ignition` service.
+
+You do not need the following services on bare metal:
+
+- `OVNSbDb`
+
+- `OIDC`
+
+## OpenShift Virtualization firewall and port requirements
+
+Ensure that you meet the firewall and port requirements so that ports can communicate between the management cluster, the control plane, and hosted clusters.
+
+- The `kube-apiserver` service runs on port 6443 by default and requires ingress access for communication between the control plane components.
+
+  - If you use the `NodePort` publishing strategy, ensure that the node port that is assigned to the `kube-apiserver` service is exposed.
+
+  - If you use MetalLB load balancing, allow ingress access to the IP range that is used for load balancer IP addresses.
+
+- If you use the `NodePort` publishing strategy, use a firewall rule for the `ignition-server` and `Oauth-server` settings.
+
+- The `konnectivity` agent, which establishes a reverse tunnel to allow bi-directional communication on the hosted cluster, requires egress access to the cluster API server address on port 6443. With that egress access, the agent can reach the `kube-apiserver` service.
+
+  - If the cluster API server address is an internal IP address, allow access from the workload subnets to the IP address on port 6443.
+
+  - If the address is an external IP address, allow egress on port 6443 to that external IP address from the nodes.
+
+- If you change the default port of 6443, adjust the rules to reflect that change.
+
+- Ensure that you open any ports that are required by the workloads that run in the clusters.
+
+- Use firewall rules, security groups, or other access controls to restrict access to only required sources. Avoid exposing ports publicly unless necessary.
+
+- For production deployments, use a load balancer to simplify access through a single IP address.
+
+## Firewall, port, and service requirements for non-bare-metal agent machines
+
+You must meet the firewall and port requirements so that ports can communicate between the management cluster, the control plane, and hosted clusters.
+
+> [!NOTE]
+> Services run on their default ports. However, if you use the `NodePort` publishing strategy, services run on the port that is assigned by the `NodePort` service.
+
+Use firewall rules, security groups, or other access controls to restrict access to only required sources. Avoid exposing ports publicly unless necessary. For production deployments, use a load balancer to simplify access through a single IP address.
+
+A hosted control plane exposes the following services on non-bare-metal agent machines:
+
+- `APIServer`
+
+  - The `APIServer` service runs on port 6443 by default and requires ingress access for communication between the control plane components.
+
+  - If you use MetalLB load balancing, allow ingress access to the IP range that is used for load balancer IP addresses.
+
+- `OAuthServer`
+
+  - The `OAuthServer` service runs on port 443 by default when you use the route and ingress to expose the service.
+
+  - If you use the `NodePort` publishing strategy, use a firewall rule for the `OAuthServer` service.
+
+- `Konnectivity`
+
+  - The `Konnectivity` service runs on port 443 by default when you use the route and ingress to expose the service.
+
+  - The `Konnectivity` agent establishes a reverse tunnel to allow the control plane to access the network for the hosted cluster. The agent uses egress to connect to the `Konnectivity` server. The server is exposed by using either a route on port 443 or a manually assigned `NodePort`.
+
+  - If the cluster API server address is an internal IP address, allow access from the workload subnets to the IP address on port 6443.
+
+  - If the address is an external IP address, allow egress on port 6443 to that external IP address from the nodes.
+
+- `Ignition`
+
+  - The `Ignition` service runs on port 443 by default when you use the route and ingress to expose the service.
+
+  - If you use the `NodePort` publishing strategy, use a firewall rule for the `Ignition` service.
+
+You do not need the following services on non-bare-metal agent machines:
+
+- `OVNSbDb`
+
+- `OIDC`
+
+## Example firewall configuration
+
+Review an example of what the firewall configuration looks like for a typical hosted control planes on AWS deployment that uses `Route` service publishing.
+
+Ingress rules
+- Port `6443`/TCP: Kubernetes API server, from compute nodes and external clients
+
+- Port `443`/TCP: OpenShift Router for Ignition or Konnectivity routes, from compute nodes
+
+Egress rules
+- Port `443`/TCP: HTTPS, to container registries, routes, and external services
+
+- Port `6443`/TCP: Management cluster API, to management cluster
+
+- Port `53`/TCP and UDP: DNS, to DNS servers
+
+If you use `NodePort` or `LoadBalancer` service publishing instead of `Route` service publishing, the following rules apply:
+
+- Port `8091`/TCP: Konnectivity server, from compute nodes
+
+- Port `8443`/TCP: Ignition Proxy, from compute nodes during the bootstrap process, `NodePort` publishing strategy only
+
+- Port `9090`/TCP: Ignition server, from compute nodes during the bootstrap process, `NodePort` publishing strategy only
 
 # Ingress and egress requirements for hosted control planes
 
@@ -166,30 +348,6 @@ Compute nodes require outbound network access to several hosted control planes s
 | `53` | TCP and UDP | DNS | Name resolution | Always |
 
 Compute node egress requirements
-
-## Example firewall configuration
-
-Review an example of what the firewall configuration looks like for a typical hosted control planes on AWS deployment that uses `Route` service publishing.
-
-Ingress rules
-- Port `6443`/TCP: Kubernetes API server, from compute nodes and external clients
-
-- Port `443`/TCP: OpenShift Router for Ignition or Konnectivity routes, from compute nodes
-
-Egress rules
-- Port `443`/TCP: HTTPS, to container registries, routes, and external services
-
-- Port `6443`/TCP: Management cluster API, to management cluster
-
-- Port `53`/TCP and UDP: DNS, to DNS servers
-
-If you use `NodePort` or `LoadBalancer` service publishing instead of `Route` service publishing, the following rules apply:
-
-- Port `8091`/TCP: Konnectivity server, from compute nodes
-
-- Port `8443`/TCP: Ignition Proxy, from compute nodes during the bootstrap process, `NodePort` publishing strategy only
-
-- Port `9090`/TCP: Ignition server, from compute nodes during the bootstrap process, `NodePort` publishing strategy only
 
 ## Handling ingress in a hosted cluster on bare metal
 
@@ -405,7 +563,7 @@ Procedure
 In hosted clusters, you can configure internal OVN subnets to avoid routing conflicts, customize network architecture, or enable virtual private cloud (VPC) peering.
 
 Avoid CIDR conflicts
-Connect VPCs that host Red Hat OpenShift Service on AWS clusters with other VPCs that use the default OVN internal subnets of 100.88.0.0/16 and 100.64.0.0/16. To avoid a conflict on a `kubevirt` hosted cluster, the HyperShift Operator sets the OVN join subnet to `100.66.0.0/16` instead of `100.64.0.0/16` or `100.65.0.0/16`. The default CIDR for the OVN gateway router is `100.64.0.0/16`. The default CIDR for the user-defined network (UDN) join subnet is `100.65.0.0/16`.
+Connect VPCs that host Red Hat OpenShift Service on AWS clusters with other VPCs that use the default OVN internal subnets of 100.88.0.0/16 and 100.64.0.0/16. To avoid a conflict on a `kubevirt` hosted cluster, the HyperShift Operator sets the OVN join subnet to `100.66.0.0/16` instead of `100.64.0.0/16` or `100.65.0.0/16`. The default classless inter-domain routing (CIDR) for the OVN gateway router is `100.64.0.0/16`. The default CIDR for the user-defined network (UDN) join subnet is `100.65.0.0/16`.
 
 Customize network architecture
 Configure internal OVN subnets to align with your corporate network policies.
@@ -490,9 +648,6 @@ Procedure
 
 - To configure internal OVN subnets in an existing hosted cluster, enter the following command:
 
-  > [!IMPORTANT]
-  > When you make this change to an existing hosted cluster, the `ovnkube-node` DaemonSet is rolled out and the OVN components on compute nodes are restarted. During this process, you might experience brief network disruptions.
-
   ``` terminal
   $ oc patch hostedcluster <hosted_cluster_name> \
     -n <hosted_control_plane_namespace> \
@@ -515,11 +670,11 @@ Procedure
 
   where:
 
-  `metadata`
-  Specifies the name of the hosted cluster and the name of the hosted control plane namespace.
-
   `spec.operatorConfiguration.clusterNetworkOperator.ovnKubernetesConfig.ipv4`
   Specifies the subnets to use. Both subnet fields in this section must be in a valid IPv4 CIDR notation, such as `192.168.1.0/24`. The prefix range is `/0` to `/30`, inclusive. The first octet cannot be 0, and the string length must be 9-18 characters. The subnet fields cannot use the same value. The subnet must be large enough to accommodate one IP address per node in the cluster. When you plan subnet size, consider future cluster growth. If you omit these fields, the default value for the `internalJoinSubnet` field is `100.64.0.0/16`, and the default value for the `internalTransitSwitchSubnet` field is `100.88.0.0/16`.
+
+  > [!IMPORTANT]
+  > When you make this change to an existing hosted cluster, the `ovnkube-node` DaemonSet is rolled out and the OVN components on compute nodes are restarted. During this process, you might experience brief network disruptions.
 
 </div>
 

@@ -11,7 +11,7 @@ You must specify the minimum required machines or hosts for your cluster so that
 The smallest OpenShift Container Platform clusters require the following hosts:
 
 > [!IMPORTANT]
-> For a cluster that contains user-provisioned infrastructure, you must deploy all of the required machines.
+> For a cluster that has user-provisioned infrastructure, you must deploy all of the required machines.
 
 | Hosts | Description |
 |----|----|
@@ -26,13 +26,13 @@ Minimum required hosts
 
 The bootstrap, control plane, and compute machines must use Red Hat Enterprise Linux CoreOS (RHCOS) as the operating system.
 
-Note that RHCOS is based on Red Hat Enterprise Linux (RHEL) 9.2 and inherits all of its hardware certifications and requirements. See [Red Hat Enterprise Linux technology capabilities and limits](https://access.redhat.com/articles/rhel-limits).
+RHCOS is based on Red Hat Enterprise Linux (RHEL) 9.2 and inherits all of its hardware certifications and requirements. See [Red Hat Enterprise Linux technology capabilities and limits](https://access.redhat.com/articles/rhel-limits).
 
 ## Minimum resource requirements for cluster installation
 
-Each created cluster must meet minimum requirements so that the cluster runs as expected.
+To ensure that your OpenShift Container Platform cluster runs as expected, each cluster machine must meet minimum CPU, memory, and storage requirements.
 
-| Machine | Operating System | vCPU <sup>\[1\]</sup> | Virtual RAM | Storage | Input/Output Per Second (IOPS) |
+| Machine | Operating system | vCPU | Virtual RAM | Storage | Input/Output Per Second (IOPS) |
 |----|----|----|----|----|----|
 | Bootstrap | RHCOS | 4 | 16 GB | 100 GB | N/A |
 | Control plane | RHCOS | 4 | 16 GB | 100 GB | N/A |
@@ -40,78 +40,58 @@ Each created cluster must meet minimum requirements so that the cluster runs as 
 
 Minimum resource requirements
 
-1.  One physical core (IFL) provides two logical cores (threads) when SMT-2 is enabled. The hypervisor can provide two or more vCPUs.
+- One physical core (IFL) provides two logical cores (threads) when SMT-2 is enabled. The hypervisor can provide two or more vCPUs.
 
 > [!NOTE]
-> For OpenShift Container Platform version 4.19, RHCOS is based on RHEL version 9.6, which updates the micro-architecture requirements. The following list contains the minimum instruction set architectures (ISA) that each architecture requires:
+> In OpenShift Container Platform version 4.19, RHCOS uses RHEL version 9.6, which updates the micro-architecture requirements. Each architecture requires the following minimum instruction set architectures (ISA):
 >
 > - x86-64 architecture requires x86-64-v2 ISA
 >
 > - ARM64 architecture requires ARMv8.0-A ISA
 >
-> - IBM Power architecture requires Power 9 ISA
+> - ppc64le architecture requires IBM® Power9 ISA
 >
-> - s390x architecture requires z14 ISA
+> - s390x architecture requires IBM® z14 ISA
 >
-> For more information, see "Architectures".
+> For more information, see [Architectures](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.8_release_notes/index#architectures) in the RHEL documentation.
 
 If an instance type for your platform meets the minimum requirements for cluster machines, it is supported to use in OpenShift Container Platform.
 
-<div>
+# Additional resources
 
-<div class="title">
+- [Bridging a HiperSockets LAN with a z/VM Virtual Switch (IBM® Documentation)](https://www.ibm.com/docs/en/zvm/latest?topic=networks-bridging-hipersockets-lan-zvm-virtual-switch)
 
-Additional resources
+- [Scaling HyperPAV alias devices on Linux guests on z/VM](https://public.dhe.ibm.com/software/dw/linux390/perf/zvm_hpav00.pdf)
 
-</div>
+- [Processors Resource/Systems Manager Planning Guide (IBM® Documentation)](https://www.ibm.com/docs/en/systems-hardware/zsystems/3932-A02?topic=library-prsm-planning-guide)
 
-- [Architectures (RHEL documentation)](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.2_release_notes/index#architectures)
+- [IBM Dynamic Partition Manager (DPM) Guide (IBM® Documentation)](https://www.ibm.com/docs/en/systems-hardware/zsystems/3932-A02?topic=library-dynamic-partition-manager-dpm-guide)
 
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- See [Bridging a HiperSockets LAN with a z/VM Virtual Switch](https://www.ibm.com/docs/en/zvm/latest?topic=networks-bridging-hipersockets-lan-zvm-virtual-switch) in IBM® Documentation.
-
-- See [Scaling HyperPAV alias devices on Linux guests on z/VM](https://public.dhe.ibm.com/software/dw/linux390/perf/zvm_hpav00.pdf) for performance optimization.
-
-- [Processors Resource/Systems Manager Planning Guide](https://www.ibm.com/docs/en/systems-hardware/zsystems/3932-A02?topic=library-prsm-planning-guide) in IBM® Documentation for PR/SM mode considerations.
-
-- [IBM Dynamic Partition Manager (DPM) Guide](https://www.ibm.com/docs/en/systems-hardware/zsystems/3932-A02?topic=library-dynamic-partition-manager-dpm-guide) in IBM® Documentation for DPM mode considerations.
-
-- [Topics in LPAR performance](https://www.vm.ibm.com/library/presentations/lparperf.pdf) for LPAR weight management and entitlements.
+- [Topics in LPAR performance](https://www.vm.ibm.com/library/presentations/lparperf.pdf)
 
 - [Recommended host practices for IBM Z® & IBM® LinuxONE environments](../../../scalability_and_performance/ibm-z-recommended-host-practices.md#ibm-z-recommended-host-practices)
 
-</div>
-
 ## Minimum IBM Z system environment
 
-The following IBM® hardware is supported with OpenShift Container Platform version 4.17.
+To install OpenShift Container Platform on IBM Z® or IBM® LinuxONE, your environment must meet minimum hardware, operating system, network, and storage requirements.
 
-|  | z/VM | LPAR <sup>\[1\]</sup> | RHEL KVM <sup>\[2\]</sup> |
-|----|----|----|----|
-| IBM® z17 (all models) | supported | supported | supported |
-| IBM® z16 (all models) | supported | supported | supported |
-| IBM® z15 (all models) | supported | supported | supported |
-| IBM® z14 (all models) | supported | supported | supported |
-| IBM® LinuxONE 4 (all models) | supported | supported | supported |
-| IBM® LinuxONE 5 (all models) | supported | supported | supported |
+|                                | z/VM      | LPAR      | RHEL KVM  |
+|--------------------------------|-----------|-----------|-----------|
+| IBM® z17 (all models)          | supported | supported | supported |
+| IBM® z16 (all models)          | supported | supported | supported |
+| IBM® z15 (all models)          | supported | supported | supported |
+| IBM® z14 (all models)          | supported | supported | supported |
+| IBM® LinuxONE 4 (all models)   | supported | supported | supported |
+| IBM® LinuxONE 5 (all models)   | supported | supported | supported |
 | IBM® LinuxONE III (all models) | supported | supported | supported |
-| IBM® LinuxONE Emperor II | supported | supported | supported |
-| IBM® LinuxONE Rockhopper II | supported | supported | supported |
+| IBM® LinuxONE Emperor II       | supported | supported | supported |
+| IBM® LinuxONE Rockhopper II    | supported | supported | supported |
 
 Supported IBM® hardware
 
-1.  When running OpenShift Container Platform on IBM Z® without a hypervisor use the Dynamic Partition Manager (DPM) to manage your machine.
+When running OpenShift Container Platform on IBM Z® in an LPAR without a hypervisor, use the Dynamic Partition Manager (DPM) to manage your machine.
 
-2.  The RHEL KVM host in your environment must meet certain requirements to host the virtual machines that you plan for the OpenShift Container Platform environment. See [Enabling virtualization on IBM Z®](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_virtualization/assembly_enabling-virtualization-in-rhel-9_configuring-and-managing-virtualization#enabling-virtualization-on-ibm-z_assembly_enabling-virtualization-in-rhel-9).
+The RHEL KVM host in your environment must meet certain requirements to host the virtual machines that you plan for the OpenShift Container Platform environment. See [Enabling virtualization on IBM Z®](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_and_managing_virtualization/assembly_enabling-virtualization-in-rhel-9_configuring-and-managing-virtualization#enabling-virtualization-on-ibm-z_assembly_enabling-virtualization-in-rhel-9).
 
 > [!NOTE]
 > For detailed system requirements, see [Linux on IBM Z®/IBM® LinuxONE tested platforms](https://www.ibm.com/support/pages/linux-ibm-zibm-linuxone-tested-platforms) (IBM Support).
@@ -187,7 +167,7 @@ Operating system requirements
 </tbody>
 </table>
 
-#### Disk storage
+### Disk storage
 
 |  | z/VM | LPAR | RHEL KVM |
 |----|----|----|----|
@@ -200,7 +180,7 @@ Disk storage requirements
 
 ## Preferred IBM Z system environment
 
-The preferred system environment for running OpenShift Container Platform version 4.17 on IBM Z® hardware is as follows:
+While OpenShift Container Platform runs on the minimum IBM Z® hardware requirements, using the preferred system environment improves performance and supports production workloads.
 
 ### Hardware requirements
 
@@ -215,7 +195,7 @@ The preferred system environment for running OpenShift Container Platform versio
 
 ### IBM Z operating system requirements
 
-|  | z/VM <sup>\[1\]</sup> | LPAR | RHEL KVM |
+|  | z/VM | LPAR | RHEL KVM |
 |----|----|----|----|
 | Hypervisor | One instance of z/VM 7.2 or later | IBM® z14 or later with DPM or PR/S | One LPAR running on RHEL 8.6 or later with KVM, which is managed by libvirt |
 | OpenShift Container Platform control plane machines | Three guest virtual machines | Three LPARs | Three guest virtual machines |
@@ -224,25 +204,18 @@ The preferred system environment for running OpenShift Container Platform versio
 
 Operating system requirements
 
-1.  To ensure the availability of integral components in an overcommitted environment, increase the priority of the control plane by using the CP command `SET SHARE`. Do the same for infrastructure nodes, if they exist. See [SET SHARE](https://www.ibm.com/docs/en/zvm/latest?topic=commands-set-share) (IBM® Documentation).
+> [!NOTE]
+> When working in a z/VM environment, to ensure the availability of integral components in an overcommitted environment, increase the priority of the control plane by using the CP command `SET SHARE`. Do the same for infrastructure nodes, if they exist. See [SET SHARE](https://www.ibm.com/docs/en/zvm/latest?topic=commands-set-share) (IBM® Documentation).
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+# Additional resources
 
 - [Optimizing storage](../../../scalability_and_performance/optimization/optimizing-storage.md#optimizing-storage)
 
-</div>
-
 ## Certificate signing requests management
 
-On user-provisioned infrastructure, you must provide a mechanism for approving cluster certificate signing requests (CSRs) after installation when your cluster has limited access to automatic machine management.
+On user-provisioned infrastructure, you must implement a mechanism for approving cluster certificate signing requests (CSRs) after installation when your cluster has limited access to automatic machine management.
 
-The `kube-controller-manager` only approves the kubelet client CSRs. The `machine-approver` cannot guarantee the validity of a serving certificate that is requested by using kubelet credentials because it cannot confirm that the correct machine issued the request. You must determine and implement a method of verifying the validity of the kubelet serving certificate requests and approving them.
+The `kube-controller-manager` only approves the kubelet client CSRs. The `machine-approver` cannot guarantee the validity of a serving certificate that kubelet credentials request because it cannot confirm that the correct machine issued the request. You must find and implement a method of verifying the validity of the kubelet serving certificate requests and approving them.
 
 ## Networking requirements for user-provisioned infrastructure
 
@@ -266,7 +239,7 @@ The Kubernetes API server must be able to resolve the node names of the cluster 
 
 ### Setting the cluster node hostnames through DHCP
 
-On Red Hat Enterprise Linux CoreOS (RHCOS) machines, the hostname is set through NetworkManager. By default, the machines obtain their hostname through DHCP. If the hostname is not provided by DHCP, set statically through kernel arguments, or another method, it is obtained through a reverse DNS lookup. Reverse DNS lookup occurs after the network has been initialized on a node and can take time to resolve. Other system services can start prior to this and detect the hostname as `localhost` or similar. You can avoid this by using DHCP to provide the hostname for each cluster node.
+On Red Hat Enterprise Linux CoreOS (RHCOS) machines, the hostname is set through NetworkManager. By default, the machines obtain their hostname through DHCP. If the hostname is not provided by DHCP, set statically through kernel arguments, or another method, it is obtained through a reverse DNS lookup. Reverse DNS lookup occurs after the network has been initialized on a node and can take time to resolve. Other system services can start before this and detect the hostname as `localhost` or similar. You can avoid this by using DHCP to provide the hostname for each cluster node.
 
 Additionally, setting the hostnames through DHCP can bypass any manual DNS record name configuration errors in environments that have a DNS split-horizon implementation.
 
@@ -314,17 +287,9 @@ OpenShift Container Platform clusters are configured to use a public Network Tim
 
 If a DHCP server provides NTP server information, the chrony time service on the Red Hat Enterprise Linux CoreOS (RHCOS) machines read the information and can sync the clock with the NTP servers.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+# Additional resources
 
 - [Configuring chrony time service](../../install_config/installing-customizing.md#installation-special-config-chrony_installing-customizing)
-
-</div>
 
 ## User-provisioned DNS requirements
 

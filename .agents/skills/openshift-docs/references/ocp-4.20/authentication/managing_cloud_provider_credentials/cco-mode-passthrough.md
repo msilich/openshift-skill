@@ -1,40 +1,37 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+To allow the Cloud Credential Operator (CCO) to pass cloud credentials to the components that request them, you can configure the Cloud Credential Operator (CCO) to operate in passthrough mode.
+
+The credential must have permissions to perform the installation and complete the operations that are required by components in the cluster, but does not need to be able to create new credentials. The CCO does not attempt to create additional limited-scoped credentials in passthrough mode.
+
 Passthrough mode is supported for Amazon Web Services (AWS), Microsoft Azure, Google Cloud, Red Hat OpenStack Platform (RHOSP), and VMware vSphere.
 
-In passthrough mode, the Cloud Credential Operator (CCO) passes the provided cloud credential to the components that request cloud credentials. The credential must have permissions to perform the installation and complete the operations that are required by components in the cluster, but does not need to be able to create new credentials. The CCO does not attempt to create additional limited-scoped credentials in passthrough mode.
-
 > [!NOTE]
-> [Manual mode](cco-mode-manual.md#cco-mode-manual) is the only supported CCO configuration for Microsoft Azure Stack Hub.
+> Manual mode is the only supported CCO configuration for Microsoft Azure Stack Hub.
 
 # Passthrough mode permissions requirements
 
 When using the CCO in passthrough mode, ensure that the credential you provide meets the requirements of the cloud on which you are running or installing OpenShift Container Platform. If the provided credentials the CCO passes to a component that creates a `CredentialsRequest` CR are not sufficient, that component will report an error when it tries to call an API that it does not have permissions for.
 
-## Amazon Web Services (AWS) permissions
-
+Amazon Web Services (AWS) permissions
 The credential you provide for passthrough mode in AWS must have all the requested permissions for all `CredentialsRequest` CRs that are required by the version of OpenShift Container Platform you are running or installing.
 
-To locate the `CredentialsRequest` CRs that are required, see [Manually creating long-term credentials for AWS](../../installing/installing_aws/ipi/installing-aws-customizations.md#manually-create-iam_installing-aws-customizations).
+To locate the `CredentialsRequest` CRs that are required, see "Manually creating long-term credentials for AWS.
 
-## Microsoft Azure permissions
-
+Microsoft Azure permissions
 The credential you provide for passthrough mode in Azure must have all the requested permissions for all `CredentialsRequest` CRs that are required by the version of OpenShift Container Platform you are running or installing.
 
-To locate the `CredentialsRequest` CRs that are required, see [Manually creating long-term credentials for Azure](../../installing/installing_azure/ipi/installing-azure-customizations.md#manually-create-iam_installing-azure-customizations).
+To locate the `CredentialsRequest` CRs that are required, see "Manually creating long-term credentials for Azure".
 
-## Google Cloud permissions
-
+Google Cloud permissions
 The credential you provide for passthrough mode in Google Cloud must have all the requested permissions for all `CredentialsRequest` CRs that are required by the version of OpenShift Container Platform you are running or installing.
 
-To locate the `CredentialsRequest` CRs that are required, see [Manually creating long-term credentials for Google Cloud](../../installing/installing_gcp/installing-gcp-customizations.md#manually-create-iam_installing-gcp-customizations).
+To locate the `CredentialsRequest` CRs that are required, see "Manually creating long-term credentials for Google Cloud".
 
-## Red Hat OpenStack Platform (RHOSP) permissions
-
+Red Hat OpenStack Platform (RHOSP) permissions
 To install an OpenShift Container Platform cluster on RHOSP, the CCO requires a credential with the permissions of a `member` user role.
 
-## VMware vSphere permissions
-
+VMware vSphere permissions
 To install an OpenShift Container Platform cluster on VMware vSphere, the CCO requires a credential with the following vSphere privileges:
 
 | Category               | Privileges                                |
@@ -49,6 +46,10 @@ To install an OpenShift Container Platform cluster on VMware vSphere, the CCO re
 | Virtual machine        | All privileges                            |
 
 Required vSphere privileges
+
+If `CredentialsRequest` CRs change over time as the cluster is upgraded, you must manually update the passthrough mode credential to meet the requirements. To avoid credentials issues during an upgrade, check the `CredentialsRequest` CRs in the release image for the new version of OpenShift Container Platform before upgrading.
+
+To locate the `CredentialsRequest` CRs that are required for AWS, Azure, or Google Cloud, see the *Manually creating long-term credentials* topic for your platform.
 
 # Admin credentials root secret format
 
@@ -194,10 +195,6 @@ data:
 
 </div>
 
-# Passthrough mode credential maintenance
-
-If `CredentialsRequest` CRs change over time as the cluster is upgraded, you must manually update the passthrough mode credential to meet the requirements. To avoid credentials issues during an upgrade, check the `CredentialsRequest` CRs in the release image for the new version of OpenShift Container Platform before upgrading. To locate the `CredentialsRequest` CRs that are required for your cloud provider, see *Manually creating long-term credentials* for [AWS](../../installing/installing_aws/ipi/installing-aws-customizations.md#manually-create-iam_installing-aws-customizations), [Azure](../../installing/installing_azure/ipi/installing-azure-customizations.md#manually-create-iam_installing-azure-customizations), or [Google Cloud](../../installing/installing_gcp/installing-gcp-customizations.md#manually-create-iam_installing-gcp-customizations).
-
 ## Maintaining cloud provider credentials
 
 If your cloud provider credentials are changed for any reason, you must manually update the secret that the Cloud Credential Operator (CCO) uses to manage cloud provider credentials.
@@ -295,13 +292,15 @@ Additional resources
 
 </div>
 
-# Reducing permissions after installation
+## Reducing permissions after installation
 
-When using passthrough mode, each component has the same permissions used by all other components. If you do not reduce the permissions after installing, all components have the broad permissions that are required to run the installer.
+When using passthrough mode, after installing you can reduce the installed permissions to only those permissions required to run the cluster.
 
-After installation, you can reduce the permissions on your credential to only those that are required to run the cluster, as defined by the `CredentialsRequest` CRs in the release image for the version of OpenShift Container Platform that you are using.
+In passthrough mode, each component has the same permissions used by all other components. If you do not reduce the permissions after installing, all components have the broad permissions that are required to run the installation program.
 
-To locate the `CredentialsRequest` CRs that are required for AWS, Azure, or Google Cloud and learn how to change the permissions the CCO uses, see *Manually creating long-term credentials* for [AWS](../../installing/installing_aws/ipi/installing-aws-customizations.md#manually-create-iam_installing-aws-customizations), [Azure](../../installing/installing_azure/ipi/installing-azure-customizations.md#manually-create-iam_installing-azure-customizations), or [Google Cloud](../../installing/installing_gcp/installing-gcp-customizations.md#manually-create-iam_installing-gcp-customizations).
+After installation, reduce the permissions on your credential to only those defined by the `CredentialsRequest` CRs in the release image for the version of OpenShift Container Platform that you are using.
+
+To locate the `CredentialsRequest` CRs that are required for AWS, Azure, or Google Cloud and learn how to change the permissions the CCO uses, see the *Manually creating long-term credentials* topic for your platform.
 
 # Additional resources
 

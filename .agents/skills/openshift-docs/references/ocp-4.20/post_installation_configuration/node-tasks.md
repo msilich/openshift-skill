@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+You can perform postinstallation node tasks to add and manage compute machines, configure node resources and hardware, improve availability, and control workload scheduling.
+
 After installing OpenShift Container Platform, you can further expand and customize your cluster to your requirements through certain node tasks.
 
 # Adding RHCOS compute machines to an OpenShift Container Platform cluster
@@ -8,15 +10,15 @@ You can add more Red Hat Enterprise Linux CoreOS (RHCOS) compute machines to yo
 
 Before you add more compute machines to a cluster that you installed on bare metal infrastructure, you must create RHCOS machines for it to use. You can either use an ISO image or network PXE booting to create the machines.
 
-## Prerequisites
+**Prerequisites**
 
 - You installed a cluster on bare metal.
 
-- You have installation media and Red Hat Enterprise Linux CoreOS (RHCOS) images that you used to create your cluster. If you do not have these files, you must obtain them by following the instructions in the [installation procedure](../installing/installing_bare_metal/upi/installing-bare-metal.md#installing-bare-metal).
+- You have installation media and Red Hat Enterprise Linux CoreOS (RHCOS) images that you used to create your cluster. If you do not have these files, you must obtain them by following the instructions in the installation procedure.
 
-## Creating RHCOS machines using an ISO image
+## Creating RHCOS machines by using an ISO image
 
-You can create more Red Hat Enterprise Linux CoreOS (RHCOS) compute machines for your bare metal cluster by using an ISO image to create the machines.
+To scale your OpenShift Container Platform bare metal cluster, you can create more Red Hat Enterprise Linux CoreOS (RHCOS) compute machines by using an ISO image.
 
 <div>
 
@@ -26,7 +28,7 @@ Prerequisites
 
 </div>
 
-- Obtain the URL of the Ignition config file for the compute machines for your cluster. You uploaded this file to your HTTP server during installation.
+- You have obtained the URL of the Ignition config file for the compute machines for your cluster. You uploaded this file to your HTTP server during installation.
 
 - You must have the OpenShift CLI (`oc`) installed.
 
@@ -54,7 +56,7 @@ Procedure
     $ curl -k http://<HTTP_server>/worker.ign
     ```
 
-4.  You can access the ISO image for booting your new machine by running to following command:
+4.  You can access the ISO image for booting your new machine by running the following command:
 
     ``` terminal
     RHCOS_VHD_ORIGIN_URL=$(oc -n openshift-machine-config-operator get configmap/coreos-bootimages -o jsonpath='{.data.stream}' | jq -r '.architectures.<architecture>.artifacts.metal.formats.iso.disk.location')
@@ -100,9 +102,21 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installing a cluster on bare metal](../installing/installing_bare_metal/upi/installing-bare-metal.md#installing-bare-metal)
+
+</div>
+
 ## Creating RHCOS machines by PXE or iPXE booting
 
-You can create more Red Hat Enterprise Linux CoreOS (RHCOS) compute machines for your bare-metal cluster by using PXE or iPXE booting.
+To scale your OpenShift Container Platform bare metal cluster, you can create more Red Hat Enterprise Linux CoreOS (RHCOS) compute machines by using PXE or iPXE booting.
 
 <div>
 
@@ -112,9 +126,9 @@ Prerequisites
 
 </div>
 
-- Obtain the URL of the Ignition config file for the compute machines for your cluster. You uploaded this file to your HTTP server during installation.
+- You have obtained the URL of the Ignition config file for the compute machines for your cluster. You uploaded this file to your HTTP server during installation.
 
-- Obtain the URLs of the RHCOS ISO image, compressed metal BIOS, `kernel`, and `initramfs` files that you uploaded to your HTTP server during cluster installation.
+- You have obtained the URLs of the RHCOS ISO image, compressed metal BIOS, `kernel`, and `initramfs` files that you uploaded to your HTTP server during cluster installation.
 
 - You have access to the PXE booting infrastructure that you used to create the machines for your OpenShift Container Platform cluster during installation. The machines must boot from their local disks after RHCOS is installed on them.
 
@@ -192,7 +206,7 @@ Procedure
 
       - If you use multiple NICs, specify a single interface in the `ip` option. For example, to use DHCP on a NIC named `eno1`, set `ip=eno1:dhcp`.
 
-      - This configuration does not enable serial console access on machines with a graphical console To configure a different console, add one or more `console=` arguments to the `kernel` line. For example, add `console=tty0 console=ttyS0` to set the first PC serial port as the primary console and the graphical console as a secondary console. For more information on setting up a serial terminal and/or console in RHCOS, see "How does one set up a serial terminal and/or console in Red Hat Enterprise Linux?" in the Additional resources section and "Enabling the serial console for PXE and ISO installation" in the "Advanced RHCOS installation configuration" section.
+      - This configuration does not enable serial console access on machines with a graphical console. To configure a different console, add one or more `console=` arguments to the `kernel` line. For example, add `console=tty0 console=ttyS0` to set the first PC serial port as the primary console and the graphical console as a secondary console. For more information on setting up a serial terminal and/or console in RHCOS, see "How does one set up a serial terminal and/or console in Red Hat Enterprise Linux?" in the Additional resources section and "Enabling the serial console for PXE and ISO installation" in the "Advanced RHCOS installation configuration" section.
 
       </div>
 
@@ -243,7 +257,7 @@ Additional resources
 
 ## Approving the certificate signing requests for your machines
 
-When you add machines to a cluster, two pending certificate signing requests (CSRs) are generated for each machine that you added. You must confirm that these CSRs are approved or, if necessary, approve them yourself. The client requests must be approved first, followed by the server requests.
+To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 
 <div>
 
@@ -291,7 +305,7 @@ Procedure
     The output lists all of the machines that you created.
 
     > [!NOTE]
-    > The preceding output might not include the compute nodes until some CSRs are approved.
+    > The preceding output might not include the compute nodes until you approve some CSRs.
 
 2.  Review the pending CSRs and ensure that you see the client requests with the `Pending` or `Approved` status for each machine that you added to the cluster:
 
@@ -321,10 +335,10 @@ Procedure
 3.  If the CSRs were not approved, after all of the pending CSRs for the machines you added are in `Pending` status, approve the CSRs for your cluster machines:
 
     > [!NOTE]
-    > You must approve your CSRs within an hour of adding the machines to the cluster. If you do not approve them within an hour, the certificates will rotate, and more than two certificates will be present for each node. You must approve all of these certificates. After the client CSR is approved, the Kubelet creates a secondary CSR for the serving certificate, which requires manual approval. The subsequent serving certificate renewal requests are then automatically approved by the `machine-approver` if the Kubelet requests a new certificate with identical parameters.
+    > You must approve your CSRs within an hour of adding the machines to the cluster. If you do not approve them within an hour, the certificates rotate, and more than two certificates are present for each node. You must approve all of these certificates. After you approve the client CSR, the kubelet creates a secondary CSR for the serving certificate, which requires manual approval. The `machine-approver` then automatically approves later serving certificate renewal requests if the kubelet requests a new certificate with the same parameters.
 
     > [!NOTE]
-    > For clusters running on platforms that are not machine API enabled, such as bare metal and other user-provisioned infrastructure, you must implement a method of automatically approving the kubelet serving certificate requests (CSRs). If a request is not approved, then the `oc exec`, `oc rsh`, and `oc logs` commands cannot succeed, because a serving certificate is required when the API server connects to the kubelet. Any operation that contacts the Kubelet endpoint requires this certificate approval to be in place. The method must watch for new CSRs, confirm that the CSR was submitted by the `node-bootstrapper` service account in the `system:node` or `system:admin` groups, and confirm the identity of the node.
+    > For clusters running on platforms that are not machine API enabled, such as bare metal and other user-provisioned infrastructure, you must implement a method of automatically approving the kubelet serving certificate requests (CSRs). If you do not approve a request, the `oc exec`, `oc rsh`, and `oc logs` commands cannot succeed, because the API server requires a serving certificate when it connects to the kubelet. Any operation that contacts the kubelet endpoint requires this certificate approval to be in place. The method must watch for new CSRs, confirm that the `node-bootstrapper` service account in the `system:node` or `system:admin` groups submitted the CSR, and confirm the identity of the node.
 
     - To approve them individually, run the following command for each valid CSR:
 
@@ -344,9 +358,9 @@ Procedure
       ```
 
       > [!NOTE]
-      > Some Operators might not become available until some CSRs are approved.
+      > Some Operators might not become available until you approve some CSRs.
 
-4.  Now that your client requests are approved, you must review the server requests for each machine that you added to the cluster:
+4.  After you approve your client requests, review the server requests for each machine that you added to the cluster:
 
     ``` terminal
     $ oc get csr
@@ -388,7 +402,7 @@ Procedure
       $ oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
       ```
 
-6.  After all client and server CSRs have been approved, the machines have the `Ready` status. Verify this by running the following command:
+6.  After you approve all client and server CSRs, the machines have the `Ready` status. Verify this by running the following command:
 
     ``` terminal
     $ oc get nodes
@@ -414,11 +428,13 @@ Procedure
     </div>
 
     > [!NOTE]
-    > You might need to wait a few minutes after approval of the server CSRs for the machines to transition to the `Ready` status.
+    > You might need to wait a few minutes after approval of the server CSRs for the machines to reach the `Ready` status.
 
 </div>
 
 ## Adding a new RHCOS worker node with a custom `/var` partition in AWS
+
+You can add an RHCOS worker node with a custom `/var` partition in AWS by creating a user data secret and a compute machine set that use the required device naming schema.
 
 OpenShift Container Platform supports partitioning devices during installation by using machine configs that are processed during the bootstrap. However, if you use `/var` partitioning, the device name must be determined at installation and cannot be changed. You cannot add different instance types as nodes if they have a different device naming schema. For example, if you configured the `/var` partition with the default AWS device name for `m4.large` instances, `dev/xvdb`, you cannot directly add an AWS `m5.large` instance, as `m5.large` instances use a `/dev/nvme1n1` device by default. The device might fail to partition due to the different naming schema.
 
@@ -505,19 +521,28 @@ Procedure
         }
         ```
 
-        - Specifies an absolute path to the AWS block device.
+        where:
 
-        - Specifies the size of the data partition in Mebibytes.
+        `device` (under `disks`)
+        Specifies an absolute path to the AWS block device.
 
-        - Specifies the start of the partition in Mebibytes. When adding a data partition to the boot disk, a minimum value of 25000 MB (Mebibytes) is recommended. The root file system is automatically resized to fill all available space up to the specified offset. If no value is specified, or if the specified value is smaller than the recommended minimum, the resulting root file system will be too small, and future reinstalls of RHCOS might overwrite the beginning of the data partition.
+        `sizeMiB`
+        Specifies the size of the data partition in Mebibytes.
 
-        - Specifies an absolute path to the `/var` partition.
+        `startMiB`
+        Specifies the start of the partition in Mebibytes. When adding a data partition to the boot disk, a minimum value of 25000 MB (Mebibytes) is recommended. The root file system is automatically resized to fill all available space up to the specified offset. If no value is specified, or if the specified value is smaller than the recommended minimum, the resulting root file system will be too small, and future reinstalls of RHCOS might overwrite the beginning of the data partition.
 
-        - Specifies the filesystem format.
+        `device` (under `filesystems`)
+        Specifies an absolute path to the `/var` partition.
 
-        - Specifies the mount-point of the filesystem while Ignition is running relative to where the root filesystem will be mounted. This is not necessarily the same as where it should be mounted in the real root, but it is encouraged to make it the same.
+        `format`
+        Specifies the filesystem format.
 
-        - Defines a systemd mount unit that mounts the `/dev/disk/by-partlabel/var` device to the `/var` partition.
+        `path`
+        Specifies the mount-point of the filesystem while Ignition is running relative to where the root filesystem will be mounted. This is not necessarily the same as where it should be mounted in the real root, but it is encouraged to make it the same.
+
+        `units`
+        Defines a systemd mount unit that mounts the `/dev/disk/by-partlabel/var` device to the `/var` partition.
 
     3.  Extract the `disableTemplating` section from the `work-user-data` secret to a text file:
 
@@ -605,13 +630,19 @@ Procedure
                     name: worker-user-data-x5
         ```
 
-        - Specifies a name for the new node.
+        where:
 
-        - Specifies an absolute path to the AWS block device, here an encrypted EBS volume.
+        `name`
+        Specifies a name for the new node.
 
-        - Optional. Specifies an additional EBS volume.
+        `DeviceName: /dev/nvme1n1`
+        Specifies an absolute path to the AWS block device, here an encrypted EBS volume.
 
-        - Specifies the user data secret file.
+        `DeviceName: /dev/nvme1n2`
+        Optional. Specifies an additional EBS volume.
+
+        `userDataSecret.name`
+        Specifies the user data secret file.
 
     2.  Create the compute machine set:
 
@@ -646,7 +677,7 @@ Procedure
 
         </div>
 
-        - This is the new compute machine set.
+        The `worker-us-east-2-nvme1n1` compute machine set is the new compute machine set.
 
     2.  Verify that the new node is created:
 
@@ -675,7 +706,7 @@ Procedure
 
         </div>
 
-        - This is new new node.
+        The `ip-10-0-217-135.ec2.internal` node is the new node.
 
     3.  Verify that the custom `/var` partition is created on the new node:
 
@@ -710,7 +741,7 @@ Procedure
 
         </div>
 
-        - The `nvme1n1` device is mounted to the `/var` partition.
+        The `nvme1n1` device is mounted to the `/var` partition.
 
 </div>
 
@@ -726,10 +757,6 @@ Additional resources
 
 </div>
 
-# Deploying machine health checks
-
-Understand and deploy machine health checks.
-
 > [!IMPORTANT]
 > You can use the advanced machine management and scaling capabilities only in clusters where the Machine API is operational. Clusters with user-provisioned infrastructure require additional validation and configuration to use the Machine API.
 >
@@ -741,7 +768,13 @@ Understand and deploy machine health checks.
 > $ oc get infrastructure cluster -o jsonpath='{.status.platform}'
 > ```
 
+# Deploying machine health checks
+
+Understand and deploy machine health checks to detect and remediate unhealthy machines in your cluster.
+
 ## About machine health checks
+
+You can use machine health checks to detect and remediate unhealthy machines automatically, limiting disruption to the targeted machine pool.
 
 > [!NOTE]
 > You can only apply a machine health check to machines that are managed by compute machine sets or control plane machine sets.
@@ -785,7 +818,9 @@ Additional resources
 
 </div>
 
-## Sample MachineHealthCheck resource
+## About the MachineHealthCheck custom resource
+
+You control how a machine health check remediates unhealthy machines by using a `MachineHealthCheck` custom resource (CR) to configure health criteria, remediation limits, and startup timeouts for machines in a targeted pool.
 
 The `MachineHealthCheck` resource for all cloud-based installation types, and other than bare metal, resembles the following YAML file:
 
@@ -812,26 +847,37 @@ spec:
   nodeStartupTimeout: "10m"
 ```
 
-- Specify the name of the machine health check to deploy.
+where:
 
-- Specify a label for the machine pool that you want to check.
+`metadata.name`
+Specifies the name of the machine health check to deploy.
 
-- Specify the machine set to track in `<cluster_name>-<label>-<zone>` format. For example, `prod-node-us-east-1a`.
+`spec.selector.matchLabels`
+Specifies the machine pool and machine set to check by adding labels:
 
-- Specify the timeout duration for a node condition. If a condition is met for the duration of the timeout, the machine will be remediated. Long timeouts can result in long periods of downtime for a workload on an unhealthy machine.
+- `machine.openshift.io/cluster-api-machine-role`: Specifies a label for the machine pool that you want to check.
 
-- Specify the amount of machines allowed to be concurrently remediated in the targeted pool. This can be set as a percentage or an integer. If the number of unhealthy machines exceeds the limit set by `maxUnhealthy`, remediation is not performed.
+- `machine.openshift.io/cluster-api-machine-type`: Specifies a label for the machine pool that you want to check.
 
-- Specify the timeout duration that a machine health check must wait for a node to join the cluster before a machine is determined to be unhealthy.
+- `machine.openshift.io/cluster-api-machineset`: Specifies the machine set to track in the `<cluster_name>-<label>-<zone>` format. For example, `prod-node-us-east-1a`.
+
+`spec.unhealthyConditions.timeout`
+Specifies the timeout duration for a node condition. If a condition is met for the duration of the timeout, the machine will be remediated. Long timeouts can result in long periods of downtime for a workload on an unhealthy machine.
+
+`spec.maxUnhealthy`
+Specifies the amount of machines allowed to be concurrently remediated in the targeted pool. This can be set as a percentage or an integer. If the number of unhealthy machines exceeds the limit set by `maxUnhealthy`, remediation is not performed.
+
+`spec.nodeStartupTimeout`
+Specifies the timeout duration that a machine health check must wait for a node to join the cluster before a machine is determined to be unhealthy.
 
 > [!NOTE]
 > The `matchLabels` are examples only; you must map your machine groups based on your specific needs.
 
-### Short-circuiting machine health check remediation
+## About short-circuiting machine health check remediation
 
-Short-circuiting ensures that machine health checks remediate machines only when the cluster is healthy. Short-circuiting is configured through the `maxUnhealthy` field in the `MachineHealthCheck` resource.
+You can use machine health check short-circuiting to ensure that machine health checks remediate machines only when the cluster is healthy, by configuring the `maxUnhealthy` field in the `MachineHealthCheck` resource.
 
-If the user defines a value for the `maxUnhealthy` field, before remediating any machines, the `MachineHealthCheck` compares the value of `maxUnhealthy` with the number of machines within its target pool that it has determined to be unhealthy. Remediation is not performed if the number of unhealthy machines exceeds the `maxUnhealthy` limit.
+If you define a value for the `maxUnhealthy` field, before remediating any machines, the `MachineHealthCheck` compares the value of `maxUnhealthy` with the number of machines within its target pool that it has determined to be unhealthy. Remediation is not performed if the number of unhealthy machines exceeds the `maxUnhealthy` limit.
 
 > [!IMPORTANT]
 > If `maxUnhealthy` is not set, the value defaults to `100%` and the machines are remediated regardless of the state of the cluster.
@@ -847,8 +893,7 @@ The appropriate `maxUnhealthy` value depends on the scale of the cluster you dep
 
 The `maxUnhealthy` field can be set as either an integer or percentage. There are different remediation implementations depending on the `maxUnhealthy` value.
 
-#### Setting maxUnhealthy by using an absolute value
-
+Setting maxUnhealthy by using an absolute value
 If `maxUnhealthy` is set to `2`:
 
 - Remediation will be performed if 2 or fewer nodes are unhealthy
@@ -857,8 +902,7 @@ If `maxUnhealthy` is set to `2`:
 
 These values are independent of how many machines are being checked by the machine health check.
 
-#### Setting maxUnhealthy by using percentages
-
+Setting maxUnhealthy by using percentages
 If `maxUnhealthy` is set to `40%` and there are 25 machines being checked:
 
 - Remediation will be performed if 10 or fewer nodes are unhealthy
@@ -876,7 +920,7 @@ If `maxUnhealthy` is set to `40%` and there are 6 machines being checked:
 
 ## Creating a machine health check resource
 
-You can create a `MachineHealthCheck` resource for machine sets in your cluster.
+You can create a `MachineHealthCheck` resource to monitor and automatically remediate unhealthy machines in a machine set.
 
 > [!NOTE]
 > You can only apply a machine health check to machines that are managed by compute machine sets or control plane machine sets.
@@ -1011,6 +1055,8 @@ Verification
 
 ## Understanding the difference between compute machine sets and the machine config pool
 
+Compute machine sets and machine config pools control different aspects of node lifecycle in OpenShift Container Platform. Understanding how each object relates to scaling and upgrades helps you configure nodes correctly.
+
 `MachineSet` objects describe OpenShift Container Platform nodes with respect to the cloud or machine provider.
 
 The `MachineConfigPool` object allows `MachineConfigController` components to define and provide the status of machines in the context of upgrades.
@@ -1020,6 +1066,8 @@ The `MachineConfigPool` object allows users to configure how upgrades are rolled
 The `NodeSelector` object can be replaced with a reference to the `MachineSet` object.
 
 # Recommended node host practices
+
+You can configure the `podsPerCore` and `maxPods` parameters to control the maximum number of pods that can be scheduled on a node.
 
 The OpenShift Container Platform node configuration file contains important options. For example, two parameters control the maximum number of pods that can be scheduled to a node: `podsPerCore` and `maxPods`.
 
@@ -1374,6 +1422,8 @@ Verification
 
 ## Modifying the number of unavailable worker nodes
 
+You can speed up kubelet configuration rollouts on large clusters by increasing the number of worker nodes that can be unavailable during machine config pool updates.
+
 By default, only one machine is allowed to be unavailable when applying the kubelet-related configuration to the available worker nodes. For a large cluster, it can take a long time for the configuration change to be reflected. At any time, you can adjust the number of machines that are updating to speed up the process.
 
 <div>
@@ -1454,7 +1504,7 @@ Operator Lifecycle Manager (OLM) runs on the control plane nodes and its memory 
 | 10,000 | 9.9 | 21.6 |
 
 > [!IMPORTANT]
-> You can modify the control plane node size in a running OpenShift Container Platform 4.17 cluster for the following configurations only:
+> You can modify the control plane node size in a running OpenShift Container Platform 4.20 cluster for the following configurations only:
 >
 > - Clusters installed with a user-provisioned installation method.
 >
@@ -1465,7 +1515,7 @@ Operator Lifecycle Manager (OLM) runs on the control plane nodes and its memory 
 > For all other configurations, you must estimate your total node count and use the suggested control plane node size during installation.
 
 > [!NOTE]
-> In OpenShift Container Platform 4.17, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. The sizes are determined taking that into consideration.
+> In OpenShift Container Platform 4.20, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. The sizes are determined taking that into consideration.
 
 ## Setting up CPU Manager
 
@@ -1839,7 +1889,7 @@ Verification
 
 # Huge pages
 
-Understand and configure huge pages.
+Understand and configure huge pages to optimize memory mapping efficiency on cluster nodes.
 
 ## What huge pages do
 
@@ -2018,6 +2068,8 @@ Verification
 
 A device plugin is a gRPC service running on nodes that manages specific hardware resources through an extension mechanism, enabling containers to consume these devices.
 
+The device plugin provides a consistent and portable solution to consume hardware devices across clusters. The device plugin provides support for these devices through an extension mechanism, which makes these devices available to Containers, provides health checks of these devices, and securely shares them.
+
 > [!IMPORTANT]
 > OpenShift Container Platform supports the device plugin API, but the device plugin Containers are supported by individual vendors.
 
@@ -2049,15 +2101,15 @@ service DevicePlugin {
 
 ## Example device plugins
 
-- [Nvidia GPU device plugin for COS-based operating system](https://github.com/GoogleCloudPlatform/Container-engine-accelerators/tree/master/cmd/nvidia_gpu)
+- Nvidia GPU device plugin for COS-based operating system
 
-- [Nvidia official GPU device plugin](https://github.com/NVIDIA/k8s-device-plugin)
+- Nvidia official GPU device plugin
 
-- [Solarflare device plugin](https://github.com/vikaschoudhary16/sfc-device-plugin)
+- Solarflare device plugin
 
-- [KubeVirt device plugins: vfio and kvm](https://github.com/kubevirt/kubernetes-device-plugins)
+- KubeVirt device plugins: vfio and kvm
 
-- [Kubernetes device plugin for IBM® Crypto Express (CEX) cards](https://github.com/ibm-s390-cloud/k8s-cex-dev-plugin)
+- Kubernetes device plugin for IBM® Crypto Express (CEX) cards
 
 > [!NOTE]
 > For easy device plugin reference implementation, there is a stub device plugin in the Device Manager code: ***vendor/k8s.io/kubernetes/pkg/kubelet/cm/deviceplugin/device_plugin_stub.go***.
@@ -2072,9 +2124,31 @@ service DevicePlugin {
 
 - More specific details regarding deployment steps can be found with each device plugin implementation.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Nvidia GPU device plugin for COS-based operating system](https://github.com/GoogleCloudPlatform/Container-engine-accelerators/tree/master/cmd/nvidia_gpu)
+
+- [Nvidia official GPU device plugin](https://github.com/NVIDIA/k8s-device-plugin)
+
+- [Solarflare device plugin](https://github.com/vikaschoudhary16/sfc-device-plugin)
+
+- [KubeVirt device plugins: vfio and kvm](https://github.com/kubevirt/kubernetes-device-plugins)
+
+- [Kubernetes device plugin for IBM® Crypto Express (CEX) cards](https://github.com/ibm-s390-cloud/k8s-cex-dev-plugin)
+
+</div>
+
 ## Understanding the Device Manager
 
 Device Manager advertises specialized node hardware resources through device plugins, enabling pods to consume hardware devices without requiring upstream code changes.
+
+Device Manager provides a mechanism for advertising specialized node hardware resources with the help of plugins known as device plugins.
 
 You can advertise specialized hardware without requiring any upstream code changes.
 
@@ -2094,6 +2168,8 @@ Additionally, device plugins can also perform several other device-specific oper
 ## Enabling Device Manager
 
 Enable Device Manager to allow device plugins to advertise specialized node hardware resources and make them available to pods without requiring code changes.
+
+Enable Device Manager to implement a device plugin to advertise specialized hardware without any upstream code changes.
 
 Device Manager provides a mechanism for advertising specialized node hardware resources with the help of plugins known as device plugins.
 
@@ -2200,7 +2276,7 @@ Procedure
 
 # Taints and tolerations
 
-Understand and work with taints and tolerations.
+Understand and work with taints and tolerations to control which pods can be scheduled on specific nodes.
 
 ## Understanding taints and tolerations
 
@@ -2844,7 +2920,7 @@ Procedure
 
 # Topology Manager
 
-Understand and work with Topology Manager.
+Understand and work with Topology Manager to align CPU and device resources for latency-sensitive workloads.
 
 ## Topology Manager policies
 
@@ -3732,7 +3808,7 @@ To provide more reliable scheduling and minimize node resource overcommitment, e
 > [!NOTE]
 > It is recommended that you reserve resources for incompressible resources such as memory.
 
-For more details, see Allocating Resources for Nodes in the *Additional resources* section.
+For more details, see "Allocating Resources for Nodes".
 
 <div>
 
@@ -3808,7 +3884,7 @@ Procedure
 
 # Freeing node resources using garbage collection
 
-Understand and use garbage collection.
+Understand and use garbage collection to free node resources by removing unused containers and images.
 
 ## Understanding how terminated containers are removed through garbage collection
 
@@ -4117,7 +4193,9 @@ Verification
 
 # Using the Node Tuning Operator
 
-Understand and use the Node Tuning Operator.
+Understand and use the Node Tuning Operator to manage node-level performance tuning on your cluster.
+
+## Node Tuning Operator
 
 The Node Tuning Operator helps you manage node-level tuning by orchestrating the TuneD daemon and achieves low latency performance by using the Performance Profile controller. The majority of high-performance applications require some level of kernel tuning. The Node Tuning Operator provides a unified management interface to users of node-level sysctls and more flexibility to add custom tuning specified by user needs.
 
@@ -4634,21 +4712,11 @@ Verification
 
 After you deployed your cluster to run nodes with static IP addresses, you can scale an instance of a machine or a machine set to use one of these static IP addresses.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Static IP addresses for vSphere nodes](../installing/installing_vsphere/ipi/ipi-vsphere-installation-reqs.md#installation-vsphere-installer-infra-requirements_ipi-vsphere-installation-reqs)
-
-</div>
-
 ## Scaling machines to use static IP addresses
 
-You can scale additional machine sets to use pre-defined static IP addresses on your cluster. For this configuration, you need to create a machine resource YAML file and then define static IP addresses in this file.
+You can add machines with predefined static IP addresses by creating machine resources that specify static network configuration in the machine YAML file.
+
+You can scale additional machine sets to use predefined static IP addresses on your cluster. For this configuration, you need to create a machine resource YAML file and then define static IP addresses in this file.
 
 <div>
 
@@ -4672,13 +4740,7 @@ Procedure
 
 1.  Create a machine resource YAML file and define static IP address network information in the `network` parameter.
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example of a machine resource YAML file with static IP address information defined in the `network` parameter.
-
-    </div>
+    Example of a machine resource YAML file with static IP address information defined in the `network` parameter:
 
     ``` yaml
     apiVersion: machine.openshift.io/v1beta1
@@ -4728,23 +4790,28 @@ Procedure
     status: {}
     ```
 
-    </div>
+    where:
 
-    - The IP address for the default gateway for the network interface.
+    `gateway`
+    Specifies an IP address for the default gateway for the network interface.
 
-    - Lists IPv4, IPv6, or both IP addresses that installation program passes to the network interface. Both IP families must use the same network interface for the default network.
+    `ipAddrs`
+    Specifies a list of IPv4, IPv6, or both IP addresses that installation program passes to the network interface. Both IP families must use the same network interface for the default network.
 
-    - Lists a DNS nameserver. You can define up to 3 DNS nameservers. Consider defining more than one DNS nameserver to take advantage of DNS resolution if that one DNS nameserver becomes unreachable.
+    `nameservers`
+    Specifies a DNS name server. You can define up to 3 DNS name servers. Consider defining more than one DNS name server to take advantage of DNS resolution if that one DNS name server becomes unreachable.
 
-      - Create a `machine` custom resource (CR) by entering the following command in your terminal:
+    - Create a `machine` custom resource (CR) by entering the following command in your terminal:
 
-        ``` terminal
-        $ oc create -f <file_name>.yaml
-        ```
+      ``` terminal
+      $ oc create -f <file_name>.yaml
+      ```
 
 </div>
 
 ## Machine set scaling of machines with configured static IP addresses
+
+You can scale machines with static IP addresses by configuring machine sets that request addresses through `IPAddressClaim` resources managed by your IP address management (IPAM) service.
 
 You can use a machine set to scale machines with configured static IP addresses.
 
@@ -4777,6 +4844,8 @@ status: {}
 The machine controller updates the machine with a status of `IPAddressClaimed` to indicate that a static IP address has successfully bound to the `IPAddressClaim` resource. The machine controller applies the same status to a machine with multiple `IPAddressClaim` resources that each contain a bound static IP address.The machine controller then creates a virtual machine and applies static IP addresses to any nodes listed in the `providerSpec` of a machine’s configuration.
 
 ## Using a machine set to scale machines with configured static IP addresses
+
+You can scale machines that use static IP addresses by configuring a machine set to request addresses from an IP address pool.
 
 You can use a machine set to scale machines with configured static IP addresses.
 
@@ -4864,9 +4933,13 @@ Procedure
                 server: vcenter.ibmc.devcluster.openshift.com
     ```
 
-    - Specifies an IP pool, which lists a static IP address or a range of static IP addresses. The IP Pool can either be a reference to a custom resource definition (CRD) or a resource supported by the `IPAddressClaims` resource handler. The machine controller accesses static IP addresses listed in the machine set’s configuration and then allocates each address to each machine.
+    where:
 
-    - Lists a nameserver. You must specify a nameserver for nodes that receive static IP address, because the Dynamic Host Configuration Protocol (DHCP) network configuration does not support static IP addresses.
+    `addressesFromPools`
+    Specifies an IP pool, which lists a static IP address or a range of static IP addresses. The IP Pool can either be a reference to a custom resource definition (CRD) or a resource supported by the `IPAddressClaims` resource handler. The machine controller accesses static IP addresses listed in the machine set’s configuration and then allocates each address to each machine.
+
+    `nameservers`
+    Lists a name server. You must specify a name server for nodes that receive static IP address, because the Dynamic Host Configuration Protocol (DHCP) network configuration does not support static IP addresses.
 
 2.  Scale the machine set by entering the following commands in your `oc` CLI:
 
@@ -4930,17 +5003,33 @@ Procedure
       prefix: 23
     ```
 
-    - The name of the target `IPAddressClaim` resource.
+    where:
 
-    - Details information about the static IP address or addresses from your nodes.
+    `claimRef`
+    The name of the target `IPAddressClaim` resource.
 
-      > [!NOTE]
-      > By default, the external controller automatically scans any resources in the machine set for recognizable address pool types. When the external controller finds `kind: IPPool` defined in the `IPAddress` resource, the controller binds any static IP addresses to the `IPAddressClaim` resource.
+    `poolRef`
+    Details information about the static IP address or addresses from your nodes.
+
+    > [!NOTE]
+    > By default, the external controller automatically scans any resources in the machine set for recognizable address pool types. When the external controller finds `kind: IPPool` defined in the `IPAddress` resource, the controller binds any static IP addresses to the `IPAddressClaim` resource.
 
 5.  Update the `IPAddressClaim` status with a reference to the `IPAddress` resource:
 
     ``` terminal
     $ oc --type=merge patch IPAddressClaim cluster-dev-9n5wg-worker-0-m7529-claim-0-0 -p='{"status":{"addressRef": {"name": "cluster-dev-9n5wg-worker-0-m7529-ipaddress-0-0"}}}' -n openshift-machine-api --subresource=status
     ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Static IP addresses for vSphere nodes](../installing/installing_vsphere/ipi/ipi-vsphere-installation-reqs.md#installation-vsphere-installer-infra-requirements_ipi-vsphere-installation-reqs)
 
 </div>

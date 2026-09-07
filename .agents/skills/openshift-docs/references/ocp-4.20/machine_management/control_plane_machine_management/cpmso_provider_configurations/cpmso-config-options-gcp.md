@@ -132,7 +132,7 @@ If the cluster uses a failure domain, configure this parameter in the failure do
 
 # Sample Google Cloud failure domain configuration
 
-To prevent downtime for your application due to the failure of a single Google Cloud region, you can configure failure domains in the control plane machine set. To use failure domains, you configure appropriate values in the `failureDomains` section of the `ControlPlaneMachineSet` custom resource (CR).
+To prevent downtime for your application due to the failure of a single Google Cloud region, you can configure failure domains in the control plane machine set by configuring appropriate values in the `failureDomains` section of the `ControlPlaneMachineSet` object.
 
 The control plane machine set concept of a failure domain is analogous to the existing Google Cloud concept of a [*zone*](https://cloud.google.com/compute/docs/regions-zones). The `ControlPlaneMachineSet` CR spreads control plane machines across more than one failure domain when possible.
 

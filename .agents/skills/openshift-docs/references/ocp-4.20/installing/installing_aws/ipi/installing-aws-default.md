@@ -1,8 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-In OpenShift Container Platform version 4.17, you can install a cluster on Amazon Web Services (AWS) that uses the default configuration options.
+In OpenShift Container Platform version 4.20, you can install a cluster on Amazon Web Services (AWS) that uses the default configuration options.
 
 # Prerequisites
+
+Before you install a cluster on Amazon Web Services (AWS) that uses the default configuration options, you must meet several prerequisites.
+
+The following prerequisites must be met:
 
 - You reviewed details about the [OpenShift Container Platform installation and update](../../../architecture/architecture-installation.md#architecture-installation) processes.
 
@@ -17,7 +21,7 @@ In OpenShift Container Platform version 4.17, you can install a cluster on Amazo
 
 # Deploying the cluster
 
-To deploy your OpenShift Container Platform cluster, you can initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions infrastructure and completes cluster setup.
+To deploy your OpenShift Container Platform cluster, you initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions the required infrastructure and completes the cluster setup.
 
 > [!IMPORTANT]
 > You can run the `create cluster` command of the installation program only once, during initial installation.
@@ -53,15 +57,13 @@ Procedure
         --log-level=info
     ```
 
-    - For `<installation_directory>`, specify the directory name to store the files that the installation program creates.
+    where:
 
-    - To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
+    - `<installation_directory>`: Specifies the directory name to store the files that the installation program creates.
 
-    When specifying the directory:
+    - `--log-level`: Specifies the log level. To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
 
-    - Verify that the directory has the `execute` permission. This permission is required to run Terraform binaries under the installation directory.
-
-    - Use an empty directory. Some installation assets, such as bootstrap X.509 certificates, have short expiration intervals, therefore you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
+    When specifying the directory: \* Verify that the directory has the `execute` permission. This permission is required to run Terraform binaries under the installation directory. \* Use an empty directory. Some installation assets, such as bootstrap X.509 certificates, have short expiration intervals, therefore you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
 
 2.  Provide values at the prompts:
 
@@ -111,13 +113,7 @@ When the cluster deployment completes successfully:
   > [!IMPORTANT]
   > Do not delete the installation program or the files that the installation program creates. Both are required to delete the cluster.
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  The following example shows the expected output:
 
   ``` terminal
   ...
@@ -127,8 +123,6 @@ When the cluster deployment completes successfully:
   INFO Login to the console with user: "kubeadmin", and password: "password"
   INFO Time elapsed: 36m22s
   ```
-
-  </div>
 
   <div class="important">
 
@@ -158,7 +152,7 @@ Additional resources
 
 To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
 
-The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+The `kubeconfig` file is specific to a cluster and OpenShift Container Platform generates it during installation.
 
 <div>
 
@@ -231,7 +225,7 @@ Next steps
 
 # Logging in to the cluster by using the web console
 
-The `kubeadmin` user exists by default after an OpenShift Container Platform installation. You can log in to your cluster as the `kubeadmin` user by using the OpenShift Container Platform web console.
+To verify that your cluster deployed successfully and access its features, log in to the OpenShift Container Platform web console as the `kubeadmin` user.
 
 <div>
 
@@ -262,7 +256,7 @@ Procedure
     ```
 
     > [!NOTE]
-    > Alternatively, you can obtain the `kubeadmin` password from the `<installation_directory>/.openshift_install.log` log file on the installation host.
+    > Or, you can obtain the `kubeadmin` password from the `<installation_directory>/.openshift_install.log` log file on the installation host.
 
 2.  List the OpenShift Container Platform web console route:
 
@@ -271,7 +265,7 @@ Procedure
     ```
 
     > [!NOTE]
-    > Alternatively, you can obtain the OpenShift Container Platform route from the `<installation_directory>/.openshift_install.log` log file on the installation host.
+    > Or, you can obtain the OpenShift Container Platform route from the `<installation_directory>/.openshift_install.log` log file on the installation host.
 
     <div class="formalpara">
 
@@ -291,24 +285,14 @@ Procedure
 
 </div>
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+# Additional resources
 
 - [Accessing the web console](../../../web_console/web-console.md#web-console)
 
-</div>
+- [Validating an installation](../../validation_and_troubleshooting/validating-an-installation.md#validating-an-installation)
 
-# Next steps
+- [Available cluster customizations](../../../post_installation_configuration/cluster-tasks.md#available_cluster_customizations)
 
-- [Validating an installation](../../validation_and_troubleshooting/validating-an-installation.md#validating-an-installation).
+- [Remote health reporting](../../../support/remote_health_monitoring/remote-health-reporting.md#remote-health-reporting)
 
-- [Customize your cluster](../../../post_installation_configuration/cluster-tasks.md#available_cluster_customizations).
-
-- If necessary, you can [Remote health reporting](../../../support/remote_health_monitoring/remote-health-reporting.md#remote-health-reporting).
-
-- If necessary, you can [remove cloud provider credentials](../../../post_installation_configuration/changing-cloud-credentials-configuration.md#manually-removing-cloud-creds_changing-cloud-credentials-configuration).
+- [Removing cloud provider credentials](../../../post_installation_configuration/changing-cloud-credentials-configuration.md#manually-removing-cloud-creds_changing-cloud-credentials-configuration)

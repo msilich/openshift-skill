@@ -49,7 +49,7 @@ Procedure
 To completely uninstall the web terminal, you must also remove the DevWorkspace Operator and custom resources used by the Operator.
 
 > [!IMPORTANT]
-> The DevWorkspace Operator is a standalone Operator and may be required as a dependency for other Operators installed in the cluster. Follow the steps below only if you are sure that the DevWorkspace Operator is no longer needed.
+> The DevWorkspace Operator is a standalone Operator and might be required as a dependency for other Operators installed in the cluster. Follow the steps below only if you are sure that the DevWorkspace Operator is no longer needed.
 
 <div>
 
@@ -128,9 +128,9 @@ Procedure
     ```
 
     > [!NOTE]
-    > If you remove the `devworkspace-webhook-server` deployment without removing the mutating and validating webhooks, you can not use `oc exec` commands to run commands in a container in the cluster. After you remove the webhooks you can use the `oc exec` commands again.
+    > If you remove the `devworkspace-webhook-server` deployment without removing the mutating and validating webhooks, you cannot use `oc exec` commands to run commands in a container in the cluster. After you remove the webhooks you can use the `oc exec` commands again.
 
-5.  Remove any remaining services, secrets, and config maps. Depending on the installation, some resources included in the following commands may not exist in the cluster.
+5.  Remove any remaining services, secrets, and config maps. Depending on the installation, some resources included in the following commands might not exist in the cluster.
 
     ``` terminal
     $ oc delete all --selector app.kubernetes.io/part-of=devworkspace-operator,app.kubernetes.io/name=devworkspace-webhook-server -n openshift-operators

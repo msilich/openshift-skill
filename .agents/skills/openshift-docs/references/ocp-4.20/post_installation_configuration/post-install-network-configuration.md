@@ -1,34 +1,36 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+You can configure networking after installation to manage cluster traffic, security, connectivity, and default network policies for new projects.
+
 After installing OpenShift Container Platform, you can further expand and customize your network to your requirements.
 
 # Using the Cluster Network Operator
 
 You can use the Cluster Network Operator (CNO) to deploy and manage cluster network components on an OpenShift Container Platform cluster, including the Container Network Interface (CNI) network plugin selected for the cluster during installation.
 
-For more information, see [Cluster Network Operator in OpenShift Container Platform](../networking/networking_operators/cluster-network-operator.md#nw-cluster-network-operator_cluster-network-operator).
+For more information, see "Cluster Network Operator in OpenShift Container Platform".
 
 # Network configuration tasks
 
-- [Configuring the cluster-wide proxy](../networking/configuring_network_settings/enable-cluster-wide-proxy.md#enable-cluster-wide-proxy)
+- Configuring the cluster-wide proxy
 
-- [Configuring ingress cluster traffic overview](../networking/ingress_load_balancing/configuring_ingress_cluster_traffic/overview-traffic.md#overview-traffic)
+- Configuring ingress cluster traffic overview
 
-- [Configuring the node port service range](../networking/configuring_network_settings/configuring-node-port-service-range.md#configuring-node-port-service-range)
+- Configuring the node port service range
 
-- [Configuring IPsec encryption](../networking/network_security/configuring-ipsec-ovn.md#configuring-ipsec-ovn)
+- Configuring IPsec encryption
 
-- [Create a network policy](../networking/network_security/network_policy/creating-network-policy.md#creating-network-policy) or [configure multitenant isolation with network policies](../networking/network_security/network_policy/multitenant-network-policy.md#multitenant-network-policy)
+- Create a network policy or configure multitenant isolation with network policies
 
-- [Optimizing routing](../scalability_and_performance/optimization/routing-optimization.md#routing-optimization)
+- Optimizing routing
 
-- [Understanding multiple networks](../networking/multiple_networks/understanding-multiple-networks.md#understanding-multiple-networks)
+- Understanding multiple networks
 
-## Creating default network policies for a new project
+# Creating default network policies for a new project
 
 As a cluster administrator, you can modify the new project template to automatically include `NetworkPolicy` objects when you create a new project.
 
-### Modifying the template for new projects
+## Modifying the template for new projects
 
 To modify the default project template to customize the resources and settings applied when users create new projects, you can create a custom project template.
 
@@ -74,7 +76,7 @@ Procedure
 
 5.  Edit the project configuration resource using the web console or CLI.
 
-    - Using the web console:
+    - Using the web console, complete the following tasks:
 
       1.  Navigate to the **Administration** → **Cluster Settings** page.
 
@@ -82,7 +84,7 @@ Procedure
 
       3.  Find the entry for **Project** and click **Edit YAML**.
 
-    - Using the CLI:
+    - Using the CLI, complete the following tasks:
 
       1.  Edit the `project.config.openshift.io/cluster` resource:
 
@@ -90,7 +92,7 @@ Procedure
           $ oc edit project.config.openshift.io/cluster
           ```
 
-6.  Update the `spec` section to include the `projectRequestTemplate` and `name` parameters, and set the name of your uploaded project template. The default name is `project-request`.
+6.  Update the `spec` section to include the `projectRequestTemplate` and `name` parameters. Ensure you set the name of your uploaded project template. The default name is `project-request`.
 
     <div class="formalpara">
 
@@ -117,7 +119,7 @@ Procedure
 
 </div>
 
-### Adding network policies to the new project template
+## Adding network policies to the new project template
 
 You can add `NetworkPolicy` objects to the default project template so that new projects automatically include predefined network isolation rules. Applying network policies through templates helps enforce consistent network security controls across projects.
 
@@ -226,3 +228,23 @@ Procedure
         ```
 
 </div>
+
+# Additional resources
+
+- [Cluster Network Operator in OpenShift Container Platform](../networking/networking_operators/cluster-network-operator.md#nw-cluster-network-operator_cluster-network-operator)
+
+- [Configuring the cluster-wide proxy](../networking/configuring_network_settings/enable-cluster-wide-proxy.md#enable-cluster-wide-proxy)
+
+- [Configuring ingress cluster traffic overview](../networking/ingress_load_balancing/configuring_ingress_cluster_traffic/overview-traffic.md#overview-traffic)
+
+- [Configuring the node port service range](../networking/configuring_network_settings/configuring-node-port-service-range.md#configuring-node-port-service-range)
+
+- [Configuring IPsec encryption](../networking/network_security/configuring-ipsec-ovn.md#configuring-ipsec-ovn)
+
+- [Create a network policy](../networking/network_security/network_policy/creating-network-policy.md#creating-network-policy)
+
+- [Configure multitenant isolation with network policies](../networking/network_security/network_policy/multitenant-network-policy.md#multitenant-network-policy)
+
+- [Optimizing routing](../scalability_and_performance/optimization/routing-optimization.md#routing-optimization)
+
+- [Understanding multiple networks](../networking/multiple_networks/understanding-multiple-networks.md#understanding-multiple-networks)

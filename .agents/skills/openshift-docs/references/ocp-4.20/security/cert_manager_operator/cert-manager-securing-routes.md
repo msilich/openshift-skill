@@ -51,7 +51,10 @@ Procedure
     EOF
     ```
 
-    Replace `<namespace>` with the namespace where the `Issuer` is located. It must be the same as your route’s namespace.
+    where:
+
+    `<namespace>`
+    Specifies the namespace where the `Issuer` is located. It must be the same as the route namespace.
 
 2.  Create a `Certificate` object for the route by running the following command. The `secretName` specifies the TLS secret that is going to be issued and managed by cert-manager and will also be referenced in your route in the following steps.
 
@@ -78,13 +81,13 @@ Procedure
     where:
 
     `<namespace>`
-    Specifies the `namespace` where the `Certificate` resource is located. It should be the same as your route’s namespace.
+    Specifies the `namespace` where the `Certificate` resource is located. It should be the same as the namespace of your route.
 
     `<common_host>`
-    Specifies the certificate’s common name using the hostname of the route.
+    Specifies the common name of your certificate by using the hostname of the route.
 
     `<hostname>`
-    Specifies the hostname of your route to the certificate’s DNS names.
+    Specifies the hostname of your route to the DNS names of your certificate.
 
     `<secret_name>`
     Specifies the name of the secret that contains the certificate.
@@ -116,7 +119,10 @@ Procedure
       --namespace=<namespace>
     ```
 
-    Replace `<namespace>` with the namespace where both your secret and route are located.
+    where:
+
+    `<namespace>`
+    Specifies the namespace where both your secret and route are located.
 
 5.  Create a route for your service resource, that uses edge TLS termination and a custom hostname, by running the following command. The hostname is used when creating a `Certificate` resource in the next step.
 
@@ -130,7 +136,7 @@ Procedure
     where:
 
     `<route_name>`
-    Specifies your route’s name.
+    Specifies the name of your route.
 
     `<service_name>`
     Specifies the service you want to expose.
@@ -141,7 +147,7 @@ Procedure
     `<namespace>`
     Specifies the namespace where your route is located.
 
-6.  Update your route’s `.spec.tls.externalCertificate` field to reference the previously created secret and use the certificate issued by cert-manager by using the following command:
+6.  To reference the secret and use the certificate issued by `cert-manager`, update the `.spec.tls.externalCertificate` field in the route by using the following command:
 
     ``` terminal
     $ oc patch route <route_name> \
@@ -153,7 +159,7 @@ Procedure
     where:
 
     `<route_name>`
-    Specifies the route name.
+    Specifies the name of your route.
 
     `<namespace>`
     Specifies the namespace where both your secret and route are located.
@@ -178,7 +184,10 @@ Verification
     $ oc get secret -n <namespace>
     ```
 
-    Replace `<namespace>` with the namespace name where both your secret and route reside.
+    where:
+
+    `<namespace>`
+    Specifies the namespace where both your secret and route are located.
 
 2.  Verify that the router is using the referenced external certificate by running the following command. The command should return with the status code `200 OK`.
 
@@ -186,17 +195,25 @@ Verification
     $ curl -IsS https://<hostname>
     ```
 
-    Replace `<hostname>` with the hostname of your route.
+    where:
 
-3.  Verify the server certificate’s `subject`, `subjectAltName` and `issuer` are all as expected from the curl verbose outputs by running the following command:
+    `<hostname>`
+    Specifies the hostname of your route.
+
+3.  Verify the `subject`, `subjectAltName`, and `issuer` fields of your server certificate are all as expected from the curl verbose outputs by running the following command:
 
     ``` terminal
     $ curl -v https://<hostname>
     ```
 
-    Replace `<hostname>` with the hostname of your route. The route is now successfully secured by the certificate from the referenced secret issued by cert-manager. cert-manager will automatically manage the certificate’s lifecycle.
+    where:
+
+    `<hostname>`
+    Specifies the hostname of your route.
 
 </div>
+
+The certificate from the referenced secret secures the route. The `cert-manager` component issues the certificate and automatically manages the certificate lifecycle.
 
 # Additional resources
 

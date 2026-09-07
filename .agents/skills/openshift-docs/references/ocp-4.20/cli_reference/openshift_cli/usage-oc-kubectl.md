@@ -16,7 +16,7 @@ Additional commands
 The additional command `oc new-app`, for example, makes it easier to get new applications started using existing source code or pre-built images. Similarly, the additional command `oc new-project` makes it easier to start a project that you can switch to as your default.
 
 > [!IMPORTANT]
-> If you installed an earlier version of the `oc` binary, you cannot use it to complete all of the commands in OpenShift Container Platform 4.17 . If you want the latest features, you must download and install the latest version of the `oc` binary corresponding to your OpenShift Container Platform server version.
+> If you installed an earlier version of the `oc` binary, you cannot use it to complete all of the commands in OpenShift Container Platform 4.20 . If you want the latest features, you must download and install the latest version of the `oc` binary corresponding to your OpenShift Container Platform server version.
 
 Non-security API changes will involve, at minimum, two minor releases (4.1 to 4.2 to 4.3, for example) to allow older `oc` binaries to update. Using new capabilities might require newer `oc` binaries. A 4.3 server might have additional capabilities that a 4.2 `oc` binary cannot use and a 4.3 `oc` binary might have additional capabilities that are unsupported by a 4.2 server.
 

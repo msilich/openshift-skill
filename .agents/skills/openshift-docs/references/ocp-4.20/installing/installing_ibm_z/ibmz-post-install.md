@@ -1,6 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-After installing OpenShift Container Platform, you can configure additional devices for your cluster in an IBM Z® or IBM® LinuxONE environment, which is installed with z/VM. The following devices can be configured:
+After installing OpenShift Container Platform, you can configure additional devices for your cluster in an IBM Z® or IBM® LinuxONE environment, which is installed with z/VM.
+
+The following devices can be configured:
 
 - Fibre Channel Protocol (FCP) host
 
@@ -10,7 +12,7 @@ After installing OpenShift Container Platform, you can configure additional devi
 
 - qeth
 
-You can configure devices by adding udev rules using the Machine Config Operator (MCO) or you can configure devices manually.
+You can configure devices by adding udev rules by using the Machine Config Operator (MCO) or you can configure devices manually.
 
 > [!NOTE]
 > The procedures described here apply only to z/VM installations. If you have installed your cluster with RHEL KVM on IBM Z® or IBM® LinuxONE infrastructure, no additional configuration is needed inside the KVM guest after the devices were added to the KVM guests. However, both in z/VM and RHEL KVM environments the next steps to configure the Local Storage Operator and Kubernetes NMState Operator need to be applied.
@@ -27,9 +29,9 @@ Additional resources
 
 </div>
 
-# Configuring additional devices using the Machine Config Operator (MCO)
+# Configuring additional devices by using the Machine Config Operator
 
-Tasks in this section describe how to use features of the Machine Config Operator (MCO) to configure additional devices in an IBM Z® or IBM® LinuxONE environment. Configuring devices with the MCO is persistent but only allows specific configurations for compute nodes. MCO does not allow control plane nodes to have different configurations.
+You can use the Machine Config Operator (MCO) to configure additional devices in an IBM Z® or IBM® LinuxONE environment. Configuring devices with the MCO is persistent but only allows specific configurations for compute nodes. MCO does not allow control plane nodes to have different configurations.
 
 <div>
 
@@ -65,10 +67,6 @@ Prerequisites
 
 </div>
 
-## Configuring a Fibre Channel Protocol (FCP) host
-
-The following is an example of how to configure an FCP host adapter with N_Port Identifier Virtualization (NPIV) by adding a udev rule.
-
 <div>
 
 <div class="title">
@@ -77,250 +75,236 @@ Procedure
 
 </div>
 
-1.  Take the following sample udev rule `441-zfcp-host-0.0.8000.rules`:
+1.  To configure an FCP host adapter with N_Port Identifier Virtualization (NPIV) by adding a udev rule, complete the following steps:
+
+    1.  Take the following sample udev rule `441-zfcp-host-0.0.8000.rules`:
+
+        ``` terminal
+        ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.8000", DRIVER=="zfcp", GOTO="cfg_zfcp_host_0.0.8000"
+        ACTION=="add", SUBSYSTEM=="drivers", KERNEL=="zfcp", TEST=="[ccw/0.0.8000]", GOTO="cfg_zfcp_host_0.0.8000"
+        GOTO="end_zfcp_host_0.0.8000"
+
+        LABEL="cfg_zfcp_host_0.0.8000"
+        ATTR{[ccw/0.0.8000]online}="1"
+
+        LABEL="end_zfcp_host_0.0.8000"
+        ```
+
+    2.  Convert the rule to Base64 encoded by running the following command:
 
-    ``` terminal
-    ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.8000", DRIVER=="zfcp", GOTO="cfg_zfcp_host_0.0.8000"
-    ACTION=="add", SUBSYSTEM=="drivers", KERNEL=="zfcp", TEST=="[ccw/0.0.8000]", GOTO="cfg_zfcp_host_0.0.8000"
-    GOTO="end_zfcp_host_0.0.8000"
+        ``` terminal
+        $ base64 /path/to/file/
+        ```
+
+    3.  Copy the following MCO sample profile into a YAML file:
+
+        ``` yaml
+        apiVersion: machineconfiguration.openshift.io/v1
+        kind: MachineConfig
+        metadata:
+           labels:
+             machineconfiguration.openshift.io/role: worker0
+           name: 99-worker0-devices
+        spec:
+           config:
+             ignition:
+               version: 3.2.0
+             storage:
+               files:
+               - contents:
+                   source: <base64_data_uri>
+                 filesystem: root
+                 mode: 420
+                 path: /etc/udev/rules.d/41-zfcp-host-0.0.8000.rules
+        ```
+
+        where:
+
+        `metadata.labels.machineconfiguration.openshift.io/role`
+        Specifies the role you have defined in the machine config file.
+
+        `spec.config.storage.files.contents.source`
+        Specifies the data URI for the Base64 encoded udev rule. The value is the Base64 encoded string that you generated in the previous step, formatted as an Ignition data URI.
+
+        `spec.config.storage.files.path`
+        Specifies the path where the udev rule is located.
+
+2.  To configure an FCP LUN by adding a udev rule, complete the following steps. You can add new FCP LUNs or add additional paths to LUNs that are already configured with multipathing.
+
+    1.  Take the following sample udev rule `41-zfcp-lun-0.0.8000:0x500507680d760026:0x00bc000000000000.rules`:
+
+        ``` terminal
+        ACTION=="add", SUBSYSTEMS=="ccw", KERNELS=="0.0.8000", GOTO="start_zfcp_lun_0.0.8207"
+        GOTO="end_zfcp_lun_0.0.8000"
+
+        LABEL="start_zfcp_lun_0.0.8000"
+        SUBSYSTEM=="fc_remote_ports", ATTR{port_name}=="0x500507680d760026", GOTO="cfg_fc_0.0.8000_0x500507680d760026"
+        GOTO="end_zfcp_lun_0.0.8000"
+
+        LABEL="cfg_fc_0.0.8000_0x500507680d760026"
+        ATTR{[ccw/0.0.8000]0x500507680d760026/unit_add}="0x00bc000000000000"
+        GOTO="end_zfcp_lun_0.0.8000"
+
+        LABEL="end_zfcp_lun_0.0.8000"
+        ```
+
+    2.  Convert the rule to Base64 encoded by running the following command:
+
+        ``` terminal
+        $ base64 /path/to/file/
+        ```
+
+    3.  Copy the following MCO sample profile into a YAML file:
+
+        ``` yaml
+        apiVersion: machineconfiguration.openshift.io/v1
+        kind: MachineConfig
+        metadata:
+           labels:
+             machineconfiguration.openshift.io/role: worker0
+           name: 99-worker0-devices
+        spec:
+           config:
+             ignition:
+               version: 3.2.0
+             storage:
+               files:
+               - contents:
+                   source: <base64_data_uri>
+                 filesystem: root
+                 mode: 420
+                 path: /etc/udev/rules.d/41-zfcp-lun-0.0.8000:0x500507680d760026:0x00bc000000000000.rules
+        ```
+
+        where:
 
-    LABEL="cfg_zfcp_host_0.0.8000"
-    ATTR{[ccw/0.0.8000]online}="1"
+        `metadata.labels.machineconfiguration.openshift.io/role`
+        Specifies the role you have defined in the machine config file.
 
-    LABEL="end_zfcp_host_0.0.8000"
-    ```
+        `spec.config.storage.files.contents.source`
+        Specifies the data URI for the Base64 encoded udev rule. The value is the Base64 encoded string that you generated in the previous step, formatted as an Ignition data URI.
 
-2.  Convert the rule to Base64 encoded by running the following command:
-
-    ``` terminal
-    $ base64 /path/to/file/
-    ```
-
-3.  Copy the following MCO sample profile into a YAML file:
-
-    ``` yaml
-    apiVersion: machineconfiguration.openshift.io/v1
-    kind: MachineConfig
-    metadata:
-       labels:
-         machineconfiguration.openshift.io/role: worker0
-       name: 99-worker0-devices
-    spec:
-       config:
-         ignition:
-           version: 3.2.0
-         storage:
-           files:
-           - contents:
-               source: data:text/plain;base64,<encoded_base64_string>
-             filesystem: root
-             mode: 420
-             path: /etc/udev/rules.d/41-zfcp-host-0.0.8000.rules
-    ```
-
-    - The role you have defined in the machine config file.
-
-    - The Base64 encoded string that you have generated in the previous step.
-
-    - The path where the udev rule is located.
-
-</div>
-
-## Configuring an FCP LUN
-
-The following is an example of how to configure an FCP LUN by adding a udev rule. You can add new FCP LUNs or add additional paths to LUNs that are already configured with multipathing.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Take the following sample udev rule `41-zfcp-lun-0.0.8000:0x500507680d760026:0x00bc000000000000.rules`:
-
-    ``` terminal
-    ACTION=="add", SUBSYSTEMS=="ccw", KERNELS=="0.0.8000", GOTO="start_zfcp_lun_0.0.8207"
-    GOTO="end_zfcp_lun_0.0.8000"
-
-    LABEL="start_zfcp_lun_0.0.8000"
-    SUBSYSTEM=="fc_remote_ports", ATTR{port_name}=="0x500507680d760026", GOTO="cfg_fc_0.0.8000_0x500507680d760026"
-    GOTO="end_zfcp_lun_0.0.8000"
-
-    LABEL="cfg_fc_0.0.8000_0x500507680d760026"
-    ATTR{[ccw/0.0.8000]0x500507680d760026/unit_add}="0x00bc000000000000"
-    GOTO="end_zfcp_lun_0.0.8000"
-
-    LABEL="end_zfcp_lun_0.0.8000"
-    ```
-
-2.  Convert the rule to Base64 encoded by running the following command:
-
-    ``` terminal
-    $ base64 /path/to/file/
-    ```
-
-3.  Copy the following MCO sample profile into a YAML file:
-
-    ``` yaml
-    apiVersion: machineconfiguration.openshift.io/v1
-    kind: MachineConfig
-    metadata:
-       labels:
-         machineconfiguration.openshift.io/role: worker0
-       name: 99-worker0-devices
-    spec:
-       config:
-         ignition:
-           version: 3.2.0
-         storage:
-           files:
-           - contents:
-               source: data:text/plain;base64,<encoded_base64_string>
-             filesystem: root
-             mode: 420
-             path: /etc/udev/rules.d/41-zfcp-lun-0.0.8000:0x500507680d760026:0x00bc000000000000.rules
-    ```
-
-    - The role you have defined in the machine config file.
-
-    - The Base64 encoded string that you have generated in the previous step.
-
-    - The path where the udev rule is located.
-
-</div>
-
-## Configuring DASD
-
-The following is an example of how to configure a DASD device by adding a udev rule.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Take the following sample udev rule `41-dasd-eckd-0.0.4444.rules`:
-
-    ``` terminal
-    ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.4444", DRIVER=="dasd-eckd", GOTO="cfg_dasd_eckd_0.0.4444"
-    ACTION=="add", SUBSYSTEM=="drivers", KERNEL=="dasd-eckd", TEST=="[ccw/0.0.4444]", GOTO="cfg_dasd_eckd_0.0.4444"
-    GOTO="end_dasd_eckd_0.0.4444"
-
-    LABEL="cfg_dasd_eckd_0.0.4444"
-    ATTR{[ccw/0.0.4444]online}="1"
-
-    LABEL="end_dasd_eckd_0.0.4444"
-    ```
-
-2.  Convert the rule to Base64 encoded by running the following command:
-
-    ``` terminal
-    $ base64 /path/to/file/
-    ```
-
-3.  Copy the following MCO sample profile into a YAML file:
-
-    ``` yaml
-    apiVersion: machineconfiguration.openshift.io/v1
-    kind: MachineConfig
-    metadata:
-       labels:
-         machineconfiguration.openshift.io/role: worker0
-       name: 99-worker0-devices
-    spec:
-       config:
-         ignition:
-           version: 3.2.0
-         storage:
-           files:
-           - contents:
-               source: data:text/plain;base64,<encoded_base64_string>
-             filesystem: root
-             mode: 420
-             path: /etc/udev/rules.d/41-dasd-eckd-0.0.4444.rules
-    ```
-
-    - The role you have defined in the machine config file.
-
-    - The Base64 encoded string that you have generated in the previous step.
-
-    - The path where the udev rule is located.
-
-</div>
-
-## Configuring qeth
-
-The following is an example of how to configure a qeth device by adding a udev rule.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Take the following sample udev rule `41-qeth-0.0.1000.rules`:
-
-    ``` terminal
-    ACTION=="add", SUBSYSTEM=="drivers", KERNEL=="qeth", GOTO="group_qeth_0.0.1000"
-    ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.1000", DRIVER=="qeth", GOTO="group_qeth_0.0.1000"
-    ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.1001", DRIVER=="qeth", GOTO="group_qeth_0.0.1000"
-    ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.1002", DRIVER=="qeth", GOTO="group_qeth_0.0.1000"
-    ACTION=="add", SUBSYSTEM=="ccwgroup", KERNEL=="0.0.1000", DRIVER=="qeth", GOTO="cfg_qeth_0.0.1000"
-    GOTO="end_qeth_0.0.1000"
-
-    LABEL="group_qeth_0.0.1000"
-    TEST=="[ccwgroup/0.0.1000]", GOTO="end_qeth_0.0.1000"
-    TEST!="[ccw/0.0.1000]", GOTO="end_qeth_0.0.1000"
-    TEST!="[ccw/0.0.1001]", GOTO="end_qeth_0.0.1000"
-    TEST!="[ccw/0.0.1002]", GOTO="end_qeth_0.0.1000"
-    ATTR{[drivers/ccwgroup:qeth]group}="0.0.1000,0.0.1001,0.0.1002"
-    GOTO="end_qeth_0.0.1000"
-
-    LABEL="cfg_qeth_0.0.1000"
-    ATTR{[ccwgroup/0.0.1000]online}="1"
-
-    LABEL="end_qeth_0.0.1000"
-    ```
-
-2.  Convert the rule to Base64 encoded by running the following command:
-
-    ``` terminal
-    $ base64 /path/to/file/
-    ```
-
-3.  Copy the following MCO sample profile into a YAML file:
-
-    ``` yaml
-    apiVersion: machineconfiguration.openshift.io/v1
-    kind: MachineConfig
-    metadata:
-       labels:
-         machineconfiguration.openshift.io/role: worker0
-       name: 99-worker0-devices
-    spec:
-       config:
-         ignition:
-           version: 3.2.0
-         storage:
-           files:
-           - contents:
-               source: data:text/plain;base64,<encoded_base64_string>
-             filesystem: root
-             mode: 420
-             path: /etc/udev/rules.d/41-dasd-eckd-0.0.4444.rules
-    ```
-
-    - The role you have defined in the machine config file.
-
-    - The Base64 encoded string that you have generated in the previous step.
-
-    - The path where the udev rule is located.
+        `spec.config.storage.files.path`
+        Specifies the path where the udev rule is located.
+
+3.  To configure a DASD device by adding a udev rule, complete the following steps:
+
+    1.  Take the following sample udev rule `41-dasd-eckd-0.0.4444.rules`:
+
+        ``` terminal
+        ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.4444", DRIVER=="dasd-eckd", GOTO="cfg_dasd_eckd_0.0.4444"
+        ACTION=="add", SUBSYSTEM=="drivers", KERNEL=="dasd-eckd", TEST=="[ccw/0.0.4444]", GOTO="cfg_dasd_eckd_0.0.4444"
+        GOTO="end_dasd_eckd_0.0.4444"
+
+        LABEL="cfg_dasd_eckd_0.0.4444"
+        ATTR{[ccw/0.0.4444]online}="1"
+
+        LABEL="end_dasd_eckd_0.0.4444"
+        ```
+
+    2.  Convert the rule to Base64 encoded by running the following command:
+
+        ``` terminal
+        $ base64 /path/to/file/
+        ```
+
+    3.  Copy the following MCO sample profile into a YAML file:
+
+        ``` yaml
+        apiVersion: machineconfiguration.openshift.io/v1
+        kind: MachineConfig
+        metadata:
+           labels:
+             machineconfiguration.openshift.io/role: worker0
+           name: 99-worker0-devices
+        spec:
+           config:
+             ignition:
+               version: 3.2.0
+             storage:
+               files:
+               - contents:
+                   source: <base64_data_uri>
+                 filesystem: root
+                 mode: 420
+                 path: /etc/udev/rules.d/41-dasd-eckd-0.0.4444.rules
+        ```
+
+        where:
+
+        `metadata.labels.machineconfiguration.openshift.io/role`
+        Specifies the role you have defined in the machine config file.
+
+        `spec.config.storage.files.contents.source`
+        Specifies the data URI for the Base64 encoded udev rule. The value is the Base64 encoded string that you generated in the previous step, formatted as an Ignition data URI.
+
+        `spec.config.storage.files.path`
+        Specifies the path where the udev rule is located.
+
+4.  To configure a qeth device by adding a udev rule, complete the following steps:
+
+    1.  Take the following sample udev rule `41-qeth-0.0.1000.rules`:
+
+        ``` terminal
+        ACTION=="add", SUBSYSTEM=="drivers", KERNEL=="qeth", GOTO="group_qeth_0.0.1000"
+        ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.1000", DRIVER=="qeth", GOTO="group_qeth_0.0.1000"
+        ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.1001", DRIVER=="qeth", GOTO="group_qeth_0.0.1000"
+        ACTION=="add", SUBSYSTEM=="ccw", KERNEL=="0.0.1002", DRIVER=="qeth", GOTO="group_qeth_0.0.1000"
+        ACTION=="add", SUBSYSTEM=="ccwgroup", KERNEL=="0.0.1000", DRIVER=="qeth", GOTO="cfg_qeth_0.0.1000"
+        GOTO="end_qeth_0.0.1000"
+
+        LABEL="group_qeth_0.0.1000"
+        TEST=="[ccwgroup/0.0.1000]", GOTO="end_qeth_0.0.1000"
+        TEST!="[ccw/0.0.1000]", GOTO="end_qeth_0.0.1000"
+        TEST!="[ccw/0.0.1001]", GOTO="end_qeth_0.0.1000"
+        TEST!="[ccw/0.0.1002]", GOTO="end_qeth_0.0.1000"
+        ATTR{[drivers/ccwgroup:qeth]group}="0.0.1000,0.0.1001,0.0.1002"
+        GOTO="end_qeth_0.0.1000"
+
+        LABEL="cfg_qeth_0.0.1000"
+        ATTR{[ccwgroup/0.0.1000]online}="1"
+
+        LABEL="end_qeth_0.0.1000"
+        ```
+
+    2.  Convert the rule to Base64 encoded by running the following command:
+
+        ``` terminal
+        $ base64 /path/to/file/
+        ```
+
+    3.  Copy the following MCO sample profile into a YAML file:
+
+        ``` yaml
+        apiVersion: machineconfiguration.openshift.io/v1
+        kind: MachineConfig
+        metadata:
+           labels:
+             machineconfiguration.openshift.io/role: worker0
+           name: 99-worker0-devices
+        spec:
+           config:
+             ignition:
+               version: 3.2.0
+             storage:
+               files:
+               - contents:
+                   source: <base64_data_uri>
+                 filesystem: root
+                 mode: 420
+                 path: /etc/udev/rules.d/41-dasd-eckd-0.0.4444.rules
+        ```
+
+        where:
+
+        `metadata.labels.machineconfiguration.openshift.io/role`
+        Specifies the role you have defined in the machine config file.
+
+        `spec.config.storage.files.contents.source`
+        Specifies the data URI for the Base64 encoded udev rule. The value is the Base64 encoded string that you generated in the previous step, formatted as an Ignition data URI.
+
+        `spec.config.storage.files.path`
+        Specifies the path where the udev rule is located.
 
 </div>
 
@@ -328,7 +312,7 @@ Procedure
 
 <div class="title">
 
-Next steps
+Additional resources
 
 </div>
 
@@ -340,7 +324,7 @@ Next steps
 
 # Configuring additional devices manually
 
-Tasks in this section describe how to manually configure additional devices in an IBM Z® or IBM® LinuxONE environment. This configuration method is persistent over node restarts but not OpenShift Container Platform native and you need to redo the steps if you replace the node.
+After installation, you can manually configure additional devices on IBM Z® or IBM® LinuxONE nodes. This configuration persists across node restarts, but you must redo the steps if you replace the node.
 
 <div>
 
@@ -394,19 +378,19 @@ Additional resources
 
 </div>
 
-- [chzdev - Configure IBM Z® devices](https://www.ibm.com/docs/en/linux-on-systems?topic=commands-chzdev) (IBM® Documentation)
+- [chzdev - Configure IBM Z® devices (IBM® Documentation)](https://www.ibm.com/docs/en/linux-on-systems?topic=commands-chzdev)
 
-- [Persistent device configuration](https://www.ibm.com/docs/en/linux-on-systems?topic=linuxonibm/com.ibm.linux.z.ludd/ludd_c_perscfg.html) (IBM® Documentation)
+- [Persistent device configuration (IBM® Documentation)](https://www.ibm.com/docs/en/linux-on-systems?topic=linuxonibm/com.ibm.linux.z.ludd/ludd_c_perscfg.html)
 
 </div>
 
-# RoCE network Cards
+# RoCE network cards
 
-RoCE (RDMA over Converged Ethernet) network cards do not need to be enabled and their interfaces can be configured with the Kubernetes NMState Operator whenever they are available in the node. For example, RoCE network cards are available if they are attached in a z/VM environment or passed through in a RHEL KVM environment.
+You can configure RoCE (RDMA over Converged Ethernet) interfaces with the Kubernetes NMState Operator when RoCE network cards are available on a node. For example, the cards are available if they are attached in a z/VM environment or passed through in a RHEL KVM environment.
 
 # Enabling multipathing for FCP LUNs
 
-Tasks in this section describe how to manually configure additional devices in an IBM Z® or IBM® LinuxONE environment. This configuration method is persistent over node restarts but not OpenShift Container Platform native and you need to redo the steps if you replace the node.
+After installation, you can enable multipathing for Fibre Channel Protocol (FCP) logical unit numbers (LUNs) on IBM Z® or IBM® LinuxONE nodes. This configuration persists across node restarts, but you must redo the steps if you replace the node.
 
 > [!IMPORTANT]
 > On IBM Z® and IBM® LinuxONE, you can enable multipathing only if you configured your cluster for it during installation. For more information, see "Installing RHCOS and starting the OpenShift Container Platform bootstrap process" in *Installing a cluster with z/VM on IBM Z® and IBM® LinuxONE*.
@@ -479,13 +463,7 @@ Verification
   $ sudo multipath -ll
   ```
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  For example:
 
   ``` terminal
   mpatha (20017380030290197) dm-1 IBM,2810XIV
@@ -497,15 +475,13 @@ Verification
       `- 0:0:1:6  sdh 66:48  active ready running
   ```
 
-  </div>
-
 </div>
 
 <div>
 
 <div class="title">
 
-Next steps
+Additional resources
 
 </div>
 

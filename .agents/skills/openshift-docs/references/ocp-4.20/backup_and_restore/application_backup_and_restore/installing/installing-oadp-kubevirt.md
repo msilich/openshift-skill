@@ -2,7 +2,7 @@
 
 You can install the OpenShift API for Data Protection (OADP) with OpenShift Virtualization by installing the OADP Operator and configuring a backup location. Then, you can install the Data Protection Application.
 
-Back up and restore virtual machines by using the [OpenShift API for Data Protection](../../index.md#application-backup-restore-operations-overview).
+Back up and restore virtual machines by using the OpenShift API for Data Protection.
 
 OpenShift API for Data Protection with OpenShift Virtualization supports the following backup and restore storage options:
 
@@ -10,15 +10,15 @@ OpenShift API for Data Protection with OpenShift Virtualization supports the fol
 
 - Container Storage Interface (CSI) backups with DataMover
 
-The following storage options are excluded:
+OpenShift API for Data Protection excludes the following storage options:
 
 - File system backup and restore
 
 - Volume snapshot backups and restores
 
-For more information, see [Backing up applications with File System Backup: Kopia or Restic](../backing_up_and_restoring/oadp-backing-up-applications-restic-doc.md#oadp-backing-up-applications-restic-doc).
+For more information, see "Backing up applications with File System Backup: Kopia or Restic".
 
-To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog. See [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks) for details.
+To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog. See "Using Operator Lifecycle Manager in disconnected environments" for details.
 
 > [!IMPORTANT]
 > Red Hat only supports the combination of OADP versions 1.3.0 and later, and OpenShift Virtualization versions 4.14 and later.
@@ -1217,6 +1217,10 @@ OADP backup support matrix for OpenShift Virtualization workloads
 > The CSI Data Mover backups use Kopia regardless of `uploaderType`.
 
 # Additional resources
+
+- [Application backup and restore operations](../../index.md#application-backup-restore-operations-overview_backup-restore-overview)
+
+- [Backing up applications with File System Backup: Kopia or Restic](../backing_up_and_restoring/oadp-backing-up-applications-restic-doc.md#oadp-backing-up-applications-restic-doc)
 
 - [OADP plugins](../oadp-features-plugins.md#oadp-plugins_oadp-features-plugins)
 

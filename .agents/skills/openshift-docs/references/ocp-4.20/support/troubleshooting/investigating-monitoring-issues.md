@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-OpenShift Container Platform includes a preconfigured, preinstalled, and self-updating monitoring stack that provides monitoring for core platform components. In OpenShift Container Platform 4.17, cluster administrators can optionally enable monitoring for user-defined projects.
+OpenShift Container Platform includes a preconfigured, preinstalled, and self-updating monitoring stack that provides monitoring for core platform components. In OpenShift Container Platform 4.20, cluster administrators can optionally enable monitoring for user-defined projects.
 
 Use these procedures if the following issues occur:
 
@@ -12,7 +12,9 @@ Use these procedures if the following issues occur:
 
 # Investigating why user-defined project metrics are unavailable
 
-`ServiceMonitor` resources enable you to determine how to use the metrics exposed by a service in user-defined projects. Follow the steps outlined in this procedure if you have created a `ServiceMonitor` resource but cannot see any corresponding metrics in the Metrics UI.
+`ServiceMonitor` resources enable you to determine how to use the metrics exposed by a service in user-defined projects.
+
+Follow the steps outlined in this procedure if you have created a `ServiceMonitor` resource but cannot see any corresponding metrics in the Metrics UI.
 
 <div>
 
@@ -266,25 +268,19 @@ Procedure
 
 </div>
 
-<div>
+# Additional resources
 
-<div class="title">
+- [Enabling monitoring for user-defined projects](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/configuring_user_workload_monitoring/preparing-to-configure-the-monitoring-stack-uwm#enabling-monitoring-for-user-defined-projects-uwm_preparing-to-configure-the-monitoring-stack-uwm)
 
-Additional resources
+- [Specifying how a service is monitored](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/configuring_user_workload_monitoring/configuring-metrics-uwm#specifying-how-a-service-is-monitored_configuring-metrics-uwm)
 
-</div>
-
-- [Enabling monitoring for user-defined projects](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/4.20/html/configuring_user_workload_monitoring/preparing-to-configure-the-monitoring-stack-uwm#enabling-monitoring-for-user-defined-projects-uwm_preparing-to-configure-the-monitoring-stack-uwm)
-
-- [Specifying how a service is monitored](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/4.20/html/configuring_user_workload_monitoring/configuring-metrics-uwm#specifying-how-a-service-is-monitored_configuring-metrics-uwm)
-
-- [Getting detailed information about a metrics target](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/4.20/html/accessing_metrics/accessing-metrics-as-an-administrator#getting-detailed-information-about-a-target_accessing-metrics-as-an-administrator)
-
-</div>
+- [Getting detailed information about a metrics target](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/accessing_metrics/accessing-metrics-as-an-administrator#getting-detailed-information-about-a-target_accessing-metrics-as-an-administrator)
 
 # Determining why Prometheus is consuming a lot of disk space
 
-Developers can create labels to define attributes for metrics in the form of key-value pairs. The number of potential key-value pairs corresponds to the number of possible values for an attribute. An attribute that has an unlimited number of potential values is called an unbound attribute. For example, a `customer_id` attribute is unbound because it has an infinite number of possible values.
+Developers can create labels to define attributes for metrics in the form of key-value pairs. The number of potential key-value pairs corresponds to the number of possible values for an attribute.
+
+An attribute that has an unlimited number of potential values is called an unbound attribute. For example, a `customer_id` attribute is unbound because it has an infinite number of possible values.
 
 Every assigned key-value pair has a unique time series. The use of many unbound attributes in labels can result in an exponential increase in the number of time series created. This can impact Prometheus performance and can consume a lot of disk space.
 
@@ -386,17 +382,9 @@ Procedure
 
 </div>
 
-<div>
+# Additional resources
 
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Setting scrape intervals, evaluation intervals, and enforced limits for user-defined projects](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/4.20/html/configuring_user_workload_monitoring/configuring-performance-and-scalability-uwm#setting-scrape-and-evaluation-intervals-limits-for-user-defined-projects_configuring-performance-and-scalability-uwm)
-
-</div>
+- [Setting scrape intervals, evaluation intervals, and enforced limits for user-defined projects](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/configuring_user_workload_monitoring/configuring-performance-and-scalability-uwm#setting-scrape-and-evaluation-intervals-limits-for-user-defined-projects_configuring-performance-and-scalability-uwm)
 
 # Resolving the KubePersistentVolumeFillingUp alert firing for Prometheus
 
@@ -444,30 +432,30 @@ Procedure
     -- sh -c 'cd /prometheus/;du -hs $(ls -dtr */ | grep -Eo "[0-9|A-Z]{26}")'
     ```
 
-    - Replace `<prometheus_k8s_pod_name>` with the pod mentioned in the `KubePersistentVolumeFillingUp` alert description.
+    Replace `<prometheus_k8s_pod_name>` with the pod mentioned in the `KubePersistentVolumeFillingUp` alert description.
 
-      <div class="formalpara">
+    <div class="formalpara">
 
-      <div class="title">
+    <div class="title">
 
-      Example output
+    Example output
 
-      </div>
+    </div>
 
-      ``` terminal
-      308M    01HVKMPKQWZYWS8WVDAYQHNMW6
-      52M     01HVK64DTDA81799TBR9QDECEZ
-      102M    01HVK64DS7TRZRWF2756KHST5X
-      140M    01HVJS59K11FBVAPVY57K88Z11
-      90M     01HVH2A5Z58SKT810EM6B9AT50
-      152M    01HV8ZDVQMX41MKCN84S32RRZ1
-      354M    01HV6Q2N26BK63G4RYTST71FBF
-      156M    01HV664H9J9Z1FTZD73RD1563E
-      216M    01HTHXB60A7F239HN7S2TENPNS
-      104M    01HTHMGRXGS0WXA3WATRXHR36B
-      ```
+    ``` terminal
+    308M    01HVKMPKQWZYWS8WVDAYQHNMW6
+    52M     01HVK64DTDA81799TBR9QDECEZ
+    102M    01HVK64DS7TRZRWF2756KHST5X
+    140M    01HVJS59K11FBVAPVY57K88Z11
+    90M     01HVH2A5Z58SKT810EM6B9AT50
+    152M    01HV8ZDVQMX41MKCN84S32RRZ1
+    354M    01HV6Q2N26BK63G4RYTST71FBF
+    156M    01HV664H9J9Z1FTZD73RD1563E
+    216M    01HTHXB60A7F239HN7S2TENPNS
+    104M    01HTHMGRXGS0WXA3WATRXHR36B
+    ```
 
-      </div>
+    </div>
 
 2.  Identify which and how many blocks could be removed, then remove the blocks. The following example command removes the three oldest Prometheus TSDB blocks from the `prometheus-k8s-0` pod:
 
@@ -487,26 +475,26 @@ Procedure
     -o jsonpath='{.spec.containers[?(@.name=="prometheus")].image}') -- df -h /prometheus/
     ```
 
-    - Replace `<prometheus_k8s_pod_name>` with the pod mentioned in the `KubePersistentVolumeFillingUp` alert description.
+    Replace `<prometheus_k8s_pod_name>` with the pod mentioned in the `KubePersistentVolumeFillingUp` alert description.
 
-      The following example output shows the mounted PV claimed by the `prometheus-k8s-0` pod that has 63% of space remaining:
+    The following example output shows the mounted PV claimed by the `prometheus-k8s-0` pod that has 63% of space remaining:
 
-      <div class="formalpara">
+    <div class="formalpara">
 
-      <div class="title">
+    <div class="title">
 
-      Example output
+    Example output
 
-      </div>
+    </div>
 
-      ``` terminal
-      Starting pod/prometheus-k8s-0-debug-j82w4 ...
-      Filesystem      Size  Used Avail Use% Mounted on
-      /dev/nvme0n1p4  40G   15G  40G  37% /prometheus
+    ``` terminal
+    Starting pod/prometheus-k8s-0-debug-j82w4 ...
+    Filesystem      Size  Used Avail Use% Mounted on
+    /dev/nvme0n1p4  40G   15G  40G  37% /prometheus
 
-      Removing debug pod ...
-      ```
+    Removing debug pod ...
+    ```
 
-      </div>
+    </div>
 
 </div>

@@ -4,7 +4,7 @@ Before you deploy an OpenShift Container Platform cluster on Nutanix, you provid
 
 # Available installation configuration parameters for Nutanix
 
-To customize your cluster installation, configuration parameters are available to use in the `install-config.yaml` file.
+To customize your cluster installation, you can use configuration parameters in the `install-config.yaml` file.
 
 The following tables specify the required, optional, and Nutanix-specific installation configuration parameters that you can set as part of the installation process.
 
@@ -167,7 +167,7 @@ Only IPv4 addresses are supported.
 <div class="note">
 <div class="title">
 &#10;</div>
-<p>Set the <code>networking.machineNetwork</code> to match the CIDR that the preferred NIC resides in.</p>
+<p>Set the <code>networking.machineNetwork</code> to match the CIDR of the preferred NIC.</p>
 </div></td>
 </tr>
 <tr>
@@ -477,7 +477,7 @@ Additional Nutanix configuration parameters are described in the following table
   platform:
     nutanix:
       bootType:</code></pre></td>
-<td style="text-align: left;"><p>The boot type that the compute machines use. You must use the <code>Legacy</code> boot type in OpenShift Container Platform 4.17. For more information on boot types, see <a href="https://portal.nutanix.com/page/documents/kbs/details?targetId=kA07V000000H3K9SAK">Understanding UEFI, Secure Boot, and TPM in the Virtualized Environment</a>.</p>
+<td style="text-align: left;"><p>The boot type that the compute machines use. You must use the <code>Legacy</code> boot type in OpenShift Container Platform 4.20. For more information on boot types, see <a href="https://portal.nutanix.com/page/documents/kbs/details?targetId=kA07V000000H3K9SAK">Understanding UEFI, Secure Boot, and TPM in the Virtualized Environment</a>.</p>
 <p><strong>Value:</strong> <code>Legacy</code>, <code>SecureBoot</code> or <code>UEFI</code>. The default is <code>Legacy</code>.</p></td>
 </tr>
 <tr>
@@ -689,7 +689,7 @@ Additional Nutanix configuration parameters are described in the following table
   nutanix:
     defaultMachinePlatform:
       bootType:</code></pre></td>
-<td style="text-align: left;"><p>The boot type for all machines. You must use the <code>Legacy</code> boot type in OpenShift Container Platform 4.17. For more information on boot types, see <a href="https://portal.nutanix.com/page/documents/kbs/details?targetId=kA07V000000H3K9SAK">Understanding UEFI, Secure Boot, and TPM in the Virtualized Environment</a>.</p>
+<td style="text-align: left;"><p>The boot type for all machines. You must use the <code>Legacy</code> boot type in OpenShift Container Platform 4.20. For more information on boot types, see <a href="https://portal.nutanix.com/page/documents/kbs/details?targetId=kA07V000000H3K9SAK">Understanding UEFI, Secure Boot, and TPM in the Virtualized Environment</a>.</p>
 <p><strong>Value:</strong> <code>Legacy</code>, <code>SecureBoot</code> or <code>UEFI</code>. The default is <code>Legacy</code>.</p></td>
 </tr>
 <tr>

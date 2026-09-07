@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The Compliance Operator includes options for advanced users for the purpose of debugging or integration with existing tooling.
+As an advanced user, you can use options in the Compliance Operator for the purpose of debugging or integrating with existing tooling.
 
 # Using the ComplianceSuite and ComplianceScan objects directly
 
-While it is recommended that users take advantage of the `ScanSetting` and `ScanSettingBinding` objects to define the suites and scans, there are valid use cases to define the `ComplianceSuite` objects directly:
+You can define a `ComplianceSuite` object directly rather than using the `ScanSetting` and `ScanSettingBinding` objects to define the suites and scans.
+
+There following use cases are valid reasons to define a `ComplianceSuite` object:
 
 - Specifying only a single rule to scan. This can be useful for debugging together with the `debug: true` attribute which increases the OpenSCAP scanner verbosity, as the debug mode tends to get quite verbose otherwise. Limiting the test to one rule helps to lower the amount of debug information.
 
@@ -35,11 +37,11 @@ spec:
 
 The `ComplianceSuite` object and the `ComplianceScan` objects referred to above specify several attributes in a format that OpenSCAP expects.
 
-To find out the profile, content, or rule values, you can start by creating a similar Suite from `ScanSetting` and `ScanSettingBinding` or inspect the objects parsed from the `ProfileBundle` objects like rules or profiles. Those objects contain the `xccdf_org` identifiers you can use to refer to them from a `ComplianceSuite`.
+To discover the profile, content, or rule values, you can start by creating a similar Suite from `ScanSetting` and `ScanSettingBinding` or inspect the objects parsed from the `ProfileBundle` objects such as rules or profiles. Those objects contain the `xccdf_org` identifiers you can use to refer to them from a `ComplianceSuite`.
 
 # Setting `PriorityClass` for `ScanSetting` scans
 
-In large scale environments, the default `PriorityClass` object can be too low to guarantee Pods execute scans on time. For clusters that must maintain compliance or guarantee automated scanning, it is recommended to set the `PriorityClass` variable to ensure the Compliance Operator is always given priority in resource constrained situations.
+In some clusters, the default `PriorityClass` object can be too low to guarantee pods execute scans on time. To maintain compliance or guarantee automated scanning, you can set the `PriorityClass` variable to ensure the Compliance Operator is always given priority in resource constrained situations.
 
 <div>
 
@@ -102,25 +104,18 @@ Procedure
     - operator: Exists
   ```
 
-  - If the `PriorityClass` referenced in the `ScanSetting` cannot be found, the Operator will leave the `PriorityClass` empty, issue a warning, and continue scheduling scans without a `PriorityClass`.
+  where:
 
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Configuring priority and preemption](../../../nodes/pods/nodes-pods-priority.md#nodes-pods-priority-configuring_nodes-pods-priority)
+  `PriorityClass`
+  If the `PriorityClass` referenced in the `ScanSetting` cannot be found, the Operator will leave the `PriorityClass` empty, issue a warning, and continue scheduling scans without a `PriorityClass`.
 
 </div>
 
 # Using raw tailored profiles
 
-While the `TailoredProfile` CR enables the most common tailoring operations, the XCCDF standard allows even more flexibility in tailoring OpenSCAP profiles. In addition, if your organization has been using OpenScap previously, you may have an existing XCCDF tailoring file and can reuse it.
+Although the `TailoredProfile` CR enables the most common tailoring operations, you can use the XCCDF standard for more flexibility in tailoring OpenSCAP profiles.
+
+In addition, if your organization has been using OpenScap previously, you might have an existing XCCDF tailoring file and can reuse it.
 
 The `ComplianceSuite` object contains an optional `TailoringConfigMap` attribute that you can point to a custom tailoring file. The value of the `TailoringConfigMap` attribute is a name of a config map which must contain a key called `tailoring.xml` and the value of this key is the tailoring contents.
 
@@ -165,83 +160,97 @@ Procedure
 
 # Performing a rescan
 
-Typically you will want to re-run a scan on a defined schedule, like every Monday or daily. It can also be useful to re-run a scan once after fixing a problem on a node. To perform a single scan, annotate the scan with the `compliance.openshift.io/rescan=` option:
+You can re-run a scan on a defined schedule, such as every Monday or daily. It can also be useful to re-run a scan once after fixing a problem on a node.
 
-``` terminal
-$ oc -n openshift-compliance \
-annotate compliancescans/rhcos4-e8-worker compliance.openshift.io/rescan=
-```
+To perform a single scan, annotate the scan with the `compliance.openshift.io/rescan=` option:
 
-A rescan generates four additional `mc` for `rhcos-moderate` profile:
-
-``` terminal
-$ oc get mc
-```
-
-<div class="formalpara">
+<div>
 
 <div class="title">
 
-Example output
+Procedure
 
 </div>
 
-``` terminal
-75-worker-scan-chronyd-or-ntpd-specify-remote-server
-75-worker-scan-configure-usbguard-auditbackend
-75-worker-scan-service-usbguard-enabled
-75-worker-scan-usbguard-allow-hid-and-hub
-```
+1.  Annotate the scan to trigger a rescan:
+
+    ``` terminal
+    $ oc -n openshift-compliance \
+    annotate compliancescans/rhcos4-e8-worker compliance.openshift.io/rescan=
+    ```
+
+    A rescan generates four additional `mc` for `rhcos-moderate` profile:
+
+2.  Verify the rescan generated machine configs:
+
+    ``` terminal
+    $ oc get mc
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    75-worker-scan-chronyd-or-ntpd-specify-remote-server
+    75-worker-scan-configure-usbguard-auditbackend
+    75-worker-scan-service-usbguard-enabled
+    75-worker-scan-usbguard-allow-hid-and-hub
+    ```
+
+    </div>
+
+    > [!IMPORTANT]
+    > When the scan setting `default-auto-apply` label is applied, remediations are applied automatically and outdated remediations automatically update. If there are remediations that were not applied due to dependencies, or remediations that had been outdated, rescanning applies the remediations and might trigger a reboot. Only remediations that use `MachineConfig` objects trigger reboots. If there are no updates or dependencies to be applied, no reboot occurs.
 
 </div>
-
-> [!IMPORTANT]
-> When the scan setting `default-auto-apply` label is applied, remediations are applied automatically and outdated remediations automatically update. If there are remediations that were not applied due to dependencies, or remediations that had been outdated, rescanning applies the remediations and might trigger a reboot. Only remediations that use `MachineConfig` objects trigger reboots. If there are no updates or dependencies to be applied, no reboot occurs.
 
 # Setting custom storage size for results
 
-While the custom resources such as `ComplianceCheckResult` represent an aggregated result of one check across all scanned nodes, it can be useful to review the raw results as produced by the scanner. The raw results are produced in the ARF format and can be large (tens of megabytes per node), it is impractical to store them in a Kubernetes resource backed by the `etcd` key-value store. Instead, every scan creates a persistent volume (PV) which defaults to 1GB size. Depending on your environment, you may want to increase the PV size accordingly. This is done using the `rawResultStorage.size` attribute that is exposed in both the `ScanSetting` and `ComplianceScan` resources.
+Although `ComplianceCheckResult` custom resources summarize one check across all scanned nodes, raw scanner results in ARF format are too large to store in etcd-backed Kubernetes resources. You can store them on a per-scan persistent volume and increase the default 1 GiB size by setting the `rawResultStorage.size` value in a `ScanSetting` or `ComplianceScan` resource.
 
 A related parameter is `rawResultStorage.rotation` which controls how many scans are retained in the PV before the older scans are rotated. The default value is 3, setting the rotation policy to 0 disables the rotation. Given the default rotation policy and an estimate of 100MB per a raw ARF scan report, you can calculate the right PV size for your environment.
 
-## Using custom result storage values
-
-Because OpenShift Container Platform can be deployed in a variety of public clouds or bare metal, the Compliance Operator cannot determine available storage configurations. By default, the Compliance Operator will try to create the PV for storing results using the default storage class of the cluster, but a custom storage class can be configured using the `rawResultStorage.StorageClassName` attribute.
+Because OpenShift Container Platform can be deployed in a variety of public clouds or bare metal, the Compliance Operator cannot determine available storage configurations. By default, the Compliance Operator will try to create the PV for storing results by using the default storage class of the cluster, but a custom storage class can be configured using the `rawResultStorage.StorageClassName` attribute.
 
 > [!IMPORTANT]
 > If your cluster does not specify a default storage class, this attribute must be set.
 
-Configure the `ScanSetting` custom resource to use a standard storage class and create persistent volumes that are 10GB in size and keep the last 10 results:
+- Configure the `ScanSetting` custom resource to use a standard storage class and create persistent volumes that are 10GB in size and keep the last 10 results:
 
-<div class="formalpara">
+  <div class="formalpara">
 
-<div class="title">
+  <div class="title">
 
-Example `ScanSetting` CR
+  Example `ScanSetting` CR
 
-</div>
+  </div>
 
-``` yaml
-apiVersion: compliance.openshift.io/v1alpha1
-kind: ScanSetting
-metadata:
-  name: default
-  namespace: openshift-compliance
-rawResultStorage:
-  storageClassName: standard
-  rotation: 10
-  size: 10Gi
-roles:
-- worker
-- master
-scanTolerations:
-- effect: NoSchedule
-  key: node-role.kubernetes.io/master
-  operator: Exists
-schedule: '0 1 * * *'
-```
+  ``` yaml
+  apiVersion: compliance.openshift.io/v1alpha1
+  kind: ScanSetting
+  metadata:
+    name: default
+    namespace: openshift-compliance
+  rawResultStorage:
+    storageClassName: standard
+    rotation: 10
+    size: 10Gi
+  roles:
+  - worker
+  - master
+  scanTolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+    operator: Exists
+  schedule: '0 1 * * *'
+  ```
 
-</div>
+  </div>
 
 # Applying remediations generated by suite scans
 
@@ -255,18 +264,20 @@ Procedure
 
 </div>
 
-- Apply the `compliance.openshift.io/apply-remediations` annotation by running:
+- Apply the `compliance.openshift.io/apply-remediations` annotation by running the following command:
+
+  ``` terminal
+  $ oc -n openshift-compliance \
+  annotate compliancesuites/workers-compliancesuite compliance.openshift.io/apply-remediations=
+  ```
 
 </div>
-
-``` terminal
-$ oc -n openshift-compliance \
-annotate compliancesuites/workers-compliancesuite compliance.openshift.io/apply-remediations=
-```
 
 # Automatically update remediations
 
 In some cases, a scan with newer content might mark remediations as `OUTDATED`. As an administrator, you can apply the `compliance.openshift.io/remove-outdated` annotation to apply new remediations and remove the outdated ones.
+
+Alternatively, set the `autoUpdateRemediations` flag in a `ScanSetting` or `ComplianceSuite` object to update the remediations automatically.
 
 <div>
 
@@ -278,14 +289,12 @@ Procedure
 
 - Apply the `compliance.openshift.io/remove-outdated` annotation:
 
+  ``` terminal
+  $ oc -n openshift-compliance \
+  annotate compliancesuites/workers-compliancesuite compliance.openshift.io/remove-outdated=
+  ```
+
 </div>
-
-``` terminal
-$ oc -n openshift-compliance \
-annotate compliancesuites/workers-compliancesuite compliance.openshift.io/remove-outdated=
-```
-
-Alternatively, set the `autoUpdateRemediations` flag in a `ScanSetting` or `ComplianceSuite` object to update the remediations automatically.
 
 # Creating a custom SCC for the Compliance Operator
 
@@ -363,9 +372,13 @@ Procedure
 
     </div>
 
-    - The priority of this SCC must be higher than any other SCC that applies to the `system:authenticated` group.
+    where:
 
-    - Service Account used by Compliance Operator Scanner pod.
+    `priority`
+    Specifies the priority of this SCC. This value must be higher than any other SCC that applies to the `system:authenticated` group.
+
+    `system:serviceaccount:openshift-compliance:api-resource-collector`
+    Specifies the Service Account used by Compliance Operator Scanner pod.
 
 2.  Create the SCC:
 
@@ -421,5 +434,7 @@ Verification
 </div>
 
 # Additional resources
+
+- [Configuring priority and preemption](../../../nodes/pods/nodes-pods-priority.md#nodes-pods-priority-configuring_nodes-pods-priority)
 
 - [Managing security context constraints](../../../authentication/managing-security-context-constraints.md#managing-pod-security-policies)

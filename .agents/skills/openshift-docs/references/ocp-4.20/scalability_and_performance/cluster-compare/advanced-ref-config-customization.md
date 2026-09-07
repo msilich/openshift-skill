@@ -51,13 +51,19 @@ Procedure
 
     </div>
 
-    - The `correlationSettings` section contains the manual correlation settings.
+    where:
 
-    - The `manualCorrelation` section specifies that manual correlation is enabled.
+    `correlationSettings`
+    The `correlationSettings` section contains the manual correlation settings.
 
-    - The `correlationPairs` section lists the CR and template pairs to manually match.
+    `manualCorrelation`
+    The `manualCorrelation` section specifies that manual correlation is enabled.
 
-    - Specifies the CR and template pair to match. The CR specification uses the following format: `<apiversion>_<kind>_<namespace>_<name>`. For cluster-scoped CRs that do not have a namespace, use the following format: `<apiversion>_<kind>_<name>`. The path to the template must be relative to the `metadata.yaml` file.
+    `correlationPairs`
+    The `correlationPairs` section lists the CR and template pairs to manually match.
+
+    `ptp.openshift.io/v1_PtpConfig_openshift-ptp_grandmaster: optional/ptp-config/PtpOperatorConfig.yaml`
+    Specifies the CR and template pair to match. The CR specification uses the following format: `<apiversion>_<kind>_<namespace>_<name>`. For cluster-scoped CRs that do not have a namespace, use the following format: `<apiversion>_<kind>_<name>`. The path to the template must be relative to the `metadata.yaml` file.
 
 2.  Reference the user configuration file in a `cluster-compare` command by running the following command:
 
@@ -65,7 +71,10 @@ Procedure
     $ oc cluster-compare -r <path_to_reference_config>/metadata.yaml -c <path_to_user_config>/user-config.yaml
     ```
 
-    - Specify the `user-config.yaml` file by using the `-c` option.
+    where:
+
+    `-c <path_to_user_config>/user-config.yaml`
+    Specify the `user-config.yaml` file by using the `-c` option.
 
 </div>
 
@@ -134,11 +143,16 @@ Procedure
 
     </div>
 
-    - The plugin patches the fields in the template to match the CR.
+    where:
 
-    - The path to the template.
+    `patch`
+    The plugin patches the fields in the template to match the CR.
 
-    - The `mergepath` option merges the JSON into the target template. Unspecified fields remain unchanged.
+    `templatePath`
+    The path to the template.
+
+    `type: mergepatch`
+    The `mergepath` option merges the JSON into the target template. Unspecified fields remain unchanged.
 
 3.  Apply the patch to the reference configuration by running the following command:
 
@@ -150,35 +164,27 @@ Procedure
 
     - `-p` specifies the path to the patch file.
 
-      <div class="formalpara">
-
-      <div class="title">
-
-      Example output
-
-      </div>
-
-      ``` terminal
-      ...
-
-      Cluster CR: storage.k8s.io/v1_StorageClass_crc-csi-hostpath-provisioner
-      Reference File: optional/local-storage-operator/StorageClass.yaml
-      Description: Component description
-      Diff Output: None
-      Patched with patch
-      Patch Reasons:
-      - A valid reason for the override
-
-      ...
-
-      No CRs are unmatched to reference CRs
-      Metadata Hash: bb2165004c496b32e0c8509428fb99c653c3cf4fba41196ea6821bd05c3083ab
-      Cluster CRs with patches applied: 1
-      ```
-
-      </div>
-
 </div>
+
+The following is example output:
+
+``` terminal
+...
+
+Cluster CR: storage.k8s.io/v1_StorageClass_crc-csi-hostpath-provisioner
+Reference File: optional/local-storage-operator/StorageClass.yaml
+Description: Component description
+Diff Output: None
+Patched with patch
+Patch Reasons:
+- A valid reason for the override
+
+...
+
+No CRs are unmatched to reference CRs
+Metadata Hash: bb2165004c496b32e0c8509428fb99c653c3cf4fba41196ea6821bd05c3083ab
+Cluster CRs with patches applied: 1
+```
 
 ## Creating a patch file manually
 
@@ -273,7 +279,7 @@ Procedure
 
     </div>
 
-    - The patches uses the `kind`, `apiVersion`, `name`, and `namespace` fields to match the patch with the correct cluster CR.
+    The patches use the `kind`, `apiVersion`, `name`, and `namespace` fields to match the patch with the correct cluster CR.
 
 2.  Apply the patch to the reference configuration by running the following command:
 
@@ -285,34 +291,26 @@ Procedure
 
     - `p` specifies the path to the patch file.
 
-      <div class="formalpara">
-
-      <div class="title">
-
-      Example output
-
-      </div>
-
-      ``` terminal
-      ...
-
-      Cluster CR: storage.k8s.io/v1_StorageClass_crc-csi-hostpath-provisioner
-      Reference File: namespace.yaml
-      Description: Component description
-      Diff Output: None
-      Patched with patch
-      Patch Reasons:
-      - known deviation
-      - known deviation
-      - known deviation
-
-      ...
-
-      No CRs are unmatched to reference CRs
-      Metadata Hash: bb2165004c496b32e0c8509428fb99c653c3cf4fba41196ea6821bd05c3083ab
-      Cluster CRs with patches applied: 1
-      ```
-
-      </div>
-
 </div>
+
+The following is example output:
+
+``` terminal
+...
+
+Cluster CR: storage.k8s.io/v1_StorageClass_crc-csi-hostpath-provisioner
+Reference File: namespace.yaml
+Description: Component description
+Diff Output: None
+Patched with patch
+Patch Reasons:
+- known deviation
+- known deviation
+- known deviation
+
+...
+
+No CRs are unmatched to reference CRs
+Metadata Hash: bb2165004c496b32e0c8509428fb99c653c3cf4fba41196ea6821bd05c3083ab
+Cluster CRs with patches applied: 1
+```

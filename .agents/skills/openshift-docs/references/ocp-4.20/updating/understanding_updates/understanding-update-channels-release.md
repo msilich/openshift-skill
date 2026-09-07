@@ -24,15 +24,15 @@ For instance, OpenShift Container Platform 4.10 update channels provide the foll
 
 Update channels control only release selection and do not impact the version of the cluster that you install. The `openshift-install` binary file for a specific version of OpenShift Container Platform always installs that version.
 
-OpenShift Container Platform 4.17 offers the following update channels:
+OpenShift Container Platform 4.20 offers the following update channels:
 
-- `stable-4.17`
+- `stable-4.20`
 
 - `eus-4.y` (only offered for EUS versions and meant to facilitate updates between EUS versions)
 
-- `fast-4.17`
+- `fast-4.20`
 
-- `candidate-4.17`
+- `candidate-4.20`
 
 If you do not want the Cluster Version Operator to fetch available updates from the update recommendation service, you can use the `oc adm upgrade channel` command in the OpenShift CLI to configure an empty channel. This configuration can be helpful if, for example, a cluster has restricted network access and there is no local, reachable update recommendation service.
 
@@ -43,13 +43,13 @@ If you do not want the Cluster Version Operator to fetch available updates from 
 
 OpenShift Container Platform offers several update channels for you to choose from, depending on your desired update strategy.
 
-## fast-4.17 channel
+## fast-4.20 channel
 
-The `fast-4.17` channel is updated with new versions of OpenShift Container Platform 4.17 as soon as Red Hat declares the version as a general availability (GA) release. As such, these releases are fully supported and purposed to be used in production environments.
+The `fast-4.20` channel is updated with new versions of OpenShift Container Platform 4.20 as soon as Red Hat declares the version as a general availability (GA) release. As such, these releases are fully supported and purposed to be used in production environments.
 
-## stable-4.17 channel
+## stable-4.20 channel
 
-While the `fast-4.17` channel contains releases as soon as their errata are published, releases are added to the `stable-4.17` channel after a delay. During this delay, data is collected from multiple sources and analyzed for indications of product regressions. Once a significant number of data points have been collected, these releases are added to the stable channel.
+While the `fast-4.20` channel contains releases as soon as their errata are published, releases are added to the `stable-4.20` channel after a delay. During this delay, data is collected from multiple sources and analyzed for indications of product regressions. Once a significant number of data points have been collected, these releases are added to the stable channel.
 
 > [!NOTE]
 > Since the time required to obtain a significant number of data points varies based on many factors, Service LeveL Objective (SLO) is not offered for the delay duration between fast and stable channels. For more information, please see "Choosing the correct channel for your cluster"
@@ -63,9 +63,9 @@ In addition to the stable channel, all even-numbered minor versions of OpenShift
 > [!NOTE]
 > Both standard and non-EUS subscribers can access all EUS repositories and necessary RPMs (`rhel-*-eus-rpms`) to be able to support critical purposes such as debugging and building drivers.
 
-## candidate-4.17 channel
+## candidate-4.20 channel
 
-The `candidate-4.17` channel offers unsupported early access to releases as soon as they are built. Releases present only in candidate channels may not contain the full feature set of eventual GA releases or features may be removed prior to GA. Additionally, these releases have not been subject to full Red Hat Quality Assurance and may not offer update paths to later GA releases. Given these caveats, the candidate channel is only suitable for testing purposes where destroying and recreating a cluster is acceptable.
+The `candidate-4.20` channel offers unsupported early access to releases as soon as they are built. Releases present only in candidate channels may not contain the full feature set of eventual GA releases or features may be removed prior to GA. Additionally, these releases have not been subject to full Red Hat Quality Assurance and may not offer update paths to later GA releases. Given these caveats, the candidate channel is only suitable for testing purposes where destroying and recreating a cluster is acceptable.
 
 # Restricted network clusters
 
@@ -81,18 +81,18 @@ Update paths are also limited to versions relevant to your currently selected ch
 
 You can imagine seeing the following releases in your channel:
 
-- 4.17.0
+- 4.20.0
 
-- 4.17.1
+- 4.20.1
 
-- 4.17.3
+- 4.20.3
 
-- 4.17.4
+- 4.20.4
 
-The service recommends only updates that have been tested and have no known serious regressions. For example, if your cluster is on 4.17.1 and OpenShift Container Platform suggests 4.17.4, then it is recommended to update from 4.17.1 to 4.17.4.
+The service recommends only updates that have been tested and have no known serious regressions. For example, if your cluster is on 4.20.1 and OpenShift Container Platform suggests 4.20.4, then it is recommended to update from 4.20.1 to 4.20.4.
 
 > [!IMPORTANT]
-> Do not rely on consecutive patch numbers. In this example, 4.17.2 is not and never was available in the channel, therefore updates to 4.17.2 are not recommended or supported.
+> Do not rely on consecutive patch numbers. In this example, 4.20.2 is not and never was available in the channel, therefore updates to 4.20.2 are not recommended or supported.
 
 # Update recommendations and Conditional Updates
 
@@ -113,7 +113,7 @@ First, select the minor version you want for your cluster update. Selecting a ch
 > [!NOTE]
 > Due to the complexity involved in planning updates between versions many minors apart, channels that assist in planning updates beyond a single Control Plane Only update are not offered.
 
-Second, you should choose your desired rollout strategy. You may choose to update as soon as Red Hat declares a release GA by selecting from fast channels or you may want to wait for Red Hat to promote releases to the stable channel. Update recommendations offered in the `fast-4.17` and `stable-4.17` are both fully supported and benefit equally from ongoing data analysis. The promotion delay before promoting a release to the stable channel represents the only difference between the two channels. Updates to the latest z-streams are generally promoted to the stable channel within a week or two, however the delay when initially rolling out updates to the latest minor is much longer, generally 45-90 days. Please consider the promotion delay when choosing your desired channel, as waiting for promotion to the stable channel may affect your scheduling plans.
+Second, you should choose your desired rollout strategy. You may choose to update as soon as Red Hat declares a release GA by selecting from fast channels or you may want to wait for Red Hat to promote releases to the stable channel. Update recommendations offered in the `fast-4.20` and `stable-4.20` are both fully supported and benefit equally from ongoing data analysis. The promotion delay before promoting a release to the stable channel represents the only difference between the two channels. Updates to the latest z-streams are generally promoted to the stable channel within a week or two, however the delay when initially rolling out updates to the latest minor is much longer, generally 45-90 days. Please consider the promotion delay when choosing your desired channel, as waiting for promotion to the stable channel may affect your scheduling plans.
 
 Additionally, there are several factors which may lead an organization to move clusters to the fast channel either permanently or temporarily including the following:
 
@@ -137,10 +137,10 @@ The web console will display an alert if you switch to a channel that does not i
 
 Changing your channel might impact the supportability of your cluster. The following conditions might apply:
 
-- Your cluster is still supported if you change from the `stable-4.17` channel to the `fast-4.17` channel.
+- Your cluster is still supported if you change from the `stable-4.20` channel to the `fast-4.20` channel.
 
-- You can switch to the `candidate-4.17` channel at any time, but some releases for this channel might be unsupported.
+- You can switch to the `candidate-4.20` channel at any time, but some releases for this channel might be unsupported.
 
-- You can switch from the `candidate-4.17` channel to the `fast-4.17` channel if your current release is a general availability release.
+- You can switch from the `candidate-4.20` channel to the `fast-4.20` channel if your current release is a general availability release.
 
-- You can always switch from the `fast-4.17` channel to the `stable-4.17` channel. There is a possible delay of up to a day for the release to be promoted to `stable-4.17` if the current release was recently promoted.
+- You can always switch from the `fast-4.20` channel to the `stable-4.20` channel. There is a possible delay of up to a day for the release to be promoted to `stable-4.20` if the current release was recently promoted.

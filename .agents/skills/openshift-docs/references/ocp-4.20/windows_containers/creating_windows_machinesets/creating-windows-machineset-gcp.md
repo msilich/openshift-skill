@@ -2,7 +2,7 @@
 
 You can use a `MachineSet` custom resource (CR) to add a Windows compute node to your Google Cloud cluster, where you can run Windows container workloads.
 
-For example, you might create infrastructure Windows machine sets and related machines so that you can move supporting Windows workloads to the new Windows machines. For more information about machine sets, see "Overview of machine management" in the *Additional resources* section.
+For example, you might create infrastructure Windows machine sets and related machines so that you can move supporting Windows workloads to the new Windows machines. For more information about machine sets, see "Overview of machine management".
 
 # Prerequisites
 

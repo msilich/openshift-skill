@@ -39,7 +39,7 @@ A selector that matches the pods from which the policy object allows ingress tra
 `ingress.ports`
 A list of one or more destination ports on which to accept traffic.
 
-# Creating a network policy using the CLI
+# Create a network policy using the CLI
 
 To define granular rules describing ingress or egress network traffic allowed for namespaces in your cluster, you can create a network policy.
 
@@ -180,7 +180,7 @@ Procedure
 
 </div>
 
-# Creating a default deny all network policy
+# Create a default deny all network policy
 
 The default deny all network policy blocks all cross-pod networking other than network traffic allowed by the configuration of other deployed network policies and traffic between host-networked pods.
 
@@ -247,7 +247,7 @@ Procedure
 
 </div>
 
-# Creating a network policy to allow traffic from external clients
+# Create a network policy to allow traffic from external clients
 
 With the `deny-by-default` policy in place you can proceed to configure a policy that allows traffic from external clients to a pod with the label `app=web`.
 
@@ -311,7 +311,7 @@ Procedure
 
 </div>
 
-# Creating a network policy allowing traffic to an application from all namespaces
+# Create a network policy allowing traffic to an application from all namespaces
 
 You can configure a policy that allows traffic from all pods in all namespaces to a particular application.
 
@@ -436,7 +436,7 @@ Verification
 
 </div>
 
-# Creating a network policy allowing traffic to an application from a namespace
+# Create a network policy allowing traffic to an application from a namespace
 
 You can configure a policy that allows traffic to a pod with the label `app=web` from a particular namespace.
 

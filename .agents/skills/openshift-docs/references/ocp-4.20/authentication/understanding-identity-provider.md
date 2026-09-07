@@ -4,12 +4,12 @@ As an administrator, you can configure OAuth to specify an identity provider aft
 
 The OpenShift Container Platform master includes a built-in OAuth server.
 
-# About identity providers in OpenShift Container Platform
+# Identity providers in OpenShift Container Platform
 
 You can configure identity providers by creating a custom resource (CR) that describes the provider and adding it to the cluster. Identity providers enable user authentication in OpenShift Container Platform beyond the default `kubeadmin` user.
 
 > [!NOTE]
-> OpenShift Container Platform user names containing `/`, `:`, and `%` are not supported.
+> OpenShift Container Platform usernames containing `/`, `:`, and `%` are not supported.
 
 # Supported identity providers
 

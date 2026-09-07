@@ -1,6 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-OpenShift Container Platform clusters can be provisioned with persistent storage using NFS. Persistent volumes (PVs) and persistent volume claims (PVCs) provide a convenient method for sharing a volume across a project. While the NFS-specific information contained in a PV definition could also be defined directly in a `Pod` definition, doing so does not create the volume as a distinct cluster resource, making the volume more susceptible to conflicts.
+You can provision OpenShift Container Platform clusters with persistent storage using NFS.
+
+Persistent volumes (PVs) and persistent volume claims (PVCs) provide a convenient method for sharing a volume across a project. While the NFS-specific information contained in a PV definition could also be defined directly in a pod definition, doing so does not create the volume as a distinct cluster resource, making the volume more susceptible to conflicts.
 
 > [!NOTE]
 > The in-tree NFS provisioner does not support user namespaces.
@@ -17,9 +19,21 @@ Additional resources
 
 </div>
 
-# Provisioning
+# Provisioning persistent storage using NFS
 
-Storage must exist in the underlying infrastructure before it can be mounted as a volume in OpenShift Container Platform. To provision NFS volumes, a list of NFS servers and export paths are all that is required.
+You can provision persistent storage for OpenShift Container Platform by creating persistent volume (PV) and persistent volume claim (PVC) objects that reference your NFS servers and export paths.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have NFS storage available in the underlying infrastructure with the appropriate export paths configured.
+
+</div>
 
 <div>
 
@@ -47,22 +61,31 @@ Procedure
       persistentVolumeReclaimPolicy: Retain
     ```
 
-    - The name of the volume. This is the PV identity in various `oc <command> pod` commands.
+    where:
 
-    - The amount of storage allocated to this volume.
+    `metadata.name`
+    Specifies the name of the volume. This is the PV identity in various `oc` commands.
 
-    - Though this appears to be related to controlling access to the volume, it is actually used similarly to labels and used to match a PVC to a PV. Currently, no access rules are enforced based on the `accessModes`.
+    `spec.capacity.storage`
+    Specifies the amount of storage allocated to this volume.
 
-    - The volume type being used, in this case the `nfs` plugin.
+    `spec.accessModes.ReadWriteOnce`
+    Though this appears to be related to controlling access to the volume, it is actually used similarly to labels and used to match a PVC to a PV. Currently, no access rules are enforced based on the `accessModes`.
 
-    - The path that is exported by the NFS server.
+    `spec.nfs`
+    Specifies the volume type being used, in this case the `nfs` plugin.
 
-    - The hostname or IP address of the NFS server.
+    `spec.nfs.path`
+    Specifies the path that is exported by the NFS server.
 
-    - The reclaim policy for the PV. This defines what happens to a volume when released.
+    `spec.nfs.server`
+    Specifies the hostname or IP address of the NFS server.
 
-      > [!NOTE]
-      > Each NFS volume must be mountable by all schedulable nodes in the cluster.
+    `spec.persistentVolumeReclaimPolicy`
+    Specifies the reclaim policy for the PV. This defines what happens to a volume when released.
+
+    > [!NOTE]
+    > Each NFS volume must be mountable by all schedulable nodes in the cluster.
 
 2.  Verify that the PV was created:
 
@@ -102,9 +125,13 @@ Procedure
       storageClassName: ""
     ```
 
-    - The access modes do not enforce security, but rather act as labels to match a PV to a PVC.
+    where:
 
-    - This claim looks for PVs offering **5Gi** or greater capacity.
+    `spec.accessModes.ReadWriteOnce`
+    Specifies the access modes do not enforce security, but rather act as labels to match a PV to a PVC.
+
+    `spec.resources.requests.storage`
+    This claim looks for PVs offering **5Gi** or greater capacity.
 
 4.  Verify that the persistent volume claim was created:
 
@@ -131,13 +158,15 @@ Procedure
 
 # Enforce disk quotas
 
+You can enforce disk quotas for NFS volumes by allocating individual persistent volumes for each project, allowing you to control storage capacity per namespace.
+
 You can use disk partitions to enforce disk quotas and size constraints. Each partition can be its own export. Each export is one PV. OpenShift Container Platform enforces unique names for PVs, but the uniqueness of the NFS volume’s server and path is up to the administrator.
 
 Enforcing quotas in this way allows the developer to request persistent storage by a specific amount, such as 10Gi, and be matched with a corresponding volume of equal or greater capacity.
 
 # NFS volume security
 
-This section covers NFS volume security, including matching permissions and SELinux considerations. The user is expected to understand the basics of POSIX permissions, process UIDs, supplemental groups, and SELinux.
+To understand NFS volume security, including matching permissions and SELinux considerations, you should understand the basics of POSIX permissions, process UIDs, supplemental groups, and SELinux.
 
 Developers request NFS storage by referencing either a PVC by name or the NFS volume plugin directly in the `volumes` section of their `Pod` definition.
 
@@ -188,7 +217,7 @@ Then the container must match SELinux labels, and either run with a UID of `6553
 
 ## Group IDs
 
-The recommended way to handle NFS access, assuming it is not an option to change permissions on the NFS export, is to use supplemental groups. Supplemental groups in OpenShift Container Platform are used for shared storage, of which NFS is an example. In contrast, block storage such as iSCSI uses the `fsGroup` SCC strategy and the `fsGroup` value in the `securityContext` of the pod.
+You can use supplemental groups to manage NFS access in OpenShift Container Platform when you cannot change permissions on the NFS export. Supplemental groups manage shared storage such as NFS, while block storage such as iSCSI uses the `fsGroup` SCC strategy and `fsGroup` value in the pod `securityContext`.
 
 > [!NOTE]
 > To gain access to persistent storage, it is generally preferable to use supplemental group IDs versus user IDs.
@@ -204,9 +233,13 @@ spec:
     supplementalGroups: [5555]
 ```
 
-- `securityContext` must be defined at the pod level, not under a specific container.
+where:
 
-- An array of GIDs defined for the pod. In this case, there is one element in the array. Additional GIDs would be comma-separated.
+`spec.securityContext`
+Must be defined at the pod level, not under a specific container.
+
+`spec.securityContext.supplementalGroups`
+Specifies an array of GIDs defined for the pod. In this case, there is one element in the array. Additional GIDs would be comma-separated.
 
 Assuming there are no custom SCCs that might satisfy the pod requirements, the pod likely matches the `restricted` SCC. This SCC has the `supplementalGroups` strategy set to `RunAsAny`, meaning that any supplied group ID is accepted without range checking.
 
@@ -217,7 +250,7 @@ As a result, the above pod passes admissions and is launched. However, if group 
 
 ## User IDs
 
-User IDs can be defined in the container image or in the `Pod` definition.
+You can define user IDs in the container image or in the pod definition.
 
 > [!NOTE]
 > It is generally preferable to use supplemental group IDs to gain access to persistent storage versus using user IDs.
@@ -233,9 +266,13 @@ spec:
       runAsUser: 65534
 ```
 
-- Pods contain a `securityContext` definition specific to each container and a pod’s `securityContext` which applies to all containers defined in the pod.
+where:
 
-- `65534` is the `nfsnobody` user.
+`spec.containers`
+Pods contain a `securityContext` definition specific to each container and a pod’s `securityContext`, which applies to all containers defined in the pod.
+
+`spec.securityContext.runAsUser`
+Specifies the user ID to run the container as. In this example, `65534` is the `nfsnobody` user.
 
 Assuming that the project is `default` and the SCC is `restricted`, the user ID of `65534` as requested by the pod is not allowed. Therefore, the pod fails for the following reasons:
 
@@ -254,9 +291,11 @@ It is generally considered a good practice not to modify the predefined SCCs. Th
 
 ## SELinux
 
+For non-RHEL and non-RHCOS systems, SELinux does not allow writing from a pod to a remote NFS server. The NFS volume mounts correctly but it is read-only. You need to manually enable the correct SELinux permissions.
+
 Red Hat Enterprise Linux (RHEL) and Red Hat Enterprise Linux CoreOS (RHCOS) systems are configured to use SELinux on remote NFS servers by default.
 
-For non-RHEL and non-RHCOS systems, SELinux does not allow writing from a pod to a remote NFS server. The NFS volume mounts correctly but it is read-only. You will need to enable the correct SELinux permissions by using the following procedure.
+The following procedure shows how to enable the correct SELinux permissions.
 
 <div>
 
@@ -288,7 +327,29 @@ Procedure
 
 ## Export settings
 
-To enable arbitrary container users to read and write the volume, each exported volume on the NFS server should conform to the following conditions:
+Before you can enable arbitrary container users to read and write the volume, check that each exported volume on the NFS server meets the required conditions.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to the NFS server with root permissions.
+
+- You have installed and configured an NFS server on your system.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 - Every export must be exported using the following format:
 
@@ -340,7 +401,11 @@ To enable arbitrary container users to read and write the volume, each exported 
 
 - The NFS export and directory must be set up so that they are accessible by the target pods. Either set the export to be owned by the container’s primary UID, or supply the pod group access using `supplementalGroups`, as shown in the group IDs above.
 
-# Reclaiming resources
+</div>
+
+# Resource reclamation
+
+You can release NFS shares to allow them to be reclaimed.
 
 NFS implements the OpenShift Container Platform `Recyclable` plugin interface. Automatic processes handle reclamation tasks based on policies set on each persistent volume.
 
@@ -385,6 +450,8 @@ spec:
 Deleting the original PV and re-creating it with the same name is discouraged. Attempting to manually change the status of a PV from `Released` to `Available` causes errors and potential data loss.
 
 # Additional configuration and troubleshooting
+
+You can configure additional NFS mount options to customize volume behavior and optimize performance for your specific storage requirements.
 
 Depending on what version of NFS is being used and how it is configured, there may be additional configuration steps needed for proper export and security mapping. The following are some that may apply:
 

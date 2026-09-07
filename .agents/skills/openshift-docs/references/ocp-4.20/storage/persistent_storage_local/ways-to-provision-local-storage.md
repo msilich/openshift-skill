@@ -1,5 +1,11 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Local storage provides direct access to disks attached to cluster nodes, delivering lower latency and higher throughput than network-attached or cloud-based storage. Use local storage for performance-sensitive workloads, single-node clusters, or environments without cloud storage infrastructure.
+
+# Overview of local storage options
+
+OpenShift Container Platform provides three solutions for provisioning node-local storage. Each offers different capabilities for dynamic provisioning and topology awareness. Node-local storage binds workloads to specific nodes.
+
 You can use any of the following solutions to provision local storage:
 
 - HostPath Provisioner (HPP)
@@ -11,7 +17,7 @@ You can use any of the following solutions to provision local storage:
 > [!WARNING]
 > These solutions support provisioning only node-local storage. The workloads are bound to the nodes that provide the storage. If the node becomes unavailable, the workload also becomes unavailable. To maintain workload availability despite node failures, you must ensure storage data replication through active or passive replication mechanisms.
 
-# Overview of HostPath Provisioner functionality
+## Overview of HostPath Provisioner functionality
 
 You can perform the following actions using HostPath Provisioner (HPP):
 
@@ -26,7 +32,7 @@ You can perform the following actions using HostPath Provisioner (HPP):
 > [!NOTE]
 > HPP is available in upstream Kubernetes. However, it is not recommended to use HPP from upstream Kubernetes.
 
-# Overview of Local Storage Operator functionality
+## Overview of Local Storage Operator functionality
 
 You can perform the following actions using Local Storage Operator (LSO):
 
@@ -39,7 +45,7 @@ You can perform the following actions using Local Storage Operator (LSO):
 > [!NOTE]
 > LSO is developed and delivered by Red Hat.
 
-# Overview of LVM Storage functionality
+## Overview of LVM Storage functionality
 
 You can perform the following actions using Logical Volume Manager (LVM) Storage:
 
@@ -54,7 +60,7 @@ LVM Storage uses the TopoLVM CSI driver to dynamically allocate storage space to
 
 # Comparison of LVM Storage, LSO, and HPP
 
-The following sections compare the functionalities provided by LVM Storage, Local Storage Operator (LSO), and HostPath Provisioner (HPP) to provision local storage.
+Compare LVM Storage, Local Storage Operator (LSO), and HostPath Provisioner (HPP) across storage types, core features, performance, and isolation to determine the best local storage provisioning solution for your cluster.
 
 ## Comparison of the support for storage types and filesystems
 

@@ -4,26 +4,34 @@ Daemon sets ensure that pods run on all or specific nodes in a cluster, enabling
 
 As an administrator, you can create and use daemon sets to run replicas of a pod on specific or all nodes in an OpenShift Container Platform cluster.
 
-A daemon set ensures that all (or some) nodes run a copy of a pod. As nodes are added to the cluster, pods are added to the cluster. As nodes are removed from the cluster, those pods are removed through garbage collection. Deleting a daemon set will clean up the pods it created.
+A daemon set ensures that all (or some) nodes run a copy of a pod. As nodes are added to the cluster, pods are added to the cluster. As nodes are removed from the cluster, those pods are removed through garbage collection. Deleting a daemon set cleans up the pods it created.
 
 You can use daemon sets to create shared storage, run a logging pod on every node in your cluster, or deploy a monitoring agent on every node.
 
 For security reasons, the cluster administrators and the project administrators can create daemon sets.
 
-For more information on daemon sets, see the [Kubernetes documentation](http://kubernetes.io/docs/admin/daemons/).
-
 > [!IMPORTANT]
-> Daemon set scheduling is incompatible with project’s default node selector. If you fail to disable it, the daemon set gets restricted by merging with the default node selector. This results in frequent pod recreates on the nodes that got unselected by the merged node selector, which in turn puts unwanted load on the cluster.
+> Daemon set scheduling is incompatible with the project’s default node selector. If you fail to disable it, the daemon set gets restricted by merging with the default node selector. This results in frequent pod recreates on the nodes that got unselected by the merged node selector, which in turn puts unwanted load on the cluster.
 
-# Scheduled by default scheduler
+# Daemon set scheduling
 
-A daemon set ensures that all eligible nodes run a copy of a pod. Normally, the node that a pod runs on is selected by the Kubernetes scheduler. However, daemon set pods are created and scheduled by the daemon set controller. That introduces the following issues:
+A daemon set ensures that all eligible nodes run a copy of a pod by using the default scheduler, which replaces the original daemon set controller scheduling approach for improved consistency and preemption support.
+
+Normally, the node that a pod runs on is selected by the Kubernetes scheduler. However, daemon set pods are created and scheduled by the daemon set controller. That introduces the following issues:
 
 - Inconsistent pod behavior: Normal pods waiting to be scheduled are created and in Pending state, but daemon set pods are not created in `Pending` state. This is confusing to the user.
 
-- Pod preemption is handled by default scheduler. When preemption is enabled, the daemon set controller will make scheduling decisions without considering pod priority and preemption.
+- Pod preemption is handled by default scheduler. When preemption is enabled, the daemon set controller makes scheduling decisions without considering pod priority and preemption.
 
-The **ScheduleDaemonSetPods** feature, enabled by default in OpenShift Container Platform, lets you schedule daemon sets using the default scheduler instead of the daemon set controller, by adding the `NodeAffinity` term to the daemon set pods, instead of the `spec.nodeName` term. The default scheduler is then used to bind the pod to the target host. If node affinity of the daemon set pod already exists, it is replaced. The daemon set controller only performs these operations when creating or modifying daemon set pods, and no changes are made to the `spec.template` of the daemon set.
+The **ScheduleDaemonSetPods** feature, enabled by default in OpenShift Container Platform, lets you schedule daemon sets using the default scheduler instead of the daemon set controller, by adding the `nodeAffinity` term to the daemon set pods, instead of the `spec.nodeName` term. The default scheduler is then used to bind the pod to the target host. If node affinity of the daemon set pod already exists, it is replaced. The daemon set controller only performs these operations when creating or modifying daemon set pods, and no changes are made to the `spec.template` of the daemon set.
+
+<div class="formalpara">
+
+<div class="title">
+
+Example `nodeAffinity` in a daemon set pod
+
+</div>
 
 ``` yaml
 kind: Pod
@@ -43,6 +51,8 @@ spec:
 #...
 ```
 
+</div>
+
 In addition, a `node.kubernetes.io/unschedulable:NoSchedule` toleration is added automatically to daemon set pods. The default scheduler ignores unschedulable Nodes when scheduling daemon set pods.
 
 # Creating daemonsets
@@ -59,7 +69,7 @@ When creating daemon sets, the `nodeSelector` field is used to indicate the node
 
 - If you update a daemon set pod template, the existing pod replicas are not affected.
 
-- If you delete a daemon set and then create a new daemon set with a different template but the same label selector, it recognizes any existing pod replicas as having matching labels and thus does not update them or create new replicas despite a mismatch in the pod template.
+- If you delete a daemon set and then create a new daemon set with a different template but the same label selector, it recognizes any existing pod replicas as having matching labels. It does not update them or create new replicas despite a mismatch in the pod template.
 
 - If you change node labels, the daemon set adds pods to nodes that match the new labels and deletes pods from nodes that do not match the new labels.
 
@@ -75,7 +85,7 @@ Prerequisites
 
 </div>
 
-- Before you start using daemon sets, disable the default project-wide node selector in your namespace, by setting the namespace annotation `openshift.io/node-selector` to an empty string:
+- The default project-wide node selector in your namespace is set to an empty string by using the `openshift.io/node-selector` annotation:
 
   ``` terminal
   $ oc patch namespace myproject -p \
@@ -95,7 +105,7 @@ Prerequisites
   > #...
   > ```
 
-- If you are creating a new project, overwrite the default node selector:
+- If you are creating a new project, the default node selector is overwritten:
 
   ``` terminal
   $ oc adm new-project <name> --node-selector=""
@@ -160,65 +170,59 @@ Procedure
     $ oc create -f daemonset.yaml
     ```
 
-3.  To verify that the pods were created, and that each node has a pod replica:
+</div>
 
-    1.  Find the daemonset pods by entering the following command:
+<div>
 
-        ``` terminal
-        $ oc get pods
-        ```
+<div class="title">
 
-        <div class="formalpara">
-
-        <div class="title">
-
-        Example output
-
-        </div>
-
-        ``` terminal
-        hello-daemonset-cx6md   1/1       Running   0          2m
-        hello-daemonset-e3md9   1/1       Running   0          2m
-        ```
-
-        </div>
-
-    2.  View the pods to verify the pod has been placed onto the node by entering the following command:
-
-        ``` terminal
-        $ oc describe pod/hello-daemonset-cx6md|grep Node
-        ```
-
-        <div class="formalpara">
-
-        <div class="title">
-
-        Example output
-
-        </div>
-
-        ``` terminal
-        Node:        openshift-node01.hostname.com/10.14.20.134
-        ```
-
-        </div>
-
-        ``` terminal
-        $ oc describe pod/hello-daemonset-e3md9|grep Node
-        ```
-
-        <div class="formalpara">
-
-        <div class="title">
-
-        Example output
-
-        </div>
-
-        ``` terminal
-        Node:        openshift-node02.hostname.com/10.14.20.137
-        ```
-
-        </div>
+Verification
 
 </div>
+
+- Verify that the pods were created and that each node has a pod replica by running the following command:
+
+  ``` terminal
+  $ oc get pods
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` terminal
+  hello-daemonset-cx6md   1/1       Running   0          2m
+  hello-daemonset-e3md9   1/1       Running   0          2m
+  ```
+
+  </div>
+
+- Verify that the pods are placed onto the correct nodes by running the following command:
+
+  ``` terminal
+  $ oc describe pod/hello-daemonset-cx6md|grep Node
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` terminal
+  Node:        openshift-node01.hostname.com/10.14.20.134
+  ```
+
+  </div>
+
+</div>
+
+# Additional resources
+
+- [Kubernetes documentation about daemon sets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)

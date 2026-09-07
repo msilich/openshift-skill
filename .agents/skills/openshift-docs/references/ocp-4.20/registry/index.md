@@ -72,7 +72,9 @@ Additional resources
 
 # Automatically pruning images
 
-To reclaim storage in the OpenShift image registry in OpenShift Container Platform and set how long the cluster keeps images, you can configure the automatic image pruner. You set the schedule, suspension, and retention options on the pruning custom resource (CR).
+To reclaim storage in the OpenShift image registry in OpenShift Container Platform and define image retention period, you can configure the automatic image pruner.
+
+You set the schedule, suspension, and retention options on the pruning custom resource (CR).
 
 <div>
 
@@ -140,31 +142,46 @@ Procedure
       message: "Most recent image pruning job succeeded."
   ```
 
-- `schedule`: `CronJob` formatted schedule. This is an optional field, default is daily at midnight.
+  where:
 
-- `suspend`: If set to `true`, the `CronJob` running pruning is suspended. This is an optional field, default is `false`. The initial value on new clusters is `false`.
+  `spec.schedule`
+  `CronJob` formatted schedule. This is an optional field, default is daily at midnight.
 
-- `keepTagRevisions`: The number of revisions per tag to keep. This is an optional field, default is `3`. The initial value is `3`.
+  `spec.suspend`
+  If set to `true`, the `CronJob` running pruning is suspended. This is an optional field, default is `false`. The initial value on new clusters is `false`.
 
-- `keepYoungerThanDuration`: Retain images younger than this duration. This is an optional field. If a value is not specified, either `keepYoungerThan` or the default value `60m` (60 minutes) is used.
+  `spec.keepTagRevisions`
+  The number of revisions per tag to keep. This is an optional field, default is `3`. The initial value is `3`.
 
-- `keepYoungerThan`: Deprecated. The same as `keepYoungerThanDuration`, but the duration is specified as an integer in nanoseconds. This is an optional field. When `keepYoungerThanDuration` is set, this field is ignored.
+  `spec.keepYoungerThanDuration`
+  Retain images younger than this duration. This is an optional field. If a value is not specified, either `keepYoungerThan` or the default value `60m` (60 minutes) is used.
 
-- `resources`: Standard pod resource requests and limits. This is an optional field.
+  `spec.keepYoungerThan`
+  Deprecated. The same as `keepYoungerThanDuration`, but the duration is specified as an integer in nanoseconds. This is an optional field. When `keepYoungerThanDuration` is set, this field is ignored.
 
-- `affinity`: Standard pod affinity. This is an optional field.
+  `spec.resources`
+  Standard pod resource requests and limits. This is an optional field.
 
-- `nodeSelector`: Standard pod node selector. This is an optional field.
+  `spec.affinity`
+  Standard pod affinity. This is an optional field.
 
-- `tolerations`: Standard pod tolerations. This is an optional field.
+  `nodeSelector`
+  Standard pod node selector. This is an optional field.
 
-- `successfulJobsHistoryLimit`: The maximum number of successful jobs to retain. Must be greater than or equal to `1` to ensure metrics are reported. This is an optional field, default is `3`. The initial value is `3`.
+  `spec.tolerations`
+  Standard pod tolerations. This is an optional field.
 
-- `failedJobsHistoryLimit`: The maximum number of failed jobs to retain. Must be greater than or equal `1` to ensure metrics are reported. This is an optional field, default is `3`. The initial value is `3`.
+  `spec.successfulJobsHistoryLimit`
+  The maximum number of successful jobs to retain. Must be greater than or equal to `1` to ensure metrics are reported. This is an optional field, default is `3`. The initial value is `3`.
 
-- `observedGeneration`: The generation observed by the Operator.
+  `spec.failedJobsHistoryLimit`
+  The maximum number of failed jobs to retain. Must be greater than or equal `1` to ensure metrics are reported. This is an optional field, default is `3`. The initial value is `3`.
 
-- `conditions`: The standard condition objects with the following types:
+  `status.observedGeneration`
+  The generation observed by the Operator.
+
+  `status.conditions`
+  The standard condition objects with the following types:
 
   - `Available`: Indicates if the pruning job has been created. Reasons can be `Ready` or `Error`.
 
@@ -217,7 +234,7 @@ Procedure
 
 If you need an enterprise-quality container image registry, Red Hat Quay is available both as a hosted service and as software that you can install in your own data center or cloud environment. Advanced features in Red Hat Quay include geo-replication, image scanning, and the ability to roll back images.
 
-Visit the [Quay.io](https://quay.io) site to set up your own hosted Quay registry account. After that, follow the Quay Tutorial to log in to the Quay registry and start managing your images.
+Visit the Quay.io site to set up your own hosted Quay registry account. After that, follow the Quay Tutorial to log in to the Quay registry and start managing your images.
 
 You can access your Red Hat Quay registry from OpenShift Container Platform, similar to any remote container image registry.
 
@@ -228,6 +245,8 @@ You can access your Red Hat Quay registry from OpenShift Container Platform, si
 Additional resources
 
 </div>
+
+- [Quay.io](https://quay.io)
 
 - [Red Hat Quay product documentation](https://access.redhat.com/documentation/en-us/red_hat_quay/)
 

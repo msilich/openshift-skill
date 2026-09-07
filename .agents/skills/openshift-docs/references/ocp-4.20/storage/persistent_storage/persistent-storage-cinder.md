@@ -1,13 +1,13 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-OpenShift Container Platform supports OpenStack Cinder. Some familiarity with Kubernetes and OpenStack is assumed.
+OpenShift Container Platform supports OpenStack Cinder volumes. You can provision your OpenShift Container Platform cluster with persistent storage using OpenStack Cinder. Some familiarity with Kubernetes and OpenStack is assumed.
 
-Cinder volumes can be provisioned dynamically. Persistent volumes are not bound to a single project or namespace; they can be shared across the OpenShift Container Platform cluster. Persistent volume claims are specific to a project or namespace and can be requested by users.
+Persistent volumes are not bound to a single project or namespace; they can be shared across the OpenShift Container Platform cluster. Persistent volume claims are specific to a project or namespace and can be requested by users.
 
 > [!IMPORTANT]
 > OpenShift Container Platform 4.11 and later provides automatic migration for the Cinder in-tree volume plugin to its equivalent CSI driver.
 >
-> CSI automatic migration should be seamless. Migration does not change how you use all existing API objects, such as persistent volumes, persistent volume claims, and storage classes. For more information about migration, see [CSI automatic migration](../container_storage_interface/persistent-storage-csi-migration.md#persistent-storage-csi-migration).
+> CSI automatic migration should be seamless. Migration does not change how you use all existing API objects, such as persistent volumes, persistent volume claims, and storage classes. For more information about migration, see "CSI automatic migration".
 
 <div>
 
@@ -17,13 +17,21 @@ Additional resources
 
 </div>
 
-- For more information about how OpenStack Block Storage provides persistent block storage management for virtual hard drives, see [OpenStack Cinder](https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/8/html-single/architecture_guide/index#comp-cinder).
+- [CSI automatic migration](../container_storage_interface/persistent-storage-csi-migration.md#persistent-storage-csi-migration)
+
+- [OpenStack Cinder](https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/8/html-single/architecture_guide/index#comp-cinder)
 
 </div>
 
 # Manual provisioning with Cinder
 
 Storage must exist in the underlying infrastructure before it can be mounted as a volume in OpenShift Container Platform.
+
+Manual provisioning requires that OpenShift Container Platform is configured for Red Hat OpenStack Platform (RHOSP) and that you have the Cinder volume ID.
+
+## Creating the persistent volume
+
+You can create a persistent volume (PV) that provisions storage from an Red Hat OpenStack Platform (RHOSP) Cinder volume for use with OpenShift Container Platform.
 
 <div>
 
@@ -33,15 +41,9 @@ Prerequisites
 
 </div>
 
-- OpenShift Container Platform configured for Red Hat OpenStack Platform (RHOSP)
-
-- Cinder volume ID
+- You have defined your PV in an object definition before creating it in OpenShift Container Platform.
 
 </div>
-
-## Creating the persistent volume
-
-You must define your persistent volume (PV) in an object definition before creating it in OpenShift Container Platform:
 
 <div>
 
@@ -78,18 +80,25 @@ Procedure
 
     </div>
 
-    - The name of the volume that is used by persistent volume claims or pods.
+    where:
 
-    - The amount of storage allocated to this volume.
+    `metadata.name`
+    Specifies the name of the volume that is used by persistent volume claims or pods.
 
-    - Indicates `cinder` for Red Hat OpenStack Platform (RHOSP) Cinder volumes.
+    `spec.capacity.storage`
+    Specifies the amount of storage allocated to this volume.
 
-    - The file system that is created when the volume is mounted for the first time.
+    `spec.cinder`
+    Indicates `cinder` for Red Hat OpenStack Platform (RHOSP) Cinder volumes.
 
-    - The Cinder volume to use.
+    `spec.cinder.fsType`
+    Specifies the file system that is created when the volume is mounted for the first time.
 
-      > [!IMPORTANT]
-      > Do not change the `fstype` parameter value after the volume is formatted and provisioned. Changing this value can result in data loss and pod failure.
+    `spec.cinder.volumeID`
+    Specifies the Cinder volume to use.
+
+    > [!IMPORTANT]
+    > Do not change the `fstype` parameter value after the volume is formatted and provisioned. Changing this value can result in data loss and pod failure.
 
 2.  Create the object definition file you saved in the previous step.
 
@@ -105,9 +114,9 @@ You can use unformatted Cinder volumes as PVs because OpenShift Container Platfo
 
 Before OpenShift Container Platform mounts the volume and passes it to a container, the system checks that it contains a file system as specified by the `fsType` parameter in the PV definition. If the device is not formatted with the file system, all data from the device is erased and the device is automatically formatted with the given file system.
 
-## Cinder volume security
+## Configuring Cinder volume security
 
-If you use Cinder PVs in your application, configure security for their deployment configurations.
+If you use Cinder PVs in your application, configure security for their deployment resources.
 
 <div>
 
@@ -139,7 +148,7 @@ Procedure
     $ oc adm policy add-scc-to-user <new_scc> -z <service_account> -n <project>
     ```
 
-2.  In your application’s deployment configuration, provide the service account name and `securityContext`:
+2.  In your application’s deployment resource, provide the service account name and `securityContext`:
 
     ``` yaml
     apiVersion: v1
@@ -167,18 +176,27 @@ Procedure
             fsGroup: 7777
     ```
 
-    - The number of copies of the pod to run.
+    where:
 
-    - The label selector of the pod to run.
+    `spec.replicas`
+    Specifies the number of copies of the pod to run.
 
-    - A template for the pod that the controller creates.
+    `spec.selector`
+    Specifies the label selector of the pod to run.
 
-    - The labels on the pod. They must include labels from the label selector.
+    `spec.template`
+    Specifies a template for the pod that the controller creates.
 
-    - The maximum name length after expanding any parameters is 63 characters.
+    `spec.template.metadata.labels`
+    Specifies the labels on the pod. They must include labels from the label selector.
 
-    - Specifies the service account you created.
+    `spec.template.metadata.labels.name`
+    Specifies the maximum name length after expanding any parameters is 63 characters.
 
-    - Specifies an `fsGroup` for the pods.
+    `spec.template.spec.serviceAccountName`
+    Specifies the service account you created.
+
+    `spec.template.spec.securityContext.fsGroup`
+    Specifies an `fsGroup` for the pods.
 
 </div>

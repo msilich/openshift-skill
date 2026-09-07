@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can add extensions that allow you to customize your plugin. Those extensions are then loaded to the console at run-time.
+You can add extensions that allow you to customize your plugin. Those extensions are then loaded to the console at runtime.
 
 # Dynamic plugin extension types
 
@@ -216,7 +216,7 @@ Adds an activity to the Activity Card of Overview Dashboard where the triggering
 |----|----|----|----|
 | `k8sResource` | `CodeRef<FirehoseResource & { isList: true; }>` | no | The utilization item to be replaced. |
 | `component` | `CodeRef<React.ComponentType<K8sActivityProps<T>>>` | no | The action component. |
-| `isActivity` | `CodeRef<(resource: T) ⇒ boolean>` | yes | Function which determines if the given resource represents the action. If not defined, every resource represents activity. |
+| `isActivity` | `CodeRef<(resource: T) ⇒ boolean>` | yes | Function that determines whether the given resource represents the action. If not defined, every resource represents activity. |
 | `getTimestamp` | `CodeRef<(resource: T) ⇒ Date>` | yes | Time stamp for the given action, which will be used for ordering. |
 
 ## `console.dashboards/overview/health/operator`
@@ -226,7 +226,7 @@ Adds a health subsystem to the status card of the **Overview** dashboard, where 
 | Name | Value Type | Optional | Description |
 |----|----|----|----|
 | `title` | `string` | no | Title of Operators section in the pop-up menu. |
-| `resources` | `CodeRef<FirehoseResource[]>` | no | Kubernetes resources which will be fetched and passed to `healthHandler`. |
+| `resources` | `CodeRef<FirehoseResource[]>` | no | Kubernetes resources that will be fetched and passed to `healthHandler`. |
 | `getOperatorsWithStatuses` | `CodeRef<GetOperatorsWithStatuses<T>>` | yes | Resolves status for the Operators. |
 | `operatorRowLoader` | `CodeRef<React.ComponentType<OperatorRowProps<T>>>` | yes | Loader for pop-up row component. |
 | `viewAllLink` | `string` | yes | Links to all resources page. If not provided, then a list page of the first resource from resources prop is used. |
@@ -239,8 +239,8 @@ Adds a health subsystem to the status card of Overview dashboard where the sourc
 |----|----|----|----|
 | `title` | `string` | no | The display name of the subsystem. |
 | `queries` | `string[]` | no | The Prometheus queries. |
-| `healthHandler` | `CodeRef<PrometheusHealthHandler>` | no | Resolve the subsystem’s health. |
-| `additionalResource` | `CodeRef<FirehoseResource>` | yes | Additional resource which will be fetched and passed to `healthHandler`. |
+| `healthHandler` | `CodeRef<PrometheusHealthHandler>` | no | Resolves the subsystem’s health. |
+| `additionalResource` | `CodeRef<FirehoseResource>` | yes | Additional resource that will be fetched and passed to `healthHandler`. |
 | `popupComponent` | `CodeRef<React.ComponentType<PrometheusHealthPopupProps>>` | yes | Loader for pop-up menu content. If defined, a health item is represented as a link, which opens a pop-up menu with the given content. |
 | `popupTitle` | `string` | yes | The title of the popover. |
 | `disallowedControlPlaneTopology` | `string[]` | yes | Control plane topology for which the subsystem should be hidden. |
@@ -253,7 +253,7 @@ Adds a health subsystem to the status card of Overview dashboard where the sourc
 |----|----|----|----|
 | `title` | `string` | no | The display name of the subsystem. |
 | `resources` | `CodeRef<WatchK8sResources<T>>` | no | Kubernetes resources that will be fetched and passed to `healthHandler`. |
-| `healthHandler` | `CodeRef<ResourceHealthHandler<T>>` | no | Resolve the subsystem’s health. |
+| `healthHandler` | `CodeRef<ResourceHealthHandler<T>>` | no | Resolves the subsystem’s health. |
 | `popupComponent` | `CodeRef<WatchK8sResults<T>>` | yes | Loader for pop-up menu content. If defined, a health item is represented as a link, which opens a pop-up menu with the given content. |
 | `popupTitle` | `string` | yes | The title of the popover. |
 
@@ -265,8 +265,8 @@ Adds a health subsystem to the status card of Overview dashboard where the sourc
 |----|----|----|----|
 | `title` | `string` | no | The display name of the subsystem. |
 | `url` | `string` | no | The URL to fetch data from. It will be prefixed with base Kubernetes URL. |
-| `healthHandler` | `CodeRef<URLHealthHandler<T, K8sResourceCommon | K8sResourceCommon[]>>` | no | Resolve the subsystem’s health. |
-| `additionalResource` | `CodeRef<FirehoseResource>` | yes | Additional resource which will be fetched and passed to `healthHandler`. |
+| `healthHandler` | `CodeRef<URLHealthHandler<T, K8sResourceCommon | K8sResourceCommon[]>>` | no | Resolves the subsystem’s health. |
+| `additionalResource` | `CodeRef<FirehoseResource>` | yes | Additional resource that will be fetched and passed to `healthHandler`. |
 | `popupComponent` | `CodeRef<React.ComponentType<{ healthResult?: T; healthResultError?: any; k8sResult?: FirehoseResult<R>; }>>` | yes | Loader for popup content. If defined, a health item will be represented as a link which opens popup with given content. |
 | `popupTitle` | `string` | yes | The title of the popover. |
 
@@ -481,7 +481,7 @@ Adds new resource list page to Console router.
 
 ## `console.page/route`
 
-Adds a new page to the web console router. See [React Router](https://v5.reactrouter.com/).
+Adds a new page to the web console router. For more information, see React Router, linked in Additional resources.
 
 | Name | Value Type | Optional | Description |
 |----|----|----|----|
@@ -492,7 +492,7 @@ Adds a new page to the web console router. See [React Router](https://v5.reactro
 
 ## `console.page/route/standalone`
 
-Adds a new standalone page, rendered outside the common page layout, to the web console router. See [React Router](https://v5.reactrouter.com/).
+Adds a new standalone page, rendered outside the common page layout, to the web console router. For more information, see React Router, linked in Additional resources.
 
 | Name | Value Type | Optional | Description |
 |----|----|----|----|
@@ -600,9 +600,9 @@ Adds a new details item to the default resource summary on the details page.
 | `id` | `string` | no | A unique identifier. |
 | `column` | `DetailsItemColumn` | no | Determines if the item will appear in the 'left' or 'right' column of the resource summary on the details page. Default: 'right' |
 | `title` | `string` | no | The details item title. |
-| `path` | `string` | yes | An optional, fully-qualified path to a resource property to used as the details item value. Only [primitive type](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) values can be rendered directly. Use the component property to handle other data types. |
+| `path` | `string` | yes | An optional, fully-qualified path to a resource property to used as the details item value. You can directly render only primitive type values, linked in Additional resources. Use the component property to handle other data types. |
 | `component` | `CodeRef<React.ComponentType<DetailsItem ComponentProps<K8sResourceCommon, any>>>` | yes | An optional React component that will render the details item value. |
-| `sortWeight` | `number` | yes | An optional sort weight, relative to all other details items in the same column. Represented by any valid [JavaScriptNumber](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type). Items in each column are sorted independently, lowest to highest. Items without sort weightsare sorted after items with sort weights. |
+| `sortWeight` | `number` | yes | An optional sort weight, relative to all other details items in the same column. You can represent it by using any valid JavaScript Number, linked in Additional resources. Items in each column are sorted independently, lowest to highest. Items without sort weights are sorted after items with sort weights. |
 
 ## `console.storage-class/provisioner`
 
@@ -774,8 +774,8 @@ Topology relationship provider connector extension
 | Name | Value Type | Optional | Description |
 |----|----|----|----|
 | `provides` | `CodeRef<RelationshipProviderProvides>` | no | Use to determine if a connection can be created between the source and target node |
-| `tooltip` | `string` | no | Tooltip to show when connector operation is hovering over the drop target, for example, "Create a Visual Connector" |
-| `create` | `CodeRef<RelationshipProviderCreate>` | no | Callback to execute when connector is drop over target node to create a connection |
+| `tooltip` | `string` | no | A tooltip to show when connector operation is hovering over the drop target, for example, "Create a Visual Connector" |
+| `create` | `CodeRef<RelationshipProviderCreate>` | no | A callback that creates a connection when a connector is dropped onto the target node |
 | `priority` | `number` | no | Priority for relationship, higher will be preferred in case of multiple |
 
 ## `console.user-preference/group`
@@ -829,7 +829,7 @@ This extension allows plugins to contribute an add action item to the add page o
 
 ## `dev-console.add/action-group`
 
-This extension allows plugins to contibute a group in the add page of developer console. Groups can be referenced by actions, which will be grouped together in the add action page based on their extension definition. For example, a Serverless plugin can contribute a Serverless group and together with multiple add actions.
+This extension allows plugins to contribute a group in the add page of developer console. Groups can be referenced by actions, which will be grouped together in the add action page based on their extension definition. For example, a Serverless plugin can contribute a Serverless group and together with multiple add actions.
 
 | Name | Value Type | Optional | Description |
 |----|----|----|----|
@@ -868,6 +868,22 @@ Deprecated: Use `console.tab/horizontalNav` instead. Adds a new resource tab pag
 | `href` | `string` | yes | The optional `href` for the tab link. If not provided, the first `path` is used. |
 | `exact` | `boolean` | yes | When true, will only match if the path matches the `location.pathname` exactly. |
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [React Router](https://v5.reactrouter.com/)
+
+- [Primitive type](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
+
+- [JavaScript Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type)
+
+</div>
+
 # Dynamic plugin API
 
 ## `useActivePerspective`
@@ -892,7 +908,7 @@ const Component: React.FC = (props) => {
 
 ## `GreenCheckCircleIcon`
 
-Component for displaying a green check mark circle icon.
+Component for displaying a checkmark circle icon.
 
 **Example**
 
@@ -908,7 +924,7 @@ Component for displaying a green check mark circle icon.
 
 ## `RedExclamationCircleIcon`
 
-Component for displaying a red exclamation mark circle icon.
+Component for displaying an exclamation mark circle icon.
 
 **Example**
 
@@ -924,7 +940,7 @@ Component for displaying a red exclamation mark circle icon.
 
 ## `YellowExclamationTriangleIcon`
 
-Component for displaying a yellow triangle exclamation icon.
+Component for displaying a triangle exclamation icon.
 
 **Example**
 
@@ -1281,7 +1297,7 @@ Component that creates a link to a specific resource type with an icon badge.
 | `inline` | (optional) flag to create icon badge and name inline with children |
 | `linkTo` | (optional) flag to create a Link object - defaults to true |
 | `name` | (optional) name of resource |
-| `namesapce` | (optional) specific namespace for the kind resource to link to |
+| `namespace` | (optional) specific namespace for the kind resource to link to |
 | `hideIcon` | (optional) flag to hide the icon badge |
 | `title` | (optional) title for the link object (not displayed) |
 | `dataTest` | (optional) identifier for testing |
@@ -1356,7 +1372,7 @@ const Component: React.FC = () => {
 
 ## `useK8sWatchResources`
 
-Hook that retrieves the k8s resources along with their respective status for loaded and error. It returns a map where keys are as provided in initResouces and value has three properties data, loaded and error.
+Hook that retrieves the k8s resources along with their respective status for loaded and error. It returns a map where keys are as provided in initResources and value has three properties data, loaded and error.
 
 **Example**
 
@@ -1411,7 +1427,7 @@ A custom wrapper around `fetch` that adds console specific headers and allows fo
 
 ## `getConsoleRequestHeaders`
 
-A function that creates impersonation and multicluster related headers for API requests using current redux state. It returns an object containing the appropriate impersonation and clustr requst headers, based on redux state.
+A function that creates impersonation and multicluster related headers for API requests using current redux state. It returns an object containing the appropriate impersonation and cluster request headers, based on redux state.
 
 | Parameter Name | Description |
 |----|----|
@@ -1419,7 +1435,7 @@ A function that creates impersonation and multicluster related headers for API r
 
 ## `k8sGetResource`
 
-It fetches a resource from the cluster, based on the provided options. If the name is provided it returns one resource else it returns all the resources matching the model. It returns a promise that resolves to the response as JSON object with a resource if the name is providedelse it returns all the resources matching the model. In case of failure, the promise gets rejected with HTTP error response.
+It fetches a resource from the cluster, based on the provided options. If the name is provided it returns one resource else it returns all the resources matching the model. It returns a promise that resolves to the response as JSON object with a resource if the name is provided else it returns all the resources matching the model. In case of failure, the promise gets rejected with HTTP error response.
 
 | Parameter Name | Description |
 |----|----|
@@ -1445,7 +1461,7 @@ It creates a resource in the cluster, based on the provided options. It returns 
 
 ## `k8sUpdateResource`
 
-It updates the entire resource in the cluster, based on providedoptions. When a client needs to replace an existing resource entirely, they can use k8sUpdate. Alternatively can use k8sPatch to perform the partial update. It returns a promise that resolves to the response of the resource updated. In case of failure promise gets rejected with HTTP error response.
+It updates the entire resource in the cluster, based on provided options. When a client needs to replace an existing resource entirely, they can use k8sUpdate. Alternatively can use k8sPatch to perform the partial update. It returns a promise that resolves to the response of the resource updated. In case of failure promise gets rejected with HTTP error response.
 
 | Parameter Name | Description |
 |----|----|
@@ -1527,7 +1543,7 @@ Provides a group, version, and kind for a k8s model. This returns the group, ver
 
 ## `StatusPopupSection`
 
-Component that shows the status in a popup window. Helpful component for building `console.dashboards/overview/health/resource` extensions.
+Component that shows the status in a pop-up. Helpful component for building `console.dashboards/overview/health/resource` extensions.
 
 **Example**
 
@@ -1879,21 +1895,21 @@ Sets up a poll to Prometheus for a single query. It returns a tuple containing t
 | `{PrometheusEndpoint} props.endpoint` | one of the PrometheusEndpoint (label, query, range, rules, targets) |
 | `{string} [props.query]` | (optional) Prometheus query string. If empty or undefined, polling is not started. |
 | `{number} [props.delay]` | (optional) polling delay interval (ms) |
-| `{number} [props.endTime]` | (optional) for QUERY_RANGE enpoint, end of the query range |
-| `{number} [props.samples]` | (optional) for QUERY_RANGE enpoint |
-| `{number} [options.timespan]` | (optional) for QUERY_RANGE enpoint |
+| `{number} [props.endTime]` | (optional) for QUERY_RANGE endpoint, end of the query range |
+| `{number} [props.samples]` | (optional) for QUERY_RANGE endpoint |
+| `{number} [options.timespan]` | (optional) for QUERY_RANGE endpoint |
 | `{string} [options.namespace]` | (optional) a search param to append |
 | `{string} [options.timeout]` | (optional) a search param to append |
 
 ## `Timestamp`
 
-A component to render timestamp. The timestamps are synchronized between invidual instances of the Timestamp component. The provided timestamp is formatted according to user locale.
+A component to render timestamp. The timestamps are synchronized between individual instances of the Timestamp component. The provided timestamp is formatted according to user locale.
 
 | Parameter Name | Description |
 |----|----|
 | `timestamp` | the timestamp to render. Format is expected to be ISO 8601 (used by Kubernetes), epoch timestamp, or an instance of a Date. |
 | `simple` | render simple version of the component omitting icon and tooltip. |
-| `omitSuffix` | formats the date ommiting the suffix. |
+| `omitSuffix` | formats the date omitting the suffix. |
 | `className` | additional class name for the component. |
 
 ## `useOverlay`
@@ -2233,7 +2249,7 @@ const Component: React.FC = (props) => {
 
 </div>
 
-**Returns** A tuple containing the user setting vauel, a setter callback, and a loaded boolean.
+**Returns** A tuple containing the user setting value, a setter callback, and a loaded boolean.
 
 ## `useQuickStartContext`
 
@@ -2280,7 +2296,7 @@ Deprecated: Use `useAccessReview` from `@console/dynamic-plugin-sdk` instead. Ho
 
 ## `useSafetyFirst`
 
-Deprecated: This hook is not related to console functionality. Hook that ensures a safe asynchronnous setting of React state in case a given component could be unmounted. It returns an array with a pair of state value and its set function.
+Deprecated: This hook is not related to console functionality. Hook that ensures a safe asynchronous setting of React state in case a given component could be unmounted. It returns an array with a pair of state value and its set function.
 
 | Parameter Name | Description         |
 |----------------|---------------------|
@@ -2508,7 +2524,7 @@ Refer to this list of troubleshooting tips if you run into issues loading your p
 
 - Verify there are no typos in the nav extension perspective or section IDs.
 
-  - Your plugin may be loaded, but nav items missing if IDs are incorrect. Try navigating to a plugin page directly by editing the URL.
+  - Your plugin might be loaded, but nav items missing if IDs are incorrect. Try navigating to a plugin page directly by editing the URL.
 
 - Verify there are no network policies that are blocking traffic from the console pod to your plugin service.
 
@@ -2516,7 +2532,7 @@ Refer to this list of troubleshooting tips if you run into issues loading your p
 
 - Verify the list of dynamic plugins to be loaded in your browser in the **Console** tab of the developer tools browser.
 
-  - Evaluate `window.SERVER_FLAGS.consolePlugins` to see the dynamic plugin on the Console frontend.
+  - Evaluate `window.SERVER_FLAGS.consolePlugins` to see the dynamic plugin on the Console front end.
 
 <div>
 

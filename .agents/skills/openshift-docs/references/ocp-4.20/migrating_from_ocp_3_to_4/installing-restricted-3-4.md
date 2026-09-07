@@ -6,7 +6,7 @@ You can install the Migration Toolkit for Containers (MTC) on OpenShift Containe
 
     This process creates a `mapping.txt` file, which contains the mapping between the `registry.redhat.io` image and your mirror registry image. The `mapping.txt` file is required for installing the Operator on the source cluster.
 
-2.  Install the Migration Toolkit for Containers Operator on the OpenShift Container Platform 4.17 target cluster by using Operator Lifecycle Manager.
+2.  Install the Migration Toolkit for Containers Operator on the OpenShift Container Platform 4.20 target cluster by using Operator Lifecycle Manager.
 
     By default, the MTC web console and the `Migration Controller` pod run on the target cluster. You can configure the `Migration Controller` custom resource manifest to run the MTC web console and the `Migration Controller` pod on a [source cluster or on a remote cluster](https://access.redhat.com/articles/5064151).
 
@@ -41,9 +41,9 @@ MTC compatibility: Migrating from OpenShift Container Platform 3 to 4
 
 Edge cases exist where network restrictions prevent OpenShift Container Platform 4 clusters from connecting to other clusters involved in the migration. For example, when migrating from an OpenShift Container Platform 3.11 cluster on premises to a OpenShift Container Platform 4 cluster in the cloud, the OpenShift Container Platform 4 cluster might have trouble connecting to the OpenShift Container Platform 3.11 cluster. In this case, it is possible to designate the OpenShift Container Platform 3.11 cluster as the control cluster and push workloads to the remote OpenShift Container Platform 4 cluster.
 
-# Installing the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.17
+# Installing the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.20
 
-You install the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.17 by using the Operator Lifecycle Manager.
+You install the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.20 by using the Operator Lifecycle Manager.
 
 <div>
 
@@ -111,7 +111,7 @@ Prerequisites
 
 - You must create a mirror image of the Operator catalog.
 
-- You must install the Migration Toolkit for Containers Operator from the mirrored Operator catalog on OpenShift Container Platform 4.17.
+- You must install the Migration Toolkit for Containers Operator from the mirrored Operator catalog on OpenShift Container Platform 4.20.
 
 </div>
 
@@ -235,7 +235,7 @@ Procedure
 
 For OpenShift Container Platform 4.1 and earlier versions, you must configure proxies in the `MigrationController` custom resource (CR) manifest after you install the Migration Toolkit for Containers Operator because these versions do not support a cluster-wide `proxy` object.
 
-For OpenShift Container Platform 4.2 to 4.17, the MTC inherits the cluster-wide proxy settings. You can change the proxy parameters if you want to override the cluster-wide proxy settings.
+For OpenShift Container Platform 4.2 to 4.20, the MTC inherits the cluster-wide proxy settings. You can change the proxy parameters if you want to override the cluster-wide proxy settings.
 
 ## Direct volume migration
 

@@ -8,7 +8,7 @@ You must have access to the internet to obtain the necessary container images. U
 
 You can mirror the images that are required for OpenShift Container Platform installation and subsequent product updates to a container mirror registry such as Red Hat Quay, JFrog Artifactory, Sonatype Nexus Repository, or Harbor. If you do not have access to a large-scale container registry, you can use the *mirror registry for Red Hat OpenShift*, a small-scale container registry included with OpenShift Container Platform subscriptions.
 
-You can use any container registry that supports [Docker v2-2](https://docs.docker.com/registry/spec/manifest-v2-2), such as Red Hat Quay, the *mirror registry for Red Hat OpenShift*, Artifactory, Sonatype Nexus Repository, or Harbor. Regardless of your chosen registry, the procedure to mirror content from Red Hat hosted sites on the internet to an isolated image registry is the same. After you mirror the content, you configure each cluster to retrieve this content from your mirror registry.
+You can use any container registry that supports Docker v2-2, such as Red Hat Quay, the *mirror registry for Red Hat OpenShift*, Artifactory, Sonatype Nexus Repository, or Harbor. Regardless of your chosen registry, the procedure to mirror content from Red Hat hosted sites on the internet to an isolated image registry is the same. After you mirror the content, you configure each cluster to retrieve this content from your mirror registry.
 
 > [!IMPORTANT]
 > The OpenShift image registry cannot be used as the target registry because it does not support pushing without a tag, which is required during the mirroring process.
@@ -45,7 +45,7 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 Linux Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 Linux Clients** entry and save the file.
 
 5.  Unpack the archive:
 
@@ -55,7 +55,7 @@ Procedure
 
 6.  Place the `oc` binary in a directory that is on your `PATH`.
 
-    To check your `PATH`, execute the following command:
+    To check your `PATH`, run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -100,13 +100,13 @@ Procedure
 
 2.  Select the appropriate version from the **Version** list.
 
-3.  Click **Download Now** next to the **OpenShift v4.17 Windows Client** entry and save the file.
+3.  Click **Download Now** next to the **OpenShift v4.20 Windows Client** entry and save the file.
 
 4.  Extract the archive with a ZIP program.
 
 5.  Move the `oc` binary to a directory that is on your `PATH` variable.
 
-    To check your `PATH` variable, open the command prompt and execute the following command:
+    To check your `PATH` variable, open the Command Prompt and run the following command:
 
     ``` terminal
     C:\> path
@@ -153,16 +153,16 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 macOS Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 macOS Clients** entry and save the file.
 
     > [!NOTE]
-    > For macOS arm64, choose the **OpenShift v4.17 macOS arm64 Client** entry.
+    > For macOS arm64, choose the **OpenShift v4.20 macOS arm64 Client** entry.
 
-5.  Unpack and unzip the archive.
+5.  Extract the archive.
 
 6.  Move the `oc` binary to a directory on your `PATH` variable.
 
-    To check your `PATH` variable, open a terminal and execute the following command:
+    To check your `PATH` variable, open a terminal and run the following command:
 
     ``` terminal
     $ echo $PATH

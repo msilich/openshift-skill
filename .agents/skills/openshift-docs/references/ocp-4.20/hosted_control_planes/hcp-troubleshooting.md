@@ -522,13 +522,15 @@ Procedure
 
 </div>
 
-## Return non-bare-metal clusters to the late binding pool
+## Returning non-bare-metal clusters to the late binding pool
 
 If you are using late binding managed clusters without `BareMetalHosts`, you must complete additional manual steps to delete a late binding cluster and return the nodes back to the Discovery ISO.
 
 For late binding managed clusters without `BareMetalHosts`, removing cluster information does not automatically return all nodes to the Discovery ISO.
 
-<div class="formalpara">
+To unbind the non-bare-metal nodes with late binding, complete the following steps.
+
+<div>
 
 <div class="title">
 
@@ -536,15 +538,13 @@ Procedure
 
 </div>
 
-To unbind the non-bare-metal nodes with late binding, complete the following steps:
-
-</div>
-
-1.  Remove the cluster information. For more information, see *Removing a cluster from management*.
+1.  Remove the cluster information. For more information, see "Removing a cluster from management".
 
 2.  Clean the root disks.
 
 3.  Reboot manually with the Discovery ISO.
+
+</div>
 
 <div>
 
@@ -562,9 +562,9 @@ Additional resources
 
 The following information applies to troubleshooting hosted control planes on bare metal.
 
-## Nodes fail to be added to hosted control planes on bare metal
+## Determining why nodes are not added to a hosted cluster on bare metal
 
-When you scale up a hosted control planes cluster with nodes that were provisioned by using Assisted Installer, the host fails to pull the ignition with a URL that contains port 22642. That URL is invalid for hosted control planes and indicates that an issue exists with the cluster.
+When you scale up a hosted cluster with nodes that were provisioned by using Assisted Installer, the host fails to pull the ignition with a URL that contains port `22642`. That URL is invalid for hosted control planes and indicates that an issue exists with the cluster.
 
 <div>
 
@@ -574,13 +574,13 @@ Procedure
 
 </div>
 
-1.  To determine the issue, review the assisted-service logs:
+1.  To determine the issue, review the assisted-service logs by entering the following command:
 
     ``` terminal
     $ oc logs -n multicluster-engine <assisted_service_pod_name>
     ```
 
-    - Specify the Assisted Service pod name.
+    Replace `<assisted_service_pod_name>` with the Assisted Service pod name.
 
 2.  In the logs, find errors that resemble these examples:
 
@@ -595,7 +595,7 @@ Procedure
 3.  To fix this issue, see "Add the pull secret to the namespace" in the multicluster engine for Kubernetes Operator documentation.
 
     > [!NOTE]
-    > To use hosted control planes, you must have multicluster engine Operator installed, either as a standalone operator or as part of Red Hat Advanced Cluster Management. Because the operator has a close association with Red Hat Advanced Cluster Management, the documentation for the operator is published within that product’s documentation. Even if you do not use Red Hat Advanced Cluster Management, the parts of its documentation that cover multicluster engine Operator are relevant to hosted control planes.
+    > To use hosted control planes, you must have multicluster engine Operator installed, either as a standalone Operator or as part of Red Hat Advanced Cluster Management. Because the Operator has a close association with Red Hat Advanced Cluster Management, the documentation for the Operator is published within that product’s documentation. Even if you do not use Red Hat Advanced Cluster Management, the parts of its documentation that cover multicluster engine Operator are relevant to hosted control planes.
 
 </div>
 
@@ -613,7 +613,9 @@ Additional resources
 
 # Restarting hosted control plane components
 
-If you are an administrator for hosted control planes, you can use the `hypershift.openshift.io/restart-date` annotation to restart all control plane components for a particular `HostedCluster` resource. For example, you might need to restart control plane components for certificate rotation.
+If you are an administrator for hosted control planes, you can use the `hypershift.openshift.io/restart-date` annotation to restart all control plane components for a particular `HostedCluster` resource.
+
+For example, you might need to restart control plane components for certificate rotation.
 
 <div>
 
@@ -632,7 +634,7 @@ Procedure
     hypershift.openshift.io/restart-date=$(date --iso-8601=seconds)
   ```
 
-  - The control plane is restarted whenever the value of the annotation changes. The `date` command serves as the source of a unique string. The annotation is treated as a string, not a timestamp.
+  The control plane is restarted whenever the value of the annotation changes. The `date` command serves as the source of a unique string. The annotation is treated as a string, not a timestamp.
 
 </div>
 
@@ -724,7 +726,7 @@ Procedure
         --type=merge
       ```
 
-      - Specify a timestamp in the RFC339 format, for example, `2024-03-03T03:28:48Z`. The reconciliation is paused until the specified time is passed.
+      Replace `<timestamp>` with a timestamp in the RFC339 format; for example, `2024-03-03T03:28:48Z`. The reconciliation is paused until the specified time is passed.
 
     - To pause the reconciliation indefinitely, enter the following command:
 
@@ -750,129 +752,15 @@ Procedure
 
 </div>
 
-# Scaling down the data plane to zero
+# Resolving agent service failures for hosted control planes on IBM Z
 
-If you are not using the hosted control plane, to save the resources and cost you can scale down a data plane to zero.
+In some cases, agents might fail to join the cluster after booting the machines with the boot artifacts.
 
-> [!NOTE]
-> Ensure you are prepared to scale down the data plane to zero. Because the workload from the worker nodes disappears after scaling down.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Set the `kubeconfig` file to access the hosted cluster by running the following command:
-
-    ``` terminal
-    $ export KUBECONFIG=<install_directory>/auth/kubeconfig
-    ```
-
-2.  Get the name of the `NodePool` resource associated to your hosted cluster by running the following command:
-
-    ``` terminal
-    $ oc get nodepool --namespace <hosted_cluster_namespace>
-    ```
-
-3.  Optional: To prevent the pods from draining, add the `nodeDrainTimeout` field in the `NodePool` resource by running the following command:
-
-    ``` terminal
-    $ oc edit nodepool <nodepool_name>  --namespace <hosted_cluster_namespace>
-    ```
-
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example output
-
-    </div>
-
-    ``` yaml
-    apiVersion: hypershift.openshift.io/v1alpha1
-    kind: NodePool
-    metadata:
-    # ...
-      name: nodepool-1
-      namespace: clusters
-    # ...
-    spec:
-      arch: amd64
-      clusterName: clustername
-      management:
-        autoRepair: false
-        replace:
-          rollingUpdate:
-            maxSurge: 1
-            maxUnavailable: 0
-          strategy: RollingUpdate
-        upgradeType: Replace
-      nodeDrainTimeout: 0s
-      nodeVolumeDetachTimeout: 0
-    # ...
-    ```
-
-    </div>
-
-    `spec.arch.clusterName`
-    Defines the name of your hosted cluster.
-
-    `spec.nodeDrainTimeout`
-    Specifies the total amount of time that the controller spends to drain a node. By default, the `nodeDrainTimeout: 0s` setting blocks the node draining process. To allow the node draining process to continue for a certain period of time, you can set the value of the `nodeDrainTimeout` field; for example, `nodeDrainTimeout: 1m`.
-
-    `spec.nodeVolumeDetachTimeout`
-    Specifies the total amount of time that the controller spends detaching volumes from a node. By default, the `0` setting blocks the volume detachment process.
-
-    > [!NOTE]
-    > To prevent nodes from getting stuck when scaling down, set the `.spec.nodeDrainTimeout` and `.spec.nodeVolumeDetachTimeout` in the `NodePool` resource to a value greater than `0`. This setting forces nodes to be removed after the timeout specified in the field is reached, regardless of whether the node can be drained or the volumes can be detached.
-
-4.  Scale down the `NodePool` resource associated to your hosted cluster by running the following command:
-
-    ``` terminal
-    $ oc scale nodepool/<nodepool_name> --namespace <hosted_cluster_namespace> \
-      --replicas=0
-    ```
-
-    > [!NOTE]
-    > After scaling down the data plan to zero, some pods in the control plane stay in the `Pending` status and the hosted control plane stays up and running. If necessary, you can scale up the `NodePool` resource.
-
-5.  Optional: Scale up the `NodePool` resource associated to your hosted cluster by running the following command:
-
-    ``` terminal
-    $ oc scale nodepool/<nodepool_name> --namespace <hosted_cluster_namespace> --replicas=1
-    ```
-
-    After rescaling the `NodePool` resource, wait for couple of minutes for the `NodePool` resource to become available in a `Ready` state.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-- Verify that the value for the `nodeDrainTimeout` field is greater than `0s` by running the following command:
-
-  ``` terminal
-  $ oc get nodepool -n <hosted_cluster_namespace> <nodepool_name> -ojsonpath='{.spec.nodeDrainTimeout}'
-  ```
-
-</div>
-
-# Agent service failures and agents not joining the cluster
-
-In some cases, agents might fail to join the cluster after booting the machines with the boot artifacts. You can confirm this issue by checking the `agent.service` logs for the following error:
+You can confirm this issue by checking the `agent.service` logs for the following error:
 
     Error: copying system image from manifest list: Source image rejected: A signature was required, but no signature exists
 
-> [!NOTE]
-> This issue occurs because image signature verification fails when no signature is present. As a workaround, you can disable signature verification by modifying the container policy.
+This issue occurs because image signature verification fails when no signature is present. As a workaround, you can disable signature verification by modifying the container policy.
 
 <div>
 
@@ -884,7 +772,7 @@ Procedure
 
 1.  Add the `ignitionConfigOverride` field in the `InfraEnv` manifest to override the `/etc/containers/policy.json` file. This disables signature verification for container images.
 
-2.  Replace the base64-encoded content in the `ignitionConfigOverride` with the required `/etc/containers/policy.json` configuration according to your image registries.
+2.  Replace the base64-encoded content in the `ignitionConfigOverride` with the required `/etc/containers/policy.json` configuration according to your image registries. See the following example:
 
     <div class="formalpara">
 
@@ -931,7 +819,7 @@ Procedure
 
     <div class="title">
 
-    Example InfraEnv manifest with `ignitionConfigOverride`
+    Example `InfraEnv` manifest with `ignitionConfigOverride`
 
     </div>
 
@@ -953,11 +841,9 @@ Procedure
 
 </div>
 
-# Troubleshooting internal subnets for hosted clusters
+# Known limitations for internal subnets for hosted clusters
 
-If you encounter issues releated to subnets on hosted control planes, the following information can help you determine the cause and find a resolution.
-
-The following known limitations exist related to internal subnets on hosted clusters:
+Several known limitations exist for internal subnets on hosted clusters.
 
 - IPv6 subnets are not supported.
 
@@ -990,7 +876,7 @@ Procedure
 
 ## Setting CIDR values in internal subnet fields
 
-If the `internalJoinSubnet` field and the `internalTransitSwitchSubnet` field are set to the same CIDR values, an error occurs.
+If the `internalJoinSubnet` field and the `internalTransitSwitchSubnet` field are set to the same classless inter-domain routing (CIDR) values, an error occurs.
 
 <div>
 
@@ -1003,11 +889,18 @@ Procedure
 - Use different subnets for each field, as shown in the following example:
 
   ``` yaml
-  # ...
-  ovnKubernetesConfig:
-    ipv4:
-      internalJoinSubnet: "100.99.0.0/16"
-      internalTransitSwitchSubnet: "100.69.0.0/16"
+  apiVersion: hypershift.openshift.io/v1beta1
+  kind: HostedCluster
+  metadata:
+    # ...
+  spec:
+    #...
+    operatorConfiguration:
+      clusterNetworkOperator:
+        ovnKubernetesConfig:
+          ipv4:
+            internalJoinSubnet: "100.99.0.0/16"
+            internalTransitSwitchSubnet: "100.69.0.0/16"
   # ...
   ```
 
@@ -1015,7 +908,7 @@ Procedure
 
 ## Ensuring a valid IPv4 CIDR format
 
-If you do not specify subnets in a valid CIDR format, an error occurs.
+If you do not specify subnets in a valid classless inter-domain range (CIDR) format, an error occurs.
 
 <div>
 
@@ -1039,36 +932,36 @@ Procedure
   `Y`
   is a value from `0` to `30`.
 
-</div>
+  <div class="formalpara">
 
-<div class="formalpara">
+  <div class="title">
 
-<div class="title">
+  Valid examples
 
-Valid examples
+  </div>
 
-</div>
+  ``` text
+  100.99.0.0/16
+  192.168.1.0/24
+  ```
 
-``` text
-100.99.0.0/16
-192.168.1.0/24
-```
+  </div>
 
-</div>
+  <div class="formalpara">
 
-<div class="formalpara">
+  <div class="title">
 
-<div class="title">
+  Invalid examples
 
-Invalid examples
+  </div>
 
-</div>
+  ``` text
+  100.99.0.0
+  256.1.1.0/16
+  0.99.0.0/16
+  ```
 
-``` text
-100.99.0.0
-256.1.1.0/16
-0.99.0.0/16
-```
+  </div>
 
 </div>
 
@@ -1142,6 +1035,6 @@ Procedure
       --kubeconfig=hosted-kubeconfig
     ```
 
-</div>
+    If the rollout is stuck, you might need to revert the configuration change.
 
-If the rollout is stuck, you might need to revert the configuration change.
+</div>

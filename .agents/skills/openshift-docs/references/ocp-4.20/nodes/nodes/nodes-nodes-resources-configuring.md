@@ -25,7 +25,7 @@ An allocated amount of a resource is computed based on the following formula:
 
 If `Allocatable` is negative, it is set to `0`.
 
-Each node reports the system resources that are used by the container runtime and kubelet. To simplify configuring the `system-reserved` parameter, view the resource use for the node by using the node summary API. The node summary is available at `/api/v1/nodes/<node>/proxy/stats/summary`.
+Each node reports the system resources that are used by the container runtime and kubelet. To simplify configuring the `system-reserved` parameter, view the resource use for the node by using the node summary API. The node summary is available at `/api/v1/nodes/<node>/proxy/stats/summary`. For more information, see "Node metrics data".
 
 ## How nodes enforce resource constraints
 

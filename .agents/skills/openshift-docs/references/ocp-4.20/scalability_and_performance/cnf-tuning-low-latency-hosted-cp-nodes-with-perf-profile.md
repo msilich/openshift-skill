@@ -233,7 +233,7 @@ Procedure
     ``` terminal
     $ podman run --entrypoint performance-profile-creator \
         -v /path/to/must-gather:/must-gather:z \
-        registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.17 \
+        registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.20 \
         --must-gather-dir-path /must-gather \
         --reserved-cpu-count=2 \
         --rt-kernel=false \

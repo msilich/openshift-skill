@@ -2,7 +2,7 @@
 
 You can install the Migration Toolkit for Containers (MTC) on OpenShift Container Platform 3 and 4.
 
-After you install the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.17 by using the Operator Lifecycle Manager, you manually install the legacy Migration Toolkit for Containers Operator on OpenShift Container Platform 3.
+After you install the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.20 by using the Operator Lifecycle Manager, you manually install the legacy Migration Toolkit for Containers Operator on OpenShift Container Platform 3.
 
 By default, the MTC web console and the `Migration Controller` pod run on the target cluster. You can configure the `Migration Controller` custom resource manifest to run the MTC web console and the `Migration Controller` pod on a [source cluster or on a remote cluster](https://access.redhat.com/articles/5064151).
 
@@ -138,9 +138,9 @@ Procedure
 
 </div>
 
-# Installing the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.17
+# Installing the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.20
 
-You install the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.17 by using the Operator Lifecycle Manager.
+You install the Migration Toolkit for Containers Operator on OpenShift Container Platform 4.20 by using the Operator Lifecycle Manager.
 
 <div>
 
@@ -186,7 +186,7 @@ Procedure
 
 For OpenShift Container Platform 4.1 and earlier versions, you must configure proxies in the `MigrationController` custom resource (CR) manifest after you install the Migration Toolkit for Containers Operator because these versions do not support a cluster-wide `proxy` object.
 
-For OpenShift Container Platform 4.2 to 4.17, the MTC inherits the cluster-wide proxy settings. You can change the proxy parameters if you want to override the cluster-wide proxy settings.
+For OpenShift Container Platform 4.2 to 4.20, the MTC inherits the cluster-wide proxy settings. You can change the proxy parameters if you want to override the cluster-wide proxy settings.
 
 ## Direct volume migration
 

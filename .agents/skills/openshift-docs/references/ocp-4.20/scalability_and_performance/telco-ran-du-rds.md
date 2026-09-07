@@ -8,7 +8,7 @@ Specific limits, requirements, and engineering considerations for individual com
 
 # Reference design specifications for telco RAN DU 5G deployments
 
-Red Hat and certified partners offer deep technical expertise and support for networking and operational capabilities required to run telco applications on OpenShift Container Platform 4.17 clusters.
+Red Hat and certified partners offer deep technical expertise and support for networking and operational capabilities required to run telco applications on OpenShift Container Platform 4.20 clusters.
 
 Red Hat’s telco partners require a well-integrated, well-tested, and stable environment that can be replicated at scale for enterprise 5G solutions. The telco core and RAN DU reference design specifications (RDS) outline the recommended solution architecture based on a specific version of OpenShift Container Platform. Each RDS describes a tested and validated platform configuration for telco core and RAN DU use models. The RDS ensures an optimal experience when running your applications by defining the set of critical KPIs for telco 5G core and RAN DU. Following the RDS minimizes high severity escalations and improves application stability.
 
@@ -64,7 +64,7 @@ Deviation from the RDS can have some or all of the following consequences:
 The RAN DU use model configures an OpenShift Container Platform cluster running on commodity hardware for hosting RAN distributed unit (DU) workloads. Model and system level considerations are described below. Specific limits, requirements and engineering considerations for individual components are detailed in later sections.
 
 > [!NOTE]
-> For details of the telco RAN DU RDS KPI test results, see the [telco RAN DU 4.17 reference design specification KPI test results](https://access.redhat.com/articles/7137863). This information is only available to customers and partners.
+> For details of the telco RAN DU RDS KPI test results, see the [telco RAN DU 4.20 reference design specification KPI test results](https://access.redhat.com/articles/7137863). This information is only available to customers and partners.
 
 Cluster topology
 The recommended topology for RAN DU workloads is single-node OpenShift. DU workloads may be run on other cluster topologies such as 3-node compact cluster, high availability (3 control plane + n worker nodes), or SNO+1 as needed. Multiple SNO clusters, or a highly-available 3-node compact cluster, are recommended over the SNO+1 topology.
@@ -469,6 +469,8 @@ Engineering considerations
 - PTP fast event notifications use `ConfigMap` CRs to persist subscriber details.
 
 - Hierarchical event subscription as described in the O-RAN specification is not supported for PTP events.
+
+- Cluster nodes must have valid NTP configurations to establish accurate time before the PTP Operator takes ownership of node timing.
 
 - The PTP fast events REST API v1 is end of life.
 
@@ -1164,7 +1166,7 @@ Procedure
 2.  Extract the content from the `ztp-site-generate-rhel8` container image by running the following commands::
 
     ``` terminal
-    $ podman pull registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17
+    $ podman pull registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20
     ```
 
     ``` terminal
@@ -1172,7 +1174,7 @@ Procedure
     ```
 
     ``` terminal
-    $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17 extract /home/ztp --tar | tar x -C ./out
+    $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20 extract /home/ztp --tar | tar x -C ./out
     ```
 
 3.  Compare the configuration for your cluster to the reference configuration by running the following command:
@@ -1275,9 +1277,9 @@ Additional resources
 
 </div>
 
-# Telco RAN DU 4.17 validated software components
+# Telco RAN DU 4.20 validated software components
 
-The Red Hat telco RAN DU 4.17 solution has been validated using the following Red Hat software products for OpenShift Container Platform managed clusters.
+The Red Hat telco RAN DU 4.20 solution has been validated using the following Red Hat software products for OpenShift Container Platform managed clusters.
 
 | Component                                | Software version |
 |------------------------------------------|------------------|

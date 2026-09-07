@@ -132,7 +132,7 @@ As a cluster administrator, ensure that a namespace admin user has editor roles 
 
 - `nonadmindownloadrequests.oadp.openshift.io`
 
-For more details on the namespace `admin` role, see [Default cluster roles](https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/authentication_and_authorization/using-rbac#default-roles_using-rbac).
+For more details on the namespace `admin` role, see [Default cluster roles](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/authentication_and_authorization/using-rbac#default-roles_using-rbac).
 
 A cluster administrator can also define their own specifications so that users can have rights similar to `project` or namespace `admin` roles.
 

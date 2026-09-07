@@ -48,7 +48,7 @@ Procedure
 2.  Export the `argocd` directory from the `ztp-site-generate` container image:
 
     ``` terminal
-    $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17 extract /home/ztp --tar | tar x -C ./out
+    $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20 extract /home/ztp --tar | tar x -C ./out
     ```
 
     The `./out` directory has the reference `PolicyGenerator` and `SiteConfig` CRs in the `out/argocd/example/` folder.
@@ -252,7 +252,7 @@ Procedure
 5.  Generate the Day 0 installation CRs by processing the modified `SiteConfig` CR `site-1-sno.yaml` by running the following command:
 
     ``` terminal
-    $ podman run -it --rm -v `pwd`/out/argocd/example/siteconfig:/resources:Z -v `pwd`/site-install:/output:Z,U registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17 generator install site-1-sno.yaml /output
+    $ podman run -it --rm -v `pwd`/out/argocd/example/siteconfig:/resources:Z -v `pwd`/site-install:/output:Z,U registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20 generator install site-1-sno.yaml /output
     ```
 
     <div class="formalpara">
@@ -293,7 +293,7 @@ Procedure
     2.  Generate the `MachineConfig` installation CRs:
 
         ``` terminal
-        $ podman run -it --rm -v `pwd`/out/argocd/example/siteconfig:/resources:Z -v `pwd`/site-machineconfig:/output:Z,U registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17 generator install -E site-1-sno.yaml /output
+        $ podman run -it --rm -v `pwd`/out/argocd/example/siteconfig:/resources:Z -v `pwd`/site-machineconfig:/output:Z,U registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20 generator install -E site-1-sno.yaml /output
         ```
 
         <div class="formalpara">
@@ -325,7 +325,7 @@ Procedure
     2.  Generate and export the Day 2 configuration CRs:
 
         ``` terminal
-        $ podman run -it --rm -v `pwd`/out/argocd/example/acmpolicygenerator:/resources:Z -v `pwd`/ref:/output:Z,U registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17 generator config -N . /output
+        $ podman run -it --rm -v `pwd`/out/argocd/example/acmpolicygenerator:/resources:Z -v `pwd`/ref:/output:Z,U registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20 generator config -N . /output
         ```
 
         The command generates example group and site-specific `PolicyGenerator` CRs for single-node OpenShift, three-node clusters, and standard clusters in the `./ref` folder.
@@ -479,7 +479,7 @@ Procedure
 
 # Configuring Discovery ISO kernel arguments for manual installations using GitOps ZTP
 
-The GitOps Zero Touch Provisioning (ZTP) workflow uses the Discovery ISO as part of the OpenShift Container Platform installation process on managed bare-metal hosts. You can edit the `InfraEnv` resource to specify kernel arguments for the Discovery ISO. This is useful for cluster installations with specific environmental requirements. For example, configure the `rd.net.timeout.carrier` kernel argument for the Discovery ISO to facilitate static networking for the cluster or to receive a DHCP address before downloading the root file system during installation. In OpenShift Container Platform 4.17, you can only add kernel arguments. You can not replace or delete kernel arguments.
+The GitOps Zero Touch Provisioning (ZTP) workflow uses the Discovery ISO as part of the OpenShift Container Platform installation process on managed bare-metal hosts. You can edit the `InfraEnv` resource to specify kernel arguments for the Discovery ISO. This is useful for cluster installations with specific environmental requirements. For example, configure the `rd.net.timeout.carrier` kernel argument for the Discovery ISO to facilitate static networking for the cluster or to receive a DHCP address before downloading the root file system during installation. In OpenShift Container Platform 4.20, you can only add kernel arguments. You can not replace or delete kernel arguments.
 
 <div>
 
@@ -593,15 +593,15 @@ Procedure
 
 </div>
 
-1.  Create a `ClusterImageSet` for each specific cluster version to be deployed, for example `clusterImageSet-4.17.yaml`. A `ClusterImageSet` has the following format:
+1.  Create a `ClusterImageSet` for each specific cluster version to be deployed, for example `clusterImageSet-4.20.yaml`. A `ClusterImageSet` has the following format:
 
     ``` yaml
     apiVersion: hive.openshift.io/v1
     kind: ClusterImageSet
     metadata:
-      name: openshift-4.17.0
+      name: openshift-4.20.0
     spec:
-       releaseImage: quay.io/openshift-release-dev/ocp-release:4.17.0-x86_64
+       releaseImage: quay.io/openshift-release-dev/ocp-release:4.20.0-x86_64
     ```
 
     where:
@@ -615,7 +615,7 @@ Procedure
 2.  Apply the `clusterImageSet` CR:
 
     ``` terminal
-    $ oc apply -f clusterImageSet-4.17.yaml
+    $ oc apply -f clusterImageSet-4.20.yaml
     ```
 
 3.  Create the `Namespace` CR in the `cluster-namespace.yaml` file:

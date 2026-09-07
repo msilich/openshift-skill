@@ -106,7 +106,7 @@ Additional resources
 
 </div>
 
-## Firewall and port requirements
+## OpenShift Virtualization firewall and port requirements
 
 Ensure that you meet the firewall and port requirements so that ports can communicate between the management cluster, the control plane, and hosted clusters.
 
@@ -1383,7 +1383,7 @@ Additional resources
 
 </div>
 
-- [Scaling down the data plane to zero](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.15/html/hosted_control_planes/troubleshooting-hosted-control-planes#scale-down-data-plane_hcp-troubleshooting)
+- [Scaling down the data plane to zero](../hcp-machine-config.md#scale-down-data-plane_hcp-machine-config)
 
 </div>
 

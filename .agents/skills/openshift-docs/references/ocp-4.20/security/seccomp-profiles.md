@@ -2,7 +2,7 @@
 
 An OpenShift Container Platform container or a pod runs a single application that performs one or more well-defined tasks. The application usually requires only a small subset of the underlying operating system kernel APIs. Secure computing mode, seccomp, is a Linux kernel feature that can be used to limit the process running in a container to only using a subset of the available system calls.
 
-The `restricted-v2` SCC applies to all newly created pods in 4.17. The default seccomp profile `runtime/default` is applied to these pods.
+The `restricted-v2` SCC applies to all newly created pods in 4.20. The default seccomp profile `runtime/default` is applied to these pods.
 
 Seccomp profiles are stored as JSON files on the disk.
 
@@ -11,7 +11,7 @@ Seccomp profiles are stored as JSON files on the disk.
 
 # Verifying the default seccomp profile applied to a pod
 
-OpenShift Container Platform ships with a default seccomp profile that is referenced as `runtime/default`. In 4.17, newly created pods have the Security Context Constraint (SCC) set to `restricted-v2` and the default seccomp profile applies to the pod.
+OpenShift Container Platform ships with a default seccomp profile that is referenced as `runtime/default`. In 4.20, newly created pods have the Security Context Constraint (SCC) set to `restricted-v2` and the default seccomp profile applies to the pod.
 
 <div>
 
@@ -102,13 +102,13 @@ Procedure
 
         - The `restricted-v2` SCC is added by default if your workload does not have access to a different SCC.
 
-        - Newly created pods in 4.17 will have the seccomp profile configured to `runtime/default` as mandated by the SCC.
+        - Newly created pods in 4.20 will have the seccomp profile configured to `runtime/default` as mandated by the SCC.
 
 </div>
 
 ## Upgraded cluster
 
-In clusters upgraded to 4.17 all authenticated users have access to the `restricted` and `restricted-v2` SCC.
+In clusters upgraded to 4.20 all authenticated users have access to the `restricted` and `restricted-v2` SCC.
 
 A workload admitted by the SCC `restricted` for example, on a OpenShift Container Platform v4.10 cluster when upgraded may get admitted by `restricted-v2`. This is because `restricted-v2` is the more restrictive SCC between `restricted` and `restricted-v2`.
 
@@ -129,7 +129,7 @@ A workload with `privilegeEscalation: true` may be admitted into a newly install
 $ oc -n <workload-namespace> adm policy add-scc-to-user <scc-name> -z <serviceaccount_name>
 ```
 
-In OpenShift Container Platform 4.17 the ability to add the pod annotations `seccomp.security.alpha.kubernetes.io/pod: runtime/default` and `container.seccomp.security.alpha.kubernetes.io/<container_name>: runtime/default` is deprecated.
+In OpenShift Container Platform 4.20 the ability to add the pod annotations `seccomp.security.alpha.kubernetes.io/pod: runtime/default` and `container.seccomp.security.alpha.kubernetes.io/<container_name>: runtime/default` is deprecated.
 
 # Configuring a custom seccomp profile
 
@@ -272,7 +272,7 @@ Procedure
 
   - Provide the name of your custom seccomp profile.
 
-    Alternatively, you can use the pod annotations `seccomp.security.alpha.kubernetes.io/pod: localhost/<custom-name>.json`. However, this method is deprecated in OpenShift Container Platform 4.17.
+    Alternatively, you can use the pod annotations `seccomp.security.alpha.kubernetes.io/pod: localhost/<custom-name>.json`. However, this method is deprecated in OpenShift Container Platform 4.20.
 
 </div>
 

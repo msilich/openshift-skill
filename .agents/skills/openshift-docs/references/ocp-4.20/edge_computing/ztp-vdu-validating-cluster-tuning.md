@@ -18,7 +18,7 @@ Additional resources
 
 # Recommended firmware configuration for vDU cluster hosts
 
-Use the following table as the basis to configure the cluster host firmware for vDU applications running on OpenShift Container Platform 4.17.
+Use the following table as the basis to configure the cluster host firmware for vDU applications running on OpenShift Container Platform 4.20.
 
 > [!NOTE]
 > The following table is a general recommendation for vDU cluster host firmware configuration. Exact firmware settings will depend on your requirements and specific hardware platform. Automatic setting of firmware is not handled by the zero touch provisioning pipeline.
@@ -52,7 +52,7 @@ Recommended cluster host firmware settings
 
 # Recommended cluster configurations to run vDU applications
 
-Clusters running virtualized distributed unit (vDU) applications require a highly tuned and optimized configuration. The following information describes the various elements that you require to support vDU workloads in OpenShift Container Platform 4.17 clusters.
+Clusters running virtualized distributed unit (vDU) applications require a highly tuned and optimized configuration. The following information describes the various elements that you require to support vDU workloads in OpenShift Container Platform 4.20 clusters.
 
 ## Recommended cluster MachineConfig CRs for single-node OpenShift clusters
 
@@ -334,7 +334,7 @@ Check that the kernel version listed for the cluster’s current release matches
 
 # Checking that the recommended cluster configurations are applied
 
-You can check that clusters are running the correct configuration. The following procedure describes how to check the various configurations that you require to deploy a DU application in OpenShift Container Platform 4.17 clusters.
+You can check that clusters are running the correct configuration. The following procedure describes how to check the various configurations that you require to deploy a DU application in OpenShift Container Platform 4.20 clusters.
 
 <div>
 

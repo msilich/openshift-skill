@@ -44,7 +44,7 @@ Procedure
 
 # Removing cert-manager Operator for Red Hat OpenShift resources
 
-Once you have uninstalled the cert-manager Operator for Red Hat OpenShift, you have the option to eliminate its associated resources from your cluster.
+After you uninstall the cert-manager Operator for Red Hat OpenShift, you can delete its associated resources from your cluster.
 
 <div>
 

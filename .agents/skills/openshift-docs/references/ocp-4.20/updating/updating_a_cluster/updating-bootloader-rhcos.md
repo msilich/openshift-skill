@@ -119,7 +119,7 @@ Procedure
 1.  Create a Butane config file, `99-worker-bootupctl-update.bu`, including the contents of the `bootupctl-update.service` systemd unit.
 
     > [!NOTE]
-    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
     <div class="formalpara">
 
@@ -131,7 +131,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 99-worker-chrony
       labels:

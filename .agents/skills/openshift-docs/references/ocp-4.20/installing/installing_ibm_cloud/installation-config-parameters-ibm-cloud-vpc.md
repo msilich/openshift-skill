@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Before you deploy an OpenShift Container Platform cluster on IBM Cloud®, you provide parameters to customize your cluster and the platform that hosts it. When you create the `install-config.yaml` file, you provide values for the required parameters through the command line. You can then modify the `install-config.yaml` file to customize your cluster further.
+Before you deploy an OpenShift Container Platform cluster on IBM Cloud®, you give values for parameters to customize your cluster and the platform that hosts it.
+
+When you create the `install-config.yaml` file, you give values for the required parameters through the command line. You can then change the `install-config.yaml` file to customize your cluster further.
 
 # Available installation configuration parameters for IBM Cloud
 
-To customize your cluster installation, configuration parameters are available to use in the `install-config.yaml` file.
+To customize your cluster installation, you can use configuration parameters in the `install-config.yaml` file.
 
 The following tables specify the required, optional, and IBM Cloud-specific installation configuration parameters that you can set as part of the installation process.
 
@@ -168,7 +170,7 @@ Only IPv4 addresses are supported.
 <div class="note">
 <div class="title">
 &#10;</div>
-<p>Set the <code>networking.machineNetwork</code> to match the CIDR that the preferred NIC resides in.</p>
+<p>Set the <code>networking.machineNetwork</code> to match the CIDR of the preferred NIC.</p>
 </div></td>
 </tr>
 <tr>

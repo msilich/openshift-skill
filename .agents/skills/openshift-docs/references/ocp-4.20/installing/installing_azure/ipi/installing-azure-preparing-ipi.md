@@ -1,16 +1,32 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-To prepare for installation of an OpenShift Container Platform cluster on Azure, complete the following steps:
+Before you install an OpenShift Container Platform cluster on Azure with installer-provisioned infrastructure, you must configure your account, obtain the installation program and `oc` CLI, and optionally prepare disk encryption sets.
 
-- You have [selected a cluster installation method](../../overview/installing-preparing.md#installing-preparing).
+# Prerequisites for installing a cluster on Azure
 
-- You [configured an Azure account](../installing-azure-account.md#installing-azure-account) to host the cluster and determined the tested and validated region to deploy the cluster to.
+Before you install an OpenShift Container Platform cluster on Azure, ensure that you have selected a cluster installation method and configured an Azure account to host the cluster and determine the tested and validated region to deploy the cluster to.
 
-- If you use a firewall, you have [configured it to allow the sites](../../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall) that your cluster requires access to.
+If you use a firewall, you must configure it to allow the sites that your cluster requires access to.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Select a cluster installation method](../../overview/installing-preparing.md#installing-preparing)
+
+- [Configure an Azure account](../installing-azure-account.md#installing-azure-account)
+
+- [Configure your firewall](../../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall)
+
+</div>
 
 # Internet access for OpenShift Container Platform
 
-In OpenShift Container Platform 4.17, you require access to the internet to install your cluster.
+In OpenShift Container Platform 4.20, you require access to the internet to install your cluster.
 
 You must have internet access to perform the following actions:
 
@@ -102,7 +118,7 @@ Procedure
     $ ssh-add <path>/<file_name>
     ```
 
-    Specifies the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`
+    Specify the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`.
 
     <div class="formalpara">
 
@@ -134,7 +150,7 @@ Next steps
 
 # Obtaining the installation program
 
-Before you install OpenShift Container Platform, download the installation file on the host you are using for installation.
+Before you install OpenShift Container Platform, download the installation file on the host you are using for installation, so that installation assets exist for deployment in your environment.
 
 <div>
 
@@ -215,7 +231,7 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 Linux Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 Linux Clients** entry and save the file.
 
 5.  Unpack the archive:
 
@@ -225,7 +241,7 @@ Procedure
 
 6.  Place the `oc` binary in a directory that is on your `PATH`.
 
-    To check your `PATH`, execute the following command:
+    To check your `PATH`, run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -270,13 +286,13 @@ Procedure
 
 2.  Select the appropriate version from the **Version** list.
 
-3.  Click **Download Now** next to the **OpenShift v4.17 Windows Client** entry and save the file.
+3.  Click **Download Now** next to the **OpenShift v4.20 Windows Client** entry and save the file.
 
 4.  Extract the archive with a ZIP program.
 
 5.  Move the `oc` binary to a directory that is on your `PATH` variable.
 
-    To check your `PATH` variable, open the command prompt and execute the following command:
+    To check your `PATH` variable, open the Command Prompt and run the following command:
 
     ``` terminal
     C:\> path
@@ -323,16 +339,16 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 macOS Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 macOS Clients** entry and save the file.
 
     > [!NOTE]
-    > For macOS arm64, choose the **OpenShift v4.17 macOS arm64 Client** entry.
+    > For macOS arm64, choose the **OpenShift v4.20 macOS arm64 Client** entry.
 
-5.  Unpack and unzip the archive.
+5.  Extract the archive.
 
 6.  Move the `oc` binary to a directory on your `PATH` variable.
 
-    To check your `PATH` variable, open a terminal and execute the following command:
+    To check your `PATH` variable, open a terminal and run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -370,7 +386,7 @@ Additional resources
 
 </div>
 
-- For more information about the Telemetry service, see [About remote health monitoring](../../../support/remote_health_monitoring/about-remote-health-monitoring.md#about-remote-health-monitoring)
+- [About remote health monitoring](../../../support/remote_health_monitoring/about-remote-health-monitoring.md#about-remote-health-monitoring)
 
 </div>
 
@@ -444,7 +460,7 @@ Prerequisite
 
 # Preparing an Azure Disk Encryption Set
 
-The OpenShift Container Platform installer can use an existing Disk Encryption Set with a user-managed key. To enable this feature, you can create a Disk Encryption Set in Azure and provide the key to the installer.
+To use an existing Disk Encryption Set with a user-managed key in OpenShift Container Platform on Azure, you must create a Disk Encryption Set in Azure and provide the key to the installation program.
 
 <div>
 
@@ -461,9 +477,13 @@ Procedure
         LOCATION="<location>"
     ```
 
-    - Specifies the name of the Azure resource group where the Disk Encryption Set and encryption key are to be created. To prevent losing access to your keys when you destroy the cluster, create the Disk Encryption Set in a separate resource group from the one where you install the cluster.
+    where:
 
-    - Specifies the Azure location where the resource group is to be created.
+    `<resource_group>`
+    Specifies the name of the Azure resource group where you create the Disk Encryption Set and encryption key. To prevent losing access to your keys when you delete the cluster, create the Disk Encryption Set in a separate resource group from the one where you install the cluster.
+
+    `<location>`
+    Specifies the Azure location where you create the resource group.
 
 2.  Set the environment variables for the Azure Key Vault and Disk Encryption Set by running the following command:
 
@@ -473,11 +493,16 @@ Procedure
         DISK_ENCRYPTION_SET_NAME="<disk_encryption_set_name>"
     ```
 
-    - Specifies the name of the Azure Key Vault to be created.
+    where:
 
-    - Specifies the name of the encryption key to be created.
+    `<keyvault_name>`
+    Specifies the name of the Azure Key Vault that you create.
 
-    - Specifies the name of the disk encryption set to be created.
+    `<keyvault_key_name>`
+    Specifies the name of the encryption key that you create.
+
+    `<disk_encryption_set_name>`
+    Specifies the name of the disk encryption set that you create.
 
 3.  Set the environment variable for the ID of your Azure service principal by running the following command:
 
@@ -485,7 +510,8 @@ Procedure
     $ export CLUSTER_SP_ID="<service_principal_id>"
     ```
 
-    - Specifies the ID of the service principal to be used for installation.
+    `<service_principal_id>`
+    Specifies the ID of the service principal that you use for installation.
 
 4.  Enable host-level encryption in Azure by running the following command:
 
@@ -565,7 +591,8 @@ Procedure
         --scope $DES_RESOURCE_ID -o jsonc
     ```
 
-    - Specifies an Azure role with read permissions to the disk encryption set. You can use the `Owner` role or a custom role with the necessary permissions.
+    `<reader_role>`
+    Specifies an Azure role with read permissions to the disk encryption set. You can use the `Owner` role or a custom role with the necessary permissions.
 
 </div>
 
@@ -573,18 +600,16 @@ Procedure
 
 <div class="title">
 
-Next steps
+Additional resources
 
 </div>
 
-- Install an OpenShift Container Platform cluster:
+- [Install a cluster with customizations on installer-provisioned infrastructure](installing-azure-customizations.md#installing-azure-customizations)
 
-  - [Install a cluster with customizations on installer-provisioned infrastructure](installing-azure-customizations.md#installing-azure-customizations)
+- [Install a cluster into an existing VNet on installer-provisioned infrastructure](installing-azure-vnet.md#installing-azure-vnet)
 
-  - [Install a cluster into an existing VNet on installer-provisioned infrastructure](installing-azure-vnet.md#installing-azure-vnet)
+- [Install a private cluster on installer-provisioned infrastructure](installing-azure-private.md#installing-azure-private)
 
-  - [Install a private cluster on installer-provisioned infrastructure](installing-azure-private.md#installing-azure-private)
-
-  - [Install a cluster into an government region on installer-provisioned infrastructure](installing-azure-government-region.md#installing-azure-government-region)
+- [Install a cluster into an government region on installer-provisioned infrastructure](installing-azure-government-region.md#installing-azure-government-region)
 
 </div>

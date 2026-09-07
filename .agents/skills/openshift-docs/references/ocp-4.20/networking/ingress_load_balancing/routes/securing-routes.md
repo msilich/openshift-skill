@@ -19,7 +19,7 @@ Cluster administrators can configure HSTS to do the following:
 > [!IMPORTANT]
 > HSTS works only with secure routes, either edge-terminated or re-encrypt. The configuration is ineffective on HTTP or passthrough routes.
 
-## Enabling HTTP Strict Transport Security per-route
+## Enable HTTP Strict Transport Security per-route
 
 To enforce secure HTTPS connections for specific applications, enable HTTP Strict Transport Security (HSTS) on a per-route basis. Applying the `haproxy.router.openshift.io/hsts_header` annotation to edge and re-encrypt routes ensures that browsers reject unencrypted traffic.
 
@@ -101,7 +101,7 @@ Procedure
 
 </div>
 
-## Disabling HTTP Strict Transport Security per-route
+## Disable HTTP Strict Transport Security per-route
 
 To allow unencrypted connections or troubleshoot access issues, disable HTTP Strict Transport Security (HSTS) for a specific route. Setting the `max-age` route annotation to `0` instructs browsers to stop enforcing HTTPS requirements on the route host.
 

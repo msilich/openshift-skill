@@ -1,34 +1,58 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+You can provision and manage Azure File storage in OpenShift Container Platform by using the Azure File Container Storage Interface (CSI) Driver Operator and driver, which provide dynamic volume provisioning and eliminate the need to pre-provision storage.
+
 # Overview
 
 OpenShift Container Platform is capable of provisioning persistent volumes (PVs) by using the Container Storage Interface (CSI) driver for Microsoft Azure File Storage.
 
-Familiarity with [persistent storage](../understanding-persistent-storage.md#understanding-persistent-storage) and [configuring CSI volumes](persistent-storage-csi.md#persistent-storage-csi) is recommended when working with a CSI Operator and driver.
+Familiarity with persistent storage and configuring CSI volumes is recommended when working with a CSI Operator and driver. For more information, see "Understanding persistent storage" and "Configuring CSI volumes".
 
 To create CSI-provisioned PVs that mount to Azure File storage assets, OpenShift Container Platform installs the Azure File CSI Driver Operator and the Azure File CSI driver by default in the `openshift-cluster-csi-drivers` namespace.
 
-- The *Azure File CSI Driver Operator* provides a storage class that is named `azurefile-csi` that you can use to create persistent volume claims (PVCs). You can disable this default storage class if desired (see [Managing the default storage class](persistent-storage-csi-sc-manage.md#persistent-storage-csi-sc-manage)).
+Azure File CSI Driver Operator
+The Azure File CSI Driver Operator provides a storage class that is named `azurefile-csi` that you can use to create persistent volume claims (PVCs). You can disable this default storage class if desired (see "Managing the default storage").
 
-- The *Azure File CSI driver* enables you to create and mount Azure File PVs. The Azure File CSI driver supports dynamic volume provisioning by allowing storage volumes to be created on-demand, eliminating the need for cluster administrators to pre-provision storage.
+Azure File CSI driver
+The Azure File CSI driver enables you to create and mount Azure File PVs. The Azure File CSI driver supports dynamic volume provisioning by allowing storage volumes to be created on-demand, eliminating the need for cluster administrators to pre-provision storage.
 
-Azure File CSI Driver Operator does not support:
+Azure File CSI Driver Operator does not support the following:
 
 - Virtual hard disks (VHD)
 
 - Running on nodes with Federal Information Processing Standard (FIPS) mode enabled for Server Message Block (SMB) file share. However, Network File System (NFS) does support FIPS mode.
 
-For more information about supported features, see [Supported CSI drivers and features](persistent-storage-csi.md#persistent-storage-csi-drivers-supported_persistent-storage-csi).
+For more information about supported features, see "Supported CSI drivers and features".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Understanding persistent storage](../understanding-persistent-storage.md#understanding-persistent-storage)
+
+- [Configuring CSI volumes](persistent-storage-csi.md#persistent-storage-csi)
+
+- [Managing the default storage class](persistent-storage-csi-sc-manage.md#persistent-storage-csi-sc-manage)
+
+- [Supported CSI drivers and features](persistent-storage-csi.md#persistent-storage-csi-drivers-supported_persistent-storage-csi)
+
+</div>
 
 # About CSI
 
-Storage vendors have traditionally provided storage drivers as part of Kubernetes. With the implementation of the Container Storage Interface (CSI), third-party providers can instead deliver storage plugins using a standard interface without ever having to change the core Kubernetes code.
+The Container Storage Interface (CSI) enables storage vendors to deliver plugins through a standard interface without modifying Kubernetes core code, replacing traditional embedded storage drivers.
 
 CSI Operators give OpenShift Container Platform users storage options, such as volume snapshots, that are not possible with in-tree volume plugins.
 
 # NFS support
 
-OpenShift Container Platform supports the Azure File Container Storage Interface (CSI) Driver Operator with Network File System (NFS) with the following restrictions:
+OpenShift Container Platform supports the Azure File Container Storage Interface (CSI) Driver Operator with Network File System (NFS).
+
+The following restrictions apply:
 
 - If you create a volume smaller than 100GiB, the CSI driver rounds it up to 100GiB.
 
@@ -43,6 +67,14 @@ OpenShift Container Platform supports the Azure File Container Storage Interface
 
 - The Azure File CSI Operator does not automatically create a storage class for NFS. You must create it manually. Use a file similar to the following:
 
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example Azure File storage class YAML file
+
+  </div>
+
   ``` yaml
   apiVersion: storage.k8s.io/v1
   kind: StorageClass
@@ -56,11 +88,13 @@ OpenShift Container Platform supports the Azure File Container Storage Interface
     - nconnect=4
   ```
 
-  - Storage class name.
+  </div>
 
-  - Specifies the Azure File CSI provider.
+- `metadata.name`: Specifies the storage class name.
 
-  - Specifies NFS as the storage backend protocol.
+- `provisioner`: Specifies the Azure File CSI provider.
+
+- `parameters.protocol`: Specifies NFS as the storage backend protocol.
 
 # Azure File cross-subscription support
 
@@ -71,7 +105,7 @@ Cross-subscription support allows you to have an OpenShift Container Platform cl
 
 ## Dynamic provisioning across subscriptions for Azure File
 
-To use Azure File dynamic provisioning across subscriptions by completing this procedure.
+Enable Azure File dynamic provisioning across Azure subscriptions by granting the cluster’s Azure identity access to a storage account in a different subscription, then creating a storage class that references the target subscription.
 
 <div>
 
@@ -130,17 +164,15 @@ Procedure
         --scope /subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/Microsoft.Storage/storageAccounts/<storage-account-name>
       ```
 
-      Where:
+      - `<object-id-or-app-id>`: Specifies the service principal or managed identity that you obtained from the previous step, such as `sp_id` or `mi_id`.
 
-      `<object-id-or-app-id>`: The service principal or managed identity that you obtained from the previous step, such as `sp_id` or `mi_id`.
+      - `<role-name>`: Specifies the role name. Contributor or your own role with required permissions.
 
-      `<role-name>`: Role name. Contributor or your own role with required permissions.
+      - `<subscription-id>`: Subscription B ID.
 
-      `<subscription-id>`: Subscription B ID.
+      - `<resource-group-name>`: Subscription B resource group name.
 
-      `<resource-group-name>`: Subscription B resource group name.
-
-      Or
+        Or
 
     - Log in to the Azure portal and on the left menu, click **Resource groups**:
 
@@ -198,15 +230,15 @@ Procedure
 
     </div>
 
-    - The name of the storage class
+    - `metadata.name`: Specifies the name of the storage class.
 
-    - The subscription B ID
+    - `parameters.subscriptionID`: Specifies the subscription B ID.
 
-    - The Subscription B resource group name
+    - `parameters.resourceGroup`: Specifies the Subscription B resource group name.
 
-    - The storage account name, if you want to specify your own
+    - `parameters.storageAccount`: Specifies the storage account name, if you want to specify your own.
 
-    - The name of the SKU type
+    - `parameters.skuName`: Specifies the name of the SKU type.
 
 4.  Create a persistent volume claim (PVC) that specifies the Azure File storage class that you created in the previous step by using a similar configuration to the following:
 
@@ -234,13 +266,18 @@ Procedure
 
     </div>
 
-    - The name of the PVC.
+    - `metadata.name`: Specifies the name of the PVC.
 
-    - The name of the storage class that you created in the previous step.
+    - `spec.storageClassName`: Specifies the name of the storage class that you created in the previous step.
 
 </div>
 
 ## Static provisioning across subscriptions for Azure File by creating a PV and PVC:
+
+Provision Azure File storage across subscriptions using static provisioning by creating a secret with storage credentials, then creating a persistent volume (PV) and persistent volume claim (PVC) referencing an Azure File share in a different subscription.
+
+Recommendation to use a storage class
+In the following example of static provisioning across subscriptions, the storage class referenced in the PV and PVC is not strictly necessary, as storage classes are not required to accomplish static provisioning. However, it is advisable to use a storage class to avoid cases where a manually created PVC accidentally does not match a manually created PV, and thus potentially triggers dynamic provisioning of a new PV. Other ways to avoid this issue would be to create a storage class with `provisioner: kubernetes.io/no-provisioner` or reference a non-existing storage class, which in both cases ensures that dynamic provisioning does not occur. When using either of these strategies, if a mis-matched PV and PVC occurs, the PVC stays in a pending state, and you can correct the error.
 
 <div>
 
@@ -274,7 +311,7 @@ Procedure
     $ oc create secret generic azure-storage-account-<storageaccount-name>-secret --from-literal=azurestorageaccountname="<azure-storage-account-name>" --from-literal azurestorageaccountkey="<azure-storage-account-key>" --type=Opaque
     ```
 
-    Where: `<azure-storage-account-name>` and `<azure-storage-account-key>` are the Azure storage account name and key respectively that you recorded in Step 1.
+    `<azure-storage-account-name>` and `<azure-storage-account-key>` are the Azure storage account name and key respectively that you recorded in Step 1.
 
 3.  Create a persistent volume (PV) by using a similar configuration to the following example file:
 
@@ -317,19 +354,19 @@ Procedure
 
     </div>
 
-    - The name of the PV.
+    - `metadata.name`: Specifies the name of the PV.
 
-    - The size of the PV.
+    - `spec.capacity.storage`: Specifies the size of the PV.
 
-    - The storage class name.
+    - `spec.storageClassName`: Specifies the storage class name.
 
-    - Ensure that `volumeHandle` is unique for every identical share in the cluster.
+    - `spec.csi.volumeHandle`: Specifies the `volumeHandle` parameter. Ensure that `volumeHandle` is unique for every identical share in the cluster.
 
-    - For \`\<existing-file-share-name\>, use only the file share name and not the full path.
+    - `spec.csi.volumeAttributes.shareName`: For `` <existing-file-share-name>` ``, use only the file share name and not the full path.
 
-    - The secret name created in the previous step.
+    - `spec.csi.nodeStageSecretRef.name`: Specifies the secret name created in the previous step.
 
-    - The namespace where the secret resides.
+    - `spec.csi.nodeStageSecretRef.namespace`: Specifies the namespace where the secret resides.
 
 4.  Create a persistent value claim (PVC) specifying the existing Azure File share referenced in Step 1 using a similar configuration to the following:
 
@@ -357,27 +394,15 @@ Procedure
 
     </div>
 
-    - The name of the PVC.
+    - `metadata.name`: Specifies the name of the PVC.
 
-    - The name of the storage class that you specified for the PV in the previous step.
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Recommendation to use a storage class
-
-</div>
-
-In the preceding example of static provisioning across subscriptions, the storage class referenced in the PV and PVC is not strictly necessary, as storage classes are not required to accomplish static provisioning. However, it is advisable to use a storage class to avoid cases where a manually created PVC accidentally does not match a manually created PV, and thus potentially triggers dynamic provisioning of a new PV. Other ways to avoid this issue would be to create a storage class with `provisioner: kubernetes.io/no-provisioner` or reference a non-existing storage class, which in both cases ensures that dynamic provisioning does not occur. When using either of these strategies, if a mis-matched PV and PVC occurs, the PVC stays in a pending state, and you can correct the error.
+    - `spec.storageClassName`: Specifies the name of the storage class that you specified for the PV in the previous step.
 
 </div>
 
 # Static provisioning for Azure File
 
-For static provisioning, cluster administrators create persistent volumes (PVs) that define the details of the real storage. Cluster users can then create persistent volume claims (PVCs) that consume these PVs.
+Use static provisioning to manually create persistent volumes (PVs) for existing Azure File shares. Create a secret with storage credentials, define a PV that references the share, and create a persistent volume claim (PVC) to consume the storage.
 
 <div>
 
@@ -391,15 +416,11 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To use static provisioning for Azure File:
 
 </div>
 
@@ -411,7 +432,7 @@ To use static provisioning for Azure File:
 
     - `azurestorageaccountkey`: \<account_key\>
 
-      To create a secret named *azure-secret*, run the following command:
+      To create a secret named `azure-secret`, run the following command:
 
       ``` terminal
       oc create secret generic azure-secret  -n <namespace_name> --type=Opaque --from-literal=azurestorageaccountname="<storage_account_name>" --from-literal=azurestorageaccountkey="<account_key>"
@@ -466,31 +487,31 @@ To use static provisioning for Azure File:
 
     </div>
 
-    - Volume size.
+    - `spec.capacity.storage`: Specifies the Volume size.
 
-    - Access mode. Defines the read-write and mount permissions. For more information, under *Additional resources*, see *Access modes*.
+    - `spec.accessModes`: Defines the read/write and mount permissions. For more information, see "Access modes".
 
-    - Reclaim policy. Tells the cluster what to do with the volume after it is released. Accepted values are `Retain`, `Recycle`, or `Delete`.
+    - `spec.persistentVolumeReclaimPolicy`: Specifies the Reclaim policy, which tells the cluster what to do with the volume after it is released. Accepted values are `Retain`, `Recycle`, or `Delete`.
 
-    - Storage class name. This name is used by the PVC to bind to this specific PV. For static provisioning, a `StorageClass` object does not need to exist, but the name in the PV and PVC must match.
+    - `spec.storageClassName`: Specifies the storage class name. This name is used by the PVC to bind to this specific PV. For static provisioning, a `StorageClass` object does not need to exist, but the name in the PV and PVC must match.
 
-    - Modify this permission if you want to enhance the security.
+    - `spec.mountOPtions.dir_mode=0777`: Modify this permission if you want to enhance the security.
 
-    - Cache mode. Accepted values are `none`, `strict`, and `loose`. The default is `strict`.
+    - `spec.mountOPtions.cache`: Specifies the cache mode. Accepted values are `none`, `strict`, and `loose`. The default is `strict`.
 
-    - Use to reduce the probability of a reconnect race.
+    - `spec.mountOPtions..nosharesock`: Use to reduce the probability of a reconnect race.
 
-    - The time (in seconds) that the CIFS client caches attributes of a file or directory before it requests attribute information from a server.
+    - `spec.mountOPtions.actimeo`: Specifies the time (in seconds) that the CIFS client caches attributes of a file or directory before it requests attribute information from a server.
 
-    - Disables sending byte range lock requests to the server, and for applications which have challenges with POSIX locks.
+    - `spec.mountOPtions.nobrl`: Disables sending byte range lock requests to the server, and for applications which have challenges with POSIX locks.
 
-    - Ensure that `volumeHandle` is unique across the cluster. The `resource-group-name` is the Azure resource group where the storage account resides.
+    - `csi.volumeHandle`: Specifies the `volumeHandle`. Ensure that `volumeHandle` is unique across the cluster. The `resource-group-name` is the Azure resource group where the storage account resides.
 
-    - File share name. Use only the file share name; do not use full path.
+    - `csi.volumeAttributes.shareName`: Specifies the file share name. Use only the file share name; do not use full path.
 
-    - Provide the name of the secret created in step 1 of this procedure. In this example, it is *azure-secret*.
+    - `csi.nodeStageSecretRef.name`: Provide the name of the secret created in step 1 of this procedure. In this example, it is `azure-secret`.
 
-    - The namespace that the secret was created in. This must be the namespace where the PV is consumed.
+    - `csi.nodeStageSecretRef.namespace`: Specifies the namespace that the secret was created in. This must be the namespace where the PV is consumed.
 
 3.  Create a PVC that references the PV using the following example file:
 
@@ -520,17 +541,17 @@ To use static provisioning for Azure File:
 
     </div>
 
-    - PVC name.
+    - `metadata.name`: Specifies the PVC name.
 
-    - Namespace for the PVC.
+    - `metadata.namespace`: Specifies the namespace for the PVC.
 
-    - The name of the PV that you created in the previous step.
+    - `spec.volumeName`: Specifies the name of the PV that you created in the previous step.
 
-    - Storage class name. This name is used by the PVC to bind to this specific PV. For static provisioning, a `StorageClass` object does not need to exist, but the name in the PV and PVC must match.
+    - `spec.storageClassName`: Specifies the storage class name. This name is used by the PVC to bind to this specific PV. For static provisioning, a `StorageClass` object does not need to exist, but the name in the PV and PVC must match.
 
-    - Access mode. Defines the requested read-write access for the PVC. Claims use the same conventions as volumes when requesting storage with specific access modes. For more information, under *Additional resources*, see *Access modes*.
+    - `spec.accessModes`: Specifies the access mode. Defines the requested read/write access for the PVC. Claims use the same conventions as volumes when requesting storage with specific access modes. For more information, see "Access modes".
 
-    - PVC size.
+    - `spec.resources.requests.storage`: Specifies the PVC size.
 
 4.  Ensure that the PVC is created and in `Bound` status after a while by running the following command:
 
@@ -538,22 +559,24 @@ To use static provisioning for Azure File:
     $ oc get pvc <pvc-name>
     ```
 
-    - The name of your PVC.
+    Where `<pvc-name>` is the name of your PVC.
 
-      <div class="formalpara">
+    <div class="formalpara">
 
-      <div class="title">
+    <div class="title">
 
-      Example output
+    Example output
 
-      </div>
+    </div>
 
-      ``` terminal
-      NAME       STATUS    VOLUME         CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-      pvc-name   Bound     pv-azurefile   5Gi        ReadWriteMany  my-sc          7m2s
-      ```
+    ``` terminal
+    NAME       STATUS    VOLUME         CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+    pvc-name   Bound     pv-azurefile   5Gi        ReadWriteMany  my-sc          7m2s
+    ```
 
-      </div>
+    </div>
+
+</div>
 
 <div>
 
@@ -564,8 +587,6 @@ Additional resources
 </div>
 
 - [Persistent storage using Azure File](../persistent_storage/persistent-storage-azure-file.md#persistent-storage-using-azure-file)
-
-- [Configuring CSI volumes](persistent-storage-csi.md#persistent-storage-csi)
 
 - [Access modes](../understanding-persistent-storage.md#pv-access-modes_understanding-persistent-storage)
 

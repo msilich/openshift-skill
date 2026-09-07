@@ -256,7 +256,7 @@ Procedure
 
 </div>
 
-# Creating a route using the destination CA certificate in the Ingress annotation
+# Create a route using the destination CA certificate in the Ingress annotation
 
 To define a route with a custom destination CA certificate, apply the `route.openshift.io/destination-ca-certificate-secret` annotation to an Ingress object. This configuration ensures the Ingress Controller uses the specified secret to verify the identity of the destination service.
 
@@ -456,7 +456,7 @@ Procedure
 
 </div>
 
-# Creating a route using the default certificate through an Ingress object
+# Create a route using the default certificate through an Ingress object
 
 To generate a secure, edge-terminated route that uses the default ingress certificate, specify an empty TLS configuration in the Ingress object. This configuration overrides the default behavior, preventing the creation of an insecure route.
 

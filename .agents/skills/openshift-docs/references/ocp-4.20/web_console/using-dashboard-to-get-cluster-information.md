@@ -12,7 +12,7 @@ The OpenShift Container Platform dashboard consists of the following cards:
 
 - **Details** provides a brief overview of informational cluster details.
 
-  Statuses include **ok**, **error**, **warning**, **in progress**, and **unknown**. Resources can add custom status names.
+  Statuses include **OK**, **error**, **warning**, **in progress**, and **unknown**. Resources can add custom status names.
 
   - Cluster ID
 
@@ -30,7 +30,7 @@ The OpenShift Container Platform dashboard consists of the following cards:
 
   - Bare-metal hosts in the cluster, listed according to their state (only available in **metal3** environment).
 
-- **Status** helps administrators understand how cluster resources are consumed. Click on a resource to jump to a detailed page listing pods and nodes that consume the largest amount of the specified cluster resource (CPU, memory, or storage).
+- **Status** helps administrators understand how cluster resources are consumed. Click a resource to jump to a detailed page listing pods and nodes that consume the largest amount of the specified cluster resource (CPU, memory, or storage).
 
 - **Cluster Utilization** shows the capacity of various resources over a specified period of time, to help administrators understand the scale and frequency of high resource consumption, including information about:
 
@@ -50,6 +50,6 @@ The OpenShift Container Platform dashboard consists of the following cards:
 
 You can view a graphical representation of available resources in the **Topology** view of the web console **Developer** perspective.
 
-If a resource has a message about resource limitations or quotas being reached, a yellow border appears around the resource name. Click the resource to open a side panel to see the message. If the **Topology** view has been zoomed out, a yellow dot indicates that a message is available.
+If a resource has a message about resource limitations or quotas being reached, a border is displayed around the resource name to indicate this. Click the resource to open a side panel to see the message. If the **Topology** view is zoomed out, a dot next to the resource name indicates that a message is available.
 
 If you are using **List View** from the **View Shortcuts** menu, resources appear as a list. The **Alerts** column indicates if a message is available.

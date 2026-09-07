@@ -1,23 +1,25 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Configure the `keystone` identity provider to integrate your OpenShift Container Platform cluster with Keystone to enable shared authentication with an OpenStack Keystone v3 server configured to store users in an internal database. This configuration allows users to log in to OpenShift Container Platform with their Keystone credentials.
+Configure a Keystone identity provider to connect OpenShift Container Platform to an OpenStack Keystone v3 server so that users can sign in with Keystone credentials.
 
-# About identity providers in OpenShift Container Platform
+# Identity providers in OpenShift Container Platform
 
 You can configure identity providers by creating a custom resource (CR) that describes the provider and adding it to the cluster. Identity providers enable user authentication in OpenShift Container Platform beyond the default `kubeadmin` user.
 
 > [!NOTE]
-> OpenShift Container Platform user names containing `/`, `:`, and `%` are not supported.
+> OpenShift Container Platform usernames containing `/`, `:`, and `%` are not supported.
 
 # About Keystone authentication
 
-[Keystone](http://docs.openstack.org/developer/keystone/) is an OpenStack project that provides identity, token, catalog, and policy services.
+Configure Keystone authentication in OpenShift Container Platform to share sign-in with your OpenStack Keystone server. Mapping users by Keystone ID reduces access risk when usernames are reused.
 
-You can configure the integration with Keystone so that the new OpenShift Container Platform users are based on either the Keystone user names or unique Keystone IDs. With both methods, users log in by entering their Keystone user name and password. Basing the OpenShift Container Platform users on the Keystone ID is more secure because if you delete a Keystone user and create a new Keystone user with that user name, the new user might have access to the old user’s resources.
+Map OpenShift Container Platform users to Keystone usernames or unique Keystone IDs. Users log in with their Keystone username and password.
+
+Basing users on the Keystone ID is gives each user a unique identity. If you delete a Keystone user, then create a new user with the same username but a different Keystone ID, the new user does not have access to resources of the deleted user.
 
 # Creating the secret
 
-Identity providers use OpenShift Container Platform `Secret` objects in the `openshift-config` namespace to contain the client secret, client certificates, and keys.
+You can create a TLS `Secret` object in the `openshift-config` namespace by using the `oc` CLI or by applying a YAML file to store client certificates and keys that identity providers require for secure communication.
 
 <div>
 
@@ -27,32 +29,31 @@ Procedure
 
 </div>
 
-- Create a `Secret` object that contains the key and certificate by using the following command:
+1.  Create a `Secret` object that contains the key and certificate by running the following command:
 
-  ``` terminal
-  $ oc create secret tls <secret_name> --key=key.pem --cert=cert.pem -n openshift-config
-  ```
+    ``` terminal
+    $ oc create secret tls <secret_name> --key=key.pem --cert=cert.pem -n openshift-config
+    ```
 
-  > [!TIP]
-  > You can alternatively apply the following YAML to create the secret:
-  >
-  > ``` yaml
-  > apiVersion: v1
-  > kind: Secret
-  > metadata:
-  >   name: <secret_name>
-  >   namespace: openshift-config
-  > type: kubernetes.io/tls
-  > data:
-  >   tls.crt: <base64_encoded_cert>
-  >   tls.key: <base64_encoded_key>
-  > ```
+2.  Optional: Apply the following YAML to create the secret:
+
+    ``` yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: <secret_name>
+      namespace: openshift-config
+    type: kubernetes.io/tls
+    data:
+      tls.crt: <base64_encoded_cert>
+      tls.key: <base64_encoded_key>
+    ```
 
 </div>
 
-# Creating a config map
+# Creating a ConfigMap
 
-Identity providers use OpenShift Container Platform `ConfigMap` objects in the `openshift-config` namespace to contain the certificate authority bundle. These are primarily used to contain certificate bundles needed by the identity provider.
+Create a `ConfigMap` object in the `openshift-config` namespace that contains the certificate authority bundle for the identity provider. OpenShift Container Platform uses this bundle to validate Transport Layer Security (TLS) connections to the identity provider.
 
 <div>
 
@@ -62,39 +63,32 @@ Procedure
 
 </div>
 
-- Define an OpenShift Container Platform `ConfigMap` object containing the certificate authority by using the following command. The certificate authority must be stored in the `ca.crt` key of the `ConfigMap` object.
+1.  Define an OpenShift Container Platform `ConfigMap` object containing the CA by running the following command:
 
-  ``` terminal
-  $ oc create configmap ca-config-map --from-file=ca.crt=/path/to/ca -n openshift-config
-  ```
+    ``` terminal
+    $ oc create configmap ca-config-map --from-file=ca.crt=/path/to/ca -n openshift-config
+    ```
 
-  > [!TIP]
-  > You can alternatively apply the following YAML to create the config map:
-  >
-  > ``` yaml
-  > apiVersion: v1
-  > kind: ConfigMap
-  > metadata:
-  >   name: ca-config-map
-  >   namespace: openshift-config
-  > data:
-  >   ca.crt: |
-  >     <CA_certificate_PEM>
-  > ```
+2.  Optional: Apply the following YAML to create the config map:
 
-</div>
+    ``` yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: ca-config-map
+      namespace: openshift-config
+    data:
+      ca.crt: |
+        <CA_certificate_PEM>
+    ```
 
-# Sample Keystone CR
-
-The following custom resource (CR) shows the parameters and acceptable values for a Keystone identity provider.
-
-<div class="formalpara">
-
-<div class="title">
-
-Keystone CR
+    The CA must be stored in the `ca.crt` key of the `ConfigMap` object.
 
 </div>
+
+# Sample Keystone custom resource
+
+You can configure a Keystone identity provider for your cluster by applying an `OAuth` custom resource (CR) with a `Keystone` identity provider. Review domain name, server URL, certificate authority, and TLS client certificate parameters in this sample before you connect to your Keystone server.
 
 ``` yaml
 apiVersion: config.openshift.io/v1
@@ -117,21 +111,28 @@ spec:
         name: client-key-secret
 ```
 
-</div>
+where:
 
-- This provider name is prefixed to provider user names to form an identity name.
+`spec.identityProviders.name`
+Specifies the provider name, which is prefixed to provider usernames to form an identity name.
 
-- Controls how mappings are established between this provider’s identities and `User` objects.
+`spec.identityProviders.mappingMethod`
+Specifies how mappings are established between identities from this provider and `User` objects.
 
-- Keystone domain name. In Keystone, usernames are domain-specific. Only a single domain is supported.
+`spec.identityProviders.keystone.domainName`
+Specifies the Keystone domain name. In Keystone, usernames are domain-specific. Only a single domain is supported.
 
-- The URL to use to connect to the Keystone server (required). This must use https.
+`spec.identityProviders.keystone.url`
+Specifies the URL to use to connect to the Keystone server (required). This must use `https`.
 
-- Optional: Reference to an OpenShift Container Platform `ConfigMap` object containing the PEM-encoded certificate authority bundle to use in validating server certificates for the configured URL.
+`spec.identityProviders.keystone.ca`
+Specifies an optional reference to an OpenShift Container Platform `ConfigMap` object containing the PEM-encoded certificate authority bundle to use in validating server certificates for the configured URL.
 
-- Optional: Reference to an OpenShift Container Platform `Secret` object containing the client certificate to present when making requests to the configured URL.
+`spec.identityProviders.keystone.tlsClientCert`
+Specifies an optional reference to an OpenShift Container Platform `Secret` object containing the client certificate to present when making requests to the configured URL.
 
-- Reference to an OpenShift Container Platform `Secret` object containing the key for the client certificate. Required if `tlsClientCert` is specified.
+`spec.identityProviders.keystone.tlsClientKey`
+Specifies a reference to an OpenShift Container Platform `Secret` object containing the key for the client certificate. Required if `tlsClientCert` is specified.
 
 <div>
 
@@ -141,13 +142,13 @@ Additional resources
 
 </div>
 
-- See [Identity provider parameters](../understanding-identity-provider.md#identity-provider-parameters_understanding-identity-provider) for information on parameters, such as `mappingMethod`, that are common to all identity providers.
+- [Identity provider parameters](../understanding-identity-provider.md#identity-provider-parameters_understanding-identity-provider)
 
 </div>
 
 # Adding an identity provider to your cluster
 
-After you install your cluster, add an identity provider to it so your users can authenticate.
+Apply the identity provider custom resource (CR) to your cluster after you define it. With this configuration, you can authenticate with the configured identity provider.
 
 <div>
 
@@ -157,11 +158,11 @@ Prerequisites
 
 </div>
 
-- Create an OpenShift Container Platform cluster.
+- You have access to a OpenShift Container Platform cluster.
 
-- Create the custom resource (CR) for your identity providers.
+- You have created the CR for your identity providers.
 
-- You must be logged in as an administrator.
+- You are logged in as an administrator.
 
 </div>
 
@@ -173,7 +174,7 @@ Procedure
 
 </div>
 
-1.  Apply the defined CR:
+1.  Apply the defined CR by running the following command:
 
     ``` terminal
     $ oc apply -f </path/to/CR>
@@ -188,10 +189,14 @@ Procedure
     $ oc login -u <username>
     ```
 
-3.  Confirm that the user logged in successfully, and display the user name.
+3.  Confirm that the user logged in successfully and that the username displays by running the following command:
 
     ``` terminal
     $ oc whoami
     ```
 
 </div>
+
+# Additional resources
+
+- [Keystone](http://docs.openstack.org/developer/keystone/)

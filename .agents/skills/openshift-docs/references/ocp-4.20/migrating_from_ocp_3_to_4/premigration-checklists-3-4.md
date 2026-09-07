@@ -93,7 +93,7 @@ Before you migrate your application workloads with the Migration Toolkit for Con
 
 - [ ] Internal container image dependencies are met.
 
-  If an application uses an internal image in the `openshift` namespace that is not supported by OpenShift Container Platform 4.17, you can manually update the [OpenShift Container Platform 3 image stream tag](troubleshooting-3-4.md#migration-updating-deprecated-internal-images_troubleshooting-3-4) with `podman`.
+  If an application uses an internal image in the `openshift` namespace that is not supported by OpenShift Container Platform 4.20, you can manually update the [OpenShift Container Platform 3 image stream tag](troubleshooting-3-4.md#migration-updating-deprecated-internal-images_troubleshooting-3-4) with `podman`.
 
 - [ ] The target cluster and the replication repository have sufficient storage space.
 

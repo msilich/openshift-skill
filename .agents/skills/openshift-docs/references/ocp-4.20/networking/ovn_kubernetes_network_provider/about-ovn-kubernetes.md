@@ -7,7 +7,7 @@ Part of Red Hat OpenShift Networking, the OVN-Kubernetes network plugin is the d
 > [!NOTE]
 > OVN-Kubernetes is the default networking solution for OpenShift Container Platform and single-node OpenShift deployments.
 
-OVN-Kubernetes, which arose from the OVS project, uses many of the same constructs. For example, the plugin applies OpenFlow rules to direct packet routing through the network infrastructure. For more information, see Additional resources.
+OVN-Kubernetes, which arose from the OVS project, uses many of the same constructs. For example, the plugin applies OpenFlow rules to direct packet routing through the network infrastructure. For more information, see the "Open Virtual Network website".
 
 OVN-Kubernetes is a series of daemons for OVS that transform virtual network configurations into `OpenFlow` rules. `OpenFlow` is a protocol for communicating with network switches and routers, providing a means for remotely controlling the flow of network traffic on a network device. This means that network administrators can configure, manage, and monitor the flow of network traffic.
 
@@ -114,7 +114,7 @@ The OVN-Kubernetes network plugin has specific IPv6 and dual-stack networking co
 
 # Session affinity
 
-You can use *session affinity* if you want to ensure that each time you connect to a \<service_VIP\>:\<Port\>, the traffic is always load balanced to the same back end. For more information, including how to set session affinity based on a client’s IP address, see the Additional resources.
+You can use *session affinity* if you want to ensure that each time you connect to a \<service_VIP\>:\<Port\>, the traffic is always load balanced to the same back end. For more information, including how to set session affinity based on a client’s IP address, see "Session affinity in Kubernetes".
 
 ## Stickiness timeout for session affinity
 
@@ -122,7 +122,7 @@ The OVN-Kubernetes network plugin for OpenShift Container Platform calculates th
 
 For example, if you run a `curl` command 10 times, the sticky session timer starts from the tenth packet not the first.
 
-As a result, if the client is continuously contacting the service, then the session never times out. The timeout starts when the service has not received a packet for the amount of time set by the `timeoutSeconds` parameter. For more information about `timeoutSeconds`, see the Additional resources.
+As a result, if the client is continuously contacting the service, then the session never times out. The timeout starts when the service has not received a packet for the amount of time set by the `timeoutSeconds` parameter. For more information about `timeoutSeconds`, see "Session stickiness timeout in Kubernetes".
 
 <div>
 

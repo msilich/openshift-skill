@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-In OpenShift Container Platform version 4.17, you can install a cluster with a customized network configuration on infrastructure that the installation program provisions on Azure Stack Hub. By customizing your network configuration, your cluster can coexist with existing IP address allocations in your environment and integrate with existing MTU and VXLAN configurations.
+In OpenShift Container Platform version 4.20, you can install a cluster with a customized network configuration on infrastructure that the installation program provisions on Azure Stack Hub. By customizing your network configuration, your cluster can coexist with existing IP address allocations in your environment and integrate with existing MTU and VXLAN configurations.
 
 > [!NOTE]
 > While you can select `azure` when using the installation program to deploy a cluster using installer-provisioned infrastructure, this option is only supported for the Azure Public Cloud.
@@ -20,6 +20,8 @@ In OpenShift Container Platform version 4.17, you can install a cluster with a c
 - You verified that you have approximately 16 GB of local disk space. Installing the cluster requires that you download the RHCOS virtual hard drive (VHD) cluster image and upload it to your Azure Stack Hub environment so that it is accessible during deployment. Decompressing the VHD files requires this amount of local disk space.
 
 # Uploading the RHCOS cluster image
+
+To make the RHCOS cluster image accessible during deployment, you can download and upload the image to your Azure Stack Hub environment.
 
 You must download the RHCOS virtual hard disk (VHD) cluster image and upload it to your Azure Stack Hub environment so that it is accessible during deployment.
 
@@ -191,45 +193,68 @@ additionalTrustBundle: |
     -----END CERTIFICATE-----
 ```
 
-- Required.
+where:
 
-- If you do not provide these parameters and values, the installation program provides the default value.
+`baseDomain`
+Specifies the base domain for your cluster. This parameter is required.
 
-- The `controlPlane` section is a single mapping, but the `compute` section is a sequence of mappings. To meet the requirements of the different data structures, the first line of the `compute` section must begin with a hyphen, `-`, and the first line of the `controlPlane` section must not. Although both sections currently define a single machine pool, it is possible that future versions of OpenShift Container Platform will support defining multiple compute pools during installation. Only one control plane pool is used.
+`controlPlane`
+Specifies the configuration for the machines that form the control plane. The `controlPlane` section is a single mapping. To meet the requirements of the different data structures, the first line of the `compute` section must begin with a hyphen, `-`, and the first line of the `controlPlane` section must not. Although both sections currently define a single machine pool, it is possible that future versions of OpenShift Container Platform will support defining multiple compute pools during installation. Only one control plane pool is used. If you do not provide these parameter, the installation program provides the default value.
 
-- You can specify the size of the disk to use in GB. Minimum recommendation for control plane nodes is 1024 GB.
+`compute`
+Specifies the configuration for the machines that form the compute plane. The `compute` section is a sequence of mappings. To meet the requirements of the different data structures, the first line of the `compute` section must begin with a hyphen, `-`, and the first line of the `controlPlane` section must not. Although both sections currently define a single machine pool, it is possible that future versions of OpenShift Container Platform will support defining multiple compute pools during installation. If you do not provide these parameter, the installation program provides the default value.
 
-- The name of the cluster.
+`controlPlane.platform.azure.osDisk.diskSizeGB`
+Specifies the size of the disk to use in GB. Minimum recommendation for control plane nodes is 1024 GB.
 
-- The cluster network plugin to install. The default value `OVNKubernetes` is the only supported value.
+`compute.platform.azure.osDisk.diskSizeGB`
+Specifies the size of the disk to use in GB.
 
-- The Azure Resource Manager endpoint that your Azure Stack Hub operator provides.
+`metadata.name`
+Specifies the name of the cluster. This parameter is required.
 
-- The name of the resource group that contains the DNS zone for your base domain.
+`networking.networkType`
+Specifies the cluster network plugin to install. The default value `OVNKubernetes` is the only supported value.
 
-- The name of your Azure Stack Hub local region.
+`platform.azure.armEndpoint`
+Specifies the Azure Resource Manager endpoint that your Azure Stack Hub operator provides. This parameter is required.
 
-- The name of an existing resource group to install your cluster to. If undefined, a new resource group is created for the cluster.
+`platform.azure.baseDomainResourceGroupName`
+Specifies the name of the resource group that contains the DNS zone for your base domain. This parameter is required.
 
-- The URL of a storage blob in the Azure Stack environment that contains an RHCOS VHD.
+`platform.azure.region`
+Specifies the name of your Azure Stack Hub local region. This parameter is required.
 
-- The pull secret required to authenticate your cluster.
+`platform.azure.resourceGroupName`
+Specifies the name of an existing resource group to install your cluster to. If undefined, a new resource group is created for the cluster.
 
-- Whether to enable or disable FIPS mode. By default, FIPS mode is not enabled. If FIPS mode is enabled, the Red Hat Enterprise Linux CoreOS (RHCOS) machines that OpenShift Container Platform runs on bypass the default Kubernetes cryptography suite and use the cryptography modules that are provided with RHCOS instead.
+`platform.azure.cloudName`
+Specifies the `platform.azure.cloudName` parameter. This parameter is required.
 
-  > [!IMPORTANT]
-  > When running Red Hat Enterprise Linux (RHEL) or Red Hat Enterprise Linux CoreOS (RHCOS) booted in FIPS mode, OpenShift Container Platform core components use the RHEL cryptographic libraries that have been submitted to NIST for FIPS 140-2/140-3 Validation on only the x86_64, ppc64le, and s390x architectures.
+`platform.azure.clusterOSimage`
+Specifies the URL of a storage blob in the Azure Stack environment that contains an RHCOS VHD.
 
-- You can optionally provide the `sshKey` value that you use to access the machines in your cluster.
+`pullSecret`
+Specifies the pull secret required to authenticate your cluster. This parameter is required.
 
-  > [!NOTE]
-  > For production OpenShift Container Platform clusters on which you want to perform installation debugging or disaster recovery, specify an SSH key that your `ssh-agent` process uses.
+`fips`
+Specifies whether to enable or disable FIPS mode. By default, FIPS mode is not enabled. If FIPS mode is enabled, the Red Hat Enterprise Linux CoreOS (RHCOS) machines that OpenShift Container Platform runs on bypass the default Kubernetes cryptography suite and use the cryptography modules that are provided with RHCOS instead.
 
-- If the Azure Stack Hub environment is using an internal Certificate Authority (CA), adding the CA certificate is required.
+> [!IMPORTANT]
+> When running Red Hat Enterprise Linux (RHEL) or Red Hat Enterprise Linux CoreOS (RHCOS) booted in FIPS mode, OpenShift Container Platform core components use the RHEL cryptographic libraries that have been submitted to NIST for FIPS 140-2/140-3 Validation on only the x86_64, ppc64le, and s390x architectures.
+
+`sshKey`
+Specifies the `sshKey` value that you use to access the machines in your cluster. This parameter is optional.
+
+> [!NOTE]
+> For production OpenShift Container Platform clusters on which you want to perform installation debugging or disaster recovery, specify an SSH key that your `ssh-agent` process uses.
+
+`additionalTrustBundle`
+Specifies the certificate trust bundle. If the Azure Stack Hub environment is using an internal Certificate Authority (CA), adding the CA certificate is required.
 
 # Manually manage cloud credentials
 
-The Cloud Credential Operator (CCO) only supports your cloud provider in manual mode. As a result, you must specify the identity and access management (IAM) secrets for your cloud provider.
+You must manually create and configure the identity and access management (IAM) secrets for your OpenShift Container Platform cluster because the Cloud Credential Operator (CCO) only supports manual mode for your cloud provider.
 
 <div>
 
@@ -382,7 +407,7 @@ Additional resources
 
 # Configuring the cluster to use an internal CA
 
-If the Azure Stack Hub environment is using an internal Certificate Authority (CA), update the `cluster-proxy-01-config.yaml file` to configure the cluster to use the internal CA.
+If the Azure Stack Hub environment is using an internal Certificate Authority (CA), update the `cluster-proxy-01-config.yaml` file to configure the cluster to use the internal CA.
 
 <div>
 
@@ -438,7 +463,7 @@ Procedure
 
 # Network configuration phases
 
-There are two phases prior to OpenShift Container Platform installation where you can customize the network configuration. Customize settings in the `install-config.yaml` file and in the Cluster Network Operator manifest across two configuration phases.
+You can customize your OpenShift Container Platform network plugin configuration, such as cluster network CIDR and service network ranges, during two phases before installation to integrate with your existing network environment.
 
 Phase 1
 You can customize the following network-related fields in the `install-config.yaml` file before you create the manifest files:
@@ -468,7 +493,9 @@ During phase 2, you cannot override the values that you specified in phase 1 in 
 
 # Specifying advanced network configuration
 
-To integrate your OpenShift Container Platform cluster with your existing network environment, you can specify advanced network configuration in a manifest before you install the cluster. Advanced network configuration can be configured only during cluster installation.
+You can use advanced network configuration for your OpenShift Container Platform network plugin to integrate your cluster into your existing network environment.
+
+You can specify advanced network configuration only before you install the cluster.
 
 > [!IMPORTANT]
 > Customizing your network configuration by modifying the OpenShift Container Platform manifest files created by the installation program is not supported. Applying a manifest file that you create, as in the following procedure, is supported.
@@ -499,7 +526,7 @@ Procedure
     $ ./openshift-install create manifests --dir <installation_directory>
     ```
 
-    The `<installation_directory>` specifies the name of the directory that contains the `install-config.yaml` file for your cluster.
+    where `<installation_directory>` specifies the name of the directory that contains the `install-config.yaml` file for your cluster.
 
 2.  Create a stub manifest file for the advanced network configuration that is named `cluster-network-03-config.yml` in the `<installation_directory>/manifests/` directory:
 
@@ -513,13 +540,7 @@ Procedure
 
 3.  Specify the advanced network configuration for your cluster in the `cluster-network-03-config.yml` file, such as in the following example:
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Enable IPsec for the OVN-Kubernetes network provider
-
-    </div>
+    The following example enables IPsec for the OVN-Kubernetes network provider:
 
     ``` yaml
     apiVersion: operator.openshift.io/v1
@@ -532,8 +553,6 @@ Procedure
           ipsecConfig:
             mode: Full
     ```
-
-    </div>
 
 4.  Optional: Back up the `manifests/cluster-network-03-config.yml` file. The installation program consumes the `manifests/` directory when you create the Ignition config files.
 
@@ -848,7 +867,7 @@ The following table describes the configuration fields for the OVN-Kubernetes ne
 </dd>
 <dt><code>unix:&lt;file&gt;</code></dt>
 <dd>
-<p>A Unix Domain Socket file specified by <code>&lt;file&gt;</code>.</p>
+<p>A UNIX Domain Socket file specified by <code>&lt;file&gt;</code>.</p>
 </dd>
 <dt><code>null</code></dt>
 <dd>
@@ -926,7 +945,7 @@ The following table describes the configuration fields for the OVN-Kubernetes ne
 <tr>
 <td style="text-align: left;"><p><code>internalMasqueradeSubnet</code></p></td>
 <td style="text-align: left;"><p><code>string</code></p></td>
-<td style="text-align: left;"><p>The masquerade IPv4 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses as well as the shared gateway bridge interface. The default value is <code>169.254.169.0/29</code>.</p>
+<td style="text-align: left;"><p>The masquerade IPv4 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses and the shared gateway bridge interface. The default value is <code>169.254.169.0/29</code>.</p>
 <div class="important">
 <div class="title">
 &#10;</div>
@@ -954,7 +973,7 @@ The following table describes the configuration fields for the OVN-Kubernetes ne
 <tr>
 <td style="text-align: left;"><p><code>internalMasqueradeSubnet</code></p></td>
 <td style="text-align: left;"><p><code>string</code></p></td>
-<td style="text-align: left;"><p>The masquerade IPv6 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses as well as the shared gateway bridge interface. The default value is <code>fd69::/125</code>.</p>
+<td style="text-align: left;"><p>The masquerade IPv6 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses and the shared gateway bridge interface. The default value is <code>fd69::/125</code>.</p>
 <div class="important">
 <div class="title">
 &#10;</div>
@@ -996,7 +1015,7 @@ The following table describes the configuration fields for the OVN-Kubernetes ne
 
 <div class="title">
 
-Example OVN-Kubernetes configuration with IPSec enabled
+Example OVN-Kubernetes configuration with IPsec enabled
 
 </div>
 
@@ -1097,7 +1116,7 @@ Procedure
 
 # Deploying the cluster
 
-To deploy your OpenShift Container Platform cluster, you can initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions infrastructure and completes cluster setup.
+To deploy your OpenShift Container Platform cluster, you initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions the required infrastructure and completes the cluster setup.
 
 > [!IMPORTANT]
 > You can run the `create cluster` command of the installation program only once, during initial installation.
@@ -1133,9 +1152,11 @@ Procedure
       --log-level=info
   ```
 
-  - For `<installation_directory>`, specify the location of your customized `./install-config.yaml` file.
+  where:
 
-  - To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
+  - `<installation_directory>`: Specifies the location of your customized `./install-config.yaml` file.
+
+  - `--log-level`: Specifies the log level. To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
 
 </div>
 
@@ -1158,13 +1179,7 @@ When the cluster deployment completes successfully:
   > [!IMPORTANT]
   > Do not delete the installation program or the files that the installation program creates. Both are required to delete the cluster.
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  The following example shows the expected output:
 
   ``` terminal
   ...
@@ -1174,8 +1189,6 @@ When the cluster deployment completes successfully:
   INFO Login to the console with user: "kubeadmin", and password: "password"
   INFO Time elapsed: 36m22s
   ```
-
-  </div>
 
   <div class="important">
 
@@ -1193,7 +1206,7 @@ When the cluster deployment completes successfully:
 
 To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
 
-The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+The `kubeconfig` file is specific to a cluster and OpenShift Container Platform generates it during installation.
 
 <div>
 
@@ -1266,7 +1279,7 @@ Next steps
 
 # Logging in to the cluster by using the web console
 
-The `kubeadmin` user exists by default after an OpenShift Container Platform installation. You can log in to your cluster as the `kubeadmin` user by using the OpenShift Container Platform web console.
+To verify that your cluster deployed successfully and access its features, log in to the OpenShift Container Platform web console as the `kubeadmin` user.
 
 <div>
 
@@ -1297,7 +1310,7 @@ Procedure
     ```
 
     > [!NOTE]
-    > Alternatively, you can obtain the `kubeadmin` password from the `<installation_directory>/.openshift_install.log` log file on the installation host.
+    > Or, you can obtain the `kubeadmin` password from the `<installation_directory>/.openshift_install.log` log file on the installation host.
 
 2.  List the OpenShift Container Platform web console route:
 
@@ -1306,7 +1319,7 @@ Procedure
     ```
 
     > [!NOTE]
-    > Alternatively, you can obtain the OpenShift Container Platform route from the `<installation_directory>/.openshift_install.log` log file on the installation host.
+    > Or, you can obtain the OpenShift Container Platform route from the `<installation_directory>/.openshift_install.log` log file on the installation host.
 
     <div class="formalpara">
 

@@ -4,7 +4,7 @@ You can launch an embedded command-line terminal instance in the web console. Th
 
 # Accessing the web terminal
 
-After the Web Terminal Operator is installed, you can access the web terminal. After the web terminal is initialized, you can use the preinstalled CLI tools like `oc`, `kubectl`, `odo`, `kn`, `tkn`, `helm`, and `subctl` in the web terminal. You can re-run commands by selecting them from the list of commands you have run in the terminal. These commands persist across multiple terminal sessions. The web terminal remains open until you close it or until you close the browser window or tab.
+After the Web Terminal Operator is installed, you can access the web terminal. After the web terminal is initialized, you can use the preinstalled CLI tools such as `oc`, `kubectl`, `odo`, `kn`, `tkn`, `helm`, and `subctl` in the web terminal. You can re-run commands by selecting them from the list of commands you have run in the terminal. These commands persist across multiple terminal sessions. The web terminal remains open until you close it or until you close the browser window or tab.
 
 <div>
 
@@ -50,7 +50,7 @@ Procedure
 
     1.  Click Timeout.
 
-    2.  In the field that appears, enter the timeout value.
+    2.  In the field that is displayed, enter the timeout value.
 
     3.  From the drop-down list, select a timeout interval of **Seconds**, **Minutes**, **Hours**, or **Milliseconds**.
 
@@ -58,7 +58,7 @@ Procedure
 
     1.  Click Image.
 
-    2.  In the field that appears, enter the URL of the image that you want to use.
+    2.  In the field that is displayed, enter the URL of the image that you want to use.
 
 5.  Click **Start** to initialize the web terminal using the selected project.
 

@@ -1,8 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Use the following sections to troubleshoot network issues.
+
 # How the network interface is selected
 
-For installations on bare metal or with virtual machines that have more than one network interface controller (NIC), the NIC that OpenShift Container Platform uses for communication with the Kubernetes API server is determined by the `nodeip-configuration.service` service unit that is run by systemd when the node boots. The `nodeip-configuration.service` selects the IP from the interface associated with the default route.
+For installations on bare metal or with virtual machines that have more than one network interface controller (NIC), the NIC that OpenShift Container Platform uses for communication with the Kubernetes API server is determined by the `nodeip-configuration.service` service unit that is run by systemd when the node boots.
+
+The `nodeip-configuration.service` selects the IP from the interface associated with the default route.
 
 After the `nodeip-configuration.service` service determines the correct NIC, the service creates the `/etc/systemd/system/kubelet.service.d/20-nodenet.conf` file. The `20-nodenet.conf` file sets the `KUBELET_NODE_IP` environment variable to the IP address that the service selected.
 
@@ -426,6 +430,8 @@ Procedure
 
         </div>
 
+        where:
+
         - Ensure `bond0` exists on the node before you apply the machine configuration file to the node.
 
     2.  Before you apply the configuration to all new nodes in your cluster, reboot the host node to verify that `br-ex` selects the intended interface and does not conflict with the new interfaces that you defined on `br-ex1`.
@@ -548,7 +554,9 @@ To avoid the log messages related to the mismatch, revert the log level change a
 
 ## Configuring the Open vSwitch log level temporarily
 
-For short-term troubleshooting, you can configure the Open vSwitch (OVS) log level temporarily. The following procedure does not require rebooting the node. In addition, the configuration change does not persist whenever you reboot the node.
+For short-term troubleshooting, you can configure the Open vSwitch (OVS) log level temporarily.
+
+The following procedure does not require rebooting the node. In addition, the configuration change does not persist whenever you reboot the node.
 
 After you perform this procedure to change the log level, you can receive log messages from the machine config daemon that indicate a content mismatch for the `ovs-vswitchd.service`. To avoid the log messages, repeat this procedure and set the log level to the original value.
 
@@ -703,9 +711,13 @@ Procedure
             name: ovs-vswitchd.service
     ```
 
-    - After you perform this procedure to configure control plane nodes, repeat the procedure and set the role to `worker` to configure worker nodes.
+    where:
 
-    - Set the `syslog:<log_level>` value. Log levels are `off`, `emer`, `err`, `warn`, `info`, or `dbg`. Setting the value to `off` filters out all log messages.
+    `metadata.labels.machineconfiguration.openshift.io/role`
+    After you perform this procedure to configure control plane nodes, repeat the procedure and set the role to `worker` to configure worker nodes.
+
+    `spec.systemmd.units.dropins.contents.ExecStartPost`
+    Set the `syslog:<log_level>` value. Log levels are `off`, `emer`, `err`, `warn`, `info`, or `dbg`. Setting the value to `off` filters out all log messages.
 
 2.  Apply the machine config:
 

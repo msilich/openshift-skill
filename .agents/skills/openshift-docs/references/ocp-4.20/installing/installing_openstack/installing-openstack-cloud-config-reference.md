@@ -1,13 +1,17 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+The reference guide provides a comprehensive overview of the Red Hat OpenStack Platform (RHOSP) Cloud Controller Manager (CCM) config map parameters, specifically detailing load balancer options and properties automatically managed by the Operator.
+
 # The OpenStack Cloud Controller Manager
 
-Beginning with OpenShift Container Platform 4.12, clusters that run on Red Hat OpenStack Platform (RHOSP) were switched from the legacy OpenStack cloud provider to the external OpenStack Cloud Controller Manager (CCM). This change follows the move in Kubernetes from in-tree, legacy cloud providers to external cloud providers that are implemented by using the [Cloud Controller Manager](https://kubernetes.io/docs/concepts/architecture/cloud-controller/).
+Beginning with OpenShift Container Platform 4.12, clusters that run on Red Hat OpenStack Platform (RHOSP) were switched from the legacy RHOSP cloud provider to the external OpenStack Cloud Controller Manager (CCM).
 
-To preserve user-defined configurations for the legacy cloud provider, existing configurations are mapped to new ones as part of the migration process. It searches for a configuration called `cloud-provider-config` in the `openshift-config` namespace.
+This change follows the move in Kubernetes from in-tree, legacy cloud providers to external cloud providers that are implemented by using the CCM.
+
+To preserve user-defined configurations for the legacy cloud provider, existing configurations are mapped to new ones as part of the migration process. The OpenStack CCM searches for a configuration called `cloud-provider-config` in the `openshift-config` namespace.
 
 > [!NOTE]
-> The config map name `cloud-provider-config` is not statically configured. It is derived from the `spec.cloudConfig.name` value in the `infrastructure/cluster` CRD.
+> The config map name `cloud-provider-config` is not statically configured. The name is derived from the `spec.cloudConfig.name` value in the `infrastructure/cluster` CRD.
 
 Found configurations are synchronized to the `cloud-conf` config map in the `openshift-cloud-controller-manager` namespace.
 
@@ -34,9 +38,21 @@ enabled = true
 
 The `clouds-value` value, `/etc/openstack/secret/clouds.yaml`, is mapped to the `openstack-cloud-credentials` config in the `openshift-cloud-controller-manager` namespace. You can modify the RHOSP cloud in this file as you do any other `clouds.yaml` file.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Cloud Controller Manager (Kubernetes documentation)](https://kubernetes.io/docs/concepts/architecture/cloud-controller/)
+
+</div>
+
 # The OpenStack Cloud Controller Manager (CCM) config map
 
-An OpenStack CCM config map defines how your cluster interacts with your RHOSP cloud. By default, this configuration is stored under the `cloud.conf` key in the `cloud-conf` config map in the `openshift-cloud-controller-manager` namespace.
+An RHOSP CCM config map defines how your cluster interacts with your RHOSP cloud. By default, the configuration is stored under the `cloud.conf` key in the `cloud-conf` config map in the `openshift-cloud-controller-manager` namespace.
 
 > [!IMPORTANT]
 > The `cloud-conf` config map is generated from the `cloud-provider-config` config map in the `openshift-config` namespace.
@@ -76,13 +92,13 @@ metadata:
 
 </div>
 
-- Set global options by using a `clouds.yaml` file rather than modifying the config map.
+`apiVersion.data.cloud.conf`: Specifies global options by using a `clouds.yaml` file rather than modifying the config map.
 
 The following options are present in the config map. Except when indicated otherwise, they are mandatory for clusters that run on RHOSP.
 
 ## Load balancer options
 
-CCM supports several load balancer options for deployments that use Octavia.
+You can configure load balancer options to control how the Cloud Controller Manager (CCM) creates and manages RHOSP Octavia load balancers for services in your cluster.
 
 > [!NOTE]
 > Neutron-LBaaS support is deprecated.
@@ -101,11 +117,11 @@ CCM supports several load balancer options for deployments that use Octavia.
 <tbody>
 <tr>
 <td style="text-align: left;"><p><code>enabled</code></p></td>
-<td style="text-align: left;"><p>Whether or not to enable the <code>LoadBalancer</code> type of services integration. The default value is <code>true</code>.</p></td>
+<td style="text-align: left;"><p>Enables the <code>LoadBalancer</code> service type integration. The default value is <code>true</code>.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>floating-network-id</code></p></td>
-<td style="text-align: left;"><p>Optional. The external network used to create floating IP addresses for load balancer virtual IP addresses (VIPs). If there are multiple external networks in the cloud, this option must be set or the user must specify <code>loadbalancer.openstack.org/floating-network-id</code> in the service annotation.</p></td>
+<td style="text-align: left;"><p>Optional. The external network used to create floating IP addresses for load balancer virtual IP addresses (VIPs). If there are multiple external networks in the cloud, you must set this option or specify the <code>loadbalancer.openstack.org/floating-network-id</code> label in the service annotation.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>floating-subnet-id</code></p></td>
@@ -144,7 +160,7 @@ CCM supports several load balancer options for deployments that use Octavia.
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>create-monitor</code></p></td>
-<td style="text-align: left;"><p>Whether or not to create a health monitor for the service load balancer. A health monitor is required for services that declare <code>externalTrafficPolicy: Local</code>. The default value is <code>false</code>.</p>
+<td style="text-align: left;"><p>Creates a health monitor for the service load balancer. A health monitor is required for services that declare <code>externalTrafficPolicy: Local</code>. The default value is <code>false</code>.</p>
 <p>This option is unsupported if you use RHOSP earlier than version 17 with the <code>ovn</code> provider.</p></td>
 </tr>
 <tr>
@@ -186,9 +202,10 @@ CCM supports several load balancer options for deployments that use Octavia.
 
 ## Options that the Operator overrides
 
-The CCM Operator overrides the following options, which you might recognize from configuring RHOSP. Do not configure them yourself. They are included in this document for informational purposes only.
+The CCM Operator overrides specific options, which you might recognize from configuring RHOSP. Do not configure these options. The options are for informational purposes only.
 
 <table>
+<caption>Options overridden by the CCM Operator</caption>
 <colgroup>
 <col style="width: 50%" />
 <col style="width: 50%" />
@@ -251,8 +268,8 @@ The CCM Operator overrides the following options, which you might recognize from
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>use-clouds</code></p></td>
-<td style="text-align: left;"><p>Whether or not to fetch authorization credentials from a <code>clouds.yaml</code> file. Options set in this section are prioritized over values read from the <code>clouds.yaml</code> file.</p>
-<p>CCM searches for the file in the following places:</p>
+<td style="text-align: left;"><p>Whether to fetch authorization credentials from a <code>clouds.yaml</code> file. Options set in this section are prioritized over values read from the <code>clouds.yaml</code> file.</p>
+<p>The CCM Operator searches for the file in the following places:</p>
 <ol type="1">
 <li><p>The value of the <code>clouds-file</code> option.</p></li>
 <li><p>A file path stored in the environment variable <code>OS_CLIENT_CONFIG_FILE</code>.</p></li>

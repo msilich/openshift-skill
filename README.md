@@ -13,6 +13,9 @@ OpenShift with [OpenCode](https://opencode.ai/):
 The skills are model-provider independent. An optional OpenAI-compatible Qwen
 provider example is included for local and air-gapped deployments.
 
+The `main` branch bundles OpenShift Container Platform 4.20 documentation.
+For OCP 4.22, use the [`v4.22` branch](https://github.com/msilich/openshift-skill/tree/v4.22).
+
 > [!WARNING]
 > The OpenShift MCP server is Developer Preview at the pinned baseline and is
 > not recommended for production use by its maintainers. These skills provide
@@ -578,10 +581,30 @@ resources technically. It is not enabled automatically.
 
 ## Offline OCP 4.20 documentation
 
-The `openshift-docs` skill contains 1,746 converted OCP 4.20 topics and requires
+The `openshift-docs` skill contains 1,749 converted OCP 4.20 topics and requires
 no network access at runtime. Provenance, exact commits, licenses, conversion
 details, and the content manifest are recorded in
 `.agents/skills/openshift-docs/references/ocp-4.20/SOURCE.json`.
+
+The snapshot is pinned to `openshift/openshift-docs` branch `enterprise-4.20`,
+commit `3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98` (September 7, 2026).
+The converter includes a small local correction: this source revision's distro
+map lacks a 4.20 entry, so the product version is derived from the explicit
+`enterprise-4.20` branch instead of silently using the upstream 4.17 fallback.
+
+To rebuild on a connected preparation host with Python 3.12+, PyYAML 6.0.3,
+Asciidoctor 2.0.23, and Pandoc 3.7.0.2 installed:
+
+```bash
+git clone --branch enterprise-4.20 --single-branch https://github.com/openshift/openshift-docs.git /path/to/openshift-docs
+git -C /path/to/openshift-docs checkout --detach 3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98
+python3 tools/docs/build.py \
+  --source-dir /path/to/openshift-docs \
+  --output-dir .agents/skills/openshift-docs/references/ocp-4.20
+```
+
+The build checks the source revision, converter checksum, topic count, and
+complete Markdown content manifest against `tools/docs/build.lock.json`.
 
 When the bundled documentation and a connected cluster disagree about an API,
 the API actually served by the cluster is authoritative.

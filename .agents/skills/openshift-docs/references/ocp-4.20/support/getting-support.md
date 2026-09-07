@@ -1,28 +1,44 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-# Getting support
+To resolve issues with your OpenShift Container Platform cluster, you can search the Red Hat Knowledgebase, submit a support case, and use remote health monitoring tools.
 
-If you experience difficulty with a procedure described in this documentation, or with OpenShift Container Platform in general, visit the [Red Hat Customer Portal](http://access.redhat.com).
+# Get support
 
-From the Customer Portal, you can:
+Red Hat offers several support channels to help you troubleshoot issues and get the most from OpenShift Container Platform.
 
-- Search or browse through the Red Hat Knowledgebase of articles and solutions relating to Red Hat products.
+From the Red Hat Customer Portal, you can:
 
-- Submit a support case to Red Hat Support.
+- Search or browse through the Red Hat Knowledgebase of articles and solutions about Red Hat products.
+
+- Submit a support case to Red Hat Support.
 
 - Access other product documentation.
 
-To identify issues with your cluster, you can use Red Hat Lightspeed in [OpenShift Cluster Manager](https://console.redhat.com/openshift). Red Hat Lightspeed provides details about issues and, if available, information on how to solve a problem.
+To identify issues with your cluster, you can use Red Hat Lightspeed in [OpenShift Cluster Manager](https://console.redhat.com/openshift). Red Hat Lightspeed provides details about issues and, if available, information about how to solve a problem.
 
-If you have a suggestion for improving this documentation or have found an error, submit a [Jira issue](https://issues.redhat.com/secure/CreateIssueDetails!init.jspa?pid=12332330&summary=Documentation_issue&issuetype=1&components=12367614&priority=10200&versions=12385624) for the most relevant documentation component. Please provide specific details, such as the section name and OpenShift Container Platform version.
+To suggest improvements or report errors, give specific details such as the section name and OpenShift Container Platform version.
 
-# About the Red Hat Knowledgebase
+# About the Red Hat Knowledgebase
 
-The [Red Hat Knowledgebase](https://access.redhat.com/knowledgebase) provides rich content aimed at helping you make the most of Red Hat’s products and technologies. The Red Hat Knowledgebase consists of articles, product documentation, and videos outlining best practices on installing, configuring, and using Red Hat products. In addition, you can search for solutions to known issues, each providing concise root cause descriptions and remedial steps.
+The Red Hat Knowledgebase helps you get the most from Red Hat products and technologies.
 
-# Searching the Red Hat Knowledgebase
+It includes articles, product documentation, and videos that outline best practices for installing, configuring, and using Red Hat products. You can also search for solutions to known issues. Each solution has a root cause description and steps to fix the problem.
 
-In the event of an OpenShift Container Platform issue, you can perform an initial search to determine if a solution already exists within the Red Hat Knowledgebase.
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Knowledgebase](https://access.redhat.com/knowledgebase)
+
+</div>
+
+# Search the Red Hat Knowledgebase
+
+Search the Red Hat Knowledgebase to find solutions to known issues and resolve problems quickly without opening a support case.
 
 <div>
 
@@ -32,7 +48,7 @@ Prerequisites
 
 </div>
 
-- You have a Red Hat Customer Portal account.
+- You have a Red Hat Customer Portal account.
 
 </div>
 
@@ -44,7 +60,7 @@ Procedure
 
 </div>
 
-1.  Log in to the [Red Hat Customer Portal](http://access.redhat.com).
+1.  Log in to the [Red Hat Customer Portal](http://access.redhat.com).
 
 2.  Click **Search**.
 
@@ -66,6 +82,8 @@ Procedure
 
 # Submitting a support case
 
+If you cannot resolve an OpenShift Container Platform issue by using the Red Hat Knowledgebase, submit a support case to get direct help from Red Hat Support.
+
 <div>
 
 <div class="title">
@@ -78,9 +96,9 @@ Prerequisites
 
 - You have installed the OpenShift CLI (`oc`).
 
-- You have a Red Hat Customer Portal account.
+- You have a Red Hat Customer Portal account.
 
-- You have a Red Hat Standard or Premium subscription.
+- You have a Red Hat Standard or Premium subscription.
 
 </div>
 
@@ -92,7 +110,7 @@ Procedure
 
 </div>
 
-1.  Log in to [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
+1.  Log in to [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 
 2.  Click **Get support**.
 
@@ -104,17 +122,17 @@ Procedure
 
 4.  Enter the following information:
 
-    1.  In the **Summary** field, enter a concise but descriptive problem summary and further details about the symptoms being experienced, as well as your expectations.
+    1.  In the **Summary** field, enter a concise but descriptive problem summary and further details about the symptoms that you experience and your expectations.
 
     2.  Select **OpenShift Container Platform** from the **Product** drop-down menu.
 
-    3.  Select **4.17** from the **Version** drop-down.
+    3.  Select **4.20** from the **Version** drop-down.
 
-5.  Review the list of suggested Red Hat Knowledgebase solutions for a potential match against the problem that is being reported. If the suggested articles do not address the issue, click **Continue**.
+5.  Review the list of suggested Red Hat Knowledgebase solutions for a potential match against the problem that you are reporting. If the suggested articles do not address the issue, click **Continue**.
 
-6.  Review the updated list of suggested Red Hat Knowledgebase solutions for a potential match against the problem that is being reported. The list is refined as you provide more information during the case creation process. If the suggested articles do not address the issue, click **Continue**.
+6.  Review the updated list of suggested Red Hat Knowledgebase solutions for a potential match against the problem that you are reporting. The list updates as you give more information during the case creation process. If the suggested articles do not address the issue, click **Continue**.
 
-7.  Ensure that the account information presented is as expected, and if not, amend accordingly.
+7.  Ensure that the account information presented is as expected, and if not, change it as needed.
 
 8.  Check that the autofilled OpenShift Container Platform Cluster ID is correct. If it is not, manually obtain your cluster ID.
 
@@ -124,11 +142,11 @@ Procedure
 
       2.  Find the value in the **Cluster ID** field of the **Details** section.
 
-    - Alternatively, it is possible to open a new support case through the OpenShift Container Platform web console and have your cluster ID autofilled.
+    - Or, open a new support case from the OpenShift Container Platform web console, which automatically fills in your cluster ID.
 
       1.  From the toolbar, navigate to **(?) Help** → **Open Support Case**.
 
-      2.  The **Cluster ID** value is autofilled.
+      2.  The **Cluster ID** value automatically fills in.
 
     - To obtain your cluster ID using the OpenShift CLI (`oc`), run the following command:
 
@@ -146,7 +164,7 @@ Procedure
 
     - When does this behavior occur? Frequency? Repeatedly? At certain times?
 
-10. Upload relevant diagnostic data files and click **Continue**. It is recommended to include data gathered using the `oc adm must-gather` command as a starting point, plus any issue specific data that is not collected by that command.
+10. Upload relevant diagnostic data files and click **Continue**. Red Hat recommends including data gathered by using the `oc adm must-gather` command as a starting point, plus any issue-specific data that the command does not collect.
 
 11. Input relevant case management details and click **Continue**.
 
@@ -156,4 +174,4 @@ Procedure
 
 # Additional resources
 
-- For details about identifying issues with your cluster, see [Using Red Hat Lightspeed to identify issues with your cluster](remote_health_monitoring/using-insights-to-identify-issues-with-your-cluster.md#using-insights-to-identify-issues-with-your-cluster).
+- [Using Red Hat Lightspeed to identify issues with your cluster](remote_health_monitoring/using-insights-to-identify-issues-with-your-cluster.md#using-insights-to-identify-issues-with-your-cluster)

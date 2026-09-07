@@ -1,13 +1,15 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The oc-mirror v2 plugin introduces major changes to image mirroring workflows. This guide provides step-by-step instructions for migration while ensuring compatibility with oc-mirror plugin v2.
+The oc-mirror v2 plugin introduces major changes to image mirroring workflows. Understand the migration process and check for compatibility with oc-mirror plugin v2 to ensure a successful migration.
 
 > [!IMPORTANT]
 > You must manually update the configurations by modifying the API version and removing deprecated fields. For more information, see "Changes from oc-mirror plugin v1 to v2".
 
 # Changes from oc-mirror plugin v1 to v2
 
-Before migrating from oc-mirror plugin v1 to v2, see the following differences between oc-mirror plugin v1 and v2:
+Before migrating from oc-mirror plugin v1 to v2, you must review the updated mirroring workflow commands, which have changed to align with the new v2 workflow.
+
+See the following differences between oc-mirror plugin v1 and v2:
 
 - Explicit version selection: Users must explicitly specify `--v2` when using `oc-mirror`. If no version is specified, v1 is executed by default. This behavior is expected to change in future releases, where `--v2` will be the default.
 
@@ -75,7 +77,7 @@ Before migrating from oc-mirror plugin v1 to v2, see the following differences b
 
 # Migrating to oc-mirror plugin v2
 
-To migrate from oc-mirror plugin v1 to v2, you must manually update the `ImageSetConfiguration` file, modify mirroring commands, and clean up v1 artifacts. Follow these steps to complete the migration.
+To migrate from oc-mirror plugin v1 to v2, you must manually update the `ImageSetConfiguration` file, modify mirroring commands, and clean up v1 artifacts.
 
 <div>
 
@@ -219,6 +221,6 @@ Procedure
 
 - [Mirroring an image set in a fully disconnected environment](about-installing-oc-mirror-v2.md#oc-mirror-workflows-fully-disconnected-v2_about-installing-oc-mirror-v2)
 
-- For details regarding configuration changes, see [Changes from oc-mirror plugin v1 to v2](oc-mirror-migration-v1-to-v2.md#oc-mirror-migration-differences_oc-mirror-migration-v1-to-v2).
+- [Changes from oc-mirror plugin v1 to v2](oc-mirror-migration-v1-to-v2.md#oc-mirror-migration-differences_oc-mirror-migration-v1-to-v2)
 
-- For more information about deleting images, see [Deletion of images from your disconnected environment](about-installing-oc-mirror-v2.md#oc-mirror-procedure-delete-v2_about-installing-oc-mirror-v2).
+- [Deletion of images from your disconnected environment](about-installing-oc-mirror-v2.md#oc-mirror-procedure-delete-v2_about-installing-oc-mirror-v2)

@@ -255,7 +255,7 @@ Procedure
     </div>
 
     ``` terminal
-    $ oc adm upgrade channel stable-4.17
+    $ oc adm upgrade channel stable-4.20
     ```
 
     </div>

@@ -39,7 +39,7 @@ Review the following tasks to install the MTC:
 
 # Upgrading MTC
 
-You [upgrade the Migration Toolkit for Containers (MTC)](upgrading-3-4.md#upgrading-3-4) on OpenShift Container Platform 4.17 by using OLM. You upgrade MTC on OpenShift Container Platform 3 by reinstalling the legacy Migration Toolkit for Containers Operator.
+You [upgrade the Migration Toolkit for Containers (MTC)](upgrading-3-4.md#upgrading-3-4) on OpenShift Container Platform 4.20 by using OLM. You upgrade MTC on OpenShift Container Platform 3 by reinstalling the legacy Migration Toolkit for Containers Operator.
 
 # Reviewing premigration checklists
 

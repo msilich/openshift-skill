@@ -2,6 +2,8 @@
 
 # RBAC overview
 
+You can use role-based access control to configure whether users and groups can perform specific actions on cluster or project resources by evaluating roles, rules, and bindings.
+
 Role-based access control (RBAC) objects determine whether a user is allowed to perform a given action within a project.
 
 Cluster administrators can use the cluster roles and bindings to control who has various access levels to the OpenShift Container Platform platform itself and all projects.
@@ -62,7 +64,7 @@ The relationships between cluster roles, local roles, cluster role bindings, loc
 </figure>
 
 > [!WARNING]
-> The `get pods/exec`, `get pods/*`, and `get *` rules grant execution privileges when they are applied to a role. Apply the principle of least privilege and assign only the minimal RBAC rights required for users and agents. For more information, see [RBAC rules allow execution privileges](https://access.redhat.com/solutions/6989997).
+> The `get pods/exec`, `get pods/*`, and `get *` rules grant execution privileges when they are applied to a role. Apply the principle of least privilege and assign only the minimal RBAC rights required for users and agents. For more information, see "RBAC rules allow execution privileges".
 
 ## Evaluating authorization
 
@@ -105,13 +107,29 @@ Project administrators can use the CLI to view local roles and bindings, includi
 >
 > Cluster roles are roles defined at the cluster level but can be bound either at the cluster level or at the project level.
 
-### Cluster role aggregation
+## Cluster role aggregation
 
-The default admin, edit, view, and cluster-reader cluster roles support [cluster role aggregation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles), where the cluster rules for each role are dynamically updated as new rules are created. This feature is relevant only if you extend the Kubernetes API by creating custom resources.
+The default admin, edit, view, and cluster-reader cluster roles support cluster role aggregation, where the cluster rules for each role are dynamically updated as new rules are created. This feature is relevant only if you extend the Kubernetes API by creating custom resources.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [RBAC rules allow execution privileges](https://access.redhat.com/solutions/6989997)
+
+- [Aggregated ClusterRoles (Kubernetes documentation)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles)
+
+</div>
 
 # Projects and namespaces
 
-A Kubernetes *namespace* provides a mechanism to scope resources in a cluster. The [Kubernetes documentation](https://kubernetes.io/docs/tasks/administer-cluster/namespaces/) has more information on namespaces.
+You can use projects and namespaces to organize and isolate cluster resources. These resources provide boundaries for access control, policies, quotas, and service accounts.
+
+A Kubernetes *namespace* provides a mechanism to scope resources in a cluster. The Kubernetes documentation has more information on namespaces.
 
 Namespaces provide a unique scope for:
 
@@ -146,16 +164,44 @@ Cluster administrators can create projects and delegate administrative rights fo
 
 Developers and administrators can interact with projects by using the CLI or the web console.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Kubernetes documentation on namespaces](https://kubernetes.io/docs/tasks/administer-cluster/namespaces/)
+
+</div>
+
 # Default projects
 
-OpenShift Container Platform comes with a number of default projects, and projects starting with `openshift-` are the most essential to users. These projects host master components that run as pods and other infrastructure components. The pods created in these namespaces that have a [critical pod annotation](https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#rescheduler-guaranteed-scheduling-of-critical-add-ons) are considered critical, and the have guaranteed admission by kubelet. Pods created for master components in these namespaces are already marked as critical.
+Default projects host critical cluster and infrastructure components. By understanding their purpose, you can avoid making changes that could disrupt essential cluster services.
+
+OpenShift Container Platform includes several default projects, and projects starting with `openshift-` are the most essential to users. These projects host master components that run as pods and other infrastructure components. The pods created in these namespaces that have a critical pod annotation are considered critical, and they have guaranteed admission by kubelet. Pods created for master components in these namespaces are already marked as critical.
 
 > [!IMPORTANT]
 > Do not run workloads in or share access to default projects. Default projects are reserved for running core cluster components.
 >
 > The following default projects are considered highly privileged: `default`, `kube-public`, `kube-system`, `openshift`, `openshift-infra`, `openshift-node`, and other system-created projects that have the `openshift.io/run-level` label set to `0` or `1`. Functionality that relies on admission plugins, such as pod security admission, security context constraints, cluster resource quotas, and image reference resolution, does not work in highly privileged projects.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Guaranteed Scheduling For Critical Add-On Pods (Kubernetes documentation)](https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#rescheduler-guaranteed-scheduling-of-critical-add-ons)
+
+</div>
+
 # Viewing cluster roles and bindings
+
+You can view cluster roles and bindings by using the `oc` CLI to determine the permissions associated with roles and identify the users, groups, and service accounts assigned to them.
 
 You can use the `oc` CLI to view cluster roles and bindings by using the `oc describe` command.
 
@@ -477,6 +523,8 @@ Procedure
 
 # Viewing local roles and bindings
 
+You can view local role bindings by using the `oc` CLI to identify the users, groups, and service accounts that have roles within the current project or another project.
+
 You can use the `oc` CLI to view local roles and bindings by using the `oc describe` command.
 
 <div>
@@ -585,6 +633,8 @@ Procedure
 </div>
 
 # Adding roles to users
+
+To grant a user access within a project, you can bind an appropriate role to the user and verify the resulting role binding.
 
 You can use the `oc adm` administrator CLI to manage the roles and bindings.
 
@@ -719,13 +769,13 @@ Procedure
 
     </div>
 
-    - The `alice` user has been added to the `admins` `RoleBinding`.
+    The `alice` user has been added to the `admins` `RoleBinding`.
 
 </div>
 
 # Creating a local role
 
-You can create a local role for a project and then bind it to a user.
+You can create a local role and bind it to a user to define custom permissions within a project.
 
 <div>
 
@@ -767,7 +817,7 @@ Procedure
 
 # Creating a cluster role
 
-You can create a cluster role.
+To define custom cluster-wide permissions, you can create a cluster role that specifies the verbs and resources users can access.
 
 <div>
 
@@ -777,29 +827,31 @@ Procedure
 
 </div>
 
-1.  To create a cluster role, run the following command:
+- To create a cluster role, run the following command:
 
-    ``` terminal
-    $ oc create clusterrole <name> --verb=<verb> --resource=<resource>
-    ```
+  ``` terminal
+  $ oc create clusterrole <name> --verb=<verb> --resource=<resource>
+  ```
 
-    In this command, specify:
+  In this command, specify:
 
-    - `<name>`, the local role’s name
+  - `<name>`, the local role’s name
 
-    - `<verb>`, a comma-separated list of the verbs to apply to the role
+  - `<verb>`, a comma-separated list of the verbs to apply to the role
 
-    - `<resource>`, the resources that the role applies to
+  - `<resource>`, the resources that the role applies to
 
-    For example, to create a cluster role that allows a user to view pods, run the following command:
+  For example, to create a cluster role that allows a user to view pods, run the following command:
 
-    ``` terminal
-    $ oc create clusterrole podviewonly --verb=get --resource=pod
-    ```
+  ``` terminal
+  $ oc create clusterrole podviewonly --verb=get --resource=pod
+  ```
 
 </div>
 
 # Local role binding commands
+
+You can use local role binding commands to review, grant, or remove user and group permissions within the current or a specified project.
 
 When you manage a user or group’s associated roles for local role bindings using the following operations, a project may be specified with the `-n` flag. If it is not specified, then the current project is used.
 
@@ -819,6 +871,8 @@ Local role binding operations
 
 # Cluster role binding commands
 
+You can use cluster role binding commands to grant or remove roles for users and groups across all projects in the cluster.
+
 You can also manage cluster role bindings using the following operations. The `-n` flag is not used for these operations because cluster role bindings use non-namespaced resources.
 
 | Command | Description |
@@ -831,6 +885,8 @@ You can also manage cluster role bindings using the following operations. The `-
 Cluster role binding operations
 
 # Creating a cluster admin
+
+To grant a user full administrative access to the cluster, you can bind the `cluster-admin` cluster role to that user.
 
 The `cluster-admin` role is required to perform administrator level tasks on the OpenShift Container Platform cluster, such as modifying cluster resources.
 
@@ -864,10 +920,12 @@ Procedure
 
 # Cluster role bindings for unauthenticated groups
 
+Unauthenticated groups do not have default access to cluster roles. As a cluster administrator, you can grant limited unauthenticated access when required, while ensuring that the change complies with organizational security standards.
+
 > [!NOTE]
 > Before OpenShift Container Platform 4.17, unauthenticated groups were allowed access to some cluster roles. Clusters updated from versions before OpenShift Container Platform 4.17 retain this access for unauthenticated groups.
 
-For security reasons OpenShift Container Platform 4.17 does not allow unauthenticated groups to have default access to cluster roles.
+For security reasons OpenShift Container Platform 4.20 does not allow unauthenticated groups to have default access to cluster roles.
 
 There are use cases where it might be necessary to add `system:unauthenticated` to a cluster role.
 

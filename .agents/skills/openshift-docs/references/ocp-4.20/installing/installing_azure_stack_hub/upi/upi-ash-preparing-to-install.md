@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You prepare to install an OpenShift Container Platform cluster on Azure Stack Hub by completing the following steps:
+Prepare to install an OpenShift Container Platform cluster on Azure Stack Hub by verifying connectivity, configuring your account, generating SSH keys, downloading the installation program, and installing the CLI.
 
 - Verifying internet connectivity for your cluster.
 
-- [Configuring an Azure Stack Hub account](../installing-azure-stack-hub-account.md#installing-azure-stack-hub-account).
+- Configuring an Azure Stack Hub account. See the "Configuring an Azure Stack Hub account".
 
 - Generating an SSH key pair. You can use this key pair to authenticate into the OpenShift Container Platform cluster’s nodes after it is deployed.
 
@@ -14,7 +14,7 @@ You prepare to install an OpenShift Container Platform cluster on Azure Stack Hu
 
 # Internet access for OpenShift Container Platform
 
-In OpenShift Container Platform 4.17, you require access to the internet to install your cluster.
+In OpenShift Container Platform 4.20, you require access to the internet to install your cluster.
 
 You must have internet access to perform the following actions:
 
@@ -106,7 +106,7 @@ Procedure
     $ ssh-add <path>/<file_name>
     ```
 
-    Specifies the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`
+    Specify the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`.
 
     <div class="formalpara">
 
@@ -138,7 +138,7 @@ Next steps
 
 # Obtaining the installation program
 
-Before you install OpenShift Container Platform, download the installation file on the host you are using for installation.
+Before you install OpenShift Container Platform, download the installation file on the host you are using for installation, so that installation assets exist for deployment in your environment.
 
 <div>
 
@@ -219,7 +219,7 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 Linux Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 Linux Clients** entry and save the file.
 
 5.  Unpack the archive:
 
@@ -229,7 +229,7 @@ Procedure
 
 6.  Place the `oc` binary in a directory that is on your `PATH`.
 
-    To check your `PATH`, execute the following command:
+    To check your `PATH`, run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -274,13 +274,13 @@ Procedure
 
 2.  Select the appropriate version from the **Version** list.
 
-3.  Click **Download Now** next to the **OpenShift v4.17 Windows Client** entry and save the file.
+3.  Click **Download Now** next to the **OpenShift v4.20 Windows Client** entry and save the file.
 
 4.  Extract the archive with a ZIP program.
 
 5.  Move the `oc` binary to a directory that is on your `PATH` variable.
 
-    To check your `PATH` variable, open the command prompt and execute the following command:
+    To check your `PATH` variable, open the Command Prompt and run the following command:
 
     ``` terminal
     C:\> path
@@ -327,16 +327,16 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 macOS Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 macOS Clients** entry and save the file.
 
     > [!NOTE]
-    > For macOS arm64, choose the **OpenShift v4.17 macOS arm64 Client** entry.
+    > For macOS arm64, choose the **OpenShift v4.20 macOS arm64 Client** entry.
 
-5.  Unpack and unzip the archive.
+5.  Extract the archive.
 
 6.  Move the `oc` binary to a directory on your `PATH` variable.
 
-    To check your `PATH` variable, open a terminal and execute the following command:
+    To check your `PATH` variable, open a terminal and run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -359,3 +359,7 @@ Verification
   ```
 
 </div>
+
+# Additional resources
+
+- [Configuring an Azure Stack Hub account](../installing-azure-stack-hub-account.md#installing-azure-stack-hub-account)

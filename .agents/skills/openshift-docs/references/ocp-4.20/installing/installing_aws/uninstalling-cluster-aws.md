@@ -4,7 +4,7 @@ You can remove a cluster that you deployed to Amazon Web Services (AWS).
 
 # Removing a cluster that uses installer-provisioned infrastructure
 
-To remove an OpenShift Container Platform cluster that uses installer-provisioned infrastructure, you can run the installation program destroy command. Use the installation files from your original deployment to uninstall the cluster from your cloud platform.
+To remove an OpenShift Container Platform cluster that uses installer-provisioned infrastructure, you can use the installation program and the installation files from your original deployment to uninstall the cluster from your cloud platform.
 
 > [!NOTE]
 > After uninstallation, check your cloud provider for any resources that were not removed properly, especially with user-provisioned infrastructure clusters. Some resources might exist because either the installation program did not create the resource or could not access the resource.
@@ -217,10 +217,10 @@ Verification
 
 # Additional resources
 
-- [Working with stacks(AWS documentation)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacks.html)
+- [Working with stacks (AWS documentation)](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacks.html)
 
-- [Opt into AWS Local Zones(AWS documentation)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#opt-in-local-zone)
+- [Opt in to AWS Local Zones (AWS documentation)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#opt-in-local-zone)
 
-- [AWS Local Zones available locations(AWS documentation)](https://aws.amazon.com/about-aws/global-infrastructure/localzones/locations)
+- [AWS Local Zones available locations (AWS documentation)](https://aws.amazon.com/about-aws/global-infrastructure/localzones/locations)
 
-- [AWS Local Zones features(AWS documentation)](https://aws.amazon.com/about-aws/global-infrastructure/localzones/features)
+- [AWS Local Zones features (AWS documentation)](https://aws.amazon.com/about-aws/global-infrastructure/localzones/features)

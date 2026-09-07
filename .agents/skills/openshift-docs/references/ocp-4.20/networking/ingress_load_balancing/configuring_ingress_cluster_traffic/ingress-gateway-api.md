@@ -61,7 +61,7 @@ To ensure interoperability between external vendor implementations and your netw
 
 In some situations, Gateway API provides one or more fields that a vendor implementation does not support, but that implementation is otherwise compatible in schema with the rest of the fields. These "dead fields" can result in disrupted Ingress workloads, improperly provisioned applications and services, and security-related issues. Because OpenShift Container Platform uses a specific version of Gateway API CRDs, any use of third-party implementations of Gateway API must conform to the OpenShift Container Platform implementation to ensure that all fields work as expected.
 
-Any CRDs created within an OpenShift Container Platform 4.17 cluster are compatibly versioned and maintained by the Ingress Operator. If CRDs are already present but were not previously managed by the Ingress Operator, the Ingress Operator checks whether these configurations are compatible with Gateway API version supported by OpenShift Container Platform, and creates an admin-gate that requires your acknowledgment of CRD succession.
+Any CRDs created within an OpenShift Container Platform 4.20 cluster are compatibly versioned and maintained by the Ingress Operator. If CRDs are already present but were not previously managed by the Ingress Operator, the Ingress Operator checks whether these configurations are compatible with Gateway API version supported by OpenShift Container Platform, and creates an admin-gate that requires your acknowledgment of CRD succession.
 
 > [!IMPORTANT]
 > If you are updating your cluster from a previous OpenShift Container Platform version that contains Gateway API CRDs change those resources so that they exactly match the version supported by OpenShift Container Platform. Otherwise, you cannot update your cluster because those CRDs were not managed by OpenShift Container Platform, and could contain functionality that is unsupported by Red Hat.
@@ -202,7 +202,10 @@ Procedure
               - name: gwapi-wildcard
             allowedRoutes:
               namespaces:
-                from: All
+                from: Selector
+                selector:
+                  matchLabels:
+                    shared-gateway-access: "true"
         ```
 
         </div>
@@ -223,6 +226,9 @@ Procedure
 
         `tls.name`
         The name of the previously created secret.
+
+        `listeners.allowedRoutes.namespaces`
+        Allow route attachment only from namespaces that have the `shared-gateway-access: "true"` label. Do not set `namespaces.from: All`; that setting allows routes from every namespace and can enable hostname or domain hijacking.
 
     2.  Apply the resource by running the following command:
 

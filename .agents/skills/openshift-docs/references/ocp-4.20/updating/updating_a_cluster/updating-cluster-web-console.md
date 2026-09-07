@@ -3,7 +3,7 @@
 You can perform minor version and patch updates on an OpenShift Container Platform cluster by using the web console.
 
 > [!NOTE]
-> Use the web console or `oc adm upgrade channel <channel>` to change the update channel. You can follow the steps in [Updating a cluster using the CLI](updating-cluster-cli.md#updating-cluster-cli) to complete the update after you change to a 4.17 channel.
+> Use the web console or `oc adm upgrade channel <channel>` to change the update channel. You can follow the steps in [Updating a cluster using the CLI](updating-cluster-cli.md#updating-cluster-cli) to complete the update after you change to a 4.20 channel.
 
 # Before updating the OpenShift Container Platform cluster
 
@@ -179,7 +179,7 @@ Procedure
 
 1.  From the web console, click **Administration** → **Cluster Settings** and review the contents of the **Details** tab.
 
-2.  For production clusters, ensure that the **Channel** is set to the correct channel for the version that you want to update to, such as `stable-4.17`.
+2.  For production clusters, ensure that the **Channel** is set to the correct channel for the version that you want to update to, such as `stable-4.20`.
 
     > [!IMPORTANT]
     > For production clusters, you must subscribe to a `stable-*`, `eus-*` or `fast-*` channel.

@@ -146,7 +146,7 @@ The rules collectively enable essential ICMPv6 traffic for correct network funct
 
 To manage network traffic isolation and security for pods on secondary networks, you can create, edit, view, and delete multi-network policies. Before you work with multi-network policies, you must enable multi-network policy support for your cluster.
 
-## Creating a multi-network policy using the CLI
+## Create a multi-network policy using the CLI
 
 To define granular rules describing ingress or egress network traffic allowed for namespaces in your cluster, you can create a multi-network policy.
 
@@ -314,7 +314,7 @@ Procedure
 
 </div>
 
-## Editing a multi-network policy
+## Edit a multi-network policy
 
 To modify existing policy configurations, you can edit a multi-network policy in a namespace. Edit policies by modifying the policy file and applying it with `oc apply`, or by using the `oc edit` command directly.
 
@@ -404,7 +404,7 @@ Procedure
 
 </div>
 
-## Viewing multi-network policies using the CLI
+## View multi-network policies using the CLI
 
 You can examine the multi-network policies in a namespace.
 
@@ -459,7 +459,7 @@ Procedure
 
 </div>
 
-## Deleting a multi-network policy using the CLI
+## Delete a multi-network policy using the CLI
 
 You can delete a multi-network policy in a namespace.
 
@@ -508,7 +508,7 @@ Procedure
 
 </div>
 
-## Creating a default deny all multi-network policy
+## Create a default deny all multi-network policy
 
 The default deny all multi-network policy blocks all cross-pod networking other than network traffic allowed by the configuration of other deployed network policies and traffic between host-networked pods.
 
@@ -588,7 +588,7 @@ Procedure
 
 </div>
 
-## Creating a multi-network policy to allow traffic from external clients
+## Create a multi-network policy to allow traffic from external clients
 
 With the `deny-by-default` policy in place you can proceed to configure a policy that allows traffic from external clients to a pod with the label `app=web`.
 
@@ -657,7 +657,7 @@ Procedure
 
 </div>
 
-## Creating a multi-network policy allowing traffic to an application from all namespaces
+## Create a multi-network policy allowing traffic to an application from all namespaces
 
 You can configure a policy that allows traffic from all pods in all namespaces to a particular application.
 
@@ -784,7 +784,7 @@ Verification
 
 </div>
 
-## Creating a multi-network policy allowing traffic to an application from a namespace
+## Create a multi-network policy allowing traffic to an application from a namespace
 
 You can configure a policy that allows traffic to a pod with the label `app=web` from a particular namespace.
 

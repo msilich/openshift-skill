@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The following documentation provides information about recommended performance and scalability practices for etcd.
+Follow storage, latency, and hardware validation guidance for etcd to reduce leader elections, API timeouts, and control plane instability on OpenShift Container Platform.
 
 # Storage practices for etcd
 
-Because etcd writes data to disk and persists proposals on disk, its performance depends on disk performance. Although etcd is not particularly I/O intensive, it requires a low latency block device for optimal performance and stability. Because the consensus protocol for etcd depends on persistently storing metadata to a log (WAL), etcd is sensitive to disk-write latency. Slow disks and disk activity from other processes can cause long fsync latencies.
+Because etcd writes data to disk and persists proposals on disk, its performance depends on disk performance.
+
+Although etcd is not particularly I/O intensive, it requires a low latency block device for optimal performance and stability. Because the consensus protocol for etcd depends on persistently storing metadata to a log (WAL), etcd is sensitive to disk-write latency. Slow disks and disk activity from other processes can cause long fsync latencies.
 
 Those latencies can cause etcd to miss heartbeats, not commit new proposals to the disk on time, and ultimately experience request timeouts and temporary leader loss. High write latencies also lead to an OpenShift API slowness, which affects cluster performance. Because of these reasons, avoid colocating other workloads on the control-plane nodes that are I/O sensitive or intensive and share the same underlying I/O infrastructure.
 
@@ -42,15 +44,17 @@ Some key metrics to monitor on a deployed OpenShift Container Platform cluster a
 
 # Cluster latency requirements for etcd
 
-Two important constraints should be addressed to provide a low-latency, high-availability network for etcd:
+etcd requires low network and disk I/O latency so that Raft consensus can commit changes quickly and recover from leader failures without destabilizing the cluster.
+
+Address two constraints to provide a low-latency, high-availability network for etcd:
 
 - network I/O latency
 
 - disk I/O latency
 
-etcd uses the Raft consensus algorithm, and every change should replicate to a majority of the cluster members before it commits. This process is highly sensitive to network and disk performance. The minimum time for an etcd request is the Round-Trip Time (RTT) between members, plus the time required for data to write to permanent storage.
+etcd uses the Raft consensus algorithm, and every change must replicate to a majority of cluster members before it commits. This process is highly sensitive to network and disk performance. The minimum time for an etcd request is the round-trip time (RTT) between members, plus the time required to write data to permanent storage.
 
-To achieve high availability, etcd should detect and recover from a leader failure quickly. This depends on two key tuning parameters:
+To achieve high availability, etcd must detect and recover from a leader failure quickly. This depends on two key tuning parameters:
 
 Heartbeat Interval
 The frequency that the leader sends a heartbeat to followers. This value should be close to the average RTT between members.
@@ -58,7 +62,7 @@ The frequency that the leader sends a heartbeat to followers. This value should 
 Election Timeout
 The time a follower waits without hearing a heartbeat before it attempts to become the new leader. This should be at least 10 times the RTT value to account for network variance.
 
-In a healthy cluster, the round-trip time between members should be less than 50 ms to ensure stability and avoid frequent leader elections. This is why etcd clusters are often deployed within a single data center or availability zone to minimize physical distance and network latency.
+In a healthy cluster, the round-trip time between members should be less than 50 ms to eensure stability and avoid frequent leader elections. For this reason, etcd clusters are often deployed within a single data center or availability zone to minimize physical distance and network latency.
 
 To support a low-latency, high-availability network, especially during the leader election process, an arbiter site should be located where it provides an RTT latency of less than 10 ms. The arbiter component of a network maintains consistency and availability in a distributed system.
 
@@ -76,7 +80,21 @@ Additional resources
 
 # Validating the hardware for etcd
 
-To validate the hardware for etcd before or after you create the OpenShift Container Platform cluster, you can use fio.
+Validate control plane disk performance with `fio` before or after you create the OpenShift Container Platform cluster so that you can confirm that storage meets etcd latency requirements.
+
+The output of the following procedure reports whether the disk is fast enough to host etcd by comparing the 99th percentile of the fsync metric captured from the run to see if it is less than 10 ms.
+
+A few of the most important etcd metrics that might affected by I/O performance are as follows:
+
+- `etcd_disk_wal_fsync_duration_seconds_bucket` reports the etcd WAL fsync duration.
+
+- `etcd_disk_backend_commit_duration_seconds_bucket` reports the etcd backend commit latency duration.
+
+- `etcd_server_leader_changes_seen_total` reports the leader changes.
+
+Because etcd replicates the requests among all the members, its performance strongly depends on network input/output (I/O) latency. High network latencies result in etcd heartbeats taking longer than the election timeout, which results in leader elections that are disruptive to the cluster. A key metric to monitor on a deployed OpenShift Container Platform cluster is the 99th percentile of etcd network peer latency on each etcd cluster member. Use Prometheus to track the metric.
+
+The `histogram_quantile(0.99, rate(etcd_network_peer_round_trip_time_seconds_bucket[2m]))` metric reports the round trip time for etcd to finish replicating the client requests between the members. Ensure that it is less than 50 ms.
 
 <div>
 
@@ -86,9 +104,9 @@ Prerequisites
 
 </div>
 
-- Container runtimes such as Podman or Docker are installed on the machine that you are testing.
+- A container runtime, such as Podman or Docker, is installed on the machine that you are testing.
 
-- Data is written to the `/var/lib/etcd` path.
+- The `/var/lib/etcd` path is available for writing test data.
 
 </div>
 
@@ -100,15 +118,15 @@ Procedure
 
 </div>
 
-- Run fio and analyze the results:
+- Run `fio` and analyze the results:
 
-  - If you use Podman, run this command:
+  - If you use Podman, run the following command:
 
     ``` terminal
     $ sudo podman run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/cloud-bulldozer/etcd-perf
     ```
 
-  - If you use Docker, run this command:
+  - If you use Docker, run the following command:
 
     ``` terminal
     $ sudo docker run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/cloud-bulldozer/etcd-perf
@@ -116,17 +134,19 @@ Procedure
 
 </div>
 
-The output reports whether the disk is fast enough to host etcd by comparing the 99th percentile of the fsync metric captured from the run to see if it is less than 10 ms. A few of the most important etcd metrics that might affected by I/O performance are as follows:
+<div>
 
-- `etcd_disk_wal_fsync_duration_seconds_bucket` metric reports the etcd’s WAL fsync duration
+<div class="title">
 
-- `etcd_disk_backend_commit_duration_seconds_bucket` metric reports the etcd backend commit latency duration
+Verification
 
-- `etcd_server_leader_changes_seen_total` metric reports the leader changes
+</div>
 
-Because etcd replicates the requests among all the members, its performance strongly depends on network input/output (I/O) latency. High network latencies result in etcd heartbeats taking longer than the election timeout, which results in leader elections that are disruptive to the cluster. A key metric to monitor on a deployed OpenShift Container Platform cluster is the 99th percentile of etcd network peer latency on each etcd cluster member. Use Prometheus to track the metric.
+- Confirm that the 99th percentile of the fsync metric from the run is less than 10 ms.
 
-The `histogram_quantile(0.99, rate(etcd_network_peer_round_trip_time_seconds_bucket[2m]))` metric reports the round trip time for etcd to finish replicating the client requests between the members. Ensure that it is less than 50 ms.
+- Confirm that the report indicates that the disk is fast enough to host etcd.
+
+</div>
 
 <div>
 

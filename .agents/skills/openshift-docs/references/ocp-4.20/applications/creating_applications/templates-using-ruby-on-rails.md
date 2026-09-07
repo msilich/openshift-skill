@@ -1,25 +1,29 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Ruby on Rails is a web framework written in Ruby. This guide covers using Rails 4 on OpenShift Container Platform.
+You can build and deploy a Ruby on Rails 4 application on OpenShift Container Platform by developing it locally.
+
+Store the source in Git, then deploy the database, frontend, and route services. With this process, you can validate your application locally before deploying it to the cluster as a set of distinct services.
 
 > [!WARNING]
-> Go through the whole tutorial to have an overview of all the steps necessary to run your application on the OpenShift Container Platform. If you experience a problem try reading through the entire tutorial and then going back to your issue. It can also be useful to review your previous steps to ensure that all the steps were run correctly.
+> You must complete each part of this tutorial in order to before you deploy your application on OpenShift Container Platform. If a step fails, confirm that every preceding step completed successfully before you continue.
 
 # Prerequisites
 
-- Basic Ruby and Rails knowledge.
+- You have basic Ruby on Rails knowledge.
 
-- Locally installed version of Ruby 2.0.0+, Rubygems, Bundler.
+- You have Ruby 2.0.0+, Rubygems, and Bundler installed locally.
 
-- Basic Git knowledge.
+- You have basic Git knowledge.
 
-- Running instance of OpenShift Container Platform 4.
+- You have a running instance of OpenShift Container Platform 4.
 
-- Make sure that an instance of OpenShift Container Platform is running and is available. Also make sure that your `oc` CLI client is installed and the command is accessible from your command shell, so you can use it to log in using your email address and password.
+- The OpenShift CLI (`oc`) installed.
+
+- You are logged into a running OpenShift Container Platform cluster.
 
 # Setting up the database
 
-Rails applications are almost always used with a database. For local development use the PostgreSQL database.
+You can install PostgreSQL on your local system for Ruby on Rails development. This gives your application a local database to connect to during development and testing before you deploy to OpenShift Container Platform.
 
 <div>
 
@@ -29,13 +33,13 @@ Procedure
 
 </div>
 
-1.  Install the database:
+1.  Install the database by running the following command:
 
     ``` terminal
     $ sudo yum install -y postgresql postgresql-server postgresql-devel
     ```
 
-2.  Initialize the database:
+2.  Initialize the database by running the following command:
 
     ``` terminal
     $ sudo postgresql-setup initdb
@@ -43,25 +47,26 @@ Procedure
 
     This command creates the `/var/lib/pgsql/data` directory, in which the data is stored.
 
-3.  Start the database:
+3.  Start the database by running the following command:
 
     ``` terminal
     $ sudo systemctl start postgresql.service
     ```
 
-4.  When the database is running, create your `rails` user:
+4.  When the database is running, create your `rails` user by running the following command:
 
     ``` terminal
     $ sudo -u postgres createuser -s rails
     ```
 
-    Note that the user created has no password.
+    > [!NOTE]
+    > The user that is created has no password.
 
 </div>
 
 # Writing your application
 
-If you are starting your Rails application from scratch, you must install the Rails gem first. Then you can proceed with writing your application.
+You can create a Ruby on Rails application that uses PostgreSQL. Install the Rails gem, configure the `database.yml` file, and initialize the development and test databases. These steps ensure that your application can interact with PostgreSQL in both development and test environments.
 
 <div>
 
@@ -71,7 +76,7 @@ Procedure
 
 </div>
 
-1.  Install the Rails gem:
+1.  Install the Rails gem by running the following command:
 
     ``` terminal
     $ gem install rails
@@ -92,33 +97,31 @@ Procedure
 
     </div>
 
-2.  After you install the Rails gem, create a new application with PostgreSQL as your database:
+2.  Create a new application with PostgreSQL as your database by running the following command:
 
     ``` terminal
     $ rails new rails-app --database=postgresql
     ```
 
-3.  Change into your new application directory:
+3.  Change into your new application directory by running the following command:
 
     ``` terminal
     $ cd rails-app
     ```
 
-4.  If you already have an application, make sure the `pg` (postgresql) gem is present in your `Gemfile`. If not, edit your `Gemfile` by adding the gem:
+4.  If you already have an application, ensure that the PostgreSQL adapter gem (`pg`) is present in your `Gemfile`. If not, edit your `Gemfile` by adding the gem:
 
     ``` terminal
     gem 'pg'
     ```
 
-5.  Generate a new `Gemfile.lock` with all your dependencies:
+5.  Generate a new `Gemfile.lock` with all your dependencies by running the following command:
 
     ``` terminal
     $ bundle install
     ```
 
-6.  In addition to using the `postgresql` database with the `pg` gem, you also must ensure that the `config/database.yml` is using the `postgresql` adapter.
-
-    Make sure you updated `default` section in the `config/database.yml` file, so it looks like this:
+6.  Update the `default` section in the `config/database.yml` file to use the `postgresql` adapter, as shown in the following example:
 
     ``` yaml
     default: &default
@@ -130,29 +133,17 @@ Procedure
       password: <password>
     ```
 
-7.  Create your application’s development and test databases:
+7.  Create the `development` and `test` databases for your application by running the following command:
 
     ``` terminal
     $ rake db:create
     ```
 
-    This creates `development` and `test` database in your PostgreSQL server.
-
 </div>
 
 ## Creating a welcome page
 
-Since Rails 4 no longer serves a static `public/index.html` page in production, you must create a new root page.
-
-To have a custom welcome page must do following steps:
-
-- Create a controller with an index action.
-
-- Create a view page for the welcome controller index action.
-
-- Create a route that serves applications root page with the created controller and view.
-
-Rails offers a generator that completes all necessary steps for you.
+You can run the Rails generator to create a custom welcome page for your Rails application. A welcome page gives you content to display when you run the Rails server and open the application in your browser.
 
 <div>
 
@@ -162,31 +153,33 @@ Procedure
 
 </div>
 
-1.  Run Rails generator:
+1.  Run the Rails generator by running the following command:
 
     ``` terminal
     $ rails generate controller welcome index
     ```
 
-    All the necessary files are created.
+    The command creates all the necessary files.
 
-2.  edit line 2 in `config/routes.rb` file as follows:
+2.  Edit line 2 in the `config/routes.rb` file as follows:
 
-        root 'welcome#index'
+    ``` ruby
+    root 'welcome#index'
+    ```
 
-3.  Run the rails server to verify the page is available:
+3.  Run the Rails server to verify that the page is available by running the following command:
 
     ``` terminal
     $ rails server
     ```
 
-    You should see your page by visiting <http://localhost:3000> in your browser. If you do not see the page, check the logs that are output to your server to debug.
+    Verify that the page is available by visiting `http://localhost:3000` in your browser. If the page does not display, check the server logs for errors.
 
 </div>
 
 ## Configuring application for OpenShift Container Platform
 
-To have your application communicate with the PostgreSQL database service running in OpenShift Container Platform you must edit the `default` section in your `config/database.yml` to use environment variables, which you must define later, upon the database service creation.
+To configure your Rails application for OpenShift Container Platform, you must edit the `default` section in the `config/database.yml` file. This is required for OpenShift Container Platform to supply the correct database credentials at runtime so your application can connect to PostgreSQL on the cluster.
 
 <div>
 
@@ -230,7 +223,7 @@ Procedure
 
 ## Storing your application in Git
 
-Building an application in OpenShift Container Platform usually requires that the source code be stored in a git repository, so you must install `git` if you do not already have it.
+You can commit your Rails application to Git and push the source to a remote repository. Remote storage keeps your source available for deployment on OpenShift Container Platform.
 
 <div>
 
@@ -240,7 +233,7 @@ Prerequisites
 
 </div>
 
-- Install git.
+- You have installed Git.
 
 </div>
 
@@ -252,7 +245,7 @@ Procedure
 
 </div>
 
-1.  Make sure you are in your Rails application directory by running the `ls -1` command. The output of the command should look like:
+1.  Verify that you are in your Rails application directory by running the following command:
 
     ``` terminal
     $ ls -1
@@ -286,29 +279,33 @@ Procedure
 
     </div>
 
-2.  Run the following commands in your Rails app directory to initialize and commit your code to git:
+2.  Initialize a Git repository in your Rails application directory by running the following command:
 
     ``` terminal
     $ git init
     ```
 
+3.  Stage all application files by running the following command:
+
     ``` terminal
     $ git add .
     ```
+
+4.  Commit the staged files by running the following command:
 
     ``` terminal
     $ git commit -m "initial commit"
     ```
 
-    After your application is committed you must push it to a remote repository. GitHub account, in which you create a new repository.
+5.  Create a GitHub repository for your application.
 
-3.  Set the remote that points to your `git` repository:
+6.  Set the remote that points to your `git` repository by running the following command:
 
     ``` terminal
     $ git remote add origin git@github.com:<namespace/repository-name>.git
     ```
 
-4.  Push your application to your remote git repository.
+7.  Push your application to your remote Git repository by running the following command:
 
     ``` terminal
     $ git push
@@ -318,17 +315,15 @@ Procedure
 
 # Deploying your application to OpenShift Container Platform
 
-You can deploy you application to OpenShift Container Platform.
+You can create an OpenShift Container Platform project to deploy your Ruby on Rails application. This separates your database, frontend, and route into distinct services that OpenShift Container Platform can manage independently.
 
-After creating the `rails-app` project, you are automatically switched to the new project namespace.
+Deploying your application on OpenShift Container Platform takes three steps:
 
-Deploying your application in OpenShift Container Platform involves three steps:
+1.  Creating a database service from the PostgreSQL image on OpenShift Container Platform.
 
-- Creating a database service from OpenShift Container Platform’s PostgreSQL image.
+2.  Creating a frontend service from the Ruby 2.0 builder image on OpenShift Container Platform and your Ruby on Rails source code, connected to the database service.
 
-- Creating a frontend service from OpenShift Container Platform’s Ruby 2.0 builder image and your Ruby on Rails source code, which are wired with the database service.
-
-- Creating a route for your application.
+3.  Creating a route for your application.
 
 <div>
 
@@ -338,7 +333,7 @@ Procedure
 
 </div>
 
-- To deploy your Ruby on Rails application, create a new project for the application:
+- Create a project for your Rails application by running the following command:
 
   ``` terminal
   $ oc new-project rails-app --description="My Rails application" --display-name="Rails Application"
@@ -348,17 +343,17 @@ Procedure
 
 ## Creating the database service
 
-Your Rails application expects a running database service. For this service use PostgreSQL database image.
+You must create a database service for your Rails application. Be sure to set the environment variables for the database name, username, and password. These are required for the service to connect correctly to your Rails application.
 
-To create the database service, use the `oc new-app` command. To this command you must pass some necessary environment variables which are used inside the database container. These environment variables are required to set the username, password, and name of the database. You can change the values of these environment variables to anything you would like. The variables are as follows:
+You can change the values of these environment variables to any values you choose. The variables are as follows:
 
-- POSTGRESQL_DATABASE
+- `POSTGRESQL_DATABASE`
 
-- POSTGRESQL_USER
+- `POSTGRESQL_USER`
 
-- POSTGRESQL_PASSWORD
+- `POSTGRESQL_PASSWORD`
 
-Setting these variables ensures:
+Setting these variables ensures that the following occurs:
 
 - A database exists with the specified name.
 
@@ -374,19 +369,16 @@ Procedure
 
 </div>
 
-1.  Create the database service:
+1.  Create the database service by running the following command:
 
     ``` terminal
     $ oc new-app postgresql -e POSTGRESQL_DATABASE=db_name -e POSTGRESQL_USER=username -e POSTGRESQL_PASSWORD=password
     ```
 
-    To also set the password for the database administrator, append to the previous command with:
+    > [!NOTE]
+    > To also set a database administrator password, add `-e POSTGRESQL_ADMIN_PASSWORD=admin_pw` to the command.
 
-    ``` terminal
-    -e POSTGRESQL_ADMIN_PASSWORD=admin_pw
-    ```
-
-2.  Watch the progress:
+2.  Monitor the pod status by running the following command:
 
     ``` terminal
     $ oc get pods --watch
@@ -396,7 +388,7 @@ Procedure
 
 ## Creating the frontend service
 
-To bring your application to OpenShift Container Platform, you must specify a repository in which your application lives.
+You can create a frontend service with the `oc new-app` command. Specifying your source repository and database environment variables enables OpenShift Container Platform to build your application image and deploy it on the cluster.
 
 <div>
 
@@ -406,7 +398,7 @@ Procedure
 
 </div>
 
-1.  Create the frontend service and specify database related environment variables that were setup when creating the database service:
+1.  Create the frontend service and specify the database-related environment variables that were set up when creating the database service by running the following command:
 
     ``` terminal
     $ oc new-app path/to/source/code --name=rails-app -e POSTGRESQL_USER=username -e POSTGRESQL_PASSWORD=password -e POSTGRESQL_DATABASE=db_name -e DATABASE_SERVICE_NAME=postgresql
@@ -414,13 +406,13 @@ Procedure
 
     With this command, OpenShift Container Platform fetches the source code, sets up the builder, builds your application image, and deploys the newly created image together with the specified environment variables. The application is named `rails-app`.
 
-2.  Verify the environment variables have been added by viewing the JSON document of the `rails-app` deployment config:
+2.  Verify that the environment variables have been added by viewing the JSON document of the `rails-app` deployment config by running the following command:
 
     ``` terminal
     $ oc get dc rails-app -o json
     ```
 
-    You should see the following section:
+    The output includes the following section:
 
     <div class="formalpara">
 
@@ -454,45 +446,45 @@ Procedure
 
     </div>
 
-3.  Check the build process:
+3.  Check the build process by running the following command:
 
     ``` terminal
     $ oc logs -f build/rails-app-1
     ```
 
-4.  After the build is complete, look at the running pods in OpenShift Container Platform:
+4.  After the build is complete, check the running pods in OpenShift Container Platform by running the following command:
 
     ``` terminal
     $ oc get pods
     ```
 
-    You should see a line starting with `myapp-<number>-<hash>`, and that is your application running in OpenShift Container Platform.
+    The output includes a line starting with `myapp-<number>-<hash>`, which confirms that the application is running in OpenShift Container Platform.
 
 5.  Before your application is functional, you must initialize the database by running the database migration script. There are two ways you can do this:
 
     - Manually from the running frontend container:
 
-      - Exec into frontend container with `rsh` command:
+      - Open a remote shell to the frontend pod by running the following command:
 
         ``` terminal
         $ oc rsh <frontend_pod_id>
         ```
 
-      - Run the migration from inside the container:
+      - Run the migration from inside the container by running the following command:
 
         ``` terminal
         $ RAILS_ENV=production bundle exec rake db:migrate
         ```
 
-        If you are running your Rails application in a `development` or `test` environment you do not have to specify the `RAILS_ENV` environment variable.
+        If you are running your Rails application in a `development` or `test` environment, you do not have to specify the `RAILS_ENV` environment variable.
 
-    - By adding pre-deployment lifecycle hooks in your template.
+    - You can also run the migration by adding pre-deployment lifecycle hooks to your template.
 
 </div>
 
 ## Creating a route for your application
 
-You can expose a service to create a route for your application.
+You can create a route for your application with the `oc expose service` command. The route makes the application accessible from outside the cluster.
 
 <div>
 
@@ -502,13 +494,13 @@ Procedure
 
 </div>
 
-- To expose a service by giving it an externally-reachable hostname like `www.example.com` use OpenShift Container Platform route. In your case you need to expose the frontend service by typing:
+- Make the frontend service accessible externally by running the following command:
 
   ``` terminal
   $ oc expose service rails-app --hostname=www.example.com
   ```
 
-</div>
+  > [!WARNING]
+  > Ensure that the hostname you specify resolves to the IP address of the router.
 
-> [!WARNING]
-> Ensure the hostname you specify resolves into the IP address of the router.
+</div>

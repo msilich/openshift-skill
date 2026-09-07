@@ -1,8 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+You can configure API requests to impersonate users or groups to test permissions and troubleshoot access issues in OpenShift Container Platform.
+
 # API impersonation
 
-You can configure a request to the OpenShift Container Platform API to act as though it originated from another user. For more information, see [User impersonation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation) in the Kubernetes documentation.
+You can configure API requests in OpenShift Container Platform to act as another user. Impersonation allows you to perform actions on behalf of another account without switching credentials.
 
 # Impersonating the system:admin user
 
@@ -44,7 +46,7 @@ Procedure
 
 # Impersonating the system:admin group
 
-When a `system:admin` user is granted cluster administration permissions through a group, you must include the `--as=<user> --as-group=<group1> --as-group=<group2>` parameters in the command to impersonate the associated groups.
+To impersonate a user who has cluster administration privileges through group membership, you must specify both the user and the associated groups in the impersonation command.
 
 <div>
 
@@ -65,7 +67,7 @@ Procedure
 
 # Adding unauthenticated groups to cluster roles
 
-As a cluster administrator, you can grant unauthenticated users access to specific cluster roles to enable features, such as external webhooks or automated token management, that require cluster access without authentication. Only grant this access when required and after verifying compliance with your organization’s security standards.
+Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 
 You can add unauthenticated users to the following cluster roles:
 
@@ -128,3 +130,7 @@ Procedure
     ```
 
 </div>
+
+# Additional resources
+
+- [User impersonation (Kubernetes documentation)](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation)

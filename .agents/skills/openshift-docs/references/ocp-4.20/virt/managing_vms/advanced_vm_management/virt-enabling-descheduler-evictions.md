@@ -6,14 +6,9 @@ You can use the descheduler to evict pods so that the pods can be rescheduled on
 
 Use descheduler profiles to enable specific eviction strategies that rebalance your cluster based on criteria such as pod lifecycle or node utilization.
 
-Use the `KubeVirtRelieveAndMigrate` or `LongLifecycle` profile to enable the descheduler on a virtual machine.
-
-> [!IMPORTANT]
-> You cannot have both `KubeVirtRelieveAndMigrate` and `LongLifeCycle` enabled at the same time.
+Use the `KubeVirtRelieveAndMigrate` profile to enable the descheduler on a virtual machine.
 
 `KubeVirtRelieveAndMigrate`
-This profile is an enhanced version of the `LongLifeCycle` profile.
-
 The `KubeVirtRelieveAndMigrate` profile evicts pods from high-cost nodes to reduce overall resource expenses and enable workload migration. It also periodically rebalances workloads to help maintain similar spare capacity across nodes, which supports better handling of sudden workload spikes. Nodes can experience the following costs:
 
 - **Resource utilization**: Increased resource pressure raises the overhead for running applications.
@@ -30,13 +25,7 @@ The profile enables the `LowNodeUtilization` strategy with the `EvictionsInBackg
 
 - `devEnableSoftTainter`: Enables the soft-tainting component to dynamically apply or remove soft taints as scheduling hints.
 
-<div class="formalpara">
-
-<div class="title">
-
-Example configuration
-
-</div>
+Example configuration:
 
 ``` yaml
 apiVersion: operator.openshift.io/v1
@@ -56,17 +45,9 @@ spec:
     devActualUtilizationProfile: PrometheusCPUCombined
 ```
 
-</div>
-
 The `KubeVirtRelieveAndMigrate` profile requires PSI metrics to be enabled on all worker nodes. You can enable this by applying the following `MachineConfig` custom resource (CR):
 
-<div class="formalpara">
-
-<div class="title">
-
-Example `MachineConfig` CR
-
-</div>
+Example `MachineConfig` CR:
 
 ``` yaml
 apiVersion: machineconfiguration.openshift.io/v1
@@ -80,25 +61,10 @@ spec:
     - psi=1
 ```
 
-</div>
-
 > [!NOTE]
 > The name of the `MachineConfig` object is significant because machine configs are processed in lexicographical order. By default, a config that starts with `98-` disables PSI. To ensure that PSI is enabled, name your config with a higher prefix, such as `99-openshift-machineconfig-worker-psi-karg`.
 
 You can use this profile with the `SoftTopologyAndDuplicates` profile to also rebalance pods based on soft topology constraints, which can be useful in hosted control plane environments.
-
-<!-- -->
-
-`LongLifecycle`
-This profile balances resource usage between nodes and enables the following strategies:
-
-- `RemovePodsHavingTooManyRestarts`: removes pods whose containers have been restarted too many times and pods where the sum of restarts over all containers (including Init Containers) is more than 100. Restarting the VM guest operating system does not increase this count.
-
-- `LowNodeUtilization`: evicts pods from overutilized nodes when there are any underutilized nodes. The destination node for the evicted pod will be determined by the scheduler.
-
-  - A node is considered underutilized if its usage is below 20% for all thresholds (CPU, memory, and number of pods).
-
-  - A node is considered overutilized if its usage is above 50% for any of the thresholds (CPU, memory, and number of pods).
 
 # Installing the descheduler
 
@@ -163,12 +129,10 @@ Procedure
 
         1.  To evict pods instead of simulating the evictions, change the **Mode** field to **Automatic**.
 
-        2.  Expand the **Profiles** section and select `LongLifecycle`. The `AffinityAndTaints` profile is enabled by default.
+        2.  Expand the **Profiles** section and select `KubeVirtRelieveAndMigrate`. The `AffinityAndTaints` profile is enabled by default.
 
-            > [!IMPORTANT]
-            > The only profile currently available for OpenShift Virtualization is `LongLifecycle`.
-
-            You can also configure the profiles and settings for the descheduler later using the OpenShift CLI (`oc`).
+            > [!NOTE]
+            > You can also configure the profiles and settings for the descheduler later using the OpenShift CLI (`oc`).
 
 </div>
 

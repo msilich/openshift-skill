@@ -522,14 +522,14 @@ Procedure
     mirror:
       platform:
         channels:
-        - name: candidate-4.17
+        - name: candidate-4.20
           minVersion: <4.x.y-build>
           maxVersion: <4.x.y-build>
           type: ocp
         kubeVirtContainer: true
         graph: true
       operators:
-      - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.17
+      - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.20
         packages:
         - name: lvms-operator
         - name: local-storage-operator
@@ -900,7 +900,7 @@ Procedure
     ``` yaml
     spec:
       additionalTrustedCA:
-        - name: registry-config
+        name: registry-config
     ```
 
     As a result of this patch, the control plane nodes can retrieve images from the private registry and the HyperShift Operator can extract the OpenShift Container Platform payload for hosted cluster deployments.

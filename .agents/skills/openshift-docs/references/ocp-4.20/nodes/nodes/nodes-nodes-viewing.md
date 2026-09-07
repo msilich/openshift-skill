@@ -267,7 +267,7 @@ You can get detailed information about the nodes in the cluster, which can help 
   Specifies the events reported by the node.
 
   > [!NOTE]
-  > The control plane label is not automatically added to newly created or updated master nodes. If you want to use the control plane label for your nodes, you can manually configure the label. For more information, see *Understanding how to update labels on nodes* in the *Additional resources* section.
+  > The control plane label is not automatically added to newly created or updated master nodes. If you want to use the control plane label for your nodes, you can manually configure the label. For more information, see "Understanding how to update labels on nodes".
 
 Among the information shown for nodes, the following node conditions appear in the output of the commands shown in this section:
 

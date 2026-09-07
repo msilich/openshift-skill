@@ -39,7 +39,7 @@ A selector that matches the pods from which the policy object allows ingress tra
 `ingress.ports`
 A list of one or more destination ports on which to accept traffic.
 
-# Viewing network policies using the CLI
+# View network policies using the CLI
 
 You can examine the network policies in a namespace.
 

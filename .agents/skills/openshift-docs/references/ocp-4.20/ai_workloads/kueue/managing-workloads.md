@@ -1,12 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Red Hat build of Kueue does not directly manipulate jobs that are created by users. Instead, Kueue manages `Workload` objects that represent the resource requirements of a job. Red Hat build of Kueue automatically creates a workload for each job, and syncs any decisions and statuses between the two objects.
+When you create jobs in your cluster, Red Hat build of Kueue represents each job as a `Workload` object to track resource requirements, decisions, and statuses.
+
+Red Hat build of Kueue does not directly manipulate your jobs. Instead, Red Hat build of Kueue manages `Workload` objects that represent the resource requirements of a job, and syncs any decisions and statuses between the two objects.
 
 # Labeling namespaces to allow Red Hat build of Kueue to manage jobs
 
-The Red Hat build of Kueue Operator uses an opt-in webhook mechanism to ensure that policies are only enforced for the jobs and namespaces that it is expected to target.
-
-You must label the namespaces where you want Red Hat build of Kueue to manage jobs with the `kueue.openshift.io/managed=true` label.
+You must add the `kueue.openshift.io/managed=true` label to each namespace where you want Red Hat build of Kueue to manage jobs, because the Operator only enforces policies on labeled namespaces.
 
 <div>
 
@@ -38,13 +38,15 @@ Procedure
   $ oc label namespace <namespace> kueue.openshift.io/managed=true
   ```
 
-</div>
+  When you add this label, you instruct the Red Hat build of Kueue Operator that the namespace is managed by its webhook admission controllers. As a result, any Red Hat build of Kueue resources within that namespace are properly validated and mutated.
 
-When you add this label, you instruct the Red Hat build of Kueue Operator that the namespace is managed by its webhook admission controllers. As a result, any Red Hat build of Kueue resources within that namespace are properly validated and mutated.
+</div>
 
 # Configuring label policies for jobs
 
-The `spec.config.workloadManagement.labelPolicy` spec in the `Kueue` custom resource (CR) is an optional field that controls how Red Hat build of Kueue decides whether to manage or ignore different jobs. The allowed values are `QueueName`, `None` and empty (`""`).
+You can configure the `spec.config.workloadManagement.labelPolicy` field in the `Kueue` CR to control whether Red Hat build of Kueue manages or ignores specific jobs.
+
+The allowed values are `QueueName`, `None`, and empty (`""`).
 
 If the `labelPolicy` setting is omitted or empty (`""`), the default policy is that Red Hat build of Kueue manages jobs that have a `kueue.x-k8s.io/queue-name` label, and ignores jobs that do not have the `kueue.x-k8s.io/queue-name` label. This is the same workflow as if the `labelPolicy` is set to `QueueName`.
 

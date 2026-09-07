@@ -965,7 +965,7 @@ While the offer must be purchased in North America or EMEA, you can deploy the c
 
 # Supported Azure regions
 
-Base on your subscription, the installation program dynamically generates the list of available Microsoft Azure public regions.
+Based on your subscription, the installation program dynamically generates the list of available Microsoft Azure public regions.
 
 ## Supported Azure public regions
 

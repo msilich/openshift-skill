@@ -96,13 +96,19 @@ spec:
 
 </div>
 
-- `common: "true"` applies the policies to all clusters with this label.
+where:
 
-- Files listed under `sourceFiles` create the Operator policies for installed clusters.
+`common: "true"`
+Applies the policies to all clusters with this label.
 
-- `DefaultCatsrc.yaml` configures the catalog source for the disconnected registry.
+`sourceFiles`
+Files listed under `sourceFiles` create the Operator policies for installed clusters.
 
-- `policyName: "config-policy"` configures Operator subscriptions. The `OperatorHub` CR disables the default and this CR replaces `redhat-operators` with a `CatalogSource` CR that points to the disconnected registry.
+`DefaultCatsrc.yaml`
+Configures the catalog source for the disconnected registry.
+
+`policyName: "config-policy"`
+Configures Operator subscriptions. The `OperatorHub` CR disables the default and this CR replaces `redhat-operators` with a `CatalogSource` CR that points to the disconnected registry.
 
 A `PolicyGenTemplate` CR can be constructed with any number of included CRs. Apply the following example CR in the hub cluster to generate a policy containing a single CR:
 
@@ -445,9 +451,10 @@ Procedure
 
 </div>
 
-When all of the cluster policies become compliant, GitOps ZTP installation and configuration for the cluster is complete. The `ztp-done` label is added to the cluster.
-
-In the reference configuration, the final policy that becomes compliant is the one defined in the `*-du-validator-policy` policy. This policy, when compliant on a cluster, ensures that all cluster configuration, Operator installation, and Operator configuration is complete.
+> [!NOTE]
+> When all of the cluster policies become compliant, GitOps ZTP installation and configuration for the cluster is complete. The `ztp-done` label is added to the cluster.
+>
+> In the reference configuration, the final policy that becomes compliant is the one defined in the `*-du-validator-policy` policy. This policy, when compliant on a cluster, ensures that all cluster configuration, Operator installation, and Operator configuration is complete.
 
 # Validating the generation of configuration policy CRs
 
@@ -600,9 +607,10 @@ Procedure
 
 </div>
 
-Note that when the `ClusterGroupUpgrade` CR completes with status `UpgradeCompleted` and the managed cluster has the label `ztp-done` applied, you can make additional configuration changes by using `PolicyGenTemplate`. Deleting the existing `ClusterGroupUpgrade` CR will not make the TALM generate a new CR.
-
-At this point, GitOps ZTP has completed its interaction with the cluster and any further interactions should be treated as an update and a new `ClusterGroupUpgrade` CR created for remediation of the policies.
+> [!NOTE]
+> When the `ClusterGroupUpgrade` CR completes with status `UpgradeCompleted` and the managed cluster has the label `ztp-done` applied, you can make additional configuration changes by using `PolicyGenTemplate`. Deleting the existing `ClusterGroupUpgrade` CR will not make the TALM generate a new CR.
+>
+> At this point, GitOps ZTP has completed its interaction with the cluster and any further interactions should be treated as an update and a new `ClusterGroupUpgrade` CR created for remediation of the policies.
 
 <div>
 

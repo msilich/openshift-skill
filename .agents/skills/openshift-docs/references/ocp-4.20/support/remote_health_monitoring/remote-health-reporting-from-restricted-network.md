@@ -2,11 +2,11 @@
 
 You can manually gather and upload Insights Operator archives to diagnose issues from a restricted network.
 
-To use the Insights Operator in a restricted network, you must:
+To use the Insights Operator in a restricted network, you must complete the following tasks:
 
 - Create a copy of your Insights Operator archive.
 
-- Upload the Insights Operator archive to [console.redhat.com](https://console.redhat.com).
+- Upload the Insights Operator archive to the Red Hat Hybrid Cloud Console.
 
 Additionally, you can select to obfuscate the Insights Operator data before data upload.
 
@@ -17,6 +17,8 @@ Additionally, you can select to obfuscate the Insights Operator data before data
 Additional resources
 
 </div>
+
+- [Red Hat Hybrid Cloud Console](https://console.redhat.com)
 
 - [Enabling Insights Operator data obfuscation](remote-health-reporting-from-restricted-network.md#insights-operator-enable-obfuscation_remote-health-reporting-from-restricted-network)
 
@@ -46,11 +48,7 @@ Procedure
 
 </div>
 
-1.  Create a file named `gather-job.yaml` using this template:
-
-    ``` yaml
-    link:https://raw.githubusercontent.com/openshift/insights-operator/release-4.20/docs/gather-job.yaml[role=include]
-    ```
+1.  Create a file named `gather-job.yaml` using this [template](https://raw.githubusercontent.com/openshift/insights-operator/release-4.20/docs/gather-job.yaml).
 
 2.  Copy your `insights-operator` image version:
 
@@ -86,7 +84,7 @@ Procedure
 
     </div>
 
-    The `spec.template.spec.containers.image` field specifies your insights-operator image version.
+    The `spec.template.spec.containers.image` field specifies your `insights-operator` image version.
 
 3.  Paste your image version in `gather-job.yaml`:
 
@@ -220,6 +218,7 @@ Procedure
           "auth": "<your_token>",
           "email": "asd@redhat.com"
         }
+      }
     }
     ```
 
@@ -267,7 +266,7 @@ Verification
 
 </div>
 
-1.  Log in to <https://console.redhat.com/openshift>.
+1.  Log in to [console.redhat.com](https://console.redhat.com/openshift).
 
 2.  Click the **Cluster List** menu in the left pane.
 
@@ -366,6 +365,6 @@ Additional resources
 
 </div>
 
-- For more information on how to download your Insights Operator archive, see [Showing data collected by the Insights Operator](showing-data-collected-by-remote-health-monitoring.md#insights-operator-showing-data-collected-from-the-cluster_showing-data-collected-by-remote-health-monitoring).
+- [Showing data collected by the Insights Operator](showing-data-collected-by-remote-health-monitoring.md#insights-operator-showing-data-collected-from-the-cluster_showing-data-collected-by-remote-health-monitoring)
 
 </div>

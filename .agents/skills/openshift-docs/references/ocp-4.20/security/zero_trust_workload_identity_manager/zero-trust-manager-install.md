@@ -90,8 +90,8 @@ Verification
         </div>
 
         ``` terminal
-        NAME                                                           READY UP-TO-DATE AVAILABLE AGE
-        zero-trust-workload-identity-manager-controller-manager-6c4djb 1/1   1          1         43m
+        NAME                                                      READY   UP-TO-DATE   AVAILABLE   AGE
+        zero-trust-workload-identity-manager-controller-manager   1/1     1            1           3h36m
         ```
 
         </div>
@@ -99,7 +99,7 @@ Verification
 2.  To check the Operator logs, run the following command:
 
     ``` terminal
-    $ oc logs -f deployment/zero-trust-workload-identity-manager -n zero-trust-workload-identity-manager
+    $ oc logs -f deployment/zero-trust-workload-identity-manager-controller-manager -n zero-trust-workload-identity-manager
     ```
 
 </div>

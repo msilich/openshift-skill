@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This guide outlines multitenancy and Operator colocation in Operator Lifecycle Manager (OLM).
+When Operators share a namespace, Operator Lifecycle Manager (OLM) treats them as related, which affects how they behave during updates.
 
 # Colocation of Operators in a namespace
 
-Operator Lifecycle Manager (OLM) handles OLM-managed Operators that are installed in the same namespace, meaning their `Subscription` resources are colocated in the same namespace, as related Operators. Even if they are not actually related, OLM considers their states, such as their version and update policy, when any one of them is updated.
+Operator Lifecycle Manager (OLM) treats OLM-managed Operators that are installed in the same namespace as related Operators. Even if the Operators are not actually related, OLM considers their states, such as their version and update policy, when any one of them is updated.
 
 This default behavior manifests in two ways:
 

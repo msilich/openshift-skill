@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Admission plugins are used to help regulate how OpenShift Container Platform functions.
+You can use admission plugins to regulate how OpenShift Container Platform functions. The default set of admission plugins for OpenShift Container Platform ensures proper functioning for your cluster.
 
 # About admission plugins
 
-Admission plugins intercept requests to the master API to validate resource requests. After a request is authenticated and authorized, the admission plugins ensure that any associated policies are followed. For example, they are commonly used to enforce security policy, resource limitations or configuration requirements.
+Admission plugins enforce security standards, resource limits, and configuration requirements across your cluster. These plugins intercept and validate authenticated API requests to ensure compliance with cluster policies.
+
+After a request is authenticated and authorized, the admission plugins ensure that any associated policies are followed.
 
 Admission plugins run in sequence as an admission chain. If any admission plugin in the sequence rejects a request, the whole chain is aborted and an error is returned.
 
@@ -15,26 +17,18 @@ In addition to the defaults, the admission chain can be extended dynamically thr
 Calling webhook servers through a mutating admission plugin can produce side effects on resources related to the target object. In such situations, you must take steps to validate that the end result is as expected.
 
 > [!WARNING]
-> Dynamic admission should be used cautiously because it impacts cluster control plane operations. When calling webhook servers through webhook admission plugins in OpenShift Container Platform 4.17, ensure that you have read the documentation fully and tested for side effects of mutations. Include steps to restore resources back to their original state prior to mutation, in the event that a request does not pass through the entire admission chain.
+> Dynamic admission should be used cautiously because it impacts cluster control plane operations. When calling webhook servers through webhook admission plugins in OpenShift Container Platform 4.20, ensure that you have read the documentation fully and tested for side effects of mutations. Include steps to restore resources back to their original state prior to mutation, in the event that a request does not pass through the entire admission chain.
 
 # Default admission plugins
 
-Default validating and admission plugins are enabled in OpenShift Container Platform 4.17. These default plugins contribute to fundamental control plane functionality, such as ingress policy, cluster resource limit override and quota policy.
+Default validating and mutating admission plugins are enabled in OpenShift Container Platform. These default plugins contribute to fundamental control plane functionality, such as ingress policy, cluster resource limit override, and quota policy.
 
 > [!IMPORTANT]
 > Do not run workloads in or share access to default projects. Default projects are reserved for running core cluster components.
 >
 > The following default projects are considered highly privileged: `default`, `kube-public`, `kube-system`, `openshift`, `openshift-infra`, `openshift-node`, and other system-created projects that have the `openshift.io/run-level` label set to `0` or `1`. Functionality that relies on admission plugins, such as pod security admission, security context constraints, cluster resource quotas, and image reference resolution, does not work in highly privileged projects.
 
-The following lists contain the default admission plugins:
-
-<div class="example">
-
-<div class="title">
-
-Validating admission plugins
-
-</div>
+The following list includes the default validating admission plugins:
 
 - `LimitRanger`
 
@@ -112,15 +106,7 @@ Validating admission plugins
 
 - `quota.openshift.io/ClusterResourceQuota`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Mutating admission plugins
-
-</div>
+The following list includes the default mutating admission plugins:
 
 - `NamespaceLifecycle`
 
@@ -160,11 +146,11 @@ Mutating admission plugins
 
 - `MutatingAdmissionWebhook`
 
-</div>
-
 # Webhook admission plugins
 
-In addition to OpenShift Container Platform default admission plugins, dynamic admission can be implemented through webhook admission plugins that call webhook servers, to extend the functionality of the admission chain. Webhook servers are called over HTTP at defined endpoints.
+In addition to OpenShift Container Platform default admission plugins, you can implement dynamic admission through webhook admission plugins that call webhook servers. This approach extends the functionality of the admission chain.
+
+Webhook servers are called over HTTP at defined endpoints.
 
 There are two types of webhook admission plugins in OpenShift Container Platform:
 
@@ -172,7 +158,7 @@ There are two types of webhook admission plugins in OpenShift Container Platform
 
 <!-- -->
 
-- At the end of the admission process, the *validating admission plugin* can be used to make sure an object is configured properly, for example ensuring affinity labels are as expected. If the validation passes, OpenShift Container Platform schedules the object as configured.
+- At the end of the admission process, the *validating admission plugin* validates that an object is configured properly, for example ensuring affinity labels are as expected. If the validation passes, OpenShift Container Platform schedules the object as configured.
 
 When an API request comes in, mutating or validating admission plugins use the list of external webhooks in the configuration and call them in parallel:
 
@@ -210,13 +196,12 @@ Some common webhook admission plugin use cases include:
 
 # Types of webhook admission plugins
 
-Cluster administrators can call out to webhook servers through the mutating admission plugin or the validating admission plugin in the API server admission chain.
+As a cluster administrator, you can call webhook servers through the mutating admission plugin or the validating admission plugin in the API server admission chain.
 
-## Mutating admission plugin
-
+Mutating admission plugin
 The mutating admission plugin is invoked during the mutation phase of the admission process, which allows modification of resource content before it is persisted. One example webhook that can be called through the mutating admission plugin is the Pod Node Selector feature, which uses an annotation on a namespace to find a label selector and add it to the pod specification.
 
-<div id="mutating-admission-plug-in-config_admission-plug-ins" class="formalpara">
+<div class="formalpara">
 
 <div class="title">
 
@@ -252,36 +237,48 @@ webhooks:
 
 </div>
 
-- Specifies a mutating admission plugin configuration.
+where:
 
-- The name for the `MutatingWebhookConfiguration` object. Replace `<webhook_name>` with the appropriate value.
+`kind`
+Specifies a mutating admission plugin configuration.
 
-- The name of the webhook to call. Replace `<webhook_name>` with the appropriate value.
+`metadata.name`
+Specifies the name for the `MutatingWebhookConfiguration` object. Replace `<webhook_name>` with the appropriate value.
 
-- Information about how to connect to, trust, and send data to the webhook server.
+`webhooks.name`
+Specifies the name of the webhook to call. Replace `<webhook_name>` with the appropriate value.
 
-- The namespace where the front-end service is created.
+`webhooks.clientConfig`
+Specifies information about how to connect to, trust, and send data to the webhook server.
 
-- The name of the front-end service.
+`webhooks.clientConfig.service.namespace`
+Specifies the namespace where the front-end service is created.
 
-- The webhook URL used for admission requests. Replace `<webhook_url>` with the appropriate value.
+`webhooks.clientConfig.service.name`
+Specifies the name of the front-end service.
 
-- A PEM-encoded CA certificate that signs the server certificate that is used by the webhook server. Replace `<ca_signing_certificate>` with the appropriate certificate in base64 format.
+`webhooks.clientConfig.service.path`
+Specifies the webhook URL used for admission requests. Replace `<webhook_url>` with the appropriate value.
 
-- Rules that define when the API server should use this webhook admission plugin.
+`webhooks.clientConfig.caBundle`
+Specifies a PEM-encoded CA certificate that signs the server certificate that is used by the webhook server. Replace `<ca_signing_certificate>` with the appropriate certificate in base64 format.
 
-- One or more operations that trigger the API server to call this webhook admission plugin. Possible values are `create`, `update`, `delete` or `connect`. Replace `<operation>` and `<resource>` with the appropriate values.
+`webhooks.rules`
+Specifies rules that define when the API server should use this webhook admission plugin.
 
-- Specifies how the policy should proceed if the webhook server is unavailable. Replace `<policy>` with either `Ignore` (to unconditionally accept the request in the event of a failure) or `Fail` (to deny the failed request). Using `Ignore` can result in unpredictable behavior for all clients.
+`webhooks.rules.operations`
+Specifies one or more operations that trigger the API server to call this webhook admission plugin. Possible values are `create`, `update`, `delete`, or `connect`. Replace `<operation>` and `<resource>` with the appropriate values.
+
+`webhooks.failurePolicy`
+Specifies how the policy should proceed if the webhook server is unavailable. Replace `<policy>` with either `Ignore` (to unconditionally accept the request in case of a failure) or `Fail` (to deny the failed request). Using `Ignore` can result in unpredictable behavior for all clients.
 
 > [!IMPORTANT]
-> In OpenShift Container Platform 4.17, objects created by users or control loops through a mutating admission plugin might return unexpected results, especially if values set in an initial request are overwritten, which is not recommended.
+> In OpenShift Container Platform 4.20, objects created by users or control loops through a mutating admission plugin might return unexpected results, especially if values set in an initial request are overwritten, which is not recommended.
 
-## Validating admission plugin
-
+Validating admission plugin
 A validating admission plugin is invoked during the validation phase of the admission process. This phase allows the enforcement of invariants on particular API resources to ensure that the resource does not change again. The Pod Node Selector is also an example of a webhook which is called by the validating admission plugin, to ensure that all `nodeSelector` fields are constrained by the node selector restrictions on the namespace.
 
-<div id="validating-admission-plug-in-config_admission-plug-ins" class="formalpara">
+<div class="formalpara">
 
 <div class="title">
 
@@ -317,33 +314,46 @@ webhooks:
 
 </div>
 
-- Specifies a validating admission plugin configuration.
+where:
 
-- The name for the `ValidatingWebhookConfiguration` object. Replace `<webhook_name>` with the appropriate value.
+`kind`
+Specifies a validating admission plugin configuration.
 
-- The name of the webhook to call. Replace `<webhook_name>` with the appropriate value.
+`metadata.name`
+Specifies the name for the `ValidatingWebhookConfiguration` object. Replace `<webhook_name>` with the appropriate value.
 
-- Information about how to connect to, trust, and send data to the webhook server.
+`webhooks.name`
+Specifies the name of the webhook to call. Replace `<webhook_name>` with the appropriate value.
 
-- The namespace where the front-end service is created.
+`webhooks.clientConfig`
+Specifies information about how to connect to, trust, and send data to the webhook server.
 
-- The name of the front-end service.
+`webhooks.clientConfig.service.namespace`
+Specifies the namespace where the front-end service is created.
 
-- The webhook URL used for admission requests. Replace `<webhook_url>` with the appropriate value.
+`webhooks.clientConfig.service.name`
+Specifies the name of the front-end service.
 
-- A PEM-encoded CA certificate that signs the server certificate that is used by the webhook server. Replace `<ca_signing_certificate>` with the appropriate certificate in base64 format.
+`webhooks.clientConfig.service.path`
+Specifies the webhook URL used for admission requests. Replace `<webhook_url>` with the appropriate value.
 
-- Rules that define when the API server should use this webhook admission plugin.
+`webhooks.caBundle`
+Specifies a PEM-encoded CA certificate that signs the server certificate that is used by the webhook server. Replace `<ca_signing_certificate>` with the appropriate certificate in base64 format.
 
-- One or more operations that trigger the API server to call this webhook admission plugin. Possible values are `create`, `update`, `delete` or `connect`. Replace `<operation>` and `<resource>` with the appropriate values.
+`webhooks.rules`
+Specifies rules that define when the API server should use this webhook admission plugin.
 
-- Specifies how the policy should proceed if the webhook server is unavailable. Replace `<policy>` with either `Ignore` (to unconditionally accept the request in the event of a failure) or `Fail` (to deny the failed request). Using `Ignore` can result in unpredictable behavior for all clients.
+`webhooks.rules.operations`
+Specifies one or more operations that trigger the API server to call this webhook admission plugin. Possible values are `create`, `update`, `delete`, or `connect`. Replace `<operation>` and `<resource>` with the appropriate values.
+
+`webhooks.failurePolicy`
+Specifies how the policy should proceed if the webhook server is unavailable. Replace `<policy>` with either `Ignore` (to unconditionally accept the request in case of a failure) or `Fail` (to deny the failed request). Using `Ignore` can result in unpredictable behavior for all clients.
 
 # Configuring dynamic admission
 
-This procedure outlines high-level steps to configure dynamic admission. The functionality of the admission chain is extended by configuring a webhook admission plugin to call out to a webhook server.
+You can complete high-level steps to configure dynamic admission. These steps extend the admission chain by configuring a webhook admission plugin to call out to a webhook server.
 
-The webhook server is also configured as an aggregated API server. This allows other OpenShift Container Platform components to communicate with the webhook using internal credentials and facilitates testing using the `oc` command. Additionally, this enables role based access control (RBAC) into the webhook and prevents token information from other API servers from being disclosed to the webhook.
+The webhook server is also configured as an aggregated API server. This allows other OpenShift Container Platform components to communicate with the webhook that uses internal credentials and facilitates testing that uses the `oc` command. Additionally, this enables role-based access control (RBAC) into the webhook and prevents token information from other API servers from being disclosed to the webhook.
 
 <div>
 
@@ -355,7 +365,7 @@ Prerequisites
 
 - An OpenShift Container Platform account with cluster administrator access.
 
-- The OpenShift Container Platform CLI (`oc`) installed.
+- The OpenShift Container Platform OpenShift CLI (`oc`) installed.
 
 - A published webhook server container image.
 
@@ -369,7 +379,7 @@ Procedure
 
 </div>
 
-1.  Build a webhook server container image and make it available to the cluster using an image registry.
+1.  Build a webhook server container image and make it available to the cluster by using an image registry.
 
 2.  Create a local CA key and certificate and use them to sign the webhook server’s certificate signing request (CSR).
 
@@ -492,21 +502,28 @@ Procedure
         name: server
     ```
 
-    - Delegates authentication and authorization to the webhook server API.
+    where:
 
-    - Allows the webhook server to access cluster resources.
+    `apiVersion: rbac.authorization.k8s.io/v1`
+    For `ClusterRoleBinding`, specifies authentication and authorization metadata to the webhook server API.
 
-    - Points to resources. This example points to the `namespacereservations` resource.
+    `apiVersion: rbac.authorization.k8s.io/v1`
+    For `ClusterRole`, specifies the webhook server that is allowed access cluster resources.
 
-    - Enables the aggregated API server to create admission reviews.
+    `rules.resources`
+    For `ClusterRole`, specifies the location to resources. This example points to the `namespacereservations` resource.
 
-    - Points to resources. This example points to the `namespacereservations` resource.
+    `apiVersion: rbac.authorization.k8s.io/v1`
+    For `ClusterRole`, specifies the enablement of the aggregated API server to create admission reviews.
 
-    - Enables the webhook server to access cluster resources.
+    `apiVersion: rbac.authorization.k8s.io/v1`
+    For `ClusterRoleBinding`, specifies the enablement of the webhook server to access cluster resources.
 
-    - Role binding to read the configuration for terminating authentication.
+    `apiVersion: rbac.authorization.k8s.io/v1`
+    For `RoleBinding`, specifies role binding to read the configuration for terminating authentication.
 
-    - Default cluster role and cluster role bindings for an aggregated API server.
+    `apiVersion: rbac.authorization.k8s.io/v1`
+    For `ClusterRole`, specifies the default cluster role and cluster role bindings for an aggregated API server.
 
 5.  Apply those RBAC rules to the cluster:
 
@@ -558,15 +575,22 @@ Procedure
               secretName: server-serving-cert
     ```
 
-    - Note that the webhook server might expect a specific container name.
+    where:
 
-    - Points to a webhook server container image. Replace `<image_registry_username>/<image_path>:<tag>` with the appropriate value.
+    `spec.template.spec.name`
+    Specifies the container name. Note that the webhook server might expect a specific container name.
 
-    - Specifies webhook container run commands. Replace `<container_commands>` with the appropriate value.
+    `spec.template.spec.image`
+    Specifies the path to a webhook server container image. Replace `<image_registry_username>/<image_path>:<tag>` with the appropriate value.
 
-    - Defines the target port within pods. This example uses port 8443.
+    `spec.template.spec.command`
+    Specifies webhook container run commands. Replace `<container_commands>` with the appropriate value.
 
-    - Specifies the port used by the readiness probe. This example uses port 8443.
+    `spec.template.spec.ports.containerPort`
+    Specifies the target port within pods. This example uses port 8443.
+
+    `spec.template.spec.readinessProbe.port`
+    Specifies the port used by the readiness probe. This example uses port 8443.
 
 7.  Deploy the daemon set:
 
@@ -588,9 +612,13 @@ Procedure
       tls.key: <server_key>
     ```
 
-    - References the signed webhook server certificate. Replace `<server_certificate>` with the appropriate certificate in base64 format.
+    where:
 
-    - References the signed webhook server key. Replace `<server_key>` with the appropriate key in base64 format.
+    `data.tls.crt`
+    References the signed webhook server certificate. Replace `<server_certificate>` with the appropriate certificate in base64 format.
+
+    `data.tls.key`
+    References the signed webhook server key. Replace `<server_key>` with the appropriate key in base64 format.
 
 9.  Create the secret:
 
@@ -626,9 +654,13 @@ Procedure
           targetPort: 8443
     ```
 
-    - Defines the port that the service listens on. This example uses port 443.
+    where:
 
-    - Defines the target port within pods that the service forwards connections to. This example uses port 8443.
+    `spec.ports.port`
+    Specifies the port that the service listens on. This example uses port 443.
+
+    `spec.ports.targetPort`
+    Specifies the target port within pods that the service forwards connections to. This example uses port 8443.
 
 11. Expose the webhook server within the cluster:
 
@@ -653,19 +685,28 @@ Procedure
         kind: NamespaceReservation
     ```
 
-    - Reflects `CustomResourceDefinition` `spec` values and is in the format `<plural>.<group>`. This example uses the `namespacereservations` resource.
+    where:
 
-    - REST API group name.
+    `metadata.name`
+    Reflects `CustomResourceDefinition` `spec` values and is in the format `<plural>.<group>`. This example uses the `namespacereservations` resource.
 
-    - REST API version name.
+    `spec.group`
+    Specifies the REST API group name.
 
-    - Accepted values are `Namespaced` or `Cluster`.
+    `spec.version`
+    Specifies the REST API version name.
 
-    - Plural name to be included in URL.
+    `spec.scope`
+    Specifies accepted values are `Namespaced` or `Cluster`.
 
-    - Alias seen in `oc` output.
+    `spec.names.plural`
+    Specifies the plural name to be included in URL.
 
-    - The reference for resource manifests.
+    `spec.names.singular`
+    Specifies the alias seen in `oc` output.
+
+    `spec.names.kind`
+    Specifies the reference for resource manifests.
 
 13. Apply the custom resource definition:
 
@@ -691,7 +732,7 @@ Procedure
       version: v1beta1
     ```
 
-    - A PEM-encoded CA certificate that signs the server certificate that is used by the webhook server. Replace `<ca_signing_certificate>` with the appropriate certificate in base64 format.
+    - The `spec.caBundle` field specifies a PEM-encoded CA certificate that signs the server certificate. This certificate is used by the webhook server. Replace `<ca_signing_certificate>` with the appropriate certificate in base64 format.
 
 15. Deploy the aggregated API service:
 
@@ -734,15 +775,22 @@ Procedure
       failurePolicy: Fail
     ```
 
-    - Name for the `ValidatingWebhookConfiguration` object. This example uses the `namespacereservations` resource.
+    where:
 
-    - Name of the webhook to call. This example uses the `namespacereservations` resource.
+    `metadata.name`
+    Specifies the name for the `ValidatingWebhookConfiguration` object. This example uses the `namespacereservations` resource.
 
-    - Enables access to the webhook server through the aggregated API.
+    `webhooks.name`
+    Specifies the name of the webhook to call. This example uses the `namespacereservations` resource.
 
-    - The webhook URL used for admission requests. This example uses the `namespacereservation` resource.
+    `name.clientConfig.service`
+    Enables access to the webhook server through the aggregated API.
 
-    - A PEM-encoded CA certificate that signs the server certificate that is used by the webhook server. Replace `<ca_signing_certificate>` with the appropriate certificate in base64 format.
+    `name.clientConfig.service.path`
+    Specifies the webhook URL used for admission requests. This example uses the `namespacereservation` resource.
+
+    `name.clientConfig.caBundle`
+    Specifies a PEM-encoded CA certificate that signs the server certificate that is used by the webhook server. Replace `<ca_signing_certificate>` with the appropriate certificate in base64 format.
 
 17. Deploy the webhook:
 
@@ -760,4 +808,4 @@ Procedure
 
 - [Controlling pod placement using node taints](../nodes/scheduling/nodes-scheduler-taints-tolerations.md#nodes-scheduler-taints-tolerations_dedicating_nodes-scheduler-taints-tolerations)
 
-- [Pod priority names](../nodes/pods/nodes-pods-priority.md#admin-guide-priority-preemption-names_nodes-pods-priority)
+- [Including pod priority in pod scheduling decisions](../nodes/pods/nodes-pods-priority.md#admin-guide-priority-preemption-names_nodes-pods-priority)

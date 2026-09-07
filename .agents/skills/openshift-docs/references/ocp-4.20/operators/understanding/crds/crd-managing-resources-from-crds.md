@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This guide describes how developers can manage custom resources (CRs) that come from custom resource definitions (CRDs).
+As a developer, you can manage custom resources (CRs) that come from custom resource definitions (CRDs) to work with the custom object types available in your cluster.
 
 # Custom resource definitions
 
@@ -17,7 +17,7 @@ Operators in particular make use of CRDs by packaging them with any required RBA
 
 # Creating custom resources from a file
 
-After a custom resource definition (CRD) has been added to the cluster, custom resources (CRs) can be created with the CLI from a file using the CR specification.
+After you add a custom resource definition (CRD) to the cluster, you can create custom resources (CRs) from a file by using the CLI.
 
 <div>
 
@@ -63,15 +63,22 @@ Procedure
 
     </div>
 
-    - Specify the group name and API version (name/version) from the CRD.
+    where:
 
-    - Specify the type in the CRD.
+    `apiVersion`
+    Specifies the group name and API version (name/version) from the CRD.
 
-    - Specify a name for the object.
+    `kind`
+    Specifies the type in the CRD.
 
-    - Specify the [finalizers](https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions/#finalizers) for the object, if any. Finalizers allow controllers to implement conditions that must be completed before the object can be deleted.
+    `metadata.name`
+    Specifies a name for the object.
 
-    - Specify conditions specific to the type of object.
+    `metadata.finalizers`
+    Specifies the finalizers for the object, if any. Finalizers allow controllers to implement conditions that must be completed before the object can be deleted.
+
+    `spec`
+    Specifies conditions specific to the type of object.
 
 2.  After you create the file, create the object:
 
@@ -188,6 +195,6 @@ Procedure
 
     </div>
 
-    - Custom data from the YAML that you used to create the object displays.
+    The `spec` section in the output displays the custom configuration settings, such as `cronSpec` and `image`, that you defined when creating the object.
 
 </div>

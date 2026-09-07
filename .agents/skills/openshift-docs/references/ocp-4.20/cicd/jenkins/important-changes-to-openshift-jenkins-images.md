@@ -225,7 +225,7 @@ Prerequisites
 
 </div>
 
-- You are running OpenShift Jenkins on OpenShift Container Platform 4.17.
+- You are running OpenShift Jenkins on OpenShift Container Platform 4.20.
 
 - You know the namespace where OpenShift Jenkins is deployed.
 
@@ -313,7 +313,7 @@ pipeline {
     agent any
 
     tools {
-        oc 'oc-4.17'
+        oc 'oc-4.20'
     }
 
     stages {

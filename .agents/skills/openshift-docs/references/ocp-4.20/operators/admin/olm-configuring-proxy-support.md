@@ -14,7 +14,7 @@ Additional resources
 
 </div>
 
-- [Configuring a custom PKI](../../networking/configuring_network_settings/configuring-a-custom-pki.md#configuring-a-custom-pki) (custom CA certificate)
+- [Configuring a custom PKI (custom CA certificate)](../../networking/configuring_network_settings/configuring-a-custom-pki.md#configuring-a-custom-pki)
 
 # Overriding proxy settings of an Operator
 

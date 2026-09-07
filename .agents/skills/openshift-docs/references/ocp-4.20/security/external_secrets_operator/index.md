@@ -4,7 +4,7 @@ The External Secrets Operator for Red Hat OpenShift operates as a cluster-wide s
 
 # About the External Secrets Operator for Red Hat OpenShift
 
-Use the External Secrets Operator for Red Hat OpenShift to integrate [external-secrets](https://external-secrets.io/latest/) application with the OpenShift Container Platform cluster. The `external-secrets` application fetches secrets stored in the external providers such as [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/), [HashiCorp Vault](https://developer.hashicorp.com/vault), [Google Secret Manager](https://cloud.google.com/security/products/secret-manager), [Azure Key Vault](https://azure.microsoft.com/en-us/products/key-vault/), [IBM Cloud Secrets Manager](https://www.ibm.com/products/secrets-manager), [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) and integrates them with Kubernetes in a secure manner.
+Use the External Secrets Operator for Red Hat OpenShift to integrate the `external-secrets` application with the OpenShift Container Platform cluster. The `external-secrets` application fetches secrets stored in external providers such as AWS Secrets Manager, HashiCorp Vault, Google Secret Manager, Azure Key Vault, IBM Cloud Secrets Manager, and AWS Systems Manager Parameter Store, and integrates them with Kubernetes in a secure manner.
 
 Using the External Secrets Operator ensures the following:
 
@@ -21,7 +21,7 @@ Using the External Secrets Operator ensures the following:
 > [!IMPORTANT]
 > Do not attempt to use more than one External Secrets Operator in your cluster. If you have a community External Secrets Operator installed in your cluster, you must uninstall it before installing the External Secrets Operator for Red Hat OpenShift.
 
-For more information about `external-secrets` application, see [external-secrets](https://external-secrets.io/latest/).
+For more information about the `external-secrets` application, see "external-secrets application" in Additional resources.
 
 Use the External Secrets Operator to authenticate with the external secrets store, retrieve secrets, and inject the retrieved secrets into a native Kubernetes secret. This method removes the need for applications to directly access or manage external secrets.
 
@@ -29,22 +29,22 @@ Use the External Secrets Operator to authenticate with the external secrets stor
 
 The External Secrets Operator for Red Hat OpenShift is tested with the following external secrets provider types:
 
-- [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/)
+- AWS Secrets Manager
 
-- [HashiCorp Vault](https://developer.hashicorp.com/vault)
+- HashiCorp Vault
 
-- [Google Secret Manager](https://cloud.google.com/security/products/secret-manager)
+- Google Secret Manager
 
-- [Azure Key Vault](https://azure.microsoft.com/en-us/products/key-vault/)
+- Azure Key Vault
 
-- [IBM Cloud Secrets Manager](https://www.ibm.com/products/secrets-manager)
+- IBM Cloud Secrets Manager
 
 > [!NOTE]
-> Red Hat does not test all factors associated with third-party secrets store provider functionality. For more information about third-party support, see the [Red Hat third-party support policy](https://access.redhat.com/third-party-software-support).
+> Red Hat does not test all factors associated with third-party secrets store provider functionality. For more information about third-party support, see "Red Hat third-party support policy" in Additional resources.
 
 # About FIPS compliance for External Secrets Operator for Red Hat OpenShift
 
-The External Secrets Operator for Red Hat OpenShift supports FIPS compliance. When running on OpenShift Container Platform in FIPS mode, External Secrets Operator uses the RHEL cryptographic libraries submitted to NIST for FIPS validation on the x86_64, ppc64le, and s390X architectures. For more information about the NIST validation program, see [Cryptographic module validation program](https://csrc.nist.gov/Projects/cryptographic-module-validation-program/validated-modules). For more information about the latest NIST status for the individual versions of the RHEL cryptographic libraries submitted for validation, see [Compliance activities and government standards](https://access.redhat.com/articles/2918071#fips-140-2-and-fips-140-3-2).
+The External Secrets Operator for Red Hat OpenShift supports FIPS compliance. When running on OpenShift Container Platform in FIPS mode, External Secrets Operator uses the RHEL cryptographic libraries submitted to NIST for FIPS validation on the x86_64, ppc64le, and s390X architectures. For more information about the NIST validation program, see "Cryptographic module validation program" in Additional resources. For more information about the latest NIST status for the individual versions of the RHEL cryptographic libraries submitted for validation, see "Compliance activities and government standards" in Additional resources.
 
 To enable FIPS mode, install the External Secrets Operator on an OpenShift Container Platform cluster that runs in FIPS mode. For more information, see "Do you need extra security for your cluster?".
 
@@ -66,8 +66,26 @@ When using the External Secrets Operator for Red Hat OpenShift, there are some s
 
 - [Installing a cluster in FIPS mode](../../installing/overview/installing-fips.md#installing-fips-mode_installing-fips)
 
-- [Do you need extra security for your cluster?](../../installing/overview/installing-preparing.md#installing-preparing-security)
+- [Do you need extra security for your cluster?](../../installing/overview/installing-preparing.md#installing-preparing-security_installing-preparing)
 
 - [Security considerations](https://docs.redhat.com/en/documentation/red_hat_openshift_data_foundation/4.19/html/planning_your_deployment/security-considerations_rhodf)
 
 - [Security Best Practices](https://external-secrets.io/latest/guides/security-best-practices/)
+
+- [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/)
+
+- [HashiCorp Vault](https://developer.hashicorp.com/vault)
+
+- [Google Secret Manager](https://cloud.google.com/security/products/secret-manager)
+
+- [Azure Key Vault](https://azure.microsoft.com/en-us/products/key-vault/)
+
+- [IBM Cloud Secrets Manager](https://www.ibm.com/products/secrets-manager)
+
+- [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html)
+
+- [Cryptographic module validation program](https://csrc.nist.gov/Projects/cryptographic-module-validation-program/validated-modules)
+
+- [Compliance activities and government standards](https://access.redhat.com/articles/2918071#fips-140-2-and-fips-140-3-2)
+
+- [Red Hat third-party support policy](https://access.redhat.com/third-party-software-support)

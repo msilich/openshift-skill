@@ -1,6 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Gang scheduling ensures that a group or *gang* of related jobs only start when all required resources are available. Red Hat build of Kueue enables gang scheduling by suspending jobs until the OpenShift Container Platform cluster can guarantee the capacity to start and execute all of the related jobs in the gang together. This is also known as *all-or-nothing* scheduling.
+You can use gang scheduling to ensure that a group, or gang, of related jobs starts only when all required resources are available.
+
+Red Hat build of Kueue enables gang scheduling by suspending jobs until the OpenShift Container Platform cluster can guarantee the capacity to start and execute all of the related jobs in the *gang* together. This is also known as *all-or-nothing* scheduling.
 
 Gang scheduling is important if you are working with expensive, limited resources, such as GPUs. Gang scheduling can prevent jobs from claiming but not using GPUs, which can improve GPU utilization and can reduce running costs. Gang scheduling can also help to prevent issues like resource segmentation and deadlocking.
 
@@ -36,27 +38,11 @@ spec:
 
 </div>
 
-- You can set the `policy` value to enable or disable gang scheduling. The possible values are `ByWorkload`, `None`, or empty (`""`).
+`spec.config.gangScheduling.policy`
+You can set the `policy` value to enable or disable gang scheduling. The possible values are `ByWorkload`, `None`, or empty (`""`). When the `policy` value is set to `ByWorkload`, each job is processed and considered for admission as a single unit. If the job does not become ready within the specified time, the entire job is evicted and retried at a later time. When the `policy` value is set to `None`, gang scheduling is disabled. When the `policy` value is empty or set to `""`, the Red Hat build of Kueue Operator determines settings for gang scheduling. Currently, gang scheduling is disabled by default.
 
-  `ByWorkload`
-  When the `policy` value is set to `ByWorkload`, each job is processed and considered for admission as a single unit. If the job does not become ready within the specified time, the entire job is evicted and retried at a later time.
-
-  `None`
-  When the `policy` value is set to `None`, gang scheduling is disabled.
-
-  Empty (`""`)
-  When the `policy` value is empty or set to `""`, the Red Hat build of Kueue Operator determines settings for gang scheduling. Currently, gang scheduling is disabled by default.
-
-- If the `policy` value is set to `ByWorkload`, you must configure job admission settings. The possible values for the `admission` spec are `Parallel`, `Sequential`, or empty (`""`).
-
-  `Parallel`
-  When the `admission` value is set to `Parallel`, pods from any job can be admitted at any time. This can cause a deadlock, where jobs are in contention for cluster capacity. When a deadlock occurs, the successful scheduling of pods from another job can prevent the scheduling of pods from the current job.
-
-  `Sequential`
-  When the `admission` value is set to `Sequential`, only pods from the currently processing job are admitted. After all of the pods from the current job have been admitted and are ready, Red Hat build of Kueue processes the next job. Sequential processing can slow down admission when the cluster has sufficient capacity for multiple jobs, but provides a higher likelihood that all of the pods for a job are scheduled together successfully.
-
-  Empty (`""`)
-  When the `admission` value is empty or set to `""`, the Red Hat build of Kueue Operator determines job admission settings. Currently, the `admission` value is set to `Parallel` by default.
+`spec.config.gangScheduling.byWorkload.admission`
+If the `policy` value is set to `ByWorkload`, you must configure job admission settings. The possible values for the `admission` spec are `Parallel`, `Sequential`, or empty (`""`). When the `admission` value is set to `Parallel`, pods from any job can be admitted at any time. This can cause a deadlock, where jobs are in contention for cluster capacity. When a deadlock occurs, the successful scheduling of pods from another job can prevent the scheduling of pods from the current job. When the `admission` value is set to `Sequential`, only pods from the currently processing job are admitted. After all of the pods from the current job have been admitted and are ready, Red Hat build of Kueue processes the next job. Sequential processing can slow down admission when the cluster has sufficient capacity for multiple jobs, but provides a higher likelihood that all of the pods for a job are scheduled together successfully. When the `admission` value is empty or set to `""`, the Red Hat build of Kueue Operator determines job admission settings. Currently, the `admission` value is set to `Parallel` by default.
 
 # Additional resources
 

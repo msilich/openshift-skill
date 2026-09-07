@@ -1,27 +1,29 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Both containers and virtual machines provide ways of separating applications running on a host from the operating system itself. Understanding RHCOS, which is the operating system used by OpenShift Container Platform, will help you see how the host systems protect containers and hosts from each other.
+Containers and virtual machines provide ways of separating applications running on a host from the operating system itself. You should understand RHCOS, which is the operating system used by OpenShift Container Platform, to see how the host systems protect containers and hosts from each other.
 
 # Securing containers on Red Hat Enterprise Linux CoreOS (RHCOS)
 
+You should understand the security enhancements you can make to the containers in your OpenShift Container Platform clusters.
+
 Containers simplify the act of deploying many applications to run on the same host, using the same kernel and container runtime to spin up each container. The applications can be owned by many users and, because they are kept separate, can run different, and even incompatible, versions of those applications at the same time without issue.
 
-In Linux, containers are just a special type of process, so securing containers is similar in many ways to securing any other running process. An environment for running containers starts with an operating system that can secure the host kernel from containers and other processes running on the host, as well as secure containers from each other.
+In Linux, containers are just a special type of process, so securing containers is similar in many ways to securing any other running process. An environment for running containers starts with an operating system that can secure the host kernel from containers and other processes running on the host, and secure containers from each other.
 
-Because OpenShift Container Platform 4.17 runs on RHCOS hosts, with the option of using Red Hat Enterprise Linux (RHEL) as worker nodes, the following concepts apply by default to any deployed OpenShift Container Platform cluster. These RHEL security features are at the core of what makes running containers in OpenShift Container Platform more secure:
+Because OpenShift Container Platform 4.20 runs on RHCOS hosts, with the option of using Red Hat Enterprise Linux (RHEL) as worker nodes, the following concepts apply by default to any deployed OpenShift Container Platform cluster. These RHEL security features are at the core of what makes running containers in OpenShift Container Platform more secure:
 
-- *Linux namespaces* enable creating an abstraction of a particular global system resource to make it appear as a separate instance to processes within a namespace. Consequently, several containers can use the same computing resource simultaneously without creating a conflict. Container namespaces that are separate from the host by default include mount table, process table, network interface, user, control group, UTS, and IPC namespaces. Those containers that need direct access to host namespaces need to have elevated permissions to request that access. See [Building, running, and managing containers](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/building_running_and_managing_containers/index) from the RHEL 9 container documentation for details on the types of namespaces.
+- *Linux namespaces* enable creating an abstraction of a particular global system resource to make it appear as a separate instance to processes within a namespace. Consequently, several containers can use the same computing resource simultaneously without creating a conflict. Container namespaces that are separate from the host by default include mount table, process table, network interface, user, control group, UTS, and IPC namespaces. Those containers that need direct access to host namespaces need to have elevated permissions to request that access. See Building, running, and managing containers from the RHEL 9 container documentation for details on the types of namespaces.
 
 - *SELinux* provides an additional layer of security to keep containers isolated from each other and from the host. SELinux allows administrators to enforce mandatory access controls (MAC) for every user, application, process, and file.
 
 > [!WARNING]
 > Disabling SELinux on RHCOS is not supported.
 
-- *CGroups* (control groups) limit, account for, and isolate the resource usage (CPU, memory, disk I/O, network, etc.) of a collection of processes. CGroups are used to ensure that containers on the same host are not impacted by each other.
+- *CGroups* (control groups) limit, account for, and isolate the resource usage (CPU, memory, disk I/O, network, and so on.) of a collection of processes. CGroups are used to ensure that containers on the same host are not impacted by each other.
 
-- *Secure computing mode (seccomp)* profiles can be associated with a container to restrict available system calls. See page 94 of the [Red Hat OpenShift security guide](https://www.redhat.com/en/resources/openshift-security-guide-ebook) for details about seccomp.
+- *Secure computing mode (seccomp)* profiles can be associated with a container to restrict available system calls.
 
-- Deploying containers using *RHCOS* reduces the attack surface by minimizing the host environment and tuning it for containers. The [CRI-O container engine](https://access.redhat.com/documentation/en-us/openshift_container_platform/3.11/html-single/cri-o_runtime/index) further reduces that attack surface by implementing only those features required by Kubernetes and OpenShift Container Platform to run and manage containers, as opposed to other container engines that implement desktop-oriented standalone features.
+- Deploying containers using *RHCOS* reduces the attack surface by minimizing the host environment and tuning it for containers. The CRI-O container engine further reduces that attack surface by implementing only those features required by Kubernetes and OpenShift Container Platform to run and manage containers, as opposed to other container engines that implement desktop-oriented standalone features.
 
 RHCOS is a version of Red Hat Enterprise Linux (RHEL) that is specially configured to work as control plane (master) and worker nodes on OpenShift Container Platform clusters. So RHCOS is tuned to efficiently run container workloads, along with Kubernetes and OpenShift Container Platform services.
 
@@ -35,6 +37,8 @@ RHCOS is a version of Red Hat Enterprise Linux (RHEL) that is specially configu
 Additional resources
 
 </div>
+
+- [Building, running, and managing containers](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/building_running_and_managing_containers/index)
 
 - [How nodes enforce resource constraints](../../nodes/nodes/nodes-nodes-resources-configuring.md#allocate-node-enforcement_nodes-nodes-resources-configuring)
 
@@ -56,27 +60,43 @@ Additional resources
 
 - [About the OpenShift Update Service](../../updating/understanding_updates/intro-to-updates.md#update-service-about_understanding-openshift-updates)
 
+- [Red Hat OpenShift security guide](https://www.redhat.com/en/resources/openshift-security-guide-ebook)
+
 - [FIPS cryptography](../../installing/overview/installing-fips.md#installing-fips)
 
 </div>
 
 # Comparing virtualization and containers
 
-Traditional virtualization provides another way to keep application environments separate on the same physical host. However, virtual machines work in a different way than containers. Virtualization relies on a hypervisor spinning up guest virtual machines (VMs), each of which has its own operating system (OS), represented by a running kernel, as well as the running application and its dependencies.
+You should understand the differences between containers and VMs to learn the advantages and drawbacks that influence the use cases in which these technologies are typically applied.
 
-With VMs, the hypervisor isolates the guests from each other and from the host kernel. Fewer individuals and processes have access to the hypervisor, reducing the attack surface on the physical server. That said, security must still be monitored: one guest VM might be able to use hypervisor bugs to gain access to another VM or the host kernel. And, when the OS needs to be patched, it must be patched on all guest VMs using that OS.
+Traditional virtualization provides another way to keep application environments separate on the same physical host. However, virtual machines work in a different way than containers. Virtualization relies on a hypervisor spinning up guest virtual machines (VMs), each of which has its own operating system (OS), represented by a running kernel, and the running application and its dependencies.
+
+With VMs, the hypervisor isolates the guests from each other and from the host kernel. Fewer individuals and processes have access to the hypervisor, reducing the attack surface on the physical server. That said, security must still be monitored: one guest VM might be able to use hypervisor bugs to gain access to another VM or the host kernel. And, when the operating system needs to be patched, it must be patched on all guest VMs by using that operating system.
 
 Containers can be run inside guest VMs, and there might be use cases where this is desirable. For example, you might be deploying a traditional application in a container, perhaps to lift-and-shift an application to the cloud.
 
 Container separation on a single host, however, provides a more lightweight, flexible, and easier-to-scale deployment solution. This deployment model is particularly appropriate for cloud-native applications. Containers are generally much smaller than VMs and consume less memory and CPU.
 
-See [Linux Containers Compared to KVM Virtualization](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/overview_of_containers_in_red_hat_systems/introduction_to_linux_containers#linux_containers_compared_to_kvm_virtualization) in the RHEL 7 container documentation to learn about the differences between container and VMs.
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Linux Containers Compared to KVM Virtualization](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/overview_of_containers_in_red_hat_systems/introduction_to_linux_containers#linux_containers_compared_to_kvm_virtualization)
+
+</div>
 
 # Securing OpenShift Container Platform
 
+To make your OpenShift Container Platform cluster more secure, you should understand the security enhancements you can make to your cluster.
+
 When you deploy OpenShift Container Platform, you have the choice of an installer-provisioned infrastructure (there are several available platforms) or your own user-provisioned infrastructure. Some low-level security-related configuration, such as enabling FIPS mode or adding kernel modules required at first boot, might benefit from a user-provisioned infrastructure. Likewise, user-provisioned infrastructure is appropriate for disconnected OpenShift Container Platform deployments.
 
-Keep in mind that, when it comes to making security enhancements and other configuration changes to OpenShift Container Platform, the goals should include:
+Remember when it comes to making security enhancements and other configuration changes to OpenShift Container Platform, the goals should include:
 
 - Keeping the underlying nodes as generic as possible. You want to be able to easily throw away and spin up similar nodes quickly and in prescriptive ways.
 

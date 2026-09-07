@@ -2,11 +2,11 @@
 
 You can create `MachineConfig` custom resources (CR) that modify files, systemd unit files, and other operating system features running on OpenShift Container Platform nodes. By using `MachineConfig` objects, you can perform tasks such as disabling chronyd, adding kernel arguments, enabling multipathing, and adding RHCOS extensions.
 
-For more ideas on working with machine configs, see "How to update ssh keys after installation in OpenShift 4?", "Container image signatures", "Enabling SCTP in Openshift Container Platform 4", and "How to provide custom iSCSI initiatornames for nodes" in the *Additional resources* section.
+For more ideas on working with machine configs, see "How to update ssh keys after installation in OpenShift 4?", "Container image signatures", "Enabling SCTP in Openshift Container Platform 4", and "How to provide custom iSCSI initiatornames for nodes".
 
-OpenShift Container Platform supports Ignition specification version 3.5. For more information, see "Ignition specification version 3.5" in the *Additional resources* section. You should base all new machine configs you create going forward on Ignition specification version 3.5. If you are upgrading your OpenShift Container Platform cluster, any existing machine configs with a previous Ignition specification will be translated automatically to specification version 3.5.
+OpenShift Container Platform supports Ignition specification version 3.5. For more information, see "Configuration Specification v3.5.0 (Ignition documentation)". You should base all new machine configs you create going forward on Ignition specification version 3.5. If you are upgrading your OpenShift Container Platform cluster, any existing machine configs with a previous Ignition specification will be translated automatically to specification version 3.5.
 
-There might be situations where the configuration on a node does not fully match what the currently-applied machine config specifies. This state is called *configuration drift*. The Machine Config Daemon (MCD) regularly checks the nodes for configuration drift. If the MCD detects configuration drift, the MCO marks the node `degraded` until an administrator corrects the node configuration. A degraded node is online and operational, but, it cannot be updated. For more information on configuration drift, see "Understanding configuration drift detection" in the *Additional resources* section.
+There might be situations where the configuration on a node does not fully match what the currently-applied machine config specifies. This state is called *configuration drift*. The Machine Config Daemon (MCD) regularly checks the nodes for configuration drift. If the MCD detects configuration drift, the MCO marks the node `degraded` until an administrator corrects the node configuration. A degraded node is online and operational, but, it cannot be updated. For more information on configuration drift, see "Understanding configuration drift detection".
 
 > [!TIP]
 > Use the following "Configuring chrony time service" procedure as a model for how to go about adding other configuration files to OpenShift Container Platform nodes.
@@ -34,11 +34,11 @@ Procedure
 1.  Create a Butane config including the contents of the `chrony.conf` file. For example, to configure chrony on worker nodes, create a `99-worker-chrony.bu` file.
 
     > [!NOTE]
-    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 99-worker-chrony
       labels:
@@ -554,7 +554,7 @@ Procedure
 
 If your OpenShift Container Platform workloads require real-time operating system characteristics, you can switch your machines to the Linux real-time kernel. Switching to the real-time kernel provides a higher degree of determinism for your OpenShift Container Platform workloads.
 
-Even though Linux is not a real-time operating system, the Linux real-time kernel includes a preemptive scheduler that provides the operating system with real-time characteristics. For OpenShift Container Platform, 4.17 you can make the switch to real-time kernel by using a `MachineConfig` object.
+Even though Linux is not a real-time operating system, the Linux real-time kernel includes a preemptive scheduler that provides the operating system with real-time characteristics. For OpenShift Container Platform, 4.20 you can make the switch to real-time kernel by using a `MachineConfig` object.
 
 Although making the change is as simple as changing a machine config `kernelType` setting to `realtime`, there are a few other considerations before making the change:
 
@@ -696,11 +696,11 @@ Procedure
 1.  Create a Butane config file, `40-worker-custom-journald.bu`, that includes an `/etc/systemd/journald.conf` file with the required settings.
 
     > [!NOTE]
-    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 40-worker-custom-journald
       labels:
@@ -852,7 +852,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 80-worker-usbguard
       labels:
@@ -1015,7 +1015,7 @@ Procedure
 1.  Create a Butane config file, `98-worker-firmware-blob.bu`, that updates the search path so that it is root-owned and writable to local storage. The following example places the custom blob file from your local workstation onto nodes under `/var/lib/firmware`.
 
     > [!NOTE]
-    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
     <div class="formalpara">
 
@@ -1027,7 +1027,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       labels:
         machineconfiguration.openshift.io/role: worker

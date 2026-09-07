@@ -686,7 +686,11 @@ Procedure
 
 # Evicting KubeVirt virtual machines
 
-In cases where KubeVirt virtual machines (VMs) cannot be live migrated, such as when you use GPU passthrough, the VMs must be evicted at the same time as the `NodePool` resource of the hosted cluster. Otherwise, the compute nodes might be shut down without being drained from the workload. This might also happen when you are upgrading the OpenShift Virtualization Operator. To achieve a synchronized restart, you can set the `evictionStrategy` parameter on the `hyperconverged` resource to ensure that only VMs that are drained from workloads are rebooted.
+In cases where KubeVirt virtual machines (VMs) cannot be live migrated, such as when you use GPU passthrough, the VMs must be evicted at the same time as the `NodePool` resource of the hosted cluster.
+
+Otherwise, the compute nodes might be shut down without being drained from the workload. This might also happen when you are upgrading the OpenShift Virtualization Operator.
+
+To achieve a synchronized restart, you can set the `evictionStrategy` parameter on the `hyperconverged` resource to ensure that only VMs that are drained from workloads are rebooted.
 
 <div>
 
@@ -754,9 +758,9 @@ Verification
 
 # Spreading node pool VMs by using topologySpreadConstraint
 
-By default, KubeVirt virtual machines (VMs) created by a node pool are scheduled on any available nodes that have the capacity to run the VMs. By default, the `topologySpreadConstraint` constraint is set to schedule VMs on multiple nodes.
+In some scenarios, node pool virtual machines (VMs) might run on the same node, which can cause availability issues. To avoid distribution of VMs on a single node, use the descheduler to continuously honor the `topologySpreadConstraint` constraint to spread VMs on multiple nodes.
 
-In some scenarios, node pool VMs might run on the same node, which can cause availability issues. To avoid distribution of VMs on a single node, use the descheduler to continuously honor the `topologySpreadConstraint` constraint to spread VMs on multiple nodes.
+By default, KubeVirt VMs created by a node pool are scheduled on any available nodes that have the capacity to run the VMs. The `topologySpreadConstraint` constraint is set to schedule VMs on multiple nodes.
 
 <div>
 
@@ -815,11 +819,13 @@ Procedure
 
   </div>
 
-  - Sets the number of seconds between the descheduler running cycles.
+  where:
 
-  - This profile evicts pods that follow the soft topology constraint: `whenUnsatisfiable: ScheduleAnyway`.
+  `spec.deschedulingIntervalSeconds`
+  Sets the number of seconds between the descheduler running cycles.
 
-  - This profile balances resource usage between nodes and enables the strategies, such as `RemovePodsHavingTooManyRestarts` and `LowNodeUtilization`.
+  `spec.profiles`
+  The `SoftTopologyAndDuplicates` profile evicts pods that follow the `whenUnsatisfiable: ScheduleAnyway` soft topology constraint. The `KubeVirtRelieveAndMigrate` profile balances resource usage between nodes and enables strategies, such as `RemovePodsHavingTooManyRestarts` and `LowNodeUtilization`.
 
 </div>
 

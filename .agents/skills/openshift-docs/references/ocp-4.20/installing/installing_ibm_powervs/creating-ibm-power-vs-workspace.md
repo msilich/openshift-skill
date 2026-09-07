@@ -1,8 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+To host your OpenShift Container Platform cluster on IBM Power® Virtual Server, you can create a dedicated workspace and retrieve its identifier for use during installation.
+
 # Creating an IBM Power Virtual Server workspace
 
-Use the following procedure to create an IBM Power® Virtual Server workspace.
+To set up the infrastructure needed for your OpenShift Container Platform cluster, you can create an IBM Power® Virtual Server workspace and retrieve its GUID for use during installation.
 
 <div>
 
@@ -22,6 +24,6 @@ Procedure
 
 </div>
 
-# Next steps
+# Additional resources
 
 - [Installing a cluster on IBM Power® Virtual Server with customizations](installing-ibm-power-vs-customizations.md#installing-ibm-power-vs-customizations)

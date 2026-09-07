@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The Migration Toolkit for Containers (MTC) enables you to migrate stateful application workloads from OpenShift Container Platform 3 to 4.17 at the granularity of a namespace.
+The Migration Toolkit for Containers (MTC) enables you to migrate stateful application workloads from OpenShift Container Platform 3 to 4.20 at the granularity of a namespace.
 
 > [!IMPORTANT]
 > Before you begin your migration, be sure to review the [differences between OpenShift Container Platform 3 and 4](planning-migration-3-4.md#planning-migration-3-4).
@@ -88,7 +88,7 @@ The service catalog is deprecated in OpenShift Container Platform 4. You can mig
 
 # MTC workflow
 
-You can migrate Kubernetes resources, persistent volume data, and internal container images to OpenShift Container Platform 4.17 by using the Migration Toolkit for Containers (MTC) web console or the Kubernetes API.
+You can migrate Kubernetes resources, persistent volume data, and internal container images to OpenShift Container Platform 4.20 by using the Migration Toolkit for Containers (MTC) web console or the Kubernetes API.
 
 MTC migrates the following resources:
 

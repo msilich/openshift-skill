@@ -198,7 +198,7 @@ Verification
 
     ``` terminal
     NAME                                                   DISPLAY                            VERSION               REPLACES                           PHASE
-    topology-aware-lifecycle-manager.4.17.x   Topology Aware Lifecycle Manager   4.17.x                                      Succeeded
+    topology-aware-lifecycle-manager.4.20.x   Topology Aware Lifecycle Manager   4.20.x                                      Succeeded
     ```
 
     </div>
@@ -1124,7 +1124,7 @@ Example upgrade policy
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: ocp-4.4.17.4
+  name: ocp-4.4.20.4
   namespace: platform-upgrade
 spec:
   disabled: false
@@ -1148,14 +1148,14 @@ spec:
             metadata:
               name: version
             spec:
-              channel: stable-4.17
+              channel: stable-4.20
               desiredUpdate:
-                version: 4.4.17.4
+                version: 4.4.20.4
               upstream: https://api.openshift.com/api/upgrades_info/v1/graph
             status:
               history:
                 - state: Completed
-                  version: 4.4.17.4
+                  version: 4.4.20.4
         remediationAction: inform
         severity: low
   remediationAction: inform
@@ -1623,7 +1623,7 @@ Verification
 
     ``` terminal
     NAME      VERSION   AVAILABLE   PROGRESSING   SINCE   STATUS
-    version   4.4.17.5     True        True          43s     Working towards 4.4.17.7: 71 of 735 done (9% complete)
+    version   4.4.20.5     True        True          43s     Working towards 4.4.20.7: 71 of 735 done (9% complete)
     ```
 
     </div>
@@ -1896,7 +1896,7 @@ Verification
     }
     ```
 
-    Displays the list of identified clusters.
+    The output lists the identified clusters. The `platformImage` value in `status.precaching.spec` is derived by TALM from the `ClusterVersion` object in the managed policies.
 
 3.  Check the status of the pre-caching job by running the following command on the spoke cluster:
 

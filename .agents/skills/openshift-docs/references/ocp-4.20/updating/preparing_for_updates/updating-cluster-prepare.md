@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Learn more about administrative tasks that cluster admins must perform to successfully initialize an update, as well as optional guidelines for ensuring a successful update.
+Before you update your OpenShift Container Platform cluster, complete the required administrative tasks and review best practices to minimize disruption and avoid update failures.
 
 # Kubernetes API removals
 
@@ -27,9 +27,13 @@ Kubernetes APIs removed from OpenShift Container Platform 4.20
 
 ## Evaluating your cluster for removed APIs
 
+Before you update your cluster, evaluate your workloads and integrations for uses of removed APIs so that you can migrate them to supported API versions and avoid disruptions.
+
 There are several methods to help administrators identify where APIs that will be removed are in use. However, OpenShift Container Platform cannot identify all instances, especially workloads that are idle or external tools that are used. It is the responsibility of the administrator to properly evaluate all workloads and other integrations for instances of removed APIs.
 
 ### Reviewing alerts to identify uses of removed APIs
+
+Before you update your cluster, review alerts that identify removed API usage so that you can migrate affected workloads and avoid disruptions after the update.
 
 Two alerts fire when an API is in use that will be removed in the next release:
 
@@ -233,7 +237,7 @@ Procedure
 
 </div>
 
-- Run the following command to acknowledge that you have completed the evaluation and your cluster is ready for the Kubernetes API removals in OpenShift Container Platform 4.17:
+- Run the following command to acknowledge that you have completed the evaluation and your cluster is ready for the Kubernetes API removals in OpenShift Container Platform 4.20:
 
   ``` terminal
   $ oc -n openshift-config patch cm admin-acks --patch '{"data":{"ack-4.19-admissionregistration-v1beta1-api-removals-in-4.20":"true"}}' --type=merge
@@ -282,7 +286,7 @@ etcd restorations might be destructive and destabilizing to a running cluster, u
 > [!WARNING]
 > Due to their high consequences, etcd restorations are not intended to be used as a rollback solution. Rolling your cluster back to a previous version is not supported. If your update is failing to complete, contact Red Hat support.
 
-There are several factors that affect the viability of an etcd restoration. For more information, see "Backing up etcd data" and "Restoring to a previous cluster state".
+There are several factors that affect the viability of an etcd restoration. For more information, see "Backing up etcd data" and "Restoring to an earlier cluster state".
 
 <div>
 
@@ -294,108 +298,7 @@ Additional resources
 
 - [Backing up etcd](../../backup_and_restore/control_plane_backup_and_restore/backing-up-etcd.md#backup-etcd)
 
-- [Restoring to a previous cluster state](../../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
-
-</div>
-
-# Preparing for Gateway API management succession by the Ingress Operator
-
-Prepare your cluster for Gateway API management succession by removing existing unsupported definitions and installing compliant resources. This ensures a seamless update to OpenShift Container Platform 4.19 and prevents conflicts with the Ingress Operator.
-
-Starting in OpenShift Container Platform 4.19, the Ingress Operator manages the lifecycle of any Gateway API custom resource definitions (CRDs). This lifecycle control blocks you from creating, updating, or deleting CRDs within the `gateway.networking.k8s.io` API group.
-
-> [!NOTE]
-> Starting in OpenShift Container Platform 4.22, deploying the Gateway API CRD `gateway.networking.x-k8s.io` is no longer restricted. You can deploy that CRD without interference from the Ingress Operator. Experimental Gateway API CRDs in the `gateway.networking.k8s.io` group remain restricted.
-
-> [!WARNING]
-> Updating or deleting Gateway API resources can result in downtime and loss of service or data. Be sure you understand how this will affect your cluster before performing the steps in this procedure. If necessary, back up any Gateway API objects in YAML format in order to restore it later.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You have installed the OpenShift CLI (`oc`).
-
-- You have access to an OpenShift Container Platform account with cluster administrator access.
-
-- Optional: You have backed up any necessary Gateway API objects.
-
-  > [!WARNING]
-  > Backup and restore can fail or result in data loss for any CRD fields that were present in the old definitions but are absent in the new definitions.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  List all the Gateway API CRDs that you need to remove by running the following command:
-
-    ``` terminal
-    $ oc get crd | grep -F -e gateway.networking.k8s.io -e gateway.networking.x-k8s.io
-    ```
-
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example output
-
-    </div>
-
-    ``` terminal
-    gatewayclasses.gateway.networking.k8s.io
-    gateways.gateway.networking.k8s.io
-    grpcroutes.gateway.networking.k8s.io
-    httproutes.gateway.networking.k8s.io
-    referencegrants.gateway.networking.k8s.io
-    ```
-
-    </div>
-
-2.  Delete the Gateway API CRDs from the previous step by running the following command:
-
-    ``` terminal
-    $ oc delete crd gatewayclasses.networking.k8s.io && \
-    oc delete crd gateways.networking.k8s.io && \
-    oc delete crd grpcroutes.gateway.networking.k8s.io && \
-    oc delete crd httproutes.gateway.networking.k8s.io && \
-    oc delete crd referencesgrants.gateway.networking.k8s.io
-    ```
-
-    > [!IMPORTANT]
-    > Deleting CRDs removes every custom resource that relies on them and can result in data loss. Back up any necessary data before deleting the Gateway API CRDs. Any controller that was previously managing the lifecycle of the Gateway API CRDs will fail to operate properly. Attempting to force its use in conjunction with the Ingress Operator to manage Gateway API CRDs might prevent the cluster update from succeeding.
-
-3.  Get the supported Gateway API CRDs by running the following command:
-
-    ``` terminal
-    $ oc apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
-    ```
-
-    > [!WARNING]
-    > You can perform this step without deleting your CRDs. If your update to a CRD removes a field that is used by a custom resource, you can lose data. Updating a CRD a second time, to a version that re-adds a field, can cause any previously deleted data to reappear. Any third-party controller that depends on a specific Gateway API CRD version that is not supported in OpenShift Container Platform 4.17 will break upon updating that CRD to one supported by Red Hat.
-    >
-    > For more information on the OpenShift Container Platform implementation and the dead fields issue, see *Gateway API implementation for OpenShift Container Platform*.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Gateway API implementation for OpenShift Container Platform](../../networking/ingress_load_balancing/configuring_ingress_cluster_traffic/ingress-gateway-api.md#nw-ingress-gateway-api-implementation)
+- [Restoring to an earlier cluster state](../../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
 
 </div>
 
@@ -405,7 +308,7 @@ Follow best practices to ensure successful cluster updates. These best practices
 
 OpenShift Container Platform minimizes workload disruptions during an update. Updates do not begin unless the cluster is in an upgradeable state at the time of the update request.
 
-This design enforces some key conditions before initiating an update, but there are a number of actions you can take to increase your chances of a successful cluster update.
+This design enforces some key conditions before initiating an update, but there are several actions you can take to increase your chances of a successful cluster update.
 
 ## Choose versions recommended by the OpenShift Update Service
 
@@ -423,13 +326,13 @@ Failing to address critical alerts before beginning an update can cause problema
 
 In the **Administrator** perspective of the web console, navigate to **Observe** → **Alerting** to find critical alerts.
 
-## Ensure that the cluster is in an Upgradable state
+## Ensure that the cluster is in an Upgradeable state
 
 When one or more Operators have not reported their `Upgradeable` condition as `True` for more than an hour, the `ClusterNotUpgradeable` warning alert is triggered in the cluster. In most cases this alert does not block patch updates, but you cannot perform a minor version update until you resolve this alert and all Operators report `Upgradeable` as `True`.
 
 For more information about the `Upgradeable` condition, see "Understanding cluster Operator condition types" in the additional resources section.
 
-### SDN support removal
+## SDN support removal
 
 OpenShift SDN network plugin was deprecated in versions 4.15 and 4.16. With this release, the SDN network plugin is no longer supported and the content has been removed from the documentation.
 

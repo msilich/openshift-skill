@@ -370,7 +370,7 @@ Procedure
 
     ``` terminal
     NAME        VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE   MESSAGE
-    baremetal   4.17     True          False      False   3d15h
+    baremetal   4.20     True          False      False   3d15h
     ```
 
     </div>

@@ -520,7 +520,7 @@ Procedure
   ``` terminal
   # podman run -v /mnt:/mnt -v /root/.docker:/root/.docker --privileged --rm quay.io/openshift-kni/telco-ran-tools -- \
      factory-precaching-cli download \
-     -r 4.17.0 \
+     -r 4.20.0 \
      --acm-version 2.6.3 \
      --mce-version 2.1.4 \
      -f /mnt \
@@ -531,7 +531,7 @@ Procedure
 
   - `factory-precaching-cli download` specifies the downloading function of the factory-precaching-cli tool.
 
-  - `-r 4.17.0` specifies the OpenShift Container Platform release version.
+  - `-r 4.20.0` specifies the OpenShift Container Platform release version.
 
   - `--acm-version 2.6.3` specifies the RHACM version.
 
@@ -558,7 +558,7 @@ Procedure
     ...
     Summary:
 
-    Release:                            4.17.0
+    Release:                            4.20.0
     Hub Version:                        2.6.3
     ACM Version:                        2.6.3
     MCE Version:                        2.1.4
@@ -625,7 +625,7 @@ Procedure
 
   ``` terminal
   # podman run -v /mnt:/mnt -v /root/.docker:/root/.docker --privileged --rm quay.io/openshift-kni/telco-ran-tools:latest -- factory-precaching-cli download \
-     -r 4.17.0 \
+     -r 4.20.0 \
      --acm-version 2.6.3 \
      --mce-version 2.1.4 \
      -f /mnt \
@@ -637,7 +637,7 @@ Procedure
 
   - `factory-precaching-cli download` specifies the downloading function of the factory-precaching-cli tool.
 
-  - `-r 4.17.0` specifies the OpenShift Container Platform release version.
+  - `-r 4.20.0` specifies the OpenShift Container Platform release version.
 
   - `--acm-version 2.6.3` specifies the RHACM version.
 
@@ -663,7 +663,7 @@ Procedure
     ...
     Summary:
 
-    Release:                            4.17.0
+    Release:                            4.20.0
     Hub Version:                        2.6.3
     ACM Version:                        2.6.3
     MCE Version:                        2.1.4
@@ -697,7 +697,7 @@ Procedure
 
     ``` terminal
     # podman run -v /mnt:/mnt -v /root/.docker:/root/.docker --privileged --rm quay.io/openshift-kni/telco-ran-tools:latest -- factory-precaching-cli download \
-       -r 4.17.0 \
+       -r 4.20.0 \
        --acm-version 2.6.3 \
        --mce-version 2.1.4 \
        -f /mnt \
@@ -710,7 +710,7 @@ Procedure
 
     - `factory-precaching-cli download` specifies the downloading function of the factory-precaching-cli tool.
 
-    - `-r 4.17.0` specifies the OpenShift Container Platform release version.
+    - `-r 4.20.0` specifies the OpenShift Container Platform release version.
 
     - `--acm-version 2.6.3` specifies the RHACM version.
 
@@ -738,13 +738,13 @@ Procedure
       mirror:
         platform:
           channels:
-          - name: stable-4.17
-            minVersion: 4.17.0
-            maxVersion: 4.17.0
+          - name: stable-4.20
+            minVersion: 4.20.0
+            maxVersion: 4.20.0
         additionalImages:
           - name: quay.io/custom/repository
         operators:
-          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.17
+          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.20
             packages:
               - name: advanced-cluster-management
                 channels:
@@ -770,14 +770,14 @@ Procedure
                   - name: 'stable'
               - name: lvms-operator
                 channels:
-                  - name: 'stable-4.17'
+                  - name: 'stable-4.20'
               - name: amq7-interconnect-operator
                 channels:
                   - name: '1.10.x'
               - name: bare-metal-event-relay
                 channels:
                   - name: 'stable'
-          - catalog: registry.redhat.io/redhat/certified-operator-index:v4.17
+          - catalog: registry.redhat.io/redhat/certified-operator-index:v4.20
             packages:
               - name: sriov-fec
                 channels:
@@ -801,7 +801,7 @@ Procedure
       platform:
     [...]
       operators:
-        - catalog: eko4.cloud.lab.eng.bos.redhat.com:8443/redhat/certified-operator-index:v4.17
+        - catalog: eko4.cloud.lab.eng.bos.redhat.com:8443/redhat/certified-operator-index:v4.20
           packages:
             - name: sriov-fec
               channels:
@@ -827,7 +827,7 @@ Procedure
     ``` terminal
     # podman run -v /mnt:/mnt -v /root/.docker:/root/.docker -v /etc/pki:/etc/pki --privileged --rm quay.io/openshift-kni/telco-ran-tools:latest -- \
     factory-precaching-cli download \
-       -r 4.17.0 \
+       -r 4.20.0 \
        --acm-version 2.6.3 \
        --mce-version 2.1.4 \
        -f /mnt \
@@ -840,7 +840,7 @@ Procedure
 
     - `factory-precaching-cli download` specifies the downloading function of the factory-precaching-cli tool.
 
-    - `-r 4.17.0` specifies the OpenShift Container Platform release version.
+    - `-r 4.20.0` specifies the OpenShift Container Platform release version.
 
     - `--acm-version 2.6.3` specifies the RHACM version.
 
@@ -857,7 +857,7 @@ Procedure
 6.  Download the images without generating a new `imageSetConfiguration` CR:
 
     ``` terminal
-    # podman run -v /mnt:/mnt -v /root/.docker:/root/.docker --privileged --rm quay.io/openshift-kni/telco-ran-tools:latest -- factory-precaching-cli download -r 4.17.0 \
+    # podman run -v /mnt:/mnt -v /root/.docker:/root/.docker --privileged --rm quay.io/openshift-kni/telco-ran-tools:latest -- factory-precaching-cli download -r 4.20.0 \
     --acm-version 2.6.3 --mce-version 2.1.4 -f /mnt \
     --img quay.io/custom/repository \
     --du-profile -s \
@@ -1145,7 +1145,7 @@ Procedure
 
     ``` terminal
     # podman run -v /mnt:/mnt -v /root/.docker:/root/.docker -v /etc/pki:/etc/pki --privileged -it --rm quay.io/openshift-kni/telco-ran-tools:latest -- \
-    factory-precaching-cli download -r 4.17.0 --acm-version 2.5.4 \
+    factory-precaching-cli download -r 4.20.0 --acm-version 2.5.4 \
        --mce-version 2.0.4 -f /mnt \--img quay.io/custom/repository
        --du-profile -s --skip-imageset
     ```

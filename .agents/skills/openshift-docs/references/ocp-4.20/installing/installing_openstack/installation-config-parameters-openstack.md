@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Before you deploy an OpenShift Container Platform cluster on Red Hat OpenStack Platform (RHOSP), you provide parameters to customize your cluster and the platform that hosts it. When you create the `install-config.yaml` file, you provide values for the required parameters through the command line. You can then modify the `install-config.yaml` file to customize your cluster further.
+Before you deploy an OpenShift Container Platform cluster on Red Hat OpenStack Platform (RHOSP), provide parameters to customize your environment. Provide required parameters through the CLI when generating the `install-config.yaml` file. You can then further customize the file.
 
 # Available installation configuration parameters for OpenStack
 
-To customize your cluster installation, configuration parameters are available to use in the `install-config.yaml` file.
+To customize your cluster installation, you can use configuration parameters in the `install-config.yaml` file.
 
 The following tables specify the required, optional, and OpenStack-specific installation configuration parameters that you can set as part of the installation process.
 
@@ -198,7 +198,7 @@ If you configure your cluster to use both IP address families, review the follow
 <div class="note">
 <div class="title">
 &#10;</div>
-<p>Set the <code>networking.machineNetwork</code> to match the CIDR that the preferred NIC resides in.</p>
+<p>Set the <code>networking.machineNetwork</code> to match the CIDR of the preferred NIC.</p>
 </div></td>
 </tr>
 <tr>
@@ -507,7 +507,7 @@ Additional RHOSP configuration parameters are described in the following table:
   openstack:
     cloud:</code></pre></td>
 <td style="text-align: left;"><p>The name of the RHOSP cloud to use from the list of clouds in the <code>clouds.yaml</code> file.</p>
-<p>In the cloud configuration in the <code>clouds.yaml</code> file, if possible, use application credentials rather than a user name and password combination. Using application credentials avoids disruptions from secret propogation that follow user name and password rotation.</p>
+<p>In the cloud configuration in the <code>clouds.yaml</code> file, if possible, use application credentials rather than a user name and password combination. Using application credentials avoids disruptions from secret propagation that follow user name and password rotation.</p>
 <p><strong>Value:</strong> String, for example <code>MyCloud</code>.</p></td>
 </tr>
 <tr>

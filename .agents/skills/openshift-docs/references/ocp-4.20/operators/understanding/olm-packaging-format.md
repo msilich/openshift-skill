@@ -1,12 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This guide outlines the packaging format for Operators supported by Operator Lifecycle Manager (OLM) in OpenShift Container Platform.
+You can use the Operator Framework packaging format to bundle and publish Operator metadata for Operator Lifecycle Manager (OLM) in OpenShift Container Platform. The format covers bundle images, dependencies, and file-based catalog schemas.
 
 # Bundle format
 
-The *bundle format* for Operators is a packaging format introduced by the Operator Framework. To improve scalability and to better enable upstream users hosting their own catalogs, the bundle format specification simplifies the distribution of Operator metadata.
+The bundle format is an Operator Framework packaging format that simplifies distributing Operator metadata to catalogs. An Operator bundle is a single Operator version shipped as a non-runnable container image that stores Kubernetes manifests and metadata.
 
-An Operator bundle represents a single version of an Operator. On-disk *bundle manifests* are containerized and shipped as a *bundle image*, which is a non-runnable container image that stores the Kubernetes manifests and Operator metadata. Storage and distribution of the bundle image is then managed using existing container tools like `podman` and `docker` and container registries such as Quay.
+Storage and distribution of the bundle image is managed using existing container tools like `podman` and `docker` and container registries such as Quay.
 
 Operator metadata can include:
 
@@ -28,9 +28,7 @@ When loading manifests into the Operator Registry database, the following requir
 
 ## Manifests
 
-Bundle manifests refer to a set of Kubernetes manifests that define the deployment and RBAC model of the Operator.
-
-A bundle includes one CSV per directory and typically the CRDs that define the owned APIs of the CSV in its `/manifests` directory.
+Bundle manifests are Kubernetes objects in an Operator bundle that define the deployment and role based access control (RBAC) model for an Operator. A bundle includes one cluster service version (CSV) and typically the custom resource definitions (CRDs) for APIs owned by that CSV in its `/manifests` directory.
 
 <div class="formalpara">
 
@@ -54,17 +52,11 @@ etcd
 
 </div>
 
-### Additionally supported objects
+### Additional supported Kubernetes objects
 
-The following object types can also be optionally included in the `/manifests` directory of a bundle:
+Operator bundles can optionally include additional Kubernetes object types in the `/manifests` directory for deployment with a cluster service version (CSV). When included, Operator Lifecycle Manager (OLM) creates and manages the lifecycle of these objects alongside the CSV.
 
-<div>
-
-<div class="title">
-
-Supported optional object types
-
-</div>
+The following optional object types are supported:
 
 - `ClusterRole`
 
@@ -100,17 +92,7 @@ Supported optional object types
 
 - `VerticalPodAutoscaler`
 
-</div>
-
-When these optional objects are included in a bundle, Operator Lifecycle Manager (OLM) can create them from the bundle and manage their lifecycle along with the CSV:
-
-<div>
-
-<div class="title">
-
-Lifecycle for optional objects
-
-</div>
+OLM manages the lifecycle of these optional objects as follows:
 
 - When the CSV is deleted, OLM deletes the optional object.
 
@@ -120,11 +102,11 @@ Lifecycle for optional objects
 
   - If the name of the optional object has changed between versions, OLM deletes and recreates it.
 
-</div>
-
 ## Annotations
 
-A bundle also includes an `annotations.yaml` file in its `/metadata` directory. This file defines higher level aggregate data that helps describe the format and package information about how the bundle should be added into an index of bundles:
+Operator bundle annotations in the `metadata/annotations.yaml` file define aggregate metadata that describes how a bundle is indexed. These annotations specify media type, manifest paths, package name, channels, and the default channel for catalog registration.
+
+A bundle includes an `annotations.yaml` file in its `/metadata` directory:
 
 <div class="formalpara">
 
@@ -146,24 +128,32 @@ annotations:
 
 </div>
 
-- The media type or format of the Operator bundle. The `registry+v1` format means it contains a CSV and its associated Kubernetes objects.
+where:
 
-- The path in the image to the directory that contains the Operator manifests. This label is reserved for future use and currently defaults to `manifests/`. The value `manifests.v1` implies that the bundle contains Operator manifests.
+`annotations.operators.operatorframework.io.bundle.mediatype.v1`
+Specifies the media type or format of the Operator bundle. The `registry+v1` format means it contains a CSV and its associated Kubernetes objects.
 
-- The path in the image to the directory that contains metadata files about the bundle. This label is reserved for future use and currently defaults to `metadata/`. The value `metadata.v1` implies that this bundle has Operator metadata.
+`annotations.operators.operatorframework.io.bundle.manifests.v1`
+Specifies the path in the image to the directory that contains the Operator manifests. This label is reserved for future use and currently defaults to `manifests/`. The value `manifests.v1` implies that the bundle contains Operator manifests.
 
-- The package name of the bundle.
+`annotations.operators.operatorframework.io.bundle.metadata.v1`
+Specifies the path in the image to the directory that contains metadata files about the bundle. This label is reserved for future use and currently defaults to `metadata/`. The value `metadata.v1` implies that this bundle has Operator metadata.
 
-- The list of channels the bundle is subscribing to when added into an Operator Registry.
+`annotations.operators.operatorframework.io.bundle.package.v1`
+Specifies the package name of the bundle.
 
-- The default channel an Operator should be subscribed to when installed from a registry.
+`annotations.operators.operatorframework.io.bundle.channels.v1`
+Specifies the list of channels the bundle is subscribing to when added into an Operator Registry.
+
+`annotations.operators.operatorframework.io.bundle.channel.default.v1`
+Specifies the default channel an Operator should be subscribed to when installed from a registry.
 
 > [!NOTE]
 > In case of a mismatch, the `annotations.yaml` file is authoritative because the on-cluster Operator Registry that relies on these annotations only has access to this file.
 
 ## Dependencies
 
-The dependencies of an Operator are listed in a `dependencies.yaml` file in the `metadata/` folder of a bundle. This file is optional and currently only used to specify explicit Operator-version dependencies.
+Operator dependencies define relationships between Operators that Operator Lifecycle Manager (OLM) must resolve during installation on OpenShift Container Platform. You can list these dependencies in the optional `dependencies.yaml` file in a bundle’s `metadata/` folder.
 
 The dependency list contains a `type` field for each item to specify what kind of dependency this is. The following types of Operator dependencies are supported:
 
@@ -215,15 +205,15 @@ Additional resources
 
 ## About the opm CLI
 
-The `opm` CLI tool is provided by the Operator Framework for use with the Operator bundle format. This tool allows you to create and maintain catalogs of Operators from a list of Operator bundles that are similar to software repositories. The result is a container image which can be stored in a container registry and then installed on a cluster.
+The `opm` CLI is an Operator Framework tool for creating and maintaining Operator catalogs from bundle images in OpenShift Container Platform. You can use it to build catalog container images that Operator Lifecycle Manager (OLM) references through catalog sources.
 
 A catalog contains a database of pointers to Operator manifest content that can be queried through an included API that is served when the container image is run. On OpenShift Container Platform, Operator Lifecycle Manager (OLM) can reference the image in a catalog source, defined by a `CatalogSource` object, which polls the image at regular intervals to enable frequent updates to installed Operators on the cluster.
 
 - See [CLI tools](../../cli_reference/opm/cli-opm-install.md#cli-opm-install) for steps on installing the `opm` CLI.
 
-# Highlights
+# Introduction to file-based catalogs
 
-*File-based catalogs* are the latest iteration of the catalog format in Operator Lifecycle Manager (OLM). It is a plain text-based (JSON or YAML) and declarative config evolution of the earlier SQLite database format, and it is fully backwards compatible. The goal of this format is to enable Operator catalog editing, composability, and extensibility.
+File-based catalogs are the latest plain text (JSON or YAML) catalog format for Operator Lifecycle Manager (OLM). This format enables catalog editing, composability, and extensibility while remaining compatible with earlier SQLite-based catalogs.
 
 Editing
 With file-based catalogs, users interacting with the contents of a catalog are able to make direct changes to the format and verify that their changes are valid. Because this format is plain text JSON or YAML, catalog maintainers can easily manipulate catalog metadata by hand or with widely known and supported JSON or YAML tooling, such as the `jq` CLI.
@@ -258,7 +248,21 @@ While this extensibility allows for additional official tooling to be developed 
 >
 > The `opm` subcommands, flags, and functionality related to the SQLite database format are also deprecated and will be removed in a future release. The features are still supported and must be used for catalogs that use the deprecated SQLite database format.
 >
-> Many of the `opm` subcommands and flags for working with the SQLite database format, such as `opm index prune`, do not work with the file-based catalog format. For more information about working with file-based catalogs, see [Managing custom catalogs](../admin/olm-managing-custom-catalogs.md#olm-managing-custom-catalogs-fb) and [Mirroring images for a disconnected installation using the oc-mirror plugin](../../disconnected/installing-mirroring-disconnected.md#installing-mirroring-disconnected).
+> Many of the `opm` subcommands and flags for working with the SQLite database format, such as `opm index prune`, do not work with the file-based catalog format.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Managing custom catalogs](../admin/olm-managing-custom-catalogs.md#olm-managing-custom-catalogs-fb)
+
+- [Mirroring images for a disconnected installation using the oc-mirror plugin](../../disconnected/installing-mirroring-disconnected.md#installing-mirroring-disconnected)
+
+</div>
 
 ## Directory structure
 
@@ -285,7 +289,7 @@ Example `.indexignore` file
 
 </div>
 
-Catalog maintainers have the flexibility to choose their desired layout, but it is recommended to store each package’s file-based catalog blobs in separate subdirectories. Each individual file can be either JSON or YAML; it is not necessary for every file in a catalog to use the same format.
+Catalog maintainers have the flexibility to choose their layout, but it is recommended to store each package’s file-based catalog blobs in separate subdirectories. Each individual file can be either JSON or YAML; it is not necessary for every file in a catalog to use the same format.
 
 <div class="formalpara">
 
@@ -315,7 +319,7 @@ This recommended structure has the property that each subdirectory in the direct
 
 ## Schemas
 
-File-based catalogs use a format, based on the [CUE language specification](https://cuelang.org/docs/references/spec/), that can be extended with arbitrary schemas. The following `_Meta` CUE schema defines the format that all file-based catalog blobs must adhere to:
+File-based catalogs on OpenShift Container Platform use a CUE-based format with schemas that define catalog structure for Operator Lifecycle Manager (OLM). Each Operator package requires one `olm.package` blob, at least one `olm.channel` blob, and one or more `olm.bundle` blobs.
 
 <div class="formalpara">
 
@@ -351,16 +355,12 @@ _Meta: {
 > [!NOTE]
 > No CUE schemas listed in this specification should be considered exhaustive. The `opm validate` command has additional validations that are difficult or impossible to express concisely in CUE.
 
-An Operator Lifecycle Manager (OLM) catalog currently uses three schemas (`olm.package`, `olm.channel`, and `olm.bundle`), which correspond to OLM’s existing package and bundle concepts.
-
-Each Operator package in a catalog requires exactly one `olm.package` blob, at least one `olm.channel` blob, and one or more `olm.bundle` blobs.
-
 > [!NOTE]
 > All `olm.*` schemas are reserved for OLM-defined schemas. Custom schemas must use a unique prefix, such as a domain that you own.
 
 ### olm.package schema
 
-The `olm.package` schema defines package-level metadata for an Operator. This includes its name, description, default channel, and icon.
+The `olm.package` schema specifies package-level metadata for Operators in file-based catalogs, including name, default channel, and icon. Use this schema reference when you build or validate Operator package definitions for Operator Lifecycle Manager (OLM).
 
 <div class="example">
 
@@ -444,7 +444,21 @@ It is valid for an entry’s `replaces` value to reference another bundle name t
 >
 > You can update an Operator incrementally while keeping previously installed versions available to users for future installation by using both the `skipRange` and `replaces` field. Ensure that the `replaces` field points to the immediate previous version of the Operator version in question.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [CUE language specification](https://cuelang.org/docs/references/spec/)
+
+</div>
+
 ### olm.bundle schema
+
+The `olm.bundle` schema defines the structure of bundle entries stored in an Operator catalog index. It specifies required fields such as package name, bundle name, image reference, and optional properties and related images.
 
 <div class="example">
 
@@ -486,9 +500,7 @@ It is valid for an entry’s `replaces` value to reference another bundle name t
 
 ### olm.deprecations schema
 
-The optional `olm.deprecations` schema defines deprecation information for packages, bundles, and channels in a catalog. Operator authors can use this schema to provide relevant messages about their Operators, such as support status and recommended upgrade paths, to users running those Operators from a catalog.
-
-When this schema is defined, the OpenShift Container Platform web console displays warning badges for the affected elements of the Operator, including any custom deprecation messages, on both the pre- and post-installation pages of the software catalog.
+The optional `olm.deprecations` schema defines deprecation information for packages, bundles, and channels in an Operator catalog. When you define this schema, the web console displays warning badges and deprecation messages in the software catalog.
 
 An `olm.deprecations` schema entry contains one or more of the following `reference` types, which indicates the deprecation scope. After the Operator is installed, any specified messages can be viewed as status conditions on the related `Subscription` object.
 
@@ -502,7 +514,7 @@ Deprecation `reference` types
 
 Each `reference` type has their own requirements, as detailed in the following example.
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -533,6 +545,8 @@ entries:
     install my-operator.v1.72.0 for support.
 ```
 
+</div>
+
 - Each deprecation schema must have a `package` value, and that package reference must be unique across the catalog. There must not be an associated `name` field.
 
 - The `olm.package` schema must not include a `name` field, because it is determined by the `package` field defined earlier in the schema.
@@ -542,8 +556,6 @@ entries:
 - The `name` field for the `olm.channel` schema is required.
 
 - The `name` field for the `olm.bundle` schema is required.
-
-</div>
 
 > [!NOTE]
 > The deprecation feature does not consider overlapping deprecation, for example package versus channel versus bundle.
@@ -589,7 +601,7 @@ OLM defines a handful of property types, again using the reserved `olm.*` prefix
 
 The `olm.package` property defines the package name and version. This is a required property on bundles, and there must be exactly one of these properties. The `packageName` field must match the bundle’s first-class `package` field, and the `version` field must be a valid semantic version.
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -613,7 +625,7 @@ The `olm.package` property defines the package name and version. This is a requi
 
 The `olm.gvk` property defines the group/version/kind (GVK) of a Kubernetes API that is provided by this bundle. This property is used by OLM to resolve a bundle with this property as a dependency for other bundles that list the same GVK as a required API. The GVK must adhere to Kubernetes GVK validations.
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -638,7 +650,7 @@ The `olm.gvk` property defines the group/version/kind (GVK) of a Kubernetes API 
 
 The `olm.package.required` property defines the package name and version range of another package that this bundle requires. For every required package property a bundle lists, OLM ensures there is an Operator installed on the cluster for the listed package and in the required version range. The `versionRange` field must be a valid semantic version (semver) range.
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -662,7 +674,7 @@ The `olm.package.required` property defines the package name and version range o
 
 The `olm.gvk.required` property defines the group/version/kind (GVK) of a Kubernetes API that this bundle requires. For every required GVK property a bundle lists, OLM ensures there is an Operator installed on the cluster that provides it. The GVK must adhere to Kubernetes GVK validations.
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -685,7 +697,9 @@ The `olm.gvk.required` property defines the group/version/kind (GVK) of a Kubern
 
 ## Example catalog
 
-With file-based catalogs, catalog maintainers can focus on Operator curation and compatibility. Because Operator authors have already produced Operator-specific catalogs for their Operators, catalog maintainers can build their catalog by rendering each Operator catalog into a subdirectory of the catalog’s root directory.
+With file-based catalogs, catalog maintainers can focus on Operator curation and compatibility.
+
+Because Operator authors have already produced Operator-specific catalogs for their Operators, catalog maintainers can build their catalog by rendering each Operator catalog into a subdirectory of the catalog’s root directory.
 
 There are many possible ways to build a file-based catalog; the following steps outline a simple approach:
 
@@ -741,7 +755,7 @@ There are many possible ways to build a file-based catalog; the following steps 
 
 ## Guidelines
 
-Consider the following guidelines when maintaining file-based catalogs.
+Follow the guidelines to maintain file-based Operator catalogs. Treat bundle images and metadata as immutable. Store catalog metadata in source control as the source of truth.
 
 ### Immutable bundles
 
@@ -751,7 +765,7 @@ If a broken bundle has been pushed to a catalog, you must assume that at least o
 
 However, there are some cases where a change in the catalog metadata is preferred:
 
-- Channel promotion: If you already released a bundle and later decide that you would like to add it to another channel, you can add an entry for your bundle in another `olm.channel` blob.
+- Channel promotion: If you already released a bundle and later decide that you want to add it to another channel, you can add an entry for your bundle in another `olm.channel` blob.
 
 - New upgrade paths: If you release a new `1.2.z` bundle version, for example `1.2.4`, but `1.3.0` is already released, you can update the catalog metadata for `1.3.0` to skip `1.2.4`.
 
@@ -763,15 +777,28 @@ Catalog metadata should be stored in source control and treated as the source of
 
 2.  Build and push the catalog image. Use a consistent tagging taxonomy, such as `:latest` or `:<target_cluster_version>`, so that users can receive updates to a catalog as they become available.
 
-## CLI usage
+> [!NOTE]
+> For more information about creating file-based catalogs by using the `opm` CLI, see "Creating a file-based catalog image".
 
-For instructions about creating file-based catalogs by using the `opm` CLI, see [Managing custom catalogs](../admin/olm-managing-custom-catalogs.md#olm-creating-fb-catalog-image_olm-managing-custom-catalogs).
+<div>
 
-For reference documentation about the `opm` CLI commands related to managing file-based catalogs, see [CLI tools](../../cli_reference/opm/cli-opm-ref.md#cli-opm-ref).
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Managing custom catalogs](../admin/olm-managing-custom-catalogs.md#olm-creating-fb-catalog-image_olm-managing-custom-catalogs)
+
+- [CLI tools](../../cli_reference/opm/cli-opm-ref.md#cli-opm-ref)
+
+</div>
 
 ## Automation
 
-Operator authors and catalog maintainers are encouraged to automate their catalog maintenance with CI/CD workflows. Catalog maintainers can further improve on this by building GitOps automation to accomplish the following tasks:
+Operator authors and catalog maintainers can automate file-based catalog maintenance with CI/CD workflows.
+
+Catalog maintainers can use GitOps automation to accomplish the following example tasks:
 
 - Check that pull request (PR) authors are permitted to make the requested changes, for example by updating their package’s image reference.
 

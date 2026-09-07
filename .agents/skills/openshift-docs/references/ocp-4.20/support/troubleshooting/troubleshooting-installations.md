@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Use the following sections to troubleshoot OpenShift Container Platform installation issues.
+
 # Determining where installation issues occur
 
 When troubleshooting OpenShift Container Platform installation issues, you can monitor installation logs to determine at which stage issues occur. Then, retrieve diagnostic data relevant to that stage.
@@ -34,7 +36,7 @@ OpenShift Container Platform installation proceeds through the following stages:
 
 The default installation method uses installer-provisioned infrastructure. With installer-provisioned infrastructure clusters, OpenShift Container Platform manages all aspects of the cluster, including the operating system itself. If possible, use this feature to avoid having to provision and maintain the cluster infrastructure.
 
-You can alternatively install OpenShift Container Platform 4.17 on infrastructure that you provide. If you use this installation method, follow user-provisioned infrastructure installation documentation carefully. Additionally, review the following considerations before the installation:
+You can alternatively install OpenShift Container Platform 4.20 on infrastructure that you provide. If you use this installation method, follow user-provisioned infrastructure installation documentation carefully. Additionally, review the following considerations before the installation:
 
 - Check the [Red Hat Enterprise Linux (RHEL) Ecosystem](https://access.redhat.com/ecosystem/search/#/ecosystem/Red%20Hat%20Enterprise%20Linux) to determine the level of Red Hat Enterprise Linux CoreOS (RHCOS) support provided for your chosen server hardware or virtualization technology.
 
@@ -55,7 +57,7 @@ You can alternatively install OpenShift Container Platform 4.17 on infrastructur
 
 # Checking a load balancer configuration before OpenShift Container Platform installation
 
-Check your load balancer configuration prior to starting an OpenShift Container Platform installation.
+Check your load balancer configuration before starting an OpenShift Container Platform installation.
 
 <div>
 
@@ -114,7 +116,9 @@ Procedure
 
 # Specifying OpenShift Container Platform installer log levels
 
-By default, the OpenShift Container Platform installer log level is set to `info`. If more detailed logging is required when diagnosing a failed OpenShift Container Platform installation, you can increase the `openshift-install` log level to `debug` when starting the installation again.
+By default, the OpenShift Container Platform installer log level is set to `info`.
+
+If more detailed logging is required when diagnosing a failed OpenShift Container Platform installation, you can increase the `openshift-install` log level to `debug` when starting the installation again.
 
 <div>
 
@@ -142,7 +146,7 @@ Procedure
   $ ./openshift-install --dir <installation_directory> wait-for bootstrap-complete --log-level debug
   ```
 
-  - Possible log levels include `info`, `warn`, `error,` and `debug`.
+  Possible log levels include `info`, `warn`, `error,` and `debug`.
 
 </div>
 
@@ -276,7 +280,7 @@ Procedure
           $ curl -I http://<http_server_fqdn>:<port>/bootstrap.ign
           ```
 
-          - The `-I` option returns the header only. If the Ignition file is available on the specified URL, the command returns `200 OK` status. If it is not available, the command returns `404 file not found`.
+          The `-I` option returns the header only. If the Ignition file is available on the specified URL, the command returns `200 OK` status. If it is not available, the command returns `404 file not found`.
 
       2.  To verify that the Ignition file was received by the bootstrap node, query the HTTP server logs on the serving host. For example, if you are using an Apache web server to serve Ignition files, enter the following command:
 
@@ -368,7 +372,7 @@ Procedure
           $ curl -I http://<http_server_fqdn>:<port>/master.ign
           ```
 
-          - The `-I` option returns the header only. If the Ignition file is available on the specified URL, the command returns `200 OK` status. If it is not available, the command returns `404 file not found`.
+          The `-I` option returns the header only. If the Ignition file is available on the specified URL, the command returns `200 OK` status. If it is not available, the command returns `404 file not found`.
 
       2.  To verify that the Ignition file was received by the control plane node query the HTTP server logs on the serving host. For example, if you are using an Apache web server to serve Ignition files:
 
@@ -466,7 +470,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
+        > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
 
 9.  Retrieve `crio.service` journald unit logs on control plane nodes, after they have booted. This provides visibility into control plane node CRI-O container runtime activity.
 
@@ -657,7 +661,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
+        > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
 
 4.  Validate primary and secondary DNS server connectivity from control plane nodes.
 
@@ -714,7 +718,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
+        > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
 
 5.  Check for certificate expiration messages in the control plane node kubelet logs.
 
@@ -734,7 +738,9 @@ Procedure
 
 # Investigating worker node installation issues
 
-If you experience worker node installation issues, you can review the worker node status. Collect `kubelet.service`, `crio.service` journald unit logs and the worker node container logs for visibility into the worker node agent, CRI-O container runtime and pod activity. Additionally, you can check the Ignition file and Machine API Operator functionality. If worker node postinstallation configuration fails, check Machine Config Operator (MCO) and DNS functionality. You can also verify system clock synchronization between the bootstrap, master, and worker nodes, and validate certificates.
+If you experience worker node installation issues, you can review the worker node status. Collect `kubelet.service`, `crio.service` journald unit logs and the worker node container logs for visibility into the worker node agent, CRI-O container runtime and pod activity.
+
+Additionally, you can check the Ignition file and Machine API Operator functionality. If worker node postinstallation configuration fails, check Machine Config Operator (MCO) and DNS functionality. You can also verify system clock synchronization between the bootstrap, master, and worker nodes, and validate certificates.
 
 <div>
 
@@ -779,7 +785,7 @@ Procedure
           $ curl -I http://<http_server_fqdn>:<port>/worker.ign
           ```
 
-          - The `-I` option returns the header only. If the Ignition file is available on the specified URL, the command returns `200 OK` status. If it is not available, the command returns `404 file not found`.
+          The `-I` option returns the header only. If the Ignition file is available on the specified URL, the command returns `200 OK` status. If it is not available, the command returns `404 file not found`.
 
       2.  To verify that the Ignition file was received by the worker node, query the HTTP server logs on the HTTP host. For example, if you are using an Apache web server to serve Ignition files:
 
@@ -857,7 +863,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
+        > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
 
 8.  Retrieve `crio.service` journald unit logs on worker nodes, after they have booted. This provides visibility into worker node CRI-O container runtime activity.
 
@@ -1010,9 +1016,9 @@ Procedure
 
         </div>
 
-        - A client request CSR.
+        - In this example, `csr-8b2br` represents a client request CSR.
 
-        - A server request CSR.
+        - The `csr-bfd72` represents a server request CSR.
 
           In this example, two machines are joining the cluster. You might see more approved CSRs in the list.
 
@@ -1029,8 +1035,6 @@ Procedure
           ``` terminal
           $ oc adm certificate approve <csr_name>
           ```
-
-          - `<csr_name>` is the name of a CSR from the list of current CSRs.
 
         - To approve all pending CSRs, run the following command:
 
@@ -1142,25 +1146,25 @@ Procedure
         > [!NOTE]
         > A default cluster contains three control plane machines. List all of your control plane machines as shown, no matter how many your cluster uses.
 
-        <div class="formalpara">
+      <div class="formalpara">
 
-        <div class="title">
+      <div class="title">
 
-        Example output
+      Example output
 
-        </div>
+      </div>
 
-        ``` terminal
-        INFO Pulling debug logs from the bootstrap machine
-        INFO Bootstrap gather logs captured here "<installation_directory>/log-bundle-<timestamp>.tar.gz"
-        ```
+      ``` terminal
+      INFO Pulling debug logs from the bootstrap machine
+      INFO Bootstrap gather logs captured here "<installation_directory>/log-bundle-<timestamp>.tar.gz"
+      ```
 
-        </div>
+      </div>
 
-        If you open a Red Hat support case about your installation failure, include the compressed logs when opening a Red Hat support case.
+      If you open a Red Hat support case about your installation failure, include the compressed logs when opening a Red Hat support case.
 
 </div>
 
 # Additional resources
 
-- See [Installation process](../../architecture/architecture-installation.md#installation-process_architecture-installation) for more details on OpenShift Container Platform installation types and process.
+- [Installation process](../../architecture/architecture-installation.md#installation-process_architecture-installation)

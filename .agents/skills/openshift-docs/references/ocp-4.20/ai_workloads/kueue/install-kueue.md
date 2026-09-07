@@ -4,7 +4,7 @@ You can install Red Hat build of Kueue by using the Red Hat Build of Kueue Oper
 
 # Compatible environments
 
-Before you install Red Hat build of Kueue, review this section to ensure that your cluster meets the requirements.
+Your cluster must meet specific architecture and platform requirements before you can install Red Hat build of Kueue.
 
 ## Supported architectures
 
@@ -69,8 +69,6 @@ Procedure
 
     > [!NOTE]
     > Alternatively, if you are creating the `Namespace` object by using YAML, ensure that you include the `openshift.io/cluster-monitoring: "true"` label:
-    >
-    > \+
     >
     > ``` yaml
     > apiVersion: v1
@@ -238,11 +236,16 @@ Procedure
 
     </div>
 
-    - The name of the `Kueue` CR must be `cluster`.
+    where:
 
-    - If you want to configure Red Hat build of Kueue for use with other workload types, add those types here. The default configuration is `BatchJob`. Additional types are `Pod`, `Deployment`, and `StatefulSet`.
+    `metadata.name`
+    Specifies the name of the `Kueue` CR. The value must be `cluster`.
 
-    - Optional: If you want to configure fair sharing for Red Hat build of Kueue, set the `preemptionPolicy` value to `FairSharing`. The default setting in the `Kueue` CR is `Classical` preemption.
+    `spec.config.integrations.frameworks`
+    Specifies the workload types to configure for Red Hat build of Kueue. The default configuration is `BatchJob`. Additional types are `Pod`, `Deployment`, and `StatefulSet`.
+
+    `spec.config.preemption.preemptionPolicy`
+    Specifies the preemption policy for Red Hat build of Kueue. Set the value to `FairSharing` to configure fair sharing. The default value is `Classical`. This value is optional.
 
 5.  Click **Create**.
 
@@ -283,9 +286,7 @@ Verification
 
 # Labeling namespaces to allow Red Hat build of Kueue to manage jobs
 
-The Red Hat build of Kueue Operator uses an opt-in webhook mechanism to ensure that policies are only enforced for the jobs and namespaces that it is expected to target.
-
-You must label the namespaces where you want Red Hat build of Kueue to manage jobs with the `kueue.openshift.io/managed=true` label.
+You must add the `kueue.openshift.io/managed=true` label to each namespace where you want Red Hat build of Kueue to manage jobs, because the Operator only enforces policies on labeled namespaces.
 
 <div>
 
@@ -317,6 +318,6 @@ Procedure
   $ oc label namespace <namespace> kueue.openshift.io/managed=true
   ```
 
-</div>
+  When you add this label, you instruct the Red Hat build of Kueue Operator that the namespace is managed by its webhook admission controllers. As a result, any Red Hat build of Kueue resources within that namespace are properly validated and mutated.
 
-When you add this label, you instruct the Red Hat build of Kueue Operator that the namespace is managed by its webhook admission controllers. As a result, any Red Hat build of Kueue resources within that namespace are properly validated and mutated.
+</div>

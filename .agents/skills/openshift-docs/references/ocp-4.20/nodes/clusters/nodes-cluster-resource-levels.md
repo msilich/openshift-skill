@@ -27,7 +27,7 @@ Prerequisites
 
 </div>
 
-1.  Run the OpenShift Cluster Capacity Tool, which is available as a container image from the Red Hat Ecosystem Catalog. See the link in the "Additional resources" section.
+1.  Run the OpenShift Cluster Capacity Tool, which is available as a container image from the Red Hat Ecosystem Catalog.
 
 2.  Create a sample pod spec file:
 
@@ -156,7 +156,7 @@ Prerequisites
 
 </div>
 
-- Download and install the OpenShift Cluster Capacity Tool from the `cluster-capacity` repository. See the link in the "Additional resources" section.
+- Download and install the OpenShift Cluster Capacity Tool from the `cluster-capacity` repository.
 
 </div>
 

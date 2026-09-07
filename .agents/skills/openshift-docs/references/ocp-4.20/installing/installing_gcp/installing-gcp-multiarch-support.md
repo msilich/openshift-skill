@@ -1,9 +1,9 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-An OpenShift Container Platform cluster with multi-architecture compute machines supports compute machines with different architectures.
+You can install an OpenShift Container Platform cluster on Google Cloud with multi-architecture support to run workloads on compute machines with different CPU architectures.
 
 > [!NOTE]
-> When you have nodes with multiple architectures in your cluster, the architecture of your image must be consistent with the architecture of the node. You must ensure that the pod is assigned to the node with the appropriate architecture and that it matches the image architecture. For more information on assigning pods to nodes, [Scheduling workloads on clusters with multi-architecture compute machines](../../post_installation_configuration/configuring-multi-arch-compute-machines/multi-architecture-compute-managing.md#scheduling-workloads-on-clusters-with-multi-architecture-compute-machines).
+> When you have nodes with different architectures in your cluster, the architecture of your image must be consistent with the architecture of the node. You must verify that the pod is assigned to the node with the appropriate architecture and that it matches the image architecture. For more information about assigning pods to nodes, see "Scheduling workloads on clusters with multi-architecture compute machines".
 
 You can install a Google Cloud cluster with the support for configuring multi-architecture compute machines. After installing the Google Cloud cluster, you can add multi-architecture compute machines to the cluster in the following ways:
 
@@ -107,26 +107,10 @@ Procedure
 
 </div>
 
-<div>
-
-<div class="title">
-
-Next steps
-
-</div>
+# Additional resources
 
 - [Deploying the cluster](installing-gcp-customizations.md#installation-launching-installer_installing-gcp-customizations)
 
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+- [Scheduling workloads on clusters with multi-architecture compute machines](../../post_installation_configuration/configuring-multi-arch-compute-machines/multi-architecture-compute-managing.md#scheduling-workloads-on-clusters-with-multi-architecture-compute-machines)
 
 - [Managing workloads on multi-architecture clusters by using the Multiarch Tuning Operator](../../post_installation_configuration/configuring-multi-arch-compute-machines/multiarch-tuning-operator.md#multiarch-tuning-operator)
-
-</div>

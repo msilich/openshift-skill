@@ -78,13 +78,7 @@ Verification
   $ oc cluster-compare -h
   ```
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  The following is example output:
 
   ``` terminal
   Compare a known valid reference configuration and a set of specific cluster configuration CRs.
@@ -100,8 +94,6 @@ Verification
 
    ...
   ```
-
-  </div>
 
 </div>
 

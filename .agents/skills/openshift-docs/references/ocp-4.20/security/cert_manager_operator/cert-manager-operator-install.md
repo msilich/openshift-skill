@@ -1,16 +1,13 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The cert-manager Operator for Red Hat OpenShift is not installed in OpenShift Container Platform by default. You can install the cert-manager Operator for Red Hat OpenShift by using the web console.
+The cert-manager Operator for Red Hat OpenShift is not installed in OpenShift Container Platform by default. You can install the cert-manager Operator for Red Hat OpenShift by using the web console and command-line interface (CLI).
 
-> [!NOTE]
-> The cert-manager Operator for Red Hat OpenShift sets the `features.operators.openshift.io/token-auth-aws`, `features.operators.openshift.io/token-auth-azure`, and `features.operators.openshift.io/token-auth-gcp` annotations in the `ClusterServiceVersion` custom resource of the Operator. The OpenShift Container Platform web console requires the credential details when these annotations are set. Currently, the Operator does not use the values collected by the OpenShift web console and you can provide any value when asked for the input. For example, when installing on the managed OpenShift Container Platform cluster, the `identity-provider-arn` is asked and any value can be provided to proceed.
+The cert-manager Operator for Red Hat OpenShift sets the `features.operators.openshift.io/token-auth-aws`, `features.operators.openshift.io/token-auth-azure`, and `features.operators.openshift.io/token-auth-gcp` annotations in the `ClusterServiceVersion` custom resource of the Operator. The OpenShift Container Platform web console requires the credential details when these annotations are set. Currently, the Operator does not use the values collected by the OpenShift web console and you can provide any value when asked for the input. For example, when installing on the managed OpenShift Container Platform cluster, the `identity-provider-arn` is asked and any value can be provided to proceed.
 
 > [!IMPORTANT]
 > The cert-manager Operator for Red Hat OpenShift version 1.15 or later supports the `AllNamespaces`, `SingleNamespace`, and `OwnNamespace` installation modes. Earlier versions, such as 1.14, support only the `SingleNamespace` and `OwnNamespace` installation modes.
 
-# Installing the cert-manager Operator for Red Hat OpenShift
-
-## Installing the cert-manager Operator for Red Hat OpenShift by using the web console
+# Installing the cert-manager Operator for Red Hat OpenShift by using the web console
 
 You can use the web console to install the cert-manager Operator for Red Hat OpenShift.
 
@@ -109,9 +106,9 @@ Verification
 
 </div>
 
-## Installing the cert-manager Operator for Red Hat OpenShift by using the CLI
+# Installing the cert-manager Operator for Red Hat OpenShift by using the CLI
 
-You can install the cert-manager Operator for Red Hat OpenShift by using the command-line interface(CLI).
+You can install the cert-manager Operator for Red Hat OpenShift by using the command-line interface (CLI).
 
 <div>
 

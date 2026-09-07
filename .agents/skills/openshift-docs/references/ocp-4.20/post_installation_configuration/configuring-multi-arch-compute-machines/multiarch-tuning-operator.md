@@ -23,15 +23,15 @@ When a pod is created, the operands perform the following actions:
 >
 > - If the `nodeSelector` field is already configured with the `kubernetes.io/arch` label for a workload, the operand does not update the `nodeAffinity` field for that workload.
 >
-> - If the `nodeSelector` field is not configured with the `kubernetes.io/arch` label for a workload, the operand updates the `nodeAffinity` field for that workload. However, in that `nodeAffinity` field, the operand updates only the node selector terms that are not configured with the `kubernetes.io/arch` label.
+> - If the `nodeSelector` field is not configured with the `kubernetes.io/arch` label for a workload, the operand updates the `nodeAffinity` field for that workload. For the `nodeAffinity` field, the operand updates only the node selector terms that are not configured with the `kubernetes.io/arch` label.
 >
 > - If the `nodeName` field is already set, the Multiarch Tuning Operator does not process the pod.
 >
 > - If the pod is owned by a DaemonSet, the operand does not update the `nodeAffinity` field.
 >
-> - If both `nodeSelector` or `nodeAffinity` and `preferredAffinity` fields are set for the `kubernetes.io/arch` label, the operand does not update the `nodeAffinity` field.
+> - If `nodeSelector` or `nodeAffinity` and `preferredAffinity` fields are set for the `kubernetes.io/arch` label, the operand does not update the `nodeAffinity` field.
 >
-> - If only `nodeSelector` or `nodeAffinity` field is set for the `kubernetes.io/arch` label and the `nodeAffinityScoring` plugin is disabled, the operand does not update the `nodeAffinity` field.
+> - If only the `nodeSelector` or the `nodeAffinity` field is set for the `kubernetes.io/arch` label and the `nodeAffinityScoring` plugin is disabled, the operand does not update the `nodeAffinity` field.
 >
 > - If the `nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution` field already contains terms that score nodes based on the `kubernetes.io/arch` label, the operand ignores the configuration in the `nodeAffinityScoring` plugin.
 
@@ -169,7 +169,7 @@ Verification
 
     </div>
 
-    The installation is successful if the Operator is in `Succeeded` phase.
+    The installation is successful if the Operator is in the `Succeeded` phase.
 
 2.  Optional: To verify that the `OperatorGroup` object is created, run the following command:
 
@@ -223,7 +223,7 @@ Additional resources
 
 </div>
 
-- [Installing from the software catalog using the CLI](../../operators/user/olm-installing-operators-in-namespace.md#olm-installing-operator-from-software-catalog-using-cli_olm-installing-operators-in-namespace)
+- [Installing from the software catalog by using the CLI](../../operators/user/olm-installing-operators-in-namespace.md#olm-installing-operator-from-software-catalog-using-cli_olm-installing-operators-in-namespace)
 
 </div>
 
@@ -263,7 +263,7 @@ Procedure
 
 5.  Select the **Multiarch Tuning Operator** version from the **Version** list.
 
-6.  Click **Install**
+6.  Click **Install**.
 
 7.  Set the following options on the **Operator Installation** page:
 
@@ -273,7 +273,7 @@ Procedure
 
     3.  Set **Installed Namespace** to **Operator recommended Namespace** or **Select a Namespace**.
 
-        The recommended Operator namespace is `openshift-multiarch-tuning-operator`. If the `openshift-multiarch-tuning-operator` namespace does not exist, the namespace is created during the operator installation.
+        The recommended Operator namespace is `openshift-multiarch-tuning-operator`. If the `openshift-multiarch-tuning-operator` namespace does not exist, the namespace is created during the Operator installation.
 
         If you select **Select a namespace**, you must select a namespace for the Operator from the **Select Project** list.
 
@@ -305,7 +305,9 @@ Verification
 
 # Multiarch Tuning Operator pod labels and architecture support overview
 
-After installing the Multiarch Tuning Operator, you can verify the multi-architecture support for workloads in your cluster. You can identify and manage pods based on their architecture compatibility by using the pod labels. These labels are automatically set on the newly created pods to provide insights into their architecture support.
+After installing the Multiarch Tuning Operator, you can verify the multi-architecture support for workloads in your cluster. You can identify and manage pods based on their architecture compatibility by using the pod labels.
+
+These labels are automatically set on the newly created pods to provide insights into their architecture support.
 
 The following table describes the labels that the Multiarch Tuning Operator adds when you create a pod:
 
@@ -317,8 +319,8 @@ The following table describes the labels that the Multiarch Tuning Operator adds
 | `multiarch.openshift.io/amd64: ""` | The pod supports the `amd64` architecture. |
 | `multiarch.openshift.io/ppc64le: ""` | The pod supports the `ppc64le` architecture. |
 | `multiarch.openshift.io/s390x: ""` | The pod supports the `s390x` architecture. |
-| `multirach.openshift.io/node-affinity: set` | The Operator has set the node affinity requirement for the architecture. |
-| `multirach.openshift.io/node-affinity: not-set` | The Operator did not set the node affinity requirement. For example, when the pod already has a node affinity for the architecture, the Multiarch Tuning Operator adds this label to the pod. |
+| `multiarch.openshift.io/node-affinity: set` | The Operator has set the node affinity requirement for the architecture. |
+| `multiarch.openshift.io/node-affinity: not-set` | The Operator did not set the node affinity requirement. For example, when the pod already has a node affinity for the architecture, the Multiarch Tuning Operator adds this label to the pod. |
 | `multiarch.openshift.io/scheduling-gate: gated` | The pod is gated. |
 | `multiarch.openshift.io/scheduling-gate: removed` | The pod gate has been removed. |
 | `multiarch.openshift.io/inspection-error: ""` | An error has occurred while building the node affinity requirements. |
@@ -611,9 +613,7 @@ Procedure
 
 </div>
 
-1.  Log in to the OpenShift CLI (`oc`).
-
-2.  Delete the `ClusterPodPlacementConfig` object by running the following command:
+1.  Delete the `ClusterPodPlacementConfig` object by running the following command:
 
     ``` terminal
     $ oc delete clusterpodplacementconfig cluster
@@ -723,7 +723,7 @@ Prerequisites
 
 - You have logged in to `oc` as a user with `cluster-admin` privileges.
 
-- You deleted the `ClusterPodPlacementConfig` object.
+- You have deleted the `ClusterPodPlacementConfig` object.
 
   > [!IMPORTANT]
   > You must delete the `ClusterPodPlacementConfig` object before uninstalling the Multiarch Tuning Operator. Uninstalling the Operator without deleting the `ClusterPodPlacementConfig` object leads to unexpected behavior.
@@ -881,7 +881,7 @@ Prerequisites
 
 - You have access to the cluster with `cluster-admin` permissions.
 
-- You deleted the `ClusterPodPlacementConfig` object.
+- You have deleted the `ClusterPodPlacementConfig` object.
 
   > [!IMPORTANT]
   > You must delete the `ClusterPodPlacementConfig` object before uninstalling the Multiarch Tuning Operator. Uninstalling the Operator without deleting the `ClusterPodPlacementConfig` object leads to unexpected behavior.

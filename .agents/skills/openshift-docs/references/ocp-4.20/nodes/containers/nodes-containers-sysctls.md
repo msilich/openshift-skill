@@ -117,7 +117,7 @@ OpenShift Container Platform adds the following system-wide and interface-specif
 <div class="important">
 <div class="title">
 &#10;</div>
-<p>When specifying a range for the <code>net.ipv4.ip_local_port_range</code> sysctl parameter, ensure the range does not overlap with the range you set for the <code>serviceNodePortRange</code> parameter. For more information, see "Configuring the node port service range" in the <em>Additional resources</em> section.</p>
+<p>When specifying a range for the <code>net.ipv4.ip_local_port_range</code> sysctl parameter, ensure the range does not overlap with the range you set for the <code>serviceNodePortRange</code> parameter. For more information, see "Configuring the node port service range".</p>
 </div></td>
 </tr>
 <tr>
@@ -298,7 +298,7 @@ Procedure
       annotations:
         kubernetes.io/description: |
           Sysctl allowlist for nodes.
-        release.openshift.io/version: 4.17.0-0.nightly-2022-11-16-003434
+        release.openshift.io/version: 4.20.0-0.nightly-2022-11-16-003434
       creationTimestamp: "2022-11-17T14:09:27Z"
       name: cni-sysctl-allowlist
       namespace: openshift-multus

@@ -1,8 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Config maps allow you to decouple configuration artifacts from image content to keep containerized applications portable.
+By using a config map, you can decouple configuration artifacts from image content to keep containerized applications portable.
 
-The following sections define config maps and how to create and use them.
+The following sections define config maps, explain how to create and use them, and describe use cases for consuming `ConfigMap` objects in pods.
 
 # Understanding config maps
 
@@ -90,10 +90,6 @@ Additional resources
 - [Creating and using config maps](../nodes/pods/nodes-pods-configmaps.md)
 
 </div>
-
-# Use cases: Consuming config maps in pods
-
-The following sections describe some uses cases when consuming `ConfigMap` objects in pods.
 
 ## Populating environment variables in containers by using config maps
 

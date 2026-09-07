@@ -1,24 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Conceptually, *Operators* take human operational knowledge and encode it into software that is more easily shared with consumers.
+Operators encode human operational knowledge into software that manages complex applications. You can use Operators to package, deploy, and manage Kubernetes applications with the same APIs and tooling as native cluster resources.
 
 Operators are pieces of software that ease the operational complexity of running another piece of software. They act like an extension of the software vendor’s engineering team, monitoring a Kubernetes environment (such as OpenShift Container Platform) and using its current state to make decisions in real time. Advanced Operators are designed to handle upgrades seamlessly, react to failures automatically, and not take shortcuts, like skipping a software backup process to save time.
-
-More technically, Operators are a method of packaging, deploying, and managing a Kubernetes application.
 
 A Kubernetes application is an app that is both deployed on Kubernetes and managed using the Kubernetes APIs and `kubectl` or `oc` tooling. To be able to make the most of Kubernetes, you require a set of cohesive APIs to extend in order to service and manage your apps that run on Kubernetes. Think of Operators as the runtime that manages this type of app on Kubernetes.
 
 # Why use Operators?
 
-Operators provide:
-
-- Repeatability of installation and upgrade.
-
-- Constant health checks of every system component.
-
-- Over-the-air (OTA) updates for OpenShift components and ISV content.
-
-- A place to encapsulate knowledge from field engineers and spread it to all users, not just one or two.
+Operators package operational knowledge to automate application lifecycle tasks on Kubernetes. Operators provide repeatable installs, health checks, over-the-air updates, and shared expertise encoded in software.
 
 Why deploy on Kubernetes?
 Kubernetes (and by extension, OpenShift Container Platform) contains all of the primitives needed to build complex distributed systems – secret handling, load balancing, service discovery, autoscaling – that work across on-premise and cloud providers.
@@ -31,10 +21,10 @@ A service broker is a step towards programmatic discovery and deployment of an a
 
 # Operator Framework
 
-The Operator Framework is a family of tools and capabilities to deliver on the customer experience described above. It is not just about writing code; testing, delivering, and updating Operators is just as important. The Operator Framework components consist of open source tools to tackle these problems:
+The Operator Framework is a set of open source tools for building, testing, delivering, and updating Operators. It includes Operator Lifecycle Manager (OLM), the Operator Registry, and the software catalog.
 
 Operator Lifecycle Manager
-Operator Lifecycle Manager (OLM) controls the installation, upgrade, and role-based access control (RBAC) of Operators in a cluster. It is deployed by default in OpenShift Container Platform 4.17.
+Operator Lifecycle Manager (OLM) controls the installation, upgrade, and role-based access control (RBAC) of Operators in a cluster. It is deployed by default in OpenShift Container Platform 4.20.
 
 Operator Registry
 The Operator Registry stores cluster service versions (CSVs) and custom resource definitions (CRDs) for creation in a cluster and stores Operator metadata about packages and channels. It runs in a Kubernetes or OpenShift cluster to provide this Operator catalog data to OLM.
@@ -45,6 +35,8 @@ The software catalog is a web console for cluster administrators to discover and
 These tools are designed to be composable, so you can use any that are useful to you.
 
 # Operator maturity model
+
+The Operator maturity model describes five phases of generic Day 2 operations that an Operator can support.
 
 The level of sophistication of the management logic encapsulated within an Operator can vary. This logic is also in general highly dependent on the type of the service represented by the Operator.
 

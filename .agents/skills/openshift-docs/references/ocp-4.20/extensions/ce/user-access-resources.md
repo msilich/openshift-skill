@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-After a cluster extension has been installed and is being managed by Operator Lifecycle Manager (OLM) v1, the extension can often provide `CustomResourceDefinition` objects (CRDs) that expose new API resources on the cluster. Cluster administrators typically have full management access to these resources by default, whereas non-cluster administrator users, or *regular users*, might lack sufficient permissions.
+After you install a cluster extension managed by Operator Lifecycle Manager (OLM) v1, the extension might provide `CustomResourceDefinition` (CRD) objects that expose new cluster APIs. While cluster administrators automatically have full access to these resources, regular users usually require additional permissions.
 
 OLM v1 does not automatically configure or manage role-based access control (RBAC) for regular users to interact with the APIs provided by installed extensions. Cluster administrators must define the required RBAC policy to create, view, or edit these custom resources (CRs) for such users.
 
@@ -21,16 +21,18 @@ Additional resources
 
 # Common default cluster roles for users
 
-An installed cluster extension might include default cluster roles to determine role-based access control (RBAC) for regular users to API resources provided by the extension. A common set of cluster roles can resemble the following policies:
+An installed cluster extension can include default cluster roles that grant regular users role-based access control (RBAC) to the extension’s API resources.
+
+Cluster extensions commonly include the following default cluster role policies:
 
 `view` cluster role
-Grants read-only access to all custom resource (CR) objects of specified API resources across the cluster. Intended for regular users who require visibility into the resources without any permissions to modify them. Ideal for monitoring purposes and limited access viewing.
+Grants read-only access to custom resource (CR) objects for specified API resources across the cluster. This role provides resource visibility without permission to modify resources, which is ideal for monitoring and viewing.
 
 `edit` cluster role
-Allows users to modify all CR objects within the cluster. Enables users to create, update, and delete resources, making it suitable for team members who must manage resources but should not control RBAC or manage permissions for others.
+Grants permissions to create, update, and delete CR objects across the cluster. This role is intended for users who manage resources but do not manage RBAC or cluster permissions.
 
 `admin` cluster role
-Provides full permissions, including `create`, `update`, and `delete` verbs, over all custom resource objects for the specified API resources across the cluster.
+Grants full administrative permissions, including create, update, and delete actions, over all CR objects for specified API resources across the cluster.
 
 <div>
 
@@ -40,7 +42,7 @@ Additional resources
 
 </div>
 
-- [User-facing roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles) (Kubernetes documentation)
+- [User-facing roles (Kubernetes documentation)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles)
 
 </div>
 
@@ -204,7 +206,7 @@ Procedure
 
         </div>
 
-        - Setting a wildcard (`*`) in `verbs` allows all actions on the specified resources.
+        Setting a wildcard (`*`) in the `rules.verbs` field allows all actions on the specified resources.
 
     2.  Create the cluster roles by running the following command for any YAML files you created:
 
@@ -307,29 +309,20 @@ Procedure
 
 As a cluster administrator, you can configure role-based access control (RBAC) policies to grant user access to extension resources by using aggregated cluster roles.
 
-To automatically extend existing default cluster roles, you can add *aggregation labels* by adding one or more of the following labels to a `ClusterRole` object:
-
-<div class="formalpara">
-
-<div class="title">
-
-Aggregation labels in a `ClusterRole` object
-
-</div>
-
-``` yaml
-# ..
-metadata:
-  labels:
-    rbac.authorization.k8s.io/aggregate-to-admin: "true"
-    rbac.authorization.k8s.io/aggregate-to-edit: "true"
-    rbac.authorization.k8s.io/aggregate-to-view: "true"
-# ..
-```
-
-</div>
-
-This allows users who already have `view`, `edit`, or `admin` roles to interact with the custom resource specified by the `ClusterRole` object without requiring additional role or cluster role bindings to specific users or groups.
+> [!NOTE]
+> To automatically extend existing default cluster roles, you can add *aggregation labels* by adding one or more of the following labels to a `ClusterRole` object:
+>
+> ``` yaml
+> # ..
+> metadata:
+>   labels:
+>     rbac.authorization.k8s.io/aggregate-to-admin: "true"
+>     rbac.authorization.k8s.io/aggregate-to-edit: "true"
+>     rbac.authorization.k8s.io/aggregate-to-view: "true"
+> # ..
+> ```
+>
+> This allows users who already have `view`, `edit`, or `admin` roles to interact with the custom resource specified by the `ClusterRole` object without requiring additional role or cluster role bindings to specific users or groups.
 
 <div>
 
@@ -403,6 +396,6 @@ Additional resources
 
 </div>
 
-- [Aggregated ClusterRoles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles) (Kubernetes documentation)
+- [Aggregated ClusterRoles (Kubernetes documentation)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles)
 
 </div>

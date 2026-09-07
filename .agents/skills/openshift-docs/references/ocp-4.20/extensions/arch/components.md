@@ -1,9 +1,15 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Operator Lifecycle Manager (OLM) v1 comprises the following component projects:
+Operator Lifecycle Manager (OLM) v1 uses two key microservice components, Operator Controller and Catalogd, to unpack content and manage extensions on your cluster.
 
 Operator Controller
-[Operator Controller](operator-controller.md#operator-controller) is the central component of OLM v1 that extends Kubernetes with an API through which users can install and manage the lifecycle of Operators and extensions. It consumes information from catalogd.
+Extends Kubernetes with an API to install and manage Operators and extensions using metadata from Catalogd.
 
 Catalogd
-[Catalogd](catalogd.md#catalogd) is a Kubernetes extension that unpacks file-based catalog (FBC) content packaged and shipped in container images for consumption by on-cluster clients. As a component of the OLM v1 microservices architecture, catalogd hosts metadata for Kubernetes extensions packaged by the authors of the extensions, and as a result helps users discover installable content.
+Unpacks file-based catalog (FBC) content and hosts metadata so users can discover installable extensions.
+
+# Additional resources
+
+- [Operator Controller](operator-controller.md#operator-controller)
+
+- [Catalogd](catalogd.md#catalogd)

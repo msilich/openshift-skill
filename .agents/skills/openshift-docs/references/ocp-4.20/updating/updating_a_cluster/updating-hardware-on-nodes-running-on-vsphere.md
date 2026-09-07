@@ -8,7 +8,7 @@ You must ensure that your nodes running in vSphere are running on the hardware v
 
 </div>
 
-- Version 4.17 of OpenShift Container Platform requires VMware virtual hardware version 15 or later.
+- Version 4.20 of OpenShift Container Platform requires VMware virtual hardware version 15 or later.
 
 - Before upgrading OpenShift 4.12 to OpenShift 4.13, you must update vSphere to **v8.0 Update 1 or later**; otherwise, the OpenShift 4.12 cluster is marked **un-upgradeable**.
 

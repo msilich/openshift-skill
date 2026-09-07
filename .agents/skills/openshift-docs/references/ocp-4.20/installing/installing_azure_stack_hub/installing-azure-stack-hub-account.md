@@ -3,7 +3,7 @@
 Before you can install OpenShift Container Platform, you must configure a Microsoft Azure account.
 
 > [!IMPORTANT]
-> All Azure resources that are available through public endpoints are subject to resource name restrictions, and you cannot create resources that use certain terms. For a list of terms that Azure restricts, see [Resolve reserved resource name errors](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-reserved-resource-name) in the Azure documentation.
+> All Azure resources that are available through public endpoints are subject to resource name restrictions, and you cannot create resources that use certain terms. For a list of terms that Azure restricts, see "Resolve reserved resource name errors".
 
 # Azure Stack Hub account limits
 
@@ -124,19 +124,29 @@ Additional resources
 
 # Configuring a DNS zone in Azure Stack Hub
 
-To successfully install OpenShift Container Platform on Azure Stack Hub, you must create DNS records in an Azure Stack Hub DNS zone. The DNS zone must be authoritative for the domain. To delegate a registrar’s DNS zone to Azure Stack Hub, see Microsoft’s documentation for [Azure Stack Hub datacenter DNS integration](https://docs.microsoft.com/en-us/azure-stack/operator/azure-stack-integrate-dns?view=azs-2102).
+To successfully install OpenShift Container Platform on Azure Stack Hub, you must create DNS records in an Azure Stack Hub DNS zone. The DNS zone must be authoritative for the domain. To delegate a registrar’s DNS zone to Azure Stack Hub, see "Azure Stack Hub datacenter DNS integration".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Azure Stack Hub datacenter DNS integration (Microsoft documentation)](https://docs.microsoft.com/en-us/azure-stack/operator/azure-stack-integrate-dns?view=azs-2102)
+
+</div>
 
 # Required Azure Stack Hub roles
 
-Your Microsoft Azure Stack Hub account must have the following roles for the subscription that you use:
-
-- `Owner`
+Your Microsoft Azure Stack Hub account must have the `Owner` role for the subscription that you use.
 
 To set roles on the Azure portal, see the [Manage access to resources in Azure Stack Hub with role-based access control](https://docs.microsoft.com/en-us/azure-stack/user/azure-stack-manage-permissions?view=azs-2102) in the Microsoft documentation.
 
 # Creating a service principal
 
-Because OpenShift Container Platform and its installation program create Microsoft Azure resources by using the Azure Resource Manager, you must create a service principal to represent it.
+To enable OpenShift Container Platform to create Azure resources, you must create a service principal that represents the installation program in Azure Resource Manager.
 
 <div>
 
@@ -166,9 +176,9 @@ Procedure
     $ az cloud register -n AzureStackCloud --endpoint-resource-manager <endpoint>
     ```
 
-    - Specify the Azure Resource Manager endpoint, \`https://management.\<region\>.\<fqdn\>/\`.
+    `<endpoint>` is the Azure Resource Manager endpoint, \`https://management.\<region\>.\<fqdn\>/\`.
 
-      See the [Microsoft documentation](https://docs.microsoft.com/en-us/azure-stack/mdc/azure-stack-version-profiles-azurecli-2-tzl#connect-to-azure-stack-hub) for details.
+    See the [Microsoft documentation](https://docs.microsoft.com/en-us/azure-stack/mdc/azure-stack-version-profiles-azurecli-2-tzl#connect-to-azure-stack-hub) for details.
 
 2.  Set the active environment:
 
@@ -256,7 +266,7 @@ Procedure
 
         </div>
 
-        - Ensure that the value of the `tenantId` parameter is the correct subscription ID.
+        Ensure that the value of the `tenantId` parameter is the correct subscription ID.
 
     3.  If you are not using the right subscription, change the active subscription:
 
@@ -264,7 +274,7 @@ Procedure
         $ az account set -s <subscription_id>
         ```
 
-        - Specify the subscription ID.
+        For `<subscription_id>`, specify the subscription ID.
 
     4.  Verify the subscription ID update:
 
@@ -303,38 +313,43 @@ Procedure
 
     ``` terminal
     $ az ad sp create-for-rbac --role Contributor --name <service_principal> \
-      --scopes /subscriptions/<subscription_id>
+      --scopes /subscriptions/<subscription_id> \
       --years <years>
     ```
 
-    - Specify the service principal name.
+    where:
 
-    - Specify the subscription ID.
+    `<service_principal>`
+    Specifies the service principal name.
 
-    - Specify the number of years. By default, a service principal expires in one year. By using the `--years` option you can extend the validity of your service principal.
+    `<subscription_id>`
+    Specifies the subscription ID.
 
-      <div class="formalpara">
+    `<years>`
+    Specifies the number of years. By default, a service principal expires in one year. By using the `--years` option you can extend the validity of your service principal.
 
-      <div class="title">
+    <div class="formalpara">
 
-      Example output
+    <div class="title">
 
-      </div>
+    Example output
 
-      ``` terminal
-      Creating 'Contributor' role assignment under scope '/subscriptions/<subscription_id>'
-      The output includes credentials that you must protect. Be sure that you do not
-      include these credentials in your code or check the credentials into your source
-      control. For more information, see https://aka.ms/azadsp-cli
-      {
-        "appId": "ac461d78-bf4b-4387-ad16-7e32e328aec6",
-        "displayName": <service_principal>",
-        "password": "00000000-0000-0000-0000-000000000000",
-        "tenantId": "8049c7e9-c3de-762d-a54e-dc3f6be6a7ee"
-      }
-      ```
+    </div>
 
-      </div>
+    ``` terminal
+    Creating 'Contributor' role assignment under scope '/subscriptions/<subscription_id>'
+    The output includes credentials that you must protect. Be sure that you do not
+    include these credentials in your code or check the credentials into your source
+    control. For more information, see https://aka.ms/azadsp-cli
+    {
+      "appId": "ac461d78-bf4b-4387-ad16-7e32e328aec6",
+      "displayName": <service_principal>",
+      "password": "00000000-0000-0000-0000-000000000000",
+      "tenantId": "8049c7e9-c3de-762d-a54e-dc3f6be6a7ee"
+    }
+    ```
+
+    </div>
 
 8.  Record the values of the `appId` and `password` parameters from the previous output. You need these values during OpenShift Container Platform installation.
 
@@ -352,10 +367,10 @@ Additional resources
 
 </div>
 
-# Next steps
+# Additional resources
 
-- Install an OpenShift Container Platform cluster:
+- [Resolve reserved resource name errors (Azure documentation)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-reserved-resource-name)
 
-  - [Installing a cluster on Azure Stack Hub with customizations](ipi/installing-azure-stack-hub-default.md#installing-azure-stack-hub-default)
+- [Installing a cluster on Azure Stack Hub with customizations](ipi/installing-azure-stack-hub-default.md#installing-azure-stack-hub-default)
 
-  - Install an OpenShift Container Platform cluster on Azure Stack Hub with user-provisioned infrastructure by following [Installing a cluster on Azure Stack Hub using ARM templates](upi/installing-azure-stack-hub-user-infra.md#installing-azure-stack-hub-user-infra).
+- [Installing a cluster on Azure Stack Hub using ARM templates](upi/installing-azure-stack-hub-user-infra.md#installing-azure-stack-hub-user-infra)

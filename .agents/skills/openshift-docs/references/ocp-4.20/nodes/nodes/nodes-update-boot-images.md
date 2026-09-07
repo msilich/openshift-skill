@@ -6,7 +6,7 @@ For Google Cloud and Amazon Web Services (AWS) clusters, by default the Machine 
 
 For VMware vSphere, you can enable boot image management as a Technology Preview feature.
 
-For all other platforms, the MCO does not update the boot image with each cluster update.
+For all other platforms, the MCO does not update the boot image with each cluster update. Images from the Google Cloud Marketplace or AWS Marketplace are not automatically updated.
 
 > [!IMPORTANT]
 > Boot image management on vSphere is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
@@ -37,7 +37,7 @@ However, using an older boot image could cause the following issues:
 For information on how to disable this feature, see "Disabling boot image management". If you disable this feature, you can re-enable the feature at any time. For information, see "Enabling boot image management".
 
 > [!NOTE]
-> The ability to configure boot image management is available for only Google Cloud and AWS clusters. It is not supported for clusters managed by the Cluster CAPI Operator.
+> The ability to configure boot image management is available for only Google Cloud and AWS clusters. It is not supported for clusters managed by the Cluster CAPI Operator. Images from the Google Cloud Marketplace or AWS Marketplace are not automatically updated.
 
 How the cluster behaves after disabling or re-enabling the feature, depends upon when you made the change, including the following scenarios:
 

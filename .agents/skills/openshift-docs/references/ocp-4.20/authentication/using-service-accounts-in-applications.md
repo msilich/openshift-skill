@@ -2,7 +2,9 @@
 
 # Service accounts overview
 
-A service account is an OpenShift Container Platform account that allows a component to directly access the API. Service accounts are API objects that exist within each project. Service accounts provide a flexible way to control API access without sharing a regular user’s credentials.
+You can use OpenShift Container Platform service accounts to allow a OpenShift Container Platform component to directly access the API.
+
+Service accounts are API objects that exist within each project that provide a flexible way to control API access without sharing a regular user’s credentials.
 
 When you use the OpenShift Container Platform CLI or web console, your API token authenticates you to the API. You can associate a component with a service account so that they can access the API without using a regular user’s credentials.
 
@@ -91,7 +93,7 @@ OpenShift Container Platform automatically creates image pull secrets for each s
 > [!NOTE]
 > Prior to OpenShift Container Platform 4.16, a long-lived service account API token secret was also generated for each service account that was created. Starting with OpenShift Container Platform 4.16, this service account API token secret is no longer created.
 >
-> After upgrading to 4.17, any existing long-lived service account API token secrets are not deleted and will continue to function. For information about detecting long-lived API tokens that are in use in your cluster or deleting them if they are not needed, see "Long-lived service account API tokens in OpenShift Container Platform (Red Hat Knowledgebase)".
+> After upgrading to 4.20, any existing long-lived service account API token secrets are not deleted and will continue to function. For information about detecting long-lived API tokens that are in use in your cluster or deleting them if they are not needed, see "Long-lived service account API tokens in OpenShift Container Platform (Red Hat Knowledgebase)".
 
 This image pull secret is necessary to integrate the OpenShift image registry into the cluster’s user authentication and authorization system.
 
@@ -140,32 +142,32 @@ Procedure
     $ oc create sa <service_account_name>
     ```
 
-    - To create a service account in a different project, specify `-n <project_name>`.
+    To create a service account in a different project, specify `-n <project_name>`.
 
-      <div class="formalpara">
+    <div class="formalpara">
 
-      <div class="title">
+    <div class="title">
 
-      Example output
+    Example output
 
-      </div>
+    </div>
 
-      ``` terminal
-      serviceaccount "robot" created
-      ```
+    ``` terminal
+    serviceaccount "robot" created
+    ```
 
-      </div>
+    </div>
 
-      > [!TIP]
-      > You can alternatively apply the following YAML to create the service account:
-      >
-      > ``` yaml
-      > apiVersion: v1
-      > kind: ServiceAccount
-      > metadata:
-      >   name: <service_account_name>
-      >   namespace: <current_project>
-      > ```
+    > [!TIP]
+    > You can alternatively apply the following YAML to create the service account:
+    >
+    > ``` yaml
+    > apiVersion: v1
+    > kind: ServiceAccount
+    > metadata:
+    >   name: <service_account_name>
+    >   namespace: <current_project>
+    > ```
 
 3.  Optional: View the secrets for the service account:
 

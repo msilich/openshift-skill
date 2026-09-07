@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can apply global configuration options in OpenShift Container Platform. Operators apply these configuration settings across the cluster.
+To keep consistent behavior across your OpenShift Container Platform cluster, set global configuration options that Operators apply to all nodes.
 
 # Interacting with your cluster resources
 
-You can interact with cluster resources by using the OpenShift CLI (`oc`) tool in OpenShift Container Platform. The cluster resources that you see after running the `oc api-resources` command can be edited.
+To view and edit the global configuration of your OpenShift Container Platform cluster, use the OpenShift CLI (`oc`) to query and change cluster resources.
 
 <div>
 

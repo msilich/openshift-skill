@@ -24,14 +24,6 @@ Procedure
 
 1.  Create the following example `FileIntegrity` CR named `worker-fileintegrity.yaml` to enable scans on worker nodes:
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example FileIntegrity CR
-
-    </div>
-
     ``` yaml
     apiVersion: fileintegrity.openshift.io/v1alpha1
     kind: FileIntegrity
@@ -56,8 +48,6 @@ Procedure
     status:
       phase: Active
     ```
-
-    </div>
 
     |  |  |
     |----|----|
@@ -113,7 +103,7 @@ Verification
 
 # Checking the FileIntegrity custom resource status
 
-The `FileIntegrity` custom resource (CR) reports its status through the .`status.phase` subresource.
+The `FileIntegrity` custom resource (CR) reports its status through the `.status.phase` subresource.
 
 <div>
 
@@ -146,6 +136,8 @@ Procedure
 </div>
 
 # FileIntegrity custom resource phases
+
+The `FileIntegrity` CR reports one of the following phases during its lifecycle.
 
 - `Pending` - The phase after the custom resource (CR) is created.
 
@@ -220,7 +212,7 @@ example-fileintegrity-ip-10-0-180-200.us-east-2.compute.internal   ip-10-0-180-2
 
 # FileIntegrityNodeStatus CR status types
 
-These conditions are reported in the results array of the corresponding `FileIntegrityNodeStatus` CR status:
+These conditions are reported in the results array of the corresponding `FileIntegrityNodeStatus` CR status.
 
 - `Succeeded` - The integrity check passed; the files and directories covered by the AIDE check have not been modified since the database was last initialized.
 
@@ -229,6 +221,8 @@ These conditions are reported in the results array of the corresponding `FileInt
 - `Errored` - The AIDE scanner encountered an internal error.
 
 ## FileIntegrityNodeStatus CR success example
+
+The following example shows a `FileIntegrityNodeStatus` CR with successful scan conditions.
 
 <div class="formalpara">
 

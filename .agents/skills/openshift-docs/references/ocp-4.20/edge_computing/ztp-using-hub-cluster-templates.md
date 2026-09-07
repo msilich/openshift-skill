@@ -91,7 +91,10 @@ Procedure
           hardware-type-1-hugepages-count: "32"
         ```
 
-        - The `argocd.argoproj.io/sync-options` annotation is required only if the `ConfigMap` is larger than 1 MiB in size.
+        where:
+
+        `argocd.argoproj.io/sync-options`
+        The `argocd.argoproj.io/sync-options` annotation is required only if the `ConfigMap` is larger than 1 MiB in size.
 
     2.  Create a `ConfigMap` CR named `group-zones-configmap` to hold the regional configuration. For example:
 
@@ -340,6 +343,8 @@ Procedure
 </div>
 
 # Syncing new ConfigMap changes to existing PolicyGenerator or PolicyGentemplate CRs
+
+You can sync updated `ConfigMap` CR changes to existing `PolicyGenerator` or `PolicyGentemplate` CRs deployed on the hub cluster.
 
 <div>
 

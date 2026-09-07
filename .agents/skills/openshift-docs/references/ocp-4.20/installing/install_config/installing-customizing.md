@@ -127,7 +127,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 99-worker-custom
       labels:
@@ -631,7 +631,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 99-simple-kmod
       labels:
@@ -768,7 +768,7 @@ Procedure
 
   ``` yaml
   variant: openshift
-  version: 4.17.0
+  version: 4.20.0
   metadata:
     name: worker-storage
     labels:
@@ -955,7 +955,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: worker-storage
       labels:
@@ -1304,7 +1304,7 @@ You can enable software Redundant Array of Independent Disks (RAID) partitioning
 OpenShift Container Platform supports RAID 0, RAID 1, RAID 4, RAID 5, RAID 6, and RAID 10 for data protection and fault tolerance. See "About disk mirroring" for more details.
 
 > [!NOTE]
-> OpenShift Container Platform 4.17 supports manually configuring a hybrid RAID on an installation drive. For a manually configured example, see "Configuring an Intel® Virtual RAID on CPU (VROC) data volume".
+> OpenShift Container Platform 4.20 supports manually configuring a hybrid RAID on an installation drive. For a manually configured example, see "Configuring an Intel® Virtual RAID on CPU (VROC) data volume".
 
 <div>
 
@@ -1345,7 +1345,7 @@ Procedure
 
       ``` yaml
       variant: openshift
-      version: 4.17.0
+      version: 4.20.0
       metadata:
         name: raid1-storage
         labels:
@@ -1398,7 +1398,7 @@ Procedure
 
       ``` yaml
       variant: openshift
-      version: 4.17.0
+      version: 4.20.0
       metadata:
         name: raid1-alt-storage
         labels:
@@ -1552,11 +1552,11 @@ Procedure
 1.  Create a Butane config including the contents of the `chrony.conf` file. For example, to configure chrony on worker nodes, create a `99-worker-chrony.bu` file.
 
     > [!NOTE]
-    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 99-worker-chrony
       labels:

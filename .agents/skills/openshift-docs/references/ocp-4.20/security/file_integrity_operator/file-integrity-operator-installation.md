@@ -1,9 +1,13 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Install the File Integrity Operator on your cluster by using the OpenShift Container Platform web console or the OpenShift CLI (`oc`).
+
 > [!IMPORTANT]
 > All cluster nodes must have the same release version in order for this Operator to function properly. As an example, for nodes running RHCOS, all nodes must have the same RHCOS version.
 
 # Installing the File Integrity Operator using the web console
+
+Install the File Integrity Operator from the OpenShift Container Platform web console by using the Software Catalog.
 
 <div>
 
@@ -59,6 +63,8 @@ If the Operator is not installed successfully:
 
 # Installing the File Integrity Operator using the CLI
 
+Install the File Integrity Operator from the OpenShift CLI (`oc`) by creating `Namespace`, `OperatorGroup`, and `Subscription` objects.
+
 <div>
 
 <div class="title">
@@ -82,7 +88,7 @@ Procedure
 1.  Create a `Namespace` object YAML file by running:
 
     ``` terminal
-    $ oc create -f <file-name>.yaml
+    $ oc create -f <file_name>.yaml
     ```
 
     <div class="formalpara">
@@ -105,7 +111,8 @@ Procedure
 
     </div>
 
-    - In OpenShift Container Platform 4.17, the pod security label must be set to `privileged` at the namespace level.
+    > [!NOTE]
+    > In OpenShift Container Platform 4.20, the pod security label must be set to `privileged` at the namespace level.
 
 2.  Create the `OperatorGroup` object YAML file:
 

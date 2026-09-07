@@ -72,7 +72,7 @@ Selecting an active, installed cluster shows tabs associated with that cluster. 
 
 - Machine pools
 
-- {red-hat-lightspeed} Advisor
+- Red Hat Lightspeed Advisor
 
 - Support
 
@@ -114,7 +114,7 @@ The **Overview** tab provides information about how the cluster was configured:
 
 - **Resource usage** section of the tab displays the resources in use with a graph.
 
-- **Advisor recommendations** section gives insight in relation to security, performance, availability, and stability. This section requires the use of remote health functionality. See *Using {red-hat-lightspeed} to identify issues with the cluster* in the *Additional resources* section.
+- **Advisor recommendations** section gives insight in relation to security, performance, availability, and stability. This section requires the use of remote health functionality. See *Using Red Hat Lightspeed to identify issues with the cluster* in the *Additional resources* section.
 
 ## Access control tab
 
@@ -122,9 +122,9 @@ The **Access control** tab allows the cluster owner to set up an identity provid
 
 ## Add-ons tab
 
-## {red-hat-lightspeed} Advisor tab
+## Red Hat Lightspeed Advisor tab
 
-The **{red-hat-lightspeed} Advisor** tab uses the Remote Health functionality of the OpenShift Container Platform to identify and mitigate risks to security, performance, availability, and stability. See [Using {red-hat-lightspeed} to identify issues with your cluster](https://docs.openshift.com/container-platform/latest/support/getting-support.html) in the OpenShift Container Platform documentation.
+The **Red Hat Lightspeed Advisor** tab uses the Remote Health functionality of the OpenShift Container Platform to identify and mitigate risks to security, performance, availability, and stability. See [Using Red Hat Lightspeed to identify issues with your cluster](https://docs.openshift.com/container-platform/latest/support/getting-support.html) in the OpenShift Container Platform documentation.
 
 ## Machine pools tab
 

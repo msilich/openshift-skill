@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can review your own OAuth access tokens and delete any that are no longer needed.
+Review and manage your user-owned OAuth access tokens to monitor active sessions, verify token scopes, and revoke tokens that are no longer needed.
 
 # Listing user-owned OAuth access tokens
 
-You can list your user-owned OAuth access tokens.
+List your user-owned OAuth access tokens to review active sessions, check token expiration, and identify tokens associated with specific OAuth clients.
 
 Token names are not sensitive and cannot be used to log in.
 
@@ -188,7 +188,7 @@ Procedure
 
 # Adding unauthenticated groups to cluster roles
 
-As a cluster administrator, you can grant unauthenticated users access to specific cluster roles to enable features, such as external webhooks or automated token management, that require cluster access without authentication. Only grant this access when required and after verifying compliance with your organization’s security standards.
+Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 
 You can add unauthenticated users to the following cluster roles:
 

@@ -1,38 +1,60 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-In OpenShift Container Platform 4.17, you can install a cluster in a restricted network by creating an internal mirror of the installation release content that is accessible to an existing Virtual Private Cloud (VPC) on IBM Cloud®.
+In OpenShift Container Platform 4.20, you can install a cluster in a restricted network by creating an internal mirror of the installation release content that is accessible to an existing Virtual Private Cloud (VPC) on IBM Cloud®.
 
-# Prerequisites
+# Prerequisites for installing a cluster on IBM Cloud® in a disconnected environment
 
-- You reviewed details about the [OpenShift Container Platform installation and update](../../architecture/architecture-installation.md#architecture-installation) processes.
+Before installing an OpenShift Container Platform cluster on IBM Cloud® in a disconnected environment, ensure that you have configured your IBM Cloud® account, a mirror registry, an existing VPC with access to the mirror registry, and the `ccoctl` utility.
 
-- You [configured an IBM Cloud account](installing-ibm-cloud-account.md#installing-ibm-cloud-account) to host the cluster.
+- You reviewed details about the OpenShift Container Platform installation and update processes.
 
-- You have a container image registry that is accessible to the internet and your restricted network. The container image registry should mirror the contents of the OpenShift image registry and contain the installation media. For more information, see [Mirroring images for a disconnected installation by using the oc-mirror plugin v2](../../disconnected/about-installing-oc-mirror-v2.md#about-installing-oc-mirror-v2).
+- You configured an IBM Cloud® account to host the cluster.
 
-- You have an existing VPC on IBM Cloud® that meets the following requirements:
+- You have a container image registry that is accessible to the internet and your restricted network. The container image registry should mirror the contents of the OpenShift image registry and contain the installation media.
+
+- You have an existing Virtual Private Cloud (VPC) on IBM Cloud® that meets the following requirements:
 
   - The VPC contains the mirror registry or has firewall rules or a peering connection to access the mirror registry that is hosted elsewhere.
 
-  - The VPC can access IBM Cloud® service endpoints using a public endpoint. If network restrictions limit access to public service endpoints, evaluate those services for alternate endpoints that might be available. For more information see [Access to IBM service endpoints](installing-ibm-cloud-restricted.md#access-to-ibm-service-endpoints_installing-ibm-cloud-restricted).
+  - The VPC can access IBM Cloud® service endpoints using a public endpoint. If network restrictions limit access to public service endpoints, evaluate those services for alternate endpoints that might be available.
 
-  You cannot use the VPC that the installation program provisions by default.
+    You cannot use the VPC that the installation program provisions by default.
 
 - If you plan on configuring endpoint gateways to use IBM Cloud® Virtual Private Endpoints, consider the following requirements:
 
   - Endpoint gateway support is currently limited to the `us-east` and `us-south` regions.
 
-  - The VPC must allow traffic to and from the endpoint gateways. You can use the VPC’s default security group, or a new security group, to allow traffic on port 443. For more information, see [Allowing endpoint gateway traffic](installing-ibm-cloud-restricted.md#installation-ibm-cloud-configure-vpc-for-endpoint-gateways_installing-ibm-cloud-restricted).
+  - The VPC must allow traffic to and from the endpoint gateways. You can use the VPC’s default security group, or a new security group, to allow traffic on port 443.
 
-- If you use a firewall, you [configured it to allow the sites](../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall) that your cluster requires access to.
+- You configured the `ccoctl` utility before you installed the cluster.
 
-- You configured the `ccoctl` utility before you installed the cluster. For more information, see [Configuring IAM for IBM Cloud](configuring-iam-ibm-cloud.md#configuring-iam-ibm-cloud).
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [OpenShift Container Platform installation and update](../../architecture/architecture-installation.md#architecture-installation)
+
+- [Configuring an IBM Cloud® account](installing-ibm-cloud-account.md#installing-ibm-cloud-account)
+
+- [Mirroring images for a disconnected installation by using the oc-mirror plugin v2](../../disconnected/about-installing-oc-mirror-v2.md#about-installing-oc-mirror-v2)
+
+- [Access to IBM service endpoints](installing-ibm-cloud-restricted.md#access-to-ibm-service-endpoints_installing-ibm-cloud-restricted)
+
+- [Allowing endpoint gateway traffic](installing-ibm-cloud-restricted.md#installation-ibm-cloud-configure-vpc-for-endpoint-gateways_installing-ibm-cloud-restricted)
+
+- [Configuring your firewall](../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall)
+
+- [Configuring IAM for IBM Cloud®](configuring-iam-ibm-cloud.md#configuring-iam-ibm-cloud)
+
+</div>
 
 # About installations in restricted networks
 
-In OpenShift Container Platform 4.17, you can install a cluster in a restricted network without an active internet connection to obtain software components.
-
-Depending on the cloud platform where you install the cluster, you can complete a restricted network installation by using either installer-provisioned infrastructure or user-provisioned infrastructure.
+You can install OpenShift Container Platform 4.20 in a restricted network without an active internet connection to obtain software components. Restricted network installations can use installer-provisioned or user-provisioned infrastructure, depending on the cloud platform to which you are installing the cluster.
 
 ## Required internet access and an installation host
 
@@ -105,7 +127,7 @@ Additional resources
 
 # About using a custom VPC
 
-In OpenShift Container Platform 4.17, you can deploy a cluster into the subnets of an existing IBM® Virtual Private Cloud (VPC). Deploying OpenShift Container Platform into an existing VPC can help you avoid limit constraints in new accounts or more easily abide by the operational constraints that your company’s guidelines set. If you cannot obtain the infrastructure creation permissions that are required to create the VPC yourself, use this installation option.
+You can deploy OpenShift Container Platform into the subnets of an existing IBM® Virtual Private Cloud (VPC) to avoid account limit constraints or comply with your company’s infrastructure guidelines.
 
 Because the installation program cannot know what other components are in your existing subnets, it cannot choose subnet CIDRs and so forth. You must configure networking for the subnets to which you will install the cluster.
 
@@ -301,7 +323,7 @@ Procedure
     $ ssh-add <path>/<file_name>
     ```
 
-    Specifies the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`
+    Specify the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`.
 
     <div class="formalpara">
 
@@ -368,9 +390,7 @@ Procedure
 
 # Downloading the RHCOS cluster image
 
-The installation program requires the Red Hat Enterprise Linux CoreOS (RHCOS) image to install the cluster. While optional, downloading the Red Hat Enterprise Linux CoreOS (RHCOS) before deploying removes the need for internet access when creating the cluster.
-
-Use the installation program to locate and download the Red Hat Enterprise Linux CoreOS (RHCOS) image.
+The installation program requires the Red Hat Enterprise Linux CoreOS (RHCOS) image to install the cluster. While optional, downloading the Red Hat Enterprise Linux CoreOS (RHCOS) image before deploying removes the need for internet access when creating the cluster.
 
 <div>
 
@@ -573,12 +593,12 @@ Prerequisites
 
 - You have an existing `install-config.yaml` file.
 
-- You have reviewed the sites that your cluster requires access to and determined whether any of them need to bypass the proxy. By default, all cluster egress traffic is proxied, including calls to hosting cloud provider APIs. You added sites to the `Proxy` object’s `spec.noProxy` field to bypass the proxy if necessary.
+- You have reviewed the sites that your cluster requires access to and determined whether any of them need to bypass the proxy. By default, the proxy handles all cluster egress traffic, including calls to hosting cloud provider APIs. You added sites to the `Proxy` object’s `spec.noProxy` field to bypass the proxy if necessary.
 
   > [!NOTE]
-  > The `Proxy` object `status.noProxy` field is populated with the values of the `networking.machineNetwork[].cidr`, `networking.clusterNetwork[].cidr`, and `networking.serviceNetwork[]` fields from your installation configuration.
+  > The `Proxy` object `status.noProxy` field includes the values of the `networking.machineNetwork[].cidr`, `networking.clusterNetwork[].cidr`, and `networking.serviceNetwork[]` fields from your installation configuration.
   >
-  > For installations on Amazon Web Services (AWS), Google Cloud, Microsoft Azure, and Red Hat OpenStack Platform (RHOSP), the `Proxy` object `status.noProxy` field is also populated with the instance metadata endpoint (`169.254.169.254`).
+  > For installations on Amazon Web Services (AWS), Google Cloud, Microsoft Azure, and Red Hat OpenStack Platform (RHOSP), the `Proxy` object `status.noProxy` field also includes the instance metadata endpoint (`169.254.169.254`).
 
 </div>
 
@@ -619,10 +639,10 @@ Procedure
     Specifies a comma-separated list of destination domain names, IP addresses, or other network CIDRs to exclude from proxying. Preface a domain with `.` to match subdomains only. For example, `.y.com` matches `x.y.com`, but not `y.com`. Use `*` to bypass the proxy for all destinations.
 
     `additionalTrustBundle`
-    If provided, the installation program generates a config map that is named `user-ca-bundle` in the `openshift-config` namespace to hold the additional CA certificates. If you provide `additionalTrustBundle` and at least one proxy setting, the `Proxy` object is configured to reference the `user-ca-bundle` config map in the `trustedCA` field. The Cluster Network Operator then creates a `trusted-ca-bundle` config map that merges the contents specified for the `trustedCA` parameter with the RHCOS trust bundle. The `additionalTrustBundle` field is required unless the proxy’s identity certificate is signed by an authority from the RHCOS trust bundle.
+    If you specify this value, the installation program generates a config map named `user-ca-bundle` in the `openshift-config` namespace to hold the additional CA certificates. If you specify `additionalTrustBundle` and at least one proxy setting, the `Proxy` object references the `user-ca-bundle` config map in the `trustedCA` field. The Cluster Network Operator then creates a `trusted-ca-bundle` config map that merges the contents specified for the `trustedCA` parameter with the RHCOS trust bundle. You must set the `additionalTrustBundle` field unless an authority from the RHCOS trust bundle signs the proxy’s identity certificate.
 
     `additionalTrustBundlePolicy`
-    Specifies the policy that determines the configuration of the `Proxy` object to reference the `user-ca-bundle` config map in the `trustedCA` field. The allowed values are `Proxyonly` and `Always`. Use `Proxyonly` to reference the `user-ca-bundle` config map only when `http/https` proxy is configured. Use `Always` to always reference the `user-ca-bundle` config map. The default value is `Proxyonly`. Optional parameter.
+    Specifies the policy that determines the configuration of the `Proxy` object to reference the `user-ca-bundle` config map in the `trustedCA` field. The allowed values are `Proxyonly` and `Always`. Use `Proxyonly` to reference the `user-ca-bundle` config map only when you configure an `http/https` proxy. Use `Always` to always reference the `user-ca-bundle` config map. The default value is `Proxyonly`. Optional parameter.
 
     > [!NOTE]
     > The installation program does not support the proxy `readinessEndpoints` field.
@@ -636,10 +656,10 @@ Procedure
 
 2.  Save the file and reference it when installing OpenShift Container Platform.
 
-    The installation program creates a cluster-wide proxy that is named `cluster` that uses the proxy settings in the provided `install-config.yaml` file. If no proxy settings are provided, a `cluster` `Proxy` object is still created, but it will have a nil `spec`.
+    The installation program creates a cluster-wide proxy named `cluster` that uses the proxy settings in the `install-config.yaml` file. If you do not give proxy settings, the installation program still creates a `cluster` `Proxy` object, but it has a nil `spec`.
 
     > [!NOTE]
-    > Only the `Proxy` object named `cluster` is supported, and no additional proxies can be created.
+    > Only the `Proxy` object named `cluster` is supported, and you cannot create additional proxies.
 
 </div>
 
@@ -657,9 +677,9 @@ Additional resources
 
 ## Minimum resource requirements for cluster installation
 
-Each created cluster must meet minimum requirements so that the cluster runs as expected.
+To ensure that your OpenShift Container Platform cluster runs as expected, each cluster machine must meet minimum CPU, memory, and storage requirements.
 
-| Machine | Operating System | vCPU | Virtual RAM | Storage | Input/Output Per Second (IOPS) |
+| Machine | Operating system | vCPU | Virtual RAM | Storage | Input/Output Per Second (IOPS) |
 |----|----|----|----|----|----|
 | Bootstrap | RHCOS | 4 | 16 GB | 100 GB | 300 |
 | Control plane | RHCOS | 4 | 16 GB | 100 GB | 300 |
@@ -668,54 +688,34 @@ Each created cluster must meet minimum requirements so that the cluster runs as 
 Minimum resource requirements
 
 > [!NOTE]
-> For OpenShift Container Platform version 4.19, RHCOS is based on RHEL version 9.6, which updates the micro-architecture requirements. The following list contains the minimum instruction set architectures (ISA) that each architecture requires:
+> In OpenShift Container Platform version 4.19, RHCOS uses RHEL version 9.6, which updates the micro-architecture requirements. Each architecture requires the following minimum instruction set architectures (ISA):
 >
 > - x86-64 architecture requires x86-64-v2 ISA
 >
 > - ARM64 architecture requires ARMv8.0-A ISA
 >
-> - IBM Power architecture requires Power 9 ISA
+> - ppc64le architecture requires IBM® Power9 ISA
 >
-> - s390x architecture requires z14 ISA
+> - s390x architecture requires IBM® z14 ISA
 >
-> For more information, see "Architectures".
+> For more information, see [Architectures](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.8_release_notes/index#architectures) in the RHEL documentation.
 
 If an instance type for your platform meets the minimum requirements for cluster machines, it is supported to use in OpenShift Container Platform.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Architectures (RHEL documentation)](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.2_release_notes/index#architectures)
-
-</div>
-
 ## Tested instance types for IBM Cloud
 
-The following IBM Cloud® instance types have been tested with OpenShift Container Platform.
+Use these tested IBM Cloud® instance types to ensure compatibility when selecting machine types for your OpenShift Container Platform cluster.
 
-<div class="example">
-
-<div class="title">
-
-Machine series
-
-</div>
+See the following machine series:
 
 <https://raw.githubusercontent.com/openshift/installer/release-4.20/docs/user/ibmcloud/tested_instance_types_x86_64.md>
 
-</div>
-
 ## Sample customized install-config.yaml file for IBM Cloud
 
-You can customize the `install-config.yaml` file to specify more details about your OpenShift Container Platform cluster’s platform or modify the values of the required parameters.
+You can customize the `install-config.yaml` file to specify more details about your OpenShift Container Platform cluster’s platform or change the values of the required parameters.
 
 > [!IMPORTANT]
-> This sample YAML file is provided for reference only. You must obtain your `install-config.yaml` file by using the installation program and then modify it.
+> This sample YAML file is for reference only. You must obtain your `install-config.yaml` file by using the installation program and then change it.
 
 ``` yaml
 apiVersion: v1
@@ -724,7 +724,7 @@ controlPlane:
   hyperthreading: Enabled
   name: master
   platform:
-    ibm-cloud: {}
+    ibmcloud: {}
   replicas: 3
 compute:
 - hyperthreading: Enabled
@@ -791,50 +791,79 @@ imageContentSources:
   source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
 ```
 
-- Required.
+where:
 
-- If you do not provide these parameters and values, the installation program provides the default value.
+`baseDomain`
+Specifies the base domain of your cluster. This value is required.
 
-- The `controlPlane` section is a single mapping, but the `compute` section is a sequence of mappings. To meet the requirements of the different data structures, the first line of the `compute` section must begin with a hyphen, `-`, and the first line of the `controlPlane` section must not. Only one control plane pool is used.
+`metadata.name`
+Specifies the name of your cluster. This value is required.
 
-- Enables or disables simultaneous multithreading, also known as Hyper-Threading. By default, simultaneous multithreading is enabled to increase the performance of your machines' cores. You can disable it by setting the parameter value to `Disabled`. If you disable simultaneous multithreading in some cluster machines, you must disable it in all cluster machines.
+`platform.ibmcloud.region`
+Specifies the IBM Cloud® region to deploy the cluster to. This value is required.
 
-  > [!IMPORTANT]
-  > If you disable simultaneous multithreading, ensure that your capacity planning accounts for the dramatically decreased machine performance. Use larger machine types, such as `n1-standard-8`, for your machines if you disable simultaneous multithreading.
+`pullSecret`
+Specifies the pull secret for your mirror registry. For `<local_registry>`, specify the registry domain name, and optionally the port, that your mirror registry uses to serve content. For example, `registry.example.com` or `registry.example.com:5000`. For `<credentials>`, specify the base64-encoded user name and password for your mirror registry.
 
-- The machine CIDR must contain the subnets for the compute machines and control plane machines.
+`compute`
+Specifies parameters where, if you do not supply values, the installation program uses the default value. The first line of the `compute` section must begin with a hyphen, `-`. Both sections currently define a single machine pool.
 
-- The CIDR must contain the subnets defined in `platform.ibmcloud.controlPlaneSubnets` and `platform.ibmcloud.computeSubnets`.
+`compute.hyperthreading`
+Specifies whether to enable or disable simultaneous multithreading, also known as Hyper-Threading. By default, simultaneous multithreading is enabled to increase the performance of your machines' cores. You can disable it by setting the parameter value to `Disabled`. If you disable simultaneous multithreading in some cluster machines, you must disable it in all cluster machines.
 
-- The cluster network plugin to install. The default value `OVNKubernetes` is the only supported value.
+`controlPlane`
+Specifies parameters where, if you do not supply values, the installation program uses the default value. The `controlPlane` section is a single mapping, and its first line must not begin with a hyphen. Only one control plane pool is used.
 
-- The name of an existing resource group. All installer-provisioned cluster resources are deployed to this resource group. If undefined, a new resource group is created for the cluster.
+`controlPlane.hyperthreading`
+Specifies whether to enable or disable simultaneous multithreading, also known as Hyper-Threading. By default, simultaneous multithreading is enabled to increase the performance of your machines' cores. You can disable it by setting the parameter value to `Disabled`. If you disable simultaneous multithreading in some cluster machines, you must disable it in all cluster machines.
 
-- Based on the network restrictions of the VPC, specify alternate service endpoints as needed. This overrides the default public endpoint for the service.
+> [!IMPORTANT]
+> If you disable simultaneous multithreading, ensure that your capacity planning accounts for the dramatically decreased machine performance. Use larger machine types, such as `n1-standard-8`, for your machines if you disable simultaneous multithreading.
 
-- Specify the name of the resource group that contains the existing virtual private cloud (VPC). The existing VPC and subnets should be in this resource group. The cluster will be installed to this VPC.
+`networking.clusterNetwork.cidr`
+Specifies the CIDR. The machine CIDR must contain the subnets for the compute machines and control plane machines.
 
-- Specify the name of an existing VPC.
+`networking.machineNetwork.cidr`
+Specifies the CIDR. The CIDR must contain the subnets defined in `platform.ibmcloud.controlPlaneSubnets` and `platform.ibmcloud.computeSubnets`.
 
-- Specify the name of the existing subnets to which to deploy the control plane machines. The subnets must belong to the VPC that you specified. Specify a subnet for each availability zone in the region.
+`networking.networkType`
+Specifies the cluster network plugin to install. The default value `OVNKubernetes` is the only supported value.
 
-- Specify the name of the existing subnets to which to deploy the compute machines. The subnets must belong to the VPC that you specified. Specify a subnet for each availability zone in the region.
+`platform.ibmcloud.resourceGroupName`
+Specifies the name of an existing resource group. All installer-provisioned cluster resources are deployed to this resource group. If undefined, a new resource group is created for the cluster.
 
-- For `<local_registry>`, specify the registry domain name, and optionally the port, that your mirror registry uses to serve content. For example, registry.example.com or registry.example.com:5000. For `<credentials>`, specify the base64-encoded user name and password for your mirror registry.
+`platform.ibmcloud.serviceEndpoints`
+Specifies alternate service endpoints based on the network restrictions of the VPC. This overrides the default public endpoint for the service.
 
-- Enables or disables FIPS mode. By default, FIPS mode is not enabled. If FIPS mode is enabled, the Red Hat Enterprise Linux CoreOS (RHCOS) machines that OpenShift Container Platform runs on bypass the default Kubernetes cryptography suite and use the cryptography modules that are provided with RHCOS instead.
+`platform.ibmcloud.networkResourceGroupName`
+Specifies the name of the resource group that contains the existing virtual private cloud (VPC). The existing VPC and subnets must be in this resource group. The cluster is installed to this VPC.
 
-  > [!IMPORTANT]
-  > The use of FIPS Validated or Modules in Process cryptographic libraries is only supported on OpenShift Container Platform deployments on the `x86_64` architecture.
+`platform.ibmcloud.vpcName`
+Specifies the name of an existing VPC.
 
-- Optional: provide the `sshKey` value that you use to access the machines in your cluster.
+`platform.ibmcloud.controlPlaneSubnets`
+Specifies the name of the existing subnets to which to deploy the control plane machines. The subnets must belong to the VPC that you specified. Specify a subnet for each availability zone in the region.
 
-- Provide the contents of the certificate file that you used for your mirror registry.
+`platform.ibmcloud.computeSubnets`
+Specifies the name of the existing subnets to which to deploy the compute machines. The subnets must belong to the VPC that you specified. Specify a subnet for each availability zone in the region.
 
-- Provide these values from the `metadata.name: release-0` section of the `imageContentSourcePolicy.yaml` file that was created when you mirrored the registry.
+`fips`
+Specifies whether to enable or disable FIPS mode. By default, FIPS mode is not enabled. If FIPS mode is enabled, the Red Hat Enterprise Linux CoreOS (RHCOS) machines that OpenShift Container Platform runs on bypass the default Kubernetes cryptography suite and use the cryptography modules that are provided with RHCOS instead.
 
-  > [!NOTE]
-  > For production OpenShift Container Platform clusters on which you want to perform installation debugging or disaster recovery, specify an SSH key that your `ssh-agent` process uses.
+> [!IMPORTANT]
+> The use of FIPS Validated or Modules in Process cryptographic libraries is only supported on OpenShift Container Platform deployments on the `x86_64` architecture.
+
+`sshKey`
+Specifies the SSH key to use to access the machines in your cluster. This value is optional.
+
+`additionalTrustBundle`
+Specifies the contents of the certificate file that you used for your mirror registry.
+
+`imageContentSources`
+Specifies the values from the `metadata.name: release-0` section of the `imageContentSourcePolicy.yaml` file that was created when you mirrored the registry.
+
+> [!NOTE]
+> For production OpenShift Container Platform clusters on which you want to perform installation debugging or disaster recovery, specify an SSH key that your `ssh-agent` process uses.
 
 # Installing the OpenShift CLI on Linux
 
@@ -859,7 +888,7 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 Linux Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 Linux Clients** entry and save the file.
 
 5.  Unpack the archive:
 
@@ -869,7 +898,7 @@ Procedure
 
 6.  Place the `oc` binary in a directory that is on your `PATH`.
 
-    To check your `PATH`, execute the following command:
+    To check your `PATH`, run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -914,13 +943,13 @@ Procedure
 
 2.  Select the appropriate version from the **Version** list.
 
-3.  Click **Download Now** next to the **OpenShift v4.17 Windows Client** entry and save the file.
+3.  Click **Download Now** next to the **OpenShift v4.20 Windows Client** entry and save the file.
 
 4.  Extract the archive with a ZIP program.
 
 5.  Move the `oc` binary to a directory that is on your `PATH` variable.
 
-    To check your `PATH` variable, open the command prompt and execute the following command:
+    To check your `PATH` variable, open the Command Prompt and run the following command:
 
     ``` terminal
     C:\> path
@@ -967,16 +996,16 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 macOS Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 macOS Clients** entry and save the file.
 
     > [!NOTE]
-    > For macOS arm64, choose the **OpenShift v4.17 macOS arm64 Client** entry.
+    > For macOS arm64, choose the **OpenShift v4.20 macOS arm64 Client** entry.
 
-5.  Unpack and unzip the archive.
+5.  Extract the archive.
 
 6.  Move the `oc` binary to a directory on your `PATH` variable.
 
-    To check your `PATH` variable, open a terminal and execute the following command:
+    To check your `PATH` variable, open a terminal and run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -1002,7 +1031,7 @@ Verification
 
 # Manually creating IAM
 
-Installing the cluster requires that the Cloud Credential Operator (CCO) operate in manual mode. While the installation program configures the CCO for manual mode, you must specify the identity and access management secrets for you cloud provider.
+To install OpenShift Container Platform, the Cloud Credential Operator (CCO) must operate in manual mode. While the installation program configures the CCO for manual mode, you must specify the identity and access management secrets for your cloud provider.
 
 You can use the Cloud Credential Operator (CCO) utility (`ccoctl`) to create the required IBM Cloud® resources.
 
@@ -1049,7 +1078,10 @@ Procedure
 
     </div>
 
-    - `credentialsMode`: Set the `credentialsMode` parameter to `Manual`.
+    where:
+
+    `credentialsMode`
+    Specifies the CCO credentials mode. Set the value to `Manual`.
 
 2.  To generate the manifests, run the following command from the directory that includes the installation program:
 
@@ -1074,55 +1106,60 @@ Procedure
       --to=<path_to_directory_for_credentials_requests>
     ```
 
-    - `--included`: Includes only the manifests that your specific cluster configuration requires.
+    where:
 
-    - `<path_to_directory_with_installation_configuration>`: Specify the location of the `install-config.yaml` file.
+    `--included`
+    Specifies that only the manifests that your specific cluster configuration requires are included.
 
-    - `<path_to_directory_for_credentials_requests>`: Specify the path to the directory where you want to store the `CredentialsRequest` objects. If the specified directory does not exist, this command creates it.
+    `--install-config`
+    Specifies the location of the `install-config.yaml` file.
 
-      This command creates a YAML file for each `CredentialsRequest` object.
+    `--to`
+    Specifies the path to the directory where you want to store the `CredentialsRequest` objects. If the specified directory does not exist, this command creates it.
 
-      <div class="formalpara">
+    This command creates a YAML file for each `CredentialsRequest` object.
 
-      <div class="title">
+    <div class="formalpara">
 
-      Sample `CredentialsRequest` object
+    <div class="title">
 
-      </div>
+    Sample `CredentialsRequest` object
 
-      ``` yaml
-        apiVersion: cloudcredential.openshift.io/v1
-        kind: CredentialsRequest
-        metadata:
-          labels:
-            controller-tools.k8s.io: "1.0"
-          name: openshift-image-registry-ibmcos
-          namespace: openshift-cloud-credential-operator
-        spec:
-          secretRef:
-            name: installer-cloud-credentials
-            namespace: openshift-image-registry
-          providerSpec:
-            apiVersion: cloudcredential.openshift.io/v1
-            kind: IBMCloudProviderSpec
-            policies:
-            - attributes:
-              - name: serviceName
-                value: cloud-object-storage
-              roles:
-              - crn:v1:bluemix:public:iam::::role:Viewer
-              - crn:v1:bluemix:public:iam::::role:Operator
-              - crn:v1:bluemix:public:iam::::role:Editor
-              - crn:v1:bluemix:public:iam::::serviceRole:Reader
-              - crn:v1:bluemix:public:iam::::serviceRole:Writer
-            - attributes:
-              - name: resourceType
-                value: resource-group
-              roles:
-              - crn:v1:bluemix:public:iam::::role:Viewer
-      ```
+    </div>
 
-      </div>
+    ``` yaml
+      apiVersion: cloudcredential.openshift.io/v1
+      kind: CredentialsRequest
+      metadata:
+        labels:
+          controller-tools.k8s.io: "1.0"
+        name: openshift-image-registry-ibmcos
+        namespace: openshift-cloud-credential-operator
+      spec:
+        secretRef:
+          name: installer-cloud-credentials
+          namespace: openshift-image-registry
+        providerSpec:
+          apiVersion: cloudcredential.openshift.io/v1
+          kind: IBMCloudProviderSpec
+          policies:
+          - attributes:
+            - name: serviceName
+              value: cloud-object-storage
+            roles:
+            - crn:v1:bluemix:public:iam::::role:Viewer
+            - crn:v1:bluemix:public:iam::::role:Operator
+            - crn:v1:bluemix:public:iam::::role:Editor
+            - crn:v1:bluemix:public:iam::::serviceRole:Reader
+            - crn:v1:bluemix:public:iam::::serviceRole:Writer
+          - attributes:
+            - name: resourceType
+              value: resource-group
+            roles:
+            - crn:v1:bluemix:public:iam::::role:Viewer
+    ```
+
+    </div>
 
 5.  Create the service ID for each credential request, assign the policies defined, create an API key, and generate the secret:
 
@@ -1134,22 +1171,28 @@ Procedure
       --resource-group-name=<resource_group_name>
     ```
 
-    - `<path_to_credential_requests_directory>`: Specify the directory containing the files for the `CredentialsRequest` objects.
+    where:
 
-    - `<cluster_name>`: Specify the name of the OpenShift Container Platform cluster.
+    `<path_to_credential_requests_directory>`
+    Specifies the directory that has the files for the `CredentialsRequest` objects.
 
-    - `<installation_directory>`: Optional parameter. Specify the directory in which you want the `ccoctl` utility to create objects. By default, the utility creates objects in the directory in which you run the commands.
+    `<cluster_name>`
+    Specifies the name of the OpenShift Container Platform cluster.
 
-    - `<resource_group_name>`: Optional parameter. Specify the name of the resource group used for scoping the access policies.
+    `<installation_directory>`
+    Specifies the directory in which you want the `ccoctl` utility to create objects. By default, the utility creates objects in the directory in which you run the commands. This parameter is optional.
 
-      > [!NOTE]
-      > If you enabled Technology Preview features by using the `TechPreviewNoUpgrade` feature set for your cluster, you must include the `--enable-tech-preview` parameter in the configuration for the `CredentialsRequest` object.
-      >
-      > If you provided a wrong resource group name, the installation fails during the bootstrap phase. To find the correct resource group name, run the following command:
-      >
-      > ``` terminal
-      > $ grep resourceGroupName <installation_directory>/manifests/cluster-infrastructure-02-config.yml
-      > ```
+    `<resource_group_name>`
+    Specifies the name of the resource group used for scoping the access policies. This parameter is optional.
+
+    > [!NOTE]
+    > If you enabled Technology Preview features by using the `TechPreviewNoUpgrade` feature set for your cluster, you must include the `--enable-tech-preview` parameter in the configuration for the `CredentialsRequest` object.
+    >
+    > If you provided a wrong resource group name, the installation fails during the bootstrap phase. To find the correct resource group name, run the following command:
+    >
+    > ``` terminal
+    > $ grep resourceGroupName <installation_directory>/manifests/cluster-infrastructure-02-config.yml
+    > ```
 
 </div>
 
@@ -1167,7 +1210,7 @@ Verification
 
 # Deploying the cluster
 
-To deploy your OpenShift Container Platform cluster, you can initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions infrastructure and completes cluster setup.
+To deploy your OpenShift Container Platform cluster, you initialize installation by running the `openshift-install create cluster` command from the directory that contains the installation program. The installation program provisions the required infrastructure and completes the cluster setup.
 
 > [!IMPORTANT]
 > You can run the `create cluster` command of the installation program only once, during initial installation.
@@ -1211,9 +1254,11 @@ Procedure
         --log-level=info
     ```
 
-    - For `<installation_directory>`, specify the location of your customized `./install-config.yaml` file.
+    where:
 
-    - To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
+    - `<installation_directory>`: Specifies the location of your customized `./install-config.yaml` file.
+
+    - `--log-level`: Specifies the log level. To view different installation details, specify `warn`, `debug`, or `error` instead of `info`.
 
 </div>
 
@@ -1236,13 +1281,7 @@ When the cluster deployment completes successfully:
   > [!IMPORTANT]
   > Do not delete the installation program or the files that the installation program creates. Both are required to delete the cluster.
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  The following example shows the expected output:
 
   ``` terminal
   ...
@@ -1252,8 +1291,6 @@ When the cluster deployment completes successfully:
   INFO Login to the console with user: "kubeadmin", and password: "password"
   INFO Time elapsed: 36m22s
   ```
-
-  </div>
 
   <div class="important">
 
@@ -1271,7 +1308,7 @@ When the cluster deployment completes successfully:
 
 To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
 
-The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+The `kubeconfig` file is specific to a cluster and OpenShift Container Platform generates it during installation.
 
 <div>
 
@@ -1342,139 +1379,8 @@ Next steps
 
 </div>
 
-<div id="additional-resources_installing-ibm-cloud-restricted-console">
-
-<div class="title">
-
-Additional resources
-
-</div>
+# Additional resources
 
 - [Accessing the web console](../../web_console/web-console.md#web-console)
 
-</div>
-
-# Post installation
-
-Complete the following steps to complete the configuration of your cluster.
-
-## Disabling the default software catalog sources
-
-In a restricted network environment, you must disable the default catalogs as a cluster administrator.
-
-Operator catalogs that source content provided by Red Hat and community projects are configured for the software catalog by default during an OpenShift Container Platform installation.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-- Disable the sources for the default catalogs by adding `disableAllDefaultSources: true` to the `OperatorHub` object:
-
-  ``` terminal
-  $ oc patch OperatorHub cluster --type json \
-      -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
-  ```
-
-  > [!TIP]
-  > Alternatively, you can use the web console to manage catalog sources. From the **Administration** → **Cluster Settings** → **Configuration** → **OperatorHub** page, click the **Sources** tab, where you can create, update, delete, disable, and enable individual sources.
-
-</div>
-
-## Installing the policy resources into the cluster
-
-Mirroring the OpenShift Container Platform content using the oc-mirror OpenShift CLI (oc) plugin creates resources, which include `catalogSource-certified-operator-index.yaml` and `imageContentSourcePolicy.yaml`.
-
-- The `ImageContentSourcePolicy` resource associates the mirror registry with the source registry and redirects image pull requests from the online registries to the mirror registry.
-
-- The `CatalogSource` resource is used by Operator Lifecycle Manager (OLM) Classic to retrieve information about the available Operators in the mirror registry, which lets users discover and install Operators.
-
-  > [!NOTE]
-  > OLM v1 uses the `ClusterCatalog` resource to retrieve information about the available cluster extensions in the mirror registry.
-  >
-  > The oc-mirror plugin v1 does not generate `ClusterCatalog` resources automatically; you must manually create them. The oc-mirror plugin v2 does, however, generate `ClusterCatalog` resources automatically.
-  >
-  > For more information on creating and applying `ClusterCatalog` resources, see "Adding a catalog to a cluster" in "Extensions".
-
-After you install the cluster, you must install these resources into the cluster.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You have mirrored the image set to the registry mirror in the disconnected environment.
-
-- You have access to the cluster as a user with the `cluster-admin` role.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Log in to the OpenShift CLI as a user with the `cluster-admin` role.
-
-2.  Apply the YAML files from the results directory to the cluster:
-
-    ``` terminal
-    $ oc apply -f ./oc-mirror-workspace/results-<id>/
-    ```
-
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-1.  Verify that the `ImageContentSourcePolicy` resources were successfully installed:
-
-    ``` terminal
-    $ oc get imagecontentsourcepolicy
-    ```
-
-2.  Verify that the `CatalogSource` resources were successfully installed:
-
-    ``` terminal
-    $ oc get catalogsource --all-namespaces
-    ```
-
-</div>
-
-# Telemetry access for OpenShift Container Platform
-
-To provide metrics about cluster health and the success of updates, the Telemetry service requires internet access. When connected, this service runs automatically by default and registers your cluster to [OpenShift Cluster Manager](https://console.redhat.com/openshift).
-
-After you confirm that your [OpenShift Cluster Manager](https://console.redhat.com/openshift) inventory is correct, either maintained automatically by Telemetry or manually by using OpenShift Cluster Manager,use subscription watch to track your OpenShift Container Platform subscriptions at the account or multi-cluster level. For more information about subscription watch, see "Data Gathered and Used by Red Hat’s subscription services" in the *Additional resources* section.
-
-<div id="additional-resources_installing-ibm-cloud-restricted-telemetry">
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [About remote health monitoring](../../support/remote_health_monitoring/about-remote-health-monitoring.md#about-remote-health-monitoring)
-
-</div>
-
-# Next steps
-
-- [Customize your cluster](../../post_installation_configuration/cluster-tasks.md#available_cluster_customizations).
-
-- Optional: [Remote health reporting](../../support/remote_health_monitoring/remote-health-reporting.md#remote-health-reporting).
+- [Postinstallation configuration for a disconnected IBM Cloud cluster](installing-ibm-cloud-restricted-postinstallation-configuration.md#installing-ibm-cloud-restricted-postinstallation-configuration)

@@ -10,15 +10,11 @@ The `kdump` service, included in the `kexec-tools` package, provides a crash-dum
 
 RHCOS ships with the `kexec-tools` package, but manual configuration is required to enable the `kdump` service.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-Perform the following steps to enable kdump on RHCOS.
 
 </div>
 
@@ -54,6 +50,8 @@ Perform the following steps to enable kdump on RHCOS.
     ```
 
 5.  Ensure that kdump has loaded a crash kernel by checking that the `kdump.service` systemd service has started and exited successfully and that the command, `cat /sys/kernel/kexec_crash_loaded`, prints the value `1`.
+
+</div>
 
 ## Enabling kdump on day-1
 
@@ -92,11 +90,11 @@ Procedure
 1.  Create a Butane config file, `99-worker-kdump.bu`, that configures and enables kdump. This creates a `MachineConfig` object for cluster-wide configuration:
 
     > [!NOTE]
-    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+    > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 99-worker-kdump
       labels:
@@ -186,17 +184,25 @@ See the [Analyzing a core dump](https://access.redhat.com/documentation/en-us/re
 > [!NOTE]
 > It is recommended to perform vmcore analysis on a separate RHEL system.
 
-## Additional resources
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Setting up kdump in RHEL](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_monitoring_and_updating_the_kernel/configuring-kdump-on-the-command-line_managing-monitoring-and-updating-the-kernel)
 
 - [Linux kernel documentation for kdump](https://www.kernel.org/doc/html/latest/admin-guide/kdump/kdump.html)
 
-- kdump.conf(5) — a manual page for the `/etc/kdump.conf` configuration file containing the full documentation of available options
+- [kdump.conf(5) manual page](https://www.kernel.org/doc/html/latest/admin-guide/kdump/kdump.html#configuration)
 
-- kexec(8) — a manual page for the `kexec` package
+- [kexec(8) manual page](https://www.kernel.org/doc/html/latest/admin-guide/kdump/kdump.html)
 
-- [Red Hat Knowledgebase article](https://access.redhat.com/site/solutions/6038) regarding kexec and kdump
+- [Red Hat Knowledgebase article regarding kexec and kdump](https://access.redhat.com/site/solutions/6038)
+
+</div>
 
 # Debugging Ignition failures
 

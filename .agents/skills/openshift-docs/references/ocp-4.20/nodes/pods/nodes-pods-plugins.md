@@ -6,6 +6,8 @@ Device plugins allow you to use a particular device type (GPU, InfiniBand, or ot
 
 A device plugin is a gRPC service running on nodes that manages specific hardware resources through an extension mechanism, enabling containers to consume these devices.
 
+The device plugin provides a consistent and portable solution to consume hardware devices across clusters. The device plugin provides support for these devices through an extension mechanism, which makes these devices available to Containers, provides health checks of these devices, and securely shares them.
+
 > [!IMPORTANT]
 > OpenShift Container Platform supports the device plugin API, but the device plugin Containers are supported by individual vendors.
 
@@ -37,15 +39,15 @@ service DevicePlugin {
 
 ## Example device plugins
 
-- [Nvidia GPU device plugin for COS-based operating system](https://github.com/GoogleCloudPlatform/Container-engine-accelerators/tree/master/cmd/nvidia_gpu)
+- Nvidia GPU device plugin for COS-based operating system
 
-- [Nvidia official GPU device plugin](https://github.com/NVIDIA/k8s-device-plugin)
+- Nvidia official GPU device plugin
 
-- [Solarflare device plugin](https://github.com/vikaschoudhary16/sfc-device-plugin)
+- Solarflare device plugin
 
-- [KubeVirt device plugins: vfio and kvm](https://github.com/kubevirt/kubernetes-device-plugins)
+- KubeVirt device plugins: vfio and kvm
 
-- [Kubernetes device plugin for IBM® Crypto Express (CEX) cards](https://github.com/ibm-s390-cloud/k8s-cex-dev-plugin)
+- Kubernetes device plugin for IBM® Crypto Express (CEX) cards
 
 > [!NOTE]
 > For easy device plugin reference implementation, there is a stub device plugin in the Device Manager code: ***vendor/k8s.io/kubernetes/pkg/kubelet/cm/deviceplugin/device_plugin_stub.go***.
@@ -60,9 +62,31 @@ service DevicePlugin {
 
 - More specific details regarding deployment steps can be found with each device plugin implementation.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Nvidia GPU device plugin for COS-based operating system](https://github.com/GoogleCloudPlatform/Container-engine-accelerators/tree/master/cmd/nvidia_gpu)
+
+- [Nvidia official GPU device plugin](https://github.com/NVIDIA/k8s-device-plugin)
+
+- [Solarflare device plugin](https://github.com/vikaschoudhary16/sfc-device-plugin)
+
+- [KubeVirt device plugins: vfio and kvm](https://github.com/kubevirt/kubernetes-device-plugins)
+
+- [Kubernetes device plugin for IBM® Crypto Express (CEX) cards](https://github.com/ibm-s390-cloud/k8s-cex-dev-plugin)
+
+</div>
+
 # Understanding the Device Manager
 
 Device Manager advertises specialized node hardware resources through device plugins, enabling pods to consume hardware devices without requiring upstream code changes.
+
+Device Manager provides a mechanism for advertising specialized node hardware resources with the help of plugins known as device plugins.
 
 You can advertise specialized hardware without requiring any upstream code changes.
 
@@ -82,6 +106,8 @@ Additionally, device plugins can also perform several other device-specific oper
 # Enabling Device Manager
 
 Enable Device Manager to allow device plugins to advertise specialized node hardware resources and make them available to pods without requiring code changes.
+
+Enable Device Manager to implement a device plugin to advertise specialized hardware without any upstream code changes.
 
 Device Manager provides a mechanism for advertising specialized node hardware resources with the help of plugins known as device plugins.
 

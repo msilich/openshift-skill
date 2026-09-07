@@ -51,7 +51,7 @@ Prerequisites
 
 </div>
 
-- Install OpenShift Container Platform 4.17 on your cluster.
+- Install OpenShift Container Platform 4.20 on your cluster.
 
 - Log in to the OpenShift Container Platform web console as a user with `cluster-admin` permissions.
 
@@ -125,7 +125,7 @@ Prerequisites
 
 </div>
 
-- Install OpenShift Container Platform 4.17 on your cluster.
+- Install OpenShift Container Platform 4.20 on your cluster.
 
 - Install the OpenShift CLI (`oc`).
 
@@ -169,7 +169,7 @@ Procedure
       source: redhat-operators
       sourceNamespace: openshift-marketplace
       name: kubevirt-hyperconverged
-      startingCSV: kubevirt-hyperconverged-operator.v4.20.21
+      startingCSV: kubevirt-hyperconverged-operator.v4.20.24
       channel: "stable"
     ```
 
@@ -207,7 +207,7 @@ You must verify that the subscription creation was successful before you can pro
 
     ``` terminal
     NAME                                       DISPLAY                    VERSION   REPLACES                                   PHASE
-    kubevirt-hyperconverged-operator.v4.20.21   OpenShift Virtualization   4.20.21    kubevirt-hyperconverged-operator.v4.19.0   Succeeded
+    kubevirt-hyperconverged-operator.v4.20.24   OpenShift Virtualization   4.20.24    kubevirt-hyperconverged-operator.v4.19.0   Succeeded
     ```
 
 2.  Check that the `HyperConverged` custom resource (CR) has the correct version. Run the following command and verify the output:
@@ -221,7 +221,7 @@ You must verify that the subscription creation was successful before you can pro
     ``` terminal
     {
     "name": "operator",
-    "version": "4.20.21"
+    "version": "4.20.24"
     }
     ```
 
@@ -321,7 +321,7 @@ Verification
 
   ``` terminal
   NAME                                      DISPLAY                    VERSION   REPLACES   PHASE
-  kubevirt-hyperconverged-operator.v4.20.21   OpenShift Virtualization   4.20.21                Succeeded
+  kubevirt-hyperconverged-operator.v4.20.24   OpenShift Virtualization   4.20.24                Succeeded
   ```
 
 </div>

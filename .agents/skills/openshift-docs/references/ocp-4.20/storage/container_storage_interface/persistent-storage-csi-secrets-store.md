@@ -1,16 +1,34 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-# Overview
+To improve secret security and integrate with enterprise secret management systems, you can use the Secrets Store CSI Driver Operator to mount secrets from external stores without persisting them on the cluster after pod termination.
 
-To store and manage your secrets securely, you can configure the OpenShift Container Platform Secrets Store CSI Driver Operator to mount secrets from an external secret management system, such as Azure Key Vault, by using a provider plugin. Applications can then use the secret, but the secret does not persist on the system after the application pod is destroyed.
+# Overview of Secrets Store CSI Driver Operator
+
+To store and manage your secrets securely, configure the Secrets Store CSI Driver Operator to mount secrets from an external secret management system, such as Azure Key Vault, by using a provider plugin. Applications can then use the secret, but the secret does not persist on the system after pod termination.
 
 Secret objects are stored with Base64 encoding. etcd provides encryption at rest for these secrets, but when secrets are retrieved, they are decrypted and presented to the user. If role-based access control is not configured properly on your cluster, anyone with API or etcd access can retrieve or modify a secret. Additionally, anyone who is authorized to create a pod in a namespace can use that access to read any secret in that namespace.
 
 The Secrets Store CSI Driver Operator, `secrets-store.csi.k8s.io`, enables OpenShift Container Platform to mount multiple secrets, keys, and certificates stored in enterprise-grade external secrets stores into pods as a volume. The Secrets Store CSI Driver Operator communicates with the provider using gRPC to fetch the mount contents from the specified external secrets store. After the volume is attached, the data in it is mounted into the container’s file system. Secrets store volumes are mounted in-line.
 
-For more information about CSI inline volumes, see [CSI inline ephemeral volumes](ephemeral-storage-csi-inline.md#ephemeral-storage-csi-inline).
+For more information about CSI inline volumes, see "CSI inline ephemeral volumes".
 
-Familiarity with [persistent storage](../understanding-persistent-storage.md#understanding-persistent-storage) and [configuring CSI volumes](persistent-storage-csi.md#persistent-storage-csi) is recommended when working with a CSI driver.
+Familiarity with persistent storage and configuring CSI volumes is recommended when working with a CSI driver. For more information, see "Understanding persistent storage" and "Configuring CSI volumes".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [CSI inline ephemeral volumes](ephemeral-storage-csi-inline.md#ephemeral-storage-csi-inline)
+
+- [Understanding persistent storage](../understanding-persistent-storage.md#understanding-persistent-storage)
+
+- [Configuring CSI volumes](persistent-storage-csi.md#persistent-storage-csi)
+
+</div>
 
 ## Secrets store providers
 
@@ -33,11 +51,13 @@ The Secrets Store CSI Driver Operator has been tested with the following secrets
 
 # About CSI
 
-Storage vendors have traditionally provided storage drivers as part of Kubernetes. With the implementation of the Container Storage Interface (CSI), third-party providers can instead deliver storage plugins using a standard interface without ever having to change the core Kubernetes code.
+The Container Storage Interface (CSI) enables storage vendors to deliver plugins through a standard interface without modifying Kubernetes core code, replacing traditional embedded storage drivers.
 
 CSI Operators give OpenShift Container Platform users storage options, such as volume snapshots, that are not possible with in-tree volume plugins.
 
 # Support for disconnected environments
+
+You can use certain secrets store providers in disconnected OpenShift Container Platform clusters by configuring VPC endpoints or equivalent connectivity to enable communication between the driver and external secret management systems.
 
 The following secrets store providers support using the Secrets Store CSI driver in disconnected clusters:
 
@@ -52,11 +72,23 @@ The following secrets store providers support using the Secrets Store CSI driver
 To enable communication between Secrets Store CSI driver and the secrets store provider, configure Virtual Private Cloud (VPC) endpoints or equivalent connectivity to the corresponding secrets store provider, the OpenID Connect (OIDC) issuer, and the Secure Token Service (STS). The exact configuration depends on the secrets store provider, the authentication method, and the type of disconnected cluster.
 
 > [!NOTE]
-> For more information about disconnected environments, see [About disconnected environments](../../disconnected/about.md#about).
+> For more information about disconnected environments, see "About disconnected environments".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [About disconnected environments](../../disconnected/about.md#about)
+
+</div>
 
 # Support for network policies
 
-The Secrets Store CSI Driver Operator includes pre-defined `NetworkPolicies` resources for enhanced security. These policies govern the ingress and egress traffic for both the SS-CSI Operator and its associated driver.
+The Secrets Store CSI Driver Operator uses pre-defined `NetworkPolicies` to control ingress and egress traffic for enhanced security of the Operator and driver components.
 
 The following table summarizes the default ingress and egress rules:
 
@@ -67,7 +99,7 @@ The following table summarizes the default ingress and egress rules:
 
 # Installing the Secrets Store CSI driver
 
-You can use the OpenShift Container Platform web console to install the Secrets Store CSI driver.
+To enable OpenShift Container Platform to mount secrets from external secret management systems, install the Secrets Store CSI Driver Operator and create a `ClusterCSIDriver` instance.
 
 <div>
 
@@ -138,17 +170,17 @@ Procedure
 
 <div class="title">
 
-Next steps
+Additional resources
 
 </div>
 
-- [Mounting secrets from an external secrets store to a CSI volume](../../nodes/pods/nodes-pods-secrets-store.md#mounting-secrets-external-secrets-store)
+- [Providing sensitive data to pods by using an external secrets store](../../nodes/pods/nodes-pods-secrets-store.md#nodes-pods-secrets-store)
 
 </div>
 
 # Uninstalling the Secrets Store CSI Driver Operator
 
-You can use the OpenShift Container Platform web console to uninstall the Secrets Store CSI driver.
+To remove the Secrets Store CSI Driver Operator and free cluster resources, uninstall the Operator after stopping applications and removing the CSI driver.
 
 <div>
 

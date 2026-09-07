@@ -1,8 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This guide provides an overview of the concepts that drive Operator Lifecycle Manager (OLM) in OpenShift Container Platform.
+Key concepts for understanding Operator Lifecycle Manager (OLM) include cluster service versions (CSVs), catalog sources, subscriptions, and Operator groups.
 
-# What is Operator Lifecycle Manager (OLM) Classic?
+# About Operator Lifecycle Manager (OLM) Classic
 
 Operator Lifecycle Manager (OLM) Classic helps users install, update, and manage the lifecycle of Kubernetes native applications (Operators) and their associated services running across their OpenShift Container Platform clusters. Operator Lifecycle Manager (OLM) Classic forms part of the Operator Framework, an open source toolkit designed to manage Operators in an effective, automated, and scalable way.
 
@@ -11,13 +11,13 @@ Operator Lifecycle Manager (OLM) Classic helps users install, update, and manage
 <figcaption>OLM (Classic) workflow</figcaption>
 </figure>
 
-OLM runs by default in OpenShift Container Platform 4.17, which aids cluster administrators in installing, upgrading, and granting access to Operators running on their cluster. The OpenShift Container Platform web console provides management screens for cluster administrators to install Operators, as well as grant specific projects access to use the catalog of Operators available on the cluster.
+OLM runs by default in OpenShift Container Platform 4.20, which aids cluster administrators in installing, upgrading, and granting access to Operators running on their cluster. The OpenShift Container Platform web console provides management screens for cluster administrators to install Operators, as well as grant specific projects access to use the catalog of Operators available on the cluster.
 
 For developers, a self-service experience allows provisioning and configuring instances of databases, monitoring, and big data services without having to be subject matter experts, because the Operator has that knowledge baked into it.
 
 # OLM resources
 
-The following custom resource definitions (CRDs) are defined and managed by Operator Lifecycle Manager (OLM):
+The following custom resource definitions (CRDs) are defined and managed by Operator Lifecycle Manager (OLM) in OpenShift Container Platform. Use these resources to configure catalog sources, subscriptions, install plans, cluster service versions (CSVs), and Operator groups.
 
 | Resource | Short name | Description |
 |----|----|----|
@@ -32,9 +32,7 @@ CRDs managed by OLM and Catalog Operators
 
 ## Cluster service version
 
-A *cluster service version* (CSV) represents a specific version of a running Operator on your OpenShift Container Platform cluster. It is a YAML manifest created from Operator metadata that assists Operator Lifecycle Manager (OLM) in running the Operator in the cluster.
-
-OLM requires this metadata about an Operator to ensure that it can be kept running safely on a cluster, and to provide information about how updates should be applied as new versions of the Operator are published. This is similar to packaging software for a traditional operating system; think of the packaging step for OLM as the stage at which you make your `rpm`, `deb`, or `apk` bundle.
+A cluster service version (CSV) is a YAML manifest that represents a specific version of a running Operator on your OpenShift Container Platform cluster. OLM uses CSV metadata to run Operators safely and determine how to apply upgrades when new versions are published.
 
 A CSV includes the metadata that accompanies an Operator container image, used to populate user interfaces with information such as its name, version, description, labels, repository link, and logo.
 
@@ -102,54 +100,69 @@ status:
 
 </div>
 
-- Name for the `CatalogSource` object. This value is also used as part of the name for the related pod that is created in the requested namespace.
+where:
 
-- Namespace to create the catalog in. To make the catalog available cluster-wide in all namespaces, set this value to `openshift-marketplace`. The default Red Hat-provided catalog sources also use the `openshift-marketplace` namespace. Otherwise, set the value to a specific namespace to make the Operator only available in that namespace.
+`metadata.name`
+Specifies the name for the `CatalogSource` object. This value is also used as part of the name for the related pod that is created in the requested namespace.
 
-- Optional: To avoid cluster upgrades potentially leaving Operator installations in an unsupported state or without a continued update path, you can enable automatically changing your Operator catalog’s index image version as part of cluster upgrades.
+`metadata.namespace`
+Specifies the namespace to create the catalog in. To make the catalog available cluster-wide in all namespaces, set this value to `openshift-marketplace`. The default Red Hat-provided catalog sources also use the `openshift-marketplace` namespace. Otherwise, set the value to a specific namespace to make the Operator only available in that namespace.
 
-  Set the `olm.catalogImageTemplate` annotation to your index image name and use one or more of the Kubernetes cluster version variables as shown when constructing the template for the image tag. The annotation overwrites the `spec.image` field at run time. See the "Image template for custom catalog sources" section for more details.
+`metadata.annotations.olm.catalogImageTemplate`
+To avoid cluster upgrades potentially leaving Operator installations in an unsupported state or without a continued update path, you can enable automatically changing your Operator catalog’s index image version as part of cluster upgrades. This field is optional.
 
-- Display name for the catalog in the web console and CLI.
+Set the `olm.catalogImageTemplate` annotation to your index image name and use one or more of the Kubernetes cluster version variables as shown when constructing the template for the image tag. The annotation overwrites the `spec.image` field at run time. See the "Image template for custom catalog sources" section for more details.
 
-- Index image for the catalog. Optionally, can be omitted when using the `olm.catalogImageTemplate` annotation, which sets the pull spec at run time.
+`spec.displayName`
+Specifies the display name for the catalog in the web console and CLI.
 
-- Weight for the catalog source. OLM uses the weight for prioritization during dependency resolution. A higher weight indicates the catalog is preferred over lower-weighted catalogs.
+`spec.image`
+Specifies the index image for the catalog. Optionally, this spec can be omitted when using the `olm.catalogImageTemplate` annotation, which sets the pull spec at run time.
 
-- Source types include the following:
+`spec.priority`
+Specifies the weight for the catalog source. OLM uses the weight for prioritization during dependency resolution. A higher weight indicates the catalog is preferred over lower-weighted catalogs.
 
-  - `grpc` with an `image` reference: OLM pulls the image and runs the pod, which is expected to serve a compliant API.
+`spec.sourceType`
+Specifies one of the following source types:
 
-  - `grpc` with an `address` field: OLM attempts to contact the gRPC API at the given address. This should not be used in most cases.
+- `grpc` with an `image` reference: OLM pulls the image and runs the pod, which is expected to serve a compliant API.
 
-  - `configmap`: OLM parses config map data and runs a pod that can serve the gRPC API over it.
+- `grpc` with an `address` field: OLM attempts to contact the gRPC API at the given address. This should not be used in most cases.
 
-- Specify the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
+- `configmap`: OLM parses config map data and runs a pod that can serve the gRPC API over it.
 
-  > [!NOTE]
-  > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
+`spec.grpcPodConfig.securityContextConfig`
+Specifies the pod security admissions (PSA) policy for the catalog source pod. It accepts the values of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
 
-- Optional: For `grpc` type catalog sources, overrides the default node selector for the pod serving the content in `spec.image`, if defined.
+> [!NOTE]
+> If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
 
-- Optional: For `grpc` type catalog sources, overrides the default priority class name for the pod serving the content in `spec.image`, if defined. Kubernetes provides `system-cluster-critical` and `system-node-critical` priority classes by default. Setting the field to empty (`""`) assigns the pod the default priority. Other priority classes can be defined manually.
+`spec.grpcPodConfig.nodeSelector`
+Overrides the default node selector for the pod serving the content in `spec.image` for `grpc` type catalog sources. This field is optional.
 
-- Optional: For `grpc` type catalog sources, overrides the default tolerations for the pod serving the content in `spec.image`, if defined.
+`spec.grpcPodConfig.priorityClassName`
+Overrides the default priority class name for the pod serving the content in `spec.image` for `grpc` type catalog sources. Kubernetes provides `system-cluster-critical` and `system-node-critical` priority classes by default. Setting the field to empty (`""`) assigns the pod the default priority. Other priority classes can be defined manually. This field is optional.
 
-- Automatically check for new versions at a given interval to stay up-to-date.
+`spec.grpcPodConfig.tolerations`
+Overrides the default tolerations for the pod serving the content in `spec.image` for `grpc` type catalog sources. This field is optional.
 
-- Last observed state of the catalog connection. For example:
+`spec.updateStrategy.registryPoll`
+Specifies how often OLM polls the container registry for updates.
 
-  - `READY`: A connection is successfully established.
+`status.connectionState.lastObservedState`
+Displays the last observed state of the catalog connection. For example:
 
-  - `CONNECTING`: A connection is attempting to establish.
+- `READY`: A connection is successfully established.
 
-  - `TRANSIENT_FAILURE`: A temporary problem has occurred while attempting to establish a connection, such as a timeout. The state will eventually switch back to `CONNECTING` and try again.
+- `CONNECTING`: A connection is attempting to establish.
 
-  See [States of Connectivity](https://grpc.github.io/grpc/core/md_doc_connectivity-semantics-and-api.html) in the gRPC documentation for more details.
+- `TRANSIENT_FAILURE`: A temporary problem has occurred while attempting to establish a connection, such as a timeout. The state will eventually switch back to `CONNECTING` and try again.
 
-- Latest time the container registry storing the catalog image was polled to ensure the image is up-to-date.
+`status.latestImageRegistryPoll`
+Displays the last time OLM polled the container registry for catalog image updates.
 
-- Status information for the catalog’s Operator Registry service.
+`status.registryService`
+Displays status information for the catalog’s Operator Registry service.
 
 Referencing the `name` of a `CatalogSource` object in a subscription instructs OLM where to search to find a requested Operator:
 
@@ -194,6 +207,8 @@ Additional resources
 
 - [Viewing Operator catalog source status by using the CLI](../../admin/olm-status.md#olm-cs-status-cli_olm-status)
 
+- [States of Connectivity (gRPC documentation)](https://grpc.github.io/grpc/core/md_doc_connectivity-semantics-and-api.html)
+
 - [Understanding and managing pod security admission](../../../authentication/understanding-and-managing-pod-security-admission.md#understanding-and-managing-pod-security-admission)
 
 - [Catalog source pod scheduling](../../admin/olm-cs-podsched.md#olm-cs-podsched)
@@ -202,9 +217,9 @@ Additional resources
 
 ### Image template for custom catalog sources
 
-Operator compatibility with the underlying cluster can be expressed by a catalog source in various ways. One way, which is used for the default Red Hat-provided catalog sources, is to identify image tags for index images that are specifically created for a particular platform release, for example OpenShift Container Platform 4.17.
+Operator compatibility with the underlying cluster can be expressed by a catalog source in various ways. One way, which is used for the default Red Hat-provided catalog sources, is to identify image tags for index images that are specifically created for a particular platform release, for example OpenShift Container Platform 4.20.
 
-During a cluster upgrade, the index image tag for the default Red Hat-provided catalog sources are updated automatically by the Cluster Version Operator (CVO) so that Operator Lifecycle Manager (OLM) pulls the updated version of the catalog. For example during an upgrade from OpenShift Container Platform 4.19 to 4.17, the `spec.image` field in the `CatalogSource` object for the `redhat-operators` catalog is updated from:
+During a cluster upgrade, the index image tag for the default Red Hat-provided catalog sources are updated automatically by the Cluster Version Operator (CVO) so that Operator Lifecycle Manager (OLM) pulls the updated version of the catalog. For example during an upgrade from OpenShift Container Platform 4.19 to 4.20, the `spec.image` field in the `CatalogSource` object for the `redhat-operators` catalog is updated from:
 
 ``` terminal
 registry.redhat.io/redhat/redhat-operator-index:v4.20
@@ -266,7 +281,7 @@ spec:
 >
 > If the `spec.image` field is not set and the annotation does not resolve to a usable pull spec, OLM stops reconciliation of the catalog source and sets it into a human-readable error condition.
 
-For an OpenShift Container Platform 4.17 cluster, which uses Kubernetes 1.33, the `olm.catalogImageTemplate` annotation in the preceding example resolves to the following image reference:
+For an OpenShift Container Platform 4.20 cluster, which uses Kubernetes 1.33, the `olm.catalogImageTemplate` annotation in the preceding example resolves to the following image reference:
 
 ``` terminal
 quay.io/example-org/example-catalog:v1.33
@@ -276,11 +291,11 @@ For future releases of OpenShift Container Platform, you can create updated inde
 
 ### Catalog health requirements
 
+Operator Lifecycle Manager (OLM) requires that all Operator catalogs in a shared global namespace are healthy. When a catalog is unhealthy, Operator installation and update operations in that namespace fail with a `CatalogSourcesUnhealthy` condition.
+
 Operator catalogs on a cluster are interchangeable from the perspective of installation resolution; a `Subscription` object might reference a specific catalog, but dependencies are resolved using all catalogs on the cluster.
 
 For example, if Catalog A is unhealthy, a subscription referencing Catalog A could resolve a dependency in Catalog B, which the cluster administrator might not have been expecting, because B normally had a lower catalog priority than A.
-
-As a result, OLM requires that all catalogs with a given global namespace (for example, the default `openshift-marketplace` namespace or a custom global namespace) are healthy. When a catalog is unhealthy, all Operator installation or update operations within its shared global namespace will fail with a `CatalogSourcesUnhealthy` condition. If these operations were permitted in an unhealthy state, OLM might make resolution and installation decisions that were unexpected to the cluster administrator.
 
 As a cluster administrator, if you observe an unhealthy catalog and want to consider the catalog as invalid and resume Operator installations, see the "Removing custom catalogs" or "Disabling the default software catalog sources" sections for information about removing the unhealthy catalog.
 
@@ -467,7 +482,7 @@ Additional resources
 
 ## Operator groups
 
-An *Operator group*, defined by the `OperatorGroup` resource, provides multitenant configuration to OLM-installed Operators. An Operator group selects target namespaces in which to generate required RBAC access for its member Operators.
+An Operator group defines multitenant configuration for OLM-installed Operators through an `OperatorGroup` resource. An Operator group selects target namespaces where the required RBAC access is generated for member Operators .
 
 The set of target namespaces is provided by a comma-delimited string stored in the `olm.targetNamespaces` annotation of a cluster service version (CSV). This annotation is applied to the CSV instances of member Operators and is projected into their deployments.
 
@@ -485,9 +500,7 @@ Additional resources
 
 ## Operator conditions
 
-As part of its role in managing the lifecycle of an Operator, Operator Lifecycle Manager (OLM) infers the state of an Operator from the state of Kubernetes resources that define the Operator. While this approach provides some level of assurance that an Operator is in a given state, there are many instances where an Operator might need to communicate information to OLM that could not be inferred otherwise. This information can then be used by OLM to better manage the lifecycle of the Operator.
-
-OLM provides a custom resource definition (CRD) called `OperatorCondition` that allows Operators to communicate conditions to OLM. There are a set of supported conditions that influence management of the Operator by OLM when present in the `Spec.Conditions` array of an `OperatorCondition` resource.
+Operator Lifecycle Manager (OLM) infers Operator state from Kubernetes resources, but some conditions require explicit communication. You can use the `OperatorCondition` custom resource definition (CRD) to tell OLM about supported conditions that affect lifecycle management.
 
 > [!NOTE]
 > By default, the `Spec.Conditions` array is not present in an `OperatorCondition` object until it is either added by a user or as a result of custom Operator logic.

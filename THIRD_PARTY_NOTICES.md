@@ -7,7 +7,7 @@ and the referenced `SOURCE.json` file.
 ## OpenShift Container Platform documentation
 
 - Project: `openshift/openshift-docs`
-- Source revision: `5aee2719f9ad01a82bb80b391e5af25f566c73c0`
+- Source revision: `3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98`
 - License: Apache License 2.0
 - Bundled license:
   `.agents/skills/openshift-docs/references/ocp-4.20/LICENSE.openshift-docs`
@@ -22,6 +22,10 @@ and the referenced `SOURCE.json` file.
 - License: Apache License 2.0
 - Bundled converter: `tools/docs/convert.py`
 - Bundled license: `tools/docs/LICENSE.agentic-skills`
+- Local modification: derive the product version from an explicit
+  `enterprise-X.Y` branch when the distro map is stale; reject missing or
+  conflicting versions instead of falling back to 4.17. The original and
+  modified converter checksums are recorded in `tools/docs/build.lock.json`.
 
 ## Referenced but not redistributed
 

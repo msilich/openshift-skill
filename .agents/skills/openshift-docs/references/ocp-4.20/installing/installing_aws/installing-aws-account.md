@@ -81,7 +81,7 @@ Only the US-West region has endpoints for tagging. Omit this parameter if your c
 
 # AWS account limits
 
-The OpenShift Container Platform cluster uses several Amazon Web Services (AWS) components, and the default [Service Limits](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) affect your ability to install OpenShift Container Platform clusters.
+The OpenShift Container Platform cluster uses several Amazon Web Services (AWS) components, and the default service limits affect your ability to install OpenShift Container Platform clusters.
 
 If you use certain cluster configurations, deploy your cluster in certain AWS regions, or run multiple clusters from your account, you might need to request additional resources for your AWS account.
 
@@ -120,7 +120,7 @@ The following table summarizes the AWS components whose limits can impact your a
 <td style="text-align: left;"><p>Elastic IPs (EIPs)</p></td>
 <td style="text-align: left;"><p>0 to 1</p></td>
 <td style="text-align: left;"><p>5 EIPs per account</p></td>
-<td style="text-align: left;"><p>To provision the cluster in a highly available configuration, the installation program creates a public and private subnet for each <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html">availability zone within a region</a>. Each private subnet requires a <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">NAT Gateway</a>, and each NAT gateway requires a separate <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">elastic IP</a>. Review the <a href="https://aws.amazon.com/about-aws/global-infrastructure/">AWS region map</a> to determine how many availability zones are in each region. To take advantage of the default high availability, install the cluster in a region with at least three availability zones. To install a cluster in a region with more than five availability zones, you must increase the EIP limit.</p>
+<td style="text-align: left;"><p>To provision the cluster in a highly available configuration, the installation program creates a public and private subnet for each availability zone within a region. Each private subnet requires a NAT gateway, and each NAT gateway requires a separate elastic IP. Review the AWS region map to determine how many availability zones are in each region. To take advantage of the default high availability, install the cluster in a region with at least three availability zones. To install a cluster in a region with more than five availability zones, you must increase the EIP limit.</p>
 <div class="important">
 <div class="title">
 &#10;</div>
@@ -137,7 +137,7 @@ The following table summarizes the AWS components whose limits can impact your a
 <td style="text-align: left;"><p>Elastic Load Balancing (ELB/NLB)</p></td>
 <td style="text-align: left;"><p>3</p></td>
 <td style="text-align: left;"><p>20 per region</p></td>
-<td style="text-align: left;"><p>By default, each cluster creates internal and external network load balancers for the master API server and a single Classic Load Balancer for the router. Deploying more Kubernetes <code>Service</code> objects with type <code>LoadBalancer</code> will create additional <a href="https://aws.amazon.com/elasticloadbalancing/">load balancers</a>.</p></td>
+<td style="text-align: left;"><p>By default, each cluster creates internal and external network load balancers for the master API server and a single Classic Load Balancer for the router. Deploying more Kubernetes <code>Service</code> objects with type <code>LoadBalancer</code> will create additional load balancers.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>NAT Gateways</p></td>
@@ -149,7 +149,7 @@ The following table summarizes the AWS components whose limits can impact your a
 <td style="text-align: left;"><p>Elastic Network Interfaces (ENIs)</p></td>
 <td style="text-align: left;"><p>At least 12</p></td>
 <td style="text-align: left;"><p>350 per region</p></td>
-<td style="text-align: left;"><p>The default installation creates 21 ENIs and an ENI for each availability zone in your region. For example, the <code>us-east-1</code> region contains six availability zones, so a cluster that is deployed in that zone uses 27 ENIs. Review the <a href="https://aws.amazon.com/about-aws/global-infrastructure/">AWS region map</a> to determine how many availability zones are in each region.</p>
+<td style="text-align: left;"><p>The default installation creates 21 ENIs and an ENI for each availability zone in your region. For example, the <code>us-east-1</code> region contains six availability zones, so a cluster that is deployed in that zone uses 27 ENIs. Review the AWS region map to determine how many availability zones are in each region.</p>
 <p>Additional ENIs are created for additional machines and ELB load balancers that are created by cluster usage and deployed workloads.</p></td>
 </tr>
 <tr>
@@ -173,22 +173,38 @@ The following table summarizes the AWS components whose limits can impact your a
 </tbody>
 </table>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Service Limits (AWS documentation)](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html)
+
+- [Availability zones within a region (AWS documentation)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
+
+- [NAT Gateway (AWS documentation)](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
+
+- [Elastic IP addresses (AWS documentation)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
+
+- [AWS global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/)
+
+- [Elastic Load Balancing (AWS documentation)](https://aws.amazon.com/elasticloadbalancing/)
+
+</div>
+
 # Required AWS permissions for the IAM user
 
-To deploy all components of an OpenShift Container Platform cluster, you must grant the all the required permissions to the IAM user that you create in Amazon Web Services (AWS).
+To deploy all components of an OpenShift Container Platform cluster, you must grant all the required permissions to the IAM user that you create in Amazon Web Services (AWS).
 
 > [!NOTE]
 > Your IAM user must have the permission `tag:GetResources` in the region `us-east-1` to delete the base cluster resources. As part of the AWS API requirement, the OpenShift Container Platform installation program performs various actions in this region.
 
-When you attach the `AdministratorAccess` policy to the IAM user that you create in Amazon Web Services (AWS), you grant that user all of the required permissions. To deploy all components of an OpenShift Container Platform cluster, the IAM user requires the following permissions:
+When you attach the `AdministratorAccess` policy to the IAM user that you create in AWS, you grant that user all of the required permissions. To deploy all components of an OpenShift Container Platform cluster, the IAM user requires the following permissions:
 
-<div class="example">
-
-<div class="title">
-
-Required EC2 permissions for installation
-
-</div>
+**Required EC2 permissions for installation**
 
 - `ec2:AttachNetworkInterface`
 
@@ -246,7 +262,7 @@ Required EC2 permissions for installation
 
 - `ec2:DescribePrefixLists`
 
-- `ec2:DescribePublicIpv4Pools` (only required if `publicIpv4Pool` is specified in `install-config.yaml`)
+- `ec2:DescribePublicIpv4Pools` (only required if you specify `publicIpv4Pool` in `install-config.yaml`)
 
 - `ec2:DescribeRegions`
 
@@ -272,7 +288,7 @@ Required EC2 permissions for installation
 
 - `ec2:DescribeVpcs`
 
-- `ec2:DisassociateAddress` (only required if `publicIpv4Pool` is specified in `install-config.yaml`)
+- `ec2:DisassociateAddress` (only required if you specify `publicIpv4Pool` in `install-config.yaml`)
 
 - `ec2:GetEbsDefaultKmsKeyId`
 
@@ -288,15 +304,7 @@ Required EC2 permissions for installation
 
 - `ec2:TerminateInstances`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required permissions for creating network resources during installation
-
-</div>
+**Required permissions for creating network resources during installation**
 
 - `ec2:AllocateAddress`
 
@@ -331,15 +339,7 @@ Required permissions for creating network resources during installation
 > [!NOTE]
 > If you use an existing Virtual Private Cloud (VPC), your account does not require these permissions for creating network resources.
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required Elastic Load Balancing permissions (ELB) for installation
-
-</div>
+**Required Elastic Load Balancing permissions (ELB) for installation**
 
 - `elasticloadbalancing:AddTags`
 
@@ -394,15 +394,7 @@ Required Elastic Load Balancing permissions (ELB) for installation
 > [!IMPORTANT]
 > OpenShift Container Platform uses both the ELB and ELBv2 API services to provision load balancers. The permission list shows permissions required by both services. A known issue exists in the AWS web console where both services use the same `elasticloadbalancing` action prefix but do not recognize the same actions. You can ignore the warnings about the service not recognizing certain `elasticloadbalancing` actions.
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required IAM permissions for installation
-
-</div>
+**Required IAM permissions for installation**
 
 - `iam:AddRoleToInstanceProfile`
 
@@ -454,15 +446,7 @@ Required IAM permissions for installation
 
 </div>
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required Route 53 permissions for installation
-
-</div>
+**Required Route 53 permissions for installation**
 
 - `route53:ChangeResourceRecordSets`
 
@@ -486,15 +470,7 @@ Required Route 53 permissions for installation
 
 - `route53:UpdateHostedZoneComment`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required Amazon Simple Storage Service (S3) permissions for installation
-
-</div>
+**Required Amazon Simple Storage Service (S3) permissions for installation**
 
 - `s3:CreateBucket`
 
@@ -538,15 +514,7 @@ Required Amazon Simple Storage Service (S3) permissions for installation
 
 - `s3:PutEncryptionConfiguration`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-S3 permissions that cluster Operators require
-
-</div>
+**S3 permissions that cluster Operators require**
 
 - `s3:DeleteObject`
 
@@ -564,15 +532,7 @@ S3 permissions that cluster Operators require
 
 - `s3:PutObjectTagging`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required permissions to delete base cluster resources
-
-</div>
+**Required permissions to delete base cluster resources**
 
 - `autoscaling:DescribeAutoScalingGroups`
 
@@ -606,15 +566,7 @@ Required permissions to delete base cluster resources
 
 - `tag:GetResources`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required permissions to delete network resources
-
-</div>
+**Required permissions to delete network resources**
 
 - `ec2:DeleteDhcpOptions`
 
@@ -643,15 +595,7 @@ Required permissions to delete network resources
 > [!NOTE]
 > If you use an existing VPC, your account does not require these permissions to delete network resources. Instead, your account only requires the `tag:UntagResources` permission to delete network resources.
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Optional permissions for installing a cluster with a custom Key Management Service (KMS) key
-
-</div>
+**Optional permissions for installing a cluster with a custom Key Management Service (KMS) key**
 
 - `kms:CreateGrant`
 
@@ -670,41 +614,17 @@ Optional permissions for installing a cluster with a custom Key Management Servi
 - `kms:RevokeGrant`
 
 > [!NOTE]
-> If you provide an Amazon Machine Image (AMI) that is encrypted with a customer-managed key, you must provide the `kms:ReEncrypt*` permissions in addition to these permissions.
+> If you use an Amazon Machine Image (AMI) encrypted with a customer-managed key, you must grant the `kms:ReEncrypt*` permissions in addition to these permissions.
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required permissions to delete a cluster with shared instance roles
-
-</div>
+**Required permissions to delete a cluster with shared instance roles**
 
 - `iam:UntagRole`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required permissions to delete a cluster with shared instance profiles
-
-</div>
+**Required permissions to delete a cluster with shared instance profiles**
 
 - `tag:UntagResources`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Additional IAM and S3 permissions that are required to create manifests
-
-</div>
+**Additional IAM and S3 permissions required to create manifests**
 
 - `iam:GetUserPolicy`
 
@@ -729,45 +649,19 @@ Additional IAM and S3 permissions that are required to create manifests
 > [!NOTE]
 > If you are managing your cloud provider credentials with mint mode, the IAM user also requires the `iam:CreateAccessKey` and `iam:CreateUser` permissions.
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Optional permissions for instance and quota checks for installation
-
-</div>
+**Optional permissions for instance and quota checks for installation**
 
 - `servicequotas:ListAWSDefaultServiceQuotas`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Optional permissions for the cluster owner account when installing a cluster on a shared VPC
-
-</div>
+**Optional permissions for the cluster owner account when installing a cluster on a shared VPC**
 
 - `sts:AssumeRole`
 
-</div>
-
-<div class="example">
-
-<div class="title">
-
-Required permissions for enabling Bring your own public IPv4 addresses (BYOIP) feature for installation
-
-</div>
+**Required permissions for enabling Bring your own public IPv4 addresses (BYOIP) feature for installation**
 
 - `ec2:DescribePublicIpv4Pools`
 
 - `ec2:DisassociateAddress`
-
-</div>
 
 # Creating an IAM user
 
@@ -831,15 +725,7 @@ To ensure your cluster operates with the correct security permissions in OpenShi
 
 By default, the installation program creates IAM instance profiles for the bootstrap, control plane, and compute instances with the necessary permissions for the cluster to operate.
 
-The following lists specify the default permissions for control plane and compute machines:
-
-<div>
-
-<div class="title">
-
-Default IAM role permissions for control plane instance profiles
-
-</div>
+The following list specifies the default IAM role permissions for control plane instance profiles:
 
 - `ec2:AttachVolume`
 
@@ -917,21 +803,11 @@ Default IAM role permissions for control plane instance profiles
 
 - `kms:DescribeKey`
 
-</div>
-
-<div>
-
-<div class="title">
-
-Default IAM role permissions for compute instance profiles
-
-</div>
+The following list specifies the default IAM permissions for compute instance profiles:
 
 - `ec2:DescribeInstances`
 
 - `ec2:DescribeRegions`
-
-</div>
 
 ## Specifying an existing IAM role
 
@@ -1063,7 +939,7 @@ Procedure
 
 Installing an OpenShift Container Platform cluster using an AWS Marketplace image is available to customers who purchase the offer in North America.
 
-While the offer must be purchased in North America, you can deploy the cluster to any of the following supported paritions:
+While the offer must be purchased in North America, you can deploy the cluster to any of the following supported partitions:
 
 - Public
 

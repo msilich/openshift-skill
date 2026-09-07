@@ -4,7 +4,9 @@ As a cluster administrator, you can use a mirror registry to ensure that your cl
 
 # Mirror registries for installing clusters in disconnected environments
 
-You must mirror required container images into a disconnected environment before you can install and provision a cluster there. To mirror those container images, you must have a mirror registry. Consider the following options for creating and using a mirror registry:
+You must mirror required container images into a disconnected environment before you can install and provision a cluster there. To mirror those container images, you must have a mirror registry.
+
+Consider the following options for creating and using a mirror registry:
 
 - If you already have a container image registry, such as Red Hat Quay, you can use it as your mirror registry. If you do not already have a registry, you must create one.
 

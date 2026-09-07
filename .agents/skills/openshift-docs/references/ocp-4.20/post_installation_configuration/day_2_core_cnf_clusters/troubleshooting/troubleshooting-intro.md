@@ -21,13 +21,27 @@ If you experience difficulty with a procedure, visit the [Red Hat Customer Port
 
 To identify issues with your deployment, you can use the debugging tool or check the health endpoint of your deployment. After you have debugged or obtained health information about your deployment, you can search the Red Hat Knowledgebase for a solution or file a support ticket.
 
-## About the Red Hat Knowledgebase
+## About the Red Hat Knowledgebase
 
-The [Red Hat Knowledgebase](https://access.redhat.com/knowledgebase) provides rich content aimed at helping you make the most of Red Hat’s products and technologies. The Red Hat Knowledgebase consists of articles, product documentation, and videos outlining best practices on installing, configuring, and using Red Hat products. In addition, you can search for solutions to known issues, each providing concise root cause descriptions and remedial steps.
+The Red Hat Knowledgebase helps you get the most from Red Hat products and technologies.
 
-## Searching the Red Hat Knowledgebase
+It includes articles, product documentation, and videos that outline best practices for installing, configuring, and using Red Hat products. You can also search for solutions to known issues. Each solution has a root cause description and steps to fix the problem.
 
-In the event of an OpenShift Container Platform issue, you can perform an initial search to determine if a solution already exists within the Red Hat Knowledgebase.
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Knowledgebase](https://access.redhat.com/knowledgebase)
+
+</div>
+
+## Search the Red Hat Knowledgebase
+
+Search the Red Hat Knowledgebase to find solutions to known issues and resolve problems quickly without opening a support case.
 
 <div>
 
@@ -37,7 +51,7 @@ Prerequisites
 
 </div>
 
-- You have a Red Hat Customer Portal account.
+- You have a Red Hat Customer Portal account.
 
 </div>
 
@@ -49,7 +63,7 @@ Procedure
 
 </div>
 
-1.  Log in to the [Red Hat Customer Portal](http://access.redhat.com).
+1.  Log in to the [Red Hat Customer Portal](http://access.redhat.com).
 
 2.  Click **Search**.
 
@@ -71,6 +85,8 @@ Procedure
 
 ## Submitting a support case
 
+If you cannot resolve an OpenShift Container Platform issue by using the Red Hat Knowledgebase, submit a support case to get direct help from Red Hat Support.
+
 <div>
 
 <div class="title">
@@ -83,9 +99,9 @@ Prerequisites
 
 - You have installed the OpenShift CLI (`oc`).
 
-- You have a Red Hat Customer Portal account.
+- You have a Red Hat Customer Portal account.
 
-- You have a Red Hat Standard or Premium subscription.
+- You have a Red Hat Standard or Premium subscription.
 
 </div>
 
@@ -97,7 +113,7 @@ Procedure
 
 </div>
 
-1.  Log in to [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
+1.  Log in to [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 
 2.  Click **Get support**.
 
@@ -109,17 +125,17 @@ Procedure
 
 4.  Enter the following information:
 
-    1.  In the **Summary** field, enter a concise but descriptive problem summary and further details about the symptoms being experienced, as well as your expectations.
+    1.  In the **Summary** field, enter a concise but descriptive problem summary and further details about the symptoms that you experience and your expectations.
 
     2.  Select **OpenShift Container Platform** from the **Product** drop-down menu.
 
-    3.  Select **4.17** from the **Version** drop-down.
+    3.  Select **4.20** from the **Version** drop-down.
 
-5.  Review the list of suggested Red Hat Knowledgebase solutions for a potential match against the problem that is being reported. If the suggested articles do not address the issue, click **Continue**.
+5.  Review the list of suggested Red Hat Knowledgebase solutions for a potential match against the problem that you are reporting. If the suggested articles do not address the issue, click **Continue**.
 
-6.  Review the updated list of suggested Red Hat Knowledgebase solutions for a potential match against the problem that is being reported. The list is refined as you provide more information during the case creation process. If the suggested articles do not address the issue, click **Continue**.
+6.  Review the updated list of suggested Red Hat Knowledgebase solutions for a potential match against the problem that you are reporting. The list updates as you give more information during the case creation process. If the suggested articles do not address the issue, click **Continue**.
 
-7.  Ensure that the account information presented is as expected, and if not, amend accordingly.
+7.  Ensure that the account information presented is as expected, and if not, change it as needed.
 
 8.  Check that the autofilled OpenShift Container Platform Cluster ID is correct. If it is not, manually obtain your cluster ID.
 
@@ -129,11 +145,11 @@ Procedure
 
       2.  Find the value in the **Cluster ID** field of the **Details** section.
 
-    - Alternatively, it is possible to open a new support case through the OpenShift Container Platform web console and have your cluster ID autofilled.
+    - Or, open a new support case from the OpenShift Container Platform web console, which automatically fills in your cluster ID.
 
       1.  From the toolbar, navigate to **(?) Help** → **Open Support Case**.
 
-      2.  The **Cluster ID** value is autofilled.
+      2.  The **Cluster ID** value automatically fills in.
 
     - To obtain your cluster ID using the OpenShift CLI (`oc`), run the following command:
 
@@ -151,7 +167,7 @@ Procedure
 
     - When does this behavior occur? Frequency? Repeatedly? At certain times?
 
-10. Upload relevant diagnostic data files and click **Continue**. It is recommended to include data gathered using the `oc adm must-gather` command as a starting point, plus any issue specific data that is not collected by that command.
+10. Upload relevant diagnostic data files and click **Continue**. Red Hat recommends including data gathered by using the `oc adm must-gather` command as a starting point, plus any issue-specific data that the command does not collect.
 
 11. Input relevant case management details and click **Continue**.
 

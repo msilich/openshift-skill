@@ -16,7 +16,7 @@ The following prerequisites must be met:
 
 - You must have access to the cluster as a user with `admin` privileges. See "Using RBAC to define and apply permissions".
 
-- You must have a recent etcd backup in case your update fails and you must restore your cluster to a previous state. For more information, see "Backing up etcd" and "Restoring to a previous cluster state".
+- You must have a recent etcd backup in case your update fails and you must restore your cluster to a previous state. For more information, see "Backing up etcd" and "Restoring to an earlier cluster state".
 
 - You have updated all Operators previously installed through Operator Lifecycle Manager (OLM) to a version that is compatible with your target release. Updating the Operators ensures they have a valid update path when the default catalog sources switch from the current minor version to the next during a cluster update. See "Updating installed Operators" for more information on how to check compatibility and, if necessary, update the installed Operators.
 
@@ -43,7 +43,7 @@ Additional resources
 
 - [Backing up etcd](../../backup_and_restore/control_plane_backup_and_restore/backing-up-etcd.md#backup-etcd)
 
-- [Restoring to a previous cluster state](../../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
+- [Restoring to an earlier cluster state](../../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
 
 - [Updating installed Operators](../../operators/admin/olm-upgrading-operators.md#olm-upgrading-operators)
 
@@ -751,7 +751,7 @@ Procedure
     is the local registry you have configured for your disconnected cluster, for example, `local.registry:5000`.
 
     \<pull_spec\>
-    is the pull specification as configured in your disconnected registry, for example, `redhat/redhat-operator-index:v4.17`
+    is the pull specification as configured in your disconnected registry, for example, `redhat/redhat-operator-index:v4.20`
 
     \<pull_secret_file\>
     is the `registry.redhat.io` pull secret in `.json` file format. You can download the [pull secret from Red Hat OpenShift Cluster Manager](https://console.redhat.com/openshift/install/pull-secret).

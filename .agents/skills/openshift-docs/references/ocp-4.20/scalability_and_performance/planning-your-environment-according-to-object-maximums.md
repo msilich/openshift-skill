@@ -35,7 +35,7 @@ OpenShift Container Platform supports tested cluster maximums rather than absolu
 | Number of custom resource definitions (CRD) | 1,024 | Tested on a cluster with 29 servers: 3 control planes, 2 infrastructure nodes, and 24 compute nodes. The cluster had 500 namespaces. OpenShift Container Platform has a limit of 1,024 total custom resource definitions (CRD), including those installed by OpenShift Container Platform, products integrating with OpenShift Container Platform, and user-created CRDs. If there are more than 1,024 CRDs created, then there is a possibility that `oc` command requests might be throttled. |
 
 Example scenario
-As an example, 500 compute nodes (m5.2xl) were tested, and are supported, by using OpenShift Container Platform 4.17, the OVN-Kubernetes network plugin, and the following workload objects:
+As an example, 500 compute nodes (m5.2xl) were tested, and are supported, by using OpenShift Container Platform 4.20, the OVN-Kubernetes network plugin, and the following workload objects:
 
 - 200 namespaces, in addition to the defaults
 

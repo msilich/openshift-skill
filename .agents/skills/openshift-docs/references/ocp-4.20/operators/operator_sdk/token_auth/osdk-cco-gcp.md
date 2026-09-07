@@ -93,7 +93,7 @@ Procedure
 
     1.  Ensure Operator deployment in the CSV has the following `volumeMounts` and `volumes` fields so that the Operator can assume the role with web identity:
 
-        <div class="example">
+        <div class="formalpara">
 
         <div class="title">
 
@@ -122,7 +122,7 @@ Procedure
 
     2.  Ensure your Operator has RBAC permission to create `CredentialsRequests` objects:
 
-        <div class="example">
+        <div class="formalpara">
 
         <div class="title">
 
@@ -179,7 +179,7 @@ Procedure
 
     3.  Add the GCP Workload Identity variables to the credentials request and apply it during Operator initialization:
 
-        <div class="example">
+        <div class="formalpara">
 
         <div class="title">
 
@@ -206,7 +206,7 @@ Procedure
 
     4.  Ensure your Operator can wait for a `Secret` object to show up from the CCO, as shown in the following example, which is called along with the other items you are reconciling in your Operator:
 
-        <div class="example">
+        <div class="formalpara">
 
         <div class="title">
 
@@ -252,9 +252,9 @@ Procedure
         }
         ```
 
-        - The `timeout` value is based on an estimate of how fast the CCO might detect an added `CredentialsRequest` object and generate a `Secret` object. You might consider lowering the time or creating custom feedback for cluster administrators that could be wondering why the Operator is not yet accessing the cloud resources.
-
         </div>
+
+        The `timeout` value is based on an estimate of how fast the CCO might detect an added `CredentialsRequest` object and generate a `Secret` object. You might consider lowering the time or creating custom feedback for cluster administrators that could be wondering why the Operator is not yet accessing the cloud resources.
 
     5.  Read the `service_account.json` field from the secret and use it to authenticate your Google Cloud client:
 

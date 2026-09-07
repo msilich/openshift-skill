@@ -132,7 +132,7 @@ Specifies the vCenter server IP or fully qualified domain name.
 
 # Sample VMware vSphere failure domain configuration
 
-To prevent downtime for your application due to the failure of a single VMware vSphere region, you can configure failure domains in the control plane machine set. To use failure domains, you configure appropriate values in the `failureDomains` section of the `ControlPlaneMachineSet` custom resource (CR).
+To prevent downtime for your applications due to the failure of a single VMware vSphere region, you can configure failure domains in the control plane machine set by configuring appropriate values in the `failureDomains` section of the `ControlPlaneMachineSet` object.
 
 On vSphere infrastructure, the cluster-wide infrastructure custom resource definition (CRD), `infrastructures.config.openshift.io`, defines failure domains for your cluster. A failure domain is an infrastructure resource made up of a control plane machine set, a vCenter data center, vCenter datastore, and a network. The `providerSpec` in the `ControlPlaneMachineSet` custom resource (CR) specifies names for failure domains that the control plane machine set uses to ensure control plane nodes deploy on the appropriate failure domain.
 

@@ -1,12 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can enable pod priority and preemption in your cluster. Pod priority indicates the importance of a pod relative to other pods and queues the pods based on that priority. pod preemption allows the cluster to evict, or preempt, lower-priority pods so that higher-priority pods can be scheduled if there is no available space on a suitable node pod priority also affects the scheduling order of pods and out-of-resource eviction ordering on the node.
+Pod priority ranks pods by importance to influence scheduling order, sort out-of-resource evictions, and enable preemption, where higher-priority pods can evict lower-priority pods when resources are constrained.
 
 To use priority and preemption, you create priority classes that define the relative weight of your pods. Then, reference a priority class in the pod specification to apply that weight for scheduling.
 
 # Understanding pod priority
 
-When you use the Pod Priority and Preemption feature, the scheduler orders pending pods by their priority, and a pending pod is placed ahead of other pending pods with lower priority in the scheduling queue. As a result, the higher priority pod might be scheduled sooner than pods with lower priority if its scheduling requirements are met. If a pod cannot be scheduled, scheduler continues to schedule other lower priority pods.
+Pod priority uses priority classes with integer values to determine scheduling order, with higher-priority pods placed ahead in the queue and scheduled before lower-priority pods when requirements are met.
 
 ## Pod priority classes
 
@@ -66,7 +66,7 @@ After you have one or more priority classes, you can create pods that specify a 
 
 # Understanding pod preemption
 
-When a developer creates a pod, the pod goes into a queue. If the developer configured the pod for pod priority or preemption, the scheduler picks a pod from the queue and tries to schedule the pod on a node. If the scheduler cannot find space on an appropriate node that satisfies all the specified requirements of the pod, preemption logic is triggered for the pending pod.
+With pod preemption, the scheduler can evict lower-priority pods from nodes when higher-priority pods cannot find available resources, enabling critical workloads to run even when cluster capacity is constrained.
 
 When the scheduler preempts one or more pods on a node, the `nominatedNodeName` field of higher-priority `Pod` spec is set to the name of the node, along with the `nodename` field. The scheduler uses the `nominatedNodeName` field to keep track of the resources reserved for pods and also provides information to the user about preemptions in the clusters.
 
@@ -106,20 +106,16 @@ To minimize this gap, configure a small graceful termination period for lower-pr
 
 # Configuring priority and preemption
 
-You apply pod priority and preemption by creating a priority class object and associating pods to the priority by using the `priorityClassName` in your pod specs.
+Configure pod priority and preemption by creating priority class objects with assigned values and referencing them in pod specifications through the `priorityClassName` field.
 
 > [!NOTE]
 > You cannot add a priority class directly to an existing scheduled pod.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To configure your cluster to use priority and preemption:
 
 </div>
 
@@ -138,15 +134,22 @@ To configure your cluster to use priority and preemption:
         description: "This priority class should be used for XYZ service pods only."
         ```
 
-        - The name of the priority class object.
+        where:
 
-        - The priority value of the object.
+        `metadata.name`
+        Specifies the name of the priority class object.
 
-        - Optional. Specifies whether this priority class is preempting or non-preempting. The preemption policy defaults to `PreemptLowerPriority`, which allows pods of that priority class to preempt lower-priority pods. If the preemption policy is set to `Never`, pods in that priority class are non-preempting.
+        `value`
+        Specifies the priority value of the object.
 
-        - Optional. Specifies whether this priority class should be used for pods without a priority class name specified. This field is `false` by default. Only one priority class with `globalDefault` set to `true` can exist in the cluster. If there is no priority class with `globalDefault:true`, the priority of pods with no priority class name is zero. Adding a priority class with `globalDefault:true` affects only pods created after the priority class is added and does not change the priorities of existing pods.
+        `preemptionPolicy`
+        Optional. Specifies whether this priority class is preempting or non-preempting. The preemption policy defaults to `PreemptLowerPriority`, which allows pods of that priority class to preempt lower-priority pods. If the preemption policy is set to `Never`, pods in that priority class are non-preempting.
 
-        - Optional. Describes which pods developers should use with this priority class. Enter an arbitrary text string.
+        `globalDefault`
+        Optional. Specifies whether this priority class should be used for pods without a priority class name specified. This field is `false` by default. Only one priority class with `globalDefault` set to `true` can exist in the cluster. If there is no priority class with `globalDefault:true`, the priority of pods with no priority class name is zero. Adding a priority class with `globalDefault:true` affects only pods created after the priority class is added and does not change the priorities of existing pods.
+
+        `description`
+        Optional. Describes which pods developers should use with this priority class. Enter an arbitrary text string.
 
     2.  Create the priority class:
 
@@ -181,7 +184,10 @@ To configure your cluster to use priority and preemption:
           priorityClassName: high-priority
         ```
 
-        - Specify the priority class to use with this pod.
+        where:
+
+        `spec.priorityClassName`
+        Specifies the priority class to use with this pod.
 
     2.  Create the pod:
 
@@ -190,3 +196,5 @@ To configure your cluster to use priority and preemption:
         ```
 
     You can add the priority name directly to the pod configuration or to a pod template.
+
+</div>

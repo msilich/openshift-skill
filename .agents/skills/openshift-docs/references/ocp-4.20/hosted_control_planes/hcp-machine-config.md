@@ -405,7 +405,7 @@ Verification
 
     ``` terminal
     NAME                                         DISPLAY                   VERSION               REPLACES                                     PHASE
-    sriov-network-operator.4.17.0-202211021237   SR-IOV Network Operator   4.17.0-202211021237   sriov-network-operator.4.17.0-202210290517   Succeeded
+    sriov-network-operator.4.20.0-202211021237   SR-IOV Network Operator   4.20.0-202211021237   sriov-network-operator.4.20.0-202210290517   Succeeded
     ```
 
     </div>
@@ -443,7 +443,7 @@ Procedure
     ``` yaml
     # ...
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: 99-worker-chrony
       labels:
@@ -656,6 +656,121 @@ Additional resources
 
 </div>
 
+# Scaling down the data plane to zero
+
+If you are not using the hosted control plane, to save the resources and cost you can scale down a data plane to zero.
+
+> [!NOTE]
+> Ensure you are prepared to scale down the data plane to zero. Because the workload from the worker nodes disappears after scaling down.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Set the `kubeconfig` file to access the hosted cluster by running the following command:
+
+    ``` terminal
+    $ export KUBECONFIG=<install_directory>/auth/kubeconfig
+    ```
+
+2.  Get the name of the `NodePool` resource associated to your hosted cluster by running the following command:
+
+    ``` terminal
+    $ oc get nodepool --namespace <hosted_cluster_namespace>
+    ```
+
+3.  Optional: To prevent the pods from draining, add the `nodeDrainTimeout` field in the `NodePool` resource by running the following command:
+
+    ``` terminal
+    $ oc edit nodepool <nodepool_name>  --namespace <hosted_cluster_namespace>
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` yaml
+    apiVersion: hypershift.openshift.io/v1alpha1
+    kind: NodePool
+    metadata:
+    # ...
+      name: nodepool-1
+      namespace: clusters
+    # ...
+    spec:
+      arch: amd64
+      clusterName: clustername
+      management:
+        autoRepair: false
+        replace:
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 0
+          strategy: RollingUpdate
+        upgradeType: Replace
+      nodeDrainTimeout: 0s
+      nodeVolumeDetachTimeout: 0
+    # ...
+    ```
+
+    </div>
+
+    `spec.arch.clusterName`
+    Defines the name of your hosted cluster.
+
+    `spec.nodeDrainTimeout`
+    Specifies the total amount of time that the controller spends to drain a node. By default, the `nodeDrainTimeout: 0s` setting blocks the node draining process. To allow the node draining process to continue for a certain period of time, you can set the value of the `nodeDrainTimeout` field; for example, `nodeDrainTimeout: 1m`.
+
+    `spec.nodeVolumeDetachTimeout`
+    Specifies the total amount of time that the controller spends detaching volumes from a node. By default, the `0` setting blocks the volume detachment process.
+
+    > [!NOTE]
+    > To prevent nodes from getting stuck when scaling down, set the `.spec.nodeDrainTimeout` and `.spec.nodeVolumeDetachTimeout` in the `NodePool` resource to a value greater than `0`. This setting forces nodes to be removed after the timeout specified in the field is reached, regardless of whether the node can be drained or the volumes can be detached.
+
+4.  Scale down the `NodePool` resource associated to your hosted cluster by running the following command:
+
+    ``` terminal
+    $ oc scale nodepool/<nodepool_name> --namespace <hosted_cluster_namespace> \
+      --replicas=0
+    ```
+
+    > [!NOTE]
+    > After scaling down the data plan to zero, some pods in the control plane stay in the `Pending` status and the hosted control plane stays up and running. If necessary, you can scale up the `NodePool` resource.
+
+5.  Optional: Scale up the `NodePool` resource associated to your hosted cluster by running the following command:
+
+    ``` terminal
+    $ oc scale nodepool/<nodepool_name> --namespace <hosted_cluster_namespace> --replicas=1
+    ```
+
+    After rescaling the `NodePool` resource, wait for couple of minutes for the `NodePool` resource to become available in a `Ready` state.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Verify that the value for the `nodeDrainTimeout` field is greater than `0s` by running the following command:
+
+  ``` terminal
+  $ oc get nodepool -n <hosted_cluster_namespace> <nodepool_name> -ojsonpath='{.spec.nodeDrainTimeout}'
+  ```
+
+</div>
+
 # Scaling up and down workloads in a hosted cluster
 
 To scale up and down the workloads in your hosted cluster, you can use the `ScaleUpAndScaleDown` behavior. The compute nodes scale up when you add workloads and scale down when you delete workloads.
@@ -770,17 +885,15 @@ Procedure
     $ oc patch -n <hosted_cluster_namespace> hostedcluster <hosted_cluster_name> --type=merge --patch='{"spec": {"autoscaling": {"scaling": "ScaleUpOnly", "maxPodGracePeriod": 60}}}'
     ```
 
-2.  Remove the `spec.replicas` field from the `NodePool` resource to allow the cluster autoscaler to manage the node count. Run the following command:
+2.  Remove the `spec.replicas` field from the `NodePool` resource to allow the cluster autoscaler to manage the node count. Additionally, enable cluster autoscaling to configure the minimum and maximum node counts for your node pools. Enter the following command:
 
     ``` terminal
-    $ oc patch -n clusters nodepool <node_pool_name> --type=json  --patch='[{"op": "remove", "path": "/spec/replicas"}]'
-    ```
-
-3.  Enable cluster autoscaling to configure the minimum and maximum node counts for your node pools. Run the following command:
-
-    ``` terminal
-    $ oc patch -n <hosted_cluster_namespace> nodepool <nodepool_name> \
-      --type=merge --patch='{"spec": {"autoScaling": {"max": 3, "min": 1}}}'
+    $ oc -n clusters patch nodepool yhe-hosted-ap-northeast-1a \
+      --type=json \
+      -p='[
+        {"op":"remove","path":"/spec/replicas"},
+        {"op":"add","path":"/spec/autoScaling","value":{"min":2,"max":4}}
+      ]'
     ```
 
 </div>
@@ -806,6 +919,299 @@ Verification
     ```
 
 </div>
+
+# Autoscaling to and from zero on hosted control planes node pools
+
+You can configure hosted control planes node pools to autoscale down to zero compute nodes when no schedulable workloads remain on the pool and to provision nodes on-demand when pending pods require capacity. This capability reduces idle compute costs for variable workloads while the hosted control plane stays available.
+
+> [!NOTE]
+> Scale-from-zero autoscaling is available on OpenShift Container Platform 4.18 and later for eligible hosted control planes deployments on Amazon Web Services (AWS). Platform validation and HyperShift Operator configuration determine whether a node pool can use `spec.autoScaling.min: 0`.
+
+When you enable autoscaling on a `NodePool` object, you set `spec.autoScaling.min` to `0` and omit `spec.replicas`. The cluster autoscaler then manages pool size instead of a fixed replica count.
+
+The cluster autoscaler scales up from zero differently than it scales pools that already have nodes. When a pool has zero nodes, the autoscaler cannot observe utilization on existing compute nodes. Instead, it uses instance-type metadata from the cloud provider (CPU, memory, and GPU capacity for the `NodePool` platform configuration) to decide how many nodes to provision for pending pods.
+
+This behavior contrasts with classic fixed-minimum autoscaling, where `spec.autoScaling.min` is at least `1`. With a minimum of one or more replicas, the pool always retains at least one node even when workloads are idle.
+
+The hosted control plane remains operational when compute node pools scale to zero. Control plane pods continue running on the management cluster. Workloads that target a scale-to-zero pool remain unschedulable until the autoscaler provisions new nodes.
+
+## Terminology
+
+`AutoscalingEnabled` condition
+A `NodePool` status condition that reports whether autoscaling is correctly configured and active on the pool. Verify that this condition is `True` after you enable autoscaling.
+
+minimum replicas
+The `spec.autoScaling.min` value on a `NodePool` object. When autoscaling is enabled, this value is the lowest number of nodes the autoscaler can scale the pool to.
+
+non-tainted pools
+Node pools without taints that can accept system and user workloads. These pools must keep baseline capacity for highly available platform Operators.
+
+scale-from-zero
+Provisioning the first node in a pool that currently has zero nodes because pending pods require capacity.
+
+scale-to-zero
+Reducing a pool to zero nodes when no schedulable workloads remain on that pool and autoscaling minimum is `0`.
+
+tainted pools
+Node pools with taints that restrict which pods can schedule on them. Tainted workload pools are typical candidates for `spec.autoScaling.min: 0`.
+
+## Use cases for scale-to-zero autoscaling
+
+Scale-to-zero autoscaling is appropriate for the following scenarios:
+
+- Development and test node pools that are idle outside business hours
+
+- Batch or burst workload pools that run jobs periodically
+
+- GPU or specialized instance pools that are expensive when idle
+
+- Tainted workload pools that isolate optional capacity from system workloads
+
+In each case, keep separate baseline pools for platform Operators and confine scale-to-zero configuration to pools that tolerate cold-start latency.
+
+Do not use scale-to-zero autoscaling in the following scenarios:
+
+- Do not configure scale-to-zero on pools that must always accept system or highly available platform workloads.
+
+- Scaling all non-tainted node pools to zero violates the cluster-level minimum replica constraint and can prevent system pods from scheduling.
+
+- Do not use scale-to-zero as a substitute for full cluster hibernation.
+
+- Data-plane node pool autoscaling removes compute nodes only; the hosted control plane and management infrastructure remain active.
+
+## Best practices for scale-to-zero autoscaling
+
+Base and burst pool architecture
+Keep at least two non-tainted compute nodes across baseline pools for highly available platform Operators. Confine `spec.autoScaling.min: 0` to tainted burst pools that run dev, test, batch, or specialized workloads.
+
+Do not scale all non-tainted pools to zero. Use taints and tolerations to isolate burst capacity from system scheduling requirements.
+
+Platform and version eligibility
+Configure scale-to-zero only on AWS hosted clusters running OpenShift Container Platform 4.18 or later with a HyperShift Operator release that includes the backport.
+
+Drain timeout tuning
+Set `nodeDrainTimeout` and `nodeVolumeDetachTimeout` to positive values when workloads use persistent storage or long termination grace periods. Zero values block drain and detach operations and can leave nodes stuck during scale-down.
+
+Tune timeouts for cost-optimization patterns such as nightly scale-down of dev pools.
+
+Scale-up latency planning
+Expect cold-start delay when pools scale from zero. Nodes must provision, join the cluster, and pull images before pending pods schedule.
+
+Plan batch jobs and interactive workloads to tolerate this latency, or keep a small nonzero minimum on latency-sensitive pools.
+
+Distinguish autoscaling from hibernation
+Data-plane node pool autoscaling removes compute nodes only. The hosted control plane remains active on the management cluster. Full cluster hibernation is a separate operational pattern.
+
+Cluster-level minimum replica constraint
+The sum of `spec.autoScaling.min` (or fixed `spec.replicas` when autoscaling is disabled) across all non-tainted node pools must be at least `2`.
+
+This constraint ensures highly available platform Operators, such as ingress, console, monitoring, and image registry, can schedule second replicas that require anti-affinity across compute nodes.
+
+Tainted workload pools might use `spec.autoScaling.min: 0` because taints prevent system pods from scheduling on those nodes. Baseline non-tainted pools must retain enough minimum capacity to satisfy the cluster-wide constraint.
+
+## Configuring autoscaling to and from zero on hosted control planes node pools
+
+Configure a `NodePool` object to autoscale between zero and a maximum replica count on supported Amazon Web Services (AWS) hosted clusters. After configuration, verify the `AutoscalingEnabled` condition and validate scale-down and scale-up behavior.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- A hosted cluster on AWS running OpenShift Container Platform 4.18 or later
+
+- Permission to edit `NodePool` objects in the hosted cluster namespace
+
+- Understanding of scale-to-zero use cases, platform support, and Operator implications
+
+- For AWS, scale-from-zero provider credentials
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Confirm that your hosted cluster platform supports `spec.autoScaling.min: 0`.
+
+    On AWS, the `NodePool` API accepts `min: 0`. On other platforms, `min` must be at least `1`.
+
+2.  Confirm that the HyperShift Operator enables scale-from-zero.
+
+    On AWS, confirm that `--scale-from-zero-provider` and `--scale-from-zero-creds` are configured so instance-type metadata is available.
+
+3.  Enable autoscaling on the target `NodePool` object by removing fixed replicas and setting autoscaling bounds.
+
+    Replace `<hosted_cluster_namespace>`, `<nodepool_name>`, and `<max_replicas>` with your values.
+
+    ``` terminal
+    $ oc -n <hosted_cluster_namespace> patch nodepool <nodepool_name> \
+      --type=json \
+      -p '[{"op": "remove", "path": "/spec/replicas"}, \
+           {"op": "add", "path": "/spec/autoScaling", \
+            "value": {"min": 0, "max": <max_replicas>}}]'
+    ```
+
+    > [!NOTE]
+    > `spec.replicas` and `spec.autoScaling` are mutually exclusive. When autoscaling is enabled, omit `spec.replicas` so the cluster autoscaler manages pool size.
+
+4.  Optional: Configure hosted cluster-level autoscaling behavior on the `HostedCluster` resource.
+
+    For example, set scaling behavior to `ScaleUpAndScaleDown`:
+
+    ``` terminal
+    $ oc patch -n <hosted_cluster_namespace> \
+      hostedcluster <hosted_cluster_name> \
+      --type=merge \
+      --patch='{"spec": {"autoscaling": {"scaling": "ScaleUpAndScaleDown"}}}'
+    ```
+
+    Hosted cluster autoscaling settings apply cluster-wide autoscaler behavior. Node pool autoscaling bounds are configured on each `NodePool` object.
+
+5.  Verify that the `AutoscalingEnabled` condition on the `NodePool` is `True`.
+
+    ``` terminal
+    $ oc get nodepool -n <hosted_cluster_namespace> <nodepool_name> \
+      -o jsonpath='{range .status.conditions[*]}\
+    ={"\n"}{end}'
+    ```
+
+    The output must include `AutoscalingEnabled=True`.
+
+6.  Verify scale-down to zero by removing schedulable workloads from the pool.
+
+    Remove or reschedule deployments, jobs, or other workloads that schedule on the target pool. If the pool uses taints, only workloads with matching tolerations count toward pool utilization.
+
+    Wait for the cluster autoscaler to scale the pool down. When no schedulable workloads remain, the pool can reach zero nodes if `spec.autoScaling.min` is `0`.
+
+7.  Verify scale-up from zero by deploying a workload that creates pending pods on the pool.
+
+    For example, create a deployment with resource requests that exceed available capacity:
+
+    ``` yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: scale-from-zero-test
+      namespace: default
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: scale-from-zero-test
+      template:
+        metadata:
+          labels:
+            app: scale-from-zero-test
+        spec:
+          tolerations:
+          - key: "<taint_key>"
+            operator: "Equal"
+            value: "<taint_value>"
+            effect: "NoSchedule"
+          containers:
+          - name: app
+            image: registry.redhat.io/ubi9/ubi-minimal
+            resources:
+              requests:
+                cpu: "1"
+                memory: 1Gi
+    ```
+
+    Apply the manifest and wait for the cluster autoscaler to provision nodes from zero.
+
+8.  Extract the hosted cluster kubeconfig and verify node count changes.
+
+    ``` terminal
+    $ oc extract -n <hosted_cluster_namespace> \
+      secret/<hosted_cluster_name>-admin-kubeconfig \
+      --to=./hostedcluster-secrets --confirm
+    ```
+
+    ``` terminal
+    $ oc --kubeconfig ./hostedcluster-secrets/kubeconfig get nodes
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- The `AutoscalingEnabled` condition on the `NodePool` is `True`.
+
+- After workloads are removed, the pool scales down and `CURRENT NODES` can reach `0` when `min` is `0`.
+
+- After pending pods are created, new nodes appear and reach `Ready` status.
+
+</div>
+
+> [!NOTE]
+> When pools are at zero nodes, platform Operators on non-tainted baseline pools can report degraded status if minimum replica constraints are not satisfied.
+
+## NodePool autoscaling configuration reference
+
+Get familiar with the `NodePool` fields and status conditions for autoscaling to and from zero on hosted control planes.
+
+| Field or condition | Description |
+|----|----|
+| `spec.autoScaling.min` | Minimum nodes the cluster autoscaler can scale the pool to. Valid values include `0` on Amazon Web Services (AWS). On other platforms, the minimum must be at least `1`. |
+| `spec.autoScaling.max` | Maximum nodes the cluster autoscaler can scale the pool to. Must be greater than or equal to `spec.autoScaling.min`. |
+| `spec.replicas` | Fixed replica count when autoscaling is disabled. Must be omitted when `spec.autoScaling` is configured. |
+| `AutoscalingEnabled` condition | Reports whether autoscaling is active on the `NodePool`. Status `True` indicates the autoscaler manages pool size. |
+| `--scale-from-zero-provider` and `--scale-from-zero-creds` | On AWS, credentials and provider configuration for instance-type metadata used during scale-from-zero. |
+| Non-tainted pool minimum sum | Sum of minimum replicas across non-tainted pools must be at least `2` cluster-wide for HA platform operators. |
+
+> [!NOTE]
+> `spec.replicas` and `spec.autoScaling` are mutually exclusive. Patch or edit the `NodePool` to remove `spec.replicas` before adding `spec.autoScaling`.
+
+## NodePool API reference for autoscaling
+
+Get familiar with the `NodePool` specification fields related to autoscaling, including scaling to and from zero on supported platforms.
+
+### spec.autoScaling
+
+| Field | Type | Description |
+|----|----|----|
+| `min` | integer | Minimum number of nodes for the pool when autoscaling is enabled. `0` is valid on Amazon Web Services (AWS). Other platforms require `min` to be at least `1`. |
+| `max` | integer | Maximum number of nodes the cluster autoscaler can add to the pool. |
+
+### spec.replicas
+
+| Field | Type | Description |
+|----|----|----|
+| `replicas` | integer | Fixed number of nodes when autoscaling is disabled. Omit this field when `spec.autoScaling` is set. |
+
+### Drain and detach timeouts
+
+| Field | Type | Description |
+|----|----|----|
+| `nodeDrainTimeout` | duration | Time the controller spends draining a node during scale-down. A value of `0s` blocks draining until a positive timeout is set. |
+| `nodeVolumeDetachTimeout` | duration | Time the controller spends detaching volumes from a node during scale-down. A value of `0` blocks detachment until a positive timeout is set. |
+
+### status.conditions
+
+| Condition | Description |
+|----|----|
+| `AutoscalingEnabled` | Reports `True` when autoscaling is correctly configured and the autoscaler manages the pool. |
+
+### HyperShift Operator flags
+
+| Flag | Description |
+|----|----|
+| `--scale-from-zero-provider` | Provider used to fetch instance-type metadata on AWS. |
+| `--scale-from-zero-creds` | Credentials for the scale-from-zero provider on AWS. |
 
 # Setting the priority expander in a hosted cluster
 

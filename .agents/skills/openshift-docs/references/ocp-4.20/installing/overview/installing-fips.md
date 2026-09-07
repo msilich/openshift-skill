@@ -123,7 +123,7 @@ OpenShift Container Platform components are written in Go and built with Red Hat
 | Use of FIPS compatible golang compiler. | TLS FIPS support is not complete but is planned for future OpenShift Container Platform releases. |
 | FIPS support across multiple architectures. | FIPS is currently only supported on OpenShift Container Platform deployments using `x86_64`, `ppc64le`, and `s390x` architectures. |
 
-FIPS mode attributes and limitations in OpenShift Container Platform 4.17
+FIPS mode attributes and limitations in OpenShift Container Platform 4.20
 
 <div>
 

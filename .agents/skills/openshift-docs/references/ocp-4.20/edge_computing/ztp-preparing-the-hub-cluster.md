@@ -2,9 +2,9 @@
 
 To use RHACM in a disconnected environment, create a mirror registry that mirrors the OpenShift Container Platform release images and Operator Lifecycle Manager (OLM) catalog that contains the required Operator images. OLM manages, installs, and upgrades Operators and their dependencies in the cluster. You can also use a disconnected mirror host to serve the RHCOS ISO and RootFS disk images that are used to provision the bare-metal hosts.
 
-# Telco RAN DU 4.17 validated software components
+# Telco RAN DU 4.20 validated software components
 
-The Red Hat telco RAN DU 4.17 solution has been validated using the following Red Hat software products for OpenShift Container Platform managed clusters.
+The Red Hat telco RAN DU 4.20 solution has been validated using the following Red Hat software products for OpenShift Container Platform managed clusters.
 
 | Component                                | Software version |
 |------------------------------------------|------------------|
@@ -213,22 +213,22 @@ Procedure
         where:
 
         `<iso_image_name>`
-        ISO image name, for example, `rhcos-4.17.1-x86_64-live.x86_64.iso`
+        ISO image name, for example, `rhcos-4.20.1-x86_64-live.x86_64.iso`
 
         `<rootfs_image_name>`
-        RootFS image name, for example, `rhcos-4.17.1-x86_64-live-rootfs.x86_64.img`
+        RootFS image name, for example, `rhcos-4.20.1-x86_64-live-rootfs.x86_64.img`
 
         `<ocp_version>`
-        OpenShift Container Platform version, for example, `4.17.1`
+        OpenShift Container Platform version, for example, `4.20.1`
 
     2.  Download the required images:
 
         ``` terminal
-        $ sudo wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.17/${OCP_VERSION}/${ISO_IMAGE_NAME} -O /var/www/html/${ISO_IMAGE_NAME}
+        $ sudo wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.20/${OCP_VERSION}/${ISO_IMAGE_NAME} -O /var/www/html/${ISO_IMAGE_NAME}
         ```
 
         ``` terminal
-        $ sudo wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.17/${OCP_VERSION}/${ROOTFS_IMAGE_NAME} -O /var/www/html/${ROOTFS_IMAGE_NAME}
+        $ sudo wget https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/4.20/${OCP_VERSION}/${ROOTFS_IMAGE_NAME} -O /var/www/html/${ROOTFS_IMAGE_NAME}
         ```
 
 </div>
@@ -250,8 +250,8 @@ Verification
   Example output:
 
   ``` terminal
-  Saving to: rhcos-4.17.1-x86_64-live.x86_64.iso
-  rhcos-4.17.1-x86_64-live.x86_64.iso-  11%[====>    ]  10.01M  4.71MB/s
+  Saving to: rhcos-4.20.1-x86_64-live.x86_64.iso
+  rhcos-4.20.1-x86_64-live.x86_64.iso-  11%[====>    ]  10.01M  4.71MB/s
   ```
 
 </div>
@@ -317,7 +317,7 @@ Procedure
     # ...
       osImages:
         - cpuArchitecture: x86_64
-          openshiftVersion: "4.17"
+          openshiftVersion: "4.20"
           rootFSUrl: https://<host>/<path>/rhcos-live-rootfs.x86_64.img
           url: https://<host>/<path>/rhcos-live.x86_64.iso
     ```
@@ -741,7 +741,7 @@ Procedure
 2.  Export the `argocd` directory from the `ztp-site-generate` container image using the following commands:
 
     ``` terminal
-    $ podman pull registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17
+    $ podman pull registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20
     ```
 
     ``` terminal
@@ -749,7 +749,7 @@ Procedure
     ```
 
     ``` terminal
-    $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17 extract /home/ztp --tar | tar x -C ./out
+    $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20 extract /home/ztp --tar | tar x -C ./out
     ```
 
 3.  Check that the `out` directory contains the following subdirectories:

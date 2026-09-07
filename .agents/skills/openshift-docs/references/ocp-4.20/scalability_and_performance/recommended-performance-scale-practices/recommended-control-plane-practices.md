@@ -78,7 +78,7 @@ Operator Lifecycle Manager (OLM) runs on the control plane nodes and its memory 
 | 10,000 | 9.9 | 21.6 |
 
 > [!IMPORTANT]
-> You can modify the control plane node size in a running OpenShift Container Platform 4.17 cluster for the following configurations only:
+> You can modify the control plane node size in a running OpenShift Container Platform 4.20 cluster for the following configurations only:
 >
 > - Clusters installed with a user-provisioned installation method.
 >
@@ -89,4 +89,4 @@ Operator Lifecycle Manager (OLM) runs on the control plane nodes and its memory 
 > For all other configurations, you must estimate your total node count and use the suggested control plane node size during installation.
 
 > [!NOTE]
-> In OpenShift Container Platform 4.17, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. The sizes are determined taking that into consideration.
+> In OpenShift Container Platform 4.20, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. The sizes are determined taking that into consideration.

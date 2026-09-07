@@ -803,7 +803,9 @@ Verification
 
 # Transitioning a hosted cluster from single-architecture to multi-architecture
 
-You can transition your single-architecture 64-bit AMD hosted cluster to a multi-architecture hosted cluster on Amazon Web Services (AWS), to reduce the cost of running workloads on your cluster. For example, you can run existing workloads on 64-bit AMD while transitioning to 64-bit ARM and you can manage these workloads from a central Kubernetes cluster.
+You can transition your single-architecture 64-bit AMD hosted cluster to a multi-architecture hosted cluster on Amazon Web Services (AWS) to reduce the cost of running workloads on your cluster.
+
+For example, you can run existing workloads on 64-bit AMD while transitioning to 64-bit ARM and you can manage these workloads from a central Kubernetes cluster.
 
 A single-architecture hosted cluster can manage node pools of only one particular CPU architecture. However, a multi-architecture hosted cluster can manage node pools with different CPU architectures. On AWS, a multi-architecture hosted cluster can manage both 64-bit AMD and 64-bit ARM node pools.
 
@@ -815,13 +817,13 @@ Prerequisites
 
 </div>
 
-- You have installed an OpenShift Container Platform management cluster for AWS on Red Hat Advanced Cluster Management (RHACM) with the multicluster engine for Kubernetes Operator.
+- You installed an OpenShift Container Platform management cluster for AWS with the multicluster engine for Kubernetes Operator.
 
 - You have an existing single-architecture hosted cluster that uses 64-bit AMD variant of the OpenShift Container Platform release payload.
 
-- An existing node pool that uses the same 64-bit AMD variant of the OpenShift Container Platform release payload and is managed by an existing hosted cluster.
+- You have an existing node pool that uses the same 64-bit AMD variant of the OpenShift Container Platform release payload and is managed by an existing hosted cluster.
 
-- Ensure that you installed the following command-line tools:
+- You installed the following command-line tools:
 
   - `oc`
 
@@ -848,23 +850,21 @@ Procedure
       -o jsonpath='{.spec.release.image}'
     ```
 
-    - Replace `<hosted_cluster_name>` with your hosted cluster name.
+    Replace `<hosted_cluster_name>` with your hosted cluster name.
 
-      <div class="formalpara">
+    <div class="formalpara">
 
-      <div class="title">
+    <div class="title">
 
-      Example output
+    Example output
 
-      </div>
+    </div>
 
-      ``` terminal
-      quay.io/openshift-release-dev/ocp-release:<4.y.z>-x86_64
-      ```
+    ``` terminal
+    quay.io/openshift-release-dev/ocp-release:4.20.0-x86_64
+    ```
 
-      </div>
-
-    - Replace `<4.y.z>` with the supported OpenShift Container Platform version that you use.
+    </div>
 
 2.  In your OpenShift Container Platform release image, if you use the digest instead of a tag, find the multi-architecture tag version of your release image:
 
@@ -923,7 +923,7 @@ Procedure
           --type=merge
         ```
 
-        - Replace `<4.y.z>` with the supported OpenShift Container Platform version that you use.
+        Replace `<4.y.z>` with the supported OpenShift Container Platform version that you use.
 
     2.  Confirm that the multi-architecture image is set in your hosted cluster by running the following command:
 
@@ -995,21 +995,19 @@ Verification
   version:
       availableUpdates: null
       desired:
-        image: quay.io/openshift-release-dev/ocp-release:<4.x.y>-multi
+        image: quay.io/openshift-release-dev/ocp-release:4.20.0-multi
         url: https://access.redhat.com/errata/RHBA-2024:4855
-        version: 4.16.5
+        version: 4.20.0
       history:
       - completionTime: "2024-07-28T13:10:58Z"
-        image: quay.io/openshift-release-dev/ocp-release:<4.x.y>-multi
+        image: quay.io/openshift-release-dev/ocp-release:4.20.0-multi
         startedTime: "2024-07-28T13:10:27Z"
         state: Completed
         verified: false
-        version: <4.x.y>
+        version: 4.20.0
   ```
 
   </div>
-
-  - Replace `<4.y.z>` with the supported OpenShift Container Platform version that you use.
 
   > [!NOTE]
   > The multi-architecture OpenShift Container Platform release image is updated in your `HostedCluster`, `HostedControlPlane` resources, and hosted control plane pods. However, your existing node pools do not transition with the multi-architecture image automatically, because the release image transition is decoupled between the hosted cluster and node pools. You must create new node pools on your new multi-architecture hosted cluster.
@@ -1024,13 +1022,13 @@ Next steps
 
 </div>
 
-- Creating node pools on the multi-architecture hosted cluster
+- Create node pools on the multi-architecture hosted cluster.
 
 </div>
 
 # Creating node pools on the multi-architecture hosted cluster
 
-After transitioning your hosted cluster from single-architecture to multi-architecture, create node pools on compute machines based on 64-bit AMD and 64-bit ARM architectures.
+After you transition your hosted cluster from single-architecture to multi-architecture, create node pools on compute machines based on 64-bit AMD and 64-bit ARM architectures.
 
 <div>
 
@@ -1102,31 +1100,29 @@ Verification
     arch: amd64
   #...
     release:
-      image: quay.io/openshift-release-dev/ocp-release:<4.x.y>-multi
+      image: quay.io/openshift-release-dev/ocp-release:4.20.0-multi
   ```
 
   </div>
 
-  - Replace `<4.y.z>` with the supported OpenShift Container Platform version that you use.
+  <div class="formalpara">
 
-    <div class="formalpara">
+  <div class="title">
 
-    <div class="title">
+  Example output for 64-bit ARM node pools
 
-    Example output for 64-bit ARM node pools
+  </div>
 
-    </div>
+  ``` yaml
+  #...
+  spec:
+    arch: arm64
+  #...
+    release:
+      image: quay.io/openshift-release-dev/ocp-release:4.20.0-multi
+  ```
 
-    ``` yaml
-    #...
-    spec:
-      arch: arm64
-    #...
-      release:
-        image: quay.io/openshift-release-dev/ocp-release:<4.x.y>-multi
-    ```
-
-    </div>
+  </div>
 
 </div>
 
@@ -1140,11 +1136,11 @@ You might want to use tags for the following purposes:
 
 - Tracking chargeback or showback.
 
-- Managing cloud IAM conditional permissions.
+- Managing cloud Identity and Access Management (IAM) conditional permissions.
 
 - Aggregating resources based on tags. For example, you can query tags to calculate resource usage and billing costs.
 
-You can add or update tags for several different types of resources, including EFS access points, load balancer resources, Amazon EBS volumes, IAM users, and AWS S3.
+You can add or update tags for several different types of resources, including Amazon Elastic File System (EFS) access points, load balancer resources, Amazon Elastic Block Storage (EBS) volumes, IAM users, and AWS S3.
 
 > [!IMPORTANT]
 > On network load balancers, tags cannot be added or updated. The AWS load balancer reconciles whatever tags are in the `HostedCluster` resource. If you try to add or update a tag, the load balancer overwrites the tag.
@@ -1173,7 +1169,7 @@ Procedure
 
 1.  If you want to add or update tags for EFS access points, complete steps 1 and 2. If you are adding or updating tags for other types of resources, complete only step 2.
 
-    1.  In the `aws-efs-csi-driver-operator` service account, add two annotations, as shown in the following example. These annotations are required so that the AWS EKS pod identity webhook that runs on the cluster can correctly assign AWS roles to the pods that the EFS Operator uses.
+    1.  In the `aws-efs-csi-driver-operator` service account, add two annotations, as shown in the following example. These annotations are required so that the Amazon Elastic Kubernetes Service (EKS) pod identity webhook that runs on the cluster can correctly assign AWS roles to the pods that the EFS Operator uses.
 
         ``` yaml
         apiVersion: v1
@@ -1232,13 +1228,13 @@ Procedure
 
     </div>
 
-</div>
+    Replace `<tag>` with the tag that you want to add to your resource.
 
-- Specify the tag that you want to add to your resource.
+</div>
 
 # Configuring node pool capacity blocks on AWS
 
-After creating a hosted cluster, you can configure node pool capacity blocks for graphics processing unit (GPU) reservations on Amazon Web Services (AWS).
+After you create a hosted cluster, you can configure node pool capacity blocks for graphics processing unit (GPU) reservations on Amazon Web Services (AWS).
 
 <div>
 
@@ -1248,7 +1244,7 @@ Procedure
 
 </div>
 
-1.  Create GPU reservations on AWS by running the following command:
+1.  Create GPU reservations on AWS by running a command similar to the following example:
 
     > [!IMPORTANT]
     > The zone of the GPU reservation must match your hosted cluster zone.
@@ -1257,21 +1253,21 @@ Procedure
     $ aws ec2 describe-capacity-block-offerings \
           --instance-type "p4d.24xlarge"\
           --instance-count  "1" \
-          --start-date-range "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"  \
-          --end-date-range "$(date -u -d "2 day" +"%Y-%m-%dT%H:%M:%SZ")" \
+          --start-date-range "$(date -u +"2025-07-21T10:14:39Z")"  \
+          --end-date-range "$(date -u -d "2 day" +"2025-07-22T10:16:36Z")" \
           --capacity-duration-hours 24 \
           --output json
     ```
 
-    - Defines the type of your AWS instance, for example, `p4d.24xlarge`.
+    - `--instance-type` defines the type of your AWS instance.
 
-    - Defines your instance purchase quantity, for example, `1`. Valid values are integers ranging from `1` to `64`.
+    - `--instance-count` defines your instance purchase quantity. Valid values are integers ranging from `1` to `64`.
 
-    - Defines the start date range, for example, `2025-07-21T10:14:39Z`.
+    - `--start-date-range` defines the start date range.
 
-    - Defines the end date range, for example, `2025-07-22T10:16:36Z`.
+    - `--end-date-range` defines the end date range.
 
-    - Defines the duration of capacity blocks in hours, for example, `24`.
+    - `--capacity-duration-hours` defines the duration of capacity blocks in hours.
 
 2.  Purchase the minimum fee capacity block by running the following command:
 
@@ -1283,11 +1279,11 @@ Procedure
           --output json   > "${CR_OUTPUT_FILE}"
     ```
 
-    - Defines the ID of the capacity block offering.
+    - `--capacity-block-offering-id` defines the ID of the capacity block offering.
 
-    - Defines the platform of your instance.
+    - `--instance-platform` defines the platform of your instance.
 
-    - Defines the tag for your instance.
+    - `--tag-specifications` defines the tag for your instance.
 
 3.  Create an environment variable to set the capacity reservation ID by running the following command:
 
@@ -1303,24 +1299,24 @@ Procedure
     $ hcp create nodepool aws \
       --cluster-name <hosted_cluster_name> \
       --name <node_pool_name> \
-      --node-count 1 \
-      --instance-type p4d.24xlarge \
-      --arch amd64 \
+      --node-count <node_pool_count> \
+      --instance-type <instance_type> \
+      --arch <arch_type> \
       --release-image <release_image> \
       --render > /tmp/np.yaml
     ```
 
-    - Replace `<hosted_cluster_name>` with the name of your hosted cluster.
+    - `--cluster-name` specifies the name of your hosted cluster.
 
-    - Replace `<node_pool_name>` with the name of your node pool.
+    - `--name` specifies the name of your node pool.
 
-    - Defines the node pool count, for example, `1`.
+    - `--node-count` defines the node pool count, for example, `1`.
 
-    - Defines the instance type, for example, `p4d.24xlarge`.
+    - `--instance-type` defines the instance type, for example, `p4d.24xlarge`.
 
-    - Defines an architecture type, for example, `amd64`.
+    - `--arch` defines an architecture type, for example, `amd64`.
 
-    - Replace `<release_image>` with the release image you want to use.
+    - `--release-image` specifies the release image you want to use.
 
 5.  Add the `capacityReservation` setting in your `NodePool` resource by using the following example configuration:
 
@@ -1410,9 +1406,9 @@ Verification
 
 </div>
 
-## Destroying a hosted cluster after configuring node pool capacity blocks
+## Deleting a hosted cluster after configuring node pool capacity blocks
 
-After you configured node pool capacity blocks, you can optionally destroy a hosted cluster and uninstall the HyperShift Operator.
+After you configure node pool capacity blocks, you can optionally delete a hosted cluster and uninstall the HyperShift Operator.
 
 <div>
 
@@ -1422,7 +1418,7 @@ Procedure
 
 </div>
 
-1.  To destroy a hosted cluster, run the following example command:
+1.  To delete a hosted cluster, run a command similar to the following example:
 
     ``` terminal
     $ hcp destroy cluster aws \

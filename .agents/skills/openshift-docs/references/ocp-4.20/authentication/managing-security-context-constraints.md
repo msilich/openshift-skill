@@ -11,7 +11,7 @@ Default SCCs are created during installation and when you install some Operators
 
 # About security context constraints
 
-Similar to the way that RBAC resources control user access, administrators can use security context constraints (SCCs) to control permissions for pods. These permissions determine the actions that a pod can perform and what resources it can access. You can use SCCs to define a set of conditions that a pod must run with to be accepted into the system.
+You can use security context constraints (SCCs) to control permissions for pods by defining what actions a pod can perform, what resources it can access, and what conditions it must meet to be accepted into the system.
 
 Security context constraints allow an administrator to control:
 
@@ -535,7 +535,9 @@ By default, the `anyuid` SCC granted to cluster administrators is given priority
 
 # About pre-allocated security context constraints values
 
-The admission controller is aware of certain conditions in the security context constraints (SCCs) that trigger it to look up pre-allocated values from a namespace and populate the SCC before processing the pod. Each SCC strategy is evaluated independently of other strategies, with the pre-allocated values, where allowed, for each policy aggregated with pod specification values to make the final values for the various IDs defined in the running pod.
+When your security context constraints (SCCs) do not define explicit ranges, the admission controller automatically populates them with pre-allocated values from the namespace before processing your pods.
+
+Each SCC strategy is evaluated independently of other strategies, with the pre-allocated values, where allowed, for each policy aggregated with pod specification values to make the final values for the various IDs defined in the running pod.
 
 The following SCCs cause the admission controller to look for pre-allocated values when no ranges are defined in the pod specification:
 

@@ -140,7 +140,7 @@ Additional resources
 
 - [Understanding update channels and releases](../understanding_updates/understanding-update-channels-release.md#understanding-update-channels-releases)
 
-- [Selecting a cluster installation type](../../installing/overview/installing-preparing.md#installing-preparing-selecting-cluster-type)
+- [Selecting a cluster installation type](../../installing/overview/installing-preparing.md#installing-preparing-selecting-cluster-type_installing-preparing)
 
 - [About machine health checks](../../machine_management/deploying-machine-health-checks.md#machine-health-checks-about_deploying-machine-health-checks)
 

@@ -314,7 +314,7 @@ Verification
 
 </div>
 
-# Creating a route through an Ingress object
+# Create a route through an Ingress object
 
 To integrate ecosystem components that require Ingress resources, configure an Ingress object. OpenShift Container Platform automatically manages the lifecycle of the corresponding route objects, creating and deleting them to ensure seamless connectivity.
 

@@ -1,20 +1,22 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+You can change your cluster’s cloud provider credentials configuration to meet security and authentication requirements. You can rotate or remove credentials, or enable supported short-term credential methods.
+
 For supported configurations, you can change how OpenShift Container Platform authenticates with your cloud provider.
 
-To determine which cloud credentials strategy your cluster uses, see [Determining the Cloud Credential Operator mode](../authentication/managing_cloud_provider_credentials/about-cloud-credential-operator.md#cco-determine-mode_about-cloud-credential-operator).
+To determine which cloud credentials strategy your cluster uses, see "Determining the Cloud Credential Operator mode".
 
 # Rotating cloud provider service keys with the Cloud Credential Operator utility
 
 Some organizations require the rotation of the service keys that authenticate the cluster. You can use the Cloud Credential Operator (CCO) utility (`ccoctl`) to update keys for clusters installed on the following cloud providers:
 
-- [Amazon Web Services (AWS) with Security Token Service (STS)](changing-cloud-credentials-configuration.md#rotating-bound-service-keys_key-rotation-aws)
+- Amazon Web Services (AWS) with Security Token Service (STS)
 
-- [Google Cloud with GCP Workload Identity](changing-cloud-credentials-configuration.md#rotating-bound-service-keys_key-rotation-gcp)
+- Google Cloud with GCP Workload Identity
 
-- [Microsoft Azure with Workload ID](changing-cloud-credentials-configuration.md#rotating-bound-service-keys_key-rotation-azure)
+- Microsoft Azure with Workload ID
 
-- [IBM Cloud](changing-cloud-credentials-configuration.md#refreshing-service-ids-ibm-cloud_changing-cloud-credentials-configuration)
+- IBM Cloud
 
 ## Rotating AWS OIDC bound service account signer keys
 
@@ -78,75 +80,78 @@ Procedure
     CLUSTER_NAME=${INFRA_ID%-*}
     ```
 
-    - This value should match the name of the cluster that was specified in the `metadata.name` field of the `install-config.yaml` file during installation.
+    where:
 
-      > [!NOTE]
-      > Your cluster might differ from this example, and the resource names might not be derived identically from the cluster name. Ensure that you specify the correct corresponding resource names for your cluster.
+    `CLUSTER_NAME`
+    This value should match the name of the cluster that was specified in the `metadata.name` field of the `install-config.yaml` file during installation.
 
-      - For AWS clusters that store the OIDC configuration in a public S3 bucket, configure the following environment variable:
+    > [!NOTE]
+    > Your cluster might differ from this example, and the resource names might not be derived identically from the cluster name. Ensure that you specify the correct corresponding resource names for your cluster.
 
-        ``` text
-        AWS_BUCKET=$(oc get authentication cluster -o jsonpath={'.spec.serviceAccountIssuer'} | awk -F'://' '{print$2}' |awk -F'.' '{print$1}')
-        ```
+    - For AWS clusters that store the OIDC configuration in a public S3 bucket, configure the following environment variable:
 
-      - For AWS clusters that store the OIDC configuration in a private S3 bucket that is accessed by the IAM identity provider through a public CloudFront distribution URL, complete the following steps:
+      ``` text
+      AWS_BUCKET=$(oc get authentication cluster -o jsonpath={'.spec.serviceAccountIssuer'} | awk -F'://' '{print$2}' |awk -F'.' '{print$1}')
+      ```
 
-        1.  Extract the public CloudFront distribution URL by running the following command:
+    - For AWS clusters that store the OIDC configuration in a private S3 bucket that is accessed by the IAM identity provider through a public CloudFront distribution URL, complete the following steps:
 
-            ``` terminal
-            $ basename $(oc get authentication cluster -o jsonpath={'.spec.serviceAccountIssuer'} )
-            ```
+      1.  Extract the public CloudFront distribution URL by running the following command:
 
-            <div class="formalpara">
+          ``` terminal
+          $ basename $(oc get authentication cluster -o jsonpath={'.spec.serviceAccountIssuer'} )
+          ```
 
-            <div class="title">
+          <div class="formalpara">
 
-            Example output
+          <div class="title">
 
-            </div>
+          Example output
 
-            ``` text
-            <subdomain>.cloudfront.net
-            ```
+          </div>
 
-            </div>
+          ``` text
+          <subdomain>.cloudfront.net
+          ```
 
-            where `<subdomain>` is an alphanumeric string.
+          </div>
 
-        2.  Determine the private S3 bucket name by running the following command:
+          where `<subdomain>` is an alphanumeric string.
 
-            ``` terminal
-            $ aws cloudfront list-distributions --query "DistributionList.Items[].{DomainName: DomainName, OriginDomainName: Origins.Items[0].DomainName}[?contains(DomainName, '<subdomain>.cloudfront.net')]"
-            ```
+      2.  Determine the private S3 bucket name by running the following command:
 
-            <div class="formalpara">
+          ``` terminal
+          $ aws cloudfront list-distributions --query "DistributionList.Items[].{DomainName: DomainName, OriginDomainName: Origins.Items[0].DomainName}[?contains(DomainName, '<subdomain>.cloudfront.net')]"
+          ```
 
-            <div class="title">
+          <div class="formalpara">
 
-            Example output
+          <div class="title">
 
-            </div>
+          Example output
 
-            ``` text
-            [
-                {
-                    "DomainName": "<subdomain>.cloudfront.net",
-                    "OriginDomainName": "<s3_bucket>.s3.us-east-2.amazonaws.com"
-                }
-            ]
-            ```
+          </div>
 
-            </div>
+          ``` text
+          [
+              {
+                  "DomainName": "<subdomain>.cloudfront.net",
+                  "OriginDomainName": "<s3_bucket>.s3.us-east-2.amazonaws.com"
+              }
+          ]
+          ```
 
-            where `<s3_bucket>` is the private S3 bucket name for your cluster.
+          </div>
 
-        3.  Configure the following environment variable:
+          where `<s3_bucket>` is the private S3 bucket name for your cluster.
 
-            ``` text
-            AWS_BUCKET=$<s3_bucket>
-            ```
+      3.  Configure the following environment variable:
 
-            where `<s3_bucket>` is the private S3 bucket name for your cluster.
+          ``` text
+          AWS_BUCKET=$<s3_bucket>
+          ```
+
+          where `<s3_bucket>` is the private S3 bucket name for your cluster.
 
 2.  Create a temporary directory to use and assign it an environment variable by running the following command:
 
@@ -186,13 +191,19 @@ Procedure
       --region us-east-1
     ```
 
-    - The `--dry-run` option outputs files, including the new `keys.json` file, to the disk without making API calls.
+    where:
 
-    - Specify the path to the public key that you downloaded in the previous step.
+    `--dry-run`
+    The dry run mode outputs files, including the new `keys.json` file, to the disk without making API calls.
 
-    - Because the `--dry-run` option does not make any API calls, some parameters do not require real values.
+    `--public-key-file`
+    The path to the public key that you downloaded in the previous step.
 
-    - Specify any valid AWS region, such as `us-east-1`. This value does not need to match the region the cluster is in.
+    `--name`
+    Some parameters do not require real values because the `--dry-run` option does not make any API calls.
+
+    `--region`
+    Any valid AWS region, such as `us-east-1`. This value does not need to match the region the cluster is in.
 
 6.  Rename the `keys.json` file by running the following command:
 
@@ -387,11 +398,16 @@ Procedure
       --workload-identity-pool fake
     ```
 
-    - The `--dry-run` option outputs files, including the new `keys.json` file, to the disk without making API calls.
+    where:
 
-    - Specify the path to the public key that you downloaded in the previous step.
+    `--dry-run`
+    The dry run mode outputs files, including the new `keys.json` file, to the disk without making API calls.
 
-    - Because the `--dry-run` option does not make any API calls, some parameters do not require real values.
+    `--public-key-file`
+    The path to the public key that you downloaded in the previous step.
+
+    `--name`
+    Some parameters do not require real values because the `--dry-run` option does not make any API calls.
 
 6.  Rename the `keys.json` file by running the following command:
 
@@ -580,15 +596,22 @@ Procedure
       --region us-east-1
     ```
 
-    - The `ccoctl azure` command does not include a `--dry-run` option. To use the `--dry-run` option, you must specify `aws` for an Azure cluster.
+    where:
 
-    - The `--dry-run` option outputs files, including the new `keys.json` file, to the disk without making API calls.
+    `ccoctl aws`
+    The command does not include a `--dry-run` option. To use the `--dry-run` option, you must specify `aws` for an Azure cluster.
 
-    - Specify the path to the public key that you downloaded in the previous step.
+    `--dry-run`
+    The dry run mode outputs files, including the new `keys.json` file, to the disk without making API calls.
 
-    - Because the `--dry-run` option does not make any API calls, some parameters do not require real values.
+    `--public-key-file`
+    The path to the public key that you downloaded in the previous step.
 
-    - Specify any valid AWS region, such as `us-east-1`. This value does not need to match the region the cluster is in.
+    `--name`
+    Some parameters do not require real values because the `--dry-run` option does not make any API calls.
+
+    `--region`
+    Any valid AWS region, such as `us-east-1`. This value does not need to match the region the cluster is in.
 
 6.  Rename the `keys.json` file by running the following command:
 
@@ -687,6 +710,8 @@ Procedure
 
 ## Rotating IBM Cloud credentials
 
+You can rotate API keys for existing IBM Cloud service IDs and update the corresponding cluster secrets to maintain valid cloud provider credentials.
+
 You can rotate API keys for your existing service IDs and update the corresponding secrets.
 
 <div>
@@ -720,22 +745,46 @@ Procedure
       --name <name>
   ```
 
-  - The name of the provider. For example: `ibmcloud` or `powervs`.
+  where:
 
-  - The `kubeconfig` file associated with the cluster. For example, `<installation_directory>/auth/kubeconfig`.
+  `<provider_name>`
+  The name of the provider. For example: `ibmcloud` or `powervs`.
 
-  - The directory where the credential requests are stored.
+  `<openshift_kubeconfig_file>`
+  The `kubeconfig` file associated with the cluster. For example, `<installation_directory>/auth/kubeconfig`.
 
-  - The name of the OpenShift Container Platform cluster.
+  `<path_to_credential_requests_directory>`
+  The directory where the credential requests are stored.
 
-    > [!NOTE]
-    > If your cluster uses Technology Preview features that are enabled by the `TechPreviewNoUpgrade` feature set, you must include the `--enable-tech-preview` parameter.
+  `<name>`
+  The name of the OpenShift Container Platform cluster.
+
+  > [!NOTE]
+  > If your cluster uses Technology Preview features that are enabled by the `TechPreviewNoUpgrade` feature set, you must include the `--enable-tech-preview` parameter.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Amazon Web Services (AWS) with Security Token Service (STS)](changing-cloud-credentials-configuration.md#rotating-bound-service-keys_key-rotation-aws)
+
+- [Google Cloud with GCP Workload Identity](changing-cloud-credentials-configuration.md#rotating-bound-service-keys_key-rotation-gcp)
+
+- [Microsoft Azure with Workload ID](changing-cloud-credentials-configuration.md#rotating-bound-service-keys_key-rotation-azure)
+
+- [IBM Cloud](changing-cloud-credentials-configuration.md#refreshing-service-ids-ibm-cloud_changing-cloud-credentials-configuration)
 
 </div>
 
 # Rotating cloud provider credentials
 
-Some organizations require the rotation of the cloud provider credentials. To allow the cluster to use the new credentials, you must update the secrets that the [Cloud Credential Operator (CCO)](../operators/operator-reference.md#cloud-credential-operator_cluster-operators-ref) uses to manage cloud provider credentials.
+Some organizations require the rotation of the cloud provider credentials. To allow the cluster to use the new credentials, you must update the secrets that the Cloud Credential Operator (CCO) uses to manage cloud provider credentials.
 
 ## Rotating cloud provider credentials manually
 
@@ -891,20 +940,24 @@ Additional resources
 
 - [vSphere CSI Driver Operator](../storage/container_storage_interface/persistent-storage-csi-vsphere.md#persistent-storage-csi-vsphere)
 
+- [Cloud Credential Operator (CCO)](../operators/operator-reference.md#cloud-credential-operator_cluster-operators-ref)
+
 </div>
 
 # Removing cloud provider credentials
 
-After installing OpenShift Container Platform, some organizations require the removal of the cloud provider credentials that were used during the initial installation. To allow the cluster to use the new credentials, you must update the secrets that the [Cloud Credential Operator (CCO)](../operators/operator-reference.md#cloud-credential-operator_cluster-operators-ref) uses to manage cloud provider credentials.
+After installing OpenShift Container Platform, some organizations require the removal of the cloud provider credentials that were used during the initial installation. To allow the cluster to use the new credentials, you must update the secrets that the Cloud Credential Operator (CCO) uses to manage cloud provider credentials.
 
 ## Removing cloud provider credentials
+
+You can remove administrator-level cloud provider credentials from a cluster that uses the Cloud Credential Operator in mint mode to reduce the risk of credential exposure after installation.
 
 For clusters that use the Cloud Credential Operator (CCO) in mint mode, the administrator-level credential is stored in the `kube-system` namespace. The CCO uses the `admin` credential to process the `CredentialsRequest` objects in the cluster and create users for components with limited permissions.
 
 After installing an OpenShift Container Platform cluster with the CCO in mint mode, you can remove the administrator-level credential secret from the `kube-system` namespace in the cluster. The CCO only requires the administrator-level credential during changes that require reconciling new or modified `CredentialsRequest` custom resources, such as minor cluster version updates.
 
 > [!NOTE]
-> Before performing a minor version cluster update (for example, updating from OpenShift Container Platform 4.19 to 4.17), you must reinstate the credential secret with the administrator-level credential. If the credential is not present, the update might be blocked.
+> Before performing a minor version cluster update (for example, updating from OpenShift Container Platform 4.19 to 4.20), you must reinstate the credential secret with the administrator-level credential. If the credential is not present, the update might be blocked.
 
 <div>
 
@@ -948,6 +1001,8 @@ Additional resources
 </div>
 
 - [The Cloud Credential Operator in mint mode](../authentication/managing_cloud_provider_credentials/cco-mode-mint.md#cco-mode-mint)
+
+- [Cloud Credential Operator (CCO)](../operators/operator-reference.md#cloud-credential-operator_cluster-operators-ref)
 
 </div>
 
@@ -1072,7 +1127,7 @@ Verification
 
 ## Enabling Microsoft Entra Workload ID on an existing cluster
 
-If you did not configure your Microsoft Azure OpenShift Container Platform cluster to use Microsoft Entra Workload ID during installation, you can enable this authentication method on an existing cluster.
+Enable Microsoft Entra Workload ID on an existing Microsoft Azure OpenShift Container Platform cluster. If you did not configure your cluster to use Microsoft Entra Workload ID during installation, you can enable this authentication method post-installation.
 
 > [!IMPORTANT]
 > The process to enable Workload ID on an existing cluster is disruptive and takes a significant amount of time. Before proceeding, observe the following considerations:
@@ -1122,7 +1177,7 @@ Procedure
       > output_dir/serviceaccount-signer.public
     ```
 
-    - This procedure uses a file named `serviceaccount-signer.public` as an example.
+    This procedure uses a file named `serviceaccount-signer.public` as an example.
 
 3.  Use the extracted service account public signing key to create an OpenID Connect (OIDC) issuer and Azure blob storage container with OIDC configuration files by running the following command:
 
@@ -1136,13 +1191,19 @@ Procedure
       --public-key-file ./output_dir/serviceaccount-signer.public
     ```
 
-    - The value of the `name` parameter is used to create an Azure resource group. To use an existing Azure resource group instead of creating a new one, specify the `--oidc-resource-group-name` argument with the existing group name as its value.
+    where:
 
-    - Specify the region of the existing cluster.
+    `<azure_infra_name>`
+    The value of the `name` parameter is used to create an Azure resource group. To use an existing Azure resource group instead of creating a new one, specify the `--oidc-resource-group-name` argument with the existing group name as its value.
 
-    - Specify the subscription ID of the existing cluster.
+    `<azure_region>`
+    Specify the region of the existing cluster.
 
-    - Specify the file that contains the service account public signing key for the cluster.
+    `<azure_subscription_id>`
+    Specify the subscription ID of the existing cluster.
+
+    `--public-key-file`
+    Specify the file that contains the service account public signing key for the cluster.
 
 4.  Verify that the configuration file for the Azure pod identity webhook was created by running the following command:
 
@@ -1166,7 +1227,7 @@ Procedure
 
     </div>
 
-    - The file `azure-ad-pod-identity-webhook-config.yaml` contains the Azure pod identity webhook configuration.
+    The file `azure-ad-pod-identity-webhook-config.yaml` contains the Azure pod identity webhook configuration.
 
 5.  Set an `OIDC_ISSUER_URL` variable with the OIDC issuer URL from the generated manifests in the output directory by running the following command:
 
@@ -1259,9 +1320,13 @@ Procedure
       --network-resource-group-name <azure_resource_group>
     ```
 
-    - Specify the name of the resource group that contains the DNS zone.
+    where:
 
-    - Optional: Specify the virtual network resource group if it is different from the cluster resource group.
+    `<azure_dns_zone_resourcegroup_name>`
+    Specify the name of the resource group that contains the DNS zone.
+
+    `<azure_resource_group>`
+    Optional: Specify the virtual network resource group if it is different from the cluster resource group.
 
 14. Apply the Azure pod identity webhook configuration for Workload ID by running the following command:
 
@@ -1319,7 +1384,7 @@ Procedure
 
 ## Enabling AWS Security Token Service (STS) on an existing cluster
 
-If you did not configure your Amazon Web Services (AWS) OpenShift Container Platform cluster to use Security Token Service (STS) during installation, you can enable this authentication method on an existing cluster.
+Enable AWS Security Token Service (STS) on an existing OpenShift Container Platform cluster if you did not configure this authentication method during installation.
 
 > [!IMPORTANT]
 > The process to enable STS on an existing cluster is disruptive and takes a significant amount of time. Before proceeding, observe the following considerations:
@@ -1375,7 +1440,7 @@ Procedure
           > output_dir/serviceaccount-signer.public
         ```
 
-        - This procedure uses a file named `serviceaccount-signer.public` as an example.
+        This procedure uses a file named `serviceaccount-signer.public` as an example.
 
     2.  Create the AWS IAM identity provider and S3 bucket by running the following command:
 
@@ -1387,13 +1452,19 @@ Procedure
           --public-key-file output_dir/serviceaccount-signer.public
         ```
 
-        - Specify the output directory you created earlier.
+        where:
 
-        - Specify a globally unique name. This name functions as a prefix for AWS resources created by this command.
+        `--output-dir`
+        Specify the output directory you created earlier.
 
-        - Specify the AWS region of the cluster.
+        `--name`
+        Specify a globally unique name. This name functions as a prefix for AWS resources created by this command.
 
-        - Specify the relative path to the `serviceaccount-signer.public` file you created earlier.
+        `--region`
+        Specify the AWS region of the cluster.
+
+        `--public-key-file`
+        Specify the relative path to the `serviceaccount-signer.public` file you created earlier.
 
     3.  Save or note the Amazon Resource Name (ARN) for the IAM identity provider. You can find this information in the final line of the output of the previous command.
 
@@ -1485,15 +1556,22 @@ Procedure
           --credentials-requests-dir ./output_dir/cred-reqs/
         ```
 
-        - Specify the output directory you created earlier.
+        where:
 
-        - Specify a globally unique name. This name functions as a prefix for AWS resources created by this command.
+        `--output-dir`
+        Specify the output directory you created earlier.
 
-        - Specify the ARN for the IAM identity provider.
+        `--name`
+        Specify a globally unique name. This name functions as a prefix for AWS resources created by this command.
 
-        - Specify the AWS region of the cluster.
+        `--identity-provider-arn`
+        Specify the ARN for the IAM identity provider.
 
-        - Specify the relative path to the folder where you extracted the `CredentialsRequest` files with the `oc adm release extract` command.
+        `--region`
+        Specify the AWS region of the cluster.
+
+        `--credentials-requests-dir`
+        Specify the relative path to the folder where you extracted the `CredentialsRequest` files with the `oc adm release extract` command.
 
     2.  Apply the generated secrets by running the following command:
 
@@ -1689,3 +1767,5 @@ Procedure
 # Additional resources
 
 - [About the Cloud Credential Operator](../authentication/managing_cloud_provider_credentials/about-cloud-credential-operator.md#about-cloud-credential-operator)
+
+- [Determining the Cloud Credential Operator mode](../authentication/managing_cloud_provider_credentials/about-cloud-credential-operator.md#cco-determine-mode_about-cloud-credential-operator)

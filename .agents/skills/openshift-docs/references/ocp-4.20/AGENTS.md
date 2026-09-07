@@ -51,7 +51,7 @@ Root: ./
 |installing/installing_azure_stack_hub/ipi:{ipi-ash-preparing-to-install.md,installing-azure-stack-hub-default.md,installing-azure-stack-hub-network-customizations.md}
 |installing/installing_azure_stack_hub/upi:{upi-ash-preparing-to-install.md,installing-azure-stack-hub-user-infra.md}
 |installing/installing_gcp:{preparing-to-install-on-gcp.md,installing-gcp-account.md,installing-gcp-default.md,installing-gcp-customizations.md,installing-restricted-networks-gcp-installer-provisioned.md,installing-gcp-vpc.md,installing-gcp-shared-vpc.md,installing-gcp-private.md,installing-gcp-user-infra.md,installing-gcp-user-infra-vpc.md,installing-restricted-networks-gcp.md,installing-gcp-three-node.md,installation-config-parameters-gcp.md,uninstalling-cluster-gcp.md,installing-gcp-multiarch-support.md}
-|installing/installing_ibm_cloud:{preparing-to-install-on-ibm-cloud.md,installing-ibm-cloud-account.md,configuring-iam-ibm-cloud.md,user-managed-encryption-ibm-cloud.md,installing-ibm-cloud-customizations.md,installing-ibm-cloud-vpc.md,installing-ibm-cloud-private.md,installing-ibm-cloud-restricted.md,installation-config-parameters-ibm-cloud-vpc.md,uninstalling-cluster-ibm-cloud.md}
+|installing/installing_ibm_cloud:{preparing-to-install-on-ibm-cloud.md,installing-ibm-cloud-account.md,configuring-iam-ibm-cloud.md,user-managed-encryption-ibm-cloud.md,installing-ibm-cloud-customizations.md,installing-ibm-cloud-vpc.md,installing-ibm-cloud-private.md,installing-ibm-cloud-restricted.md,installing-ibm-cloud-restricted-postinstallation-configuration.md,installation-config-parameters-ibm-cloud-vpc.md,uninstalling-cluster-ibm-cloud.md}
 |installing/installing_nutanix:{preparing-to-install-on-nutanix.md,nutanix-failure-domains.md,installing-nutanix-installer-provisioned.md,installing-restricted-networks-nutanix-installer-provisioned.md,installing-nutanix-three-node.md,uninstalling-cluster-nutanix.md,installation-config-parameters-nutanix.md}
 |installing/installing_on_prem_assisted:{installing-on-prem-assisted.md}
 |installing/installing_with_agent_based_installer:{preparing-to-install-with-agent-based-installer.md,understanding-disconnected-installation-mirroring.md,installing-with-agent-basic.md,installing-with-agent-based-installer.md,installing-ove.md,prepare-pxe-assets-agent.md,installing-using-iscsi.md,preparing-an-agent-based-installed-cluster-for-mce.md,installation-config-parameters-agent.md,agent-based-installer-postinstallation.md}
@@ -128,7 +128,7 @@ Root: ./
 |security/security_profiles_operator:{spo-overview.md,spo-release-notes.md,spo-support.md,spo-understanding.md,spo-enabling.md,spo-seccomp.md,spo-selinux.md,spo-advanced.md,spo-troubleshooting.md,spo-uninstalling.md}
 |security/nbde_tang_server_operator:{nbde-tang-server-operator-overview.md,nbde-tang-server-operator-release-notes.md,nbde-tang-server-operator-understanding.md,nbde-tang-server-operator-installing.md,nbde-tang-server-operator-configuring-managing.md,nbde-tang-server-operator-identifying-url.md}
 |security/cert_manager_operator:{index.md,cert-manager-operator-release-notes.md,cert-manager-operator-install.md,cert-manager-operator-proxy.md,cert-manager-customizing-api-fields.md,cert-manager-authenticate.md,cert-manager-operator-issuer-acme.md,cert-manager-creating-certificate.md,cert-manager-securing-routes.md,cert-manager-operator-integrating-istio.md,cert-manager-nw-policy.md,cert-manager-trust-manager.md,cert-manager-monitoring.md,cert-manager-log-levels.md,cert-manager-operator-uninstall.md}
-|security/zero_trust_workload_identity_manager:{zero-trust-manager-overview.md,zero-trust-manager-components.md,zero-trust-manager-release-notes.md,zero-trust-manager-install.md,zero-trust-manager-configuration.md,zero-trust-manager-proxy.md,zero-trust-manager-oidc-federation.md,zero-trust-manager-spire-federation.md,zero-trust-manager-spiffe-helper.md,zero-trust-manager-mesh-integration.md,zero-trust-manager-reconciliation.md,zero-trust-manager-plugins.md,zero-trust-manager-monitoring.md,zero-trust-manager-uninstall.md}
+|security/zero_trust_workload_identity_manager:{zero-trust-manager-overview.md,zero-trust-manager-components.md,zero-trust-manager-release-notes.md,zero-trust-manager-install.md,zero-trust-manager-configuration.md,zero-trust-manager-proxy.md,zero-trust-manager-oidc-federation.md,zero-trust-manager-spire-federation.md,zero-trust-manager-spiffe-helper.md,zero-trust-manager-mesh-integration.md,zero-trust-manager-mesh-integration-multi-cluster.md,zero-trust-manager-reconciliation.md,zero-trust-manager-plugins.md,zero-trust-manager-monitoring.md,zero-trust-manager-uninstall.md}
 |security/external_secrets_operator:{index.md,external-secrets-operator-release-notes.md,external-secrets-operator-install.md,external-secrets-operator-config-net-policy.md,external-secrets-operator-proxy.md,external-secrets-monitoring.md,external-secrets-log-levels.md,external-secrets-operator-uninstall.md,external-secrets-operator-api.md,external-secrets-operator-migrate-downstream-upstream.md}
 |security/network_bound_disk_encryption:{nbde-about-disk-encryption-technology.md,nbde-tang-server-installation-considerations.md,nbde-managing-encryption-keys.md,nbde-disaster-recovery-considerations.md}
 
@@ -244,7 +244,7 @@ Root: ./
 ### etcd
 
 |etcd:{etcd-overview.md,etcd-practices.md,etcd-performance.md,etcd-encrypt.md,etcd-guidance-span.md}
-|etcd/etcd-backup-restore:{etcd-backup.md,replace-unhealthy-etcd-member.md,etcd-disaster-recovery.md}
+|etcd/etcd-backup-restore:{etcd-backup.md,replace-healthy-etcd-member.md,replace-unhealthy-etcd-member.md,etcd-disaster-recovery.md}
 
 ### Hosted control planes
 
@@ -292,7 +292,6 @@ Root: ./
 |observability/distr_tracing:{distr-tracing-tempo-architecture.md}
 |observability/otel:{otel-architecture.md}
 |observability/network_observability:{network-observability-operator-release-notes.md,network-observability-overview.md,installing-operators.md,network-observability-kafka-operator-scaling-network-flow-collection.md,understanding-network-observability-operator.md,configuring-operator.md,network-observability-per-tenant-model.md,network-observability-network-policy.md,network-observability-dns-resolution-analysis.md,observing-network-traffic.md,network-observability-health-rules.md,network-observability-monitoring-tls-traffic.md,metrics-alerts-dashboards.md,network-observability-operator-monitoring.md,network-observability-scheduling-resources.md,network-observability-secondary-networks.md,flowcollector-api.md,flowmetric-api.md,json-flows-format-reference.md,troubleshooting-network-observability.md}
-|observability/network_observability/release_notes_archive:{network-observability-operator-release-notes-archive.md}
 |observability/network_observability/netobserv_cli:{netobserv-cli-install.md,netobserv-cli-using.md,netobserv-cli-reference.md}
 |observability/power_monitoring:{about-power-monitoring.md}
 
@@ -355,7 +354,7 @@ Root: ./
 |backup_and_restore/application_backup_and_restore/installing:{about-oadp-data-mover.md,oadp-backup-restore-csi-snapshots.md,configuring-backup-restore-pvc-datamover.md,overriding-kopia-algorithms.md}
 |backup_and_restore/application_backup_and_restore/oadp-advanced-topics:{oadp-different-kubernetes-api-versions.md,oadp-backing-up-data-one-cluster-restoring-another-cluster.md,oadp-storage-class-mapping-main.md}
 |backup_and_restore/application_backup_and_restore/troubleshooting:{troubleshooting.md,velero-cli-tool.md,pods-crash-or-restart-due-to-lack-of-memory-or-cpu.md,restoring-workarounds-for-velero-backups-that-use-admission-webhooks.md,oadp-installation-issues.md,oadp-operator-issues.md,oadp-timeouts.md,backup-and-restore-cr-issues.md,restic-issues.md,oadp-data-protection-test.md,using-the-must-gather-tool.md,oadp-monitoring.md}
-|backup_and_restore/control_plane_backup_and_restore:{backing-up-etcd.md,replacing-unhealthy-etcd-member.md}
+|backup_and_restore/control_plane_backup_and_restore:{backing-up-etcd.md,replacing-healthy-etcd-member.md,replacing-unhealthy-etcd-member.md}
 |backup_and_restore/control_plane_backup_and_restore/disaster_recovery:{about-disaster-recovery.md,quorum-restoration.md,scenario-2-restoring-cluster-state.md,scenario-3-expired-certs.md}
 
 ### Migrating from version 3 to 4

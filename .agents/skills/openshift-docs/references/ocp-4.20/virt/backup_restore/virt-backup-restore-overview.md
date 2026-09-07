@@ -247,7 +247,7 @@ Verification
 
 # Additional resources
 
-- [Application backup and restore operations](../../backup_and_restore/index.md#application-backup-restore-operations-overview)
+- [Application backup and restore operations](../../backup_and_restore/index.md#application-backup-restore-operations-overview_backup-restore-overview)
 
 - [Backing up applications with File System Backup: Kopia or Restic](../../backup_and_restore/application_backup_and_restore/backing_up_and_restoring/oadp-backing-up-applications-restic-doc.md#oadp-backing-up-applications-restic-doc)
 

@@ -100,12 +100,13 @@ In the following table, features are marked with the following statuses:
 | Custom taints and tolerations | Technology Preview | Technology Preview | Technology Preview |
 | NVIDIA GPU devices on hosted control planes for OpenShift Virtualization | Technology Preview | Technology Preview | Technology Preview |
 | Hosted control planes on IBM Z in a disconnected environment | Technology Preview | Technology Preview | Generally Available |
+| Restoring a hosted cluster to a new management cluster by using OADP | Not available | Technology Preview | Technology Preview |
 
 Hosted control planes GA and TP tracker
 
 # Known issues
 
-This section includes several known issues for hosted control planes for OpenShift Container Platform 4.17.
+This section includes several known issues for hosted control planes for OpenShift Container Platform 4.20.
 
 - If the annotation and the `ManagedCluster` resource name do not match, the multicluster engine for Kubernetes Operator console displays the cluster as `Pending import`. The cluster cannot be used by the multicluster engine Operator. The same issue happens when there is no annotation and the `ManagedCluster` name does not match the `Infra-ID` value of the `HostedCluster` resource.
 

@@ -17,7 +17,7 @@ You can create a different compute machine set to serve a specific purpose in yo
 
 You can define a machine set YAML to provision nodes by specifying parameters such as `vmSize` and `image`. You can use this to automate and scale infrastructure consistently, to ensure compute nodes meet specific workload requirements within the cluster.
 
-The sample YAML defines a compute machine set that runs in the `1` Microsoft Azure zone in a region and creates nodes that are labeled with `node-role.kubernetes.io/<role>: ""`. The YAML file specifies a taint to prevent user workloads from being scheduled on infra nodes. After adding the `NoSchedule` taint on the infrastructure node, existing DNS pods running on that node are marked as `misscheduled`. You must either delete or [add toleration on `misscheduled` DNS pods](https://access.redhat.com/solutions/6592171).
+The sample YAML defines a compute machine set that runs in the `1` Microsoft Azure zone in a region and creates nodes that are labeled with `node-role.kubernetes.io/<role>: ""`. ifdef::infra\[`node-role.kubernetes.io/infra: ""`. The YAML specifies a taint to prevent user workloads from being scheduled on infra nodes. After adding the `NoSchedule` taint on the infrastructure node, existing DNS pods running on that node are marked as `misscheduled`. You must either delete or [add toleration on `misscheduled` DNS pods](https://access.redhat.com/solutions/6592171).
 
 In the sample, `<infrastructure_id>` is the infrastructure ID label that is based on the cluster ID that you set when you provisioned the cluster, and `<role>` is the node label to add.
 
@@ -95,7 +95,7 @@ spec:
 where:
 
 `<infrastructure_id>`
-Specifies the infrastructure ID that is based on the cluster ID that you set when you provisioned the cluster. If you have the OpenShift CLI installed, you can obtain the infrastructure ID by running the following command:
+Specifies the infrastructure ID that is based on the cluster ID that you set when you provisioned the cluster. If you have the OpenShift CLI (`oc`) installed, you can obtain the infrastructure ID by running the following command:
 
 ``` terminal
 $ oc get -o jsonpath='{.status.infrastructureName}{"\n"}' infrastructure cluster
@@ -613,14 +613,14 @@ Procedure
 
   Microsoft Azure caps Spot VM prices at the standard price. Azure will not evict an instance due to pricing if the instance is set with the default `maxPrice`. However, an instance can still be evicted due to capacity restrictions.
 
-</div>
+  > [!NOTE]
+  > It is strongly recommended to use the default standard VM price as the `maxPrice` value and to not set the maximum price for Spot VMs.
 
-> [!NOTE]
-> It is strongly recommended to use the default standard VM price as the `maxPrice` value and to not set the maximum price for Spot VMs.
+</div>
 
 # Machine sets that deploy machines on Ephemeral OS disks
 
-You can create a compute machine set running on Microsoft Azure that deploys machines on Ephemeral OS disks. Ephemeral OS disks use local VM capacity rather than remote Azure Storage. This configuration therefore incurs no additional cost and provides lower latency for reading, writing, and reimaging.
+You can create a compute machine set running on Microsoft Azure that deploys machines on Ephemeral OS disks. Ephemeral OS disks use local VM capacity rather than remote Microsoft Azure Storage. The configuration, therefore, incurs no additional cost and provides lower latency for reading, writing, and reimaging.
 
 <div>
 
@@ -630,13 +630,15 @@ Additional resources
 
 </div>
 
-- [Ephemeral OS disks for Azure VMs (Microsoft Azure documentation)](https://docs.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks)
+- [Ephemeral OS disks for Azure VMs (Azure documentation)](https://docs.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks)
 
 </div>
 
 ## Creating machines on Ephemeral OS disks by using compute machine sets
 
-To improve performance and reduce storage costs, you can host the OS disk directly on the local storage of the virtual machines (VMs) rather than on remote Microsoft Azure Storage. You can launch machines on Ephemeral OS disks on Azure by editing your compute machine set YAML file.
+To improve performance and reduce storage costs, you can host the OS disk directly on the local storage of the virtual machines (VMs) rather than on remote Microsoft Azure Storage.
+
+You launch machines on Ephemeral OS disks on Azure by editing your compute machine set YAML file.
 
 <div>
 
@@ -646,7 +648,7 @@ Prerequisites
 
 </div>
 
-- Have an existing Microsoft Azure cluster.
+- Have an existing Azure cluster.
 
 </div>
 
@@ -709,7 +711,7 @@ Verification
 
 </div>
 
-- On the Microsoft Azure portal, review the **Overview** page for a machine deployed by the compute machine set, and verify that the `Ephemeral OS disk` field is set to `OS cache placement`.
+- On the Azure portal, review the **Overview** page for a machine deployed by the compute machine set, and verify that the `Ephemeral OS disk` field is set to `OS cache placement`.
 
 </div>
 
@@ -730,7 +732,7 @@ Additional resources
 
 </div>
 
-- [Microsoft Azure ultra disks documentation](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types#ultra-disks)
+- [Ultra disks (Azure documentation)](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types#ultra-disks)
 
 - [Machine sets that deploy machines on ultra disks using CSI PVCs](../../storage/container_storage_interface/persistent-storage-csi-azure.md#machineset-azure-ultra-disk_persistent-storage-csi-azure)
 
@@ -762,7 +764,7 @@ Procedure
 
 </div>
 
-1.  Create a custom secret in the `openshift-machine-api` namespace using the `worker` data secret by running the following command:
+1.  Create a custom secret in the `openshift-machine-api` namespace by using the `worker` data secret by running the following command:
 
     ``` terminal
     $ oc -n openshift-machine-api \
@@ -913,7 +915,7 @@ Procedure
     `spec.template.spec.providerSpec.value.userDataSecret.name`
     Specifies the user data secret created earlier. Replace `<role>` with `worker`.
 
-7.  Create a machine set using the updated configuration by running the following command:
+7.  Create a machine set by using the updated configuration by running the following command:
 
     ``` terminal
     $ oc create -f <machine_set_name>.yaml
@@ -1074,7 +1076,9 @@ Additional resources
 
 # Configuring trusted launch for Azure virtual machines by using machine sets
 
-OpenShift Container Platform 4.17 supports trusted launch for Microsoft Azure virtual machines (VMs). By editing the machine set YAML file, you can configure the trusted launch options that a machine set uses for machines that it deploys. For example, you can configure these machines to use UEFI security features such as Secure Boot or a dedicated virtual Trusted Platform Module (vTPM) instance.
+By editing the machine set YAML file, you can configure the trusted launch for Microsoft Azure virtual machines (VMs) options that a machine set uses for machines that it deploys.
+
+For example, you can configure these machines to use UEFI security features such as Secure Boot or a dedicated virtual Trusted Platform Module (vTPM) instance.
 
 > [!NOTE]
 > Some feature combinations result in an invalid configuration.
@@ -1170,7 +1174,7 @@ Verification
 
 # Configuring Azure confidential virtual machines by using machine sets
 
-OpenShift Container Platform 4.17 supports Microsoft Azure confidential virtual machines (VMs). By enabling Azure confidential VMs, you can use memory encryption to improve data confidentiality.
+You can enable Microsoft Azure confidential virtual machines (VMs) to use memory encryption to improve data confidentiality.
 
 > [!NOTE]
 > Confidential VMs are currently not supported on 64-bit ARM architectures.
@@ -1225,8 +1229,6 @@ Procedure
     # ...
     ```
 
-    </div>
-
     where:
 
     `spec.template.spec.providerSpec.value.osDisk.managedDisk.securityProfile`
@@ -1253,6 +1255,8 @@ Procedure
     `spec.template.spec.providerSpec.value.vmSize`
     Specifies an instance type that supports confidential VMs.
 
+    </div>
+
 </div>
 
 <div>
@@ -1269,7 +1273,7 @@ Verification
 
 # Accelerated Networking for Microsoft Azure VMs
 
-Accelerated Networking uses single root I/O virtualization (SR-IOV) to provide Microsoft Azure VMs with a more direct path to the switch. This enhances network performance. You can enable this feature during or after installation.
+You can enable Accelerated Networking, which uses single root I/O virtualization (SR-IOV) to provide Microsoft Azure VMs with a more direct path to the switch, during or after installation. This enhances network performance.
 
 ## Limitations
 
@@ -1283,9 +1287,88 @@ Consider the following limitations when deciding whether to use Accelerated Netw
 
 - When this feature is enabled on an existing Azure cluster, only newly provisioned nodes are affected. Currently running nodes are not reconciled. To enable the feature on all nodes, you must replace each existing machine. This can be done for each machine individually, or by scaling the replicas down to zero, and then scaling back up to your desired number of replicas.
 
-# Configuring Capacity Reservation by using machine sets
+## Enabling Accelerated Networking on an existing Microsoft Azure cluster
 
-OpenShift Container Platform version 4.17 and later supports on-demand Capacity Reservation with Capacity Reservation groups on Microsoft Azure clusters.
+You can enable Accelerated Networking on Microsoft Azure by adding `acceleratedNetworking` to your machine set YAML file. Accelerated Networking uses SR-IOV to help improve network performance for new nodes.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Have an existing Azure cluster where the Machine API is operational.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Add the following to the `providerSpec` field:
+
+  ``` yaml
+  providerSpec:
+    value:
+      acceleratedNetworking: true
+      vmSize: <azure-vm-size>
+  ```
+
+  where:
+
+  `providerSpec.value.acceleratedNetworking`
+  Enables Accelerated Networking.
+
+  `providerSpec.value.vmSize`
+  Specifies an Azure VM size that includes at least four vCPUs. For information about VM sizes, see the Microsoft Azure documentation [Sizes for virtual machines in Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Next steps
+
+</div>
+
+- To enable the feature on currently running nodes, you must replace each existing machine. This can be done for each machine individually, or by scaling the replicas down to zero, and then scaling back up to your desired number of replicas.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- On the Microsoft Azure portal, review the **Networking** settings page for a machine provisioned by the machine set, and verify that the `Accelerated networking` field is set to `Enabled`.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Enabling Accelerated Networking during installation](../../installing/installing_azure/ipi/installing-azure-customizations.md#machineset-azure-enabling-accelerated-networking-new-install_installing-azure-customizations)
+
+</div>
+
+# Configuring Capacity Reservations by using machine sets
+
+You can configure a machine set to deploy machines on any available resources that match the parameters of a capacity request that you define by using on-demand Capacity Reservation with Capacity Reservation groups on Microsoft Azure clusters.
 
 You can configure a machine set to deploy machines on any available resources that match the parameters of a capacity request that you define.
 
@@ -1308,7 +1391,7 @@ Prerequisites
 
 - You installed the OpenShift CLI (`oc`).
 
-- You created a Capacity Reservation group. For more information, see [Create a Capacity Reservation](https://learn.microsoft.com/en-us/azure/virtual-machines/capacity-reservation-create) in the Microsoft Azure documentation.
+- You have created a Capacity Reservation group. For more information, see [Create a Capacity Reservation](https://learn.microsoft.com/en-us/azure/virtual-machines/capacity-reservation-create) in the Microsoft Azure documentation.
 
 </div>
 
@@ -1320,9 +1403,9 @@ Procedure
 
 </div>
 
-1.  In a text editor, open the YAML file for an existing machine set or create a new one.
+1.  In a text editor, open an existing machine set custom resource (CR) or create a new one.
 
-2.  Edit the following section under the `providerSpec` field:
+2.  Update the CR to implement your configuration changes:
 
     <div class="formalpara">
 
@@ -1351,6 +1434,8 @@ Procedure
 
     `<capacity_reservation_group>`
     Specifies the ID of the Capacity Reservation group that you want the machine set to deploy machines on.
+
+3.  Save your changes and exit the object specification.
 
 </div>
 
@@ -1428,7 +1513,7 @@ Procedure
     $ oc get machineset -n openshift-machine-api myclustername-worker-centralus1 -o yaml > machineset-azure.yaml
     ```
 
-3.  View the content of the machineset:
+3.  View the content of the compute machine set:
 
     ``` terminal
     $ cat machineset-azure.yaml
@@ -1976,85 +2061,6 @@ Verification
     </div>
 
     `10de` appears in the node feature list for the GPU-enabled node. This mean the NFD Operator correctly identified the node from the GPU-enabled MachineSet.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Enabling Accelerated Networking during installation](../../installing/installing_azure/ipi/installing-azure-customizations.md#machineset-azure-enabling-accelerated-networking-new-install_installing-azure-customizations)
-
-</div>
-
-## Enabling Accelerated Networking on an existing Microsoft Azure cluster
-
-You can enable Accelerated Networking on Microsoft Azure by adding `acceleratedNetworking` to your machine set YAML file. This uses SR-IOV to help improve network performance for new node.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- Have an existing Azure cluster where the Machine API is operational.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-- Add the following to the `providerSpec` field:
-
-  ``` yaml
-  providerSpec:
-    value:
-      acceleratedNetworking: true
-      vmSize: <azure-vm-size>
-  ```
-
-  where:
-
-  `providerSpec.value.acceleratedNetworking`
-  Enables Accelerated Networking.
-
-  `providerSpec.value.vmSize`
-  Specifies an Azure VM size that includes at least four vCPUs. For information about VM sizes, see the Microsoft Azure documentation [Sizes for virtual machines in Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/sizes).
-
-</div>
-
-<div>
-
-<div class="title">
-
-Next steps
-
-</div>
-
-- To enable the feature on currently running nodes, you must replace each existing machine. This can be done for each machine individually, or by scaling the replicas down to zero, and then scaling back up to your desired number of replicas.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-- On the Microsoft Azure portal, review the **Networking** settings page for a machine provisioned by the machine set, and verify that the `Accelerated networking` field is set to `Enabled`.
 
 </div>
 

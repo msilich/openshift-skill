@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+If you are planning to harden RHCOS nodes in OpenShift Container Platform to meet your security needs, you should consider both what to harden and how to go about doing that hardening.
+
 RHCOS was created and tuned to be deployed in OpenShift Container Platform with few if any changes needed to RHCOS nodes. Every organization adopting OpenShift Container Platform has its own requirements for system hardening. As a RHEL system with OpenShift-specific modifications and features added (such as Ignition, ostree, and a read-only `/usr` to provide limited immutability), RHCOS can be hardened just as you would any RHEL system. Differences lie in the ways you manage the hardening.
 
 A key feature of OpenShift Container Platform and its Kubernetes engine is to be able to quickly scale applications and infrastructure up and down as needed. Unless it is unavoidable, you do not want to make direct changes to RHCOS by logging into a host and adding software or changing settings. You want to have the OpenShift Container Platform installer and control plane manage changes to RHCOS so new nodes can be spun up without manual intervention.
@@ -8,21 +10,35 @@ So, if you are setting out to harden RHCOS nodes in OpenShift Container Platform
 
 # Choosing what to harden in RHCOS
 
-For information on how to approach security for any RHEL system, see the [RHEL 9 Security Hardening](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/security_hardening/index#scanning-container-and-container-images-for-vulnerabilities_scanning-the-system-for-security-compliance-and-vulnerabilities) guide.
+You can review the information on how to approach security for any RHEL system in the Red Hat Enterprise Linux 9 Security Hardening guide.
 
 Use this guide to learn how to approach cryptography, evaluate vulnerabilities, and assess threats to various services. Likewise, you can learn how to scan for compliance standards, check file integrity, perform auditing, and encrypt storage devices.
 
 With the knowledge of what features you want to harden, you can then decide how to harden them in RHCOS.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Enterprise Linux 9 Security Hardening guide](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/security_hardening/index#scanning-container-and-container-images-for-vulnerabilities_scanning-the-system-for-security-compliance-and-vulnerabilities)
+
+</div>
+
 # Choosing how to harden RHCOS
 
-Direct modification of RHCOS systems in OpenShift Container Platform is discouraged. Instead, you should think of modifying systems in pools of nodes, such as worker nodes and control plane nodes. When a new node is needed, in non-bare metal installs, you can request a new node of the type you want and it will be created from an RHCOS image plus the modifications you created earlier.
+Direct modification of RHCOS systems in OpenShift Container Platform is discouraged. Instead, you should think of modifying systems in pools of nodes, such as worker nodes and control plane nodes.
+
+When a new node is needed, in non-bare metal installs, you can request a new node of the type you want and it will be created from an RHCOS image plus the modifications you created earlier.
 
 There are opportunities for modifying RHCOS before installation, during installation, and after the cluster is up and running.
 
 ## Hardening before installation
 
-For bare metal installations, you can add hardening features to RHCOS before beginning the OpenShift Container Platform installation. For example, you can add kernel options when you boot the RHCOS installer to turn security features on or off, such as various SELinux booleans or low-level settings, such as symmetric multithreading.
+For bare-metal installations, you can add hardening features to RHCOS before beginning the OpenShift Container Platform installation. For example, you can add kernel options when you boot the RHCOS installer to turn security features on or off, such as various SELinux Boolean values or low-level settings, such as symmetric multithreading.
 
 > [!WARNING]
 > Disabling SELinux on RHCOS nodes is not supported.
@@ -37,7 +53,7 @@ You can interrupt the OpenShift Container Platform installation process and chan
 
 After the OpenShift Container Platform cluster is up and running, there are several ways to apply hardening features to RHCOS:
 
-- Daemon set: If you need a service to run on every node, you can add that service with a [Kubernetes `DaemonSet` object](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/).
+- Daemon set: If you need a service to run on every node, you can add that service with a Kubernetes `DaemonSet` object.
 
 - Machine config: `MachineConfig` objects contain a subset of Ignition configs in the same format. By applying machine configs to all worker or control plane nodes, you can ensure that the next node of the same type that is added to the cluster has the same changes applied.
 
@@ -50,6 +66,8 @@ All of the features noted here are described in the OpenShift Container Platform
 Additional resources
 
 </div>
+
+- [Kubernetes DaemonSet documentation](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
 
 - [OpenShift Security Guide](https://access.redhat.com/articles/5059881)
 

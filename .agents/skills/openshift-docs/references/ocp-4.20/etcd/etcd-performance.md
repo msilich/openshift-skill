@@ -1,8 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-To ensure optimal performance with etcd, it’s important to understand the conditions that affect performance, including node scaling, leader election, log replication, tuning, latency, network jitter, peer round trip time, database size, and Kubernetes API transaction rates.
+Optimize etcd reliability and scalability by understanding hardware, network, and cluster factors that affect control plane performance, from storage latency to API transaction rates.
 
 # Leader election and log replication of etcd
+
+etcd uses Raft leader election and log replication so the cluster stays consistent during writes. Understanding how the leader handles quorum requests helps you diagnose control plane latency and write failures.
 
 etcd is a consistent, distributed key-value store that operates as a cluster of replicated nodes. Following the Raft algorithm, etcd operates by electing one node as the leader and the others as followers. The leader maintains the system’s current state and ensures that the followers are up-to-date.
 
@@ -28,13 +30,13 @@ Additional resources
 
 # Node scaling for etcd
 
-In general, clusters must have 3 control plane nodes. However, if your cluster is installed on a bare metal platform, it can have up to 5 control plane nodes. If an existing bare-metal cluster has fewer than 5 control plane nodes, you can scale the cluster up as a postinstallation task.
+In general, clusters must have 3 control plane nodes. However, if your cluster is installed on a bare metal platform, it can have up to 5 control plane nodes. If your bare-metal cluster has fewer than 5 control plane nodes, you can scale up the cluster as a postinstallation task.
 
 For example, to scale from 3 to 4 control plane nodes after installation, you can add a host and install it as a control plane node. Then, the etcd Operator scales accordingly to account for the additional control plane node.
 
 Scaling a cluster to 4 or 5 control plane nodes is available only on bare metal platforms.
 
-For more information about how to scale control plane nodes by using the Assisted Installer, see "Adding hosts with the API" and "Replacing a control plane node in a healthy cluster".
+For more information about how to scale control plane nodes by using the Assisted Installer, see "Adding hosts" and "Replacing a control plane node in a healthy cluster".
 
 > [!NOTE]
 > While adding control plane nodes can increase reliability and availability, it can decrease throughput and increase latency, affecting performance.
@@ -50,7 +52,7 @@ The following table shows failure tolerance for clusters of different sizes:
 
 Failure tolerances by cluster size
 
-For more information about recovering from quorum loss, see "Restoring to a previous cluster state".
+For more information about recovering from quorum loss, see "Restoring to an earlier cluster state".
 
 <div>
 
@@ -60,21 +62,23 @@ Additional resources
 
 </div>
 
-- [Adding hosts with the API](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2025/html/installing_openshift_container_platform_with_the_assisted_installer/expanding-the-cluster#adding-hosts-with-the-api_expanding-the-cluster)
+- [Adding hosts](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2026/html/installing_openshift_container_platform_with_the_assisted_installer/installing-with-api#adding-hosts_installing-with-api)
 
-- [Replacing a control plane node in a healthy cluster](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2025/html/installing_openshift_container_platform_with_the_assisted_installer/expanding-the-cluster#installing-control-plane-node-healthy-cluster_expanding-the-cluster)
+- [Replacing a control plane node in a healthy cluster](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2026/html/installing_openshift_container_platform_with_the_assisted_installer/expanding-the-cluster#installing-control-plane-node-healthy-cluster_expanding-the-cluster)
 
-- [Expanding the cluster](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2024/html/installing_openshift_container_platform_with_the_assisted_installer/expanding-the-cluster#installing-control-plane-node-healthy-cluster_expanding-the-cluster)
+- [Expanding the cluster](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2026/html/installing_openshift_container_platform_with_the_assisted_installer/expanding-the-cluster)
 
-- [Restoring to a previous cluster state](../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
+- [Restoring to an earlier cluster state](../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
 
 </div>
 
 # Effects of disk latency on etcd
 
+etcd performance depends heavily on disk latency for fsync operations. Validate storage with `fio` before deployment so you avoid instability, failed writes, and service-affecting control plane events.
+
 An etcd cluster is sensitive to disk latencies. To understand the disk latency that is experienced by etcd in your control plane environment, run the `fio` tests or suite.
 
-Make sure that the final report classifies the disk as appropriate for etcd, as shown in the following example:
+Ensure that the final report classifies the disk as appropriate for etcd, as shown in the following example:
 
 ``` terminal
 ...
@@ -93,6 +97,8 @@ When a high latency disk is used, a message states that the disk is not recommen
 When you use cluster deployments that span multiple data centers that are using disks for etcd that do not meet the recommended latency, it increases the chances of service-affecting failures and dramatically reduces the network latency that the control plane can sustain.
 
 # Monitoring consensus latency for etcd
+
+Use the `etcdctl` command-line interface (CLI) to check endpoint health and consensus latency on a running cluster. Regular monitoring helps you spot delays before they cause leader elections and Kubernetes API instability.
 
 By using the `etcdctl` CLI, you can monitor the latency for reaching consensus as experienced by etcd. You must identify one of the etcd pods and then retrieve the endpoint health.
 
@@ -141,7 +147,7 @@ Procedure
 
     </div>
 
-2.  Enter the following command. To better understand the etcd latency for consensus, you can run this command on a precise watch cycle for a few minutes to observe that the numbers remain below the ~66 ms threshold. The closer the consensus time is to 100 ms, the more likely the cluster will experience service-affecting events and instability.
+2.  Enter the following command. To better understand the etcd latency for consensus, run this command on a precise watch cycle for a few minutes. Observe that the numbers remain below the ~66 ms threshold. The closer the consensus time is to 100 ms, the more likely the cluster experiences service-affecting events and instability.
 
     ``` terminal
     # oc exec -ti etcd-m0 -- etcdctl endpoint health -w table
@@ -197,33 +203,22 @@ Procedure
 
 # Moving etcd to a different disk
 
+Move etcd data from a shared disk to a dedicated disk to resolve or prevent performance problems. Isolating etcd storage reduces latency from competing I/O on the control plane.
+
 You can move etcd from a shared disk to a separate disk to prevent or resolve performance issues.
 
-The Machine Config Operator (MCO) is responsible for mounting a secondary disk for OpenShift Container Platform 4.17 container storage.
+The Machine Config Operator (MCO) is responsible for mounting a secondary disk for OpenShift Container Platform 4.20 container storage.
 
 > [!NOTE]
 > This encoded script only supports device names for the following device types:
 >
-> SCSI or SATA
-> `/dev/sd*`
+> - SCSI or SATA: `/dev/sd*`
 >
-> Virtual device
-> `/dev/vd*`
+> - Virtual device: `/dev/vd*`
 >
-> NVMe
-> `/dev/nvme*[0-9]*n*`
+> - NVMe: `/dev/nvme*[0-9]*n*`
 
-<div>
-
-<div class="title">
-
-Limitations
-
-</div>
-
-- When the new disk is attached to the cluster, the etcd database is part of the root mount. It is not part of the secondary disk or the intended disk when the primary node is recreated. As a result, the primary node will not create a separate `/var/lib/etcd` mount.
-
-</div>
+When the new disk is attached to the cluster, the etcd database is part of the root mount. It is not part of the secondary disk or the intended disk when the primary node is recreated. As a result, the primary node does not create a separate `/var/lib/etcd` mount.
 
 <div>
 
@@ -239,9 +234,9 @@ Prerequisites
 
 - You have access to the cluster with `cluster-admin` privileges.
 
-- Add additional disks before uploading the machine configuration.
+- You have attached additional disks before uploading the machine configuration.
 
-- The `MachineConfigPool` must match `metadata.labels[machineconfiguration.openshift.io/role]`. This applies to a controller, worker, or a custom pool.
+- The `MachineConfigPool` matches `metadata.labels[machineconfiguration.openshift.io/role]`. This applies to a controller, worker, or a custom pool.
 
 </div>
 
@@ -292,7 +287,7 @@ Procedure
     exit 77
     ```
 
-    - Replace `<device_type_glob>` with a shell glob for your block device type. For SCSI or SATA drives, use `/dev/sd*`; for virtual drives, use `/dev/vd*`; for NVMe drives, use `/dev/nvme*[0-9]*n*`.
+    Replace `<device_type_glob>` with a shell glob for your block device type. For SCSI or SATA drives, use `/dev/sd*`; for virtual drives, use `/dev/vd*`; for NVMe drives, use `/dev/nvme*[0-9]*n*`.
 
 3.  Create a base64-encoded string from the `etcd-find-secondary-device.sh` script and note its contents:
 
@@ -300,7 +295,7 @@ Procedure
     $ base64 -w0 etcd-find-secondary-device.sh
     ```
 
-4.  Create a `MachineConfig` YAML file named `etcd-mc.yml` with contents such as the following:
+4.  Create a `MachineConfig` YAML file named `etcd-mc.yml` with contents such as the following example:
 
     ``` yaml
     apiVersion: machineconfiguration.openshift.io/v1
@@ -393,7 +388,7 @@ Procedure
                 WantedBy=multi-user.target graphical.target
     ```
 
-    - Replace `<encoded_etcd_find_secondary_device_script>` with the encoded script contents that you noted.
+    Replace `<encoded_etcd_find_secondary_device_script>` with the encoded script contents that you noted.
 
 5.  Apply the created `MachineConfig` YAML file:
 
@@ -407,7 +402,7 @@ Procedure
 
 <div class="title">
 
-Verification steps
+Verification
 
 </div>
 
@@ -437,23 +432,11 @@ Verification steps
 
 </div>
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Red Hat Enterprise Linux CoreOS (RHCOS)](../architecture/architecture-rhcos.md#architecture-rhcos)
-
-</div>
-
-# Defragmenting etcd data
+# Data defragmentation for etcd
 
 To prevent etcd performance degradation and cluster-wide maintenance alarms on large clusters, monitor etcd database metrics and defragment the data store when the keyspace grows too large.
 
-For large and dense clusters, etcd can suffer from poor performance if the keyspace grows too large and exceeds the space quota. Periodically maintain and defragment etcd to free up space in the data store. Monitor Prometheus for etcd metrics and defragment it when required; otherwise, etcd can raise a cluster-wide alarm that puts the cluster into a maintenance mode that accepts only key reads and deletes.
+For large and dense clusters, etcd can suffer from poor performance if the keyspace grows too large and exceeds the space quota. Periodically maintain and defragment etcd to free up space in the data store. Monitor Prometheus for etcd metrics and defragment it when required. Otherwise, etcd can raise a cluster-wide alarm that puts the cluster into a maintenance mode, which accepts only key reads and deletes.
 
 Monitor these key metrics:
 
@@ -469,16 +452,16 @@ History compaction is performed automatically every five minutes and leaves gaps
 
 Defragmentation occurs automatically, but you can also trigger it manually.
 
-# Automatic defragmentation
+## Automatic defragmentation
 
 When etcd database growth affects performance, the etcd Operator can automatically defragment member disks based on cluster metrics.
 
 > [!NOTE]
-> Automatic defragmentation is good for most cases, because the etcd operator uses cluster information to determine the most efficient operation for the user.
+> Automatic defragmentation works well in most cases because the etcd Operator uses cluster metrics to choose the most efficient defragmentation approach.
 
 The etcd Operator automatically defragments disks. No manual intervention is needed.
 
-Verify that the defragmentation process is successful by viewing one of these logs:
+Verify that defragmentation succeeded by checking one of these logs:
 
 - etcd logs
 
@@ -501,9 +484,9 @@ The following is example log output for unsuccessful defragmentation:
 failed defrag on member: <member_name>, memberID: <member_id>: <error_message>
 ```
 
-# Manual defragmentation
+## Manually defragmenting etcd data
 
-When automatic ectd defragmentation cannot reclaim enough space, manually defragment etcd on each member to restore disk availability and normal cluster operation.
+When automatic etcd defragmentation cannot reclaim enough space, manually defragment etcd on each member to restore disk availability and normal cluster operation.
 
 A Prometheus alert indicates when you need to use manual defragmentation. The alert is displayed in two cases:
 
@@ -514,7 +497,7 @@ A Prometheus alert indicates when you need to use manual defragmentation. The al
 You can also determine whether defragmentation is needed by checking the etcd database size in MB that will be freed by defragmentation with the PromQL expression: `(etcd_mvcc_db_total_size_in_bytes - etcd_mvcc_db_total_size_in_use_in_bytes)/1024/1024`
 
 > [!WARNING]
-> Defragmenting etcd is a blocking action. The etcd member will not respond until defragmentation is complete. For this reason, wait at least one minute between defragmentation actions on each of the pods to allow the cluster to recover.
+> Defragmenting etcd is a blocking action. The etcd member does not respond until defragmentation is complete. For this reason, wait at least one minute between defragmentation actions on each of the pods to allow the cluster to recover.
 
 Follow this procedure to defragment etcd data on each etcd member.
 
@@ -626,7 +609,7 @@ Procedure
 
     5.  Repeat these steps to connect to each of the other etcd members and defragment them. Always defragment the leader last.
 
-        Wait at least one minute between defragmentation actions to allow the etcd pod to recover. Until the etcd pod recovers, the etcd member will not respond.
+        Wait at least one minute between defragmentation actions to allow the etcd pod to recover. Until the etcd pod recovers, the etcd member does not respond.
 
 3.  If any `NOSPACE` alarms were triggered due to the space quota being exceeded, clear them.
 
@@ -652,15 +635,13 @@ Procedure
 
 # Setting tuning parameters for etcd
 
-You can set the control plane hardware speed to `"Standard"`, `"Slower"`, or the default, which is `""`.
+Configure the control plane hardware speed setting for etcd to match your environment’s latency.
 
-The default setting allows the system to decide which speed to use. This value enables upgrades from versions where this feature does not exist, as the system can select values from previous versions.
+You can set the control plane hardware speed to `"Standard"` or `"Slower"`, or use the default, which is `""`.
 
-By selecting one of the other values, you are overriding the default. If you see many leader elections due to timeouts or missed heartbeats and your system is set to `""` or `"Standard"`, set the hardware speed to `"Slower"` to make the system more tolerant to the increased latency.
+The default setting allows the system to decide the speed to use. This value enables upgrades from versions where this feature does not exist, as the system can select values from previous versions.
 
-## Changing hardware speed tolerance
-
-To change the hardware speed tolerance for etcd, complete the following steps.
+By selecting one of the other values, you are overriding the default. If you see many leader elections due to timeouts or missed heartbeats, and your system is set to `""` or `"Standard"`, set the hardware speed to `"Slower"`. This change makes the system more tolerant to the increased latency.
 
 <div>
 
@@ -707,6 +688,8 @@ Procedure
     | `""`       | Varies depending on platform | Varies depending on platform |
     | `Standard` | 100                          | 1000                         |
     | `Slower`   | 500                          | 2500                         |
+
+    Heartbeat interval and leader election timeout by hardware speed profile
 
 3.  Review the output:
 
@@ -766,7 +749,7 @@ Procedure
     $ oc get pods -n openshift-etcd -w
     ```
 
-    The following output shows the expected entries for master-0. Before you continue, wait until all masters show a status of `4/4 Running`.
+    The following output shows the expected entries for the `main-0` control plane node. Before you continue, wait until all control plane nodes show a status of `4/4 Running`.
 
     <div class="formalpara">
 
@@ -777,25 +760,25 @@ Procedure
     </div>
 
     ``` terminal
-    installer-9-ci-ln-qkgs94t-72292-9clnd-master-0           0/1     Pending             0          0s
-    installer-9-ci-ln-qkgs94t-72292-9clnd-master-0           0/1     Pending             0          0s
-    installer-9-ci-ln-qkgs94t-72292-9clnd-master-0           0/1     ContainerCreating   0          0s
-    installer-9-ci-ln-qkgs94t-72292-9clnd-master-0           0/1     ContainerCreating   0          1s
-    installer-9-ci-ln-qkgs94t-72292-9clnd-master-0           1/1     Running             0          2s
-    installer-9-ci-ln-qkgs94t-72292-9clnd-master-0           0/1     Completed           0          34s
-    installer-9-ci-ln-qkgs94t-72292-9clnd-master-0           0/1     Completed           0          36s
-    installer-9-ci-ln-qkgs94t-72292-9clnd-master-0           0/1     Completed           0          36s
-    etcd-guard-ci-ln-qkgs94t-72292-9clnd-master-0            0/1     Running             0          26m
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  4/4     Terminating         0          11m
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  4/4     Terminating         0          11m
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  0/4     Pending             0          0s
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  0/4     Init:1/3            0          1s
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  0/4     Init:2/3            0          2s
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  0/4     PodInitializing     0          3s
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  3/4     Running             0          4s
-    etcd-guard-ci-ln-qkgs94t-72292-9clnd-master-0            1/1     Running             0          26m
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  3/4     Running             0          20s
-    etcd-ci-ln-qkgs94t-72292-9clnd-master-0                  4/4     Running             0          20s
+    installer-9-ci-ln-qkgs94t-72292-9clnd-main-0           0/1     Pending             0          0s
+    installer-9-ci-ln-qkgs94t-72292-9clnd-main-0           0/1     Pending             0          0s
+    installer-9-ci-ln-qkgs94t-72292-9clnd-main-0           0/1     ContainerCreating   0          0s
+    installer-9-ci-ln-qkgs94t-72292-9clnd-main-0           0/1     ContainerCreating   0          1s
+    installer-9-ci-ln-qkgs94t-72292-9clnd-main-0           1/1     Running             0          2s
+    installer-9-ci-ln-qkgs94t-72292-9clnd-main-0           0/1     Completed           0          34s
+    installer-9-ci-ln-qkgs94t-72292-9clnd-main-0           0/1     Completed           0          36s
+    installer-9-ci-ln-qkgs94t-72292-9clnd-main-0           0/1     Completed           0          36s
+    etcd-guard-ci-ln-qkgs94t-72292-9clnd-main-0            0/1     Running             0          26m
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  4/4     Terminating         0          11m
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  4/4     Terminating         0          11m
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  0/4     Pending             0          0s
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  0/4     Init:1/3            0          1s
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  0/4     Init:2/3            0          2s
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  0/4     PodInitializing     0          3s
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  3/4     Running             0          4s
+    etcd-guard-ci-ln-qkgs94t-72292-9clnd-main-0            1/1     Running             0          26m
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  3/4     Running             0          20s
+    etcd-ci-ln-qkgs94t-72292-9clnd-main-0                  4/4     Running             0          20s
     ```
 
     </div>
@@ -825,6 +808,8 @@ Additional resources
 
 # OpenShift Container Platform timer tunables for etcd
 
+OpenShift Container Platform sets platform-specific etcd election timeout and heartbeat interval values. Knowing these tunables helps you align network and disk requirements with expected cluster behavior.
+
 OpenShift Container Platform maintains etcd timers that are optimized for each platform. OpenShift Container Platform has prescribed validated values that are optimized for each platform provider. The default etcd timers with `platform=none` or `platform=metal` are as follows:
 
 ``` terminal
@@ -847,6 +832,8 @@ These values do not provide the whole story for the control plane or even etcd. 
 
 # Determining the size of the etcd database and understanding its effects
 
+etcd database size affects defragmentation duration, resync time after network partitions, and transaction rates. Plan capacity so maintenance and recovery do not degrade cluster stability.
+
 The size of the etcd database has a direct impact on the time to complete the etcd defragmentation process. OpenShift Container Platform automatically runs the etcd defragmentation on one etcd member at a time when it detects at least 45% fragmentation. During the defragmentation process, the etcd member cannot process any requests. On small etcd databases, the defragmentation process happens in less than a second. With larger etcd databases, the disk latency directly impacts the fragmentation time, causing additional latency, as operations are blocked while defragmentation happens.
 
 The size of the etcd database is a factor to consider when network partitions isolate a control plane node for a period and the control plane needs to resync after communication is re-established.
@@ -857,8 +844,8 @@ The magnitude of the effects is specific to the deployment. The time to complete
 
 Consider the following two examples for the type of impacts to plan for.
 
-Example of the effect of etcd defragementation based on database size
-Writing an etcd database of 1 GB to a slow 7200 RPMs disk at 80 Mbit/s takes about 1 minute and 40 seconds. In such a scenario, the defragmentation process takes at least this long, if not longer, to complete the defragmentation.
+Example of the effect of etcd defragmentation based on database size
+Writing an etcd database of 1 GB to a slow 7200 RPMs disk at 80 Mbits/sec takes about 1 minute and 40 seconds. In such a scenario, the defragmentation process takes at least this long, if not longer, to complete the defragmentation.
 
 Example of the effect of database size on etcd synchronization
 If there is a change of 10% of the etcd database during the disconnection of one of the control plane nodes, the resync needs to transfer at least 100 MB. Transferring 100 MB over a 1 Gbps link takes 800 ms. On clusters with regular transactions with the Kubernetes API, the larger the etcd database size, the more network instabilities will cause control plane instabilities.
@@ -875,7 +862,7 @@ Procedure
 
 - To find the database size in the OpenShift Container Platform console, go to the **etcd** dashboard to view a plot that reports the size of the etcd database.
 
-- To find the database size by using the etcdctl tool, you can enter two commands:
+- To find the database size by using the `etcdctl` tool, enter the following commands:
 
   1.  Enter the following command to list the pods:
 
@@ -926,6 +913,8 @@ Procedure
 
 # Increasing the database size for etcd
 
+Increase the etcd disk quota when low space or excessive growth alerts appear. Expanding the quota before etcd runs out of space prevents write failures and cluster instability.
+
 You can set the disk quota in gibibytes (GiB) for each etcd instance. If you set a disk quota for your etcd instance, you can specify integer values from 8 to 32. The default value is 8. You can specify only increasing values.
 
 You might want to increase the disk quota if you encounter a `low space` alert. This alert indicates that the cluster is too large to fit in etcd despite automatic compaction and defragmentation. If you see this alert, you need to increase the disk quota immediately because after etcd runs out of space, writes fail.
@@ -940,10 +929,6 @@ For large etcd databases, the control plane nodes must have additional memory an
 > Increasing the database size for etcd is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
-
-## Changing the etcd database size
-
-To change the database size for etcd, complete the following steps.
 
 <div>
 
@@ -1079,17 +1064,21 @@ Verification
 
 </div>
 
-## Troubleshooting
+# Troubleshooting etcd database size increases
 
-If you encounter issues when you try to increase the database size for etcd, the following troubleshooting steps might help.
+Resolve common errors when increasing the etcd disk quota, including values that are too small, too large, or lower than the current setting.
 
-### Value is too small
+If you encounter issues when you try to increase the database size for etcd, the following examples might help.
 
-If the value that you specify is less than `8`, you see the following error message:
+## Value is too small
+
+If the value that you specify is less than `8`, you see an error message. For example, if you enter the following command:
 
 ``` terminal
 $ oc patch etcd/cluster --type=merge -p '{"spec": {"backendQuotaGiB": 5}}'
 ```
+
+The following error message is displayed:
 
 <div class="formalpara">
 
@@ -1109,13 +1098,15 @@ The Etcd "cluster" is invalid:
 
 To resolve this issue, specify an integer between `8` and `32`.
 
-### Value is too large
+## Value is too large
 
-If the value that you specify is greater than `32`, you see the following error message:
+If the value that you specify is greater than `32`, you see an error message. For example, if you enter the following command:
 
 ``` terminal
 $ oc patch etcd/cluster --type=merge -p '{"spec": {"backendQuotaGiB": 64}}'
 ```
+
+The following error message is displayed:
 
 <div class="formalpara">
 
@@ -1133,55 +1124,57 @@ The Etcd "cluster" is invalid: spec.backendQuotaGiB: Invalid value: 64: spec.bac
 
 To resolve this issue, specify an integer between `8` and `32`.
 
-### Value is decreasing
+## Value is decreasing
 
 If the value is set to a valid value between `8` and `32`, you cannot decrease the value. Otherwise, you see an error message.
 
-1.  Check to see the current value by entering the following command:
+For example, check the current value by entering the following command:
 
-    ``` terminal
-    $ oc describe etcd/cluster | grep "Backend Quota"
-    ```
+``` terminal
+$ oc describe etcd/cluster | grep "Backend Quota"
+```
 
-    <div class="formalpara">
+<div class="formalpara">
 
-    <div class="title">
+<div class="title">
 
-    Example output
+Example output
 
-    </div>
+</div>
 
-    ``` terminal
-    Backend Quota Gi B: 10
-    ```
+``` terminal
+Backend Quota Gi B: 10
+```
 
-    </div>
+</div>
 
-2.  Decrease the disk quota value by entering the following command:
+If you decrease the disk quota value by entering the following command, an error message is displayed.
 
-    ``` terminal
-    $ oc patch etcd/cluster --type=merge -p '{"spec": {"backendQuotaGiB": 8}}'
-    ```
+``` terminal
+$ oc patch etcd/cluster --type=merge -p '{"spec": {"backendQuotaGiB": 8}}'
+```
 
-    <div class="formalpara">
+<div class="formalpara">
 
-    <div class="title">
+<div class="title">
 
-    Example error message
+Example error message
 
-    </div>
+</div>
 
-    ``` terminal
-    The Etcd "cluster" is invalid: spec.backendQuotaGiB: Invalid value: "integer": etcd backendQuotaGiB may not be decreased
-    ```
+``` terminal
+The Etcd "cluster" is invalid: spec.backendQuotaGiB: Invalid value: "integer": etcd backendQuotaGiB may not be decreased
+```
 
-    </div>
+</div>
 
-3.  To resolve this issue, specify an integer greater than `10`.
+To resolve this issue, specify an integer greater than `10`.
 
 # Measuring network jitter between control plane nodes
 
-The value of the heartbeat interval should be around the maximum of the average round-trip time (RTT) between members, normally around 1.5 times the round-trip time. With the OpenShift Container Platform default heartbeat interval of 100 ms, the recommended RTT between control plane nodes is less than approximately 33 ms with a maximum of less than 66 ms (66 ms multiplied by 1.5 equals 99 ms). For more information, see "Setting tuning parameters for etcd". Any network latency that is higher might cause service-affecting events and cluster instability.
+Measure network jitter between control plane nodes to validate latency for etcd heartbeats. High jitter causes missed heartbeats, leader loss, and Kubernetes API request failures.
+
+The value of the heartbeat interval should be around the maximum of the average round-trip time (RTT) between members, normally around 1.5 times the RTT. With the OpenShift Container Platform default heartbeat interval of 100 ms, the recommended RTT between control plane nodes is less than approximately 33 ms. The maximum RTT should be less than 66 ms (66 ms multiplied by 1.5 equals 99 ms). For more information, see "Setting tuning parameters for etcd". Any network latency that is higher might cause service-affecting events and cluster instability.
 
 The network latency is influenced by many factors, including but not limited to the following factors:
 
@@ -1193,7 +1186,7 @@ A good evaluation reference is the comparison of the network latency in the orga
 
 Consider network latency with network jitter for more accurate calculations. *Network jitter* is the variance in network latency or, more specifically, the variation in the delay of received packets. On ideal network conditions, the jitter is as close to zero as possible. Network jitter affects the network latency calculations for etcd because the actual network latency over time will be the RTT plus or minus jitter. For example, a network with a maximum latency of 80 ms and jitter of 30 ms will experience latencies of 110 ms, which means etcd is missing heartbeats, causing request timeouts and temporary leader loss. During a leader loss and reelection, the Kubernetes API cannot process any request that causes a service-affecting event and instability of the cluster.
 
-It’s important to measure the network jitter among all control plane nodes. To do so, you can use the `iPerf3` tool in UDP mode.
+It is important to measure the network jitter among all control plane nodes. To do so, you can use the `iPerf3` tool in UDP mode.
 
 <div>
 
@@ -1203,7 +1196,7 @@ Prerequisite
 
 </div>
 
-- You built your own iPerf image. For more information, see the following Red Hat Knowledgebase articles
+- You built your own `iPerf` image. For more information, see the following Red Hat Knowledgebase articles:
 
   - [Testing Network Bandwidth in OpenShift using iPerf Container](https://access.redhat.com/articles/5233541)
 
@@ -1219,13 +1212,13 @@ Procedure
 
 </div>
 
-1.  Connect to one of the control plane nodes and run the iPerf container as iPerf server in host network mode. When you are running in server mode, the tool accepts TCP and UDP tests. Enter the following command, being careful to replace `<iperf_image>` with your iPerf image:
+1.  Connect to one of the control plane nodes and run the `iPerf` container as `iPerf` server in host network mode. When you are running in server mode, the tool accepts TCP and UDP tests. Enter the following command, being careful to replace `<iperf_image>` with your `iPerf` image:
 
     ``` terminal
     # podman run -ti --rm --net host <iperf_image> iperf3 -s
     ```
 
-2.  Connect to another control plane node and run the iPerf in UDP client mode by entering the following command:
+2.  Connect to another control plane node and run the `iPerf3` tool in UDP client mode by entering the following command:
 
     ``` terminal
     # podman run -ti --rm --net host <iperf_image> iperf3 -u -c <node_iperf_server> -t 300
@@ -1251,7 +1244,7 @@ Procedure
     Starting pod/m1-debug ...
     To use host binaries, run `chroot /host`
     Pod IP: 198.18.111.13
-    If you don't see a command prompt, try pressing enter.
+    If you do not see a command prompt, try pressing Enter.
     ```
 
     </div>
@@ -1298,7 +1291,7 @@ Procedure
 
     </div>
 
-5.  On the iPerf server, the output shows the jitter on every second interval. The average is shown at the end. For the purpose of this test, you want to identify the maximum jitter that is experienced during the test, ignoring the output of the first second as it might contain an invalid measurement. Enter the following command:
+5.  On the `iPerf` server, the output shows the jitter on every second interval. The average is shown at the end. For the purpose of this test, you want to identify the maximum jitter that is experienced during the test, ignoring the output of the first second as it might contain an invalid measurement. Enter the following command:
 
     ``` terminal
     # oc debug node/m0
@@ -1316,7 +1309,7 @@ Procedure
     Starting pod/m0-debug ...
     To use host binaries, run `chroot /host`
     Pod IP: 198.18.111.12
-    If you don't see a command prompt, try pressing enter.
+    If you do not see a command prompt, try pressing Enter.
     ```
 
     </div>
@@ -1383,16 +1376,30 @@ Procedure
 
 </div>
 
-# How etcd peer round trip time affects performance
+<div>
 
-The etcd peer round trip time is an end-to-end test metric on how quickly something can be replicated among members. It shows the latency of etcd to finish replicating a client request among all the etcd members. The etcd peer round trip time is not the same thing as the network round trip time.
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Setting tuning parameters for etcd](etcd-performance.md#etcd-tuning-parameters_etcd-performance)
+
+</div>
+
+# How etcd peer round-trip time affects performance
+
+The etcd peer round-trip time (RTT) metric shows replication latency across members, beyond raw network RTT. Monitor it to detect control plane slowdowns before they affect cluster operations.
+
+The etcd peer RTT is an end-to-end test metric on how quickly something can be replicated among members. It shows the latency of etcd to finish replicating a client request among all the etcd members. The etcd peer RTT is not the same thing as the network RTT.
 
 You can monitor various etcd metrics on dashboards in the OpenShift Container Platform console. In the console, click **Observe** → **Dashboards** and from the dropdown list, select **etcd**.
 
-Near the end of the **etcd** dashboard, you can find a plot that summarizes the etcd peer round trip time.
+Near the end of the **etcd** dashboard, you can find a plot that summarizes the etcd peer RTT.
 
 > [!NOTE]
-> These etcd metrics are collected by the OpenShift metrics system in Prometheus. You can access them from the CLI by following the Red Hat Knowledgebase solution, [How to query from the command line Prometheus statistics](https://access.redhat.com/solutions/5151831).
+> These etcd metrics are collected by the OpenShift Container Platform metrics system in Prometheus. You can access them from the CLI by using a Prometheus query. For more information, see the Red Hat Knowledgebase solution, "How to query from the command line Prometheus statistics".
 
 ``` terminal
 # Get token to connect to Prometheus
@@ -1401,7 +1408,7 @@ export TOKEN=$(oc get secret $SECRET -n openshift-user-workload-monitoring -o js
 export THANOS_QUERIER_HOST=$(oc get route thanos-querier -n openshift-monitoring -o json | jq -r '.spec.host')
 ```
 
-Queries must be URL-encoded. The following example shows how to retrieve the metrics that are reporting the round trip time (in seconds) for etcd to finish replicating the client requests among the members:
+Queries must be URL-encoded. The following example shows how to retrieve the metrics that are reporting the RTT (in seconds) for etcd to finish replicating the client requests among the members:
 
 ``` terminal
 # prometheus query
@@ -1410,7 +1417,7 @@ query="histogram_quantile(0.99, rate(etcd_network_peer_round_trip_time_seconds_b
 # urlencoded query
 encoded_query=$(printf "%s" $query |jq -sRr @uri)
 
-# querying the OpenShift metrics service
+# querying the metrics service
 curl -s -X GET -k -H "Authorization: Bearer $TOKEN" "https://$THANOS_QUERIER_HOST/api/v1/query?query=$encoded_query" | jq '.data.result[] | .metric.pod,.value[1]'
 
 "etcd-m2"
@@ -1423,16 +1430,30 @@ curl -s -X GET -k -H "Authorization: Bearer $TOKEN" "https://$THANOS_QUERIER_HOS
 
 The following metrics are also relevant to understanding etcd performance:
 
-etcd_disk_wal_fsync_duration_seconds_bucket
-Reports the etcd WAL fsync duration.
+`etcd_disk_wal_fsync_duration_seconds_bucket`
+Reports the etcd write-ahead log (WAL) fsync duration.
 
-etcd_disk_backend_commit_duration_seconds_bucket
+`etcd_disk_backend_commit_duration_seconds_bucket`
 Reports the etcd backend commit latency duration.
 
-etcd_server_leader_changes_seen_total
+`etcd_server_leader_changes_seen_total`
 Reports the leader changes.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [How to query from the command line Prometheus statistics (Red Hat Knowledgebase)](https://access.redhat.com/solutions/5151831)
+
+</div>
+
 # Determining Kubernetes API transaction rate for your environment
+
+Test sustained Kubernetes API transaction rates for stretched control plane deployments by using `kube-burner-ocp` density profiles. Validate limits before production workloads exceed etcd capacity.
 
 When you are using stretched control planes, the Kubernetes API transaction rate depends on the characteristics of the particular deployment. Specifically, it depends on the following combined factors:
 
@@ -1442,7 +1463,9 @@ When you are using stretched control planes, the Kubernetes API transaction rate
 
 - The size of objects that are being written to the API
 
-As a result, when you use stretched control planes, cluster administrators must test the environment to determine the sustained transaction rate that is possible for the environment. The `kube-burner` tool is useful for that purpose. The binary includes a wrapper for testing OpenShift clusters: `kube-burner-ocp`. You can use `kube-burner-ocp` to test cluster or node density. To test the control plane, `kube-burner-ocp` has three workload profiles: cluster-density, cluster-density-v2, and cluster-density-ms. Each workload profile creates a series of resources that are designed to load the control plane. For more information about each profile, see the `kube-burner-ocp` workload documentation.
+As a result, when you use stretched control planes, cluster administrators must test the environment to determine the sustained transaction rate that is possible for the environment. The `kube-burner` tool is useful for that purpose. The binary includes a wrapper for testing OpenShift clusters: `kube-burner-ocp`. You can use `kube-burner-ocp` to test cluster or node density.
+
+To test the control plane, `kube-burner-ocp` has three workload profiles: `cluster-density`, `cluster-density-v2`, and `cluster-density-ms`. Each workload profile creates a series of resources that are designed to load the control plane. For more information about each profile, see the `kube-burner-ocp` workload documentation.
 
 <div>
 
@@ -1458,9 +1481,9 @@ Procedure
     # kube-burner ocp cluster-density-ms --churn-duration 20m --churn-delay 0s --iterations 10 --timeout 30m
     ```
 
-2.  The OpenShift Container Platform console provides a dashboard with all the relevant API performance information. To access API performance information, click **Observe** → **Dashboards**, and from the **Dashboards** menu, click **API Performance**.
+2.  The OpenShift Container Platform console provides a dashboard with all the relevant API performance information. To access API performance information, click **Observe** → **Dashboards**. From the **Dashboards** menu, click **API Performance**.
 
-3.  During the run, observe the API performance dashboard in the OpenShift Container Platform console by clicking **Observe** → **Dashboards**, and from the **Dashboards** menu, click **API Performance**.
+3.  During the run, observe the API performance dashboard in the OpenShift Container Platform console by clicking **Observe** → **Dashboards**. From the **Dashboards** menu, click **API Performance**.
 
     On the dashboard, notice how the control plane responds during load and the 99th percentile transaction rate it can achieve for the execution of various verbs and request rates by read and write. Use this information and the knowledge of your organization’s workload to determine the load that the organization can put in the clusters for the specific stretched control plane deployment.
 

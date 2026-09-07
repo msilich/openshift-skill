@@ -17,24 +17,27 @@ Example metadata.yaml file
 ``` yaml
 apiVersion: v2
 parts:
-  - name: Part1
+  - name: <part_name>
     components:
-      - name: Component1
-        <component1_configuration>
-  - name: Part2
-      - name: Component2
-        <component2_configuration>
+      - name: <component_name>
+        <component_configuration>
+  - name: <part_name>
+      - name: <component_name>
+        <component_configuration>
 ```
 
 </div>
 
-- Every `part` typically describes a workload or a set of workloads.
+where:
 
-- Specify a `part` name.
+`<part_name>`
+Specify a `part` name. Every `part` typically describes a workload or a set of workloads.
 
-- Specify a `component` name.
+`<component_name>`
+Specify a `component` name.
 
-- Specify the configuration for a template. For example, define template relationships or configure what fields to use in a comparison.
+`<component_configuration>`
+Specify the configuration for a template. For example, define template relationships or configure what fields to use in a comparison.
 
 # Configuring template relationships
 
@@ -92,17 +95,25 @@ Procedure
 
   </div>
 
-  - Specifies required templates.
+  where:
 
-  - Specifies a group of templates that are either all required or all optional. If one corresponding custom resource (CR) is present in the cluster, then all corresponding CRs must be present in the cluster.
+  `allOf`
+  Specifies required templates.
 
-  - Specifies optional templates.
+  `allOrNoneOf`
+  Specifies a group of templates that are either all required or all optional. If one corresponding custom resource (CR) is present in the cluster, then all corresponding CRs must be present in the cluster.
 
-  - Specifies templates to exclude. If a corresponding CR is present in the cluster, the plugin returns a validation error.
+  `anyOf`
+  Specifies optional templates.
 
-  - Specifies templates where only one can be present. If none, or more than one of the corresponding CRs are present in the cluster, the plugin returns a validation error .
+  `noneOf`
+  Specifies templates to exclude. If a corresponding CR is present in the cluster, the plugin returns a validation error.
 
-  - Specifies templates where only one can be present in the cluster. If more than one of the corresponding CRs are present in the cluster, the plugin returns a validation error.
+  `oneOf`
+  Specifies templates where only one can be present. If none, or more than one of the corresponding CRs are present in the cluster, the plugin returns a validation error.
+
+  `anyOneOf`
+  Specifies templates where only one can be present in the cluster. If more than one of the corresponding CRs are present in the cluster, the plugin returns a validation error.
 
 </div>
 
@@ -156,13 +167,19 @@ Procedure
       {{- end }}
   ```
 
-  - Configures a required field that must match the specified value.
+  where:
 
-  - Configures a required field that can have any value.
+  `name: frontend`
+  Configures a required field that must match the specified value.
 
-  - Configures validation for the `.spec.type` field.
+  `namespace: \{{ .metadata.namespace }}`
+  Configures a required field that can have any value.
 
-  - Configures an optional field.
+  `type: \{{.spec.type }}`
+  Configures validation for the `.spec.type` field.
+
+  `\{{- if .spec.selector.tier }}`
+  Configures an optional field.
 
 </div>
 
@@ -358,7 +375,10 @@ Procedure
   #...
   ```
 
-  - Specify `true` to exclude from the comparison all fields in a CR that are not explicitly configured in the corresponding `namespace.yaml` template.
+  where:
+
+  `ignore-unspecified-fields: true`
+  Specify `true` to exclude from the comparison all fields in a CR that are not explicitly configured in the corresponding `namespace.yaml` template.
 
 </div>
 
@@ -399,9 +419,13 @@ Procedure
 
   </div>
 
-  - Sets the default exclusion for all templates, unless overridden by the `config.fieldsToOmitRefs` field for a specific template.
+  where:
 
-  - The value is excluded for all templates.
+  `defaultOmitRef: default`
+  Sets the default exclusion for all templates, unless overridden by the `config.fieldsToOmitRefs` field for a specific template.
+
+  `pathToKey: a.custom.default."k8s.io"`
+  The value is excluded for all templates.
 
 </div>
 
@@ -448,12 +472,16 @@ Procedure
 
   </div>
 
-  - References the `fieldsToOmit.items.deployments` item for the `deployment.yaml` template.
+  where:
 
-  - Excludes the `spec.selector.matchLabels.k8s-app` field from the comparison.
+  `deployments`
+  References the `fieldsToOmit.items.deployments` item for the `deployment.yaml` template.
 
-    > [!NOTE]
-    > Setting `fieldsToOmitRefs` replaces the default value.
+  `pathToKey: spec.selector.matchLabels.k8s-app`
+  Excludes the `spec.selector.matchLabels.k8s-app` field from the comparison.
+
+  > [!NOTE]
+  > Setting `fieldsToOmitRefs` replaces the default value.
 
 </div>
 
@@ -503,7 +531,10 @@ Procedure
 
   </div>
 
-  - The `common` group is included in the default group.
+  where:
+
+  `include: common`
+  The `common` group is included in the default group.
 
 </div>
 
@@ -547,9 +578,13 @@ Procedure
               inlineDiffFunc: regex
     ```
 
-    - Specifies the field for inline validation.
+    where:
 
-    - Enables inline validation using regular expressions.
+    `pathToKey: spec.bigTextBlock`
+    Specifies the field for inline validation.
+
+    `inlineDiffFunc: regex`
+    Enables inline validation using regular expressions.
 
 2.  Use a regular expression to validate the field in the associated template:
 
@@ -597,13 +632,19 @@ Procedure
               inlineDiffFunc: capturegroups
     ```
 
-    - Specifies the field for inline validation.
+    where:
 
-    - Enables inline validation using capture groups.
+    `pathToKey: data.username`
+    Specifies the field for inline validation.
 
-    - Specifies the multi-line field for capture-group validation.
+    `inlineDiffFunc: regex`
+    Enables inline validation using capture groups.
 
-    - Enables inline validation using capture groups.
+    `pathToKey: spec.bigTextBlock`
+    Specifies the multi-line field for capture-group validation.
+
+    `inlineDiffFunc: capturegroups`
+    Enables inline validation using capture groups.
 
 2.  Use a regular expression to validate the field in the associated template:
 
@@ -620,23 +661,15 @@ Procedure
         It should match this capture group: (?<username>[a-z0-9]+).
     ```
 
-    - If the username value in the `data.username` field and the value captured in `bigTextBlock` do not match, the `cluster-compare` plugin warns you about the inconsistent matching.
-
-      <div class="formalpara">
-
-      <div class="title">
-
-      Example output with warning about the inconsistent matching:
-
-      </div>
-
-      ``` terminal
-      WARNING: Capturegroup (?<username>…) matched multiple values: « mismatchuser | exampleuser »
-      ```
-
-      </div>
+    If the username value captured in the `data.username` field does not match the value captured in `bigTextBlock`, the `cluster-compare` plugin warns you about the inconsistent matching.
 
 </div>
+
+The following is example output with a warning about the inconsistent matching:
+
+``` terminal
+WARNING: Capturegroup (?<username>…) matched multiple values: « mismatchuser | exampleuser »
+```
 
 # Configuring descriptions for the output
 

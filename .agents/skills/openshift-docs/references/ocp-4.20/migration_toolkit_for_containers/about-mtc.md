@@ -152,7 +152,7 @@ For more details about EUS, see [Extended Update Support](https://access.redhat.
 
 # MTC workflow
 
-You can migrate Kubernetes resources, persistent volume data, and internal container images to OpenShift Container Platform 4.17 by using the Migration Toolkit for Containers (MTC) web console or the Kubernetes API.
+You can migrate Kubernetes resources, persistent volume data, and internal container images to OpenShift Container Platform 4.20 by using the Migration Toolkit for Containers (MTC) web console or the Kubernetes API.
 
 MTC migrates the following resources:
 

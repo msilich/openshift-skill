@@ -551,7 +551,7 @@ Procedure
     1.  Pull the `ztp-site-generate` container image by running the following command:
 
         ``` bash
-        podman pull registry.redhat.io/openshift4/ztp-site-generate-rhel8:4.17
+        podman pull registry.redhat.io/openshift4/ztp-site-generate-rhel8:4.20
         ```
 
     2.  Run the `siteconfig-converter` tool interactively through the container by running the following command:

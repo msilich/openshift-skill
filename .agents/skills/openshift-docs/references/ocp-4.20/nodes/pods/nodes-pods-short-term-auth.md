@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Some OpenShift Container Platform clusters use [short-term security credentials for individual components](../../authentication/managing_cloud_provider_credentials/cco-short-term-creds.md#cco-short-term-creds) that are created and managed outside the cluster. Applications in customer workloads on these clusters can authenticate by using the short-term authentication method that the cluster uses.
+Some OpenShift Container Platform clusters use short-term security credentials, created and managed outside the cluster, for individual components. Applications in customer workloads on these clusters can authenticate by using the short-term authentication method that the cluster uses.
 
-# Configuring short-term authentication for workloads
+# Short-term authentication for workloads
 
-To use this authentication method in your applications, you must complete the following steps:
+To use short-term authentication in your applications, you must configure access in your cloud provider, create an OpenShift Container Platform service account, and deploy workloads that use this authentication method.
 
 1.  Create a federated identity service account in the Identity and Access Management (IAM) settings for your cloud provider.
 
@@ -14,23 +14,27 @@ To use this authentication method in your applications, you must complete the fo
 
 ## Environment and user access requirements
 
+To configure short-term authentication for workloads, you must meet specific environment and user access requirements.
+
 To configure this authentication method, you must meet the following requirements:
 
-- Your cluster must use [short-term security credentials](../../authentication/managing_cloud_provider_credentials/cco-short-term-creds.md#cco-short-term-creds).
+- Your cluster must use short-term security credentials.
 
 - You must have access to the OpenShift CLI (`oc`) as a user with the `cluster-admin` role.
 
 - In your cloud provider console, you must have access as a user with privileges to manage Identity and Access Management (IAM) and federated identity configurations.
 
-# Configuring GCP Workload Identity authentication for applications on Google Cloud
+# GCP Workload Identity authentication for applications on Google Cloud
 
-To use short-term authentication for applications on a Google Cloud clusters that use GCP Workload Identity authentication, you must complete the following steps:
+You can configure GCP Workload Identity authentication so that applications on a Google Cloud cluster can authenticate with Google Cloud services by using short-term credentials instead of long-lived service account keys.
 
-1.  [Configure access in Google Cloud.](nodes-pods-short-term-auth.md#pod-short-term-auth-gcp-cloud-sa_nodes-pods-short-term-auth)
+To configure this authentication method, complete the following tasks:
 
-2.  [Create an OpenShift Container Platform service account that can use this access.](nodes-pods-short-term-auth.md#pod-short-term-auth-gcp-cluster-sa_nodes-pods-short-term-auth)
+- Configure access in Google Cloud.
 
-3.  [Deploy customer workloads that authenticate with GCP Workload Identity.](nodes-pods-short-term-auth.md#pod-short-term-auth-gcp-deploy-pod_nodes-pods-short-term-auth)
+- Create an OpenShift Container Platform service account that can use this access.
+
+- Deploy customer workloads that authenticate with GCP Workload Identity.
 
 ## Creating a federated Google Cloud service account
 
@@ -183,15 +187,21 @@ Verification
       cloud.google.com/injection-mode: "direct"
   ```
 
-  - The workload identity provider for the service account of the cluster.
-
-  - The allowed audience for the workload identity provider.
-
-  - The token expiration time period in seconds.
-
-  - The `direct` external credentials configuration injection mode.
-
   </div>
+
+  where:
+
+  `metadata.annotations.cloud.google.com/workload-identity-provider`
+  Specifies the workload identity provider for the service account of the cluster.
+
+  `metadata.annotations.cloud.google.com/audience`
+  Specifies the allowed audience for the workload identity provider.
+
+  `metadata.annotations.cloud.google.com/token-expiration`
+  Specifies the token expiration time period in seconds.
+
+  `metadata.annotations.cloud.google.com/injection-mode`
+  Specifies the `direct` external credentials configuration injection mode.
 
 </div>
 
@@ -263,7 +273,7 @@ Procedure
 
     </div>
 
-    - Specify the name of the OpenShift Container Platform service account.
+    Replace \<service_account_name\> with the name of the OpenShift Container Platform service account.
 
 2.  Apply the deployment file by running the following command:
 
@@ -281,104 +291,104 @@ Verification
 
 </div>
 
-- To verify that a pod is using short-term authentication, run the following command:
+1.  To verify that a pod is using short-term authentication, run the following command:
 
-  ``` terminal
-  $ oc get pods -o json | jq -r '.items[0].spec.containers[0].env[] | select(.name=="GOOGLE_APPLICATION_CREDENTIALS")'
-  ```
+    ``` terminal
+    $ oc get pods -o json | jq -r '.items[0].spec.containers[0].env[] | select(.name=="GOOGLE_APPLICATION_CREDENTIALS")'
+    ```
 
-  <div class="formalpara">
+    <div class="formalpara">
 
-  <div class="title">
+    <div class="title">
 
-  Example output
+    Example output:
 
-  </div>
+    </div>
 
-  ``` terminal
-  {   "name": "GOOGLE_APPLICATION_CREDENTIALS",   "value": "/var/run/secrets/workload-identity/federation.json" }
-  ```
+    ``` terminal
+    {   "name": "GOOGLE_APPLICATION_CREDENTIALS",   "value": "/var/run/secrets/workload-identity/federation.json" }
+    ```
 
-  </div>
+    </div>
 
-  The presence of the `GOOGLE_APPLICATION_CREDENTIALS` environment variable indicates a pod that authenticates with GCP Workload Identity.
+    The presence of the `GOOGLE_APPLICATION_CREDENTIALS` environment variable indicates a pod that authenticates with GCP Workload Identity.
 
-- To verify additional configuration details, examine the pod specification. The following example pod specifications show the environment variables and volume fields that the webhook mutates.
+2.  To verify additional configuration details, examine the pod specification.
 
-  <div class="formalpara">
+    The following example pod specification shows the environment variables and volume fields that the webhook mutates.
 
-  <div class="title">
-
-  Example pod specification with the `direct` injection mode:
-
-  </div>
-
-  ``` yaml
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    name: app-x-pod
-    namespace: service-a
-  annotations:
-    cloud.google.com/skip-containers: "init-first,sidecar"
-    cloud.google.com/external-credentials-json: |-
-      {
-        "type": "external_account",
-        "audience": "//iam.googleapis.com/projects/<project_number>/locations/global/workloadIdentityPools/on-prem-kubernetes/providers/<identity_provider>",
-        "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
-        "token_url": "https://sts.googleapis.com/v1/token",
-        "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/app-x@project.iam.gserviceaccount.com:generateAccessToken",
-        "credential_source": {
-          "file": "/var/run/secrets/sts.googleapis.com/serviceaccount/token",
-          "format": {
-            "type": "text"
+    ``` yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: app-x-pod
+      namespace: service-a
+    annotations:
+      cloud.google.com/skip-containers: "init-first,sidecar"
+      cloud.google.com/external-credentials-json: |-
+        {
+          "type": "external_account",
+          "audience": "//iam.googleapis.com/projects/<project_number>/locations/global/workloadIdentityPools/on-prem-kubernetes/providers/<identity_provider>",
+          "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
+          "token_url": "https://sts.googleapis.com/v1/token",
+          "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/app-x@project.iam.gserviceaccount.com:generateAccessToken",
+          "credential_source": {
+            "file": "/var/run/secrets/sts.googleapis.com/serviceaccount/token",
+            "format": {
+              "type": "text"
+            }
           }
         }
-      }
-  spec:
-    serviceAccountName: app-x
-    initContainers:
-    - name: init-first
-      image: container-image:version
-    containers:
-    - name: sidecar
-      image: container-image:version
-    - name: container-name
-      image: container-image:version
-      env:
-      - name: GOOGLE_APPLICATION_CREDENTIALS
-        value: /var/run/secrets/gcloud/config/federation.json
-      - name: CLOUDSDK_COMPUTE_REGION
-        value: asia-northeast1
-      volumeMounts:
+    spec:
+      serviceAccountName: app-x
+      initContainers:
+      - name: init-first
+        image: container-image:version
+      containers:
+      - name: sidecar
+        image: container-image:version
+      - name: container-name
+        image: container-image:version
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/run/secrets/gcloud/config/federation.json
+        - name: CLOUDSDK_COMPUTE_REGION
+          value: asia-northeast1
+        volumeMounts:
+        - name: gcp-iam-token
+          readOnly: true
+          mountPath: /var/run/secrets/sts.googleapis.com/serviceaccount
+        - mountPath: /var/run/secrets/gcloud/config
+          name: external-credential-config
+          readOnly: true
+      volumes:
       - name: gcp-iam-token
-        readOnly: true
-        mountPath: /var/run/secrets/sts.googleapis.com/serviceaccount
-      - mountPath: /var/run/secrets/gcloud/config
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: sts.googleapis.com
+              expirationSeconds: 86400
+              path: token
+      - downwardAPI:
+          defaultMode: 288
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.annotations['cloud.google.com/external-credentials-json']
+            path: federation.json
         name: external-credential-config
-        readOnly: true
-    volumes:
-    - name: gcp-iam-token
-      projected:
-        sources:
-        - serviceAccountToken:
-            audience: sts.googleapis.com
-            expirationSeconds: 86400
-            path: token
-    - downwardAPI:
-        defaultMode: 288
-        items:
-        - fieldRef:
-            apiVersion: v1
-            fieldPath: metadata.annotations['cloud.google.com/external-credentials-json']
-          path: federation.json
-      name: external-credential-config
-  ```
+    ```
 
-  </div>
+    where:
 
-  - The external credentials configuration generated by the webhook controller. The Kubernetes `downwardAPI` volume mounts the configuration into the container filesystem.
+    `annotations.cloud.google.com/external-credentials-json`
+    Specifies the external credentials configuration generated by the webhook controller. The Kubernetes `downwardAPI` volume mounts the configuration into the container filesystem.
 
-  - The webhook-injected environment variables for token-based authentication.
+    `spec.containers.env`
+    Specifies the webhook-injected environment variables for token-based authentication.
 
 </div>
+
+# Additional resources
+
+- [Short-term credentials for components](../../authentication/managing_cloud_provider_credentials/cco-short-term-creds.md#cco-short-term-creds)

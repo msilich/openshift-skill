@@ -1,12 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Learn about the Driver Toolkit and how you can use it as a base image for driver containers for enabling special software and hardware devices on OpenShift Container Platform deployments.
+The Driver Toolkit is a base container image for building driver containers that enable specialized hardware and software devices on OpenShift Container Platform clusters.
 
 # About the Driver Toolkit
 
-## Background
-
-The Driver Toolkit is a container image in the OpenShift Container Platform payload used as a base image on which you can build driver containers. The Driver Toolkit image includes the kernel packages commonly required as dependencies to build or install kernel modules, as well as a few tools needed in driver containers. The version of these packages will match the kernel version running on the Red Hat Enterprise Linux CoreOS (RHCOS) nodes in the corresponding OpenShift Container Platform release.
+The Driver Toolkit is a container image in the OpenShift Container Platform release that provides kernel packages and tools for building driver containers. Its package versions match the kernel running on Red Hat Enterprise Linux CoreOS (RHCOS) nodes in each release.
 
 Driver containers are container images used for building and deploying out-of-tree kernel modules and drivers on container operating systems like RHCOS. Kernel modules and drivers are software libraries running with a high level of privilege in the operating system kernel. They extend the kernel functionalities or provide the hardware-specific code required to control new devices. Examples include hardware devices like Field Programmable Gate Arrays (FPGA) or GPUs, and software-defined storage (SDS) solutions, such as Lustre parallel file systems, which require kernel modules on client machines. Driver containers are the first layer of the software stack used to enable these technologies on Kubernetes.
 
@@ -44,21 +42,29 @@ The Driver Toolkit also has several tools that are commonly needed to build and 
 
 - dependencies for the above
 
-## Purpose
-
-Prior to the Driver Toolkit’s existence, users would install kernel packages in a pod or build config on OpenShift Container Platform using [entitled builds](https://www.openshift.com/blog/how-to-use-entitled-image-builds-to-build-drivercontainers-with-ubi-on-openshift) or by installing from the kernel RPMs in the hosts `machine-os-content`. The Driver Toolkit simplifies the process by removing the entitlement step, and avoids the privileged operation of accessing the machine-os-content in a pod. The Driver Toolkit can also be used by partners who have access to pre-released OpenShift Container Platform versions to prebuild driver-containers for their hardware devices for future OpenShift Container Platform releases.
+Before the Driver Toolkit’s existence, users would install kernel packages in a pod or build config on OpenShift Container Platform using entitled builds or by installing from the kernel RPMs in the host’s `machine-os-content`. The Driver Toolkit simplifies the process by removing the entitlement step, and avoids the privileged operation of accessing the machine-os-content in a pod. The Driver Toolkit can also be used by partners who have access to pre-released OpenShift Container Platform versions to prebuild driver-containers for their hardware devices for future OpenShift Container Platform releases.
 
 The Driver Toolkit is also used by the Kernel Module Management (KMM), which is currently available as a community Operator in the software catalog. KMM supports out-of-tree and third-party kernel drivers and the support software for the underlying operating system. Users can create modules for KMM to build and deploy a driver container, as well as support software like a device plugin, or metrics. Modules can include a build config to build a driver container-based on the Driver Toolkit, or KMM can deploy a prebuilt driver container.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [How to use entitled image builds to build DriverContainers with UBI on OpenShift](https://www.redhat.com/en/blog/how-to-use-entitled-image-builds-to-build-drivercontainers-with-ubi-on-openshift)
+
+</div>
+
 # Pulling the Driver Toolkit container image
+
+You can pull the `driver-toolkit` image from the Red Hat Ecosystem Catalog or extract its URL from the OpenShift Container Platform release payload by using the `oc adm` CLI.
 
 The `driver-toolkit` image is available from the [Container images section of the Red Hat Ecosystem Catalog](https://registry.redhat.io/) and in the OpenShift Container Platform release payload. The image corresponding to the most recent minor release of OpenShift Container Platform will be tagged with the version number in the catalog. The image URL for a specific release can be found using the `oc adm` CLI command.
 
-## Pulling the Driver Toolkit container image from registry.redhat.io
-
-Instructions for pulling the `driver-toolkit` image from `registry.redhat.io` with `podman` or in OpenShift Container Platform can be found on the [Red Hat Ecosystem Catalog](https://catalog.redhat.com/software/containers/openshift4/driver-toolkit-rhel8/604009d6122bd89307e00865?container-tabs=gti). The driver-toolkit image for the latest minor release are tagged with the minor release version on `registry.redhat.io`, for example: `registry.redhat.io/openshift4/driver-toolkit-rhel8:v4.17`.
-
-## Finding the Driver Toolkit image URL in the payload
+Instructions for pulling the `driver-toolkit` image from `registry.redhat.io` with `podman` or in OpenShift Container Platform can be found on the [Red Hat Ecosystem Catalog](https://catalog.redhat.com/software/containers/openshift4/driver-toolkit-rhel8/604009d6122bd89307e00865?container-tabs=gti). The driver-toolkit image for the latest minor release is tagged with the minor release version on `registry.redhat.io`, for example: `registry.redhat.io/openshift4/driver-toolkit-rhel8:v4.20`.
 
 <div>
 
@@ -87,13 +93,13 @@ Procedure
     - For an x86 image, the command is as follows:
 
       ``` terminal
-      $ oc adm release info quay.io/openshift-release-dev/ocp-release:4.17.z-x86_64 --image-for=driver-toolkit
+      $ oc adm release info quay.io/openshift-release-dev/ocp-release:4.20.z-x86_64 --image-for=driver-toolkit
       ```
 
     - For an ARM image, the command is as follows:
 
       ``` terminal
-      $ oc adm release info quay.io/openshift-release-dev/ocp-release:4.17.z-aarch64 --image-for=driver-toolkit
+      $ oc adm release info quay.io/openshift-release-dev/ocp-release:4.20.z-aarch64 --image-for=driver-toolkit
       ```
 
     <div class="formalpara">
@@ -120,12 +126,10 @@ Procedure
 
 # Using the Driver Toolkit
 
-As an example, the Driver Toolkit can be used as the base image for building a very simple kernel module called `simple-kmod`.
+Build and deploy the `simple-kmod` example kernel module by using the Driver Toolkit as a base image to learn the driver container workflow on an OpenShift Container Platform cluster.
 
 > [!NOTE]
 > The Driver Toolkit includes the necessary dependencies, `openssl`, `mokutil`, and `keyutils`, needed to sign a kernel module. However, in this example, the `simple-kmod` kernel module is not signed and therefore cannot be loaded on systems with `Secure Boot` enabled.
-
-## Build and run the simple-kmod driver container on a cluster
 
 <div>
 
@@ -145,7 +149,7 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -153,15 +157,13 @@ Procedure
 
 </div>
 
-Create a namespace. For example:
+1.  Create a namespace. For example:
 
-</div>
+    ``` terminal
+    $ oc new-project simple-kmod-demo
+    ```
 
-``` terminal
-$ oc new-project simple-kmod-demo
-```
-
-1.  The YAML defines an `ImageStream` for storing the `simple-kmod` driver container image, and a `BuildConfig` for building the container. Save this YAML as `0000-buildconfig.yaml.template`.
+2.  The YAML defines an `ImageStream` for storing the `simple-kmod` driver container image, and a `BuildConfig` for building the container. Save this YAML as `0000-buildconfig.yaml.template`.
 
     ``` yaml
     apiVersion: image.openshift.io/v1
@@ -228,7 +230,7 @@ $ oc new-project simple-kmod-demo
           name: simple-kmod-driver-container:demo
     ```
 
-2.  Substitute the correct driver toolkit image for the OpenShift Container Platform version you are running in place of “DRIVER_TOOLKIT_IMAGE” with the following commands.
+3.  Substitute the correct driver toolkit image for the OpenShift Container Platform version you are running in place of “DRIVER_TOOLKIT_IMAGE” with the following commands.
 
     ``` terminal
     $ OCP_VERSION=$(oc get clusterversion/version -ojsonpath={.status.desired.version})
@@ -242,13 +244,13 @@ $ oc new-project simple-kmod-demo
     $ sed "s#DRIVER_TOOLKIT_IMAGE#${DRIVER_TOOLKIT_IMAGE}#" 0000-buildconfig.yaml.template > 0000-buildconfig.yaml
     ```
 
-3.  Create the image stream and build config with
+4.  Create the image stream and build config with
 
     ``` terminal
     $ oc create -f 0000-buildconfig.yaml
     ```
 
-4.  After the builder pod completes successfully, deploy the driver container image as a `DaemonSet`.
+5.  After the builder pod completes successfully, deploy the driver container image as a `DaemonSet`.
 
     1.  The driver container must run with the privileged security context in order to load the kernel modules on the host. The following YAML file contains the RBAC rules and the `DaemonSet` for running the driver container. Save this YAML as `1000-drivercontainer.yaml`.
 
@@ -325,7 +327,7 @@ $ oc new-project simple-kmod-demo
         $ oc create -f 1000-drivercontainer.yaml
         ```
 
-5.  After the pods are running on the worker nodes, verify that the `simple_kmod` kernel module is loaded successfully on the host machines with `lsmod`.
+6.  After the pods are running on the worker nodes, verify that the `simple_kmod` kernel module is loaded successfully on the host machines with `lsmod`.
 
     1.  Verify that the pods are running:
 
@@ -372,6 +374,8 @@ $ oc new-project simple-kmod-demo
 
         </div>
 
+</div>
+
 # Additional resources
 
-- For more information about configuring registry storage for your cluster, see [Image Registry Operator in OpenShift Container Platform](../registry/configuring-registry-operator.md#registry-removed_configuring-registry-operator).
+- [Image Registry Operator in OpenShift Container Platform](../registry/configuring-registry-operator.md#registry-removed_configuring-registry-operator)

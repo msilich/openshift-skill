@@ -18,7 +18,7 @@ You can use the Leader Worker Set Operator to enable large-scale AI inference wo
 
 For more information, see "Leader Worker Set Operator overview".
 
-JobSet Operator (Technology Preview)
+JobSet Operator
 You can use the JobSet Operator to easily manage and run large-scale, coordinated workloads like high-performance computing (HPC) and AI training. The JobSet Operator can help you gain fast recovery and efficient resource use through features like multi-template job support and stable networking.
 
 For more information, see "JobSet Operator overview".

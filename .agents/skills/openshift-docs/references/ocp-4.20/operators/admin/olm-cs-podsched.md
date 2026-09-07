@@ -1,14 +1,16 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-When an Operator Lifecycle Manager (OLM) catalog source of source type `grpc` defines a `spec.image`, the Catalog Operator creates a pod that serves the defined image content. By default, this pod defines the following in its specification:
+When a `grpc` type catalog source defines the `spec.image` field, the Catalog Operator creates a pod to serve that image.
 
-- Only the `kubernetes.io/os=linux` node selector.
+By default, the pod specification configures the following default settings:
 
-- The default priority class name: `system-cluster-critical`.
+- Node selector: `kubernetes.io/os=linux`
 
-- No tolerations.
+- Priority class name: `system-cluster-critical`
 
-As an administrator, you can override these values by modifying fields in the `CatalogSource` object’s optional `spec.grpcPodConfig` section.
+- Tolerations: None
+
+As an administrator, you can override these defaults by configuring fields in the optional `spec.grpcPodConfig` section of the `CatalogSource` object.
 
 > [!IMPORTANT]
 > The Marketplace Operator, `openshift-marketplace`, manages the default `OperatorHub` custom resource’s (CR). This CR manages `CatalogSource` objects. If you attempt to modify fields in the `CatalogSource` object’s `spec.grpcPodConfig` section, the Marketplace Operator automatically reverts these modifications. By default, if you modify fields in the `spec.grpcPodConfig` section of the `CatalogSource` object, the Marketplace Operator automatically reverts these changes.
@@ -29,7 +31,7 @@ Additional resources
 
 # Disabling default CatalogSource objects at a local level
 
-You can apply persistent changes to a `CatalogSource` object, such as catalog source pods, at a local level, by disabling a default `CatalogSource` object. Consider the default configuration in situations where the default `CatalogSource` object’s configuration does not meet your organization’s needs. By default, if you modify fields in the `spec.grpcPodConfig` section of the `CatalogSource` object, the Marketplace Operator automatically reverts these changes.
+You can make persistent local changes to a `CatalogSource` object by disabling the default `CatalogSource` object. Otherwise, the Marketplace Operator automatically reverts any manual modifications to fields in the `spec.grpcPodConfig` section.
 
 The Marketplace Operator, `openshift-marketplace`, manages the default custom resources (CRs) of the `OperatorHub`. The `OperatorHub` manages `CatalogSource` objects.
 
@@ -69,6 +71,8 @@ Additional resources
 </div>
 
 # Overriding the node selector for catalog source pods
+
+To control which nodes run catalog source pods, you can override the default node selector in the `spec.grpcPodConfig` section of the `CatalogSource` object.
 
 <div>
 
@@ -116,6 +120,8 @@ Additional resources
 
 # Overriding the priority class name for catalog source pods
 
+To control the scheduling priority of catalog source pods, you can override the default priority class name in the `spec.grpcPodConfig` section of the `CatalogSource` object.
+
 <div>
 
 <div class="title">
@@ -124,7 +130,7 @@ Prerequisites
 
 </div>
 
-- A `CatalogSource` object of source type `grpc` with `spec.image` is defined.
+- A `CatalogSource` object of source type `grpc` with a defined `spec.image`.
 
 </div>
 
@@ -136,37 +142,40 @@ Procedure
 
 </div>
 
-- Edit the `CatalogSource` object and add or modify the `spec.grpcPodConfig` section to include the following:
+- Edit the `CatalogSource` object and configure the `spec.grpcPodConfig` section, similar to the following example:
 
   ``` yaml
     grpcPodConfig:
       priorityClassName: <priority_class>
   ```
 
-  where `<priority_class>` is one of the following:
+  where:
 
-  - One of the default priority classes provided by Kubernetes: `system-cluster-critical` or `system-node-critical`
+  `<priority_class>`
+  Specifies one of the following priority classes:
 
-  - An empty set (`""`) to assign the default priority
+  - A default Kubernetes priority class, such as `system-cluster-critical` or `system-node-critical`
 
-  - A pre-existing and custom defined priority class
+  - An empty string (`""`) to assign the default priority
+
+  - A custom, pre-existing priority class name
+
+  > [!NOTE]
+  > Previously, the only pod scheduling parameter that could be overriden was `priorityClassName`. This was done by adding the `operatorframework.io/priorityclass` annotation to the `CatalogSource` object. For example:
+  >
+  > ``` yaml
+  > apiVersion: operators.coreos.com/v1alpha1
+  > kind: CatalogSource
+  > metadata:
+  >   name: example-catalog
+  >   namespace: openshift-marketplace
+  >   annotations:
+  >     operatorframework.io/priorityclass: system-cluster-critical
+  > ```
+  >
+  > If a `CatalogSource` object defines both the annotation and `spec.grpcPodConfig.priorityClassName`, the annotation takes precedence over the configuration parameter.
 
 </div>
-
-> [!NOTE]
-> Previously, the only pod scheduling parameter that could be overriden was `priorityClassName`. This was done by adding the `operatorframework.io/priorityclass` annotation to the `CatalogSource` object. For example:
->
-> ``` yaml
-> apiVersion: operators.coreos.com/v1alpha1
-> kind: CatalogSource
-> metadata:
->   name: example-catalog
->   namespace: openshift-marketplace
->   annotations:
->     operatorframework.io/priorityclass: system-cluster-critical
-> ```
->
-> If a `CatalogSource` object defines both the annotation and `spec.grpcPodConfig.priorityClassName`, the annotation takes precedence over the configuration parameter.
 
 <div>
 
@@ -181,6 +190,8 @@ Additional resources
 </div>
 
 # Overriding tolerations for catalog source pods
+
+To allow catalog source pods to schedule onto nodes with matching taints, you can override the default tolerations in the `spec.grpcPodConfig` section of the `CatalogSource` object.
 
 <div>
 

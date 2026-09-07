@@ -77,6 +77,42 @@ With this release, when upgrading from a version that used unprefixed `NetworkPo
 
 - Before this release, if the `app=external-secrets` managed label was externally removed from a resource that the External Secrets Operator for Red Hat OpenShift owns, the resource fell out of the label-filtered informer cache. Subsequent reconciliation attempts to create the resource received an `AlreadyExists` error, causing the controller to enter a permanent error loop. With this release, the controller detects this cache-miss condition and restores the managed labels and annotations directly on the API server by using an uncached client, without interrupting the operand. ([ESO-237](https://issues.redhat.com/browse/ESO-237))
 
+# Release notes for External Secrets Operator for Red Hat OpenShift 1.1.1
+
+External Secrets Operator for Red Hat OpenShift 1.1.1 is based on the upstream external-secrets version 0.20.4.
+
+Issued: 13 August 2026
+
+This release fixes some Common Vulnerabilities and Exposures (CVEs) and provides related Red Hat advisories.
+
+The following advisories are available for the External Secrets Operator for Red Hat OpenShift:
+
+- [RHBA-2026:54480](https://access.redhat.com/errata/RHBA-2026:54480)
+
+- [RHSA-2026:54525](https://access.redhat.com/errata/RHSA-2026:54525)
+
+- [RHBA-2026:54526](https://access.redhat.com/errata/RHBA-2026:54526)
+
+- [RHBA-2026:54537](https://access.redhat.com/errata/RHBA-2026:54537)
+
+## CVEs
+
+- [CVE-2026-44740](https://access.redhat.com/security/cve/cve-2026-44740)
+
+- [CVE-2026-27145](https://access.redhat.com/security/cve/cve-2026-27145)
+
+- [CVE-2026-39835](https://access.redhat.com/security/cve/cve-2026-39835)
+
+- [CVE-2026-56852](https://access.redhat.com/security/cve/cve-2026-56852)
+
+## New features and enhancements
+
+**Operand container arguments can be overridden by using the Operator Subscription**
+
+With this release, you can override container arguments for the `external-secrets` operand components by setting environment variables in the `spec.config.env` field of the External Secrets Operator Subscription. The supported variables are `OPERAND_EXTERNAL_SECRETS_ARGS`, `OPERAND_WEBHOOK_ARGS`, `OPERAND_CERT_CONTROLLER_ARGS`, and `OPERAND_BITWARDEN_SDK_SERVER_ARGS`. Use comma-separated `--key=value` flags. Commas inside values such as `--tls-ciphers` are supported.
+
+For more information, see [Customizing the External Secrets Operator for Red Hat OpenShift](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/security_and_compliance/index#external-secrets-log-levels).
+
 # Release notes for External Secrets Operator for Red Hat OpenShift 1.1.0
 
 External Secrets Operator for Red Hat OpenShift version 1.1.0 is based on the upstream external-secrets project, version v0.20.4.

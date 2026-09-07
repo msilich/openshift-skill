@@ -1,8 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-As a day 2 operation, you can resolve and prevent performance issues of your Red Hat OpenStack Platform (RHOSP) installation by moving etcd from a root volume (provided by OpenStack Cinder) to a dedicated ephemeral local disk.
+After installation, you can resolve and prevent performance issues of your Red Hat OpenStack Platform (RHOSP) installation by moving etcd from a root volume (provided by RHOSP Cinder) to a dedicated ephemeral local disk.
 
-# Deploying RHOSP on local disk
+# Deploying OpenStack on local disk
 
 If you have an existing RHOSP cloud, you can move etcd from that cloud to a dedicated ephemeral local disk.
 
@@ -14,11 +14,11 @@ Prerequisites
 
 </div>
 
-- You have an OpenStack cloud with a working Cinder.
+- You have an RHOSP cloud with a working Cinder.
 
-- Your OpenStack cloud has at least 75 GB of available storage to accommodate 3 root volumes for the OpenShift control plane.
+- Your RHOSP cloud has at least 75 GB of available storage to accommodate 3 root volumes for the OpenShift control plane.
 
-- The OpenStack cloud is deployed with Nova ephemeral storage that uses a local storage backend and not `rbd`.
+- The RHOSP cloud is deployed with Nova ephemeral storage that uses a local storage backend and not `rbd`.
 
 </div>
 
@@ -30,7 +30,7 @@ Procedure
 
 </div>
 
-1.  Create a Nova flavor for the control plane with at least 10 GB of ephemeral disk by running the following command, replacing the values for `--ram`, `--disk`, and \<flavor_name\> based on your environment:
+1.  Create a Nova flavor for the control plane with at least 10 GB of ephemeral disk. Replace the values for `--ram`, `--disk`, and `<flavor_name>` based on your environment.
 
     ``` terminal
     $ openstack flavor create --<ram 16384> --<disk 0> --ephemeral 10 --vcpus 4 <flavor_name>
@@ -69,7 +69,7 @@ Procedure
     $ openshift-install create cluster --dir <installation_directory>
     ```
 
-    - For `<installation_directory>`, specify the location of the customized `./install-config.yaml file` that you previously created.
+    For `<installation_directory>`, specify the location of the customized `./install-config.yaml file` that you previously created.
 
 4.  Verify that the cluster you deployed is healthy before proceeding to the next step by running the following command:
 
@@ -77,11 +77,9 @@ Procedure
     $ oc wait clusteroperators --all --for=condition=Progressing=false
     ```
 
-    - Ensures that the cluster operators are finished progressing and that the cluster is not deploying or updating.
+    Check the output and ensure that the cluster Operators are finished progressing and that the cluster is not deploying or updating.
 
 5.  Create a file named `98-var-lib-etcd.yaml` by using the following YAML file:
-
-    <div class="informalexample">
 
     ``` yaml
     apiVersion: machineconfiguration.openshift.io/v1
@@ -172,28 +170,36 @@ Procedure
             name: relabel-var-lib-etcd.service
     ```
 
-    - The etcd database must be mounted by the device, not a label, to ensure that `systemd` generates the device dependency used in this config to trigger filesystem creation.
+    where:
 
-    - Do not run if the file system `dev/disk/by-label/local-etcd` already exists.
+    `[Mount].What=/dev/disk/by-label/local-etcd`
+    Specifies the etcd database must be mounted by the device, not a label, to ensure that `systemd` generates the device dependency used in this config to trigger filesystem creation.
 
-    - Fails with an alert message if `/dev/disk/by-label/ephemeral0` does not exist.
+    `[Unit].ConditionPathIsSymbolicLink=!/dev/disk/by-label/local-etcd`
+    Do not run if the file system `dev/disk/by-label/local-etcd` already exists.
 
-    - Migrates existing data to local etcd database. This config does so after `/var/lib/etcd` is mounted, but before CRI-O starts so etcd is not running yet.
+    `[Service].ExecStart=/usr/sbin/mkfs.xfs`
+    Fails with an alert message if `/dev/disk/by-label/ephemeral0` does not exist.
 
-    - Requires that etcd is mounted and does not contain a member directory, but the ostree does.
+    `[Unit].Before=crio.service`
+    Migrates existing data to local etcd database. This config does so after `/var/lib/etcd` is mounted, but before CRI-O starts so etcd is not running yet.
 
-    - Cleans up any previous migration state.
+    `[Unit].ConditionPathIsDirectory`
+    Requires that etcd is mounted and does not contain a member directory, but the ostree does.
 
-    - Copies and moves in separate steps to ensure atomic creation of a complete member directory.
+    `[Service].ExecStart=/bin/bash`
+    Cleans up any previous migration state.
 
-    - Performs a quick check of the mount point directory before performing a full recursive relabel. If restorecon in the file path `/var/lib/etcd` cannot rename the directory, the recursive rename is not performed.
+    `[Service].ExecStart=/usr/bin/mv`
+    Copies and moves in separate steps to ensure atomic creation of a complete member directory.
 
-    </div>
+    `[Service].ExecCondition=/bin/bash`
+    Performs a quick check of the mount point directory before performing a full recursive relabel. If restorecon in the file path `/var/lib/etcd` cannot rename the directory, the recursive rename is not performed.
 
     > [!WARNING]
-    > After you apply the `98-var-lib-etcd.yaml` file to the system, do not remove it. Removing this file will break etcd members and lead to system instability.
+    > After you apply the `98-var-lib-etcd.yaml` file to the system, do not remove the file. Removing this file will break etcd members and lead to system instability.
     >
-    > If a rollback is necessary, modify the `ControlPlaneMachineSet` object to use a flavor that does not include ephemeral disks. This change regenerates the control plane nodes without using ephemeral disks for the etcd partition, which avoids issues related to the `98-var-lib-etcd.yaml` file. It is safe to remove the `98-var-lib-etcd.yaml` file only after the update to the `ControlPlaneMachineSet` object is complete and no control plane nodes are using ephemeral disks.
+    > If a rollback is necessary, modify the `ControlPlaneMachineSet` object to use a flavor that does not include ephemeral disks. This change regenerates the control plane nodes without using ephemeral disks for the etcd partition, which avoids issues related to the `98-var-lib-etcd.yaml` file. You can safely remove the `98-var-lib-etcd.yaml` file only after the update to the `ControlPlaneMachineSet` object is complete and no control plane nodes are using ephemeral disks.
 
 6.  Create the new `MachineConfig` object by running the following command:
 

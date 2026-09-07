@@ -4,9 +4,9 @@ OpenShift Container Platform collects telemetry and configuration data about you
 
 A cluster that reports data to Red Hat through Telemetry and the Insights Operator is considered a *connected cluster*.
 
-**Telemetry** is the term that Red Hat uses to describe the information being sent to Red Hat by the OpenShift Container Platform Telemeter Client. Lightweight attributes are sent from connected clusters to Red Hat to enable subscription management automation, monitor the health of clusters, assist with support, and improve customer experience.
+Telemetry is the term that Red Hat uses to describe the information being sent to Red Hat by the OpenShift Container Platform Telemeter Client. Lightweight attributes are sent from connected clusters to Red Hat to enable subscription management automation, monitor the health of clusters, assist with support, and improve customer experience.
 
-The **Insights Operator** gathers OpenShift Container Platform configuration data and sends it to Red Hat. The data is used to produce insights about potential issues that a cluster might be exposed to. These insights are communicated to cluster administrators on [OpenShift Cluster Manager](https://console.redhat.com/openshift).
+The Insights Operator gathers OpenShift Container Platform configuration data and sends it to Red Hat. The data is used to produce insights about potential issues that a cluster might be exposed to. These insights are communicated to cluster administrators on [OpenShift Cluster Manager](https://console.redhat.com/openshift).
 
 More information is provided in this document about these two processes.
 
@@ -54,16 +54,15 @@ Additional resources
 
 </div>
 
-- See the [OpenShift Container Platform update documentation](../../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console) for more information about updating or upgrading a cluster.
+- [OpenShift Container Platform update documentation](../../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console)
 
 </div>
 
 ## Information collected by Telemetry
 
-The following information is collected by Telemetry:
+Telemetry collects specific information, such as system, sizing, and usage information.
 
-### System information
-
+System information
 - Version information, including the OpenShift Container Platform cluster version and installed update details that are used to determine update version availability
 
 - Update information, including the number of updates available per cluster, the channel and image repository used for an update, update progress information, and the number of errors that occur in an update
@@ -82,21 +81,19 @@ The following information is collected by Telemetry:
 
 - The name of the provider platform that OpenShift Container Platform is deployed on and the data center location
 
-### Sizing Information
-
+Sizing Information
 - Sizing information about clusters, machine types, and machines, including the number of CPU cores and the amount of RAM used for each
 
 - The number of etcd members and the number of objects stored in the etcd cluster
 
 - Number of application builds by build strategy type
 
-### Usage information
-
+Usage information
 - Usage information about components, features, and extensions
 
 - Usage details about Technology Previews and unsupported configurations
 
-Telemetry does not collect identifying information such as usernames or passwords. Red Hat does not intend to collect personal information. If Red Hat discovers that personal information has been inadvertently received, Red Hat will delete such information. To the extent that any telemetry data constitutes personal data, please refer to the [Red Hat Privacy Statement](https://www.redhat.com/en/about/privacy-policy) for more information about Red Hat’s privacy practices.
+  Telemetry does not collect identifying information such as usernames or passwords. Red Hat does not intend to collect personal information. If Red Hat discovers that personal information has been inadvertently received, Red Hat will delete such information. To the extent that any telemetry data constitutes personal data, please refer to the [Red Hat Privacy Statement](https://www.redhat.com/en/about/privacy-policy) for more information about Red Hat’s privacy practices.
 
 <div>
 
@@ -106,11 +103,11 @@ Additional resources
 
 </div>
 
-- See [Showing data collected by Telemetry](showing-data-collected-by-remote-health-monitoring.md#showing-data-collected-from-the-cluster_showing-data-collected-by-remote-health-monitoring) for details about how to list the attributes that Telemetry gathers from Prometheus in OpenShift Container Platform.
+- [Showing data collected by Telemetry](showing-data-collected-by-remote-health-monitoring.md#showing-data-collected-from-the-cluster_showing-data-collected-by-remote-health-monitoring)
 
-- See the [upstream cluster-monitoring-operator source code](https://github.com/openshift/cluster-monitoring-operator/blob/master/manifests/0000_50_cluster-monitoring-operator_04-config.yaml) for a list of the attributes that Telemetry gathers from Prometheus.
+- [Upstream cluster-monitoring-operator source code](https://github.com/openshift/cluster-monitoring-operator/blob/master/manifests/0000_50_cluster-monitoring-operator_04-config.yaml)
 
-- Telemetry is installed and enabled by default. If you need to opt out of remote health reporting, see [Remote health reporting](remote-health-reporting.md#remote-health-reporting).
+- [Remote health reporting](remote-health-reporting.md#remote-health-reporting)
 
 </div>
 
@@ -174,7 +171,7 @@ Additional resources
 
 </div>
 
-- See [Showing data collected by the Insights Operator](showing-data-collected-by-remote-health-monitoring.md#insights-operator-showing-data-collected-from-the-cluster_showing-data-collected-by-remote-health-monitoring) for details about how to review the data that is collected by the Insights Operator.
+- [Showing data collected by the Insights Operator](showing-data-collected-by-remote-health-monitoring.md#insights-operator-showing-data-collected-from-the-cluster_showing-data-collected-by-remote-health-monitoring)
 
 - [What data is being collected by the Insights Operator in OpenShift? (Knowledgebase article)](https://access.redhat.com/solutions/7066188)
 
@@ -205,9 +202,9 @@ Additional resources
 
 </div>
 
-- See [About OpenShift Container Platform monitoring](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/4.20/html/about_monitoring/about-ocp-monitoring) for more information about the OpenShift Container Platform monitoring stack.
+- [About OpenShift Container Platform monitoring](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/about_monitoring/about-ocp-monitoring)
 
-- See [Configuring your firewall](../../installing/install_config/configuring-firewall.md#configuring-firewall) for details about configuring a firewall and enabling endpoints for Telemetry and Red Hat Lightspeed
+- [Configuring your firewall](../../installing/install_config/configuring-firewall.md#configuring-firewall)
 
 </div>
 

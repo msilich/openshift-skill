@@ -131,7 +131,7 @@ Type
 <tr>
 <td style="text-align: left;"><p><code>namespace</code></p></td>
 <td style="text-align: left;"><p><code>string</code></p></td>
-<td style="text-align: left;"><p>Namespace where Network Observability pods are deployed.</p></td>
+<td style="text-align: left;"><p>Namespace where Network Observability pods are deployed. Those pods require various cluster role bindings in order to operate. Those bindings are preinstalled for service accounts located in the default namespace. If you configured a different namespace, you must update (or recreate) the cluster role bindings accordingly. You can see the list of preinstalled bindings here: <a href="https://github.com/openshift/network-observability-operator/blob/release-1.12/helm/templates/component_role_bindings.yaml">https://github.com/openshift/network-observability-operator/blob/release-1.12/helm/templates/component_role_bindings.yaml</a></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>networkPolicy</code></p></td>
@@ -743,7 +743,7 @@ Required
 | `address` | `string` | Address of the Kafka server |
 | `compression` | `string` | Compression codec to use when producing messages to Kafka. Accepted values are: `none` (default), `gzip`, `snappy`, `lz4`, `zstd`. |
 | `sasl` | `object` | SASL authentication configuration. \[Unsupported (\*)\]. |
-| `tls` | `object` | TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. |
+| `tls` | `object` | TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. When configuring TLS, the operator watches the certificate secret and copies it to both the netobserv and netobserv-privileged namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Kafka configuration documentation for more information. |
 | `topic` | `string` | Kafka topic to use. It must exist. Network Observability does not create it. |
 
 ## .spec.exporters\[\].kafka.sasl
@@ -793,7 +793,7 @@ Type
 ## .spec.exporters\[\].kafka.tls
 
 Description
-TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards.
+TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. When configuring TLS, the operator watches the certificate secret and copies it to both the netobserv and netobserv-privileged namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Kafka configuration documentation for more information.
 
 Type
 `object`
@@ -972,7 +972,7 @@ Required
 | `address` | `string` | Address of the Kafka server |
 | `compression` | `string` | Compression codec to use when producing messages to Kafka. Accepted values are: `none` (default), `gzip`, `snappy`, `lz4`, `zstd`. |
 | `sasl` | `object` | SASL authentication configuration. \[Unsupported (\*)\]. |
-| `tls` | `object` | TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. |
+| `tls` | `object` | TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. When configuring TLS, the operator watches the certificate secret and copies it to both the netobserv and netobserv-privileged namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Kafka configuration documentation for more information. |
 | `topic` | `string` | Kafka topic to use. It must exist. Network Observability does not create it. |
 
 ## .spec.kafka.sasl
@@ -1022,7 +1022,7 @@ Type
 ## .spec.kafka.tls
 
 Description
-TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards.
+TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. When configuring TLS, the operator watches the certificate secret and copies it to both the netobserv and netobserv-privileged namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Kafka configuration documentation for more information.
 
 Type
 `object`
@@ -1188,7 +1188,7 @@ Required
 | Property | Type | Description |
 |----|----|----|
 | `name` | `string` | Name of an existing LokiStack resource to use. |
-| `namespace` | `string` | Namespace where this `LokiStack` resource is located. If omitted, it is assumed to be the same as `spec.namespace`. |
+| `namespace` | `string` | Namespace where this `LokiStack` resource is located. If omitted, it is assumed to be the same as `spec.namespace`. When configuring a different namespace, the operator watches certificate secret and copies it to the netobserv main namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Loki configuration documentation for more information. |
 
 ## .spec.loki.manual
 

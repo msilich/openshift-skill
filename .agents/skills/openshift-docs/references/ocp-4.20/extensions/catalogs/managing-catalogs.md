@@ -1,17 +1,21 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Cluster administrators can add *catalogs*, or curated collections of Operators and Kubernetes extensions, to their clusters. Operator authors publish their products to these catalogs. When you add a catalog to your cluster, you have access to the versions, patches, and over-the-air updates of the Operators and extensions that are published to the catalog.
+Cluster administrators can add *catalogs*, or curated collections of Operators and Kubernetes extensions, to their clusters. Operator authors publish their products to these catalogs.
+
+When you add a catalog to your cluster, you have access to the versions, patches, and over-the-air updates of the Operators and extensions that are published to the catalog.
 
 You can manage catalogs and extensions declaratively from the CLI by using custom resources (CRs).
 
-*File-based catalogs* are the latest iteration of the catalog format in Operator Lifecycle Manager (OLM). It is a plain text-based (JSON or YAML) and declarative config evolution of the earlier SQLite database format, and it is fully backwards compatible.
+*File-based catalogs* are the latest iteration of the catalog format in Operator Lifecycle Manager (OLM). It is a plain text-based (JSON or YAML) and declarative config evolution of the earlier SQLite database format, and it is fully compatible with earlier versions.
 
 > [!IMPORTANT]
 > Kubernetes periodically deprecates certain APIs that are removed in subsequent releases. As a result, Operators are unable to use removed APIs starting with the version of OpenShift Container Platform that uses the Kubernetes version that removed the API.
 
 # About catalogs in OLM v1
 
-You can discover installable content by querying a catalog for Kubernetes extensions, such as Operators and controllers, by using the catalogd component. Catalogd is a Kubernetes extension that unpacks catalog content for on-cluster clients and is part of the Operator Lifecycle Manager (OLM) v1 suite of microservices. Currently, catalogd unpacks catalog content that is packaged and distributed as container images.
+You can discover installable content by querying a catalog for Kubernetes extensions, such as Operators and controllers, by using the catalogd component.
+
+Catalogd is a Kubernetes extension that unpacks catalog content for on-cluster clients and is part of the Operator Lifecycle Manager (OLM) v1 suite of microservices. Currently, catalogd unpacks catalog content that is packaged and distributed as container images.
 
 <div>
 
@@ -27,7 +31,9 @@ Additional resources
 
 # Red Hat-provided Operator catalogs in OLM v1
 
-Operator Lifecycle Manager (OLM) v1 includes the following Red Hat-provided Operator catalogs on the cluster by default. If you want to add an additional catalog to your cluster, create a custom resource (CR) for the catalog and apply it to the cluster. The following custom resource (CR) examples show the default catalogs installed on the cluster.
+Operator Lifecycle Manager (OLM) v1 includes several Red Hat-provided Operator catalogs on the cluster by default. If you want to add a catalog to your cluster, create a custom resource (CR) for the catalog and apply it to the cluster.
+
+The following custom resource (CR) examples show the default catalogs installed on the cluster:
 
 <div class="formalpara">
 
@@ -47,13 +53,13 @@ spec:
   source:
     image:
       pollIntervalMinutes: <poll_interval_duration>
-      ref: registry.redhat.io/redhat/redhat-operator-index:v4.17
+      ref: registry.redhat.io/redhat/redhat-operator-index:v4.20
     type: Image
 ```
 
 </div>
 
-- Specify the interval in minutes for polling the remote registry for newer image digests. To disable polling, do not set the field.
+Replace `<poll_interval_duration>` with the interval in minutes for polling the remote registry for newer image digests. To disable polling, do not set the field.
 
 <div class="formalpara">
 
@@ -74,7 +80,7 @@ priority: -200
     type: image
     image:
       pollIntervalMinutes: 10
-      ref: registry.redhat.io/redhat/certified-operator-index:v4.17
+      ref: registry.redhat.io/redhat/certified-operator-index:v4.20
     type: Image
 ```
 
@@ -98,7 +104,7 @@ spec:
   source:
     image:
       pollIntervalMinutes: 10
-      ref: registry.redhat.io/redhat/redhat-marketplace-index:v4.17
+      ref: registry.redhat.io/redhat/redhat-marketplace-index:v4.20
     type: Image
 ```
 
@@ -122,7 +128,7 @@ spec:
   source:
     image:
       pollIntervalMinutes: 10
-      ref: registry.redhat.io/redhat/community-operator-index:v4.17
+      ref: registry.redhat.io/redhat/community-operator-index:v4.20
     type: Image
 ```
 
@@ -144,7 +150,7 @@ $ oc apply -f <catalog_name>.yaml
 
 </div>
 
-- Specifies the catalog CR, such as `my-catalog.yaml`.
+Replace `<catalog_name>.yaml` with the catalog CR, such as `my-catalog.yaml`.
 
 # Adding a catalog to a cluster
 
@@ -178,19 +184,25 @@ Procedure
       source:
         image:
           pollIntervalMinutes: 10
-          ref: registry.redhat.io/redhat/community-operator-index:v4.17
+          ref: registry.redhat.io/redhat/community-operator-index:v4.20
         type: Image
     ```
 
     </div>
 
-    - The catalog is automatically labeled with the value of the `metadata.name` field when it is applied to the cluster. For more information about labels and catalog selection, see "Catalog content resolution".
+    where:
 
-    - Optional: Specify the priority of the catalog in relation to the other catalogs on the cluster. For more information, see "Catalog selection by priority".
+    `metadata.name`
+    The catalog is automatically labeled with the value of the `metadata.name` field when it is applied to the cluster. For more information about labels and catalog selection, see "Catalog content resolution".
 
-    - Specify the interval in minutes for polling the remote registry for newer image digests. To disable polling, do not set the field.
+    `spec.priority`
+    Optional: Specifies the priority of the catalog in relation to the other catalogs on the cluster. For more information, see "Catalog selection by priority".
 
-    - Specify the catalog image in the `spec.source.image.ref` field.
+    `spec.source.image.pollIntervalMinutes`
+    Specifies the interval in minutes for polling the remote registry for newer image digests. To disable polling, do not set the field.
+
+    `spec.source.image.ref`
+    Specifies the catalog image in the `spec.source.image.ref` field.
 
 2.  Add the catalog to your cluster by running the following command:
 
@@ -224,7 +236,7 @@ Verification
 
 - Run the following commands to verify the status of your catalog:
 
-  1.  Check if you catalog is available by running the following command:
+  1.  Check if your catalog is available by running the following command:
 
       ``` terminal
       $ oc get clustercatalog
@@ -283,7 +295,7 @@ Verification
         Source:
           Image:
             Poll Interval Minutes:  10
-            Ref:                    registry.redhat.io/redhat/community-operator-index:v4.17
+            Ref:                    registry.redhat.io/redhat/community-operator-index:v4.20
           Type:                     Image
       Status:
         Conditions:
@@ -311,11 +323,7 @@ Verification
 
       </div>
 
-      - Describes the status of the catalog.
-
-      - Displays the reason the catalog is in the current state.
-
-      - Displays the image reference of the catalog.
+      In the output, the `Status` section describes the status of the catalog. In the `Status` section, the `Reason` field displays the reason the catalog is in the current state. In the `Resolved Source` section, the `Ref` field displays the image reference of the catalog.
 
 </div>
 

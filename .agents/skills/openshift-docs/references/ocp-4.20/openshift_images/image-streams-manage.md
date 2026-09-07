@@ -658,9 +658,17 @@ Procedure
 
 </div>
 
-# Additional resources
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Removing deprecated image stream tags from the Cluster Samples Operator](configuring-samples-operator.md#images-samples-operator-deprecated-image-stream_configuring-samples-operator)
+
+</div>
 
 ## Configuring periodic importing of image stream tags
 

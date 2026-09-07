@@ -8,9 +8,11 @@ For more information, see [About the cert-manager Operator for Red Hat OpenShift
 
 # cert-manager Operator for Red Hat OpenShift 1.20.0
 
+Review the release notes for the cert-manager Operator for Red Hat OpenShift 1.20.0 to learn what is new and updated with this release.
+
 Issued: 2 July 2026
 
-The following advisories are available for the cert-manager Operator for Red Hat OpenShift 1.20.0:
+The following advisories are available for the cert-manager Operator for Red Hat OpenShift for OpenShift Container Platform 1.20.0:
 
 - [RHBA-2026:34294](https://access.redhat.com/errata/RHBA-2026:34294)
 
@@ -76,7 +78,7 @@ TLS arguments are applied per operand component as follows:
 
 - `cert-manager-cainjector`: metrics endpoint TLS flags only.
 
-  TLS profile enforcement is not yet supported for the IstioCSR and TrustManager operand.
+  TLS profile enforcement is not yet supported for the IstioCSR and TrustManager operands.
 
   To support this feature, the Operator now requires `get`, `list`, and `watch` permissions on the `apiservers` resource in the `config.openshift.io` API group.
 
@@ -94,11 +96,63 @@ TLS arguments are applied per operand component as follows:
 
 - Before this update, the cert-manager Operator for Red Hat OpenShift installation failed on clusters with the Console capability disabled because the `ConsoleYAMLSample` resources were missing the required capability annotation. With this release, the Operator installs successfully on Console-less clusters. ([OCPBUGS-85579](https://redhat.atlassian.net/browse/OCPBUGS-85579))
 
+# cert-manager Operator for Red Hat OpenShift 1.19.1
+
+Review the release notes for the cert-manager Operator for Red Hat OpenShift 1.19.1 to learn what is new and updated with this release.
+
+Issued: 13 August 2026
+
+The following advisories are available for the cert-manager Operator for Red Hat OpenShift for OpenShift Container Platform 1.19.1:
+
+- [RHSA-2026:54527](https://access.redhat.com/errata/RHSA-2026:54527)
+
+- [RHBA-2026:54529](https://access.redhat.com/errata/RHBA-2026:54529)
+
+- [RHSA-2026:54531](https://access.redhat.com/errata/RHSA-2026:54531)
+
+- [RHBA-2026:54551](https://access.redhat.com/errata/RHBA-2026:54551)
+
+Version `v1.19.6` of the cert-manager Operator for Red Hat OpenShift is based on the upstream cert-manager version `v1.19.6`. For more information, see the [cert-manager project release notes for v1.19.6](https://cert-manager.io/docs/releases/release-notes/release-notes-1.19#v1196).
+
+## Fixed issues
+
+- Before this update, the cert-manager Operator for Red Hat OpenShift installation failed on clusters without the console capability because the OLM bundle included `ConsoleYAMLSample` and `ConsoleQuickStart` resources that require the `console.openshift.io` APIs. With this release, the Operator creates the console resources at runtime only when the required APIs are available, ensuring successful installation. ([OCPBUGS-85579](https://redhat.atlassian.net/browse/OCPBUGS-85579))
+
+## CVEs
+
+- [CVE-2026-33186](https://access.redhat.com/security/cve/CVE-2026-33186)
+
+- [CVE-2026-46595](https://access.redhat.com/security/cve/CVE-2026-46595)
+
+- [CVE-2026-39821](https://access.redhat.com/security/cve/CVE-2026-39821)
+
+- [CVE-2026-39828](https://access.redhat.com/security/cve/CVE-2026-39828)
+
+- [CVE-2026-39830](https://access.redhat.com/security/cve/CVE-2026-39830)
+
+- [CVE-2026-42499](https://access.redhat.com/security/cve/CVE-2026-42499)
+
+- [CVE-2026-25681](https://access.redhat.com/security/cve/CVE-2026-25681)
+
+- [CVE-2026-39820](https://access.redhat.com/security/cve/CVE-2026-39820)
+
+- [CVE-2026-46597](https://access.redhat.com/security/cve/CVE-2026-46597)
+
+- [CVE-2026-27145](https://access.redhat.com/security/cve/CVE-2026-27145)
+
+- [CVE-2026-42504](https://access.redhat.com/security/cve/CVE-2026-42504)
+
+- [CVE-2026-27136](https://access.redhat.com/security/cve/CVE-2026-27136)
+
+- [CVE-2026-42502](https://access.redhat.com/security/cve/CVE-2026-42502)
+
 # cert-manager Operator for Red Hat OpenShift 1.19.0
+
+Review the release notes for the cert-manager Operator for Red Hat OpenShift 1.19.0 to learn what is new and updated with this release.
 
 Issued: 20 April 2026
 
-The following advisories are available for the cert-manager Operator for Red Hat OpenShift 1.19.0:
+The following advisories are available for the cert-manager Operator for Red Hat OpenShift for OpenShift Container Platform 1.19.0:
 
 - [RHBA-2026:9064](https://access.redhat.com/errata/RHBA-2026:9064)
 
@@ -118,160 +172,8 @@ Distribution of trust bundles with the trust manager operand (Technology Preview
 In this release, the cert-manager Operator for Red Hat OpenShift adds support for the trust-manager operand as a Technology Preview feature. You can now install the trust-manager operand to automate the secure distribution of trust bundles, such as certificate authority (CA) certificates, to application namespaces across your cluster. For more information, see [Distributing certificates by using trust-manager operand](cert-manager-trust-manager.md#cert-manager-trust-manager).
 
 Support for configuring the certificate request backoff duration
-In this release, the cert-manager Operator for Red Hat OpenShift adds support for the `--certificate-request-minimum-backoff-duration` flag. With this flag, you can configure the minimum backoff period for certificate requests by override the default configuration. For more information, see [Overridable arguments for the cert-manager components](cert-manager-customizing-api-fields.md#cert-manager-overridable-arguments_cert-manager-customizing-api-fields).
+In this release, the cert-manager Operator for Red Hat OpenShift adds support for the `--certificate-request-minimum-backoff-duration` flag. With this flag, you can configure the minimum backoff period for certificate requests by overriding the default configuration. For more information, see [Overridable arguments for the cert-manager components](cert-manager-customizing-api-fields.md#cert-manager-overridable-arguments_cert-manager-customizing-api-fields).
 
 ## Fixed issues
 
 - Before this update, the **ClusterIssuer** form view lacked an option to remove the self-signed field. As a consequence, you could not create issuer types other than self-signed. With this release, the form view sets the certificate authority (CA) as the default issuer type. As a result, you can switch to other issuer types by using the form view. ([OCPBUGS-65620](https://redhat.atlassian.net/browse/OCPBUGS-65620))
-
-# cert-manager Operator for Red Hat OpenShift 1.18.1
-
-Issued: 2026-01-26
-
-The following advisories are available for the cert-manager Operator for Red Hat OpenShift 1.18.1:
-
-- [RHSA-2026:1166](https://access.redhat.com/errata/RHSA-2026:1166)
-
-- [RHSA-2026:1168](https://access.redhat.com/errata/RHSA-2026:1168)
-
-- [RHSA-2026:1176](https://access.redhat.com/errata/RHSA-2026:1176)
-
-- [RHBA-2026:1319](https://access.redhat.com/errata/RHBA-2026:1319)
-
-Version `1.18.1` of the cert-manager Operator for Red Hat OpenShift is based on the upstream cert-manager version `v1.18.4`. For more information, see the [cert-manager project release notes for v1.18.4](https://cert-manager.io/docs/releases/release-notes/release-notes-1.18/#v1184).
-
-## New features and enhancements
-
-The final images use `ubi9-minimal` as base images
-With this update, the cert-manager Operator for Red Hat OpenShift images use ubi9-minimal as their base images providing improved security compliance. No manual action is required, as the Operator automatically uses the updated images upon installation or upgrade.
-
-## CVEs
-
-- [CVE-2025-66418](https://access.redhat.com/security/cve/CVE-2025-66418)
-
-- [CVE-2025-66471](https://access.redhat.com/security/cve/CVE-2025-66471)
-
-- [CVE-2025-61729](https://access.redhat.com/security/cve/CVE-2025-61729)
-
-- [CVE-2025-21441](https://access.redhat.com/security/cve/CVE-2026-21441)
-
-- [CVE-2025-61727](https://access.redhat.com/security/cve/CVE-2025-61727)
-
-- [CVE-2025-61729](https://access.redhat.com/security/cve/CVE-2025-61729)
-
-# cert-manager Operator for Red Hat OpenShift 1.18.0
-
-Issued: 2025-11-12
-
-The following advisories are available for the cert-manager Operator for Red Hat OpenShift 1.18.0:
-
-- [RHBA-2025:21087](https://access.redhat.com/errata/RHBA-2025:21087)
-
-- [RHBA-2025:21086](https://access.redhat.com/errata/RHBA-2025:21086)
-
-- [RHBA-2025:21088](https://access.redhat.com/errata/RHBA-2025:21088)
-
-- [RHBA-2025:21114](https://access.redhat.com/errata/RHBA-2025:21114)
-
-Version `1.18.0` of the cert-manager Operator for Red Hat OpenShift is based on the upstream cert-manager version `v1.18.3`. For more information, see the [cert-manager project release notes for v1.18.3](https://cert-manager.io/docs/releases/release-notes/release-notes-1.18#v1183).
-
-## New features and enhancements
-
-Istio-CSR integration with cert-manager Operator for Red Hat OpenShift (Generally Available)
-With this release, the integration of the cert-manager Operator for Red Hat OpenShift with Istio-CSR, which was previously provided as a Technology Preview feature, is fully supported. This feature offers enhanced support for securing workloads and control plane components within Red Hat OpenShift Service Mesh or Istio environments. By utilizing the cert-manager Operator for Red Hat OpenShift managed Istio-CSR agent, Istio can obtain, sign, deliver, and renew certificates required for mutual TLS (mTLS). For more information, see [Integrating the cert-manager Operator with Istio-CSR](cert-manager-operator-integrating-istio.md#cert-manager-operator-istio-csr-installing_cert-manager-operator-integrating-istio).
-
-Replica count configuration for cert-manager Operator for Red Hat OpenShift operands
-With this release, you can override the default replica counts for the cert-manager Operator for Red Hat OpenShift `controller`, `webhook`, and `cainjector` operands. To configure these values, specify the new `overrideReplicas` fields in the `CertManager` custom resource. With this enhancement, you can configure high availability (HA) and scale operands based on your specific operational requirements. For more information, see [Common configurable fields in the CertManager CR for the cert-manager components](cert-manager-customizing-api-fields.md#cert-manager-explanation-of-certmanager-cr-fields_cert-manager-customizing-api-fields).
-
-Root filesystem is read-only for cert-manager Operator for Red Hat OpenShift containers
-With this release, to improve security, the cert-manager Operator for Red Hat OpenShift and all its operands have the `readOnlyRootFilesystem` security context set to `true` by default. This enhancement hardens the containers and prevents a potential attacker from modifying the contents of the container’s root file system.
-
-Network policy hardening is now available for cert-manager Operator for Red Hat OpenShift components
-With this release, the cert-manager Operator for Red Hat OpenShift includes predefined `NetworkPolicy` resources to enhance security by controlling ingress and egress traffic for its components. These policies cover internal traffic, such as ingress to metrics and webhook servers, and egress to the OpenShift API and DNS servers.
-
-By default, this feature is disabled to prevent connectivity issues during upgrades. You must explicitly enable it in the `CertManager` custom resource. For more information, see [Network policy configuration for cert-manager Operator for Red Hat OpenShift](cert-manager-nw-policy.md#cert-manager-nw-policy).
-
-## Known issues
-
-- The upstream cert-manager `v1.18` release updated the ACME HTTP-01 challenge ingress path type from `ImplementationSpecific` to `Exact`. The OpenShift Route API does not have an equivalent for the `Exact` path type, which prevents the ingress-to-route controller from supporting it. As a result, ingress resources created for HTTP-01 challenges cannot route traffic to the solver pod, causing the challenge to fail with a 503 error. To mitigate this issue, the `ACMEHTTP01IngressPathTypeExact` feature gate is disabled by default in this release.
-
-# cert-manager Operator for Red Hat OpenShift 1.17.1
-
-Issued: 2025-03-25
-
-The following advisories are available for the cert-manager Operator for Red Hat OpenShift 1.17.1:
-
-- [RHBA-2026:5642](https://access.redhat.com/errata/RHBA-2026:5642)
-
-- [RHSA-2026:5645](https://access.redhat.com/errata/RHSA-2026:5645)
-
-- [RHBA-2026:5749](https://access.redhat.com/errata/RHBA-2026:5749)
-
-Version `1.17.1` of the cert-manager Operator for Red Hat OpenShift is based on the upstream cert-manager version `v1.17.4`. For more information, see the [cert-manager project release notes for v1.17.4](https://cert-manager.io/docs/releases/release-notes/release-notes-1.17#v1174).
-
-## New features and enhancements
-
-The final images use `ubi9-minimal` as base images
-With this update, the cert-manager Operator for Red Hat OpenShift images use ubi9-minimal as their base images providing improved security compliance. No manual action is required, as the Operator automatically uses the updated images upon installation or upgrade.
-
-## CVEs
-
-- [CVE-2025-47907](https://access.redhat.com/security/cve/CVE-2025-47907)
-
-- [CVE-2025-58183](https://access.redhat.com/security/cve/CVE-2025-58183)
-
-- [CVE-2025-61726](https://access.redhat.com/security/cve/CVE-2025-61726)
-
-- [CVE-2025-61728](https://access.redhat.com/security/cve/CVE-2025-61728)
-
-- [CVE-2025-61729](https://access.redhat.com/security/cve/CVE-2025-61729)
-
-- [CVE-2025-68121](https://access.redhat.com/security/cve/CVE-2025-68121)
-
-# cert-manager Operator for Red Hat OpenShift 1.17.0
-
-Issued: 2025-08-06
-
-The following advisories are available for the cert-manager Operator for Red Hat OpenShift 1.17.0:
-
-- [RHBA-2025:13182](https://access.redhat.com/errata/RHBA-2025:13182)
-
-- [RHBA-2025:13134](https://access.redhat.com/errata/RHBA-2025:13134)
-
-- [RHBA-2025:13133](https://access.redhat.com/errata/RHBA-2025:13133)
-
-Version `1.17.0` of the cert-manager Operator for Red Hat OpenShift is based on the upstream cert-manager version `v1.17.4`. For more information, see the [cert-manager project release notes for v1.17.4](https://cert-manager.io/docs/releases/release-notes/release-notes-1.17#v1174).
-
-# Bug fixes
-
-- Previously, the `status` field in the `IstioCSR` custom resource (CR) was not set to `Ready` even after the successful deployment of Istio‑CSR. With this fix, the `status` field is correctly set to `Ready`, ensuring consistent and reliable status reporting. ([CM-546](https://issues.redhat.com/browse/CM-546))
-
-## New features and enhancements
-
-**Support to configure resource requests and limits for ACME HTTP‑01 solver pods**
-
-With this release, the cert-manager Operator for Red Hat OpenShift supports configuring CPU and memory resource requests and limits for ACME HTTP‑01 solver pods. You can configure the CPU and memory resource requests and limits by using the following overridable arguments in the `CertManager` custom resource (CR):
-
-- `--acme-http01-solver-resource-limits-cpu`
-
-- `--acme-http01-solver-resource-limits-memory`
-
-- `--acme-http01-solver-resource-request-cpu`
-
-- `--acme-http01-solver-resource-request-memory`
-
-For more information, see [Overridable arguments for the cert‑manager components](cert-manager-customizing-api-fields.md#cert-manager-overridable-arguments_cert-manager-customizing-api-fields).
-
-## CVEs
-
-- [CVE-2025-22866](https://access.redhat.com/security/cve/CVE-2025-22866)
-
-- [CVE-2025-22868](https://access.redhat.com/security/cve/CVE-2025-22868)
-
-- [CVE-2025-22872](https://access.redhat.com/security/cve/CVE-2025-22872)
-
-- [CVE-2025-22870](https://access.redhat.com/security/cve/CVE-2025-22870)
-
-- [CVE-2025-27144](https://access.redhat.com/security/cve/CVE-2025-27144)
-
-- [CVE-2025-22871](https://access.redhat.com/security/cve/CVE-2025-22871)

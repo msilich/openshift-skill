@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+You can investigate OpenShift CLI (`oc`) issues by increasing the log level to get more detailed diagnostic information.
+
 # Understanding OpenShift CLI (`oc`) log levels
 
 With the OpenShift CLI (`oc`), you can create applications and manage OpenShift Container Platform projects from a terminal.

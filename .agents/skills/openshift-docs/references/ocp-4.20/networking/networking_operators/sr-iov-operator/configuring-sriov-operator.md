@@ -536,7 +536,7 @@ Verification
 
     ``` terminal
     NAME                                         DISPLAY                   VERSION               REPLACES                                     PHASE
-    sriov-network-operator.4.17.0-202211021237   SR-IOV Network Operator   4.17.0-202211021237   sriov-network-operator.4.17.0-202210290517   Succeeded
+    sriov-network-operator.4.20.0-202211021237   SR-IOV Network Operator   4.20.0-202211021237   sriov-network-operator.4.20.0-202210290517   Succeeded
     ```
 
     </div>

@@ -1,8 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Red Hat OpenShift support for Windows Containers is a feature providing the ability to run Windows compute nodes in an OpenShift Container Platform cluster. This is possible by using the Red Hat Windows Machine Config Operator (WMCO) to install and manage Windows nodes. With a Red Hat subscription, you can get support for running Windows workloads in OpenShift Container Platform. Windows instances deployed by the WMCO are configured with the containerd container runtime. For more information, see the [release notes](wmco_rn/windows-containers-release-notes.md#windows-containers-release-notes).
+You can use Red Hat OpenShift support for Windows Containers to run Windows compute nodes in an OpenShift Container Platform cluster by using the Red Hat Windows Machine Config Operator (WMCO) to install and manage Windows nodes.
 
-You can add Windows nodes either by creating a [compute machine set](creating_windows_machinesets/creating-windows-machineset-aws.md#creating-windows-machineset-aws) or by specifying existing Bring-Your-Own-Host (BYOH) Window instances through a [configuration map](byoh-windows-instance.md#byoh-windows-instance).
+# Managing Windows container workloads
+
+With a Red Hat subscription, you can get support for running Windows workloads in OpenShift Container Platform.
+
+Windows instances deployed by the WMCO are configured with the containerd container runtime. For more information, see the [release notes](wmco_rn/windows-containers-release-notes.md#windows-containers-release-notes).
+
+You can add Windows nodes either by creating a [compute machine set](creating_windows_machinesets/creating-windows-machineset-aws.md#creating-windows-machineset-aws) or by specifying existing Bring-Your-Own-Host (BYOH) Windows instances through a [ConfigMap](byoh-windows-instance.md#byoh-windows-instance).
 
 > [!NOTE]
 > Compute machine sets are not supported for bare metal or provider agnostic clusters.
@@ -19,7 +25,7 @@ You can [perform Windows Machine Config Operator upgrades](windows-node-upgrades
 
 You can [remove a Windows node](removing-windows-nodes.md#removing-windows-nodes) by deleting a specific machine.
 
-You can [use Bring-Your-Own-Host (BYOH) Windows instances](byoh-windows-instance.md#byoh-windows-instance) to repurpose Windows Server VMs and bring them to OpenShift Container Platform. BYOH Windows instances benefit users who are looking to mitigate major disruptions in the event that a Windows server goes offline. You can use BYOH Windows instances as nodes on OpenShift Container Platform 4.8 and later versions.
+You can [use Bring-Your-Own-Host (BYOH) Windows instances](byoh-windows-instance.md#byoh-windows-instance) to repurpose Windows Server VMs and bring them to OpenShift Container Platform. BYOH Windows instances benefit users who are looking to mitigate major disruptions when a Windows server goes offline. You can use BYOH Windows instances as nodes on OpenShift Container Platform 4.8 and later versions.
 
 You can [disable Windows container workloads](disabling-windows-container-workloads.md#disabling-windows-container-workloads) by performing the following:
 

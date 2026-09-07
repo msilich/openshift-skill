@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+After installing OpenShift Container Platform, you can configure, scale, and maintain your cluster to meet operational requirements, including managing nodes and infrastructure workloads, enabling features, applying autoscaling, and maintaining etcd.
+
 After installing OpenShift Container Platform, you can further expand and customize your cluster to your requirements.
 
 # Available cluster customizations
 
-You complete most of the cluster configuration and customization after you deploy your OpenShift Container Platform cluster. A number of *configuration resources* are available.
+You complete most of the cluster configuration and customization after you deploy your OpenShift Container Platform cluster. Several *configuration resources* are available.
 
 > [!NOTE]
 > If you install your cluster on IBM Z®, not all features and functions are available.
@@ -14,6 +16,8 @@ You modify the configuration resources to configure the major features of the cl
 For current documentation of the settings that you control by using these resources, use the `oc explain` command, for example `oc explain builds --api-version=config.openshift.io/v1`
 
 ## Cluster configuration resources
+
+Review the globally scoped cluster configuration resources that control major features of an OpenShift Container Platform cluster.
 
 All cluster configuration resources are globally scoped (not namespaced) and named `cluster`.
 
@@ -33,6 +37,8 @@ All cluster configuration resources are globally scoped (not namespaced) and nam
 
 ## Operator configuration resources
 
+Review the cluster-scoped Operator configuration resources that control the behavior of specific OpenShift Container Platform components.
+
 These configuration resources are cluster-scoped instances, named `cluster`, which control the behavior of a specific component as owned by a particular Operator.
 
 | Resource name | Description |
@@ -43,6 +49,8 @@ These configuration resources are cluster-scoped instances, named `cluster`, whi
 
 ## Additional configuration resources
 
+Review the additional configuration resources that represent a single instance of a particular OpenShift Container Platform component.
+
 These configuration resources represent a single instance of a particular component. In some cases, you can request multiple instances by creating multiple instances of the resource. In other cases, the Operator can use only a specific resource instance name in a specific namespace. Reference the component-specific documentation for details on how and when you can create additional resource instances.
 
 | Resource name | Instance name | Namespace | Description |
@@ -52,20 +60,26 @@ These configuration resources represent a single instance of a particular compon
 
 ## Informational Resources
 
+Review the informational resources that you can use to retrieve information about an OpenShift Container Platform cluster.
+
 You use these resources to retrieve information about the cluster. Some configurations might require you to edit these resources directly.
 
 | Resource name | Instance name | Description |
 |----|----|----|
-| `clusterversion.config.openshift.io` | `version` | In OpenShift Container Platform 4.17, you must not customize the `ClusterVersion` resource for production clusters. Instead, follow the process to [update a cluster](../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console). |
+| `clusterversion.config.openshift.io` | `version` | In OpenShift Container Platform 4.20, you must not customize the `ClusterVersion` resource for production clusters. Instead, follow the process to [update a cluster](../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console). |
 | `dns.config.openshift.io` | `cluster` | You cannot modify the DNS settings for your cluster. You can [check the DNS Operator status](../networking/networking_operators/dns-operator.md#nw-dns-operator-status_dns-operator). |
 | `infrastructure.config.openshift.io` | `cluster` | Configuration details allowing the cluster to interact with its cloud provider. |
 | `network.config.openshift.io` | `cluster` | You cannot modify your cluster networking after installation. To customize your network, follow the process to [customize networking during installation](../installing/installing_aws/ipi/installing-aws-customizations.md#installing-aws-customizations). |
 
 # Adding worker nodes
 
+After you deploy your OpenShift Container Platform cluster, you can add worker nodes to scale cluster resources using the method that matches your installation type and environment.
+
 After you deploy your OpenShift Container Platform cluster, you can add worker nodes to scale cluster resources. There are different ways you can add worker nodes depending on the installation method and the environment of your cluster.
 
 ## Adding worker nodes to an on-premise cluster
+
+Add worker nodes to an on-premise OpenShift Container Platform cluster by using the OpenShift CLI to generate an ISO image.
 
 For on-premise clusters, you can add worker nodes by using the OpenShift Container Platform CLI (`oc`) to generate an ISO image, which can then be used to boot one or more nodes in your target cluster. This process can be used regardless of how you installed your cluster.
 
@@ -73,13 +87,33 @@ You can add one or more nodes at a time while customizing each node with more co
 
 Preflight validation checks are also performed when booting the ISO image to inform you of failure-causing issues before you attempt to boot each node.
 
-[Adding worker nodes to an on-premise cluster](../nodes/nodes/nodes-nodes-adding-node-iso.md#adding-node-iso)
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Adding worker nodes to an on-premise cluster](../nodes/nodes/nodes-nodes-adding-node-iso.md#adding-node-iso)
+
+</div>
 
 ## Adding worker nodes to installer-provisioned infrastructure clusters
+
+Add worker nodes to installer-provisioned infrastructure clusters by scaling machine sets or provisioning bare-metal hosts.
 
 For installer-provisioned infrastructure clusters, you can manually or automatically scale the `MachineSet` object to match the number of available bare-metal hosts.
 
 To add a bare-metal host, you must configure all network prerequisites, configure an associated `baremetalhost` object, then provision the worker node to the cluster. You can add a bare-metal host manually or by using the web console.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Adding worker nodes using the web console](../scalability_and_performance/managing-bare-metal-hosts.md#adding-bare-metal-host-to-cluster-using-web-console_managing-bare-metal-hosts)
 
@@ -87,33 +121,75 @@ To add a bare-metal host, you must configure all network prerequisites, configur
 
 - [Manually adding a worker node to an installer-provisioned infrastructure cluster](../installing/installing_bare_metal/bare-metal-expanding-the-cluster.md#preparing-the-bare-metal-node_bare-metal-expanding)
 
+</div>
+
 ## Adding worker nodes to user-provisioned infrastructure clusters
+
+Add worker nodes to user-provisioned infrastructure clusters by using an ISO image and Ignition config files.
 
 For user-provisioned infrastructure clusters, you can add worker nodes by using a RHEL or RHCOS ISO image and connecting it to your cluster using cluster Ignition config files. For RHEL worker nodes, the following example uses Ansible playbooks to add worker nodes to the cluster. For RHCOS worker nodes, the following example uses an ISO image and network booting to add worker nodes to the cluster.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
 - [Adding RHCOS worker nodes to a user-provisioned infrastructure cluster](node-tasks.md#post-install-config-adding-fcos-compute)
+
+</div>
 
 ## Adding worker nodes to clusters managed by the Assisted Installer
 
+Add worker nodes to Assisted Installer clusters by using Red Hat OpenShift Cluster Manager, the REST API, or a manual ISO process.
+
 For clusters managed by the Assisted Installer, you can add worker nodes by using the Red Hat OpenShift Cluster Manager console, the Assisted Installer REST API or you can manually add worker nodes using an ISO image and cluster Ignition config files.
 
-- [Adding worker nodes using the OpenShift Cluster Manager](../nodes/nodes/nodes-sno-worker-nodes.md#sno-adding-worker-nodes-to-sno-clusters_add-workers)
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Adding worker nodes using OpenShift Cluster Manager](../nodes/nodes/nodes-sno-worker-nodes.md#sno-adding-worker-nodes-to-sno-clusters_add-workers)
 
 - [Adding worker nodes using the Assisted Installer REST API](../nodes/nodes/nodes-sno-worker-nodes.md#adding-worker-nodes-using-the-assisted-installer-api)
 
-- [Manually adding worker nodes to a SNO cluster](../nodes/nodes/nodes-sno-worker-nodes.md#sno-adding-worker-nodes-to-single-node-clusters-manually_add-workers)
+- [Manually adding worker nodes to a single-node OpenShift cluster](../nodes/nodes/nodes-sno-worker-nodes.md#sno-adding-worker-nodes-to-single-node-clusters-manually_add-workers)
+
+</div>
 
 ## Adding worker nodes to clusters managed by the multicluster engine for Kubernetes
 
+Add worker nodes to multicluster engine for Kubernetes clusters by using the dedicated console.
+
 For clusters managed by the multicluster engine for Kubernetes, you can add worker nodes by using the dedicated multicluster engine console.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Creating your cluster with the console](https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.9/html/clusters/cluster_mce_overview#on-prem-creating-your-cluster-with-the-console)
 
+</div>
+
 # Adjust worker nodes
+
+Resize worker nodes by creating new compute machine sets, scaling them up, and scaling down the original machine set before removal.
 
 If you incorrectly sized the worker nodes during deployment, adjust them by creating one or more new compute machine sets, scale them up, then scale the original compute machine set down before removing them.
 
 ## Understanding the difference between compute machine sets and the machine config pool
+
+Compute machine sets and machine config pools control different aspects of node lifecycle in OpenShift Container Platform. Understanding how each object relates to scaling and upgrades helps you configure nodes correctly.
 
 `MachineSet` objects describe OpenShift Container Platform nodes with respect to the cloud or machine provider.
 
@@ -464,6 +540,8 @@ Procedure
 
 # Improving cluster stability in high latency environments using worker latency profiles
 
+Configure worker latency profiles to improve cluster stability in high latency environments.
+
 If as a cluster administrator, you performed latency tests for platform verification, you might discover the need to adjust the operation of the cluster to ensure stability in cases of high latency.
 
 As a cluster administrator, you need to change only one parameter, recorded in a file, which controls four parameters affecting how supervisory processes read status and interpret the health of the cluster. Changing only the one parameter provides cluster tuning in an easy, supportable manner.
@@ -738,7 +816,23 @@ Verification
 
 # Managing control plane machines
 
-[Control plane machine sets](../machine_management/control_plane_machine_management/cpmso-about.md#cpmso-about) provide management capabilities for control plane machines that are similar to what compute machine sets provide for compute machines. The availability and initial status of control plane machine sets on your cluster depend on your cloud provider and the version of OpenShift Container Platform that you installed. For more information, see [Getting started with control plane machine sets](../machine_management/control_plane_machine_management/cpmso-getting-started.md#cpmso-getting-started).
+Use control plane machine sets to manage control plane machines with capabilities similar to compute machine sets.
+
+Control plane machine sets provide management capabilities for control plane machines that are similar to what compute machine sets provide for compute machines. The availability and initial status of control plane machine sets on your cluster depend on your cloud provider and the version of OpenShift Container Platform that you installed.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Control plane machine sets](../machine_management/control_plane_machine_management/cpmso-about.md#cpmso-about)
+
+- [Getting started with control plane machine sets](../machine_management/control_plane_machine_management/cpmso-getting-started.md#cpmso-getting-started)
+
+</div>
 
 ## Adding a control plane node to your cluster
 
@@ -1128,15 +1222,39 @@ Verification
 
 # Creating infrastructure machine sets for production environments
 
+Create infrastructure machine sets to host cluster infrastructure components without counting those machines toward subscription limits.
+
 You can create a compute machine set to create machines that host only infrastructure components, such as the default router, the integrated container image registry, and components for cluster metrics and monitoring. These infrastructure machines are not counted toward the total number of subscriptions that are required to run the environment.
 
-For information on infrastructure nodes and which components can run on infrastructure nodes, see [Creating infrastructure machine sets](../machine_management/creating-infrastructure-machinesets.md#creating-infrastructure-machinesets).
+For information on infrastructure nodes and which components can run on infrastructure nodes, see "Creating infrastructure machine sets".
 
-To create an infrastructure node, you can [use a machine set](cluster-tasks.md#machineset-creating_post-install-cluster-tasks), [assign a label to the nodes](cluster-tasks.md#creating-an-infra-node_post-install-cluster-tasks), or [use a machine config pool](cluster-tasks.md#creating-infra-machines_post-install-cluster-tasks).
+To create an infrastructure node, see "Use a machine set to create an infrastructure node", "Assign a label to infrastructure nodes", or "Use a machine config pool for infrastructure nodes".
 
-For sample machine sets that you can use with these procedures, see [Creating machine sets for different clouds](../machine_management/creating-infrastructure-machinesets.md#creating-infrastructure-machinesets-clouds).
+For sample machine sets that you can use with these procedures, see "Creating machine sets for different clouds".
 
-Applying a specific node selector to all infrastructure components causes OpenShift Container Platform to [schedule those workloads on nodes with that label](cluster-tasks.md#moving-resources-to-infrastructure-machinesets).
+Applying a specific node selector to all infrastructure components causes OpenShift Container Platform to schedule those workloads on nodes with that label; see "Schedule infrastructure workloads using node selectors".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Creating infrastructure machine sets](../machine_management/creating-infrastructure-machinesets.md#creating-infrastructure-machinesets)
+
+- [Use a machine set to create an infrastructure node](cluster-tasks.md#machineset-creating_post-install-cluster-tasks)
+
+- [Assign a label to infrastructure nodes](cluster-tasks.md#creating-an-infra-node_post-install-cluster-tasks)
+
+- [Use a machine config pool for infrastructure nodes](cluster-tasks.md#creating-infra-machines_post-install-cluster-tasks)
+
+- [Creating machine sets for different clouds](../machine_management/creating-infrastructure-machinesets.md#creating-infrastructure-machinesets-clouds)
+
+- [Schedule infrastructure workloads using node selectors](cluster-tasks.md#moving-resources-to-infrastructure-machinesets_post-install-cluster-tasks)
+
+</div>
 
 ## Creating a compute machine set
 
@@ -1535,6 +1653,8 @@ Additional resources
 
 # Assigning machine set resources to infrastructure nodes
 
+Apply taints and tolerations to infrastructure nodes so user workloads are not scheduled inadvertently to those nodes.
+
 After creating an infrastructure machine set, the `worker` and `infra` roles are applied to new infra nodes. Nodes with the `infra` role are not counted toward the total number of subscriptions that are required to run the environment, even when the `worker` role is also applied.
 
 However, when an infra node is assigned the worker role, there is a chance that user workloads can get assigned inadvertently to the infra node. To avoid this, you can apply a taint to the infra node and tolerations for the pods that you want to control.
@@ -1687,6 +1807,8 @@ Additional resources
 </div>
 
 # Moving resources to infrastructure machine sets
+
+Move default infrastructure resources to the infrastructure machine sets that you created.
 
 Some of the infrastructure resources are deployed in your cluster by default. You can move them to the infrastructure machine sets that you created.
 
@@ -2314,11 +2436,25 @@ Procedure
 
 # Applying autoscaling to your cluster
 
+Deploy a cluster autoscaler and machine autoscalers to apply autoscaling across machine types in your cluster.
+
 Applying autoscaling to an OpenShift Container Platform cluster involves deploying a cluster autoscaler and then deploying machine autoscalers for each machine type in your cluster.
 
-For more information, see [Applying autoscaling to an OpenShift Container Platform cluster](../machine_management/applying-autoscaling.md#applying-autoscaling).
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Applying autoscaling to an OpenShift Container Platform cluster](../machine_management/applying-autoscaling.md#applying-autoscaling)
+
+</div>
 
 # Enabling Technology Preview features using FeatureGates
+
+Enable Technology Preview features cluster-wide by editing the `FeatureGate` custom resource.
 
 You can turn on a subset of the current Technology Preview features on for all nodes in the cluster by editing the `FeatureGate` custom resource (CR).
 
@@ -2746,9 +2882,23 @@ You can verify that the feature gates are enabled by looking at the `kubelet.con
 Back up etcd, enable or disable etcd encryption, or defragment etcd data.
 
 > [!NOTE]
-> If you deployed a bare-metal cluster, you can scale the cluster up to 5 nodes as part of your post-installation tasks. For more information, see [Node scaling for etcd](../etcd/etcd-performance.md#etcd-node-scaling_etcd-performance).
+> If you deployed a bare-metal cluster, you can scale the cluster up to 5 nodes as part of your post-installation tasks.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Node scaling for etcd](../etcd/etcd-performance.md#etcd-node-scaling_etcd-performance)
+
+</div>
 
 ## etcd encryption
+
+You can encrypt sensitive resource data in etcd to provide an additional layer of protection if an etcd backup or storage data is exposed.
 
 By default, etcd data is not encrypted in OpenShift Container Platform. You can enable etcd encryption for your cluster to provide an additional layer of data security. For example, it can help protect the loss of sensitive data if an etcd backup is exposed to the incorrect parties.
 
@@ -3005,7 +3155,7 @@ Verification
 
 ## Backing up etcd data
 
-Follow these steps to back up etcd data by creating an etcd snapshot and backing up the resources for the static pods. This backup can be saved and used at a later time if you need to restore etcd.
+You can back up etcd data by creating an etcd snapshot and saving the static pod resources on a control plane host. This backup preserves the cluster state and provides the resources required to restore etcd at a later time.
 
 > [!IMPORTANT]
 > Only save a backup from a single control plane host. Do not take a backup from each control plane host in the cluster.
@@ -3020,7 +3170,7 @@ Prerequisites
 
 - You have access to the cluster as a user with the `cluster-admin` role.
 
-- You have checked whether the cluster-wide proxy is enabled.
+- You have verified whether the cluster-wide proxy is enabled.
 
   > [!TIP]
   > You can check whether the proxy is enabled by reviewing the output of `oc get proxy cluster -o yaml`. The proxy is enabled if the `httpProxy`, `httpsProxy`, and `noProxy` fields have values set.
@@ -3061,7 +3211,7 @@ Procedure
     $ export NO_PROXY=<example.com>
     ```
 
-4.  Run the `cluster-backup.sh` script in the debug shell and pass in the location to save the backup to.
+4.  Run the `cluster-backup.sh` script with the path to the directory where you want to save the backup:
 
     > [!TIP]
     > The `cluster-backup.sh` script is maintained as a component of the etcd Cluster Operator and is a wrapper around the `etcdctl snapshot save` command.
@@ -3101,7 +3251,7 @@ Procedure
 
     In this example, two files are created in the `/home/core/assets/backup/` directory on the control plane host:
 
-    - `snapshot_<datetimestamp>.db`: This file is the etcd snapshot. The `cluster-backup.sh` script confirms its validity.
+    - `snapshot_<datetimestamp>.db`: This file is the etcd snapshot. The `cluster-backup.sh` script confirms the validity of the snapshot.
 
     - `static_kuberesources_<datetimestamp>.tar.gz`: This file contains the resources for the static pods. If etcd encryption is enabled, it also contains the encryption keys for the etcd snapshot.
 
@@ -3112,11 +3262,11 @@ Procedure
 
 </div>
 
-## Defragmenting etcd data
+## Data defragmentation for etcd
 
 To prevent etcd performance degradation and cluster-wide maintenance alarms on large clusters, monitor etcd database metrics and defragment the data store when the keyspace grows too large.
 
-For large and dense clusters, etcd can suffer from poor performance if the keyspace grows too large and exceeds the space quota. Periodically maintain and defragment etcd to free up space in the data store. Monitor Prometheus for etcd metrics and defragment it when required; otherwise, etcd can raise a cluster-wide alarm that puts the cluster into a maintenance mode that accepts only key reads and deletes.
+For large and dense clusters, etcd can suffer from poor performance if the keyspace grows too large and exceeds the space quota. Periodically maintain and defragment etcd to free up space in the data store. Monitor Prometheus for etcd metrics and defragment it when required. Otherwise, etcd can raise a cluster-wide alarm that puts the cluster into a maintenance mode, which accepts only key reads and deletes.
 
 Monitor these key metrics:
 
@@ -3137,11 +3287,11 @@ Defragmentation occurs automatically, but you can also trigger it manually.
 When etcd database growth affects performance, the etcd Operator can automatically defragment member disks based on cluster metrics.
 
 > [!NOTE]
-> Automatic defragmentation is good for most cases, because the etcd operator uses cluster information to determine the most efficient operation for the user.
+> Automatic defragmentation works well in most cases because the etcd Operator uses cluster metrics to choose the most efficient defragmentation approach.
 
 The etcd Operator automatically defragments disks. No manual intervention is needed.
 
-Verify that the defragmentation process is successful by viewing one of these logs:
+Verify that defragmentation succeeded by checking one of these logs:
 
 - etcd logs
 
@@ -3164,9 +3314,9 @@ The following is example log output for unsuccessful defragmentation:
 failed defrag on member: <member_name>, memberID: <member_id>: <error_message>
 ```
 
-## Manual defragmentation
+## Manually defragmenting etcd data
 
-When automatic ectd defragmentation cannot reclaim enough space, manually defragment etcd on each member to restore disk availability and normal cluster operation.
+When automatic etcd defragmentation cannot reclaim enough space, manually defragment etcd on each member to restore disk availability and normal cluster operation.
 
 A Prometheus alert indicates when you need to use manual defragmentation. The alert is displayed in two cases:
 
@@ -3177,7 +3327,7 @@ A Prometheus alert indicates when you need to use manual defragmentation. The al
 You can also determine whether defragmentation is needed by checking the etcd database size in MB that will be freed by defragmentation with the PromQL expression: `(etcd_mvcc_db_total_size_in_bytes - etcd_mvcc_db_total_size_in_use_in_bytes)/1024/1024`
 
 > [!WARNING]
-> Defragmenting etcd is a blocking action. The etcd member will not respond until defragmentation is complete. For this reason, wait at least one minute between defragmentation actions on each of the pods to allow the cluster to recover.
+> Defragmenting etcd is a blocking action. The etcd member does not respond until defragmentation is complete. For this reason, wait at least one minute between defragmentation actions on each of the pods to allow the cluster to recover.
 
 Follow this procedure to defragment etcd data on each etcd member.
 
@@ -3289,7 +3439,7 @@ Procedure
 
     5.  Repeat these steps to connect to each of the other etcd members and defragment them. Always defragment the leader last.
 
-        Wait at least one minute between defragmentation actions to allow the etcd pod to recover. Until the etcd pod recovers, the etcd member will not respond.
+        Wait at least one minute between defragmentation actions to allow the etcd pod to recover. Until the etcd pod recovers, the etcd member does not respond.
 
 3.  If any `NOSPACE` alarms were triggered due to the space quota being exceeded, clear them.
 
@@ -3315,7 +3465,7 @@ Procedure
 
 ## Restoring to a previous cluster state for more than one node
 
-You can use a saved etcd backup to restore an earlier cluster state or restore a cluster that has lost the majority of control plane hosts.
+To restore your OpenShift Container Platform cluster with more than one control plane node to an earlier state, use a saved etcd snapshot after quorum loss or critical data deletion.
 
 For high availability (HA) clusters, a three-node HA cluster requires you to shut down etcd on two hosts to avoid a cluster split. On four-node and five-node HA clusters, you must shut down three hosts. Quorum requires a simple majority of nodes. The minimum number of nodes required for quorum on a three-node HA cluster is two. On four-node and five-node HA clusters, the minimum number of nodes required for quorum is three. If you start a new cluster from backup on your recovery host, the other etcd members might still be able to form quorum and continue service.
 
@@ -3323,7 +3473,7 @@ For high availability (HA) clusters, a three-node HA cluster requires you to shu
 > If your cluster uses a control plane machine set, see "Recovering a degraded etcd Operator" in "Troubleshooting the control plane machine set" for an etcd recovery procedure. For OpenShift Container Platform on a single node, see "Restoring to a previous cluster state for a single node".
 
 > [!IMPORTANT]
-> When you restore your cluster, you must use an etcd backup that was taken from the same z-stream release. For example, an OpenShift Container Platform 4.17.2 cluster must use an etcd backup that was taken from 4.17.2.
+> When you restore your cluster, you must use an etcd backup that was taken from the same z-stream release. For example, an OpenShift Container Platform 4.20.2 cluster must use an etcd backup that was taken from 4.20.2.
 
 <div>
 
@@ -3333,15 +3483,15 @@ Prerequisites
 
 </div>
 
-- Access to the cluster as a user with the `cluster-admin` role through a certificate-based `kubeconfig` file, like the one that was used during installation.
+- You have access to the cluster as a user with the `cluster-admin` role through a certificate-based `kubeconfig` file, like the one that was used during installation.
 
-- A healthy control plane host to use as the recovery host.
+- You have a healthy control plane host to use as the recovery host.
 
 - You have SSH access to control plane hosts.
 
-- A backup directory containing both the `etcd` snapshot and the resources for the static pods, which were from the same backup. The file names in the directory must be in the following formats: `snapshot_<datetimestamp>.db` and `static_kuberesources_<datetimestamp>.tar.gz`.
+- You have a backup directory containing both the `etcd` snapshot and the resources for the static pods, which were from the same backup. The file names in the directory must be in the following formats: `snapshot_<datetimestamp>.db` and `static_kuberesources_<datetimestamp>.tar.gz`.
 
-- Nodes must be accessible or bootable.
+- Control plane nodes are accessible or bootable.
 
 </div>
 
@@ -3360,12 +3510,12 @@ Procedure
 
 2.  Establish SSH connectivity to each of the control plane nodes, including the recovery host.
 
-    `kube-apiserver` becomes inaccessible after the restore process starts, so you cannot access the control plane nodes. For this reason, it is recommended to establish SSH connectivity to each control plane host in a separate terminal.
+    `kube-apiserver` becomes inaccessible after the restore process starts, so you cannot access the control plane nodes. Establish SSH connectivity to each control plane host in a separate terminal.
 
     > [!IMPORTANT]
     > If you do not complete this step, you will not be able to access the control plane hosts to complete the restore procedure, and you will be unable to recover your cluster from this state.
 
-3.  Using SSH, connect to each control plane node and run the following command to disable etcd:
+3.  Using SSH, connect to each control plane node to disable etcd by running the following command:
 
     ``` terminal
     $ sudo -E /usr/local/bin/disable-etcd.sh
@@ -3375,7 +3525,7 @@ Procedure
 
     This procedure assumes that you copied the `backup` directory containing the etcd snapshot and the resources for the static pods to the `/home/core/` directory of your recovery control plane host.
 
-5.  Use SSH to connect to the recovery host and restore the cluster from a previous backup by running the following command:
+5.  Use SSH to connect to the recovery host. Restore the cluster from an earlier backup by running the following command:
 
     ``` terminal
     $ sudo -E /usr/local/bin/cluster-restore.sh /home/core/<etcd-backup-directory>
@@ -3383,7 +3533,7 @@ Procedure
 
 6.  Exit the SSH session.
 
-7.  Once the API responds, turn off the etcd Operator quorum guard by running the following command:
+7.  When the API responds, turn off the etcd Operator quorum guard by running the following command:
 
     ``` terminal
     $ oc patch etcd/cluster --type=merge -p '{"spec": {"unsupportedConfigOverrides": {"useUnsupportedUnsafeNonHANonProductionUnstableEtcd": true}}}'
@@ -3440,6 +3590,8 @@ Additional resources
 
 ## Issues and workarounds for restoring a persistent storage state
 
+To restore workloads safely after an etcd snapshot restore, identify and resolve outdated persistent storage references, including volumes, credentials, attachments, and devices on your OpenShift Container Platform cluster.
+
 If your OpenShift Container Platform cluster uses persistent storage of any form, a state of the cluster is typically stored outside etcd. When you restore from an etcd backup, the status of the workloads in OpenShift Container Platform is also restored. However, if the etcd snapshot is old, the status might be invalid or outdated.
 
 > [!IMPORTANT]
@@ -3451,7 +3603,7 @@ The following are some example scenarios that produce an out-of-date status:
 
 - Pod P1 is using volume A, which is attached to node X. If the etcd snapshot is taken while another pod uses the same volume on node Y, then when the etcd restore is performed, pod P1 might not be able to start correctly due to the volume still being attached to node Y. OpenShift Container Platform is not aware of the attachment, and does not automatically detach it. When this occurs, the volume must be manually detached from node Y so that the volume can attach on node X, and then pod P1 can start.
 
-- Cloud provider or storage provider credentials were updated after the etcd snapshot was taken. This causes any CSI drivers or Operators that depend on the those credentials to not work. You might have to manually update the credentials required by those drivers or Operators.
+- Cloud provider or storage provider credentials were updated after the etcd snapshot was taken. This causes any CSI drivers or Operators that depend on those credentials to not work. You might have to manually update the credentials required by those drivers or Operators.
 
 - A device is removed or renamed from OpenShift Container Platform nodes after the etcd snapshot is taken. The Local Storage Operator creates symlinks for each PV that it manages from `/dev/disk/by-id` or `/dev` directories. This situation might cause the local PVs to refer to devices that no longer exist.
 
@@ -3461,11 +3613,11 @@ The following are some example scenarios that produce an out-of-date status:
 
   2.  Remove symlinks from respective nodes.
 
-  3.  Delete `LocalVolume` or `LocalVolumeSet` objects (see *Storage* → *Configuring persistent storage* → *Persistent storage using local volumes* → *Deleting the Local Storage Operator Resources*).
+  3.  Delete `LocalVolume` or `LocalVolumeSet` objects. For more information, see "Deleting the Local Storage Operator resources".
 
 # Pod disruption budgets
 
-Understand and configure pod disruption budgets.
+Understand and configure pod disruption budgets to control voluntary disruptions during cluster operations.
 
 ## Understanding how to use pod disruption budgets to specify the number of pods that must be up
 

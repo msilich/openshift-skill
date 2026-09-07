@@ -1,13 +1,13 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+A two-node OpenShift cluster with fencing provides high availability (HA) with a reduced hardware footprint. This configuration is designed for distributed or edge environments where deploying a full three-node control plane cluster is not practical.
+
+A two-node cluster does not include compute nodes. The two control plane machines run user workloads in addition to managing the cluster.
+
 > [!IMPORTANT]
 > Two-node OpenShift cluster with fencing is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
-
-A two-node OpenShift cluster with fencing provides high availability (HA) with a reduced hardware footprint. This configuration is designed for distributed or edge environments where deploying a full three-node control plane cluster is not practical.
-
-A two-node cluster does not include compute nodes. The two control plane machines run user workloads in addition to managing the cluster.
 
 Fencing is managed by Pacemaker, which can isolate an unresponsive node by using the Baseboard Management Console (BMC) of the node. After the unresponsive node is fenced, the remaining node can safely continue operating the cluster without the risk of resource corruption.
 
@@ -23,7 +23,7 @@ The two-node OpenShift cluster with fencing requires the following hosts:
 
 Minimum required hosts
 
-The bootstrap and control plane machines must use Red Hat Enterprise Linux CoreOS (RHCOS) as the operating system. For instructions on installing RHCOS and starting the bootstrap process, see [Installing RHCOS and starting the OpenShift Container Platform bootstrap process](../../installing_bare_metal/upi/installing-bare-metal-network-customizations.md#creating-machines-bare-metal_installing-bare-metal-network-customizations)
+The bootstrap and control plane machines must use Red Hat Enterprise Linux CoreOS (RHCOS) as the operating system. For instructions on installing RHCOS and starting the bootstrap process, see "Installing RHCOS and starting the OpenShift Container Platform bootstrap process".
 
 > [!NOTE]
 > The requirement to use RHCOS applies only to user-provisioned infrastructure deployments. For installer-provisioned infrastructure deployments, the bootstrap and control plane machines are provisioned automatically by the installation program, and you do not need to manually install RHCOS.
@@ -372,9 +372,9 @@ Procedure
         $ curl https://<app>.<cluster_name>.<base_domain>
         ```
 
-</div>
+        You can shut down a control plane node and verify that the load balancer stops sending traffic to that node while the other node continues to serve requests.
 
-You can shut down a control plane node and verify that the load balancer stops sending traffic to that node while the other node continues to serve requests.
+</div>
 
 # Creating a manifest object for a customized br-ex bridge
 
@@ -383,6 +383,8 @@ You must create a manifest object to modify the cluster’s network configuratio
 For instructions on creating this manifest, see "Creating a manifest file for a customized br-ex bridge".
 
 # Additional resources
+
+- [Installing RHCOS and starting the OpenShift Container Platform bootstrap process](../../installing_bare_metal/upi/installing-bare-metal-network-customizations.md#creating-machines-bare-metal_installing-bare-metal-network-customizations)
 
 - [Creating a manifest file for a customized br-ex bridge](../../installing_bare_metal/ipi/ipi-install-installation-workflow.md#creating-manifest-file-customized-br-ex-bridge_ipi-install-installation-workflow)
 

@@ -907,3 +907,111 @@ Verification
     The `Degraded` condition should show `"status": "False"`. If the condition is `True,` review the message field for the specific validation error and correct the referenced `ConfigMap`.
 
 </div>
+
+# Overriding operand container arguments for the External Secrets Operator for Red Hat OpenShift
+
+You can override container arguments for the `external-secrets` operand deployments by setting environment variables on the External Secrets Operator for Red Hat OpenShift subscription. Use this method when you need to pass additional or replacement `--key=value` flags to operand containers.
+
+> [!NOTE]
+> This is a temporary feature available only in the External Secrets Operator for Red Hat OpenShift 1.1 and 1.2 z-streams. External Secrets Operator for Red Hat OpenShift 1.3.0 adds support in the `ExternalSecretsConfig` API to configure the same behavior. Consider migrating to the `ExternalSecretsConfig` API when upgrading to External Secrets Operator 1.3.0. This subscription-based method is scheduled to be deprecated and removed in External Secrets Operator for Red Hat OpenShift 1.4.0.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Your installed External Secrets Operator for Red Hat OpenShift version is 1.1 or 1.2.
+
+- You have access to the cluster as a user with the `cluster-admin` role.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- Update the Subscription for the External Secrets Operator to set the operand argument overrides by running the following command:
+
+  ``` terminal
+  $ oc -n <external_secrets_operator_namespace> patch subscription openshift-external-secrets-operator --type='merge' -p '{"spec":{"config":{"env":[{"name":"OPERAND_EXTERNAL_SECRETS_ARGS","value":"<controller_args>"},{"name":"OPERAND_WEBHOOK_ARGS","value":"<webhook_args>"},{"name":"OPERAND_CERT_CONTROLLER_ARGS","value":"<cert_controller_args>"},{"name":"OPERAND_BITWARDEN_SDK_SERVER_ARGS","value":"<bitwarden_args>"}]}}}'
+  ```
+
+  where:
+
+  `<external_secrets_operator_namespace>`
+  Specifies the namespace where the Operator is installed.
+
+  `<controller_args>`
+  Specifies a comma-separated list of `--key` or `--key=value` flags for the `external-secrets` core controller. For example, `--concurrent=2,--loglevel=debug`.
+
+  `<webhook_args>`
+  Specifies a comma-separated list of flags for the webhook. Commas inside a flag value are preserved when the next flag begins with `--`. For example, `--tls-ciphers=TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,--loglevel=debug`.
+
+  `<cert_controller_args>`
+  Specifies a comma-separated list of flags for the `cert-controller`. For example, `--crd-requeue-interval=10m,--loglevel=debug`.
+
+  `<bitwarden_args>`
+  Specifies a comma-separated list of flags for the `bitwarden-sdk-server`. For example, `--key-file=/certs/key.pem,--cert-file=/certs/cert.pem`.
+
+  Set only the environment variables you need. Omit any unused entries from the `env` list.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Verify that the environment variables are set on the Operator by running the following command:
+
+    ``` terminal
+    $ oc set env deploy/external-secrets-operator-controller-manager -n <external_secrets_operator_namespace> --list | grep -e OPERAND_ -e container
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    $ deployments/external-secrets-operator-controller-manager, container manager
+    OPERAND_EXTERNAL_SECRETS_ARGS=--concurrent=2,--loglevel=debug
+    OPERAND_WEBHOOK_ARGS=--tls-ciphers=TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,--loglevel=debug
+    ```
+
+    </div>
+
+2.  Verify that the operand `Deployment` container arguments were updated by running the following command:
+
+    ``` terminal
+    $ oc get deploy/external-secrets-webhook -n <operand_namespace> -o jsonpath='{.spec.template.spec.containers[0].args}'
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    $ ["webhook","--dns-name=external-secrets-webhook.external-secrets.svc","--port=10250","--cert-dir=/tmp/certs","--check-interval=15m0s","--metrics-addr=:8080","--healthz-addr=:8081","--loglevel=debug","--zap-time-encoding=epoch","--tls-ciphers=TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256"]
+    ```
+
+    </div>
+
+</div>

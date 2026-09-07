@@ -61,4 +61,4 @@ Procedure
 
 - [Enabling the cluster-wide proxy](../../networking/configuring_network_settings/enable-cluster-wide-proxy.md#nw-proxy-configure-object_config-cluster-wide-proxy)
 
-- [Proxy certificate customization](../certificate_types_descriptions/proxy-certificates.md#customization)
+- [Proxy certificate customization](../certificate_types_descriptions/proxy-certificates.md#proxy-cert-customization_proxy-certificates)

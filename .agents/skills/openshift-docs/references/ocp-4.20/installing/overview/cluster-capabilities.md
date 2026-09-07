@@ -66,7 +66,7 @@ Additional resources
 
 </div>
 
-# Optional cluster capabilities in OpenShift Container Platform 4.17
+# Optional cluster capabilities in OpenShift Container Platform 4.20
 
 Currently, cluster Operators provide the features for these optional capabilities.
 
@@ -84,7 +84,7 @@ Additional resources
 
 </div>
 
-## Bare-metal capability
+## Cluster Baremetal Operator
 
 The Cluster Baremetal Operator provides the features for the `baremetal` capability.
 
@@ -127,7 +127,7 @@ The `Build` capability enables the `Build` API. The `Build` API manages the life
 >
 > Disable the `Build` capability only if you do not require `Build` and `BuildConfig` resources or the `builder` service account in the cluster.
 
-## Cloud controller manager capability
+## Cloud Controller Manager Operator
 
 The Cloud Controller Manager Operator provides features for the `CloudControllerManager` capability.
 
@@ -174,7 +174,7 @@ Additional resources
 
 </div>
 
-## Cloud credential capability
+## Cloud Credential Operator
 
 The Cloud Credential Operator provides features for the `CloudCredential` capability.
 
@@ -199,7 +199,7 @@ Additional resources
 
 </div>
 
-## Cluster Image Registry capability
+## Cluster Image Registry Operator
 
 The Cluster Image Registry Operator provides features for the `ImageRegistry` capability.
 
@@ -218,9 +218,6 @@ In order to integrate the image registry into the cluster’s user authenticatio
 
 If you disable the `ImageRegistry` capability, you can reduce the overall resource footprint of OpenShift Container Platform in Telco environments. Depending on your deployment, you can disable this component if you do not need it.
 
-Project
-See "cluster-image-registry-operator".
-
 <div>
 
 <div class="title">
@@ -237,7 +234,7 @@ Additional resources
 
 </div>
 
-## Cluster storage capability
+## Cluster Storage Operator
 
 The Cluster Storage Operator provides the features for the `Storage` capability.
 
@@ -247,7 +244,7 @@ The Cluster Storage Operator sets OpenShift Container Platform cluster-wide stor
 > If the cluster storage capability is disabled, the cluster will not have a default `storageclass` or any CSI drivers. Users with administrator privileges can create a default `storageclass` and manually install CSI drivers if the cluster storage capability is disabled.
 
 Notes
-The storage class that the Operator creates can be made non-default by editing its annotation, but this storage class cannot be deleted as long as the Operator runs.
+The storage class that the Operator creates can be made non-default by editing its annotation, but this storage class cannot be deleted if the Operator runs.
 
 <div>
 
@@ -261,7 +258,7 @@ Additional resources
 
 </div>
 
-## Console capability
+## Console Operator
 
 The Console Operator provides the features for the `Console` capability.
 
@@ -281,7 +278,7 @@ Additional resources
 
 </div>
 
-## CSI snapshot controller capability
+## Cluster CSI Snapshot Controller Operator
 
 The Cluster CSI Snapshot Controller Operator provides the features for the `CSISnapshot` capability.
 
@@ -314,14 +311,11 @@ The `DeploymentConfig` capability enables and manages the `DeploymentConfig` API
 >
 > Disable the `DeploymentConfig` capability only if you do not require `DeploymentConfig` resources and the `deployer` service account in the cluster.
 
-## Ingress Capability
+## Ingress Operator
 
 The Ingress Operator provides the features for the `Ingress` capability.
 
 The Ingress Operator configures and manages the OpenShift Container Platform router.
-
-Project
-`openshift-ingress-operator`
 
 CRDs
 - `clusteringresses.ingress.openshift.io`
@@ -386,7 +380,7 @@ Additional resources
 
 </div>
 
-## Insights capability
+## Insights Operator
 
 The Insights Operator provides the features for the `Insights` capability.
 
@@ -435,7 +429,7 @@ Additional resources
 
 </div>
 
-## Marketplace capability
+## Marketplace Operator
 
 The Marketplace Operator provides the features for the `marketplace` capability.
 
@@ -459,7 +453,7 @@ Additional resources
 
 </div>
 
-## Node Tuning capability
+## Node Tuning Operator
 
 The Node Tuning Operator provides features for the `NodeTuning` capability.
 
@@ -481,7 +475,7 @@ Additional resources
 
 </div>
 
-## OpenShift samples capability
+## Cluster Samples Operator
 
 The Cluster Samples Operator provides the features for the `openshift-samples` capability.
 
@@ -507,7 +501,7 @@ Additional resources
 
 </div>
 
-## Operator Lifecycle Manager (OLM) Classic capability
+## About Operator Lifecycle Manager (OLM) Classic
 
 OLM (Classic) provides the features for the `OperatorLifecycleManager` capability.
 
@@ -542,7 +536,7 @@ Additional resources
 
 </div>
 
-## Operator Lifecycle Manager (OLM) v1 capability
+## Operator Lifecycle Manager (OLM) v1 Operator
 
 OLM v1 provides the features for the `OperatorLifecycleManagerV1` capability.
 
@@ -674,7 +668,7 @@ Procedure
   $ oc patch clusterversion version --type merge -p '{"spec":{"capabilities":{"baselineCapabilitySet":"vCurrent"}}}'
   ```
 
-  For `baselineCapabilitySet` you can specify `vCurrent`, `v4.17`, or `None`.
+  For `baselineCapabilitySet` you can specify `vCurrent`, `v4.20`, or `None`.
 
 </div>
 

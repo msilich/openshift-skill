@@ -1,14 +1,16 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-While the Compliance Operator comes with ready-to-use profiles, they must be modified to fit the organizations’ needs and requirements. The process of modifying a profile is called *tailoring*.
+Although the Compliance Operator includes ready-to-use profiles, you must modify the profiles to fit your organization’s requirements. The process of modifying a profile is called *tailoring*.
 
 The Compliance Operator provides the `TailoredProfile` object to help tailor profiles.
 
 # Creating a new tailored profile
 
-You can write a tailored profile from scratch by using the `TailoredProfile` object. Set an appropriate `title` and `description` and leave the `extends` field empty. Indicate to the Compliance Operator what type of scan this custom profile will generate:
+You can write a tailored profile from scratch by using the `TailoredProfile` object. Set an appropriate `title` and `description` and leave the `extends` field empty.
 
-- Node scan: Scans the Operating System.
+Indicate to the Compliance Operator what type of scan this custom profile will generate:
+
+- Node scan: Scans the operating system.
 
 - Platform scan: Scans the OpenShift Container Platform configuration.
 
@@ -22,53 +24,61 @@ Procedure
 
 - Set the following annotation on the `TailoredProfile` object:
 
-</div>
+  <div class="formalpara">
 
-<div class="formalpara">
+  <div class="title">
 
-<div class="title">
+  Example `new-profile.yaml`
 
-Example `new-profile.yaml`
+  </div>
 
-</div>
+  ``` yaml
+  apiVersion: compliance.openshift.io/v1alpha1
+  kind: TailoredProfile
+  metadata:
+    name: new-profile
+    annotations:
+      compliance.openshift.io/product-type: Node
+  spec:
+    extends: ocp4-cis-node
+    description: My custom profile
+    title: Custom profile
+    enableRules:
+      - name: ocp4-etcd-unique-ca
+        rationale: We really need to enable this
+    disableRules:
+      - name: ocp4-file-groupowner-cni-conf
+        rationale: This does not apply to the cluster
+  ```
 
-``` yaml
-apiVersion: compliance.openshift.io/v1alpha1
-kind: TailoredProfile
-metadata:
-  name: new-profile
-  annotations:
-    compliance.openshift.io/product-type: Node
-spec:
-  extends: ocp4-cis-node
-  description: My custom profile
-  title: Custom profile
-  enableRules:
-    - name: ocp4-etcd-unique-ca
-      rationale: We really need to enable this
-  disableRules:
-    - name: ocp4-file-groupowner-cni-conf
-      rationale: This does not apply to the cluster
-```
+  </div>
 
-</div>
+  where:
 
-- Set `Node` or `Platform` accordingly.
+  `metadata.annotations.compliance.openshift.io/product-type`
+  Sets `Node` or `Platform` accordingly.
 
-- The `extends` field is optional.
+  `spec.extends`
+  Optional field to specify the base profile.
 
-- Use the `description` field to describe the function of the new `TailoredProfile` object.
+  `spec.description`
+  Specifies the function of the new `TailoredProfile` object.
 
-- Give your `TailoredProfile` object a title with the `title` field.
+  `spec.title`
+  Specifies a title for the `TailoredProfile` object.
 
   > [!NOTE]
-  > Adding the `-node` suffix to the `name` field of the `TailoredProfile` object is similar to adding the `Node` product type annotation and generates an Operating System scan.
+  > Adding the `-node` suffix to the `name` field of the `TailoredProfile` object is similar to adding the `Node` product type annotation and generates an operating system scan.
+
+</div>
 
 # Using tailored profiles to extend existing ProfileBundles
 
-While the `TailoredProfile` CR enables the most common tailoring operations, the XCCDF standard allows even more flexibility in tailoring OpenSCAP profiles. In addition, if your organization has been using OpenScap previously, you may have an existing XCCDF tailoring file and can reuse it.
+Although the `TailoredProfile` CR enables the most common tailoring operations, you can use the XCCDF (Extensible Configuration Checklist Description Format) standard for even more flexibility in tailoring OpenSCAP profiles.
 
-The `ComplianceSuite` object contains an optional `TailoringConfigMap` attribute that you can point to a custom tailoring file. The value of the `TailoringConfigMap` attribute is a name of a config map, which must contain a key called `tailoring.xml` and the value of this key is the tailoring contents.
+In addition, if your organization has been using OpenScap previously, you might have an existing XCCDF tailoring file and can reuse it.
+
+The `ComplianceSuite` object has an optional `TailoringConfigMap` attribute that you can point to a custom tailoring file. The value of the `TailoringConfigMap` attribute is a name of a config map, which must contain a key called `tailoring.xml` and the value of this key is the tailoring contents.
 
 <div>
 

@@ -4,7 +4,7 @@ You can further customize the OpenShift Container Platform web console by adding
 
 # Enhancing the OpenShift Container Platform web console with Operators
 
-Cluster administrators can install Operators on clusters in the OpenShift Container Platform web console by using the software catalog to provide customization outside of layered products for developers. For example, the Web Terminal Operator allows you to start a web terminal in your browser with common CLI tools for interacting with the cluster.
+Cluster administrators can install Operators from the software catalog to extend the OpenShift Container Platform web console beyond layered products. For example, the Web Terminal Operator adds a browser-based terminal with common CLI tools for interacting with the cluster.
 
 # Red Hat OpenShift Lightspeed in the web console
 
@@ -14,7 +14,7 @@ This early access program exists so that customers can provide feedback on the u
 
 # Red Hat OpenShift Pipelines in the web console
 
-Red Hat OpenShift Pipelines is a cloud-native, continuous integration and continuous delivery (CI/CD) solution based on Kubernetes resources. Install the Red Hat OpenShift Pipelines Operator using the software catalog in the OpenShift Container Platform web console. Once the Operator is installed, you can create and modify pipeline objects on **Pipelines** page.
+Red Hat OpenShift Pipelines is a cloud-native, continuous integration and continuous delivery (CI/CD) solution based on Kubernetes resources. Install the Red Hat OpenShift Pipelines Operator by using the software catalog in the OpenShift Container Platform web console. Once the Operator is installed, you can create and modify pipeline objects on **Pipelines** page.
 
 # Red Hat OpenShift Serverless in the web console
 

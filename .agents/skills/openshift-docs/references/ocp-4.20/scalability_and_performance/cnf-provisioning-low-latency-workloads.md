@@ -78,7 +78,7 @@ Procedure
           type: RuntimeDefault
       containers:
       - name: dynamic-low-latency-pod
-        image: "registry.redhat.io/openshift4/cnf-tests-rhel8:v4.17"
+        image: "registry.redhat.io/openshift4/cnf-tests-rhel8:v4.20"
         command: ["sleep", "10h"]
         resources:
           requests:

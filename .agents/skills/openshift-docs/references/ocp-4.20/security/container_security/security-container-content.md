@@ -4,7 +4,9 @@ To ensure the security of the content inside your containers you need to start w
 
 # Securing inside the container
 
-Applications and infrastructures are composed of readily available components, many of which are open source packages such as, the Linux operating system, JBoss Web Server, PostgreSQL, and Node.js.
+For the security of your containers, you need to know where any source packages originally came from, what versions are used, who built them, and whether there is any malicious code inside them.
+
+However, when using these packages, you should answer the following questions about the packages:
 
 Containerized versions of these packages are also available. However, you need to know where the packages originally came from, what versions are used, who built them, and whether there is any malicious code inside them.
 
@@ -16,48 +18,48 @@ Some questions to answer include:
 
 - Are the runtime and operating system layers current?
 
-By building your containers from Red Hat [Universal Base Images](https://access.redhat.com/articles/4238681) (UBI) you are assured of a foundation for your container images that consists of the same RPM-packaged software that is included in Red Hat Enterprise Linux. No subscriptions are required to either use or redistribute UBI images.
+By building your containers from Red Hat Universal Base Images (UBI) you are assured of a foundation for your container images that consists of the same RPM-packaged software that is included in Red Hat Enterprise Linux. No subscriptions are required to either use or redistribute UBI images.
 
-To assure ongoing security of the containers themselves, security scanning features, used directly from RHEL or added to OpenShift Container Platform, can alert you when an image you are using has vulnerabilities. OpenSCAP image scanning is available in RHEL and the [Red Hat Quay Container Security Operator](https://access.redhat.com/documentation/en-us/red_hat_quay/3/html/red_hat_quay_operator_features/container-security-operator-setup) can be added to check container images used in OpenShift Container Platform.
+To assure ongoing security of the containers themselves, security scanning features, used directly from RHEL or added to OpenShift Container Platform, can alert you when an image you are using has vulnerabilities. OpenSCAP image scanning is available in RHEL and the Red Hat Quay Container Security Operator can be added to check container images used in OpenShift Container Platform.
 
 # Creating redistributable images with UBI
 
-To create containerized applications, you typically start with a trusted base image that offers the components that are usually provided by the operating system. These include the libraries, utilities, and other features the application expects to see in the operating system’s file system.
+You can typically start with a trusted base image that offers the components that are usually provided by the operating system to create containerized applications. These include the libraries, utilities, and other features the application expects to see in the operating system’s file system.
 
-Red Hat Universal Base Images (UBI) were created to encourage anyone building their own containers to start with one that is made entirely from Red Hat Enterprise Linux rpm packages and other content. These UBI images are updated regularly to keep up with security patches and free to use and redistribute with container images built to include your own software.
+Red Hat Universal Base Images (UBI) were created to encourage anyone building their own containers to start with one that is made entirely from Red Hat Enterprise Linux RPM packages and other content. These UBI images are updated regularly to keep up with security patches and free to use and redistribute with container images built to include your own software.
 
-Search the [Red Hat Ecosystem Catalog](https://catalog.redhat.com/software/containers/explore) to both find and check the health of different UBI images. As someone creating secure container images, you might be interested in these two general types of UBI images:
+Search the Red Hat Ecosystem Catalog to both find and check the health of different UBI images. As someone creating secure container images, you might be interested in these two general types of UBI images:
 
-- **UBI**: There are standard UBI images for RHEL 7, 8, and 9 (`ubi7/ubi`, `ubi8/ubi`, and `ubi9/ubi`), as well as minimal images based on those systems (`ubi7/ubi-minimal`, `ubi8/ubi-mimimal`, and ubi9/ubi-minimal). All of these images are preconfigured to point to free repositories of RHEL software that you can add to the container images you build, using standard `yum` and `dnf` commands.
+- **UBI**: There are standard UBI images for RHEL 7, 8, and 9 (`ubi7/ubi`, `ubi8/ubi`, and `ubi9/ubi`), and minimal images based on those systems (`ubi7/ubi-minimal`, `ubi8/ubi-mimimal`, and ubi9/ubi-minimal). All of these images are preconfigured to point to free repositories of RHEL software that you can add to the container images you build, using standard `yum` and `dnf` commands.
 
   > [!NOTE]
   > Red Hat encourages people to use these images on other distributions, such as Fedora and Ubuntu.
 
 - **Red Hat Software Collections**: Search the Red Hat Ecosystem Catalog for `rhscl/` to find images created to use as base images for specific types of applications. For example, there are Apache httpd (`rhscl/httpd-*`), Python (`rhscl/python-*`), Ruby (`rhscl/ruby-*`), Node.js (`rhscl/nodejs-*`) and Perl (`rhscl/perl-*`) rhscl images.
 
-Keep in mind that while UBI images are freely available and redistributable, Red Hat support for these images is only available through Red Hat product subscriptions.
-
-See [Using Red Hat Universal Base Images](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/building_running_and_managing_containers/index#using_red_hat_universal_base_images_standard_minimal_and_runtimes) in the Red Hat Enterprise Linux documentation for information on how to use and build on standard, minimal and init UBI images.
+Remember that while UBI images are freely available and redistributable, Red Hat support for these images is only available through Red Hat product subscriptions.
 
 # Security scanning in RHEL
 
-For Red Hat Enterprise Linux (RHEL) systems, OpenSCAP scanning is available from the `openscap-utils` package. In RHEL, you can use the `openscap-podman` command to scan images for vulnerabilities. See [Scanning containers and container images for vulnerabilities](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/security_hardening/index#scanning-the-system-for-configuration-compliance-and-vulnerabilities_security-hardening) in the Red Hat Enterprise Linux documentation.
+For Red Hat Enterprise Linux (RHEL) systems, OpenSCAP scanning is available from the `openscap-utils` package. In RHEL, you can use the `openscap-podman` command to scan images for vulnerabilities.
 
-OpenShift Container Platform enables you to leverage RHEL scanners with your CI/CD process. For example, you can integrate static code analysis tools that test for security flaws in your source code and software composition analysis tools that identify open source libraries to provide metadata on those libraries such as known vulnerabilities.
+OpenShift Container Platform enables you to use RHEL scanners with your Continuous Integration and Continuous Delivery (CI/CD) process. For example, you can integrate static code analysis tools that test for security flaws in your source code and software composition analysis tools that identify open source libraries to provide metadata on those libraries such as known vulnerabilities.
 
 ## Scanning OpenShift images
 
-For the container images that are running in OpenShift Container Platform and are pulled from Red Hat Quay registries, you can use an Operator to list the vulnerabilities of those images. The [Red Hat Quay Container Security Operator](https://access.redhat.com/documentation/en-us/red_hat_quay/3/html/red_hat_quay_operator_features/container-security-operator-setup) can be added to OpenShift Container Platform to provide vulnerability reporting for images added to selected namespaces.
+For the container images that are running in OpenShift Container Platform and are pulled from Red Hat Quay registries, you can use an Operator to list the vulnerabilities of those images. The Red Hat Quay Container Security Operator can be added to OpenShift Container Platform to provide vulnerability reporting for images added to selected namespaces.
 
-Container image scanning for Red Hat Quay is performed by the [Clair](https://access.redhat.com/documentation/en-us/red_hat_quay/3/html/vulnerability_reporting_with_clair_on_red_hat_quay/index). In Red Hat Quay, Clair can search for and report vulnerabilities in images built from RHEL, CentOS, Oracle, Alpine, Debian, and Ubuntu operating system software.
+Container image scanning for Red Hat Quay is performed by Clair. In Red Hat Quay, Clair can search for and report vulnerabilities in images built from RHEL, CentOS, Oracle, Alpine, Debian, and Ubuntu operating system software.
 
 # Integrating external scanning
 
-OpenShift Container Platform makes use of [object annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) to extend functionality. External tools, such as vulnerability scanners, can annotate image objects with metadata to summarize results and control pod execution. This section describes the recognized format of this annotation so it can be reliably used in consoles to display useful data to users.
+OpenShift Container Platform makes use of object annotations to extend functionality. You can use external tools, such as vulnerability scanners, to annotate image objects with metadata to summarize results and control pod execution.
+
+This section describes the recognized format of this annotation so it can be reliably used in consoles to display useful data to users.
 
 ## Image metadata
 
-There are different types of image quality data, including package vulnerabilities and open source software (OSS) license compliance. Additionally, there may be more than one provider of this metadata. To that end, the following annotation format has been reserved:
+There are different types of image quality data, including package vulnerabilities and open source software (OSS) license compliance. Additionally, there might be more than one provider of this metadata. To that end, the following annotation format has been reserved:
 
     quality.images.openshift.io/<qualityType>.<providerId>: {}
 
@@ -110,7 +112,7 @@ The value of the image quality annotation is structured data that must adhere to
 | `name` | Yes | Provider display name | String |
 | `timestamp` | Yes | Scan timestamp | String |
 | `description` | No | Short description | String |
-| `reference` | Yes | URL of information source or more details. Required so user may validate the data. | String |
+| `reference` | Yes | URL of information source or more details. Required so user might validate the data. | String |
 | `scannerVersion` | No | Scanner version | String |
 | `compliant` | No | Compliance pass or fail | Boolean |
 | `summary` | No | Summary of issues found | List (see table below) |
@@ -187,7 +189,7 @@ Red Hat Ecosystem Catalog annotation
 
 ## Annotating image objects
 
-While image stream objects are what an end user of OpenShift Container Platform operates against, image objects are annotated with security metadata. Image objects are cluster-scoped, pointing to a single image that may be referenced by many image streams and tags.
+While image stream objects are what a user of OpenShift Container Platform operates against, image objects are annotated with security metadata. Image objects are cluster-scoped, pointing to a single image that might be referenced by many image streams and tags.
 
 ### Example annotate CLI command
 
@@ -219,11 +221,11 @@ annotations:
 
 ## Integration reference
 
-In most cases, external tools such as vulnerability scanners develop a script or plugin that watches for image updates, performs scanning, and annotates the associated image object with the results. Typically this automation calls the OpenShift Container Platform 4.17 REST APIs to write the annotation. See OpenShift Container Platform REST APIs for general information on the REST APIs.
+In most cases, external tools such as vulnerability scanners develop a script or plugin that watches for image updates, performs scanning, and annotates the associated image object with the results. Typically this automation calls the OpenShift Container Platform 4.20 REST APIs to write the annotation. See OpenShift Container Platform REST APIs for general information about the REST APIs.
 
 ### Example REST API call
 
-The following example call using `curl` overrides the value of the annotation. Be sure to replace the values for `<token>`, `<openshift_server>`, `<image_id>`, and `<image_annotation>`.
+The following example call by using `curl` overrides the value of the annotation. Be sure to replace the values for `<token>`, `<openshift_server>`, `<image_id>`, and `<image_annotation>`.
 
 <div class="formalpara">
 

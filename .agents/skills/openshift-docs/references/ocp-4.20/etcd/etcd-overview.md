@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+etcd is the primary Kubernetes data store on OpenShift Container Platform. Knowing how disk, network, and consensus latency affect etcd helps you keep the control plane reliable.
+
 etcd (pronounced et-see-dee) is a consistent, distributed key-value store that stores small amounts of data across a cluster of machines that can fit entirely in memory. As the core component of many projects, etcd is also the primary data store for Kubernetes, which is the standard system for container orchestration.
 
 By using etcd, you can benefit in several ways:
@@ -14,6 +16,8 @@ By using etcd, you can benefit in several ways:
 > The default etcd configuration optimizes container orchestration. Use it as designed for the best results.
 
 # How etcd works
+
+The etcd Operator deploys and manages the etcd cluster for the OpenShift Container Platform control plane by observing state, analyzing differences, and correcting drift.
 
 To ensure a reliable approach to cluster configuration and management, etcd uses the etcd Operator. The Operator simplifies the use of etcd on a Kubernetes container platform such as OpenShift Container Platform.
 
@@ -40,7 +44,9 @@ Additional resources
 
 </div>
 
-# Understanding etcd performance
+# Factors that affect etcd performance
+
+Disk latency, network latency and jitter, consensus delay, database size, and Kubernetes API transaction rate all influence etcd reliability on OpenShift Container Platform.
 
 As a consistent distributed key-value store operating as a cluster of replicated nodes, etcd follows the Raft algorithm by electing one node as the leader and the others as followers. The leader maintains the current state of the system current state and ensures that the followers are up-to-date.
 
@@ -50,15 +56,13 @@ When an etcd client such as `kube-apiserver` connects to an etcd member that is 
 
 When the etcd client requests an action from the leader that requires a quorum, such as writing a value, the leader maintains the client connection open while it writes the local Raft log, broadcasts the log to the followers, and waits for the majority of the followers to acknowledge to have committed the log without failures. The leader sends the acknowledgment to the etcd client and closes the session. If failure notifications are received from the followers and a consensus is not met, the leader returns the error message to the client and closes the session.
 
+OpenShift Container Platform maintains etcd timers that are optimized for each platform. OpenShift Container Platform has prescribed validated values that are optimized for each platform provider. The default `etcd timers` parameters with `platform=none` or `platform=metal` values are as follows:
+
 <div class="formalpara">
 
 <div class="title">
 
 OpenShift Container Platform timer conditions for etcd
-
-</div>
-
-OpenShift Container Platform maintains etcd timers that are optimized for each platform. OpenShift Container Platform has prescribed validated values that are optimized for each platform provider. The default `etcd timers` parameters with `platform=none` or `platform=metal` values are as follows:
 
 </div>
 
@@ -70,23 +74,17 @@ OpenShift Container Platform maintains etcd timers that are optimized for each p
   value: "100"
 ```
 
-- This timeout is how long a follower node waits without hearing a heartbeat before it attempts to become the leader.
+</div>
 
-- The frequency that the leader notifies followers that it is still the leader.
+- `ETCD_ELECTION_TIMEOUT` specifies how long a follower node waits without hearing a heartbeat before it attempts to become the leader.
+
+- `ETCD_HEARTBEAT_INTERVAL` specifies the frequency that the leader notifies followers that it is still the leader.
 
 These parameters do not provide all of the information for the control plane or for etcd. An etcd cluster is sensitive to disk latencies. Because etcd must persist proposals to its log, disk activity from other processes might cause long `fsync` latencies. The consequence is that etcd might miss heartbeats, causing request timeouts and temporary leader loss. During a leader loss and reelection, the Kubernetes API cannot process any request that causes a service-affecting event and instability of the cluster.
 
-<div class="formalpara">
-
-<div class="title">
-
-Effects of disk latency on etcd
-
-</div>
+## Effects of disk latency on etcd
 
 An etcd cluster is sensitive to disk latencies. To understand the disk latency that etcd experiences by etcd in your control plane environment, run the Flexible I/O Tester (fio) tests or suite, to check etcd disk performance in OpenShift Container Platform.
-
-</div>
 
 > [!IMPORTANT]
 > Use only the `fio` test to measure disk latency at a specific point in time. This test does not account for long-term disk behavior and other disk workloads that occur with etcd in a production environment.
@@ -109,17 +107,9 @@ When a high latency disk is used, a message states that the disk is not suggeste
 
 When your cluster deployments span many data centers that are using disks for etcd that do not meet the suggested latency, service-affecting failures can occur. In addition, the network latency that the control plane can sustain is dramatically reduced.
 
-<div class="formalpara">
-
-<div class="title">
-
-Effects of network latency and jitter on etcd
-
-</div>
+## Effects of network latency and jitter on etcd
 
 Use the tools that are described in the maximum transmission unit (MTU) discovery and validation section to obtain the average and maximum network latency.
-
-</div>
 
 The value of the heartbeat interval should be approximately the maximum of the average round-trip time (RTT) between members, normally around 1.5 times the round-trip time. With the OpenShift Container Platform default heartbeat interval of 100 ms, the suggested RTT between control plane nodes is less than 33 ms, with a maximum of less than 66 ms (66 ms x 1.5 = 99 ms). Any network latency that is larger might cause service-affecting events and cluster instability.
 
@@ -129,47 +119,23 @@ Consider network latency with network jitter for exact calculations. *Network ji
 
 For example, a network with a maximum latency of 80 ms and jitter of 30 ms will experience latencies of 110 ms, which means etcd will miss heartbeats. This condition results in request timeouts and temporary leader loss. During a leader loss and re-election, the Kubernetes API cannot process any request that causes a service-affecting event and instability of the cluster.
 
-<div class="formalpara">
-
-<div class="title">
-
-Effects of consensus latency on etcd
-
-</div>
+## Effects of consensus latency on etcd
 
 The procedure can run only on an active cluster. The disk or network test should be completed while you plan a cluster deployment. That test validates and monitors cluster health after a deployment.
 
-</div>
-
 By using the `etcdctl` CLI, you can watch the latency for reaching consensus as experienced by etcd. You must identify one of the etcd pods and then retrieve the endpoint health.
 
-<div class="formalpara">
+## etcd peer round-trip time impacts on performance
 
-<div class="title">
+The etcd peer round- trip time (RTT) is not the same as the network RTT. This calculation is an end-to-end test metric about how quickly replication can occur among members.
 
-etcd peer round trip time impacts on performance
+The etcd peer RTT is the metric that shows the latency of etcd to finish replicating a client request among all the etcd members. The OpenShift Container Platform console provides dashboards to visualize the various etcd metrics. In the console, click **Observe** → **Dashboards**. From the dropdown list, select **etcd**.
 
-</div>
+A plot that summarizes the etcd peer RTT is near the end of the etcd **Dashboard** page.
 
-The etcd peer round trip time is not the same as the network round trip time. This calculation is an end-to-end test metric about how quickly replication can occur among members.
-
-</div>
-
-The etcd peer round trip time is the metric that shows the latency of etcd to finish replicating a client request among all the etcd members. The OpenShift Container Platform console provides dashboards to visualize the various etcd metrics. In the console, click **Observe** → **Dashboards**. From the dropdown list, select **etcd**.
-
-A plot that summarizes the etcd peer round trip time is near the end of the etcd **Dashboard** page.
-
-<div class="formalpara">
-
-<div class="title">
-
-Effects of database size on etcd
-
-</div>
+## Effects of database size on etcd
 
 The etcd database size has a direct impact on the time to complete the etcd defragmentation process. OpenShift Container Platform automatically runs the etcd defragmentation on one etcd member at a time when it detects at least 45% fragmentation. During the defragmentation process, the etcd member cannot process any requests. On small etcd databases, the defragmentation process happens in less than a second. With larger etcd databases, the disk latency directly impacts the fragmentation time, causing additional latency, as operations are blocked while defragmentation happens.
-
-</div>
 
 The size of the etcd database is a factor to consider when network partitions isolate a control plane node for a period of time, and the control plane needs to sync after communication is re-established.
 
@@ -224,26 +190,8 @@ https://198.18.111.14:2379, 3.5.6, 1.1 GB
 
 </div>
 
-<div class="formalpara">
+## Effects of the Kubernetes API transaction rate on etcd
 
-<div class="title">
-
-Effects of the Kubernetes API transaction rate on etcd
-
-</div>
-
-When you are using a stretched control plane, the Kebernetes API transaction rate depends on the characteristics of the particular deployment. It depends on the combination of the etcd disk latency, the etcd round trip time, and the size of objects that are written to the API. As a result, when you use stretched control planes, the cluster administrators need to test the environment to determine the sustained transaction rate that is possible for their environment. The `kube-burner` tool can be used for this purpose.
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Determining Kubernetes API transaction rate for your environment
-
-</div>
+When you are using a stretched control plane, the Kubernetes API transaction rate depends on the characteristics of the particular deployment. It depends on the combination of the etcd disk latency, the etcd RTT, and the size of objects that are written to the API. As a result, when you use stretched control planes, the cluster administrators need to test the environment to determine the sustained transaction rate that is possible for their environment. The `kube-burner` tool can be used for this purpose.
 
 You cannot determine the transaction rate of the Kubernetes API without measuring it. One of the tools that is used for load testing the control plane is `kube-burner`. The binary provides a OpenShift Container Platform wrapper for testing OpenShift Container Platform clusters. It is used to test cluster or node density. For testing the control plane, `kube-burner ocp` has three workload profiles: `cluster-density`, `cluster-density-v2`, and `cluster-density-ms`. Each workload profile creates a series of resources designed to load the control.
-
-</div>

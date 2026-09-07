@@ -275,7 +275,7 @@ Procedure
             node-role.kubernetes.io/worker: ""
           containers:
           - name: openshift-ipfailover
-            image: registry.redhat.io/openshift4/ose-keepalived-ipfailover-rhel9:v4.17
+            image: registry.redhat.io/openshift4/ose-keepalived-ipfailover-rhel9:v4.20
             ports:
             - containerPort: 63000
               hostPort: 63000
@@ -774,7 +774,7 @@ Procedure
             spec:
               containers:
               - name: remove-ipfailover
-                image: registry.redhat.io/openshift4/ose-keepalived-ipfailover-rhel9:v4.17
+                image: registry.redhat.io/openshift4/ose-keepalived-ipfailover-rhel9:v4.20
                 command: ["/var/lib/ipfailover/keepalived/remove-failover.sh"]
               nodeSelector:
                 kubernetes.io/hostname: <host_name>

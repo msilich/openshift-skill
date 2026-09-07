@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can remove the OpenShift Compliance Operator from your cluster by using the OpenShift Container Platform web console or the CLI.
+You can remove the OpenShift Compliance Operator from your cluster by using the OpenShift Container Platform web console or the OpenShift CLI (`oc`).
 
 # Uninstalling the OpenShift Compliance Operator from OpenShift Container Platform using the web console
 
@@ -14,21 +14,17 @@ Prerequisites
 
 </div>
 
-- Access to an OpenShift Container Platform cluster using an account with `cluster-admin` permissions.
+- Access to an OpenShift Container Platform cluster by using an account with `cluster-admin` permissions.
 
-- The OpenShift Compliance Operator must be installed.
+- The OpenShift Compliance Operator is installed.
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To remove the Compliance Operator by using the OpenShift Container Platform web console:
 
 </div>
 
@@ -50,6 +46,8 @@ To remove the Compliance Operator by using the OpenShift Container Platform web 
 
     1.  Confirm the deletion by typing `openshift-compliance` in the dialog box, and click **Delete**.
 
+</div>
+
 # Uninstalling the OpenShift Compliance Operator from OpenShift Container Platform using the CLI
 
 To remove the Compliance Operator, you must first delete the objects in the namespace. After the objects are removed, you can remove the Operator and its namespace by deleting the **openshift-compliance** project.
@@ -62,9 +60,9 @@ Prerequisites
 
 </div>
 
-- Access to an OpenShift Container Platform cluster using an account with `cluster-admin` permissions.
+- Access to an OpenShift Container Platform cluster by using an account with `cluster-admin` permissions.
 
-- The OpenShift Compliance Operator must be installed.
+- The OpenShift Compliance Operator is installed.
 
 </div>
 
@@ -171,3 +169,9 @@ Verification
     </div>
 
 </div>
+
+# Additional resources
+
+- [Installing the Compliance Operator](compliance-operator-installation.md#compliance-operator-installation)
+
+- [Managing the Compliance Operator](compliance-operator-manage.md#compliance-operator-understanding)

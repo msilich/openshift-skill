@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Volume Populators enable the automatic pre-loading of data into a volume during dynamic provisioning, instead of provisioning an empty volume.
+Volume populators enable the automatic pre-loading of data into a volume during dynamic provisioning, instead of provisioning an empty volume.
 
 # Volume populators overview
 
-In OpenShift Container Platform versions 4.12 through 4.19, the `dataSource` field in a persistent volume claim (PVC) spec provides volume populator capability. However, it is limited to using only PVCs and snapshots as the data source for populating volumes.
+With volume populators, using the `dataSourceRef` field, you can prepopulate volumes from a Custom Resource Definition (CRD) instead of only persistent volume claims (PVCs) and snapshots.
+
+In OpenShift Container Platform versions 4.12 through 4.19, the `dataSource` field in a PVC spec provides volume populator capability. However, it is limited to using only PVCs and snapshots as the data source for populating volumes.
 
 Starting with OpenShift Container Platform version 4.20, the `dataSourceRef` field is used instead. With the `dataSourceRef` field, you can use any appropriate custom resource (CR) as the data source to prepopulate a new volume.
 
@@ -13,19 +15,17 @@ Starting with OpenShift Container Platform version 4.20, the `dataSourceRef` fie
 
 Volume population is enabled by default and OpenShift Container Platform includes the installed `volume-data-source-validator` controller. However, OpenShift Container Platform does not ship with any volume populators.
 
-# Creating volume populators
+# Volume populators creation
 
-To create and use volume populators:
-
-1.  Create a custom resource definition (CRD) for volume populators.
-
-2.  Create a prepopulated volume using a volume populator.
+To implement custom volume prepopulation behavior, create a volume populator by defining a custom resource definition (CRD) and then using it to create prepopulated volumes.
 
 ## Creating CRDs for volume populators
 
-The following procedure explains how to create an example "hello, world" custom resource definition (CRD) for a volume populator.
+To enable custom volume prepopulation, create a Custom Resource Definition (CRD) that defines a data source that users can instantiate to populate persistent volume claims (PVCs).
 
-Users can then create instances of this CRD to populate persistent volume claims (PVCs).
+The following procedure explains how to create an example "hello, world" CRD for a volume populator.
+
+Users can then create instances of this CRD to populate PVCs.
 
 <div>
 
@@ -149,7 +149,7 @@ Procedure
 
         </div>
 
-        - Reference the namespace that you created earlier.
+        Where `metadata.namespace` references the namespace that you created earlier.
 
     2.  Create a cluster role for the populator using the following example YAML file:
 
@@ -201,13 +201,13 @@ Procedure
 
         </div>
 
-        - Role binding name.
+        - `metadata.name`: Specifies the role binding name.
 
-        - Reference the name of the service account that you created earlier.
+        - `subjects.name`: References the name of the service account that you created earlier.
 
-        - Reference the name of the namespace for the service account that you created earlier.
+        - `subjects.namespace`: References the name of the namespace for the service account that you created earlier.
 
-        - Reference the cluster role you created earlier.
+        - `roleRef.name`: References the cluster role you created earlier.
 
     4.  Create a Deployment for the populator using the following example YAML file:
 
@@ -251,9 +251,9 @@ Procedure
 
         </div>
 
-        - Reference the namespace that you created earlier.
+        - `metadata.namespace`: References the namespace that you created earlier.
 
-        - Reference the service account that you created earlier.
+        - `spec.template.spec.serviceAccount`: References the service account that you created earlier.
 
 4.  Create a volume populator to register the `kind:Hello` resource as a valid data source for the volume using the following example YAML file:
 
@@ -277,9 +277,9 @@ Procedure
 
     </div>
 
-    - Volume populator name.
+    The `metadata.name` field specifies the Volume populator name.
 
-      PVCs that use an unregistered populator generate an event: "The datasource for this PVC does not match any registered VolumePopulator", indicating that the PVC might not be provisioned because you are using an unknown (unregistered) populator.
+    PVCs that use an unregistered populator generate an event: "The datasource for this PVC does not match any registered VolumePopulator", indicating that the PVC might not be provisioned because you are using an unknown (unregistered) populator.
 
 </div>
 
@@ -291,15 +291,17 @@ Next steps
 
 </div>
 
-- You can now create CR instances of this CRD to populate PVCs.
+- You can now create CR instances of this CRD to populate PVCs
+
+  For more information, see "Creating prepopulated volumes using volume populators".
 
 </div>
 
-For information about how to prepopulate volumes using a volume populator, see [Creating prepoluated volumes with volume populators](persistent-storage-csi-vol-populators.md#persistent-storage-csi-vol-populator-procedure_persistent-storage-csi-vol-populators).
-
 ## Creating prepopulated volumes using volume populators
 
-The following procedure explains how to create a prepopulated persistent volume claim (PVC) using the example `hellos.hello.example.com` Custom Resource Definition (CRD) created previously.
+To create volumes that are automatically filled with data when provisioned, define a Custom Resource Definition (CRD) as a data source and reference it when creating the persistent volume claim (PVC).
+
+The following procedure explains how to create a prepopulated PVC using the example `hellos.hello.example.com` CRD created previously.
 
 In this example, rather than using an actual data source, you are creating a file called "example.txt" that contains the string "Hello, world!" in the root directory of the volume. For a real-world implementation, you need to create your own volume populator.
 
@@ -313,7 +315,7 @@ Prerequisites
 
 - You are logged in to a running OpenShift Container Platform cluster.
 
-- There is an existing custom resource definition (CRD) for volume populators.
+- There is an existing CRD for volume populators.
 
 - OpenShift Container Platform does not ship with any volume populators. You **must** create your own volume populator.
 
@@ -371,9 +373,9 @@ Procedure
 
     </div>
 
-    - The `dataSourceRef` field specifies the data source for the PVC.
+    - `spec.dataSourceRef`: Specifies the data source for the PVC.
 
-    - The name of the CR that you are using as the data source. In this example, 'example-hello'.
+    - `spec.dataSourceRef.name`: Specifies the name of the CR that you are using as the data source. In this example, it is 'example-hello'.
 
 </div>
 
@@ -391,22 +393,22 @@ Verification
     $ oc get pvc example-pvc -n hello
     ```
 
-    - In this example, the name of the PVC is `example-pvc`.
+    In this example, the name of the PVC is `example-pvc`.
 
-      <div class="formalpara">
+    <div class="formalpara">
 
-      <div class="title">
+    <div class="title">
 
-      Example output
+    Example output
 
-      </div>
+    </div>
 
-      ``` terminal
-      NAME          STATUS    VOLUME        CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
-      example-pvc   Bound     my-pv         10Mi       ReadWriteOnce  gp3-csi        <unset>                 14s
-      ```
+    ``` terminal
+    NAME          STATUS    VOLUME        CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+    example-pvc   Bound     my-pv         10Mi       ReadWriteOnce  gp3-csi        <unset>                 14s
+    ```
 
-      </div>
+    </div>
 
 2.  Create a job that reads from the PVC to verify that the data source information was applied using the following example file:
 
@@ -444,9 +446,9 @@ Verification
 
     </div>
 
-    - The location and name of the file with the "Hello, world!" text.
+    - `spec.template.spec.containers.command`: Specifies the location and name of the file with the "Hello, world!" text. In this example, the location is "/mnt/example.txt".
 
-    - The name of the PVC you created in Step 2. In this example, `example-pvc`.
+    - `spec.template.spec.volumes.persistentVolumeClaim`: Specifies the name of the PVC you created in Step 2. In this example, it is `example-pvc`.
 
 3.  Start the job by running the following command:
 
@@ -484,7 +486,7 @@ Verification
 
     <div class="title">
 
-    Expected output
+    Example expected output
 
     </div>
 
@@ -496,9 +498,9 @@ Verification
 
 </div>
 
-## Uninstalling volume populators
+# Uninstalling volume populators
 
-The following procedure explains how to uninstall volume populators.
+To remove custom volume prepopulation functionality, delete all volume populator resources in reverse order of creation.
 
 <div>
 
@@ -514,7 +516,7 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -522,12 +524,12 @@ Procedure
 
 </div>
 
-To uninstall volume populators, delete in reverse order all objects installed in the procedures under:
+- To uninstall volume populators, delete in reverse order all objects installed in the following procedures:
+
+  1.  "Creating prepopulated volumes using volume populators".
+
+  2.  "Creating CRDs for volume populators".
+
+      Be sure to remove the `VolumePopulator` instance.
 
 </div>
-
-1.  Section *Creating prepopulated volumes using volume populators*.
-
-2.  Section *Creating CRDs for volume populators*.
-
-    Be sure to remove the `VolumePopulator` instance.

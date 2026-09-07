@@ -20,7 +20,7 @@ Review the following information regarding backing up applications by using OADP
 
 - You can schedule backups by creating a `Schedule` CR instead of a `Backup` CR. See *Scheduling backups using Schedule CR*.
 
-- OpenShift Container Platform 4.17 enforces a pod security admission (PSA) policy that can hinder the readiness of pods during a Restic restore process.
+- OpenShift Container Platform 4.20 enforces a pod security admission (PSA) policy that can hinder the readiness of pods during a Restic restore process.
 
   This issue has been resolved in the OADP 1.1.6 and OADP 1.2.2 releases, therefore it is recommended that users upgrade to these releases.
 

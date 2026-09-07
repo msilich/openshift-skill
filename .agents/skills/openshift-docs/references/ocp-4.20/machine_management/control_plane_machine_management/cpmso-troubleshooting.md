@@ -162,7 +162,7 @@ Procedure
     > [!IMPORTANT]
     > Before continuing, ensure that your cluster has two healthy control plane machines. Performing the actions in this procedure on more than one control plane machine risks losing etcd quorum and can cause data loss.
     >
-    > If you have lost the majority of your control plane hosts, leading to etcd quorum loss, then you must follow the disaster recovery procedure "Restoring to a previous cluster state" instead of this procedure.
+    > If you have lost the majority of your control plane hosts, leading to etcd quorum loss, then you must follow the disaster recovery procedure "Restoring to an earlier cluster state" instead of this procedure.
 
 2.  Edit the machine CR for the failed control plane machine by running the following command:
 
@@ -184,7 +184,7 @@ Additional resources
 
 </div>
 
-- [Restoring to a previous cluster state](../../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
+- [Restoring to an earlier cluster state](../../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
 
 </div>
 
@@ -357,7 +357,7 @@ Procedure
           name: openstack-cloud-credentials
           namespace: openshift-machine-api
         flavor: m1.xlarge
-        image: rhcos-4.17
+        image: rhcos-4.20
         kind: OpenstackProviderSpec
         metadata:
           creationTimestamp: null

@@ -321,6 +321,6 @@ Additional resources
 
 - [Initial Operator configuration](../../installing/installing_ibm_power/installing-ibm-power.md#installation-operators-config)
 
-- [Scaling down the data plane to zero](../hcp-troubleshooting.md#scale-down-data-plane_hcp-troubleshooting)
+- [Scaling down the data plane to zero](../hcp-machine-config.md#scale-down-data-plane_hcp-machine-config)
 
 </div>

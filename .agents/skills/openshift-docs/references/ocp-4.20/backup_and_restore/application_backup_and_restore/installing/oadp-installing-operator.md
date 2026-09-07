@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Install the OpenShift API for Data Protection (OADP) Operator on OpenShift Container Platform 4.17 by using Operator Lifecycle Manager (OLM).
+Install the OpenShift API for Data Protection (OADP) Operator on OpenShift Container Platform 4.20 by using Operator Lifecycle Manager (OLM).
 
 The OADP Operator installs [Velero 1.16](https://velero.io/docs/v1.16/).
 

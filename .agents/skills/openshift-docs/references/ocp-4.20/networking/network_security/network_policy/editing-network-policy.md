@@ -2,7 +2,7 @@
 
 As a cluster administrator, you can edit an existing network policy for a namespace.
 
-# Editing a network policy
+# Edit a network policy
 
 To modify existing policy configurations, you can edit a network policy in a namespace. Edit policies by modifying the policy file and applying it with `oc apply`, or by using the `oc edit` command directly.
 

@@ -591,7 +591,7 @@ Additional resources
 
 </div>
 
-- [Preparing to update to OpenShift Container Platform 4.17](../../../updating/preparing_for_updates/updating-cluster-prepare.md#updating-cluster-prepare)
+- [Preparing to update to OpenShift Container Platform 4.20](../../../updating/preparing_for_updates/updating-cluster-prepare.md#updating-cluster-prepare)
 
 </div>
 

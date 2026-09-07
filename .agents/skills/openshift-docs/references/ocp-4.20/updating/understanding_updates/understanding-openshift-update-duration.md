@@ -109,7 +109,7 @@ Additional resources
 
 - [Machine Config Overview](../../machine_configuration/index.md#machine-config-overview)
 
-- [Pod disruption budget](../../nodes/pods/nodes-pods-configuring.md#nodes-pods-configuring-pod-distruption-about_nodes-pods-configuring)
+- [Understanding how to use pod disruption budgets to specify the number of pods that must be up](../../nodes/pods/nodes-pods-configuring.md#nodes-pods-pod-disruption-about_nodes-pods-configuring)
 
 </div>
 

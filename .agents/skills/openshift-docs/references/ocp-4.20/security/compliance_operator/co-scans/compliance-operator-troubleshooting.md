@@ -1,6 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This section describes how to troubleshoot the Compliance Operator. The information can be useful either to diagnose a problem or provide information in a bug report. Some general tips:
+You can use the information on how to troubleshoot the Compliance Operator to learn how to diagnose a problem or provide information in a bug report.
+
+When troubleshooting, review the following general tips:
 
 - The Compliance Operator emits Kubernetes events when something important happens. You can either view all events in the cluster using the command:
 
@@ -8,7 +10,7 @@ This section describes how to troubleshoot the Compliance Operator. The informat
    $ oc get events -n openshift-compliance
   ```
 
-  Or view events for an object like a scan using the command:
+  Or view events for an object such as a scan using the command:
 
   ``` terminal
   $ oc describe -n openshift-compliance compliancescan/cis-compliance
@@ -27,13 +29,13 @@ This section describes how to troubleshoot the Compliance Operator. The informat
   $ date -d @1596184628.955853 --utc
   ```
 
-- Many custom resources, most importantly `ComplianceSuite` and `ScanSetting`, allow the `debug` option to be set. Enabling this option increases verbosity of the OpenSCAP scanner pods, as well as some other helper pods.
+- Many custom resources, most importantly `ComplianceSuite` and `ScanSetting`, allow the `debug` option to be set. Enabling this option increases verbosity of the OpenSCAP scanner pods, and some other helper pods.
 
 - If a single rule is passing or failing unexpectedly, it could be helpful to run a single scan or a suite with only that rule to find the rule ID from the corresponding `ComplianceCheckResult` object and use it as the `rule` attribute value in a `Scan` CR. Then, together with the `debug` option enabled, the `scanner` container logs in the scanner pod would show the raw OpenSCAP logs.
 
 # Anatomy of a scan
 
-The following sections outline the components and stages of Compliance Operator scans.
+Before troubleshooting Compliance Operator scans, familiarize yourself with the components and stages of Compliance Operator scans.
 
 ## Compliance sources
 
@@ -112,7 +114,7 @@ Now a `ComplianceSuite` object is created. The flow continues to reconcile the n
 
 ## ComplianceSuite custom resource lifecycle and debugging
 
-The `ComplianceSuite` CR is a wrapper around `ComplianceScan` CRs. The `ComplianceSuite` CR is handled by controller tagged with `logger=suitectrl`. This controller handles creating scans from a suite, reconciling and aggregating individual Scan statuses into a single Suite status. If a suite is set to execute periodically, the `suitectrl` also handles creating a `CronJob` CR that re-runs the scans in the suite after the initial run is done:
+The `ComplianceSuite` CR is a wrapper around `ComplianceScan` CRs. The `ComplianceSuite` CR is handled by controller tagged with `logger=suitectrl`. This controller handles creating scans from a suite, reconciling and aggregating individual Scan statuses into a single Suite status. If a suite is set to run periodically, the `suitectrl` also handles creating a `CronJob` CR that re-runs the scans in the suite after the initial run is done:
 
 ``` terminal
 $ oc get cronjobs
@@ -139,11 +141,11 @@ For the most important issues, events are emitted. View them with `oc describe c
 
 The `ComplianceScan` CRs are handled by the `scanctrl` controller. This is also where the actual scans happen and the scan results are created. Each scan goes through several phases:
 
-### Pending phase
+## Pending phase
 
-The scan is validated for correctness in this phase. If some parameters like storage size are invalid, the scan transitions to DONE with ERROR result, otherwise proceeds to the Launching phase.
+The scan is validated for correctness in this phase. If some parameters such as storage size are invalid, the scan transitions to DONE with ERROR result, otherwise proceeds to the Launching phase.
 
-### Launching phase
+## Launching phase
 
 In this phase, several config maps that contain either environment for the scanner pods or directly the script that the scanner pods will be evaluating. List the config maps:
 
@@ -181,15 +183,15 @@ rhcos4-e8-worker-ip-10-0-169-90.eu-north-1.compute.internal-pod   0/2     Comple
 
 </div>
 
-\+ The scan then proceeds to the Running phase.
+The scan then proceeds to the Running phase.
 
-### Running phase
+## Running phase
 
 The running phase waits until the scanner pods finish. The following terms and processes are in use in the running phase:
 
 - **init container**: There is one init container called `content-container`. It runs the **contentImage** container and executes a single command that copies the **contentFile** to the `/content` directory shared with the other containers in this pod.
 
-- **scanner**: This container runs the scan. For node scans, the container mounts the node filesystem as `/host` and mounts the content delivered by the init container. The container also mounts the `entrypoint` `ConfigMap` created in the Launching phase and executes it. The default script in the entrypoint `ConfigMap` executes OpenSCAP and stores the result files in the `/results` directory shared between the pod’s containers. Logs from this pod can be viewed to determine what the OpenSCAP scanner checked. More verbose output can be viewed with the `debug` flag.
+- **scanner**: This container runs the scan. For node scans, the container mounts the node filesystem as `/host` and mounts the content delivered by the init container. The container also mounts the `entrypoint` `ConfigMap` created in the Launching phase and executes it. The default script in the entrypoint `ConfigMap` executes OpenSCAP and stores the result files in the `/results` directory shared between the containers in the pod. Logs from this pod can be viewed to determine what the OpenSCAP scanner checked. More verbose output can be viewed with the `debug` flag.
 
 - **logcollector**: The logcollector container waits until the scanner container finishes. Then, it uploads the full ARF results to the `ResultServer` and separately uploads the XCCDF results along with scan result and OpenSCAP result code as a `ConfigMap.` These result config maps are labeled with the scan name (`compliance.openshift.io/scan-name=rhcos4-e8-worker`):
 
@@ -236,9 +238,9 @@ Scanner pods for `Platform` scans are similar, except:
 
 When the scanner pods are done, the scans move on to the Aggregating phase.
 
-### Aggregating phase
+## Aggregating phase
 
-In the aggregating phase, the scan controller spawns yet another pod called the aggregator pod. Its purpose it to take the result `ConfigMap` objects, read the results and for each check result create the corresponding Kubernetes object. If the check failure can be automatically remediated, a `ComplianceRemediation` object is created. To provide human-readable metadata for the checks and remediations, the aggregator pod also mounts the OpenSCAP content using an init container.
+In the aggregating phase, the scan controller spawns yet another pod called the aggregator pod. Its purpose is to take the result `ConfigMap` objects, read the results and for each check result create the corresponding Kubernetes object. If the check failure can be automatically remediated, a `ComplianceRemediation` object is created. To provide human-readable metadata for the checks and remediations, the aggregator pod also mounts the OpenSCAP content by using an init container.
 
 When a config map is processed by an aggregator pod, it is labeled the `compliance-remediations/processed` label. The result of this phase are `ComplianceCheckResult` objects:
 
@@ -290,9 +292,9 @@ rhcos4-e8-worker-audit-rules-execution-setfiles            NotApplied
 
 After these CRs are created, the aggregator pod exits and the scan moves on to the Done phase.
 
-### Done phase
+## Done phase
 
-In the final scan phase, the scan resources are cleaned up if needed and the `ResultServer` deployment is either scaled down (if the scan was one-time) or deleted if the scan is continuous; the next scan instance would then recreate the deployment again.
+In the final scan phase, the scan resources are cleaned up if needed and the `ResultServer` deployment is either scaled down (if the scan was one-time) or deleted if the scan is continuous; the next scan instance would then re-create the deployment again.
 
 It is also possible to trigger a re-run of a scan in the Done phase by annotating it:
 
@@ -333,7 +335,7 @@ Example output
 
 </div>
 
-The remediations the `mc` currently consists of are listed in the machine config’s annotations:
+The remediations the `mc` currently consists of are listed in the annotations of the machine config:
 
 ``` terminal
 $ oc describe mc/75-rhcos4-e8-worker-my-companys-compliance-requirements
@@ -355,7 +357,7 @@ Annotations:  remediation/rhcos4-e8-worker-audit-rules-dac-modification-chmod:
 
 </div>
 
-The `ComplianceRemediation` controller’s algorithm works like this:
+The `ComplianceRemediation` controller algorithm works like this:
 
 - All currently applied remediations are read into an initial remediation set.
 
@@ -420,7 +422,7 @@ $ oc logs -l workload=<workload_name> -c <container_name>
 
 # Increasing Compliance Operator resource limits
 
-In some cases, the Compliance Operator might require more memory than the default limits allow. The best way to mitigate this issue is to set custom resource limits.
+In some cases, the Compliance Operator might require more memory than the default limits allow. You can mitigate this issue by setting custom resource limits.
 
 To increase the default memory and CPU limits of scanner pods, see *\`ScanSetting\` Custom resource*.
 
@@ -432,7 +434,7 @@ Procedure
 
 </div>
 
-1.  To increase the Operator’s memory limits to 500 Mi, create the following patch file named `co-memlimit-patch.yaml`:
+1.  To increase the Operator memory limits to 500 Mi, create the following patch file named `co-memlimit-patch.yaml`:
 
     ``` yaml
     spec:
@@ -452,7 +454,7 @@ Procedure
 
 # Configuring Operator resource constraints
 
-The `resources` field defines Resource Constraints for all the containers in the Pod created by the Operator Lifecycle Manager (OLM).
+You can configure the `resources` field in the `compliance-operator` subscription object to define resource constraints for all the containers in the pod created by the Operator Lifecycle Manager (OLM), so the Operator pods have enough CPU and memory.
 
 > [!NOTE]
 > Resource Constraints applied in this process overwrites the existing resource constraints.
@@ -489,7 +491,7 @@ Procedure
 
 # Configuring ScanSetting resources
 
-When using the Compliance Operator in a cluster that contains more than 500 MachineConfigs, the `ocp4-pci-dss-api-checks-pod` pod may pause in the `init` phase when performing a `Platform` scan.
+When using the Compliance Operator in a cluster that contains more than 500 MachineConfigs, the `ocp4-pci-dss-api-checks-pod` pod might pause in the `init` phase when performing a `Platform` scan.
 
 > [!NOTE]
 > Resource constraints applied in this process overwrites the existing resource constraints.
@@ -568,7 +570,10 @@ Procedure
       memory: 1024Mi
     ```
 
-    - The default setting is `500Mi`.
+    where:
+
+    `scanLimits.memory`
+    Specifies the default setting is `500Mi`.
 
 3.  Apply the `ScanSetting` CR to your cluster:
 
@@ -580,7 +585,7 @@ Procedure
 
 # Configuring ScanSetting timeout
 
-The `ScanSetting` object has a timeout option that can be specified in the `ComplianceScanSetting` object as a duration string, such as `1h30m`. If the scan does not finish within the specified timeout, the scan reattempts until the `maxRetryOnTimeout` limit is reached.
+The `ScanSetting` object has a timeout option that you can specify in the `ComplianceScanSetting` object as a duration string, such as `1h30m`. If the scan does not finish within the specified timeout, the scan reattempts until the `maxRetryOnTimeout` limit is reached.
 
 <div>
 
@@ -613,24 +618,28 @@ Procedure
   maxRetryOnTimeout: 3
   ```
 
-  - The `timeout` variable is defined as a duration string, such as `1h30m`. The default value is `30m`. To disable the timeout, set the value to `0s`.
+  where:
 
-  - The `maxRetryOnTimeout` variable defines how many times a retry is attempted. The default value is `3`.
+  `timeout`
+  Specifies a duration string, such as `1h30m`. The default value is `30m`. To disable the timeout, set the value to `0s`.
+
+  `maxRetryOnTimeout`
+  Specifies the `maxRetryOnTimeout` variable defines how many times a retry is attempted. The default value is `3`.
 
 </div>
 
-# Getting support
+# Get support
 
-If you experience difficulty with a procedure described in this documentation, or with OpenShift Container Platform in general, visit the [Red Hat Customer Portal](http://access.redhat.com).
+Red Hat offers several support channels to help you troubleshoot issues and get the most from OpenShift Container Platform.
 
-From the Customer Portal, you can:
+From the Red Hat Customer Portal, you can:
 
-- Search or browse through the Red Hat Knowledgebase of articles and solutions relating to Red Hat products.
+- Search or browse through the Red Hat Knowledgebase of articles and solutions about Red Hat products.
 
-- Submit a support case to Red Hat Support.
+- Submit a support case to Red Hat Support.
 
 - Access other product documentation.
 
-To identify issues with your cluster, you can use Red Hat Lightspeed in [OpenShift Cluster Manager](https://console.redhat.com/openshift). Red Hat Lightspeed provides details about issues and, if available, information on how to solve a problem.
+To identify issues with your cluster, you can use Red Hat Lightspeed in [OpenShift Cluster Manager](https://console.redhat.com/openshift). Red Hat Lightspeed provides details about issues and, if available, information about how to solve a problem.
 
-If you have a suggestion for improving this documentation or have found an error, submit a [Jira issue](https://issues.redhat.com/secure/CreateIssueDetails!init.jspa?pid=12332330&summary=Documentation_issue&issuetype=1&components=12367614&priority=10200&versions=12385624) for the most relevant documentation component. Please provide specific details, such as the section name and OpenShift Container Platform version.
+To suggest improvements or report errors, give specific details such as the section name and OpenShift Container Platform version.

@@ -125,7 +125,27 @@ Procedure
 
 7.  Optional: Select **MAC Spoof Check** to enable MAC spoof filtering. This feature provides security against a MAC spoofing attack by allowing only a single MAC address to exit the pod.
 
-8.  Click **Create**.
+8.  Optional: In the **YAML** tab, add the `spec.config.disableContainerInterface` field. When set to `true`, the Bridge CNI plug-in skips creating a standard container virtual ethernet (`veth`) interface inside the pod’s network namespace. This enables the virtualization networking backend to attach the layer-2 interface directly to the guest VM instead of a standard container.
+
+    Example YAML:
+
+    ``` yaml
+    apiVersion: "k8s.cni.cncf.io/v1"
+    kind: NetworkAttachmentDefinition
+    metadata:
+      name: bridge-network
+      annotations:
+        k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br1
+    spec:
+      config: |
+        {
+    # ...
+          "disableContainerInterface": true,
+    # ...
+        }
+    ```
+
+9.  Click **Create**.
 
 </div>
 
@@ -136,7 +156,7 @@ You can create a network attachment definition (NAD) to provide layer-2 networki
 The NAD and the VM must be in the same namespace.
 
 > [!WARNING]
-> Configuring IP address management (IPAM) in a network attachment definition for virtual machines is not supported.
+> Configuring IP address management (IPAM) in a network attachment definition for VMs is not supported.
 
 <div>
 
@@ -197,6 +217,8 @@ Procedure
     - `spec.config.macspoofchk` is optional and defines a flag to enable the MAC spoof check. When set to `true`, you cannot change the MAC address of the pod or guest interface. This attribute allows only a single MAC address to exit the pod, which provides security against a MAC spoofing attack.
 
     - `spec.config.vlan` is optional and defines the VLAN tag. No additional VLAN configuration is required on the node network configuration policy.
+
+    - `spec.config.disableContainerInterface` is optional. When set to `true`, the Bridge CNI plug-in skips creating a standard container virtual ethernet (`veth`) interface inside the pod’s network namespace. This enables the virtualization networking backend to attach the layer-2 interface directly to the guest VM instead of a standard container.
 
     - `spec.config.preserveDefaultVlan` is optional and defines whether the VM connects to the bridge through the default VLAN. The default value is `true`.
 

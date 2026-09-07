@@ -39,13 +39,16 @@ Procedure
         flavor: m1.xlarge
     ```
 
-    - Specify a RHOSP flavor type that has the same base as the existing selection. For example, you can change `m6i.xlarge` to `m6i.2xlarge` or `m6i.4xlarge`. You can choose larger or smaller flavors depending on your vertical scaling needs.
+    where:
+
+    providerSpec.value.flavor
+    Specify a RHOSP flavor type that has the same base as the existing selection. For example, you can change `m6i.xlarge` to `m6i.2xlarge` or `m6i.4xlarge`. You can choose larger or smaller flavors depending on your vertical scaling needs.
 
 2.  Save your changes.
 
-</div>
+    After you save your changes, machines are replaced with ones that use the flavor you chose.
 
-After you save your changes, machines are replaced with ones that use the flavor you chose.
+</div>
 
 # Additional resources
 

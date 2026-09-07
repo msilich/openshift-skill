@@ -257,7 +257,7 @@ Procedure
         This field describes the network configuration; accepted values are `Layer2` and `Layer3`. Specifying a `Layer2` topology type creates one logical switch that is shared by all nodes. This field specifies the topology configuration. It can be `layer2` or `layer3`.
 
         `role`
-        Specifies `Primary` or `Secondary`. `Primary` is the only `role` specification supported in 4.17.
+        Specifies `Primary` or `Secondary`. `Primary` is the only `role` specification supported in 4.20.
 
         `subnets`
         For `Layer2` topology types the following specifies config details for the field:
@@ -310,7 +310,7 @@ Procedure
         The `topology` field describes the network configuration; accepted values are `Layer2` and `Layer3`. Specifying a `Layer3` topology type creates a layer 2 segment per node, each with a different subnet. Layer 3 routing is used to interconnect node subnets.
 
         `role`
-        Specifies `Primary` or `Secondary`. `Primary` is the only `role` specification supported in 4.17.
+        Specifies `Primary` or `Secondary`. `Primary` is the only `role` specification supported in 4.20.
 
         `subnets`
         For `Layer3` topology types the following specifies config details for the `subnet` field:

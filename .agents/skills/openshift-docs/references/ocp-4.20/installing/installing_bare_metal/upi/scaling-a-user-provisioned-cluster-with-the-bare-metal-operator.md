@@ -59,7 +59,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 does not support enabling a provisioning network when you scale a user-provisioned cluster by using the Bare Metal Operator.
+        > OpenShift Container Platform 4.20 does not support enabling a provisioning network when you scale a user-provisioned cluster by using the Bare Metal Operator.
 
 2.  Create the `Provisioning` CR by running the following command:
 

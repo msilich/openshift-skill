@@ -210,7 +210,7 @@ Procedure
 
     - Specifies the trigger to use as the basis for scaling, as described in the "Understanding the custom metrics autoscaler triggers" section. This example uses OpenShift Container Platform monitoring.
 
-    - Optional: Specifies a trigger authentication or a cluster trigger authentication. For more information, see *Understanding the custom metrics autoscaler trigger authentication* in the *Additional resources* section.
+    - Optional: Specifies a trigger authentication or a cluster trigger authentication. For more information, see "Understanding the custom metrics autoscaler trigger authentication".
 
       - Enter `TriggerAuthentication` to use a trigger authentication. This is the default.
 
@@ -393,11 +393,11 @@ Procedure
 
       - `gradual`: The autoscaler does not terminate an existing job if its associated scaled job is updated. The autoscaler creates new jobs with the latest specs.
 
-    - Optional: Specifies a scaling strategy: `default`, `custom`, or `accurate`. The default is `default`. For more information, see the link in the "Additional resources" section that follows.
+    - Optional: Specifies a scaling strategy: `default`, `custom`, or `accurate`. The default is `default`.
 
-    - Specifies the trigger to use as the basis for scaling, as described in the "Understanding the custom metrics autoscaler triggers" section.
+    - Specifies the trigger to use as the basis for scaling. For more information, see "Understanding custom metrics autoscaler triggers".
 
-    - Optional: Specifies a trigger authentication or a cluster trigger authentication. For more information, see *Understanding the custom metrics autoscaler trigger authentication* in the *Additional resources* section.
+    - Optional: Specifies a trigger authentication or a cluster trigger authentication. For more information, see "Understanding custom metrics autoscaler trigger authentications".
 
       - Enter `TriggerAuthentication` to use a trigger authentication. This is the default.
 
@@ -461,5 +461,7 @@ Verification
 </div>
 
 # Additional resources
+
+- [Understanding custom metrics autoscaler triggers](nodes-cma-autoscaling-custom-trigger.md#nodes-cma-autoscaling-custom-overview-trigger)
 
 - [Understanding custom metrics autoscaler trigger authentications](nodes-cma-autoscaling-custom-trigger-auth.md#nodes-cma-autoscaling-custom-trigger-auth)

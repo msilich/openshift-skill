@@ -6,12 +6,17 @@ Before you can use the Compliance Operator, you must ensure it is deployed in th
 > All cluster nodes must have the same release version in order for this Operator to function properly. As an example, for nodes running RHCOS, all nodes must have the same RHCOS version.
 
 > [!IMPORTANT]
-> The Compliance Operator might report incorrect results on managed platforms, such as OpenShift Dedicated, Red Hat OpenShift Service on AWS Classic, and Microsoft Azure Red Hat OpenShift. For more information, see the Knowledgebase article [Compliance Operator reports incorrect results on Managed Services](https://access.redhat.com/solutions/6983418).
+> The Compliance Operator might report incorrect results on managed platforms, such as OpenShift Dedicated, Red Hat OpenShift Service on AWS Classic, and Microsoft Azure Red Hat OpenShift. For more information, see the Knowledgebase article on Compliance Operator reports on Managed Services.
 
 > [!IMPORTANT]
-> Before deploying the Compliance Operator, you are required to define persistent storage in your cluster to store the raw results output. For more information, see [Persistent storage overview](../../../storage/understanding-persistent-storage.md#persistent-storage-overview_understanding-persistent-storage) and [Managing the default storage class](../../../storage/container_storage_interface/persistent-storage-csi-sc-manage.md#overview).
+> Before deploying the Compliance Operator, you are required to define persistent storage in your cluster to store the raw results output. For more information, see "Persistent storage overview" and "Managing the default storage class".
+
+> [!IMPORTANT]
+> If the `restricted` Security Context Constraints (SCC) have been modified to contain the `system:authenticated` group or has added `requiredDropCapabilities`, the Compliance Operator might not function properly due to permissions issues. You can create a custom SCC for the Compliance Operator scanner pod service account. For more information, see Additional resources.
 
 # Installing the Compliance Operator through the web console
+
+You can install the Compliance Operator through the OpenShift Container Platform web console by using the OperatorHub interface.
 
 <div>
 
@@ -67,12 +72,9 @@ If the Operator is not installed successfully:
 
 2.  Navigate to the **Workloads** → **Pods** page and check the logs in any pods in the `openshift-compliance` project that are reporting issues.
 
-> [!IMPORTANT]
-> If the `restricted` Security Context Constraints (SCC) have been modified to contain the `system:authenticated` group or has added `requiredDropCapabilities`, the Compliance Operator may not function properly due to permissions issues.
->
-> You can create a custom SCC for the Compliance Operator scanner pod service account. For more information, see [Creating a custom SCC for the Compliance Operator](../co-scans/compliance-operator-advanced.md#compliance-custom-scc_compliance-advanced).
-
 # Installing the Compliance Operator using the CLI
+
+You can install the Compliance Operator by using the OpenShift CLI by creating the required namespace, Operator group, and subscription objects.
 
 <div>
 
@@ -118,7 +120,10 @@ Procedure
 
     </div>
 
-    - In OpenShift Container Platform 4.17, the pod security label must be set to `privileged` at the namespace level.
+    where:
+
+    `metadata.labels.pod-security.kubernetes.io/enforce`
+    Specifies the pod security label that must be set to `privileged` at the namespace level in OpenShift Container Platform 4.20.
 
 2.  Create the `Namespace` object:
 
@@ -187,10 +192,10 @@ Procedure
     $ oc create -f subscription-object.yaml
     ```
 
-</div>
+    > [!NOTE]
+    > If you are setting the global scheduler feature and enable `defaultNodeSelector`, you must create the namespace manually and update the annotations of the `openshift-compliance` namespace, or the namespace where the Compliance Operator was installed, with `openshift.io/node-selector: “”`. This removes the default node selector and prevents deployment failures.
 
-> [!NOTE]
-> If you are setting the global scheduler feature and enable `defaultNodeSelector`, you must create the namespace manually and update the annotations of the `openshift-compliance` namespace, or the namespace where the Compliance Operator was installed, with `openshift.io/node-selector: “”`. This removes the default node selector and prevents deployment failures.
+</div>
 
 <div>
 
@@ -215,6 +220,8 @@ Verification
 </div>
 
 # Installing the Compliance Operator on ROSA hosted control planes (HCP)
+
+You can install the Compliance Operator on Red Hat OpenShift Service on AWS by using the OpenShift CLI by creating the required namespace, Operator group, and subscription objects.
 
 As of the Compliance Operator 1.5.0 release, the Operator is tested against Red Hat OpenShift Service on AWS using Hosted control planes.
 
@@ -264,7 +271,10 @@ Procedure
 
     </div>
 
-    - In OpenShift Container Platform 4.17, the pod security label must be set to `privileged` at the namespace level.
+    where:
+
+    `metadata.labels.pod-security.kubernetes.io/enforce`
+    Specifies the pod security label that must be set to `privileged` at the namespace level in OpenShift Container Platform 4.20.
 
 2.  Create the `Namespace` object by running the following command:
 
@@ -362,14 +372,9 @@ Verification
 
 </div>
 
-> [!IMPORTANT]
-> If the `restricted` Security Context Constraints (SCC) have been modified to contain the `system:authenticated` group or has added `requiredDropCapabilities`, the Compliance Operator may not function properly due to permissions issues.
->
-> You can create a custom SCC for the Compliance Operator scanner pod service account. For more information, see [Creating a custom SCC for the Compliance Operator](../co-scans/compliance-operator-advanced.md#compliance-custom-scc_compliance-advanced).
+# Installing the Compliance Operator on hosted control planes
 
-# Installing the Compliance Operator on Hypershift hosted control planes
-
-The Compliance Operator can be installed in hosted control planes using the software catalog by creating a `Subscription` file.
+Install the Compliance Operator on hosted control planes by creating a `Subscription` file in the software catalog so you can run compliance scans in a hosted control plane environment.
 
 > [!IMPORTANT]
 > Hosted control planes is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
@@ -418,7 +423,7 @@ Procedure
 
     </div>
 
-    - In OpenShift Container Platform 4.17, the pod security label must be set to `privileged` at the namespace level.
+    - In OpenShift Container Platform 4.20, the pod security label must be set to `privileged` at the namespace level.
 
 2.  Create the `Namespace` object by running the following command:
 
@@ -517,18 +522,16 @@ Verification
 
 </div>
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+# Additional resources
 
 - [Hosted control planes overview](../../../hosted_control_planes/index.md#hcp-overview)
 
-</div>
+- [Compliance Operator reports incorrect results on Managed Services](https://access.redhat.com/solutions/6983418)
 
-# Additional resources
+- [Persistent storage overview](../../../storage/understanding-persistent-storage.md#persistent-storage-overview_understanding-persistent-storage)
+
+- [Managing the default storage class](../../../storage/container_storage_interface/persistent-storage-csi-sc-manage.md#persistent-storage-csi-sc-manage)
+
+- [Creating a custom SCC for the Compliance Operator](../co-scans/compliance-operator-advanced.md#compliance-custom-scc_compliance-advanced)
 
 - [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks)

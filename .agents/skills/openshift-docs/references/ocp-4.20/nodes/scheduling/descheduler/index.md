@@ -115,8 +115,6 @@ Optionally, you can adjust the underutilized percentage by setting the Technolog
 > Do not enable `CompactAndScale` with any of the following profiles: `LifecycleAndUtilization`, `LongLifecycle`, or `TopologyAndDuplicates`. Enabling these profiles together results in a conflict.
 
 `KubeVirtRelieveAndMigrate`
-This profile is an enhanced version of the `LongLifeCycle` profile.
-
 The `KubeVirtRelieveAndMigrate` profile evicts pods from high-cost nodes to reduce overall resource expenses and enable workload migration. It also periodically rebalances workloads to help maintain similar spare capacity across nodes, which supports better handling of sudden workload spikes. Nodes can experience the following costs:
 
 - **Resource utilization**: Increased resource pressure raises the overhead for running applications.
@@ -133,13 +131,7 @@ The profile enables the `LowNodeUtilization` strategy with the `EvictionsInBackg
 
 - `devEnableSoftTainter`: Enables the soft-tainting component to dynamically apply or remove soft taints as scheduling hints.
 
-<div class="formalpara">
-
-<div class="title">
-
-Example configuration
-
-</div>
+Example configuration:
 
 ``` yaml
 apiVersion: operator.openshift.io/v1
@@ -159,17 +151,9 @@ spec:
     devActualUtilizationProfile: PrometheusCPUCombined
 ```
 
-</div>
-
 The `KubeVirtRelieveAndMigrate` profile requires PSI metrics to be enabled on all worker nodes. You can enable this by applying the following `MachineConfig` custom resource (CR):
 
-<div class="formalpara">
-
-<div class="title">
-
-Example `MachineConfig` CR
-
-</div>
+Example `MachineConfig` CR:
 
 ``` yaml
 apiVersion: machineconfiguration.openshift.io/v1
@@ -183,14 +167,10 @@ spec:
     - psi=1
 ```
 
-</div>
-
 > [!NOTE]
 > The name of the `MachineConfig` object is significant because machine configs are processed in lexicographical order. By default, a config that starts with `98-` disables PSI. To ensure that PSI is enabled, name your config with a higher prefix, such as `99-openshift-machineconfig-worker-psi-karg`.
 
 You can use this profile with the `SoftTopologyAndDuplicates` profile to also rebalance pods based on soft topology constraints, which can be useful in hosted control plane environments.
-
-<!-- -->
 
 `LongLifecycle`
 This profile balances resource usage between nodes and enables the following strategies:

@@ -104,7 +104,7 @@ Procedure
 
     ``` terminal
     NAME            CSV                                         APPROVAL    APPROVED
-    install-5cvnz   ingress-node-firewall.4.17.0-202211122336   Automatic   true
+    install-5cvnz   ingress-node-firewall.4.20.0-202211122336   Automatic   true
     ```
 
     </div>
@@ -125,7 +125,7 @@ Procedure
 
     ``` terminal
     NAME                                        DISPLAY                          VERSION               REPLACES                                    PHASE
-    ingress-node-firewall.4.17.0-202211122336   Ingress Node Firewall Operator   4.17.0-202211122336   ingress-node-firewall.4.17.0-202211102047   Succeeded
+    ingress-node-firewall.4.20.0-202211122336   Ingress Node Firewall Operator   4.20.0-202211122336   ingress-node-firewall.4.20.0-202211102047   Succeeded
     ```
 
     </div>

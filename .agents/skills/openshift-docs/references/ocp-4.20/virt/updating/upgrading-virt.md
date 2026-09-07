@@ -92,9 +92,9 @@ If you use the **Manual** approval strategy, you must approve every pending upda
 
 To avoid risk to cluster supportability and functionality, use the **Automatic** approval strategy. If you must use the **Manual** approval strategy, approve pending Operator updates as soon as they become available.
 
-## Manually approving a pending Operator update
+## Approving a pending Operator update manually
 
-If an installed Operator has the approval strategy in its subscription set to **Manual**, when new updates are released in its current update channel, the update must be manually approved before installation can begin.
+If an installed Operator has the approval strategy in its subscription set to **Manual**, you must manually approve the update before installation can begin. Manual approval reviews the changes and control when updates are applied to prevent unexpected downtime.
 
 <div>
 

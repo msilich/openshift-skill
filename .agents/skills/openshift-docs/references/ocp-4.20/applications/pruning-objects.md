@@ -1,10 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Reclaim cluster storage and optimize API server performance by pruning stale resources. You can run manual CLI commands or configure automated cron jobs to clean up obsolete deployment, build, image, and group records.
+
 Over time, API objects created in OpenShift Container Platform can accumulate in the cluster’s etcd data store through normal user operations, such as when building and deploying applications.
 
 Cluster administrators can periodically prune older versions of objects from the cluster that are no longer required. For example, by pruning images you can delete older images and layers that are no longer in use, but are still taking up disk space.
 
 # Basic pruning operations
+
+Remove obsolete or unreferenced cluster objects to reclaim cluster storage and maintain optimal API server performance.
 
 The CLI groups prune operations under a common parent command:
 
@@ -19,6 +23,8 @@ This specifies:
 - The `<options>` supported to prune that object type.
 
 # Pruning groups
+
+Remove stale user group records from external identity providers by using the group pruner. Pruning orphaned groups keeps user management data accurate, ensures cluster security, and prevents unauthorized access permissions.
 
 To prune groups records from an external provider, administrators can run the following command:
 
@@ -59,6 +65,8 @@ Procedure
 </div>
 
 # Pruning deployment resources
+
+Delete completed or failed deployment configurations and pod records to free up cluster storage, reduce database clutter, and speed up resource lookups.
 
 You can prune resources associated with deployments that are no longer required by the system, due to age and status.
 
@@ -142,6 +150,8 @@ Procedure
 
 # Pruning builds
 
+Prune obsolete build records and logs from your cluster to reclaim cluster storage and prevent API performance degradation.
+
 To prune builds that are no longer required by the system due to age and status, administrators can run the following command:
 
 ``` terminal
@@ -180,10 +190,10 @@ Procedure
         --keep-younger-than=60m --confirm
     ```
 
-</div>
+    > [!NOTE]
+    > Developers can enable automatic build pruning by modifying their build configuration.
 
-> [!NOTE]
-> Developers can enable automatic build pruning by modifying their build configuration.
+</div>
 
 <div>
 
@@ -193,13 +203,15 @@ Additional resources
 
 </div>
 
-- [Performing advanced builds → Pruning builds](../cicd/builds/advanced-build-operations.md#builds-build-pruning-advanced-build-operations)
+- [Performing advanced builds → Pruning builds](../cicd/builds/advanced-build-operations.md#builds-build-pruning_advanced-build-operations)
 
 </div>
 
 # Automatically pruning images
 
-To reclaim storage in the OpenShift image registry in OpenShift Container Platform and set how long the cluster keeps images, you can configure the automatic image pruner. You set the schedule, suspension, and retention options on the pruning custom resource (CR).
+To reclaim storage in the OpenShift image registry in OpenShift Container Platform and define image retention period, you can configure the automatic image pruner.
+
+You set the schedule, suspension, and retention options on the pruning custom resource (CR).
 
 <div>
 
@@ -267,31 +279,46 @@ Procedure
       message: "Most recent image pruning job succeeded."
   ```
 
-- `schedule`: `CronJob` formatted schedule. This is an optional field, default is daily at midnight.
+  where:
 
-- `suspend`: If set to `true`, the `CronJob` running pruning is suspended. This is an optional field, default is `false`. The initial value on new clusters is `false`.
+  `spec.schedule`
+  `CronJob` formatted schedule. This is an optional field, default is daily at midnight.
 
-- `keepTagRevisions`: The number of revisions per tag to keep. This is an optional field, default is `3`. The initial value is `3`.
+  `spec.suspend`
+  If set to `true`, the `CronJob` running pruning is suspended. This is an optional field, default is `false`. The initial value on new clusters is `false`.
 
-- `keepYoungerThanDuration`: Retain images younger than this duration. This is an optional field. If a value is not specified, either `keepYoungerThan` or the default value `60m` (60 minutes) is used.
+  `spec.keepTagRevisions`
+  The number of revisions per tag to keep. This is an optional field, default is `3`. The initial value is `3`.
 
-- `keepYoungerThan`: Deprecated. The same as `keepYoungerThanDuration`, but the duration is specified as an integer in nanoseconds. This is an optional field. When `keepYoungerThanDuration` is set, this field is ignored.
+  `spec.keepYoungerThanDuration`
+  Retain images younger than this duration. This is an optional field. If a value is not specified, either `keepYoungerThan` or the default value `60m` (60 minutes) is used.
 
-- `resources`: Standard pod resource requests and limits. This is an optional field.
+  `spec.keepYoungerThan`
+  Deprecated. The same as `keepYoungerThanDuration`, but the duration is specified as an integer in nanoseconds. This is an optional field. When `keepYoungerThanDuration` is set, this field is ignored.
 
-- `affinity`: Standard pod affinity. This is an optional field.
+  `spec.resources`
+  Standard pod resource requests and limits. This is an optional field.
 
-- `nodeSelector`: Standard pod node selector. This is an optional field.
+  `spec.affinity`
+  Standard pod affinity. This is an optional field.
 
-- `tolerations`: Standard pod tolerations. This is an optional field.
+  `nodeSelector`
+  Standard pod node selector. This is an optional field.
 
-- `successfulJobsHistoryLimit`: The maximum number of successful jobs to retain. Must be greater than or equal to `1` to ensure metrics are reported. This is an optional field, default is `3`. The initial value is `3`.
+  `spec.tolerations`
+  Standard pod tolerations. This is an optional field.
 
-- `failedJobsHistoryLimit`: The maximum number of failed jobs to retain. Must be greater than or equal `1` to ensure metrics are reported. This is an optional field, default is `3`. The initial value is `3`.
+  `spec.successfulJobsHistoryLimit`
+  The maximum number of successful jobs to retain. Must be greater than or equal to `1` to ensure metrics are reported. This is an optional field, default is `3`. The initial value is `3`.
 
-- `observedGeneration`: The generation observed by the Operator.
+  `spec.failedJobsHistoryLimit`
+  The maximum number of failed jobs to retain. Must be greater than or equal `1` to ensure metrics are reported. This is an optional field, default is `3`. The initial value is `3`.
 
-- `conditions`: The standard condition objects with the following types:
+  `status.observedGeneration`
+  The generation observed by the Operator.
+
+  `status.conditions`
+  The standard condition objects with the following types:
 
   - `Available`: Indicates if the pruning job has been created. Reasons can be `Ready` or `Error`.
 
@@ -303,21 +330,25 @@ Procedure
 
 # Manually pruning images
 
-The pruning custom resource enables automatic image pruning for the images from the OpenShift image registry. Administrators can manually prune images with the `oc adm prune images <image_prune_option>` command. For example:
+Manually remove orphaned image data from your integrated OpenShift image registry to reclaim storage capacity and prevent node disk exhaustion.
+
+The pruning custom resource enables automatic image pruning for the images from the OpenShift image registry. Administrators can manually prune images with the `oc adm prune images <image_prune_option>` command.
+
+For example:
 
 ``` terminal
 $ oc adm prune images <image_prune_option>
 ```
 
-- For more information about available pruning options, see "Manual image pruning command options".
+For more information about available pruning options, see "Manual image pruning command options".
 
 This command removes images that are no longer required by the system.
 
 Depending on your needs, you can prune images based on their age and tag history, or prune images that cause a project to exceed its defined storage limits.
 
-## Considerations when pruning images
+## Image pruning considerations
 
-Consider the following information before manually pruning images:
+Review soft-delete conditions and registry caching behaviors before pruning images to prevent metadata corruption and protect active container deployment layers.
 
 - Pruning with the `--namespace` flag does not remove images. It only removes image streams, because images are cluster-scoped resources. Limiting pruning to a particular namespace makes it impossible to calculate current usage.
 
@@ -333,9 +364,9 @@ Consider the following information before manually pruning images:
 
 - `oc adm prune images` operations require a route for your registry. Registry routes are not created by default.
 
-## Limitations when pruning images
+## Image pruning limitations
 
-The following limitations apply when pruning an image:
+Review image layer removal rules and external registry limitations before running prune operations to predict layer deletion and avoid unpruned image streams.
 
 - Pruning images from external registries is unsupported.
 
@@ -344,6 +375,8 @@ The following limitations apply when pruning an image:
 - Image layers that are no longer referenced by any images are removed.
 
 ## Image prune conditions
+
+Review the prerequisites, dependency checks, and soft-delete conditions required before removing registry images to safely prune image layers without breaking active pod deployments.
 
 OpenShift Container Platform supports two methodologies for pruning images:
 
@@ -355,8 +388,7 @@ These methodologies are mutually exclusive. You must choose whether to prune by 
 
 An image is only pruned if it meets the primary condition **and** is not actively referenced by a system component.
 
-### Pruning an image by age and tag
-
+Image pruning by age and tag
 Pruning an image by age and tag is the default pruning strategy. It identifies images for removal by using the `--keep-younger-than` and `--keep-tag-revisions` flags. To prune an image by age and tag, the image must be older than the `--keep-younger-than` threshold, not one of the most recent tag revisions, and cannot be in use by an active workload.
 
 For an image to be pruned by age and tag, **all** of the following conditions must be met:
@@ -377,10 +409,9 @@ For an image to be pruned by age and tag, **all** of the following conditions mu
 
     - Builds, build configurations, jobs, or cronjobs.
 
-An image is only removed if it is old, not a recent tag revision, and is confirmed to have no active references by system components.
+      An image is only removed if it is old, not a recent tag revision, and is confirmed to have no active references by system components.
 
-### Pruning an image by size limit
-
+Image pruning by size limit
 Pruning an image by size limit uses the `--prune-over-size-limit` flag. This method is used to bring a project back under its defined image storage limit.
 
 > [!NOTE]
@@ -400,11 +431,11 @@ For an image to be pruned using this method, all of the following conditions mus
 
     - Builds, build configurations, jobs, or cronjobs.
 
-With this method, the primary trigger is the project’s size, but the safety check to ensure that the image is not actively in use is still performed.
+      With this method, the primary trigger is the project’s size, but the safety check to ensure that the image is not actively in use is still performed.
 
 ## Running image prune operations
 
-Use the following procedure to run an image prune operation
+Securely remove unused container images from your registry to reclaim the cluster disk space and prevent registry storage exhaustion.
 
 <div>
 
@@ -438,7 +469,7 @@ Procedure
     $ oc adm prune images <image_prune_option_one> <image_prune_option_two>
     ```
 
-    - For more information about available pruning options, see "Manual image pruning command options".
+    For more information about available pruning options, see "Manual image pruning command options".
 
 2.  Review the output to confirm the list of images, image streams, and pods to be removed.
 
@@ -451,6 +482,8 @@ Procedure
 </div>
 
 ## Using secure or insecure connections
+
+Configure secure or insecure flags when pruning images to communicate with image registries. Setting custom CA certificates or bypassing HTTPS verification prevents connection failures during pruning.
 
 The secure connection is the preferred and recommended approach. It is done over HTTPS protocol with a mandatory certificate verification. The `prune` command always attempts to use it if possible. If it is not possible, in some cases it can fall-back to insecure connection, which is dangerous. In this case, either certificate verification is skipped or plain HTTP protocol is used.
 
@@ -468,6 +501,8 @@ The fall-back to insecure connection is allowed in the following cases unless `-
 > If the registry is secured by a certificate authority different from the one used by OpenShift Container Platform, it must be specified using the `--certificate-authority` flag. Otherwise, the `prune` command fails with an error.
 
 ## Image pruning CLI options
+
+Review the CLI options for the `oc adm prune images` command to configure flags for age thresholds, tag references, and registry endpoints.
 
 The following table describes the options you can use with the `oc adm prune images <image_prune_option>` command.
 
@@ -524,8 +559,7 @@ The following table describes the options you can use with the `oc adm prune ima
 </tbody>
 </table>
 
-### Additional information about the --prune-registry flag
-
+Additional information about the `--prune-registry` flag
 You can separate the removal of OpenShift Container Platform image API objects from the removal of image data in the registry by passing in the `--prune-registry=false` flag. For example, the following command prunes only the API objects, leaving the registry storage untouched:
 
 ``` terminal
@@ -538,10 +572,11 @@ However, timing windows are not completely eliminated. For example, a pod might 
 
 Re-running the pruning without the `--prune-registry` option, or with `--prune-registry=true`, does not remove the associated registry storage for images previously pruned with `--prune-registry=false`. Those images can only be removed from registry storage by performing a hard prune of the registry. For more information, see "Hard pruning the registry".
 
-## Image pruning problems
+## Image pruning issues
 
-### Images not being pruned
+Identify the image pruning issues in your cluster to diagnose unpruned images, manage tag revision thresholds, and fix connection or certificate authority errors between the CLI client and registry.
 
+Images not being pruned
 If your images keep accumulating and the `prune` command removes just a small portion of what you expect, ensure that you understand the image prune conditions that must apply for an image to be considered a candidate for pruning.
 
 Ensure that images you want removed occur at higher positions in each tag history than your chosen tag revisions threshold. For example, consider an old and obsolete image named `sha256:abz`. By running the following command in your namespace, where the image is tagged, the image is tagged three times in a single image stream named `myapp`:
@@ -579,10 +614,9 @@ When default options are used, the image is never pruned because it occurs at po
 
 - Move the image further in the history, either by running new builds pushing to the same `istag`, or by tagging other image. This is not always desirable for old release tags.
 
-Tags having a date or time of a particular image’s build in their names should be avoided, unless the image must be preserved for an undefined amount of time. Such tags tend to have just one image in their history, which prevents them from ever being pruned.
+  Tags having a date or time of a particular image’s build in their names should be avoided, unless the image must be preserved for an undefined amount of time. Such tags tend to have just one image in their history, which prevents them from ever being pruned.
 
-### Using a secure connection against insecure registry
-
+Secure connection to an insecure registry
 If you see a message similar to the following in the output of the `oc adm prune images` command, then your registry is not secured and the `oc adm prune images` client attempts to use a secure connection:
 
 ``` terminal
@@ -591,8 +625,7 @@ error: error communicating with registry: Get https://172.30.30.30:5000/healthz:
 
 - The recommended solution is to secure the registry. Otherwise, you can force the client to use an insecure connection by appending `--force-insecure` to the command; however, this is not recommended.
 
-### Using an insecure connection against a secured registry
-
+Insecure connection to a secured registry
 If you see one of the following errors in the output of the `oc adm prune images` command, it means that your registry is secured using a certificate signed by a certificate authority other than the one used by `oc adm prune images` client for connection verification:
 
 ``` terminal
@@ -600,12 +633,11 @@ error: error communicating with registry: Get http://172.30.30.30:5000/healthz: 
 error: error communicating with registry: [Get https://172.30.30.30:5000/healthz: x509: certificate signed by unknown authority, Get http://172.30.30.30:5000/healthz: malformed HTTP response "\x15\x03\x01\x00\x02\x02"]
 ```
 
-By default, the certificate authority data stored in the user’s configuration files is used; the same is true for communication with the master API.
+By default, the certificate authority data stored in the user’s configuration files is used; the same is true for communication with the control plane API.
 
 Use the `--certificate-authority` option to provide the right certificate authority for the container image registry server.
 
-### Using the wrong certificate authority
-
+Wrong certificate authority
 The following error means that the certificate authority used to sign the certificate of the secured container image registry is different from the authority used by the client:
 
 ``` terminal
@@ -628,13 +660,15 @@ Additional resources
 
 - [Exposing the registry](../registry/securing-exposing-registry.md#securing-exposing-registry)
 
-- See [Image Registry Operator in OpenShift Container Platform](../registry/configuring-registry-operator.md#configuring-registry-operator) for information on how to create a registry route.
+- [Image Registry Operator in OpenShift Container Platform](../registry/configuring-registry-operator.md#configuring-registry-operator)
 
 </div>
 
 # Hard pruning the registry
 
-The OpenShift Container Registry can accumulate blobs that are not referenced by the OpenShift Container Platform cluster’s etcd. The basic pruning images procedure, therefore, is unable to operate on them. These are called *orphaned blobs*.
+Hard prune the OpenShift image registry to remove orphaned image blobs that are not referenced in etcd and reclaim registry storage space when standard image pruning is insufficient.
+
+The OpenShift image registry can accumulate blobs that are not referenced by the OpenShift Container Platform cluster’s etcd. The basic pruning images procedure, therefore, is unable to operate on them. These are called *orphaned blobs*.
 
 Orphaned blobs can occur from the following scenarios:
 
@@ -648,11 +682,11 @@ Orphaned blobs can occur from the following scenarios:
 
 - A bug in the registry pruner, which fails to remove the intended blobs, causing the image objects referencing them to be removed and the blobs becoming orphans.
 
-*Hard pruning* the registry, a separate procedure from basic image pruning, allows cluster administrators to remove orphaned blobs. You should hard prune if you are running out of storage space in your OpenShift Container Registry and believe you have orphaned blobs.
+*Hard pruning* the registry, a separate procedure from basic image pruning, allows cluster administrators to remove orphaned blobs. You should hard prune if you are running out of storage space in your OpenShift image registry and believe you have orphaned blobs.
 
 This should be an infrequent operation and is necessary only when you have evidence that significant numbers of new orphans have been created. Otherwise, you can perform standard image pruning at regular intervals, for example, once a day (depending on the number of images being created).
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -660,19 +694,15 @@ Procedure
 
 </div>
 
-To hard prune orphaned blobs from the registry:
-
-</div>
-
-1.  **Log in.**
+1.  Log in.
 
     Log in to the cluster with the CLI as `kubeadmin` or another privileged user that has access to the `openshift-image-registry` namespace.
 
-2.  **Run a basic image prune**.
+2.  Run a basic image prune.
 
     Basic image pruning removes additional images that are no longer needed. The hard prune does not remove images on its own. It only removes blobs stored in the registry storage. Therefore, you should run this just before the hard prune.
 
-3.  **Switch the registry to read-only mode.**
+3.  Switch the registry to read-only mode.
 
     If the registry is not running in read-only mode, any pushes happening at the same time as the prune will either:
 
@@ -747,7 +777,7 @@ To hard prune orphaned blobs from the registry:
 
     </div>
 
-6.  **Run the hard prune.**
+6.  Run the hard prune.
 
     Execute the following command inside one running instance of a `image-registry` pod to run the hard prune. The following example references an image registry pod called `image-registry-3-vhndw`:
 
@@ -770,7 +800,7 @@ To hard prune orphaned blobs from the registry:
 
     </div>
 
-7.  **Switch the registry back to read-write mode.**
+7.  Switch the registry back to read-write mode.
 
     After the prune is finished, the registry can be switched back to read-write mode. In `configs.imageregistry.operator.openshift.io/cluster`, set `spec.readOnly` to `false`:
 
@@ -778,7 +808,11 @@ To hard prune orphaned blobs from the registry:
     $ oc patch configs.imageregistry.operator.openshift.io/cluster -p '{"spec":{"readOnly":false}}' --type=merge
     ```
 
+</div>
+
 # Pruning cron jobs
+
+Clean up completed and failed Kubernetes jobs manually to prevent resource exhaustion. You can restrict cron job access to authorized users and configure resource quotas to control job and pod creation.
 
 Cron jobs can perform pruning of successful jobs, but might not properly handle failed jobs. Therefore, the cluster administrator should perform regular cleanup of jobs manually. They should also restrict the access to cron jobs to a small group of trusted users and set appropriate quota to prevent the cron job from creating too many jobs and pods.
 
@@ -790,7 +824,7 @@ Additional resources
 
 </div>
 
-- [Running tasks in pods using jobs](../nodes/jobs/nodes-nodes-jobs.md#nodes-nodes-jobs_nodes-nodes-jobs)
+- [Running tasks in pods using jobs](../nodes/jobs/nodes-nodes-jobs.md#nodes-nodes-jobs)
 
 - [Resource quotas across multiple projects](quotas/quotas-setting-across-multiple-projects.md#setting-quotas-across-multiple-projects)
 

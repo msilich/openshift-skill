@@ -149,10 +149,8 @@ Additional resources
 
 </div>
 
-# Next steps
+# Additional resources
 
 - [Installing a cluster on IBM Cloud® with customizations](installing-ibm-cloud-customizations.md#installing-ibm-cloud-customizations)
-
-# Additional resources
 
 - [Preparing to update a cluster with manually maintained credentials](../../updating/preparing_for_updates/preparing-manual-creds-update.md#preparing-manual-creds-update)

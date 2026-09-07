@@ -1,11 +1,11 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The following describes how to delete, or uninstall, Operators that were previously installed using Operator Lifecycle Manager (OLM) on your OpenShift Container Platform cluster.
+You can delete Operators that were previously installed with Operator Lifecycle Manager (OLM) on your OpenShift Container Platform cluster.
 
 > [!IMPORTANT]
 > You must successfully and completely uninstall an Operator prior to attempting to reinstall the same Operator. Failure to fully uninstall the Operator properly can leave resources, such as a project or namespace, stuck in a "Terminating" state and cause "error resolving resource" messages to be observed when trying to reinstall the Operator.
 >
-> For more information, see [Reinstalling Operators after failed uninstallation](olm-troubleshooting-operator-issues.md#olm-reinstall_olm-troubleshooting-operator-issues).
+> For more information, see "Reinstalling Operators after failed uninstallation".
 
 # Deleting Operators from a cluster using the web console
 
@@ -48,7 +48,7 @@ Procedure
 
 # Deleting Operators from a cluster using the CLI
 
-Cluster administrators can delete installed Operators from a selected namespace by using the CLI.
+To remove an installed Operator from a namespace, cluster administrators can delete its subscription and cluster service version (CSV) by using the CLI.
 
 <div>
 
@@ -264,5 +264,17 @@ Verification
   ``` terminal
   $ oc get sub,csv,installplan -n <namespace>
   ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Reinstalling Operators after failed uninstallation](olm-troubleshooting-operator-issues.md#olm-reinstall_olm-troubleshooting-operator-issues)
 
 </div>

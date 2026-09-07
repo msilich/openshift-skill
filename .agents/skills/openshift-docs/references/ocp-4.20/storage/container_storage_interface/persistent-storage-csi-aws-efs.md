@@ -30,7 +30,7 @@ Additional resources
 
 # About CSI
 
-Storage vendors have traditionally provided storage drivers as part of Kubernetes. With the implementation of the Container Storage Interface (CSI), third-party providers can instead deliver storage plugins using a standard interface without ever having to change the core Kubernetes code.
+The Container Storage Interface (CSI) enables storage vendors to deliver plugins through a standard interface without modifying Kubernetes core code, replacing traditional embedded storage drivers.
 
 CSI Operators give OpenShift Container Platform users storage options, such as volume snapshots, that are not possible with in-tree volume plugins.
 
@@ -319,7 +319,7 @@ Procedure
 
 </div>
 
-# Creating the AWS EFS storage class
+# About the AWS EFS storage class
 
 To enable dynamic provisioning of persistent volumes, create a storage class that defines storage characteristics and allows users to automatically provision volumes on-demand.
 
@@ -398,6 +398,18 @@ Procedure
 
   > [!NOTE]
   > A cluster admin can create several `StorageClass` objects, each using a different EFS volume.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [AWS EFS CSI Driver Operator](https://github.com/openshift/aws-efs-csi-driver-operator)
 
 </div>
 
@@ -1086,16 +1098,6 @@ Additional resources
 </div>
 
 - [AWS EFS CSI driver](https://github.com/openshift/aws-efs-csi-driver)
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
 
 - [Creating the AWS EFS storage class](persistent-storage-csi-aws-efs.md#storage-create-storage-class_persistent-storage-csi-aws-efs)
 

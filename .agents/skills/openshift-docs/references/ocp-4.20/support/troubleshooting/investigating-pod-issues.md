@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-OpenShift Container Platform leverages the Kubernetes concept of a pod, which is one or more containers deployed together on one host. A pod is the smallest compute unit that can be defined, deployed, and managed on OpenShift Container Platform 4.17.
+OpenShift Container Platform leverages the Kubernetes concept of a pod, which is one or more containers deployed together on one host. A pod is the smallest compute unit that can be defined, deployed, and managed on OpenShift Container Platform 4.20.
 
 After a pod is defined, it is assigned to run on a node until its containers exit, or until it is removed. Depending on policy and exit code, pods are either removed after exiting or retained so that their logs can be accessed.
 
@@ -264,7 +264,10 @@ Procedure
     $ oc rsh <pod_name>
     ```
 
-    - If a pod has multiple containers, `oc rsh` defaults to the first container unless `-c <container_name>` is specified.
+    where:
+
+    `<pod_name>`
+    If a pod has multiple containers, `oc rsh` defaults to the first container unless `-c <container_name>` is specified.
 
 3.  Start a remote shell into a specific container within a pod:
 
@@ -278,13 +281,18 @@ Procedure
     $ oc port-forward <pod_name> <host_port>:<pod_port>
     ```
 
-    - Enter `Ctrl+C` to cancel the port forwarding session.
+    where:
+
+    `<pod_name> <host_port>:<pod_port>`
+    Enter `Ctrl+C` to cancel the port forwarding session.
 
 </div>
 
 # Starting debug pods with root access
 
-You can start a debug pod with root access, based on a problematic pod’s deployment or deployment configuration. Pod users typically run with non-root privileges, but running troubleshooting pods with temporary root privileges can be useful during issue investigation.
+You can start a debug pod with root access, based on a problematic pod’s deployment or deployment configuration.
+
+Pod users typically run with non-root privileges, but running troubleshooting pods with temporary root privileges can be useful during issue investigation.
 
 <div>
 
@@ -338,10 +346,10 @@ Procedure
         $ oc debug deploymentconfig/my-deployment-configuration --as-root -n <project_name>
         ```
 
-</div>
+        > [!NOTE]
+        > You can append `-- <command>` to the preceding `oc debug` commands to run individual commands within a debug pod, instead of running an interactive shell.
 
-> [!NOTE]
-> You can append `-- <command>` to the preceding `oc debug` commands to run individual commands within a debug pod, instead of running an interactive shell.
+</div>
 
 # Copying files to and from pods and containers
 
@@ -377,17 +385,17 @@ Procedure
     $ oc cp <local_path> <pod_name>:/<path> -c <container_name>
     ```
 
-    - The first container in a pod is selected if the `-c` option is not specified.
+    `-c <container_name>` refers to the desired container in a pod. If you do not specify a container with the `-c` option, then the first container in a pod is selected.
 
 2.  Copy a file from a pod:
 
     ``` terminal
-    $ oc cp <pod_name>:/<path>  -c <container_name> <local_path>
+    $ oc cp <pod_name>:/<path> -c <container_name> <local_path>
     ```
 
-    - The first container in a pod is selected if the `-c` option is not specified.
+    `-c <container_name>` refers to the desired container in a pod. If you do not specify a container with the `-c` option, then the first container in a pod is selected.
 
-      > [!NOTE]
-      > For `oc cp` to function, the `tar` binary must be available within the container.
+    > [!NOTE]
+    > For `oc cp` to function, the `tar` binary must be available within the container.
 
 </div>

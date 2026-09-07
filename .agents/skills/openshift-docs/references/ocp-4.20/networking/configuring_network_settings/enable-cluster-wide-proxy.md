@@ -333,6 +333,6 @@ Procedure
 
 - [Understanding the CA Bundle certificate](../../security/certificates/updating-ca-bundle.md#ca-bundle-understanding_updating-ca-bundle)
 
-- [Proxy certificates](../../security/certificate_types_descriptions/proxy-certificates.md#customization)
+- [Proxy certificates](../../security/certificate_types_descriptions/proxy-certificates.md#proxy-cert-customization_proxy-certificates)
 
 - [How is the cluster-wide proxy setting applied to OpenShift Container Platform nodes?](https://access.redhat.com/solutions/7065528)

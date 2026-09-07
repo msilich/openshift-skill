@@ -24,13 +24,13 @@ During cluster installation, OpenShift Container Platform administrators can con
 > [!IMPORTANT]
 > User-defined networks are only supported when OVN-Kubernetes is used as the CNI. UDNs are not supported for use with other CNIs.
 
-You can define an secondary network based on the available CNI plugins and attach one or more of these networks to your pods. You can define more than one secondary network for your cluster depending on your needs. This gives you flexibility when you configure pods that deliver network functionality, such as switching or routing. For more information, see the links in the Additional resources:
+You can define an secondary network based on the available CNI plugins and attach one or more of these networks to your pods. You can define more than one secondary network for your cluster depending on your needs. This gives you flexibility when you configure pods that deliver network functionality, such as switching or routing. For more information:
 
 - For a complete list of supported CNI plugins, see "Secondary networks in OpenShift Container Platform".
 
 - For information about user-defined networks, see "About user-defined networks (UDNs)".
 
-- For information about Network Attachment Definitions, "Creating primary networks by using a NetworkAttachmentDefinition".
+- For information about Network Attachment Definitions, see "Creating primary networks by using a NetworkAttachmentDefinition".
 
 # UserDefinedNetwork and NetworkAttachmentDefinition support matrix
 

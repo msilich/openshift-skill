@@ -49,8 +49,16 @@ However, some options provide a simpler and more convenient user experience for 
 
 Unless your organizational needs require you to choose another option, use the following methods for mirroring images, installing your cluster, and updating your cluster:
 
-- Mirror your images using the [oc-mirror plugin v2](about-installing-oc-mirror-v2.md#about-installing-oc-mirror-v2).
+- Mirror your images using the oc-mirror plugin v2. For more information, see "Mirroring images for a disconnected installation by using the oc-mirror plugin v2".
 
-- Install your cluster using the [Agent-based Installer](../installing/installing_with_agent_based_installer/installing-with-agent-based-installer.md#installing-with-agent-based-installer).
+- Install your cluster using the Agent-based Installer. For more information, see "Installing a cluster with customizations".
 
-- Update your cluster using a [local OpenShift Update Service instance](updating/disconnected-update-osus.md#updating-disconnected-cluster-osus).
+- Update your cluster using a local OpenShift Update Service instance. For more information, see "Updating a cluster in a disconnected environment using the OpenShift Update Service".
+
+# Additional resources
+
+- [Mirroring images for a disconnected installation by using the oc-mirror plugin v2](about-installing-oc-mirror-v2.md#about-installing-oc-mirror-v2)
+
+- [Installing a cluster with customizations](../installing/installing_with_agent_based_installer/installing-with-agent-based-installer.md#installing-with-agent-based-installer)
+
+- [Updating a cluster in a disconnected environment using the OpenShift Update Service](updating/disconnected-update-osus.md#updating-disconnected-cluster-osus)

@@ -9,6 +9,9 @@ Although the method supports general clusters, the downloaded media contains an 
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
+> [!NOTE]
+> The installation ISO for OpenShift Container Platform 4.20 is no longer available for download. If you have already downloaded the ISO, you can still use these procedures to install your cluster using the ISO. Otherwise, it is recommended to see the most recent version of this document for the most up to date instructions.
+
 # Installation method advantages
 
 This method has several advantages for users who want to install a cluster primarily to run virtualized workloads using OpenShift Virtualization.

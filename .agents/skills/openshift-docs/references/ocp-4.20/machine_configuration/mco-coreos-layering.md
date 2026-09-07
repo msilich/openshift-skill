@@ -1200,7 +1200,7 @@ Prerequisites
   > [!NOTE]
   > You should use the same base RHCOS image that is installed on the rest of your cluster. Use the `oc adm release info --image-for rhel-coreos` command to obtain the base image being used in your cluster.
 
-  For example, the following Containerfile creates a custom layered image from an OpenShift Container Platform 4.17 image and overrides the kernel package with one from CentOS 9 Stream:
+  For example, the following Containerfile creates a custom layered image from an OpenShift Container Platform 4.20 image and overrides the kernel package with one from CentOS 9 Stream:
 
   <div class="formalpara">
 
@@ -1211,7 +1211,7 @@ Prerequisites
   </div>
 
   ``` yaml
-  # Using a 4.17.0 image
+  # Using a 4.20.0 image
   FROM quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256...
   #Install hotfix rpm
   RUN rpm-ostree override replace http://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os/Packages/kernel-{,core-,modules-,modules-core-,modules-extra-}5.14.0-295.el9.x86_64.rpm && \
@@ -1349,7 +1349,7 @@ You can verify that the custom layered image is applied by performing any of the
         Namespace:
         Labels:       <none>
         Annotations:  machineconfiguration.openshift.io/generated-by-controller-version: 5bdb57489b720096ef912f738b46330a8f577803
-                      machineconfiguration.openshift.io/release-image-version: 4.17.0-ec.3
+                      machineconfiguration.openshift.io/release-image-version: 4.20.0-ec.3
         API Version:  machineconfiguration.openshift.io/v1
         Kind:         MachineConfig
         ...

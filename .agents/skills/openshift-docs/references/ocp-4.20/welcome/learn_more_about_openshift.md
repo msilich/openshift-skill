@@ -18,7 +18,7 @@ Architecture
 | [Enterprise Kubernetes with OpenShift](https://www.openshift.com/blog/enterprise-kubernetes-with-openshift-part-one?extIdCarryOver=true&sc_cid=701f2000001Css5AAC) | [Tested platforms](https://access.redhat.com/articles/4128421) |
 | [Architecture](../architecture/architecture.md#architecture) | [Security and compliance](../security/container_security/security-understanding.md#understanding-security) |
 | [Networking](../networking/networking_overview/understanding-networking.md#understanding-networking) | [OVN-Kubernetes architecture](../networking/ovn_kubernetes_network_provider/ovn-kubernetes-architecture-assembly.md#ovn-kubernetes-architecture-con) |
-| [Backup and restore](../backup_and_restore/index.md#backup-restore-overview) | [Restoring to a previous cluster state](../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#scenario-2-restoring-cluster-state) |
+| [Backup and restore](../backup_and_restore/index.md#backup-restore-overview) | [Restoring to an earlier cluster state](../backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#scenario-2-restoring-cluster-state) |
 
 Installation
 Explore the following OpenShift Container Platform installation tasks:
@@ -91,7 +91,7 @@ Cluster administration
 </tr>
 <tr>
 <td style="text-align: left;"><p><a href="../installing/overview/cluster-capabilities.xml#enabling-cluster-capabilities_cluster-capabilities">Enable cluster capabilities</a></p></td>
-<td style="text-align: left;"><p><a href="../installing/overview/cluster-capabilities.xml#explanation_of_capabilities_cluster-capabilities">Optional cluster capabilities in OpenShift Container Platform 4.17</a></p></td>
+<td style="text-align: left;"><p><a href="../installing/overview/cluster-capabilities.xml#explanation_of_capabilities_cluster-capabilities">Optional cluster capabilities in OpenShift Container Platform 4.20</a></p></td>
 </tr>
 </tbody>
 </table>

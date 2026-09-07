@@ -88,9 +88,21 @@ The core components of the cert-manager Operator for Red Hat OpenShift are as fo
 
 - CA injector: You can use the `spec.cainjectorConfig` field to configure the CA injector pod.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Deleting a TLS secret automatically upon Certificate removal](cert-manager-customizing-api-fields.md#cert-manager-override-flag-controller_cert-manager-customizing-api-fields)
+
+</div>
+
 ## Common configurable fields in the CertManager CR for the cert-manager components
 
-The following table lists the common fields that you can configure in the `spec.controllerConfig`, `spec.webhookConfig`, and `spec.cainjectorConfig` sections in the `CertManager` CR.
+You can configure common fields in the `spec.controllerConfig`, `spec.webhookConfig`, and `spec.cainjectorConfig` sections in the `CertManager` CR to customize the cert-manager components.
 
 <table>
 <caption>Common configurable fields in the CertManager CR for the cert-manager components</caption>
@@ -125,8 +137,7 @@ The following table lists the common fields that you can configure in the `spec.
 <li><p>controller: 2</p></li>
 <li><p>cainjector: 2</p></li>
 <li><p>webhook: At least 3.</p></li>
-</ul>
-<p>For more information, see <a href="https://cert-manager.io/docs/installation/best-practice/#high-availability">High Availability</a>.</p></td>
+</ul></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>overrideResources</code></p></td>
@@ -141,9 +152,21 @@ The following table lists the common fields that you can configure in the `spec.
 </tbody>
 </table>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [High Availability](https://cert-manager.io/docs/installation/best-practice/#high-availability)
+
+</div>
+
 ## Overridable arguments for the cert-manager components
 
-You can configure the overridable arguments for the cert-manager components in the `spec.controllerConfig`, `spec.webhookConfig`, and `spec.cainjectorConfig` sections in the `CertManager` CR.
+You can configure the overridable arguments for the cert-manager components in the `spec.controllerConfig`, `spec.webhookConfig`, and `spec.cainjectorConfig` sections in the `CertManager` CR to customize the cert-manager controller, webhook, and cainjector components.
 
 The following table describes the overridable arguments for the cert-manager components:
 
@@ -252,7 +275,7 @@ The following table describes the overridable arguments for the cert-manager com
 
 ## Overridable environment variables for the cert-manager controller
 
-You can configure the overridable environment variables for the cert-manager controller in the `spec.controllerConfig.overrideEnv` field in the `CertManager` CR.
+You can configure the overridable environment variables for the cert-manager controller in the `spec.controllerConfig.overrideEnv` field in the `CertManager` CR to control proxy settings for the cert-manager controller.
 
 The following table describes the overridable environment variables for the cert-manager controller:
 
@@ -266,7 +289,7 @@ Overridable environment variables for the cert-manager controller
 
 ## Overridable resource parameters for the cert-manager components
 
-You can configure the CPU and memory limits for the cert-manager components in the `spec.controllerConfig`, `spec.webhookConfig`, and `spec.cainjectorConfig` sections in the `CertManager` CR.
+You can configure the CPU and memory request and limits for the cert-manager components in the `CertManager` CR to control resource consumption for the controller, webhook, and cainjector pods.
 
 The following table describes the overridable resource parameters for the cert-manager components:
 
@@ -281,28 +304,18 @@ Overridable resource parameters for the cert-manager components
 
 ## Overridable scheduling parameters for the cert-manager components
 
-You can configure the pod scheduling constraints for the cert-manager components in the `spec.controllerConfig`, `spec.webhookConfig` field, and `spec.cainjectorConfig` sections in the `CertManager` CR.
+To optimize resource usage or isolate specific workloads, you can control the pod placement of your cert-manager components.
+
+You can easily configure node selectors and tolerations by modifying the `spec.controllerConfig`, `spec.webhookConfig`, and `spec.cainjectorConfig` sections of the `CertManager` custom resource (CR).
 
 The following table describes the pod scheduling parameters for the cert-manager components:
 
 | Field | Description |
 |----|----|
-| `overrideScheduling.nodeSelector` | Key‑value pairs to constrain pods to specific nodes. |
+| `overrideScheduling.nodeSelector` | Key and value pairs to constrain pods to specific nodes. |
 | `overrideScheduling.tolerations` | List of tolerations to schedule pods on tainted nodes. |
 
 Overridable scheduling parameters for the cert-manager components
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Deleting a TLS secret automatically upon Certificate removal](cert-manager-customizing-api-fields.md#cert-manager-override-flag-controller_cert-manager-customizing-api-fields)
-
-</div>
 
 # Customizing cert-manager by overriding environment variables from the cert-manager Operator API
 

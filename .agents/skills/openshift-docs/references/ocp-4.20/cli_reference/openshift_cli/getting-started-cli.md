@@ -45,7 +45,7 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 Linux Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 Linux Clients** entry and save the file.
 
 5.  Unpack the archive:
 
@@ -55,7 +55,7 @@ Procedure
 
 6.  Place the `oc` binary in a directory that is on your `PATH`.
 
-    To check your `PATH`, execute the following command:
+    To check your `PATH`, run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -100,13 +100,13 @@ Procedure
 
 2.  Select the appropriate version from the **Version** list.
 
-3.  Click **Download Now** next to the **OpenShift v4.17 Windows Client** entry and save the file.
+3.  Click **Download Now** next to the **OpenShift v4.20 Windows Client** entry and save the file.
 
 4.  Extract the archive with a ZIP program.
 
 5.  Move the `oc` binary to a directory that is on your `PATH` variable.
 
-    To check your `PATH` variable, open the command prompt and execute the following command:
+    To check your `PATH` variable, open the Command Prompt and run the following command:
 
     ``` terminal
     C:\> path
@@ -153,16 +153,16 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 macOS Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 macOS Clients** entry and save the file.
 
     > [!NOTE]
-    > For macOS arm64, choose the **OpenShift v4.17 macOS arm64 Client** entry.
+    > For macOS arm64, choose the **OpenShift v4.20 macOS arm64 Client** entry.
 
-5.  Unpack and unzip the archive.
+5.  Extract the archive.
 
 6.  Move the `oc` binary to a directory on your `PATH` variable.
 
-    To check your `PATH` variable, open a terminal and execute the following command:
+    To check your `PATH` variable, open a terminal and run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -191,7 +191,7 @@ Verification
 You can download the OpenShift CLI (`oc`) from the web OpenShift Container Platform console and install it to interact with OpenShift Container Platform clusters from a terminal on Linux, Windows, or macOS.
 
 > [!IMPORTANT]
-> If you installed an earlier version of `oc`, you cannot use it to complete all of the commands in OpenShift Container Platform 4.17. Download and install the new version of `oc`.
+> If you installed an earlier version of `oc`, you cannot use it to complete all of the commands in OpenShift Container Platform 4.20. Download and install the new version of `oc`.
 
 ### Installing the OpenShift CLI on Linux using the web console
 
@@ -419,10 +419,10 @@ Procedure
     # subscription-manager attach --pool=<pool_id>
     ```
 
-5.  Enable the repositories required by OpenShift Container Platform 4.17.
+5.  Enable the repositories required by OpenShift Container Platform 4.20.
 
     ``` terminal
-    # subscription-manager repos --enable="rhocp-4.17-for-rhel-8-x86_64-rpms"
+    # subscription-manager repos --enable="rhocp-4.20-for-rhel-8-x86_64-rpms"
     ```
 
 6.  Install the `openshift-clients` package:

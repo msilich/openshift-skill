@@ -1,12 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This document describes how to use volume snapshots with supported Container Storage Interface (CSI) drivers to help protect against data loss in OpenShift Container Platform. Familiarity with [persistent volumes](../understanding-persistent-storage.md#persistent-volumes_understanding-persistent-storage) is suggested.
+Container Storage Interface (CSI) snapshots capture point-in-time copies for data protection and recovery. Snapshots enable restoring volumes to previous states or creating new volumes from existing data using `VolumeSnapshot`, `VolumeSnapshotContent`, and `VolumeSnapshotClass` objects.
 
 # Overview of CSI volume snapshots
 
-A *snapshot* represents the state of the storage volume in a cluster at a particular point in time. Volume snapshots can be used to provision a new volume.
+A snapshot represents the state of the storage volume in a cluster at a particular point in time. Volume snapshots can be used to provision a new volume.
 
 OpenShift Container Platform supports Container Storage Interface (CSI) volume snapshots by default. However, a specific CSI driver is required.
+
+Familiarity with persistent volumes is suggested. For information about persistent volumes, see "Persistent volumes".
 
 With CSI volume snapshots, a cluster administrator can:
 
@@ -32,29 +34,29 @@ Be aware of the following when using volume snapshots:
 
 - Support is only available for CSI drivers. In-tree and FlexVolumes are not supported.
 
-- OpenShift Container Platform only ships with select CSI drivers. For CSI drivers that are not provided by an OpenShift Container Platform Driver Operator, it is recommended to use the CSI drivers provided by [community or storage vendors](https://kubernetes-csi.github.io/docs/drivers.html). Follow the installation instructions furnished by the CSI driver provider.
+- OpenShift Container Platform only includes select CSI drivers. For CSI drivers that are not provided by an OpenShift Container Platform Driver Operator, it is recommended to use the CSI drivers provided by the Kubernetes community or known storage vendors. Follow the installation instructions furnished by the CSI driver provider. For information about Kubernetes CSI drivers, see "Kubernetes CSI Developer Documentation".
 
 - CSI drivers may or may not have implemented the volume snapshot functionality. CSI drivers that have provided support for volume snapshots will likely use the `csi-external-snapshotter` sidecar. See documentation provided by the CSI driver for details.
 
 # CSI snapshot controller and sidecar
 
-OpenShift Container Platform provides a snapshot controller that is deployed into the control plane. In addition, your CSI driver vendor provides the CSI snapshot sidecar as a helper container that is installed during the CSI driver installation.
+Container Storage Interface (CSI) snapshots require two components: a controller deployed by OpenShift Container Platform to the control plane, and a vendor-provided sidecar with the CSI driver. The controller manages `VolumeSnapshot` bindings while the sidecar triggers create and delete operations.
 
 The CSI snapshot controller and sidecar provide volume snapshotting through the OpenShift Container Platform API. These external components run in the cluster.
 
 The external controller is deployed by the CSI Snapshot Controller Operator.
 
-## External controller
-
+External controller
 The CSI snapshot controller binds `VolumeSnapshot` and `VolumeSnapshotContent` objects. The controller manages dynamic provisioning by creating and deleting `VolumeSnapshotContent` objects.
 
-## External sidecar
-
+External sidecar
 Your CSI driver vendor provides the `csi-external-snapshotter` sidecar. This is a separate helper container that is deployed with the CSI driver. The sidecar manages snapshots by triggering `CreateSnapshot` and `DeleteSnapshot` operations. Follow the installation instructions provided by your vendor.
 
 # About the CSI Snapshot Controller Operator
 
-The CSI Snapshot Controller Operator runs in the `openshift-cluster-storage-operator` namespace. It is installed by the Cluster Version Operator (CVO) in all clusters by default.
+You can manage volume snapshots in OpenShift Container Platform by using the CSI Snapshot Controller Operator’s custom resource definitions (CRDs) for snapshot requests, storage, and configuration.
+
+The Container Storage Interface (CSI) Snapshot Controller Operator runs in the `openshift-cluster-storage-operator` namespace. It is installed by the Cluster Version Operator (CVO) in all clusters by default.
 
 The CSI Snapshot Controller Operator installs the CSI snapshot controller, which runs in the `openshift-cluster-storage-operator` namespace.
 
@@ -77,7 +79,7 @@ Similar to the `PersistentVolumeClaim` object, the `VolumeSnapshot` CRD defines 
 The `VolumeSnapshot` CRD is namespaced. A developer uses the CRD as a distinct request for a snapshot.
 
 `VolumeSnapshotClass`
-Allows a cluster administrator to specify different attributes belonging to a `VolumeSnapshot` object. These attributes may differ among snapshots taken of the same volume on the storage system, in which case they would not be expressed by using the same storage class of a persistent volume claim.
+The `VolumeSnapshotClass` CRD allows a cluster administrator to specify different attributes belonging to a `VolumeSnapshot` object. These attributes may differ among snapshots taken of the same volume on the storage system, in which case they would not be expressed by using the same storage class of a persistent volume claim.
 
 The `VolumeSnapshotClass` CRD defines the parameters for the `csi-external-snapshotter` sidecar to use when creating a snapshot. This allows the storage back end to know what kind of snapshot to dynamically create if multiple options are supported.
 
@@ -87,17 +89,19 @@ The `VolumeSnapshotContentClass` CRD is not namespaced and is for use by a clust
 
 # Volume snapshot provisioning
 
-There are two ways to provision snapshots: dynamically and manually.
+You can provision volume snapshots in OpenShift Container Platform using either dynamic provisioning to create new snapshots on-demand or static provisioning to reference pre-existing snapshots.
 
 ## Dynamic provisioning
 
 Instead of using a preexisting snapshot, you can request that a snapshot be taken dynamically from a persistent volume claim. Parameters are specified using a `VolumeSnapshotClass` CRD.
 
-## Manual provisioning
+## Static provisioning
 
 As a cluster administrator, you can manually pre-provision a number of `VolumeSnapshotContent` objects. These carry the real volume snapshot details available to cluster users.
 
-# Creating a volume snapshot
+# Dynamically creating a volume snapshot
+
+To create a point-in-time backup of a persistent volume claim (PVC), dynamically provision a volume snapshot by defining a VolumeSnapshotClass and VolumeSnapshot that automate the snapshot creation.
 
 When you create a `VolumeSnapshot` object, OpenShift Container Platform creates a volume snapshot.
 
@@ -122,15 +126,11 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To dynamically create a volume snapshot:
 
 </div>
 
@@ -140,7 +140,7 @@ To dynamically create a volume snapshot:
 
     <div class="title">
 
-    volumesnapshotclass.yaml
+    Example volumesnapshotclass.yaml
 
     </div>
 
@@ -155,10 +155,10 @@ To dynamically create a volume snapshot:
 
     </div>
 
-    - The name of the CSI driver that is used to create snapshots of this `VolumeSnapshotClass` object. The name must be the same as the `Provisioner` field of the storage class that is responsible for the PVC that is being snapshotted.
+    `driver` is the name of the CSI driver that is used to create snapshots of this `VolumeSnapshotClass` object. The name must be the same as the `Provisioner` field of the storage class that is responsible for the PVC that is being snapshotted.
 
-      > [!NOTE]
-      > Depending on the driver that you used to configure persistent storage, additional parameters might be required. You can also use an existing `VolumeSnapshotClass` object.
+    > [!NOTE]
+    > Depending on the driver that you used to configure persistent storage, additional parameters might be required. You can also use an existing `VolumeSnapshotClass` object.
 
 2.  Create the object you saved in the previous step by entering the following command:
 
@@ -172,7 +172,7 @@ To dynamically create a volume snapshot:
 
     <div class="title">
 
-    volumesnapshot-dynamic.yaml
+    Example volumesnapshot-dynamic.yaml
 
     </div>
 
@@ -189,9 +189,9 @@ To dynamically create a volume snapshot:
 
     </div>
 
-    - The request for a particular class by the volume snapshot. If the `volumeSnapshotClassName` setting is absent and there is a default volume snapshot class, a snapshot is created with the default volume snapshot class name. But if the field is absent and no default volume snapshot class exists, then no snapshot is created.
+    - `spec.volumeSnapshotClassName`: Specifies the request for a particular class by the volume snapshot. If the `volumeSnapshotClassName` setting is absent and there is a default volume snapshot class, a snapshot is created with the default volume snapshot class name. But if the field is absent and no default volume snapshot class exists, then no snapshot is created.
 
-    - The name of the `PersistentVolumeClaim` object bound to a persistent volume. This defines what you want to create a snapshot of. Required for dynamically provisioning a snapshot.
+    - `spec.source.persistentVolumeClaimName`: Specifies the name of the `PersistentVolumeClaim` object bound to a persistent volume. This defines what you want to create a snapshot of. Required for dynamically provisioning a snapshot.
 
 4.  Create the object you saved in the previous step by entering the following command:
 
@@ -199,15 +199,142 @@ To dynamically create a volume snapshot:
     $ oc create -f volumesnapshot-dynamic.yaml
     ```
 
-To manually provision a snapshot:
+</div>
 
-1.  Provide a value for the `volumeSnapshotContentName` parameter as the source for the snapshot, in addition to defining volume snapshot class as shown above.
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  After the snapshot has been created in the cluster, additional details about the snapshot are available.
+
+    To display details about the volume snapshot that was created, run the following command:
+
+    ``` terminal
+    $ oc describe volumesnapshot mysnap
+    ```
+
+    The following example displays details about the `mysnap` volume snapshot:
 
     <div class="formalpara">
 
     <div class="title">
 
-    volumesnapshot-manual.yaml
+    Example volumesnapshot.yaml
+
+    </div>
+
+    ``` yaml
+    apiVersion: snapshot.storage.k8s.io/v1
+    kind: VolumeSnapshot
+    metadata:
+      name: mysnap
+    spec:
+      source:
+        persistentVolumeClaimName: myclaim
+      volumeSnapshotClassName: csi-hostpath-snap
+    status:
+      boundVolumeSnapshotContentName: snapcontent-1af4989e-a365-4286-96f8-d5dcd65d78d6
+      creationTime: "2020-01-29T12:24:30Z"
+      readyToUse: true
+      restoreSize: 500Mi
+    ```
+
+    </div>
+
+    - `status.boundVolumeSnapshotContentName`: This parameter is the pointer to the actual storage content that was created by the controller.
+
+    - `status.creationTime`: Specifies the time when the snapshot was created. The snapshot contains the volume content that was available at this indicated time.
+
+    - `status.readyToUse`: Specifies the readiness of the snapshot. If the value is set to `true`, the snapshot can be used to restore as a new PVC. If the value is set to `false`, the snapshot was created. However, the storage back end needs to perform additional tasks to make the snapshot usable so that it can be restored as a new volume. For example, Amazon Elastic Block Store data might be moved to a different, less expensive location, which can take several minutes.
+
+2.  To verify that the volume snapshot was created, enter the following command:
+
+    ``` terminal
+    $ oc get volumesnapshotcontent
+    ```
+
+    The pointer to the actual content is displayed. If the `boundVolumeSnapshotContentName` field is populated, a `VolumeSnapshotContent` object exists and the snapshot was created.
+
+3.  To verify that the snapshot is ready, confirm that the `VolumeSnapshot` object has `readyToUse: true`.
+
+</div>
+
+# Statically creating a volume snapshot
+
+To make a pre-existing storage snapshot available in OpenShift Container Platform, manually create a volume snapshot that references the existing snapshot content by name.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Logged in to a running OpenShift Container Platform cluster.
+
+- A PVC created using a CSI driver that supports `VolumeSnapshot` objects.
+
+- A storage class to provision the storage back end.
+
+- No pods are using the persistent volume claim (PVC) that you want to take a snapshot of.
+
+  > [!WARNING]
+  > Creating a volume snapshot of a PVC that is in use by a pod can cause unwritten data and cached data to be excluded from the snapshot. To ensure that all data is written to the disk, delete the pod that is using the PVC before creating the snapshot.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a file with the `VolumeSnapshotClass` object described by the following YAML:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example volumesnapshotclass.yaml
+
+    </div>
+
+    ``` yaml
+    apiVersion: snapshot.storage.k8s.io/v1
+    kind: VolumeSnapshotClass
+    metadata:
+      name: csi-hostpath-snap
+    driver: hostpath.csi.k8s.io
+    deletionPolicy: Delete
+    ```
+
+    </div>
+
+    `driver` is the name of the CSI driver that is used to create snapshots of this `VolumeSnapshotClass` object. The name must be the same as the `Provisioner` field of the storage class that is responsible for the PVC that is being snapshotted.
+
+    > [!NOTE]
+    > Depending on the driver that you used to configure persistent storage, additional parameters might be required. You can also use an existing `VolumeSnapshotClass` object.
+
+2.  Create the object you saved in the previous step by entering the following command:
+
+    ``` terminal
+    $ oc create -f volumesnapshotclass.yaml
+    ```
+
+3.  Provide a value for the `volumeSnapshotContentName` parameter as the source for the snapshot:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example volumesnapshot-manual.yaml
 
     </div>
 
@@ -223,13 +350,15 @@ To manually provision a snapshot:
 
     </div>
 
-    - The `volumeSnapshotContentName` parameter is required for pre-provisioned snapshots.
+    `spec.source.volumeSnapshotContentName` is required for pre-provisioned snapshots.
 
-2.  Create the object you saved in the previous step by entering the following command:
+4.  Create the object you saved in the previous step by entering the following command:
 
     ``` terminal
     $ oc create -f volumesnapshot-manual.yaml
     ```
+
+</div>
 
 <div class="formalpara">
 
@@ -255,7 +384,7 @@ After the snapshot has been created in the cluster, additional details about the
 
     <div class="title">
 
-    volumesnapshot.yaml
+    Example volumesnapshot.yaml
 
     </div>
 
@@ -277,12 +406,11 @@ After the snapshot has been created in the cluster, additional details about the
 
     </div>
 
-    - The pointer to the actual storage content that was created by the controller.
+    - `status.boundVolumeSnapshotContentName`: Specifies the pointer to the actual storage content that was created by the controller.
 
-    - The time when the snapshot was created. The snapshot contains the volume content that was available at this indicated time.
+    - `status.creationTime`: Specifies the time when the snapshot was created. The snapshot contains the volume content that was available at this indicated time.
 
-    - If the value is set to `true`, the snapshot can be used to restore as a new PVC.
-      If the value is set to `false`, the snapshot was created. However, the storage back end needs to perform additional tasks to make the snapshot usable so that it can be restored as a new volume. For example, Amazon Elastic Block Store data might be moved to a different, less expensive location, which can take several minutes.
+    - `status.readyToUse`: If the value is set to `true`, the snapshot can be used to restore as a new PVC. If the value is set to `false`, the snapshot was created. However, the storage back end needs to perform additional tasks to make the snapshot usable so that it can be restored as a new volume. For example, Amazon Elastic Block Store data might be moved to a different, less expensive location, which can take several minutes.
 
 2.  To verify that the volume snapshot was created, enter the following command:
 
@@ -296,7 +424,7 @@ After the snapshot has been created in the cluster, additional details about the
 
 # Deleting a volume snapshot
 
-You can configure how OpenShift Container Platform deletes volume snapshots.
+To clean up unneeded snapshots and free storage resources, delete volume snapshots by setting a deletion policy that controls whether the underlying content is retained or removed.
 
 <div>
 
@@ -328,40 +456,40 @@ Procedure
 
     </div>
 
-    - `deletionPolicy`: When deleting the volume snapshot, if the `Delete` value is set, the underlying snapshot is deleted along with the `VolumeSnapshotContent` object. If the `Retain` value is set, both the underlying snapshot and `VolumeSnapshotContent` object remain.
+    When deleting the volume snapshot, if `deletionPolicy` is set to `Delete`, the underlying snapshot is deleted along with the `VolumeSnapshotContent` object. If the `Retain` value is set, both the underlying snapshot and `VolumeSnapshotContent` object remain.
 
-      > [!NOTE]
-      > If the `Retain` value is set and the `VolumeSnapshot` object is deleted without deleting the corresponding `VolumeSnapshotContent` object, the content remains. The snapshot itself is also retained in the storage back end.
+    > [!NOTE]
+    > If the `Retain` value is set and the `VolumeSnapshot` object is deleted without deleting the corresponding `VolumeSnapshotContent` object, the content remains. The snapshot itself is also retained in the storage back end.
 
 2.  Delete the volume snapshot by entering the following command:
 
     ``` terminal
-    $ oc delete volumesnapshot _<volumesnapshot_name>_
+    $ oc delete volumesnapshot <volumesnapshot_name>
     ```
 
-    - Replace `<volumesnapshot_name>` with the name of the volume snapshot you want to delete.
+    Replace `<volumesnapshot_name>` with the name of the volume snapshot you want to delete.
 
-      <div class="formalpara">
+    <div class="formalpara">
 
-      <div class="title">
+    <div class="title">
 
-      Example output
+    Example output
 
-      </div>
+    </div>
 
-      ``` terminal
-      volumesnapshot.snapshot.storage.k8s.io "mysnapshot" deleted
-      ```
+    ``` terminal
+    volumesnapshot.snapshot.storage.k8s.io "mysnapshot" deleted
+    ```
 
-      </div>
+    </div>
 
 3.  If the deletion policy is set to `Retain`, delete the volume snapshot content by entering the following command:
 
     ``` terminal
-    $ oc delete volumesnapshotcontent _<volumesnapshotcontent_name>_
+    $ oc delete volumesnapshotcontent <volumesnapshotcontent_name>
     ```
 
-    - Replace `<volumesnapshotcontent_name>` with the content you want to delete.
+    Replace `<volumesnapshotcontent_name>` with the content you want to delete.
 
 4.  Optional: If the `VolumeSnapshot` object is not successfully deleted, enter the following command to remove any finalizers for the leftover resource so that the delete operation can continue:
 
@@ -392,9 +520,9 @@ Procedure
 
 # Restoring a volume snapshot
 
-The `VolumeSnapshot` CRD content can be used to restore the existing volume to a previous state.
+To recover previous data or reuse snapshot data, create a new persistent volume claim (PVC) that is pre-populated with content from an existing volume snapshot.
 
-After your `VolumeSnapshot` CRD is bound and the `readyToUse` value is set to `true`, you can use that resource to provision a new volume that is pre-populated with data from the snapshot.
+The `VolumeSnapshot` CRD content can be used to restore the existing volume to a previous state. After your `VolumeSnapshot` CRD is bound and the `readyToUse` value is set to `true`, you can use that resource to provision a new volume that is pre-populated with data from the snapshot.
 
 <div>
 
@@ -452,11 +580,11 @@ Procedure
 
     </div>
 
-    - Name of the `VolumeSnapshot` object representing the snapshot to use as source.
+    - `spec.dataSource.name`: Specifies the name of the `VolumeSnapshot` object representing the snapshot to use as source.
 
-    - Must be set to the `VolumeSnapshot` value.
+    - `spec.dataSource.kind`: Must be set to the `VolumeSnapshot` value.
 
-    - Must be set to the `snapshot.storage.k8s.io` value.
+    - `spec.dataSource.apiGroup`: Must be set to the `snapshot.storage.k8s.io` value.
 
 2.  Create a PVC by entering the following command:
 
@@ -476,11 +604,11 @@ Procedure
 
 # Changing the maximum number of snapshots for vSphere
 
-The default maximum number of snapshots per volume in vSphere Container Storage Interface (CSI) is 3. You can change the maximum number up to 32 per volume.
+Configure the maximum number of snapshots per volume globally or for specific datastore types to balance storage capacity and performance in your vSphere environment.
 
-However, be aware that increasing the snapshot maximum involves a performance trade off, so for better performance use only 2 to 3 snapshots per volume.
+The default maximum number of snapshots per volume in vSphere Container Storage Interface (CSI) is 3. You can change the maximum number up to 32 per volume. However, be aware that increasing the snapshot maximum involves a performance trade off, so for better performance use only 2 to 3 snapshots per volume.
 
-For more VMware snapshot performance recommendations, see ***Additional resources***.
+For more VMware snapshot performance recommendations, see "Best practices for using VMware snapshots in the vSphere environment".
 
 <div>
 
@@ -611,10 +739,18 @@ Verification
 
   </div>
 
-  - `global-max-snapshots-per-block-volume` is now set to 10.
+  The parameter `global-max-snapshots-per-block-volume` is now set to 10.
 
 </div>
 
 # Additional resources
+
+- [Persistent volumes](../understanding-persistent-storage.md#persistent-volumes_understanding-persistent-storage)
+
+- [Kubernetes CSI Developer Documentation](https://kubernetes-csi.github.io/docs/drivers.html)
+
+- [Dynamically creating a volume snapshot](persistent-storage-csi-snapshots.md#persistent-storage-csi-snapshots-create_persistent-storage-csi-snapshots)
+
+- [Statically creating a volume snapshot](persistent-storage-csi-snapshots.md#persistent-storage-csi-snapshots-create-static_persistent-storage-csi-snapshots)
 
 - [Best practices for using VMware snapshots in the vSphere environment](https://kb.vmware.com/s/article/1025279)

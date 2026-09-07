@@ -1,12 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Fair sharing is a preemption strategy that is used to achieve an equal or weighted share of borrowable resources between the tenants of a cohort. Borrowable resources are the unused nominal quota of all the cluster queues in a cohort.
+You can configure fair sharing as a preemption strategy to distribute borrowable resources equally or by weight between tenants of a cohort.
+
+Borrowable resources are the unused nominal quota of all the cluster queues in a cohort.
 
 You can configure fair sharing by setting the `preemptionPolicy` value in the `Kueue` custom resource (CR) to `FairSharing`.
 
 # Cluster queue weights
 
-After you have enabled fair sharing, you must set share values for each cluster queue before fair sharing can take place. Share values are represented as the `weight` value in a `ClusterQueue` object.
+After you enable fair sharing, you must configure a `weight` value for each cluster queue to define how borrowable resources are distributed among competing workloads.
 
 Share values are important because they allow administrators to prioritize specific job types or teams. Critical applications or high-priority teams can be configured with a weighted value so that they receive a proportionally larger share of the available resources. Configuring weights ensures that unused resources are distributed according to defined organizational or project priorities rather than on a first-come, first-served basis.
 

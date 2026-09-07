@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Review the security and compliance capabilities available in OpenShift Container Platform, and learn how to secure your cluster.
+
 # Security overview
 
 It is important to understand how to properly secure various aspects of your OpenShift Container Platform cluster.

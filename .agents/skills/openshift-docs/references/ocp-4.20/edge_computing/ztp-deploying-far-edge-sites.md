@@ -172,7 +172,7 @@ The GitOps Zero Touch Provisioning (ZTP) workflow uses the Discovery ISO as part
 For example, configure the `rd.net.timeout.carrier` kernel argument for the Discovery ISO to facilitate static networking for the cluster or to receive a DHCP address before downloading the root file system during installation.
 
 > [!NOTE]
-> In OpenShift Container Platform 4.17, you can only add kernel arguments. You can not replace or delete kernel arguments.
+> In OpenShift Container Platform 4.20, you can only add kernel arguments. You can not replace or delete kernel arguments.
 
 <div>
 

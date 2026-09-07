@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-*Deployment strategies* are used to change or upgrade applications without downtime so that users barely notice a change.
+To upgrade applications with little or no downtime in OpenShift Container Platform, you can use a deployment strategy. Choose strategies that use `DeploymentConfig` object features or router features depending on whether you need to affect all routes or only specific ones.
 
 Because users generally access applications through a route handled by a router, deployment strategies can focus on `DeploymentConfig` object features or routing features. Strategies that focus on `DeploymentConfig` object features impact all routes that use the application. Strategies that use router features target individual routes.
 
@@ -24,7 +24,7 @@ A deployment strategy uses readiness checks to determine if a new pod is ready f
 
 # Rolling strategy
 
-A rolling deployment slowly replaces instances of the previous version of an application with instances of the new version of the application. The rolling strategy is the default deployment strategy used if no strategy is specified on a `DeploymentConfig` object.
+To update an application with little or no downtime in OpenShift Container Platform, you can use the rolling deployment strategy. New pods replace previous instances gradually after readiness checks succeed. This strategy is the default when none is specified on a `DeploymentConfig` object.
 
 A rolling deployment typically waits for new pods to become `ready` via a readiness check before scaling down the old components. If a significant issue occurs, the rolling deployment can be aborted.
 
@@ -66,17 +66,17 @@ spec:
 
 </div>
 
-- The time to wait between individual pod updates. If unspecified, this value defaults to `1`.
+- `spec.strategy.rollingParams.updatePeriodSeconds` is the time to wait between individual pod updates. If unspecified, this value defaults to `1`.
 
-- The time to wait between polling the deployment status after update. If unspecified, this value defaults to `1`.
+- `spec.strategy.rollingParams.intervalSeconds` is the time to wait between polling the deployment status after update. If unspecified, this value defaults to `1`.
 
-- The time to wait for a scaling event before giving up. Optional; the default is `600`. Here, *giving up* means automatically rolling back to the previous complete deployment.
+- `spec.strategy.rollingParams.timeoutSeconds` is the time to wait for a scaling event before giving up. Optional; the default is `600`. Here, *giving up* means automatically rolling back to the previous complete deployment.
 
-- `maxSurge` is optional and defaults to `25%` if not specified. See the information below the following procedure.
+- `spec.strategy.rollingParams.maxSurge` is optional and defaults to `25%` if not specified. See the information below the following procedure.
 
-- `maxUnavailable` is optional and defaults to `25%` if not specified. See the information below the following procedure.
+- `spec.strategy.rollingParams.maxUnavailable` is optional and defaults to `25%` if not specified. See the information below the following procedure.
 
-- `pre` and `post` are both lifecycle hooks.
+- `spec.strategy.rollingParams.pre` and `spec.strategy.rollingParams.post` are lifecycle hooks.
 
 The rolling strategy:
 
@@ -110,13 +110,13 @@ Generally, if you want fast rollouts, use `maxSurge`. If you have to take into a
 
 ## Canary deployments
 
-All rolling deployments in OpenShift Container Platform are *canary deployments*; a new version (the canary) is tested before all of the old instances are replaced. If the readiness check never succeeds, the canary instance is removed and the `DeploymentConfig` object will be automatically rolled back.
+To validate a new application version before replacing all pods in OpenShift Container Platform, you can use a canary deployment. All rolling deployments are canary deployments: the new instance is tested with readiness checks and automatically rolled back if it never becomes ready.
 
 The readiness check is part of the application code and can be as sophisticated as necessary to ensure the new instance is ready to be used. If you must implement more complex checks of the application (such as sending real user workloads to the new instance), consider implementing a custom deployment or using a blue-green deployment strategy.
 
 ## Creating a rolling deployment
 
-Rolling deployments are the default type in OpenShift Container Platform. You can create a rolling deployment using the CLI.
+To update an application with minimal downtime in OpenShift Container Platform, you can create a rolling deployment. Use the CLI to deploy an application, expose it, and trigger a new rollout so pods are gradually replaced.
 
 <div>
 
@@ -163,15 +163,15 @@ Procedure
     $ oc describe dc deployment-example
     ```
 
+    During the deployment process, the new replication controller is incrementally scaled up. After the new pods are marked as `ready` (by passing their readiness check), the deployment process continues. If the pods do not become ready, the process aborts, and the deployment rolls back to its previous version.
+
 </div>
-
-During the deployment process, the new replication controller is incrementally scaled up. After the new pods are marked as `ready` (by passing their readiness check), the deployment process continues.
-
-If the pods do not become ready, the process aborts, and the deployment rolls back to its previous version.
 
 ## Editing a deployment by using the Developer perspective
 
-You can edit the deployment strategy, image settings, environment variables, and advanced options for your deployment by using the **Developer** perspective.
+To change the strategy, images, environment variables, or advanced options for a deployment in OpenShift Container Platform, you can edit the deployment in the **Developer** perspective.
+
+Open the application in the **Topology** view and use **Edit Deployment** to update settings such as rollouts and replicas.
 
 <div>
 
@@ -215,7 +215,7 @@ Procedure
 
 ## Starting a rolling deployment using the Developer perspective
 
-You can upgrade an application by starting a rolling deployment.
+To upgrade an application with minimal downtime in OpenShift Container Platform, you can start a rolling deployment in the **Developer** perspective. From the **Topology** view, select **Start Rollout** to spin up the new version and then terminate the old pods.
 
 <div>
 
@@ -266,7 +266,7 @@ Additional resources
 
 # Recreate strategy
 
-The recreate strategy has basic rollout behavior and supports lifecycle hooks for injecting code into the deployment process.
+To replace all previous pods before starting the new version in OpenShift Container Platform, you can use the recreate deployment strategy. Scale the old deployment to zero, then scale up the new one, optionally running `pre`, `mid`, and `post` lifecycle hooks.
 
 <div class="formalpara">
 
@@ -294,9 +294,9 @@ spec:
 
 </div>
 
-- `recreateParams` are optional.
+- `spec.strategy.recreateParams` are optional.
 
-- `pre`, `mid`, and `post` are lifecycle hooks.
+- `spec.strategy.recreateParams.pre`, `spec.strategy.recreateParams.mid`, and `spec.strategy.recreateParams.post` are lifecycle hooks.
 
 The recreate strategy:
 
@@ -325,7 +325,9 @@ A recreate deployment incurs downtime because, for a brief period, no instances 
 
 ## Editing a deployment by using the Developer perspective
 
-You can edit the deployment strategy, image settings, environment variables, and advanced options for your deployment by using the **Developer** perspective.
+To change the strategy, images, environment variables, or advanced options for a deployment in OpenShift Container Platform, you can edit the deployment in the **Developer** perspective.
+
+Open the application in the **Topology** view and use **Edit Deployment** to update settings such as rollouts and replicas.
 
 <div>
 
@@ -369,7 +371,7 @@ Procedure
 
 ## Starting a recreate deployment using the Developer perspective
 
-You can switch the deployment strategy from the default rolling update to a recreate update using the **Developer** perspective in the web console.
+To switch from a rolling update to a recreate rollout in OpenShift Container Platform, you can change the deployment strategy in the **Developer** perspective. Set the strategy type to `Recreate` in the YAML editor, then start a rollout from the **Topology** view.
 
 <div>
 
@@ -385,15 +387,11 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To switch to a recreate update strategy and to upgrade an application:
 
 </div>
 
@@ -412,6 +410,8 @@ To switch to a recreate update strategy and to upgrade an application:
     <figcaption>Recreate update</figcaption>
     </figure>
 
+</div>
+
 <div>
 
 <div class="title">
@@ -428,7 +428,7 @@ Additional resources
 
 # Custom strategy
 
-The custom strategy allows you to provide your own deployment behavior.
+To define your own rollout behavior in OpenShift Container Platform, you can use a custom deployment strategy. Provide a container image, command, and environment variables that control how the new deployment becomes active.
 
 <div class="formalpara">
 
@@ -513,7 +513,9 @@ If the custom deployment strategy process requires access to the OpenShift Conta
 
 ## Editing a deployment by using the Developer perspective
 
-You can edit the deployment strategy, image settings, environment variables, and advanced options for your deployment by using the **Developer** perspective.
+To change the strategy, images, environment variables, or advanced options for a deployment in OpenShift Container Platform, you can edit the deployment in the **Developer** perspective.
+
+Open the application in the **Topology** view and use **Edit Deployment** to update settings such as rollouts and replicas.
 
 <div>
 
@@ -557,15 +559,9 @@ Procedure
 
 # Lifecycle hooks
 
-The rolling and recreate strategies support *lifecycle hooks*, or deployment hooks, which allow behavior to be injected into the deployment process at predefined points within the strategy:
+To run custom logic at specific points during a rollout in OpenShift Container Platform, you can use lifecycle hooks with the rolling or recreate strategy. Configure hooks such as `pre` with a failure policy to abort, retry, or ignore when a hook fails.
 
-<div class="formalpara">
-
-<div class="title">
-
-Example `pre` lifecycle hook
-
-</div>
+The rolling and recreate strategies support *lifecycle hooks*, or deployment hooks, which allow behavior to be injected into the deployment process at predefined points within the strategy as shown in the following example:
 
 ``` yaml
 pre:
@@ -573,9 +569,7 @@ pre:
   execNewPod: {}
 ```
 
-</div>
-
-- `execNewPod` is a pod-based lifecycle hook.
+`pre.execNewPod` is a pod-based lifecycle hook.
 
 Every hook has a *failure policy*, which defines the action the strategy should take when a hook failure is encountered:
 
@@ -587,7 +581,7 @@ Every hook has a *failure policy*, which defines the action the strategy should 
 
 Hooks have a type-specific field that describes how to execute the hook. Currently, pod-based hooks are the only supported hook type, specified by the `execNewPod` field.
 
-## Pod-based lifecycle hook
+# Pod-based lifecycle hook
 
 Pod-based lifecycle hooks execute hook code in a new pod derived from the template in a `DeploymentConfig` object.
 
@@ -609,7 +603,8 @@ spec:
           image: openshift/origin-ruby-sample
   replicas: 5
   selector:
-    name: frontend
+    name: frontendasciiditavale modules/creating-rolling-deployments-CLI.adoc
+
   strategy:
     type: Rolling
     rollingParams:
@@ -625,13 +620,13 @@ spec:
             - data
 ```
 
-- The `helloworld` name refers to `spec.template.spec.containers[0].name`.
+- `strategy.rollingParams.pre.execNewPod.containername.helloworld` refers to `spec.template.spec.containers[0].name`.
 
-- This `command` overrides any `ENTRYPOINT` defined by the `openshift/origin-ruby-sample` image.
+- `strategy.rollingParams.pre.execNewPod.command` overrides any `ENTRYPOINT` defined by the `openshift/origin-ruby-sample` image.
 
-- `env` is an optional set of environment variables for the hook container.
+- `strategy.rollingParams.pre.execNewPod.env` is an optional set of environment variables for the hook container.
 
-- `volumes` is an optional set of volume references for the hook container.
+- `strategy.rollingParams.pre.execNewPod.volumes` is an optional set of volume references for the hook container.
 
 In this example, the `pre` hook will be executed in a new pod using the `openshift/origin-ruby-sample` image from the `helloworld` container. The hook pod has the following properties:
 
@@ -643,7 +638,7 @@ In this example, the `pre` hook will be executed in a new pod using the `openshi
 
 - The hook pod inherits the `data` volume from the `DeploymentConfig` object pod.
 
-## Setting lifecycle hooks
+# Setting lifecycle hooks
 
 You can set lifecycle hooks, or deployment hooks, for a deployment using the CLI.
 

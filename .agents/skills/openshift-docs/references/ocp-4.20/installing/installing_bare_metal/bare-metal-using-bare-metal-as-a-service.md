@@ -53,7 +53,7 @@ Prerequisites
 
 </div>
 
-- If you are using user-provisioned installation and the Provisioning CR does not exist, you must create it manually. For instructions, see [Configuring a provisioning resource to scale user-provisioned clusters](https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html-single/installing_on_bare_metal/index#scaling-a-user-provisioned-cluster-with-the-bare-metal-operator). For installer-provisioned installations, the installation program creates the Provisioning custom resource (CR) automatically.
+- If you are using user-provisioned installation and the Provisioning CR does not exist, you must create it manually. For instructions, see [Configuring a provisioning resource to scale user-provisioned clusters](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html-single/installing_on_bare_metal/index#scaling-a-user-provisioned-cluster-with-the-bare-metal-operator). For installer-provisioned installations, the installation program creates the Provisioning custom resource (CR) automatically.
 
 </div>
 
@@ -88,7 +88,7 @@ Prerequisites
 
 </div>
 
-- You have [configured an identify provider](https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html-single/authentication_and_authorization/index#configuring-identity-providers).
+- You have [configured an identify provider](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html-single/authentication_and_authorization/index#configuring-identity-providers).
 
 </div>
 
@@ -207,7 +207,7 @@ Procedure
         </tbody>
         </table>
 
-        For more information about identify providers, see [Authentication and authorization](https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html-single/authentication_and_authorization/index).
+        For more information about identify providers, see [Authentication and authorization](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html-single/authentication_and_authorization/index).
 
     3.  Save and exit the editor.
 
@@ -238,7 +238,7 @@ Procedure
 6.  Clone the `baremetal-operator` repository to obtain the role-based access control (RBAC) role definitions by running the following command:
 
     ``` terminal
-    $ git clone -b release-4.17 https://github.com/openshift/baremetal-operator.git
+    $ git clone -b release-4.20 https://github.com/openshift/baremetal-operator.git
     ```
 
 7.  For each role you want to add, apply the appropriate RBAC role YAML file from the repository by running the following command:

@@ -12,7 +12,7 @@ For clusters that use the CCO in mint mode, the administrator-level credential i
 
 With mint mode, each cluster component has only the specific permissions it requires. Cloud credential reconciliation is automatic and continuous so that components can perform actions that require additional credentials or permissions.
 
-For example, a minor version cluster update (such as updating from OpenShift Container Platform 4.19 to 4.17) might include an updated `CredentialsRequest` resource for a cluster component. The CCO, operating in mint mode, uses the `admin` credential to process the `CredentialsRequest` resource and create users with limited permissions to satisfy the updated authentication requirements.
+For example, a minor version cluster update (such as updating from OpenShift Container Platform 4.19 to 4.20) might include an updated `CredentialsRequest` resource for a cluster component. The CCO, operating in mint mode, uses the `admin` credential to process the `CredentialsRequest` resource and create users with limited permissions to satisfy the updated authentication requirements.
 
 > [!NOTE]
 > By default, mint mode requires storing the `admin` credential in the cluster `kube-system` namespace. If this approach does not meet the security requirements of your organization, you can remove the credential after installing the cluster. For more information, see "Removing cloud provider credentials".

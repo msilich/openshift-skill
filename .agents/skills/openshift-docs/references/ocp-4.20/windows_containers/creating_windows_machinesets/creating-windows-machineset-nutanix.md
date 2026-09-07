@@ -2,7 +2,7 @@
 
 You can use a `MachineSet` custom resource (CR) to add a Windows compute node to your Nutanix cluster, where you can run Windows container workloads.
 
-For example, you might create infrastructure Windows machine sets and related machines so that you can move supporting Windows workloads to the new Windows machines. For more information about machine sets, see "Overview of machine management" in the *Additional resources* section.
+For example, you might create infrastructure Windows machine sets and related machines so that you can move supporting Windows workloads to the new Windows machines. For more information about machine sets, see "Overview of machine management".
 
 # Prerequisites
 
@@ -106,7 +106,7 @@ Specify the following parameters:
 - `value.bootType`. Specifies the boot type that the compute machines use. Valid values are `Legacy`, `SecureBoot`, or `UEFI`. The default is `Legacy`. For more information about boot types, see "Understanding UEFI, Secure Boot, and TPM in the Virtualized Environment (Nutanix documentaiton)" in the *Additional resources* section.
 
   > [!NOTE]
-  > You must use the `Legacy` boot type in OpenShift Container Platform 4.17.
+  > You must use the `Legacy` boot type in OpenShift Container Platform 4.20.
 
 - `value.cluster`. Specifies a Nutanix Prism Element cluster configuration. In this example, the cluster type is `uuid`, so there is a `uuid` stanza. Replace `<cluster_uuid>` with the cluster UUID.
 

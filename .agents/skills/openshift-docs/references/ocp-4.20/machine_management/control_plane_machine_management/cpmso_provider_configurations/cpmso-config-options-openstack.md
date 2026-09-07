@@ -92,7 +92,7 @@ Specifies the control plane machines security group.
 
 # Sample RHOSP failure domain configuration
 
-To prevent downtime for your application due to the failure of a single Red Hat OpenStack Platform (RHOSP) region, you can configure failure domains in the control plane machine set. To use failure domains, you configure appropriate values in the `failureDomains` section of the `ControlPlaneMachineSet` custom resource (CR).
+To prevent downtime for your applications due to the failure of a single Red Hat OpenStack Platform (RHOSP) region, you can configure failure domains in the control plane machine set by configuring appropriate values in the `failureDomains` section of the `ControlPlaneMachineSet` object.
 
 The control plane machine set concept of a failure domain is analogous to the existing RHOSP concept of an [availability zone](https://docs.openstack.org/nova/latest/admin/availability-zones.html). The `ControlPlaneMachineSet` CR spreads control plane machines across more than one failure domain when possible.
 

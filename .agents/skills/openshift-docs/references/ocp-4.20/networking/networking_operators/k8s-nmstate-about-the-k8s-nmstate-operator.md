@@ -1,6 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The Kubernetes NMState Operator provides a Kubernetes API for performing state-driven network configuration across the OpenShift Container Platform cluster’s nodes with NMState. The Kubernetes NMState Operator provides users with functionality to configure various network interface types, DNS, and routing on cluster nodes. Additionally, the daemons on the cluster nodes periodically report on the state of each node’s network interfaces to the API server.
+The Kubernetes NMState Operator provides a Kubernetes API for performing state-driven network configuration across the OpenShift Container Platform cluster nodes with NMState.
+
+The Kubernetes NMState Operator provides users with functionality to configure various network interface types, DNS, and routing on cluster nodes. Additionally, the daemons on the cluster nodes periodically report on the state of each node’s network interfaces to the API server.
 
 > [!IMPORTANT]
 > Red Hat supports the Kubernetes NMState Operator in production environments on bare-metal, IBM Power®, IBM Z®, IBM® LinuxONE, VMware vSphere, and Red Hat OpenStack Platform (RHOSP) installations.
@@ -13,14 +15,12 @@ Before you can use NMState with OpenShift Container Platform, you must install t
 
 - Creating a manifest object that includes a customized `br-ex` bridge
 
-For more information on these tasks, see the *Additional resources* section.
-
-> [!NOTE]
-> The Kubernetes NMState Operator updates the network configuration of a secondary NIC. The Operator cannot update the network configuration of the primary NIC, or update the `br-ex` bridge on most on-premise networks.
+> [!IMPORTANT]
+> The Kubernetes NMState Operator updates the network configuration of a secondary NIC. Do not use the Operator to update the primary NIC network configuration or the `br-ex` bridge on most on-premise networks. Applying a `NodeNetworkConfigurationPolicy` CR to the primary NIC or `br-ex` bridge can result in complete network loss on the affected node. This configuration requires manual recovery of the network configuration.
 >
-> On a bare-metal platform, using the Kubernetes NMState Operator to update the `br-ex` bridge network configuration is only supported if you set the `br-ex` bridge as the interface in a machine config manifest file. To update the `br-ex` bridge as a postinstallation task, you must set the `br-ex` bridge as the interface in the NMState configuration of the `NodeNetworkConfigurationPolicy` custom resource (CR) for your cluster. For more information, see [Creating a manifest object that includes a customized br-ex bridge](../../installing/installing_bare_metal/bare-metal-postinstallation-configuration.md#creating-manifest-file-customized-br-ex-bridge_bare-metal-postinstallation-configuration) in *Postinstallation configuration*.
+> For a bare-metal platform only, the Kubernetes NMState Operator can update the `br-ex` bridge network configuration. This update is supported only if you set the `br-ex` bridge as the interface in a machine config manifest file. To update the `br-ex` bridge as a postinstallation task, you must set the `br-ex` bridge as the interface in the NMState configuration of the `NodeNetworkConfigurationPolicy` custom resource (CR) for your cluster. For more information, see "Creating a manifest object that includes a customized br-ex bridge (Post-installation documentation)".
 
-OpenShift Container Platform uses [`nmstate`](https://nmstate.github.io/) to report on and configure the state of the node network. This makes it possible to modify the network policy configuration, such as by creating a Linux bridge on all nodes, by applying a single configuration manifest to the cluster.
+OpenShift Container Platform uses `nmstate` to report on and configure the state of the node network. You can modify the network policy configuration by applying a single configuration manifest to the cluster. For example, you can create a Linux bridge on all nodes.
 
 Node networking is monitored and updated by the following objects:
 
@@ -469,6 +469,8 @@ Procedure
 
 # Additional resources
 
+- [`nmstate`](https://nmstate.github.io/)
+
 - [Creating an interface on nodes](../k8s_nmstate/k8s-nmstate-updating-node-network-config.md#virt-creating-interface-on-nodes_k8s-nmstate-updating-node-network-config)
 
 - [Observing and updating the node network state and configuration](../k8s_nmstate/k8s-nmstate-updating-node-network-config.md#k8s-nmstate-updating-node-network-config)
@@ -476,3 +478,5 @@ Procedure
 - [Creating a manifest object that includes a customized br-ex bridge (Installer-provisioned infrastructure)](../../installing/installing_bare_metal/ipi/ipi-install-installation-workflow.md#creating-manifest-file-customized-br-ex-bridge_ipi-install-installation-workflow)
 
 - [Creating a manifest object that includes a customized br-ex bridge (User-provisioned infrastructure)](../../installing/installing_bare_metal/upi/installing-bare-metal.md#creating-manifest-file-customized-br-ex-bridge_installing-bare-metal)
+
+- [Creating a manifest object that includes a customized br-ex bridge (Post-installation documentation)](../../installing/installing_bare_metal/bare-metal-postinstallation-configuration.md#creating-manifest-file-customized-br-ex-bridge-post_bare-metal-postinstallation-configuration)

@@ -1,13 +1,29 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-To create a cluster with multi-architecture compute machines on IBM Z® and IBM® LinuxONE (`s390x`) in an LPAR, you must have an existing single-architecture `x86_64` cluster. You can then add `s390x` compute machines to your OpenShift Container Platform cluster.
+To create a cluster with multi-architecture compute machines on IBM Z® and IBM® LinuxONE (`s390x`) in a logical partition (LPAR), you must have an existing single-architecture `x86_64` cluster. You can then add `s390x` compute machines to your OpenShift Container Platform cluster.
 
-Before you can add `s390x` nodes to your cluster, you must upgrade your cluster to one that uses the multi-architecture payload. For more information on migrating to the multi-architecture payload, see [Migrating to a cluster with multi-architecture compute machines](../../updating/updating_a_cluster/migrating-to-multi-payload.md#migrating-to-multi-payload).
+Before you can add `s390x` nodes to your cluster, you must upgrade your cluster to one that uses the multi-architecture payload. For more information about migrating to the multi-architecture payload, see "Migrating to a cluster with multi-architecture compute machines".
 
-The following procedures explain how to create a RHCOS compute machine using an LPAR instance. This will allow you to add `s390x` nodes to your cluster and deploy a cluster with multi-architecture compute machines.
+You can create a RHCOS compute machine by using an LPAR instance. By using an LPAR instance, you can add `s390x` nodes to your cluster and deploy a cluster with multi-architecture compute machines.
 
 > [!NOTE]
-> To create an IBM Z® or IBM® LinuxONE (`s390x`) cluster with multi-architecture compute machines on `x86_64`, follow the instructions for [Installing a cluster on IBM Z® and IBM® LinuxONE](../../installing/installing_ibm_z/preparing-to-install-on-ibm-z.md#preparing-to-install-on-ibm-z). You can then add `x86_64` compute machines as described in [Creating a cluster with multi-architecture compute machines on bare metal, IBM Power, or IBM Z](creating-multi-arch-compute-nodes-bare-metal.md#creating-multi-arch-compute-nodes-bare-metal).
+> To create an IBM Z® or IBM® LinuxONE (`s390x`) cluster with multi-architecture compute machines on `x86_64`, follow the instructions for "Installing a cluster on IBM Z® and IBM® LinuxONE". You can then add `x86_64` compute machines as described in "Creating a cluster with multi-architecture compute machines on bare metal, IBM Power, or IBM Z".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Migrating to a cluster with multi-architecture compute machines](../../updating/updating_a_cluster/migrating-to-multi-payload.md#migrating-to-multi-payload)
+
+- [Installing a cluster on IBM Z® and IBM® LinuxONE](../../installing/installing_ibm_z/preparing-to-install-on-ibm-z.md#preparing-to-install-on-ibm-z)
+
+- [Creating a cluster with multi-architecture compute machines on bare metal, IBM Power, or IBM Z](creating-multi-arch-compute-nodes-bare-metal.md#creating-multi-arch-compute-nodes-bare-metal)
+
+</div>
 
 # Creating RHCOS machines on IBM Z in an LPAR
 
@@ -43,7 +59,7 @@ Procedure
 
 2.  Upload the `worker.ign` Ignition config file you exported from your cluster to your HTTP server. Note the URL of this file.
 
-3.  You can validate that the Ignition file is available on the URL. The following example gets the Ignition config file for the compute node:
+3.  Validate that the Ignition file is available on the URL. The following example gets the Ignition config file for the compute node:
 
     ``` terminal
     $ curl -k http://<http_server>/worker.ign
@@ -68,7 +84,7 @@ Procedure
 
 5.  Move the downloaded RHEL live `kernel`, `initramfs`, and `rootfs` files to an HTTP or HTTPS server that is accessible from the RHCOS guest you want to add.
 
-6.  Create a parameter file for the guest. The following parameters are specific for the virtual machine:
+6.  Create a parameter file for the guest. The following parameters are specific to the virtual machine:
 
     - Optional: To specify a static IP address, add an `ip=` parameter with the following entries, with each separated by a colon:
 
@@ -119,7 +135,7 @@ Procedure
       1.  Use `rd.zfcp=<adapter>,<wwpn>,<lun>` to specify the FCP disk where RHCOS is to be installed. For multipathing, repeat this step for each additional path.
 
           > [!NOTE]
-          > When you install with multiple paths, you must enable multipathing directly after the installation, not at a later point in time, as this can cause problems.
+          > When you install with multiple paths, you must enable multipathing directly after the installation. Enabling multipathing much later can cause problems for your cluster.
 
       2.  Set the install device as: `coreos.inst.install_dev=/dev/sda`.
 
@@ -150,15 +166,15 @@ Procedure
 
           Write all options in the parameter file as a single line and make sure that you have no newline characters.
 
-7.  Transfer the initramfs, kernel, parameter files, and RHCOS images to the LPAR, for example with FTP. For details about how to transfer the files with FTP and boot, see [Booting the installation on IBM Z® to install RHEL in an LPAR](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/interactively_installing_rhel_over_the_network/index#installing-in-an-lpar_booting-the-installation-media).
+7.  As an example for FTP, transfer the initramfs, kernel, parameter files, and RHCOS images to the LPAR. For details about how to transfer the files with FTP and boot, see [Booting the installation on IBM Z® to install RHEL in an LPAR](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/interactively_installing_rhel_over_the_network/index#installing-in-an-lpar_booting-the-installation-media).
 
-8.  Boot the machine
+8.  Boot the machine.
 
 </div>
 
 # Approving the certificate signing requests for your machines
 
-When you add machines to a cluster, two pending certificate signing requests (CSRs) are generated for each machine that you added. You must confirm that these CSRs are approved or, if necessary, approve them yourself. The client requests must be approved first, followed by the server requests.
+To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 
 <div>
 
@@ -206,7 +222,7 @@ Procedure
     The output lists all of the machines that you created.
 
     > [!NOTE]
-    > The preceding output might not include the compute nodes until some CSRs are approved.
+    > The preceding output might not include the compute nodes until you approve some CSRs.
 
 2.  Review the pending CSRs and ensure that you see the client requests with the `Pending` or `Approved` status for each machine that you added to the cluster:
 
@@ -236,10 +252,10 @@ Procedure
 3.  If the CSRs were not approved, after all of the pending CSRs for the machines you added are in `Pending` status, approve the CSRs for your cluster machines:
 
     > [!NOTE]
-    > You must approve your CSRs within an hour of adding the machines to the cluster. If you do not approve them within an hour, the certificates will rotate, and more than two certificates will be present for each node. You must approve all of these certificates. After the client CSR is approved, the Kubelet creates a secondary CSR for the serving certificate, which requires manual approval. The subsequent serving certificate renewal requests are then automatically approved by the `machine-approver` if the Kubelet requests a new certificate with identical parameters.
+    > You must approve your CSRs within an hour of adding the machines to the cluster. If you do not approve them within an hour, the certificates rotate, and more than two certificates are present for each node. You must approve all of these certificates. After you approve the client CSR, the kubelet creates a secondary CSR for the serving certificate, which requires manual approval. The `machine-approver` then automatically approves later serving certificate renewal requests if the kubelet requests a new certificate with the same parameters.
 
     > [!NOTE]
-    > For clusters running on platforms that are not machine API enabled, such as bare metal and other user-provisioned infrastructure, you must implement a method of automatically approving the kubelet serving certificate requests (CSRs). If a request is not approved, then the `oc exec`, `oc rsh`, and `oc logs` commands cannot succeed, because a serving certificate is required when the API server connects to the kubelet. Any operation that contacts the Kubelet endpoint requires this certificate approval to be in place. The method must watch for new CSRs, confirm that the CSR was submitted by the `node-bootstrapper` service account in the `system:node` or `system:admin` groups, and confirm the identity of the node.
+    > For clusters running on platforms that are not machine API enabled, such as bare metal and other user-provisioned infrastructure, you must implement a method of automatically approving the kubelet serving certificate requests (CSRs). If you do not approve a request, the `oc exec`, `oc rsh`, and `oc logs` commands cannot succeed, because the API server requires a serving certificate when it connects to the kubelet. Any operation that contacts the kubelet endpoint requires this certificate approval to be in place. The method must watch for new CSRs, confirm that the `node-bootstrapper` service account in the `system:node` or `system:admin` groups submitted the CSR, and confirm the identity of the node.
 
     - To approve them individually, run the following command for each valid CSR:
 
@@ -259,9 +275,9 @@ Procedure
       ```
 
       > [!NOTE]
-      > Some Operators might not become available until some CSRs are approved.
+      > Some Operators might not become available until you approve some CSRs.
 
-4.  Now that your client requests are approved, you must review the server requests for each machine that you added to the cluster:
+4.  After you approve your client requests, review the server requests for each machine that you added to the cluster:
 
     ``` terminal
     $ oc get csr
@@ -303,7 +319,7 @@ Procedure
       $ oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
       ```
 
-6.  After all client and server CSRs have been approved, the machines have the `Ready` status. Verify this by running the following command:
+6.  After you approve all client and server CSRs, the machines have the `Ready` status. Verify this by running the following command:
 
     ``` terminal
     $ oc get nodes
@@ -329,6 +345,6 @@ Procedure
     </div>
 
     > [!NOTE]
-    > You might need to wait a few minutes after approval of the server CSRs for the machines to transition to the `Ready` status.
+    > You might need to wait a few minutes after approval of the server CSRs for the machines to reach the `Ready` status.
 
 </div>

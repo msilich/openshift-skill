@@ -141,4 +141,4 @@ For Linux workloads, you can specify huge page resources. Huge pages are a Linux
 
 - [Example pod configurations](nodes-pods-using.md#nodes-pods-using-example_nodes-pods-using-ssy)
 
-- [Huge pages](../../post_installation_configuration/node-tasks.md#post-install-huge-pages)
+- [Huge pages](../../post_installation_configuration/node-tasks.md#post-install-huge-pages_post-install-node-tasks)

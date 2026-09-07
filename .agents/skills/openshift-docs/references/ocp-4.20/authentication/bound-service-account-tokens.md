@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can use bound service account tokens, which improves the ability to integrate with cloud provider identity access management (IAM) services, such as OpenShift Container Platform on AWS IAM or Google Cloud IAM.
+You can use bound service account tokens, which improve the ability to integrate with cloud provider identity access management (IAM) services such as OpenShift Container Platform on AWS IAM or Google Cloud IAM.
 
 # About bound service account tokens
 
-You can use bound service account tokens to limit the scope of permissions for a given service account token. These tokens are audience and time-bound. This facilitates the authentication of a service account to an IAM role and the generation of temporary credentials mounted to a pod. You can request bound service account tokens by using volume projection and the TokenRequest API.
+You can use bound service account tokens to limit the scope of permissions for a given service account token.
+
+Bound service account tokens are audience-bound and time-bound. This facilitates the authentication of a service account to an IAM role and the generation of temporary credentials mounted to a pod. You can request bound service account tokens by using volume projection and the TokenRequest API.
 
 # Configuring bound service account tokens using volume projection
 
@@ -54,7 +56,7 @@ Procedure
           serviceAccountIssuer: https://test.default.svc
         ```
 
-        - This value should be a URL from which the recipient of a bound token can source the public keys necessary to verify the signature of the token. The default is `https://kubernetes.default.svc`.
+        This value should be a URL from which the recipient of a bound token can source the public keys necessary to verify the signature of the token. The default is `https://kubernetes.default.svc`.
 
     3.  Save the file to apply the changes.
 
@@ -71,13 +73,13 @@ Procedure
         3 nodes are at revision 12
         ```
 
-        - In this example, the latest revision number is `12`.
+        In this example, the latest revision number is `12`.
 
-          If the output shows a message similar to one of the following messages, the update is still in progress. Wait a few minutes and try again.
+        If the output shows a message similar to one of the following messages, the update is still in progress. Wait a few minutes and try again.
 
-          - `3 nodes are at revision 11; 0 nodes have achieved new revision 12`
+        - `3 nodes are at revision 11; 0 nodes have achieved new revision 12`
 
-          - `2 nodes are at revision 11; 1 nodes are at revision 12`
+        - `2 nodes are at revision 11; 1 nodes are at revision 12`
 
     5.  Optional: Force the holder to request a new bound token either by performing a rolling node restart or by manually restarting all pods in the cluster.
 
@@ -137,20 +139,28 @@ Procedure
                   audience: vault
         ```
 
-        - Prevents containers from running as root to minimize compromise risks.
+        where:
 
-        - Sets the default seccomp profile, limiting to essential system calls, to reduce risks.
+        `spec.securityContext.runAsNonRoot`
+        Specifies whether to restrict containers from running as root. When `true`, containers cannot run as root to minimize compromise risks.
 
-        - A reference to an existing service account.
+        `spec.securityContext.seccompProfile.type`
+        Specifies the seccomp profile to use. Set to `RuntimeDefault` to use the default seccomp profile, limiting to essential system calls, to reduce risks.
 
-        - The path relative to the mount point of the file to project the token into.
+        `spec.serviceAccountName`
+        Specifies an existing service account.
 
-        - Optionally set the expiration of the service account token, in seconds. The default value is 3600 seconds (1 hour), and this value must be at least 600 seconds (10 minutes). The kubelet starts trying to rotate the token if the token is older than 80 percent of its time to live or if the token is older than 24 hours.
+        `spec.volumes.projected.sources.serviceAccountToken.path`
+        Specifies a path relative to the mount point of the file to project the token into.
 
-        - Optionally set the intended audience of the token. The recipient of a token should verify that the recipient identity matches the audience claim of the token, and should otherwise reject the token. The audience defaults to the identifier of the API server.
+        `spec.volumes.projected.sources.serviceAccountToken.expirationSeconds`
+        Specifies the expiration of the service account token, in seconds. The default value is 3600 seconds (1 hour). This value must be at least 600 seconds (10 minutes). The kubelet starts trying to rotate the token if the token is older than 80 percent of its time to live or if the token is older than 24 hours. This parameter is optional.
 
-          > [!NOTE]
-          > In order to prevent unexpected failure, OpenShift Container Platform overrides the `expirationSeconds` value to be one year from the initial token generation with the `--service-account-extend-token-expiration` default of `true`. You cannot change this setting.
+        `spec.volumes.projected.sources.serviceAccountToken.audience`
+        Specifies the intended audience of the token. The recipient of a token should verify that the recipient identity matches the audience claim of the token, and should otherwise reject the token. The audience defaults to the identifier of the API server. This parameter is optional.
+
+        > [!NOTE]
+        > In order to prevent unexpected failure, OpenShift Container Platform overrides the `expirationSeconds` value to be one year from the initial token generation with the `--service-account-extend-token-expiration` default of `true`. You cannot change this setting.
 
     2.  Create the pod:
 
@@ -167,6 +177,8 @@ Procedure
 </div>
 
 # Creating bound service account tokens outside the pod
+
+You can create bound service tokens outside of the pod, if needed.
 
 <div>
 
@@ -210,16 +222,8 @@ Procedure
 
 </div>
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+# Additional resources
 
 - [Rebooting a node gracefully](../nodes/nodes/nodes-nodes-rebooting.md#nodes-nodes-rebooting-gracefully_nodes-nodes-rebooting)
 
 - [Creating service accounts](understanding-and-creating-service-accounts.md#service-accounts-managing_understanding-service-accounts)
-
-</div>

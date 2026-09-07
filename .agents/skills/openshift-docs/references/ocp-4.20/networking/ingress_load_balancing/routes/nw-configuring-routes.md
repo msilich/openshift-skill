@@ -193,7 +193,7 @@ The following headers are either prevented entirely from being set or deleted, o
 </tbody>
 </table>
 
-# Setting or deleting HTTP request and response headers in a route
+# Set or delete HTTP request and response headers in a route
 
 You can set or delete certain HTTP request and response headers for compliance purposes or other reasons. You can set or delete these headers either for all routes served by an Ingress Controller or for specific routes.
 
@@ -286,7 +286,7 @@ Procedure
 
 </div>
 
-# Using cookies to keep route statefulness
+# Use cookies to keep route statefulness
 
 To maintain stateful application traffic during pod restarts or scaling events, configure sticky sessions by using cookies. By using this method, you ensure that all incoming traffic reaches the same endpoint, preventing state loss even if the specific endpoint pod changes.
 
@@ -297,7 +297,7 @@ OpenShift Container Platform can use cookies to configure session persistence. T
 >
 > If backends change, the traffic can be directed to the wrong server, making it less sticky. If you are using a load balancer, which hides source IP, the same number is set for all connections and traffic is sent to the same pod.
 
-## Annotating a route with a cookie
+## Annotate a route with a cookie
 
 To enable applications to manage session persistence and load distribution, annotate the route with a custom cookie name. Overwriting the default cookie allows the backend application to identify and delete the specific cookie, forcing endpoint re-selection when necessary.
 
@@ -599,7 +599,7 @@ If pod logs do not reveal any cause of the problem, use the following methods to
 
 - Use a packet analyzer, such as `ping` or `tcpdump` to analyze traffic between a pod and its node.
 
-  For example, [run the `tcpdump` tool on each pod](https://access.redhat.com/solutions/4569211) while reproducing the behavior that led to the issue. Review the captures on both sides to compare send and receive timestamps to analyze the latency of traffic to and from a pod. Latency can occur in OpenShift Container Platform if a node interface is overloaded with traffic from other pods, storage devices, or the data plane.
+  For example, run the `tcpdump` tool on each pod while reproducing the behavior that led to the issue. Review the captures on both sides to compare send and receive timestamps to analyze the latency of traffic to and from a pod. Latency can occur in OpenShift Container Platform if a node interface is overloaded with traffic from other pods, storage devices, or the data plane.
 
   ``` terminal
   $ tcpdump -s 0 -i any -w /tmp/dump.pcap host <podip 1> && host <podip 2>
@@ -610,19 +610,37 @@ If pod logs do not reveal any cause of the problem, use the following methods to
   `podip`
   Specifies the IP address for the pod. Run the `oc get pod <pod_name> -o wide` command to get the IP address of a pod.
 
-  The `tcpdump` command generates a file at `/tmp/dump.pcap` containing all traffic between these two pods. You can run the analyzer shortly before the issue is reproduced and stop the analyzer shortly after the issue is finished reproducing to minimize the size of the file. You can also [run a packet analyzer between the nodes](https://access.redhat.com/solutions/5074041) with:
+  The `tcpdump` command generates a file at `/tmp/dump.pcap` containing all traffic between these two pods. You can run the analyzer shortly before the issue is reproduced and stop the analyzer shortly after the issue is finished reproducing to minimize the size of the file. You can also run a packet analyzer between the nodes with:
 
   ``` terminal
   $ tcpdump -s 0 -i any -w /tmp/dump.pcap port 4789
   ```
 
-- Use a bandwidth measuring tool, such as [`iperf`](https://access.redhat.com/solutions/6129701), to measure streaming throughput and UDP throughput. Locate any bottlenecks by running the tool from the pods first, and then running it from the nodes.
+- Use a bandwidth measuring tool, such as `iperf`, to measure streaming throughput and UDP throughput. Locate any bottlenecks by running the tool from the pods first, and then running it from the nodes.
 
-  - For information on installing and using `iperf`, see this [Red Hat Solution](https://access.redhat.com/solutions/33103).
+  - For information on installing and using `iperf`, see the Red Hat Solution.
 
 - In some cases, the cluster might mark the node with the router pod as unhealthy due to latency issues. Use worker latency profiles to adjust the frequency that the cluster waits for a status update from the node before taking action.
 
 - If your cluster has designated lower-latency and higher-latency nodes, configure the `spec.nodePlacement` field in the Ingress Controller to control the placement of the router pod.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Running tcpdump inside an OpenShift pod to capture network traffic (Red Hat Knowledgebase)](https://access.redhat.com/solutions/4569211)
+
+- [Running tcpdump from a RHEL CoreOS OpenShift node (Red Hat Knowledgebase)](https://access.redhat.com/solutions/5074041)
+
+- [How to run iPerf network performance tests in OpenShift Container Platform 4 (Red Hat Knowledgebase)](https://access.redhat.com/solutions/6129701)
+
+- [How to test network bandwidth? (Red Hat Knowledgebase)](https://access.redhat.com/solutions/33103)
+
+</div>
 
 # Configuring the route admission policy
 

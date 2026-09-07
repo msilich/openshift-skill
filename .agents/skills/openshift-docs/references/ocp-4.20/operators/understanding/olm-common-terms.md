@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This topic provides a glossary of common terms related to the Operator Framework, including Operator Lifecycle Manager (OLM).
+You can use this glossary to learn terminology used across the Operator Framework and Operator Lifecycle Manager (OLM) in OpenShift Container Platform. The terms help you understand concepts for packaging, installing, and managing Operators.
 
 # Bundle
 

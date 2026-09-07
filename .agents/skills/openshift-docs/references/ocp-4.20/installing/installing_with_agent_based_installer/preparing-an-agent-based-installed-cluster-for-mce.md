@@ -87,12 +87,12 @@ Procedure
           architectures:
             - "amd64"
           channels:
-            - name: stable-4.17
+            - name: stable-4.20
               type: ocp
         additionalImages:
           - name: registry.redhat.io/ubi9/ubi:latest
         operators:
-          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.17
+          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.20
             packages:
               - name: multicluster-engine
               - name: local-storage-operator
@@ -492,9 +492,9 @@ Procedure
       apiVersion: hive.openshift.io/v1
       kind: ClusterImageSet
       metadata:
-        name: "4.17"
+        name: "4.20"
       spec:
-        releaseImage: quay.io/openshift-release-dev/ocp-release:4.17.0-x86_64
+        releaseImage: quay.io/openshift-release-dev/ocp-release:4.20.0-x86_64
     ```
 
     </div>

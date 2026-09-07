@@ -4,11 +4,11 @@ If a cluster administrator has delegated Operator installation permissions to yo
 
 # Prerequisites
 
-- A cluster administrator must add certain permissions to your OpenShift Container Platform user account to allow self-service Operator installation to a namespace. See [Allowing non-cluster administrators to install Operators](../admin/olm-creating-policy.md#olm-creating-policy) for details.
+- A cluster administrator must add certain permissions to your OpenShift Container Platform user account to allow self-service Operator installation to a namespace.
 
 # About Operator installation from the software catalog
 
-The software catalog is a user interface for discovering Operators; it works in conjunction with Operator Lifecycle Manager (OLM), which installs and manages Operators on a cluster.
+The software catalog in OpenShift Container Platform is the interface for discovering Operators that Operator Lifecycle Manager (OLM) installs and manages on your cluster. You can choose installation settings such as install mode, namespace, and approval strategy during subscription.
 
 As a user with the proper permissions, you can install an Operator from the software catalog by using the OpenShift Container Platform web console or CLI.
 
@@ -27,11 +27,23 @@ If you choose automatic updates for an installed Operator, when a new version of
 
 If you select manual updates, when a newer version of an Operator is available, OLM creates an update request. As a cluster administrator, you must then manually approve that update request to have the Operator updated to the new version.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Allowing non-cluster administrators to install Operators](../admin/olm-creating-policy.md#olm-creating-policy)
+
 - [Understanding the software catalog](../understanding/olm-understanding-software-catalog.md#olm-understanding-software-catalog)
+
+</div>
 
 # Installing from the software catalog by using the web console
 
-You can install and subscribe to an Operator from software catalog by using the OpenShift Container Platform web console.
+To install and subscribe to an Operator from the software catalog, you can use the OpenShift Container Platform web console. The console guides you through selecting an install mode, namespace, and approval strategy.
 
 <div>
 
@@ -128,7 +140,7 @@ Verification
 
 # Installing from the software catalog by using the CLI
 
-Instead of using the OpenShift Container Platform web console, you can install an Operator from the software catalog by using the CLI. Use the `oc` command to create or update a `Subscription` object.
+To install an Operator from the software catalog without using the web console, you can create or update a `Subscription` object by using the `oc` command in OpenShift Container Platform.
 
 For `SingleNamespace` install mode, you must also ensure an appropriate Operator group exists in the related namespace. An Operator group, defined by an `OperatorGroup` object, selects target namespaces in which to generate required RBAC access for all Operators in the same namespace as the Operator group.
 
@@ -163,7 +175,7 @@ Procedure
     $ oc get packagemanifests -n openshift-marketplace
     ```
 
-    <div class="example">
+    <div class="formalpara">
 
     <div class="title">
 
@@ -197,7 +209,7 @@ Procedure
     $ oc describe packagemanifests <operator_name> -n openshift-marketplace
     ```
 
-    <div class="example">
+    <div class="formalpara">
 
     <div class="title">
 
@@ -235,13 +247,9 @@ Procedure
       Default Channel:  stable-3.8
     ```
 
-    - Indicates which install modes are supported.
-
-    - Example channel names.
-
-    - The channel selected by default if one is not specified.
-
     </div>
+
+    In the example output, `Install Modes` indicates which install modes are supported; `Name` shows example channel names; and `Default Channel` is the channel selected by default if one is not specified.
 
     > [!TIP]
     > You can print an Operator’s version and channel information in YAML format by running the following command:
@@ -296,7 +304,7 @@ Procedure
 
         </div>
 
-        - For `SingleNamespace` install mode, use the same `<namespace>` value for both the `metadata.namespace` and `spec.targetNamespaces` fields.
+        For `SingleNamespace` install mode, use the same `<namespace>` value for both the `metadata.namespace` and `spec.targetNamespaces` fields.
 
     2.  Create the `OperatorGroup` object:
 
@@ -311,7 +319,7 @@ Procedure
         > [!NOTE]
         > If you want to subscribe to a specific version of an Operator, set the `startingCSV` field to the desired version and set the `installPlanApproval` field to `Manual` to prevent the Operator from automatically upgrading if a later version exists in the catalog. For details, see the following "Example `Subscription` object with a specific starting Operator version".
 
-        <div class="example">
+        <div class="formalpara">
 
         <div class="title">
 
@@ -357,33 +365,47 @@ Procedure
               foo: bar
         ```
 
-        - For default `AllNamespaces` install mode usage, specify the `openshift-operators` namespace. Alternatively, you can specify a custom global namespace, if you have created one. For `SingleNamespace` install mode usage, specify the relevant single namespace.
-
-        - Name of the channel to subscribe to.
-
-        - Name of the Operator to subscribe to.
-
-        - Name of the catalog source that provides the Operator.
-
-        - Namespace of the catalog source. Use `openshift-marketplace` for the default software catalog sources.
-
-        - The `env` parameter defines a list of environment variables that must exist in all containers in the pod created by OLM.
-
-        - The `envFrom` parameter defines a list of sources to populate environment variables in the container.
-
-        - The `volumes` parameter defines a list of volumes that must exist on the pod created by OLM.
-
-        - The `volumeMounts` parameter defines a list of volume mounts that must exist in all containers in the pod created by OLM. If a `volumeMount` references a `volume` that does not exist, OLM fails to deploy the Operator.
-
-        - The `tolerations` parameter defines a list of tolerations for the pod created by OLM.
-
-        - The `resources` parameter defines resource constraints for all the containers in the pod created by OLM.
-
-        - The `nodeSelector` parameter defines a `NodeSelector` for the pod created by OLM.
-
         </div>
 
-        <div class="example">
+        where:
+
+        `<namespace_per_install_mode>`
+        Specifies the namespace for your chosen install mode. For default `AllNamespaces` install mode usage, specify the `openshift-operators` namespace. Alternatively, you can specify a custom global namespace, if you have created one. For `SingleNamespace` install mode usage, specify the relevant single namespace.
+
+        `<channel_name>`
+        Specifies the name of the channel to subscribe to.
+
+        `<operator_name>`
+        Specifies the name of the Operator to subscribe to.
+
+        `<catalog_name>`
+        Specifies the name of the catalog source that provides the Operator.
+
+        `<catalog_source_namespace>`
+        Specifies the namespace of the catalog source. Use `openshift-marketplace` for the default software catalog sources.
+
+        `config.env`
+        Specifies a list of environment variables that must exist in all containers in the pod created by OLM.
+
+        `config.envFrom`
+        Specifies a list of sources to populate environment variables in the container.
+
+        `config.volumes`
+        Specifies a list of volumes that must exist on the pod created by OLM.
+
+        `config.volumeMounts`
+        Specifies a list of volume mounts that must exist in all containers in the pod created by OLM. If a `volumeMount` references a `volume` that does not exist, OLM fails to deploy the Operator.
+
+        `config.tolerations`
+        Specifies a list of tolerations for the pod created by OLM.
+
+        `config.resources`
+        Specifies resource constraints for all the containers in the pod created by OLM.
+
+        `config.nodeSelector`
+        Specifies a `NodeSelector` for the pod created by OLM.
+
+        <div class="formalpara">
 
         <div class="title">
 
@@ -406,17 +428,21 @@ Procedure
           startingCSV: example-operator.v3.7.10
         ```
 
-        - Set the approval strategy to `Manual` in case your specified version is superseded by a later version in the catalog. This plan prevents an automatic upgrade to a later version and requires manual approval before the starting CSV can complete the installation.
-
-        - Set a specific version of an Operator CSV.
-
         </div>
+
+        where:
+
+        `installPlanApproval`
+        Specifies the approval strategy. Set to `Manual` in case your specified version is superseded by a later version in the catalog. This plan prevents an automatic upgrade to a later version and requires manual approval before the starting CSV can complete the installation.
+
+        `startingCSV`
+        Specifies a specific version of an Operator CSV.
 
     2.  For clusters on cloud providers with token authentication enabled, such as Amazon Web Services (AWS) Security Token Service (STS), Microsoft Entra Workload ID, or Google Cloud Platform Workload Identity, configure your `Subscription` object by following these steps:
 
         1.  Ensure the `Subscription` object is set to manual update approvals:
 
-            <div class="example">
+            <div class="formalpara">
 
             <div class="title">
 
@@ -431,15 +457,15 @@ Procedure
               installPlanApproval: Manual
             ```
 
-            - Subscriptions with automatic approvals for updates are not recommended because there might be permission changes to make before updating. Subscriptions with manual approvals for updates ensure that administrators have the opportunity to verify the permissions of the later version, take any necessary steps, and then update.
-
             </div>
+
+            Set the `spec.installPlanApproval` parameter to `Manual`. Subscriptions with manual approvals for updates ensure that administrators have the opportunity to verify the permissions of the later version, take any necessary steps, and then update. Subscriptions with automatic approvals for updates are not recommended because there might be permission changes to make before updating.
 
         2.  Include the relevant cloud provider-specific fields in the `Subscription` object’s `config` section:
 
             If the cluster is in AWS STS mode, include the following fields:
 
-            <div class="example">
+            <div class="formalpara">
 
             <div class="title">
 
@@ -457,81 +483,86 @@ Procedure
                   value: "<role_arn>"
             ```
 
-            - Include the role ARN details.
-
             </div>
 
-            If the cluster is in Workload ID mode, include the following fields:
+            - `ROLEARN` is the Amazon Resource Name (ARN) of the role that the Operator assumes.
 
-            <div class="example">
+              If the cluster is in Workload ID mode, include the following fields:
 
-            <div class="title">
+              <div class="formalpara">
 
-            Example `Subscription` object with Workload ID variables
+              <div class="title">
 
-            </div>
+              Example `Subscription` object with Workload ID variables
 
-            ``` yaml
-            kind: Subscription
-            # ...
-            spec:
-             config:
-               env:
-               - name: CLIENTID
-                 value: "<client_id>"
-               - name: TENANTID
-                 value: "<tenant_id>"
-               - name: SUBSCRIPTIONID
-                 value: "<subscription_id>"
-            ```
+              </div>
 
-            - Include the client ID.
+              ``` yaml
+              kind: Subscription
+              # ...
+              spec:
+               config:
+                 env:
+                 - name: CLIENTID
+                   value: "<client_id>"
+                 - name: TENANTID
+                   value: "<tenant_id>"
+                 - name: SUBSCRIPTIONID
+                   value: "<subscription_id>"
+              ```
 
-            - Include the tenant ID.
+              </div>
 
-            - Include the subscription ID.
+              where:
 
-            </div>
+              `<client_id>`
+              Specifies the client ID.
 
-            If the cluster is in GCP Workload Identity mode, include the following fields:
+              `<tenant_id>`
+              Specifies the tenant ID.
 
-            <div class="example">
+              `<subscription_id>`
+              Specifies the subscription ID.
 
-            <div class="title">
+              If the cluster is in GCP Workload Identity mode, include the following fields:
 
-            Example `Subscription` object with GCP Workload Identity variables
+              <div class="formalpara">
 
-            </div>
+              <div class="title">
 
-            ``` yaml
-            kind: Subscription
-            # ...
-            spec:
-             config:
-               env:
-               - name: AUDIENCE
-                 value: "<audience_url>"
-               - name: SERVICE_ACCOUNT_EMAIL
-                 value: "<service_account_email>"
-            ```
+              Example `Subscription` object with GCP Workload Identity variables
 
-            </div>
+              </div>
 
-            where:
+              ``` yaml
+              kind: Subscription
+              # ...
+              spec:
+               config:
+                 env:
+                 - name: AUDIENCE
+                   value: "<audience_url>"
+                 - name: SERVICE_ACCOUNT_EMAIL
+                   value: "<service_account_email>"
+              ```
 
-            `<audience>`
-            Created in Google Cloud by the administrator when they set up GCP Workload Identity, the `AUDIENCE` value must be a preformatted URL in the following format:
+              </div>
 
-            ``` text
-            //iam.googleapis.com/projects/<project_number>/locations/global/workloadIdentityPools/<pool_id>/providers/<provider_id>
-            ```
+              where:
 
-            `<service_account_email>`
-            The `SERVICE_ACCOUNT_EMAIL` value is a Google Cloud service account email that is impersonated during Operator operation, for example:
+              `<audience_url>`
+              Created in Google Cloud by the administrator when they set up GCP Workload Identity, the `AUDIENCE` value must be a preformatted URL in the following format:
 
-            ``` text
-            <service_account_name>@<project_id>.iam.gserviceaccount.com
-            ```
+              ``` text
+              //iam.googleapis.com/projects/<project_number>/locations/global/workloadIdentityPools/<pool_id>/providers/<provider_id>
+              ```
+
+              `<service_account_email>`
+              Specifies a Google Cloud service account email that is impersonated during Operator operation, for example:
+
+              ``` text
+              <service_account_name>@<project_id>.iam.gserviceaccount.com
+              ```
 
     3.  Create the `Subscription` object by running the following command:
 
@@ -541,15 +572,17 @@ Procedure
 
 6.  If you set the `installPlanApproval` field to `Manual`, manually approve the pending install plan to complete the Operator installation. For more information, see "Manually approving a pending Operator update".
 
-    At this point, OLM is now aware of the selected Operator. A cluster service version (CSV) for the Operator should appear in the target namespace, and APIs provided by the Operator should be available for creation.
-
 </div>
 
-<div>
+<div class="formalpara">
 
 <div class="title">
 
 Verification
+
+</div>
+
+At this point, OLM is now aware of the selected Operator. A cluster service version (CSV) for the Operator should appear in the target namespace, and APIs provided by the Operator should be available for creation.
 
 </div>
 
@@ -564,8 +597,6 @@ Verification
     ``` terminal
     $ oc describe operatorgroup <operatorgroup_name> -n <namespace>
     ```
-
-</div>
 
 <div>
 

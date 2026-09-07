@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Release notes for additional related components and products not included in the core [OpenShift Container Platform 4.17 release notes](ocp-4-20-release-notes.md#ocp-4-20-release-notes) are available in the following documentation.
+Release notes for additional related components and products not included in the core [OpenShift Container Platform 4.20 release notes](ocp-4-20-release-notes.md#ocp-4-20-release-notes) are available in the following documentation.
 
 > [!IMPORTANT]
 > The following release notes are for downstream Red Hat products only; upstream or community release notes for related products are not included.

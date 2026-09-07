@@ -56,11 +56,16 @@ Example directory structure for a reference configuration
 
 </div>
 
-- The reference configuration consists of the `metadata.yaml` file and a set of templates.
+where:
 
-- This example uses an optional and required directory structure for templates that are referenced by the `metadata.yaml` file.
+`metadata.yaml`
+The reference configuration consists of the `metadata.yaml` file and a set of templates.
 
-- The configuration CRs to use as a baseline configuration for clusters.
+`optional`
+This example uses an optional and required directory structure for templates that are referenced by the `metadata.yaml` file.
+
+`baselineClusterResources`
+The configuration CRs to use as a baseline configuration for clusters.
 
 During a comparison, the plugin matches each template to a configuration resource from the cluster. The plugin evaluates optional or required fields in the template using features such as Golang templating syntax and inline regular expression validation. The `metadata.yaml` file applies additional validation rules to decide whether a template is optional or required and assesses template dependency relationships.
 

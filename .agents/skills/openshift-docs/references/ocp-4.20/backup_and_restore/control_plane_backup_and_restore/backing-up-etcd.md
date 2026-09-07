@@ -1,19 +1,23 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+You can back up etcd data for your OpenShift Container Platform cluster by manually creating an etcd snapshot and saving static pod resources on a control plane host, or by configuring automated single or recurring backups.
+
 etcd is the key-value store for OpenShift Container Platform, which persists the state of all resource objects.
 
-Back up your cluster’s etcd data regularly and store in a secure location ideally outside the OpenShift Container Platform environment. Do not take an etcd backup before the first certificate rotation completes, which occurs 24 hours after installation, otherwise the backup will contain expired certificates. It is also recommended to take etcd backups during non-peak usage hours because the etcd snapshot has a high I/O cost.
+Back up etcd data for your cluster regularly. Store backups in a secure location, ideally outside the OpenShift Container Platform environment.
+
+Do not take an etcd backup before the first certificate rotation completes. Certificate rotation occurs 24 hours after installation. A backup taken before rotation completes contains expired certificates.
+
+Take etcd backups during non-peak usage hours when possible. The etcd snapshot has a high I/O cost.
 
 Be sure to take an etcd backup before you update your cluster. Taking a backup before you update is important because when you restore your cluster, you must use an etcd backup that was taken from the same z-stream release. For example, an OpenShift Container Platform 4.17.5 cluster must use an etcd backup that was taken from 4.17.5.
 
 > [!IMPORTANT]
-> Back up your cluster’s etcd data by performing a single invocation of the backup script on a control plane host. Do not take a backup for each control plane host.
-
-After you have an etcd backup, you can [restore to a previous cluster state](disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state).
+> Back up etcd data for your cluster by performing a single invocation of the backup script on a control plane host. Do not take a backup for each control plane host.
 
 # Backing up etcd data
 
-Follow these steps to back up etcd data by creating an etcd snapshot and backing up the resources for the static pods. This backup can be saved and used at a later time if you need to restore etcd.
+You can back up etcd data by creating an etcd snapshot and saving the static pod resources on a control plane host. This backup preserves the cluster state and provides the resources required to restore etcd at a later time.
 
 > [!IMPORTANT]
 > Only save a backup from a single control plane host. Do not take a backup from each control plane host in the cluster.
@@ -28,7 +32,7 @@ Prerequisites
 
 - You have access to the cluster as a user with the `cluster-admin` role.
 
-- You have checked whether the cluster-wide proxy is enabled.
+- You have verified whether the cluster-wide proxy is enabled.
 
   > [!TIP]
   > You can check whether the proxy is enabled by reviewing the output of `oc get proxy cluster -o yaml`. The proxy is enabled if the `httpProxy`, `httpsProxy`, and `noProxy` fields have values set.
@@ -69,7 +73,7 @@ Procedure
     $ export NO_PROXY=<example.com>
     ```
 
-4.  Run the `cluster-backup.sh` script in the debug shell and pass in the location to save the backup to.
+4.  Run the `cluster-backup.sh` script with the path to the directory where you want to save the backup:
 
     > [!TIP]
     > The `cluster-backup.sh` script is maintained as a component of the etcd Cluster Operator and is a wrapper around the `etcdctl snapshot save` command.
@@ -109,7 +113,7 @@ Procedure
 
     In this example, two files are created in the `/home/core/assets/backup/` directory on the control plane host:
 
-    - `snapshot_<datetimestamp>.db`: This file is the etcd snapshot. The `cluster-backup.sh` script confirms its validity.
+    - `snapshot_<datetimestamp>.db`: This file is the etcd snapshot. The `cluster-backup.sh` script confirms the validity of the snapshot.
 
     - `static_kuberesources_<datetimestamp>.tar.gz`: This file contains the resources for the static pods. If etcd encryption is enabled, it also contains the encryption keys for the etcd snapshot.
 
@@ -122,18 +126,18 @@ Procedure
 
 # Additional resources
 
-- [Recovering an unhealthy etcd cluster](../../hosted_control_planes/hcp_high_availability/hcp-recovering-etcd-cluster.md#hcp-recovering-etcd-cluster)
+- [Restoring to an earlier cluster state](disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
+
+- [Recovering an unhealthy etcd cluster for hosted control planes](../../hosted_control_planes/hcp_high_availability/hcp-recovering-etcd-cluster.md#hcp-recovering-etcd-cluster)
 
 # Creating automated etcd backups
 
-The automated backup feature for etcd supports both recurring and single backups. Recurring backups create a cron job that starts a single backup each time the job triggers.
+You can enable automated etcd backups for your cluster by applying a `FeatureGate` and backup custom resources (CRs).
 
 > [!IMPORTANT]
 > Automating etcd backups is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
-
-Follow these steps to enable automated backups for etcd.
 
 > [!WARNING]
 > Enabling the `TechPreviewNoUpgrade` feature set on your cluster prevents minor version updates. The `TechPreviewNoUpgrade` feature set cannot be disabled. Do not enable this feature set on production clusters.
@@ -171,13 +175,15 @@ Procedure
       featureSet: TechPreviewNoUpgrade
     ```
 
-2.  Apply the CR and enable automated backups:
+2.  Apply the CR by running the following command:
 
     ``` terminal
     $ oc apply -f enable-tech-preview-no-upgrade.yaml
     ```
 
-3.  It takes time to enable the related APIs. Verify the creation of the custom resource definition (CRD) by running the following command:
+    Applying the `FeatureGate` enables the automated backup APIs. It takes time for the related APIs to become available.
+
+3.  Verify that the custom resource definition (CRD) was created by running the following command:
 
     ``` terminal
     $ oc get crd | grep backup
@@ -202,7 +208,7 @@ Procedure
 
 ## Creating a single automated etcd backup
 
-Follow these steps to create a single etcd backup by creating and applying a custom resource (CR).
+You can create a single automated etcd backup by applying an `EtcdBackup` custom resource (CR). Backup data is stored on either dynamically-provisioned or local storage.
 
 <div>
 
@@ -226,214 +232,214 @@ Procedure
 
 </div>
 
-- If dynamically-provisioned storage is available, complete the following steps to create a single automated etcd backup:
+1.  If dynamically-provisioned storage is available, complete the following steps to create a single automated etcd backup:
 
-  1.  Create a persistent volume claim (PVC) named `etcd-backup-pvc.yaml` with contents such as the following example:
+    1.  Create a persistent volume claim (PVC) named `etcd-backup-pvc.yaml` with contents such as the following example:
 
-      ``` yaml
-      kind: PersistentVolumeClaim
-      apiVersion: v1
-      metadata:
-        name: etcd-backup-pvc
-        namespace: openshift-etcd
-      spec:
-        accessModes:
+        ``` yaml
+        kind: PersistentVolumeClaim
+        apiVersion: v1
+        metadata:
+          name: etcd-backup-pvc
+          namespace: openshift-etcd
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: <storage_amount>
+          volumeMode: Filesystem
+        ```
+
+        where:
+
+        `<storage_amount>`
+        Specifies the amount of storage available to the PVC. Adjust this value for your requirements, such as `200Gi`.
+
+    2.  Apply the PVC by running the following command:
+
+        ``` terminal
+        $ oc apply -f etcd-backup-pvc.yaml
+        ```
+
+    3.  Verify that the PVC was created by running the following command:
+
+        ``` terminal
+        $ oc get pvc
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` terminal
+        NAME              STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+        etcd-backup-pvc   Bound                                                       51s
+        ```
+
+        </div>
+
+        > [!NOTE]
+        > Dynamic PVCs stay in the `Pending` state until they are mounted.
+
+    4.  Create a CR file named `etcd-single-backup.yaml` with contents such as the following example:
+
+        ``` yaml
+        apiVersion: operator.openshift.io/v1alpha1
+        kind: EtcdBackup
+        metadata:
+          name: etcd-single-backup
+          namespace: openshift-etcd
+        spec:
+          pvcName: <pvc_name>
+        ```
+
+        where:
+
+        `<pvc_name>`
+        Specifies the name of the PVC to save the backup to. Adjust this value according to your environment, such as `etcd-backup-pvc`.
+
+    5.  Apply the CR to start a single backup by running the following command:
+
+        ``` terminal
+        $ oc apply -f etcd-single-backup.yaml
+        ```
+
+2.  If dynamically-provisioned storage is not available, complete the following steps to create a single automated etcd backup:
+
+    1.  Create a `StorageClass` CR file named `etcd-backup-local-storage.yaml` with the following contents:
+
+        ``` yaml
+        apiVersion: storage.k8s.io/v1
+        kind: StorageClass
+        metadata:
+          name: etcd-backup-local-storage
+        provisioner: kubernetes.io/no-provisioner
+        volumeBindingMode: Immediate
+        ```
+
+    2.  Apply the `StorageClass` CR by running the following command:
+
+        ``` terminal
+        $ oc apply -f etcd-backup-local-storage.yaml
+        ```
+
+    3.  Create a PV named `etcd-backup-pv-fs.yaml` with contents such as the following example:
+
+        ``` yaml
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: etcd-backup-pv-fs
+        spec:
+          capacity:
+            storage: <storage_amount>
+          volumeMode: Filesystem
+          accessModes:
           - ReadWriteOnce
-        resources:
-          requests:
-            storage: <storage_amount>
-        volumeMode: Filesystem
-      ```
+          persistentVolumeReclaimPolicy: Retain
+          storageClassName: etcd-backup-local-storage
+          local:
+            path: /mnt
+          nodeAffinity:
+            required:
+              nodeSelectorTerms:
+              - matchExpressions:
+              - key: kubernetes.io/hostname
+                 operator: In
+                 values:
+                 - <node_name>
+        ```
 
-      where:
+        where:
 
-      `<storage_amount>`
-      Specifies the amount of storage available to the PVC. Adjust this value for your requirements, such as `200Gi`.
+        `<storage_amount>`
+        Specifies the amount of storage available to the PV. Adjust this value for your requirements, such as `100Gi`.
 
-  2.  Apply the PVC by running the following command:
+        `<node_name>`
+        Specifies the control plane node to attach this PV to. Replace with the actual node name.
 
-      ``` terminal
-      $ oc apply -f etcd-backup-pvc.yaml
-      ```
+    4.  Verify that the PV was created by running the following command:
 
-  3.  Verify the creation of the PVC by running the following command:
+        ``` terminal
+        $ oc get pv
+        ```
 
-      ``` terminal
-      $ oc get pvc
-      ```
+        <div class="formalpara">
 
-      <div class="formalpara">
+        <div class="title">
 
-      <div class="title">
+        Example output
 
-      Example output
+        </div>
 
-      </div>
+        ``` terminal
+        NAME                    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS                REASON   AGE
+        etcd-backup-pv-fs       100Gi      RWO            Retain           Available           etcd-backup-local-storage            10s
+        ```
 
-      ``` terminal
-      NAME              STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-      etcd-backup-pvc   Bound                                                       51s
-      ```
+        </div>
 
-      </div>
+    5.  Create a PVC named `etcd-backup-pvc.yaml` with contents such as the following example:
 
-      > [!NOTE]
-      > Dynamic PVCs stay in the `Pending` state until they are mounted.
+        ``` yaml
+        kind: PersistentVolumeClaim
+        apiVersion: v1
+        metadata:
+          name: etcd-backup-pvc
+          namespace: openshift-etcd
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          volumeMode: Filesystem
+          resources:
+            requests:
+              storage: <storage_amount>
+        ```
 
-  4.  Create a CR file named `etcd-single-backup.yaml` with contents such as the following example:
+        where:
 
-      ``` yaml
-      apiVersion: operator.openshift.io/v1alpha1
-      kind: EtcdBackup
-      metadata:
-        name: etcd-single-backup
-        namespace: openshift-etcd
-      spec:
-        pvcName: <pvc_name>
-      ```
+        `<storage_amount>`
+        Specifies the amount of storage available to the PVC. Adjust this value for your requirements, such as `10Gi`.
 
-      where:
+    6.  Apply the PVC by running the following command:
 
-      `<pvc_name>`
-      Specifies the name of the PVC to save the backup to. Adjust this value according to your environment, such as `etcd-backup-pvc`.
+        ``` terminal
+        $ oc apply -f etcd-backup-pvc.yaml
+        ```
 
-  5.  Apply the CR to start a single backup:
+    7.  Create a CR file named `etcd-single-backup.yaml` with contents such as the following example:
 
-      ``` terminal
-      $ oc apply -f etcd-single-backup.yaml
-      ```
+        ``` yaml
+        apiVersion: operator.openshift.io/v1alpha1
+        kind: EtcdBackup
+        metadata:
+          name: etcd-single-backup
+          namespace: openshift-etcd
+        spec:
+          pvcName: <pvc_name>
+        ```
 
-- If dynamically-provisioned storage is not available, complete the following steps to create a single automated etcd backup:
+        where:
 
-  1.  Create a `StorageClass` CR file named `etcd-backup-local-storage.yaml` with the following contents:
+        `<pvc_name>`
+        Specifies the name of the PVC to save the backup to. Adjust this value according to your environment, such as `etcd-backup-pvc`.
 
-      ``` yaml
-      apiVersion: storage.k8s.io/v1
-      kind: StorageClass
-      metadata:
-        name: etcd-backup-local-storage
-      provisioner: kubernetes.io/no-provisioner
-      volumeBindingMode: Immediate
-      ```
+    8.  Apply the CR to start a single backup by running the following command:
 
-  2.  Apply the `StorageClass` CR by running the following command:
-
-      ``` terminal
-      $ oc apply -f etcd-backup-local-storage.yaml
-      ```
-
-  3.  Create a PV named `etcd-backup-pv-fs.yaml` with contents such as the following example:
-
-      ``` yaml
-      apiVersion: v1
-      kind: PersistentVolume
-      metadata:
-        name: etcd-backup-pv-fs
-      spec:
-        capacity:
-          storage: <storage_amount>
-        volumeMode: Filesystem
-        accessModes:
-        - ReadWriteOnce
-        persistentVolumeReclaimPolicy: Retain
-        storageClassName: etcd-backup-local-storage
-        local:
-          path: /mnt
-        nodeAffinity:
-          required:
-            nodeSelectorTerms:
-            - matchExpressions:
-            - key: kubernetes.io/hostname
-               operator: In
-               values:
-               - <node_name>
-      ```
-
-      where:
-
-      `<storage_amount>`
-      Specifies the amount of storage available to the PV. Adjust this value for your requirements, such as `100Gi`.
-
-      `<node_name>`
-      Specifies the node to attach this PV to. Replace with the actual node name, such as `master-0`.
-
-  4.  Verify the creation of the PV by running the following command:
-
-      ``` terminal
-      $ oc get pv
-      ```
-
-      <div class="formalpara">
-
-      <div class="title">
-
-      Example output
-
-      </div>
-
-      ``` terminal
-      NAME                    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS                REASON   AGE
-      etcd-backup-pv-fs       100Gi      RWO            Retain           Available           etcd-backup-local-storage            10s
-      ```
-
-      </div>
-
-  5.  Create a PVC named `etcd-backup-pvc.yaml` with contents such as the following example:
-
-      ``` yaml
-      kind: PersistentVolumeClaim
-      apiVersion: v1
-      metadata:
-        name: etcd-backup-pvc
-        namespace: openshift-etcd
-      spec:
-        accessModes:
-        - ReadWriteOnce
-        volumeMode: Filesystem
-        resources:
-          requests:
-            storage: <storage_amount>
-      ```
-
-      where:
-
-      `<storage_amount>`
-      Specifies the amount of storage available to the PVC. Adjust this value for your requirements, such as `10Gi`.
-
-  6.  Apply the PVC by running the following command:
-
-      ``` terminal
-      $ oc apply -f etcd-backup-pvc.yaml
-      ```
-
-  7.  Create a CR file named `etcd-single-backup.yaml` with contents such as the following example:
-
-      ``` yaml
-      apiVersion: operator.openshift.io/v1alpha1
-      kind: EtcdBackup
-      metadata:
-        name: etcd-single-backup
-        namespace: openshift-etcd
-      spec:
-        pvcName: <pvc_name>
-      ```
-
-      where:
-
-      `<pvc_name>`
-      Specifies the name of the persistent volume claim (PVC) to save the backup to. Adjust this value according to your environment, such as `etcd-backup-pvc`.
-
-  8.  Apply the CR to start a single backup:
-
-      ``` terminal
-      $ oc apply -f etcd-single-backup.yaml
-      ```
+        ``` terminal
+        $ oc apply -f etcd-single-backup.yaml
+        ```
 
 </div>
 
 ## Creating recurring automated etcd backups
 
-Follow these steps to create automated recurring backups of etcd.
+You can create recurring automated etcd backups by applying a custom resource (CR) that defines a backup schedule and retention policy. Backup data is stored on either dynamically-provisioned or local storage.
 
 Use dynamically-provisioned storage to keep the created etcd backup data in a safe, external location if possible. If dynamically-provisioned storage is not available, consider storing the backup data on an NFS share to make backup recovery more accessible.
 
@@ -479,16 +485,19 @@ Procedure
           storageClassName: etcd-backup-local-storage
         ```
 
-        - The amount of storage available to the PVC. Adjust this value for your requirements.
+        where:
 
-          > [!NOTE]
-          > Each of the following providers require changes to the `accessModes` and `storageClassName` keys:
-          >
-          > | Provider | `accessModes` value | `storageClassName` value |
-          > |----|----|----|
-          > | AWS with the `versioned-installer-efc_operator-ci` profile | `- ReadWriteMany` | `efs-sc` |
-          > | Google Cloud | `- ReadWriteMany` | `filestore-csi` |
-          > | Microsoft Azure | `- ReadWriteMany` | `azurefile-csi` |
+        `spec.resources.requests.storage`
+        Specifies the amount of storage available to the PVC. Adjust this value for your requirements.
+
+        > [!NOTE]
+        > Each of the following providers requires changes to the `accessModes` and `storageClassName` keys:
+        >
+        > | Provider | `accessModes` value | `storageClassName` value |
+        > |----|----|----|
+        > | AWS with the `versioned-installer-efc_operator-ci` profile | `- ReadWriteMany` | `efs-sc` |
+        > | Google Cloud | `- ReadWriteMany` | `filestore-csi` |
+        > | Microsoft Azure | `- ReadWriteMany` | `azurefile-csi` |
 
     2.  Apply the PVC by running the following command:
 
@@ -496,7 +505,7 @@ Procedure
         $ oc apply -f etcd-backup-pvc.yaml
         ```
 
-    3.  Verify the creation of the PVC by running the following command:
+    3.  Verify that the PVC was created by running the following command:
 
         ``` terminal
         $ oc get pvc
@@ -566,21 +575,25 @@ Procedure
                 - key: kubernetes.io/hostname
                   operator: In
                   values:
-                  - <example_master_node>
+                  - <example_control_plane_node>
         ```
 
-        - The amount of storage available to the PV. Adjust this value for your requirements.
+        where:
 
-        - Replace this value with the master node to attach this PV to.
+        `spec.capacity.storage`
+        Specifies the amount of storage available to the PV. Adjust this value for your requirements.
 
-          > [!TIP]
-          > Run the following command to list the available nodes:
-          >
-          > ``` terminal
-          > $ oc get nodes
-          > ```
+        `spec.nodeAffinity.required.nodeSelectorTerms.matchExpressions.values`
+        Specifies the control plane node to attach this PV to. Replace with the actual node name.
 
-    4.  Verify the creation of the PV by running the following command:
+        > [!TIP]
+        > List the available nodes by running the following command:
+        >
+        > ``` terminal
+        > $ oc get nodes
+        > ```
+
+    4.  Verify that the PV was created by running the following command:
 
         ``` terminal
         $ oc get pv
@@ -618,7 +631,10 @@ Procedure
           storageClassName: etcd-backup-local-storage
         ```
 
-        - The amount of storage available to the PVC. Adjust this value for your requirements.
+        where:
+
+        `spec.resources.requests.storage`
+        Specifies the amount of storage available to the PVC. Adjust this value for your requirements.
 
     6.  Apply the PVC by running the following command:
 
@@ -626,7 +642,7 @@ Procedure
         $ oc apply -f etcd-backup-pvc.yaml
         ```
 
-3.  Create a custom resource definition (CRD) file named `etcd-recurring-backups.yaml`. The contents of the created CRD define the schedule and retention type of automated backups.
+3.  Create a CR file named `etcd-recurring-backups.yaml`. The contents of the CR define the schedule and retention type of automated backups.
 
     - For the default retention type of `RetentionNumber` with 15 retained backups, use contents such as the following example:
 
@@ -642,41 +658,51 @@ Procedure
           pvcName: etcd-backup-pvc
       ```
 
-      - The `CronTab` schedule for recurring backups. Adjust this value for your needs.
+      where:
 
-    - To use retention based on the maximum number of backups, add the following key-value pairs to the `etcd` key:
+      `spec.etcd.schedule`
+      Specifies the `CronTab` schedule for recurring backups. Adjust this value for your needs.
 
-      ``` yaml
-      spec:
-        etcd:
-          retentionPolicy:
-            retentionType: RetentionNumber
-            retentionNumber:
-              maxNumberOfBackups: 5
-      ```
+      1.  To use retention based on the maximum number of backups, add the following key-value pairs to the `etcd` key:
 
-      - The retention type. Defaults to `RetentionNumber` if unspecified.
+          ``` yaml
+          spec:
+            etcd:
+              retentionPolicy:
+                retentionType: RetentionNumber
+                retentionNumber:
+                  maxNumberOfBackups: 5
+          ```
 
-      - The maximum number of backups to retain. Adjust this value for your needs. Defaults to 15 backups if unspecified.
+          where:
 
-        > [!WARNING]
-        > A known issue causes the number of retained backups to be one greater than the configured value.
+      `spec.etcd.retentionPolicy.retentionType`
+      Specifies the retention type. Defaults to `RetentionNumber` if unspecified.
 
-    - For retention based on the file size of backups, use the following:
+      `spec.etcd.retentionPolicy.retentionNumber.maxNumberOfBackups`
+      Specifies the maximum number of backups to retain. Adjust this value for your needs. Defaults to 15 backups if unspecified.
 
-      ``` yaml
-      spec:
-        etcd:
-          retentionPolicy:
-            retentionType: RetentionSize
-            retentionSize:
-              maxSizeOfBackupsGb: 20
-      ```
+      > [!WARNING]
+      > A known issue causes the number of retained backups to be one greater than the configured value.
 
-      - The maximum file size of the retained backups in gigabytes. Adjust this value for your needs. Defaults to 10 GB if unspecified.
+      1.  For retention based on the file size of backups, use the following:
 
-        > [!WARNING]
-        > A known issue causes the maximum size of retained backups to be up to 10 GB greater than the configured value.
+          ``` yaml
+          spec:
+            etcd:
+              retentionPolicy:
+                retentionType: RetentionSize
+                retentionSize:
+                  maxSizeOfBackupsGb: 20
+          ```
+
+          where:
+
+      `spec.etcd.retentionPolicy.retentionSize.maxSizeOfBackupsGb`
+      Specifies the maximum file size of the retained backups in gigabytes. Adjust this value for your needs. Defaults to 10 GB if unspecified.
+
+      > [!WARNING]
+      > A known issue causes the maximum size of retained backups to be up to 10 GB greater than the configured value.
 
 4.  Create the cron job defined by the CRD by running the following command:
 

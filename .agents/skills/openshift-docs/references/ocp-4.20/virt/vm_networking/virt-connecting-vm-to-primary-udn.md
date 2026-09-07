@@ -356,16 +356,14 @@ Passt binding has the following benefits:
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
-## Attaching a virtual machine to the primary user-defined network by using the web console
+## Creating a virtual machine in a namespace with a primary user-defined network by using the web console
 
-You can connect a virtual machine (VM) to the primary user-defined network (UDN) by using the OpenShift Container Platform web console. VMs that are created in a namespace where the primary UDN is configured are automatically attached to the UDN with the Layer 2 bridge network binding plugin.
+You can create a virtual machine (VM) in a namespace that is configured to use a primary user-defined network (UDN) by using the OpenShift Container Platform web console.
 
-To attach a VM to the primary UDN by using the Plug a Simple Socket Transport (passt) binding, enable the plugin and configure the VM network interface in the web console.
+By default, the VM automatically connects to the primary UDN using the Layer 2 bridge (`l2bridge`) network binding plugin.
 
-> [!IMPORTANT]
-> Using the passt binding plugin to attach a VM to the primary UDN is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
->
-> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+> [!NOTE]
+> When creating the virtual machine, verify that the default network interface type is automatically set to `L2 bridge` and the network attachment is configured for the `pod` network.
 
 <div>
 
@@ -374,6 +372,8 @@ To attach a VM to the primary UDN by using the Plug a Simple Socket Transport (p
 Prerequisites
 
 </div>
+
+- You have a namespace configured and labeled for a primary user-defined network.
 
 - You are logged in to the OpenShift Container Platform web console.
 
@@ -387,31 +387,13 @@ Procedure
 
 </div>
 
-1.  Follow these steps to enable the passt network binding plugin Technology Preview feature:
+1.  Click **Virtualization** → **VirtualMachines**.
 
-    1.  From the **Virtualization** perspective, click **Overview**.
+2.  Select the UDN-configured namespace from the **Project** drop-down list.
 
-    2.  On the **Virtualization** page, click the **Settings** tab.
+3.  Click **Create** → **With Wizard**.
 
-    3.  Click **Preview features** and set **Enable Passt binding for primary user-defined networks** to on.
-
-2.  From the **Virtualization** perspective, click **VirtualMachines**.
-
-3.  Select a VM to open the **VirtualMachine details** page.
-
-4.  Click the **Configuration** tab.
-
-5.  Click **Network**.
-
-6.  Click the Options menu ![kebab](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAjCAIAAADqn+bCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA+0lEQVRIie2WMQqEMBBFJ47gUXRBLyBYqbUXULCx9CR2XsAb6AlUEM9kpckW7obdZhwWYWHXX/3i8TPJZEKEUgpOlXFu3JX4V4kmB2qaZhgGKSUiZlkWxzEBC84N9zxv27bdO47Tti0Bs3at4wBgXVca/lJnfN/XPggCGmadIwAsywIAiGhZFk1ydy2EYJKgGCqK4vZUVVU0zKpxnmftp2mi4S/1GhG1N82DMWNNYVmW4zgqpRAxTVMa5t4evlg11nXd9/1eY57nSZIQMKtG13WllLu3bbvrOgJmdUbHwfur8Xniqw6Hh5UYRdGDNowwDA+WvP4UV+JPJ94B1gKUWcTOCT0AAAAASUVORK5CYII=) on the **Network interfaces** page and select **Edit**.
-
-7.  In the **Edit network interface** dialog, select the default pod network attachment from the **Network** list.
-
-8.  Expand **Advanced** and then select the **Passt** binding.
-
-9.  Click **Save**.
-
-10. If your VM is running, restart it for the changes to take effect.
+4.  Configure the VM specifications in the wizard and click **Create VirtualMachine**.
 
 </div>
 

@@ -34,10 +34,20 @@ Note the following limitations when working with Windows nodes managed by the WM
 
 - Due to a limitation within the Windows operating system, `clusterNetwork` CIDR addresses of class E, such as `240.0.0.0`, are not compatible with Windows nodes.
 
-- Kubernetes has identified the following [node feature limitations](https://kubernetes.io/docs/concepts/windows/intro/#limitations) :
+- Kubernetes has identified the following node feature limitations. For more information, see "Compatibility and limitations (Kubernetes documenation)".
 
   - Huge pages are not supported for Windows containers.
 
   - Privileged containers are not supported for Windows containers.
 
-- Kubernetes has identified [several API compatibility issues](https://kubernetes.io/docs/concepts/windows/intro/#api).
+- Kubernetes has identified several API compatibility issues. For more information, see "API compatibility (Kubernetes documenation)".
+
+# Additional resources
+
+- [Red Hat Lightspeed cost management](https://docs.redhat.com/en/documentation/cost_management_service/1-latest)
+
+- [Red Hat OpenShift Local](https://developers.redhat.com/products/openshift-local/overview)
+
+- [Compatibility and limitations (Kubernetes documenation)](https://kubernetes.io/docs/concepts/windows/intro/#limitations)
+
+- [API compatibility (Kubernetes documenation)](https://kubernetes.io/docs/concepts/windows/intro/#api)

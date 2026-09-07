@@ -403,9 +403,11 @@ Procedure
 
 # Role specification
 
-The Operator description should contain the specifics of the role required to be created before installation, ideally in the form of a script that the administrator can run. For example:
+To install an Operator that uses AWS Security Token Service (STS), you must specify the IAM role that the Operator requires, ideally as a script that an administrator can run.
 
-<div class="example">
+The following example shows a script that creates the required AWS IAM role and attaches the trust policy:
+
+<div class="formalpara">
 
 <div class="title">
 
@@ -458,9 +460,7 @@ done <<< "$POLICY_ARN_STRINGS"
 
 </div>
 
-# Troubleshooting
-
-## Authentication failure
+# Troubleshoot authentication failures
 
 If authentication was not successful, ensure you can assume the role with web identity by using the token provided to the Operator.
 
@@ -486,7 +486,7 @@ Procedure
         -- cat /<path>/<to>/<secret_name>
     ```
 
-    - Do not use root for the path.
+    Do not use root for the path.
 
 3.  Try assuming the role with the web identity token:
 
@@ -499,9 +499,9 @@ Procedure
 
 </div>
 
-## Secret not mounting correctly
+# Troubleshoot secrets not mounting correctly
 
-Pods that run as non-root users cannot write to the `/root` directory where the AWS shared credentials file is expected to exist by default. If the secret is not mounting correctly to the AWS credentials file path, consider mounting the secret to a different location and enabling the shared credentials file option in the AWS SDK.
+To avoid credentials file mount failures on non-root pods, mount the secret to a writable location and enable the shared credentials file option in the AWS SDK.
 
 # Alternative method
 

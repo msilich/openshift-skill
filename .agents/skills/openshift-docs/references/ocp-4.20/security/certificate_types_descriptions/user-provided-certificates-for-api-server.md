@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Review user-provided TLS certificates for the API server in OpenShift Container Platform to understand their purpose, location, management, and expiration for external client access.
+
 # Purpose
 
 The API server is accessible by clients external to the cluster at `api.<cluster_name>.<base_domain>`. You might want clients to access the API server at a different hostname or without the need to distribute the cluster-managed certificate authority (CA) certificates to the clients. The administrator must set a custom default certificate to be used by the API server when serving content.
@@ -15,8 +17,6 @@ User-provided certificates are managed by the user.
 # Expiration
 
 API server client certificate expiration is less than five minutes.
-
-User-provided certificates are managed by the user.
 
 # Customization
 

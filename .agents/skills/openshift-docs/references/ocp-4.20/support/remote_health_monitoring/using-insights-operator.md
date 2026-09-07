@@ -10,9 +10,9 @@ Additional resources
 
 </div>
 
-- The Insights Operator is installed and enabled by default. If you need to opt out of remote health reporting, see [Remote health reporting](remote-health-reporting.md#remote-health-reporting).
+- [Remote health reporting](remote-health-reporting.md#remote-health-reporting)
 
-- For more information on using the Red Hat Lightspeed advisor service to identify issues with your cluster, see [Using Red Hat Lightspeed to identify issues with your cluster](using-insights-to-identify-issues-with-your-cluster.md#using-insights-to-identify-issues-with-your-cluster).
+- [Using Red Hat Lightspeed to identify issues with your cluster](using-insights-to-identify-issues-with-your-cluster.md#using-insights-to-identify-issues-with-your-cluster)
 
 </div>
 
@@ -198,15 +198,77 @@ The following table describes the available configuration attributes:
 </tbody>
 </table>
 
-# Insights Operator alerts
+# Creating the insights-config ConfigMap object
+
+You can create the `insights-config` `ConfigMap` object for the Insights Operator with custom configurations.
+
+> [!IMPORTANT]
+> Red Hat recommends you consult Red Hat Support before making changes to the default Insights Operator configuration.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Remote health reporting is enabled, which is the default.
+
+- You are logged in to the OpenShift Container Platform web console as a user with `cluster-admin` role.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Go to **Workloads** → **ConfigMaps** and select **Project: openshift-insights**.
+
+2.  Click **Create ConfigMap**.
+
+3.  Select **Configure via: YAML view** and enter your configuration preferences, for example:
+
+    ``` yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: insights-config
+      namespace: openshift-insights
+    data:
+      config.yaml: |
+        dataReporting:
+          obfuscation:
+            - networking
+            - workload_names
+        sca:
+          disabled: false
+          interval: 2h
+        alerting:
+           disabled: false
+    binaryData: {}
+    immutable: false
+    ```
+
+4.  Optional: Select **Form view** and enter the necessary information that way.
+
+5.  In the **ConfigMap Name** field, enter **insights-config**.
+
+6.  In the **Key** field, enter **config.yaml**.
+
+7.  For the **Value** field, either browse for a file to drag and drop into the field or enter your configuration parameters manually.
+
+8.  Click **Create**. The `ConfigMap` object and configuration information are displayed.
+
+</div>
+
+# Viewing Insights Operator alerts
 
 The Insights Operator declares alerts through the Prometheus monitoring system to the Alertmanager. You can view these alerts in the Alerting UI in the OpenShift Container Platform web console.
-
-To view these alerts in the Alerting UI in the OpenShift Container Platform web console, choose one of the following methods:
-
-- In the **Administrator** perspective, click **Observe** → **Alerting**.
-
-- In the **Developer** perspective, click **Observe** → \<project_name\> → **Alerts** tab.
 
 Currently, Insights Operator sends the following alerts when the conditions are met:
 
@@ -217,6 +279,22 @@ Currently, Insights Operator sends the following alerts when the conditions are 
 | `InsightsRecommendationActive` | Red Hat Lightspeed has an active recommendation for the cluster. |
 
 Insights Operator alerts
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+- To view these alerts in the Alerting UI in the OpenShift Container Platform web console, choose one of the following methods:
+
+  - In the **Administrator** perspective, click **Observe** → **Alerting**.
+
+  - In the **Developer** perspective, click **Observe** → \<project_name\> → **Alerts** tab.
+
+</div>
 
 ## Disabling Insights Operator alerts
 
@@ -276,9 +354,9 @@ Procedure
 
 7.  Verify that the value of the `config.yaml` `alerting` attribute is set to `disabled: true`.
 
-</div>
+    After you save the changes, Insights Operator no longer sends alerts to the cluster Prometheus instance.
 
-After you save the changes, Insights Operator no longer sends alerts to the cluster Prometheus instance.
+</div>
 
 ## Enabling Insights Operator alerts
 
@@ -336,9 +414,9 @@ Procedure
 
 7.  Verify that the value of the `config.yaml` `alerting` attribute is set to `disabled: false`.
 
-</div>
+    After you save the changes, Insights Operator again sends alerts to the cluster Prometheus instance.
 
-After you save the changes, Insights Operator again sends alerts to the cluster Prometheus instance.
+</div>
 
 # Downloading your Insights Operator archive
 
@@ -376,11 +454,11 @@ Procedure
     $ oc cp openshift-insights/<insights_operator_pod_name>:/var/lib/insights-operator ./insights-data
     ```
 
-    - Replace `<insights_operator_pod_name>` with the pod name output from the preceding command.
+    Replace `<insights_operator_pod_name>` with the pod name output from the preceding command.
+
+    The recent Insights Operator archives are now available in the `insights-data` directory.
 
 </div>
-
-The recent Insights Operator archives are now available in the `insights-data` directory.
 
 # On-demand Insights Operator gather operations
 
@@ -457,7 +535,7 @@ Procedure
         }
     ```
 
-    - `duration_in_ms` is the amount of time in milliseconds for each gather operation.
+    The `duration_in_ms` field is the amount of time in milliseconds for each gather operation.
 
 2.  Inspect each gather operation for abnormalities.
 
@@ -465,7 +543,9 @@ Procedure
 
 ## Gathering data on demand with the Insights Operator from the web console
 
-You can run a custom Insights Operator gather operation on-demand from the OpenShift Container Platform web console. An on-demand `DataGather` operation is useful for one-off data collections that require different configurations to the periodic data gathering (`InsightsDataGather`) specification.
+You can run a custom Insights Operator gather operation on-demand from the OpenShift Container Platform web console.
+
+An on-demand `DataGather` operation is useful for one-off data collections that require different configurations to the periodic data gathering (`InsightsDataGather`) specification.
 
 Use the following procedure to create a `DataGather` custom resource definition (CRD), and then run the data gather operation on demand from the web console.
 
@@ -601,7 +681,9 @@ Verification
 
 ## Gathering data on demand with the Insights Operator from the OpenShift CLI
 
-You can run a custom Insights Operator gather operation on-demand from the OpenShift Container Platform command-line interface (CLI). An on-demand `DataGather` operation is useful for one-off data collections that require different configurations to the periodic data gathering (`InsightsDataGather`) specification.
+You can run a custom Insights Operator gather operation on-demand from the OpenShift Container Platform command-line interface (CLI).
+
+An on-demand `DataGather` operation is useful for one-off data collections that require different configurations to the periodic data gathering (`InsightsDataGather`) specification.
 
 Use the following procedure to create a `DataGather` custom resource definition (CRD), and then run the data gather operation on demand from the CLI.
 
@@ -917,14 +999,16 @@ Procedure
 
     After you save the changes, the Insights Operator gather configurations are updated and the affected gather operations start.
 
-</div>
+    > [!NOTE]
+    > Disabling gather operations restricts the ability of the Red Hat Lightspeed advisor service to offer effective recommendations for your cluster.
 
-> [!NOTE]
-> Disabling gather operations restricts the ability of the Red Hat Lightspeed advisor service to offer effective recommendations for your cluster.
+</div>
 
 # Obfuscating Deployment Validation Operator data
 
-By default, when you install the Deployment Validation Operator (DVO), the name and unique identifier (UID) of a resource are included in the data that is captured and processed by the Insights Operator for OpenShift Container Platform. If you are a cluster administrator, you can configure the Insights Operator to obfuscate data from the Deployment Validation Operator (DVO). For example, you can obfuscate workload names in the archive file that is then sent to Red Hat.
+By default, when you install the Deployment Validation Operator (DVO), the name and unique identifier (UID) of a resource are included in the data that is captured and processed by the Insights Operator for OpenShift Container Platform.
+
+If you are a cluster administrator, you can configure the Insights Operator to obfuscate data from the Deployment Validation Operator (DVO). For example, you can obfuscate workload names in the archive file that is then sent to Red Hat.
 
 To obfuscate the name of resources, you must manually set the `obfuscation` attribute in the `insights-config` `ConfigMap` object to include the `workload_names` value, as outlined in the following procedure.
 

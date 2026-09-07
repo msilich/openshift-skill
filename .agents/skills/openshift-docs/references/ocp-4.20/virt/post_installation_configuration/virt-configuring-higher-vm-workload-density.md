@@ -51,6 +51,9 @@ Procedure
 
     1.  Create or edit a `KubeletConfig` file with the parameters shown in the following example:
 
+        > [!IMPORTANT]
+        > You must create or edit the `KubeletConfig` file with the parameters as shown in the example or the resource swap will not be properly configured.
+
         ``` yaml
         apiVersion: machineconfiguration.openshift.io/v1
         kind: KubeletConfig

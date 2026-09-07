@@ -66,7 +66,7 @@ Procedure
     ```
 
     ``` terminal
-    $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17 extract /home/ztp --tar | tar x -C ./update
+    $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20 extract /home/ztp --tar | tar x -C ./update
     ```
 
     The `/update` directory contains the following subdirectories:
@@ -350,7 +350,7 @@ Procedure
     # ...
       osImages:
         - cpuArchitecture: x86_64
-          openshiftVersion: "4.17"
+          openshiftVersion: "4.20"
           rootFSUrl: https://<host>/<path>/rhcos-live-rootfs.x86_64.img
           url: https://<host>/<path>/rhcos-live.x86_64.iso
     ```

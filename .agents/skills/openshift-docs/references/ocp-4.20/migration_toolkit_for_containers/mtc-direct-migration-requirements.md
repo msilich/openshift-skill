@@ -193,7 +193,7 @@ In both cases, you must set the following labels on the source side of any names
 
 #### About pod security admission
 
-OpenShift Container Platform includes [Kubernetes pod security admission](https://kubernetes.io/docs/concepts/security/pod-security-admission). Pods that do not comply with the pod security admission defined globally or at the namespace level are not admitted to the cluster and cannot run.
+You can use pod security admission modes, such as `enforce`, `warn`, or `audit`, along with security profiles to restrict which pods run in your cluster. You can apply this control at both the global and namespace levels.
 
 Globally, the `privileged` profile is enforced, and the `restricted` profile is used for warnings and audits.
 

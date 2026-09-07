@@ -4,7 +4,7 @@ Before you deploy an OpenShift Container Platform cluster on Microsoft Azure, yo
 
 # Available installation configuration parameters for Azure
 
-To customize your cluster installation, configuration parameters are available to use in the `install-config.yaml` file.
+To customize your cluster installation, you can use configuration parameters in the `install-config.yaml` file.
 
 The following tables specify the required, optional, and Azure-specific installation configuration parameters that you can set as part of the installation process.
 
@@ -167,7 +167,7 @@ Only IPv4 addresses are supported.
 <div class="note">
 <div class="title">
 &#10;</div>
-<p>Set the <code>networking.machineNetwork</code> to match the CIDR that the preferred NIC resides in.</p>
+<p>Set the <code>networking.machineNetwork</code> to match the CIDR of the preferred NIC.</p>
 </div></td>
 </tr>
 <tr>
@@ -453,7 +453,7 @@ Additional Azure configuration parameters are described in the following table.
   platform:
     azure:
       encryptionAtHost:</code></pre></td>
-<td style="text-align: left;"><p>Enables host-level encryption for compute machines. You can enable this encryption alongside user-managed server-side encryption. This feature encrypts temporary, ephemeral, cached and un-managed disks on the VM host. This is not a prerequisite for user-managed server-side encryption.</p>
+<td style="text-align: left;"><p>Enables host-level encryption for compute machines. You can enable this encryption alongside user-managed server-side encryption. This feature encrypts temporary, ephemeral, cached, and un-managed disks on the VM host. This is not a prerequisite for user-managed server-side encryption.</p>
 <p><strong>Value:</strong> <code>true</code> or <code>false</code>. The default is <code>false</code>.</p></td>
 </tr>
 <tr>
@@ -1154,7 +1154,7 @@ Additional Azure configuration parameters are described in the following table.
   platform:
     azure:
       encryptionAtHost:</code></pre></td>
-<td style="text-align: left;"><p>Enables host-level encryption for control plane machines. You can enable this encryption alongside user-managed server-side encryption. This feature encrypts temporary, ephemeral, cached and un-managed disks on the VM host. This is not a prerequisite for user-managed server-side encryption.</p>
+<td style="text-align: left;"><p>Enables host-level encryption for control plane machines. You can enable this encryption alongside user-managed server-side encryption. This feature encrypts temporary, ephemeral, cached, and un-managed disks on the VM host. This is not a prerequisite for user-managed server-side encryption.</p>
 <p><strong>Value:</strong> <code>true</code> or <code>false</code>. The default is <code>false</code>.</p></td>
 </tr>
 <tr>

@@ -1,6 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Deployment strategies provide a way for the application to evolve. Some strategies use `Deployment` objects to make changes that are seen by users of all routes that resolve to the application. Other advanced strategies, such as the ones described in this section, use router features in conjunction with `Deployment` objects to impact specific routes.
+To roll out application changes to selected traffic in OpenShift Container Platform, you can use route-based deployment strategies with the router and `Deployment` objects.
+
+These advanced strategies, including blue-green, A/B, and canary, affect specific routes rather than every route that resolves to the application.
 
 The most common route-based strategy is to use a *blue-green deployment*. The new version (the green version) is brought up for testing and evaluation, while the users still use the stable version (the blue version). When ready, the users are switched to the green version. If a problem arises, you can switch back to the blue version.
 
@@ -12,13 +14,15 @@ The route-based deployment strategies do not scale the number of pods in the ser
 
 # Proxy shards and traffic splitting
 
-In production environments, you can precisely control the distribution of traffic that lands on a particular shard. When dealing with large numbers of instances, you can use the relative scale of individual shards to implement percentage based traffic. That combines well with a *proxy shard*, which forwards or splits the traffic it receives to a separate service or application running elsewhere.
+To precisely control how traffic reaches application shards in OpenShift Container Platform, you can use relative scale and proxy shards. A proxy shard forwards or splits incoming requests to other services so you can implement percentage-based traffic, comparison testing, or related patterns.
 
 In the simplest configuration, the proxy forwards requests unchanged. In more complex setups, you can duplicate the incoming requests and send to both a separate cluster as well as to a local instance of the application, and compare the result. Other patterns include keeping the caches of a DR installation warm, or sampling incoming traffic for analysis purposes.
 
 Any TCP (or UDP) proxy could be run under the desired shard. Use the `oc scale` command to alter the relative number of instances serving requests under the proxy shard. For more complex traffic management, consider customizing the OpenShift Container Platform router with proportional balancing capabilities.
 
 # N-1 compatibility
+
+To run old and new application code side by side during a rollout in OpenShift Container Platform, you need N-1 compatibility. Design your data and schemas so that values written by the new version can be read or safely ignored by the old version.
 
 Applications that have new code and old code running at the same time must be careful to ensure that data written by the new code can be read and handled (or gracefully ignored) by the old version of the code. This is sometimes called *schema evolution* and is a complex problem.
 
@@ -30,21 +34,21 @@ One way to validate N-1 compatibility is to use an A/B deployment: run the old c
 
 # Graceful termination
 
-OpenShift Container Platform and Kubernetes give application instances time to shut down before removing them from load balancing rotations. However, applications must ensure they cleanly terminate user connections as well before they exit.
+To avoid dropping user connections when pods shut down in OpenShift Container Platform, you can rely on graceful termination. The platform sends a `TERM` signal so your application can stop accepting new traffic, close open connections, and exit before the grace period ends.
 
 On shutdown, OpenShift Container Platform sends a `TERM` signal to the processes in the container. Application code, on receiving `SIGTERM`, stop accepting new connections. This ensures that load balancers route traffic to other active instances. The application code then waits until all open connections are closed, or gracefully terminate individual connections at the next opportunity, before exiting.
 
 After the graceful termination period expires, a process that has not exited is sent the `KILL` signal, which immediately ends the process. The `terminationGracePeriodSeconds` attribute of a pod or pod template controls the graceful termination period (default 30 seconds) and can be customized per application as necessary.
 
-# Blue-green deployments
+# Setting up a blue-green deployment
 
-Blue-green deployments involve running two versions of an application at the same time and moving traffic from the in-production version (the blue version) to the newer version (the green version). You can use a rolling strategy or switch services in a route.
+To switch users from a stable application version to a new one in OpenShift Container Platform, you can set up a blue-green deployment.
+
+Run both versions at once, then point the production route at the new (green) service when you are ready, with the option to switch back to the blue version if needed.
 
 Because many applications depend on persistent data, you must have an application that supports *N-1 compatibility*, which means it shares data and implements live migration between the database, store, or disk by creating two copies of the data layer.
 
 Consider the data used in testing the new version. If it is the production data, a bug in the new version can break the production version.
-
-## Setting up a blue-green deployment
 
 Blue-green deployments use two `Deployment` objects. Both are running, and the one in production depends on the service the route specifies, with each `Deployment` object exposed to a different service.
 
@@ -97,7 +101,7 @@ Procedure
 
 # A/B deployments
 
-The A/B deployment strategy lets you try a new version of the application in a limited way in the production environment. You can specify that the production version gets most of the user requests while a limited fraction of requests go to the new version.
+To test a new application version with a limited share of production traffic in OpenShift Container Platform, you can use an A/B deployment. You send most requests to the stable version, route a fraction to the new version, and increase that fraction as testing progresses.
 
 Because you control the portion of requests to each version, as testing progresses you can increase the fraction of requests to the new version and ultimately stop using the previous version. As you adjust the request load on each version, the number of pods in each service might have to be scaled as well to provide the expected performance.
 
@@ -107,23 +111,21 @@ For this to be effective, both the old and new versions must be similar enough t
 
 OpenShift Container Platform supports N-1 compatibility through the web console as well as the CLI.
 
-## Load balancing for A/B testing
+# Load balancing for A/B testing
 
-The user sets up a route with multiple services. Each service handles a version of the application.
+To split production traffic between application versions for A/B testing in OpenShift Container Platform, you can configure a route with weighted services. Use the `oc set route-backends` command or edit the route to assign weights so the router sends a proportional share of requests to each version.
+
+You set up a route with multiple services. Each service handles a version of the application.
 
 Each service is assigned a `weight` and the portion of requests to each service is the `service_weight` divided by the `sum_of_weights`. The `weight` for each service is distributed to the service’s endpoints so that the sum of the endpoint `weights` is the service `weight`.
 
 The route can have up to four services. The `weight` for the service can be between `0` and `256`. When the `weight` is `0`, the service does not participate in load balancing but continues to serve existing persistent connections. When the service `weight` is not `0`, each endpoint has a minimum `weight` of `1`. Because of this, a service with a lot of endpoints can end up with higher `weight` than intended. In this case, reduce the number of pods to get the expected load balance `weight`.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To set up the A/B environment:
 
 </div>
 
@@ -198,7 +200,11 @@ To set up the A/B environment:
 
     </div>
 
-### Managing weights of an existing route using the web console
+</div>
+
+# Managing weights of an existing route by using the web console
+
+To split production traffic between application versions for A/B testing in OpenShift Container Platform, you can configure a route with weighted services. Use the `oc set route-backends` command or edit the route to assign weights so the router sends a proportional share of requests to each version.
 
 <div>
 
@@ -218,7 +224,17 @@ Procedure
 
 </div>
 
-### Managing weights of an new route using the web console
+# Managing weights of a new route by using the web console
+
+To set traffic weights when you create a new route for A/B testing in OpenShift Container Platform, you can use the web console. Create the route, add an alternate service, and assign relative weights so the router distributes requests between application versions.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Navigate to the **Networking** → **Routes** page.
 
@@ -236,7 +252,11 @@ Procedure
 
 8.  Click **Create**.
 
-### Managing weights using the CLI
+</div>
+
+# Managing weights using the CLI
+
+To manage service traffic weights for A/B testing in OpenShift Container Platform, you can use the `oc set route-backends` command. Set or adjust weights on a route so the router sends a proportional share of requests to each service.
 
 <div>
 
@@ -324,11 +344,15 @@ Procedure
     The `--zero` flag sets the `weight` of all services to `0`. All requests then return with a 503 error.
 
     > [!NOTE]
-    > Not all routers may support multiple or weighted backends.
+    > Not all routers support multiple or weighted backends.
 
 </div>
 
-### One service, multiple `Deployment` objects
+# Create multiple Deployment objects that use one service
+
+To serve multiple application versions through a single service in OpenShift Container Platform, you can create multiple `Deployment` objects that share a common label selector.
+
+Expose one service for those pods so you can scale or update each shard independently while users reach them through the same route.
 
 <div>
 

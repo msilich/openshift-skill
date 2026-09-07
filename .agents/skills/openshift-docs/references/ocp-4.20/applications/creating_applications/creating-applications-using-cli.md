@@ -1,83 +1,115 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can create an OpenShift Container Platform application from components that include source or binary code, images, and templates by using the OpenShift Container Platform CLI.
-
-The set of objects created by `new-app` depends on the artifacts passed as input: source repositories, images, or templates.
+You can create applications on your OpenShift Container Platform cluster from a Git repository, a container image, or a template using the `oc new-app` command. Customize names, labels, environment variables, target projects, and other deployment options with command flags.
 
 # Creating an application from source code
 
-With the `new-app` command you can create applications from source code in a local or remote Git repository.
+You can create an application on your OpenShift Container Platform cluster from a local or remote Git repository using the `oc new-app` command. Use command flags to target a specific branch or subdirectory, authenticate to a private repository, or control the build strategy and builder image.
 
-The `new-app` command creates a build configuration, which itself creates a new application image from your source code. The `new-app` command typically also creates a `Deployment` object to deploy the new image, and a service to provide load-balanced access to the deployment running your image.
+<div>
 
-OpenShift Container Platform automatically detects whether the pipeline, source, or docker build strategy should be used, and in the case of source build, detects an appropriate language builder image.
+<div class="title">
 
-## Local
+Prerequisites
 
-To create an application from a Git repository in a local directory:
+</div>
 
-``` terminal
-$ oc new-app /<path to source code>
-```
+- You have installed the OpenShift CLI (`oc`) and logged in to your cluster.
 
-> [!NOTE]
-> If you use a local Git repository, the repository must have a remote named `origin` that points to a URL that is accessible by the OpenShift Container Platform cluster. If there is no recognized remote, running the `new-app` command will create a binary build.
+- You have access to a Git repository containing your application source code.
 
-## Remote
+</div>
 
-To create an application from a remote Git repository:
+<div>
 
-``` terminal
-$ oc new-app https://github.com/sclorg/cakephp-ex
-```
+<div class="title">
 
-To create an application from a private remote Git repository:
+Procedure
 
-``` terminal
-$ oc new-app https://github.com/youruser/yourprivaterepo --source-secret=yoursecret
-```
+</div>
 
-> [!NOTE]
-> If you use a private remote Git repository, you can use the `--source-secret` flag to specify an existing source clone secret that will get injected into your build config to access the repository.
+1.  Create an application from a Git repository in a local directory by running the following command:
 
-You can use a subdirectory of your source code repository by specifying a `--context-dir` flag. To create an application from a remote Git repository and a context subdirectory:
+    ``` terminal
+    $ oc new-app /<path_to_source_code>
+    ```
 
-``` terminal
-$ oc new-app https://github.com/sclorg/s2i-ruby-container.git \
-    --context-dir=2.0/test/puma-test-app
-```
+    > [!NOTE]
+    > If you use a local Git repository, the repository must have a remote named `origin` that points to a URL that is accessible by the OpenShift Container Platform cluster. If there is no recognized remote, running the `new-app` command creates a binary build.
 
-Also, when specifying a remote URL, you can specify a Git branch to use by appending `#<branch_name>` to the end of the URL:
+2.  Create an application from a public remote Git repository by running the following command:
 
-``` terminal
-$ oc new-app https://github.com/openshift/ruby-hello-world.git#beta4
-```
+    ``` terminal
+    $ oc new-app https://github.com/sclorg/cakephp-ex
+    ```
+
+3.  Create an application from a private remote Git repository by running the following command:
+
+    ``` terminal
+    $ oc new-app https://github.com/<your_user>/<your_private_repo> --source-secret=yoursecret
+    ```
+
+    > [!NOTE]
+    > If you use a private remote Git repository, use the `--source-secret` flag to specify a source clone secret for access to the repository.
+
+4.  Use a subdirectory of your source repository by running the following command:
+
+    ``` terminal
+    $ oc new-app https://github.com/sclorg/s2i-ruby-container.git \
+        --context-dir=2.0/test/puma-test-app
+    ```
+
+5.  Specify a Git branch by running the following command:
+
+    ``` terminal
+    $ oc new-app https://github.com/openshift/ruby-hello-world.git#beta4
+    ```
+
+6.  Override the automatically detected build strategy by running the following command:
+
+    ``` terminal
+    $ oc new-app /home/user/code/myapp --strategy=docker
+    ```
+
+    > [!NOTE]
+    > The `oc` command requires that files containing build sources are available in a remote Git repository. For all source builds, you must use `git remote -v`.
+
+7.  Specify the builder image and source repository:
+
+    1.  Specify the builder image and source repository for a remote repository by running the following command:
+
+        ``` terminal
+        $ oc new-app myproject/my-ruby~https://github.com/openshift/ruby-hello-world.git
+        ```
+
+    2.  Specify the builder image and source repository for a local repository by running the following command:
+
+        ``` terminal
+        $ oc new-app openshift/ruby-20-centos7:latest~/home/user/code/my-ruby-app
+        ```
+
+</div>
+
+# Build strategy and language detection for source applications
+
+You can determine which build strategy and language builder the `oc new-app` command selects by reviewing files in the root or context directory of your Git repository. Use these detection rules to override the build strategy or specify a builder image when automatic detection does not apply.
 
 ## Build strategy detection
 
 OpenShift Container Platform automatically determines which build strategy to use by detecting certain files:
 
-- If a Jenkins file exists in the root or specified context directory of the source repository when creating a new application, OpenShift Container Platform generates a pipeline build strategy.
+- If a `Jenkinsfile` exists in the root or specified context directory of the source repository when creating a new application, OpenShift Container Platform generates a pipeline build strategy.
 
   > [!NOTE]
   > The `pipeline` build strategy is deprecated; consider using Red Hat OpenShift Pipelines instead.
 
-- If a Dockerfile exists in the root or specified context directory of the source repository when creating a new application, OpenShift Container Platform generates a docker build strategy.
+- If a `Dockerfile` exists in the root or specified context directory of the source repository when creating a new application, OpenShift Container Platform generates a docker build strategy.
 
-- If neither a Jenkins file nor a Dockerfile is detected, OpenShift Container Platform generates a source build strategy.
-
-Override the automatically detected build strategy by setting the `--strategy` flag to `docker`, `pipeline`, or `source`.
-
-``` terminal
-$ oc new-app /home/user/code/myapp --strategy=docker
-```
-
-> [!NOTE]
-> The `oc` command requires that files containing build sources are available in a remote Git repository. For all source builds, you must use `git remote -v`.
+- If neither a `Jenkinsfile` nor a `Dockerfile` is detected, OpenShift Container Platform generates a source build strategy.
 
 ## Language detection
 
-If you use the source build strategy, `new-app` attempts to determine the language builder to use by the presence of certain files in the root or specified context directory of the repository:
+If you use the source build strategy, `new-app` detects the language builder from certain files in the root or context directory of the repository.
 
 | Language | Files                              |
 |----------|------------------------------------|
@@ -93,123 +125,168 @@ If you use the source build strategy, `new-app` attempts to determine the langua
 
 Languages detected by `new-app`
 
-After a language is detected, `new-app` searches the OpenShift Container Platform server for image stream tags that have a `supports` annotation matching the detected language, or an image stream that matches the name of the detected language. If a match is not found, `new-app` searches the [Docker Hub registry](https://registry.hub.docker.com) for an image that matches the detected language based on name.
+After a language is detected, the `new-app` command searches the OpenShift Container Platform server for image stream tags with a matching `supports` annotation or image streams that match the language name. If a match is not found, the `new-app` command searches the Docker Hub registry for an image that matches the detected language based on name.
 
-You can override the image the builder uses for a particular source repository by specifying the image, either an image stream or container specification, and the repository with a `~` as a separator. Note that if this is done, build strategy detection and language detection are not carried out.
-
-For example, to use the `myproject/my-ruby` imagestream with the source in a remote repository:
-
-``` terminal
-$ oc new-app myproject/my-ruby~https://github.com/openshift/ruby-hello-world.git
-```
-
-To use the `openshift/ruby-20-centos7:latest` container image stream with the source in a local repository:
-
-``` terminal
-$ oc new-app openshift/ruby-20-centos7:latest~/home/user/code/my-ruby-app
-```
+When you specify an image and repository with the `~` separator, build strategy detection and language detection are not carried out.
 
 > [!NOTE]
 > Language detection requires the Git client to be locally installed so that your repository can be cloned and inspected. If Git is not available, you can avoid the language detection step by specifying the builder image to use with your repository with the `<image>~<repository>` syntax.
 >
-> The `-i <image> <repository>` invocation requires that `new-app` attempt to clone `repository` to determine what type of artifact it is, so this will fail if Git is not available.
+> The `-i <image> <repository>` invocation requires that `new-app` attempt to clone `repository` to determine what type of artifact it is, so the command fails if Git is not available.
 >
-> The `-i <image> --code <repository>` invocation requires `new-app` clone `repository` to determine whether `image` should be used as a builder for the source code, or deployed separately, as in the case of a database image.
+> The `-i <image> --code <repository>` invocation requires that `new-app` clone `repository` to learn whether `image` is a builder for the source or a separate deployment, such as a database image.
 
 # Creating an application from an image
 
-You can deploy an application from an existing image. Images can come from image streams in the OpenShift Container Platform server, images in a specific registry, or images in the local Docker server.
+You can use the `oc new-app` command to create an application from a container image in Docker Hub, a private registry, or an image stream on your cluster. Use this procedure when you know the container image name or image stream you want to deploy.
 
-The `new-app` command attempts to determine the type of image specified in the arguments passed to it. However, you can explicitly tell `new-app` whether the image is a container image using the `--docker-image` argument or an image stream using the `-i|--image-stream` argument.
+Use the command that matches where your container image is stored.
 
 > [!NOTE]
 > If you specify an image from your local Docker repository, you must ensure that the same image is available to the OpenShift Container Platform cluster nodes.
 
-## Docker Hub MySQL image
+<div>
 
-Create an application from the Docker Hub MySQL image, for example:
+<div class="title">
 
-``` terminal
-$ oc new-app mysql
-```
+Prerequisites
 
-## Image in a private registry
+</div>
 
-Create an application using an image in a private registry, specify the full container image specification:
+- You have installed the OpenShift CLI (`oc`) and logged in to your cluster.
 
-``` terminal
-$ oc new-app myregistry:5000/example/myimage
-```
+- You know the container image name or image stream you want to deploy.
 
-## Existing image stream and optional image stream tag
+</div>
 
-Create an application from an existing image stream and optional image stream tag:
+<div>
 
-``` terminal
-$ oc new-app my-stream:v1
-```
+<div class="title">
+
+Procedure
+
+</div>
+
+- Create an application from the Docker Hub MySQL image by running the following command:
+
+  ``` terminal
+  $ oc new-app mysql
+  ```
+
+- Create an application from an image in a private registry by specifying the full image path in the following command:
+
+  ``` terminal
+  $ oc new-app myregistry:5000/example/myimage
+  ```
+
+- Create an application from an existing image stream and optional image stream tag by running the following command:
+
+  ``` terminal
+  $ oc new-app my-stream:v1
+  ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Docker Hub registry (Docker)](https://registry.hub.docker.com)
+
+</div>
 
 # Creating an application from a template
 
-You can create an application from a previously stored template or from a template file, by specifying the name of the template as an argument. For example, you can store a sample application template and use it to create an application.
+You can use the `oc new-app` command to create an application from a template stored in your project or from a template file on your local system. Use this procedure when you have a template JSON or YAML file, or a template in the template library of your current project.
 
-Upload an application template to your current project’s template library. The following example uploads an application template from a file called `examples/sample-app/application-template-stibuild.json`:
+<div>
 
-``` terminal
-$ oc create -f examples/sample-app/application-template-stibuild.json
-```
+<div class="title">
 
-Then create a new application by referencing the application template. In this example, the template name is `ruby-helloworld-sample`:
+Prerequisites
 
-``` terminal
-$ oc new-app ruby-helloworld-sample
-```
+</div>
 
-To create a new application by referencing a template file in your local file system, without first storing it in OpenShift Container Platform, use the `-f|--file` argument. For example:
+- You have installed the OpenShift CLI (`oc`) and logged in to your cluster.
 
-``` terminal
-$ oc new-app -f examples/sample-app/application-template-stibuild.json
-```
+- You have a template JSON or YAML file, or a template stored in the template library of your current project.
 
-## Template parameters
+</div>
 
-When creating an application based on a template, use the `-p|--param` argument to set parameter values that are defined by the template:
+<div>
 
-``` terminal
-$ oc new-app ruby-helloworld-sample \
-    -p ADMIN_USERNAME=admin -p ADMIN_PASSWORD=mypassword
-```
+<div class="title">
 
-You can store your parameters in a file, then use that file with `--param-file` when instantiating a template. If you want to read the parameters from standard input, use `--param-file=-`. The following is an example file called `helloworld.params`:
+Procedure
 
-``` terminal
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=mypassword
-```
+</div>
 
-Reference the parameters in the file when instantiating a template:
+1.  Upload an application template to the template library of your current project by running the following command:
 
-``` terminal
-$ oc new-app ruby-helloworld-sample --param-file=helloworld.params
-```
+    ``` terminal
+    $ oc create -f examples/sample-app/application-template-stibuild.json
+    ```
 
-# Modifying application creation
+2.  Create a new application from a stored template by running the following command:
 
-The `new-app` command generates OpenShift Container Platform objects that build, deploy, and run the application that is created. Normally, these objects are created in the current project and assigned names that are derived from the input source repositories or the input images. However, with `new-app` you can modify this behavior.
+    ``` terminal
+    $ oc new-app ruby-helloworld-sample
+    ```
+
+3.  Create a new application from a template file on your local file system without storing it in OpenShift Container Platform by running the following command:
+
+    ``` terminal
+    $ oc new-app -f examples/sample-app/application-template-stibuild.json
+    ```
+
+4.  Set template parameter values when creating an application by running the following command:
+
+    ``` terminal
+    $ oc new-app ruby-helloworld-sample \
+        -p ADMIN_USERNAME=admin -p ADMIN_PASSWORD=mypassword
+    ```
+
+5.  Store template parameters in a file by creating a file such as `helloworld.params` with the following content:
+
+    ``` terminal
+    ADMIN_USERNAME=admin
+    ADMIN_PASSWORD=mypassword
+    ```
+
+    You can store your parameters in a file, then use that file with `--param-file` when instantiating a template. If you want to read the parameters from standard input, use `--param-file=-`.
+
+6.  Create a new application from a template by using a parameter file by running the following command:
+
+    ``` terminal
+    $ oc new-app ruby-helloworld-sample --param-file=helloworld.params
+    ```
+
+    > [!NOTE]
+    > To read parameters from standard input, use `--param-file=-`.
+
+</div>
+
+# Customization options for application creation
+
+You can customize how the `oc new-app` command creates applications by setting names, labels, environment variables, target projects, and other options. Use these flags to control the objects the command generates before you deploy.
 
 | Object | Description |
 |----|----|
 | `BuildConfig` | A `BuildConfig` object is created for each source repository that is specified in the command line. The `BuildConfig` object specifies the strategy to use, the source location, and the build output location. |
 | `ImageStreams` | For the `BuildConfig` object, two image streams are usually created. One represents the input image. With source builds, this is the builder image. With `Docker` builds, this is the **FROM** image. The second one represents the output image. If a container image was specified as input to `new-app`, then an image stream is created for that image as well. |
-| `DeploymentConfig` | A `DeploymentConfig` object is created either to deploy the output of a build, or a specified image. The `new-app` command creates `emptyDir` volumes for all Docker volumes that are specified in containers included in the resulting `DeploymentConfig` object . |
-| `Service` | The `new-app` command attempts to detect exposed ports in input images. It uses the lowest numeric exposed port to generate a service that exposes that port. To expose a different port, after `new-app` has completed, simply use the `oc expose` command to generate additional services. |
-| Other | Other objects can be generated when instantiating templates, according to the template. |
+| `DeploymentConfig` | A `DeploymentConfig` object is created either to deploy the output of a build, or a specified image. The `new-app` command creates `emptyDir` volumes for all Docker volumes that are specified in containers included in the resulting `DeploymentConfig` object. |
+| `Service` | The `new-app` command attempts to detect exposed ports in input images. It uses the lowest numeric exposed port to generate a service that exposes that port. To expose a different port, after `new-app` has completed, use the `oc expose` command to generate additional services. |
+| Other | Other objects can be generated when creating applications from templates, according to the template. |
 
 `new-app` output objects
 
 ## Specifying environment variables
 
-When generating applications from a template, source, or an image, you can use the `-e|--env` argument to pass environment variables to the application container at run time:
+When generating applications from a template, source, or an image, you can use the `-e|--env` argument to pass environment variables to the application container at run time.
 
 ``` terminal
 $ oc new-app openshift/postgresql-92-centos7 \
@@ -232,7 +309,7 @@ Read the variables from the file:
 $ oc new-app openshift/postgresql-92-centos7 --env-file=postgresql.env
 ```
 
-Additionally, environment variables can be given on standard input by using `--env-file=-`:
+Additionally, environment variables can be given on standard input by using the `--env-file=-` argument:
 
 ``` terminal
 $ cat postgresql.env | oc new-app openshift/postgresql-92-centos7 --env-file=-
@@ -280,26 +357,36 @@ $ oc new-app https://github.com/openshift/ruby-hello-world -l name=hello-world
 
 ## Viewing the output without creation
 
-To see a dry-run of running the `new-app` command, you can use the `-o|--output` argument with a `yaml` or `json` value. You can then use the output to preview the objects that are created or redirect it to a file that you can edit. After you are satisfied, you can use `oc create` to create the OpenShift Container Platform objects.
+You can preview objects without creating them by using `-o` or `--output` with a `yaml` or `json` value. Redirect the output to a file, edit the file, then create the objects with `oc create`.
 
-To output `new-app` artifacts to a file, run the following:
+<div class="formalpara">
+
+<div class="title">
+
+Writing `new-app` output to a file
+
+</div>
 
 ``` terminal
 $ oc new-app https://github.com/openshift/ruby-hello-world \
     -o yaml > myapp.yaml
 ```
 
-Edit the file:
+</div>
 
-``` terminal
-$ vi myapp.yaml
-```
+<div class="formalpara">
 
-Create a new application by referencing the file:
+<div class="title">
+
+Creating objects from an edited file
+
+</div>
 
 ``` terminal
 $ oc create -f myapp.yaml
 ```
+
+</div>
 
 ## Creating objects with different names
 
@@ -319,7 +406,7 @@ $ oc new-app https://github.com/openshift/ruby-hello-world -n myproject
 
 ## Creating multiple objects
 
-The `new-app` command allows creating multiple applications specifying multiple parameters to `new-app`. Labels specified in the command line apply to all objects created by the single command. Environment variables apply to all components created from source or images.
+You can create multiple applications by specifying multiple parameters to `new-app`. Labels specified in the command line apply to all objects created by the single command. Environment variables apply to all components created from source or images.
 
 To create an application from a source repository and a Docker Hub image:
 
@@ -332,7 +419,7 @@ $ oc new-app https://github.com/openshift/ruby-hello-world mysql
 
 ## Grouping images and source in a single pod
 
-The `new-app` command allows deploying multiple images together in a single pod. To specify which images to group together, use the `+` separator. The `--group` command-line argument can also be used to specify the images that should be grouped together. To group the image built from a source repository with other images, specify its builder image in the group:
+You can deploy multiple images together in a single pod. To specify which images to group together, use the `+` separator. The `--group` command-line argument can also be used to specify the images that should be grouped together. To group the image built from a source repository with other images, specify the builder image for the source in the group:
 
 ``` terminal
 $ oc new-app ruby+mysql
@@ -360,9 +447,9 @@ $ oc new-app --search php
 To set the import mode when using `oc new-app`, add the `--import-mode` flag. This flag can be appended with `Legacy` or `PreserveOriginal`, which provides users the option to create image streams using a single sub-manifest, or all manifests, respectively.
 
 ``` terminal
-$ oc new-app --image=registry.redhat.io/ubi8/httpd-24:latest  --import-mode=Legacy --name=test
+$ oc new-app --image=registry.redhat.io/ubi8/httpd-24:latest --import-mode=Legacy --name=test
 ```
 
 ``` terminal
-$ oc new-app --image=registry.redhat.io/ubi8/httpd-24:latest  --import-mode=PreserveOriginal --name=test
+$ oc new-app --image=registry.redhat.io/ubi8/httpd-24:latest --import-mode=PreserveOriginal --name=test
 ```

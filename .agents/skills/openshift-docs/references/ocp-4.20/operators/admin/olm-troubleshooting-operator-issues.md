@@ -98,10 +98,10 @@ Procedure
 
     </div>
 
-</div>
+    > [!NOTE]
+    > Default OpenShift Container Platform cluster Operators are managed by the Cluster Version Operator (CVO) and they do not have a `Subscription` object. Application Operators are managed by Operator Lifecycle Manager (OLM) and they have a `Subscription` object.
 
-> [!NOTE]
-> Default OpenShift Container Platform cluster Operators are managed by the Cluster Version Operator (CVO) and they do not have a `Subscription` object. Application Operators are managed by Operator Lifecycle Manager (OLM) and they have a `Subscription` object.
+</div>
 
 # Viewing Operator catalog source status by using the CLI
 
@@ -269,7 +269,7 @@ Additional resources
 
 - [Operator Lifecycle Manager concepts and resources → Catalog source](../understanding/olm/olm-understanding-olm.md#olm-catalogsource_olm-understanding-olm)
 
-- gRPC documentation: [States of Connectivity](https://grpc.github.io/grpc/core/md_doc_connectivity-semantics-and-api.html)
+- [gRPC documentation: States of Connectivity](https://grpc.github.io/grpc/core/md_doc_connectivity-semantics-and-api.html)
 
 - [Accessing images for Operators from private registries](olm-managing-custom-catalogs.md#olm-accessing-images-private-registries_olm-managing-custom-catalogs)
 
@@ -336,7 +336,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>` instead.
+        > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>` instead.
 
     3.  List details about the node’s containers, including state and associated pod IDs:
 
@@ -435,7 +435,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
+        > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
 
 </div>
 
@@ -473,9 +473,6 @@ To avoid unwanted disruptions, you can modify the machine config pool (MCP) to p
 
 To avoid unwanted disruptions from changes made by the Machine Config Operator (MCO), you can use the OpenShift Container Platform web console to modify the machine config pool (MCP) to prevent the MCO from making any changes to nodes in that pool. This prevents any reboots that would normally be part of the MCO update process.
 
-> [!NOTE]
-> See second `NOTE` in [Disabling the Machine Config Operator from automatically rebooting](../../support/troubleshooting/troubleshooting-operator-issues.md#troubleshooting-disabling-autoreboot-mco_troubleshooting-operator-issues).
-
 <div>
 
 <div class="title">
@@ -488,7 +485,7 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -496,95 +493,91 @@ Procedure
 
 </div>
 
-To pause or unpause automatic MCO update rebooting:
+1.  Log in to the OpenShift Container Platform web console as a user with the `cluster-admin` role.
+
+2.  Click **Compute** → **MachineConfigPools**.
+
+3.  On the **MachineConfigPools** page, click either **master** or **worker**, depending upon which nodes you want to pause rebooting for.
+
+4.  On the **master** or **worker** page, click **YAML**.
+
+5.  In the YAML, update the `spec.paused` field to `true`.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample MachineConfigPool object
+
+    </div>
+
+    ``` yaml
+    apiVersion: machineconfiguration.openshift.io/v1
+    kind: MachineConfigPool
+    # ...
+    spec:
+    # ...
+      paused: true
+    # ...
+    ```
+
+    </div>
+
+    Update the `spec.paused` field to `true` to pause rebooting.
+
+6.  To verify that the MCP is paused, return to the **MachineConfigPools** page.
+
+    On the **MachineConfigPools** page, the **Paused** column reports **True** for the MCP you modified.
+
+    If the MCP has pending changes while paused, the **Updated** column is **False** and **Updating** is **False**. When **Updated** is **True** and **Updating** is **False**, there are no pending changes.
+
+    > [!IMPORTANT]
+    > If there are pending changes (where both the **Updated** and **Updating** columns are **False**), it is recommended to schedule a maintenance window for a reboot as early as possible. Use the following steps for unpausing the autoreboot process to apply the changes that were queued since the last reboot.
+
+    - Unpause the autoreboot process:
+
+7.  Log in to the OpenShift Container Platform web console as a user with the `cluster-admin` role.
+
+8.  Click **Compute** → **MachineConfigPools**.
+
+9.  On the **MachineConfigPools** page, click either **master** or **worker**, depending upon which nodes you want to pause rebooting for.
+
+10. On the **master** or **worker** page, click **YAML**.
+
+11. In the YAML, update the `spec.paused` field to `false`.
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Sample MachineConfigPool object
+
+    </div>
+
+    ``` yaml
+    apiVersion: machineconfiguration.openshift.io/v1
+    kind: MachineConfigPool
+    # ...
+    spec:
+    # ...
+      paused: false
+    # ...
+    ```
+
+    </div>
+
+    Update the `spec.paused` field to `false` to allow rebooting.
+
+    > [!NOTE]
+    > By unpausing an MCP, the MCO applies all paused changes reboots Red Hat Enterprise Linux CoreOS (RHCOS) as needed.
+
+12. To verify that the MCP is paused, return to the **MachineConfigPools** page.
+
+    On the **MachineConfigPools** page, the **Paused** column reports **False** for the MCP you modified.
+
+    If the MCP is applying any pending changes, the **Updated** column is **False** and the **Updating** column is **True**. When **Updated** is **True** and **Updating** is **False**, there are no further changes being made.
 
 </div>
-
-- Pause the autoreboot process:
-
-  1.  Log in to the OpenShift Container Platform web console as a user with the `cluster-admin` role.
-
-  2.  Click **Compute** → **MachineConfigPools**.
-
-  3.  On the **MachineConfigPools** page, click either **master** or **worker**, depending upon which nodes you want to pause rebooting for.
-
-  4.  On the **master** or **worker** page, click **YAML**.
-
-  5.  In the YAML, update the `spec.paused` field to `true`.
-
-      <div class="formalpara">
-
-      <div class="title">
-
-      Sample MachineConfigPool object
-
-      </div>
-
-      ``` yaml
-      apiVersion: machineconfiguration.openshift.io/v1
-      kind: MachineConfigPool
-      # ...
-      spec:
-      # ...
-        paused: true
-      # ...
-      ```
-
-      </div>
-
-      - Update the `spec.paused` field to `true` to pause rebooting.
-
-  6.  To verify that the MCP is paused, return to the **MachineConfigPools** page.
-
-      On the **MachineConfigPools** page, the **Paused** column reports **True** for the MCP you modified.
-
-      If the MCP has pending changes while paused, the **Updated** column is **False** and **Updating** is **False**. When **Updated** is **True** and **Updating** is **False**, there are no pending changes.
-
-      > [!IMPORTANT]
-      > If there are pending changes (where both the **Updated** and **Updating** columns are **False**), it is recommended to schedule a maintenance window for a reboot as early as possible. Use the following steps for unpausing the autoreboot process to apply the changes that were queued since the last reboot.
-
-- Unpause the autoreboot process:
-
-  1.  Log in to the OpenShift Container Platform web console as a user with the `cluster-admin` role.
-
-  2.  Click **Compute** → **MachineConfigPools**.
-
-  3.  On the **MachineConfigPools** page, click either **master** or **worker**, depending upon which nodes you want to pause rebooting for.
-
-  4.  On the **master** or **worker** page, click **YAML**.
-
-  5.  In the YAML, update the `spec.paused` field to `false`.
-
-      <div class="formalpara">
-
-      <div class="title">
-
-      Sample MachineConfigPool object
-
-      </div>
-
-      ``` yaml
-      apiVersion: machineconfiguration.openshift.io/v1
-      kind: MachineConfigPool
-      # ...
-      spec:
-      # ...
-        paused: false
-      # ...
-      ```
-
-      </div>
-
-      - Update the `spec.paused` field to `false` to allow rebooting.
-
-        > [!NOTE]
-        > By unpausing an MCP, the MCO applies all paused changes reboots Red Hat Enterprise Linux CoreOS (RHCOS) as needed.
-
-  6.  To verify that the MCP is paused, return to the **MachineConfigPools** page.
-
-      On the **MachineConfigPools** page, the **Paused** column reports **False** for the MCP you modified.
-
-      If the MCP is applying any pending changes, the **Updated** column is **False** and the **Updating** column is **True**. When **Updated** is **True** and **Updating** is **False**, there are no further changes being made.
 
 ## Disabling the Machine Config Operator from automatically rebooting by using the CLI
 
@@ -607,7 +600,7 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -615,11 +608,7 @@ Procedure
 
 </div>
 
-To pause or unpause automatic MCO update rebooting:
-
-</div>
-
-- Pause the autoreboot process:
+- To pause or unpause automatic MCO update rebooting:
 
   1.  Update the `MachineConfigPool` custom resource to set the `spec.paused` field to `true`.
 
@@ -825,6 +814,8 @@ To pause or unpause automatic MCO update rebooting:
 
       If the MCP is applying any pending changes, the **UPDATED** column is **False** and the **UPDATING** column is **True**. When **UPDATED** is **True** and **UPDATING** is **False**, there are no further changes being made. In the previous example, the MCO is updating the worker node.
 
+</div>
+
 # Refreshing failing subscriptions
 
 In Operator Lifecycle Manager (OLM), if you subscribe to an Operator that references images that are not accessible on your network, you can find jobs in the `openshift-marketplace` namespace that are failing with the following errors:
@@ -962,20 +953,12 @@ Verification
 
 You must successfully and completely uninstall an Operator prior to attempting to reinstall the same Operator. Failure to fully uninstall the Operator properly can leave resources, such as a project or namespace, stuck in a "Terminating" state and cause "error resolving resource" messages. For example:
 
-<div class="formalpara">
-
-<div class="title">
-
-Example `Project` resource description
-
-</div>
+**Example `Project` resource description**
 
     ...
         message: 'Failed to delete all resource types, 1 remaining: Internal error occurred:
           error resolving resource'
     ...
-
-</div>
 
 These types of issues can prevent an Operator from being reinstalled successfully.
 

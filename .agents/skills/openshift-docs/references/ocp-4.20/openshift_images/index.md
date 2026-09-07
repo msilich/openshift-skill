@@ -8,11 +8,13 @@ Container images are binaries that include all requirements for running a single
 
 Containers only have access to resources defined in the image unless you give the container additional access when creating it. By deploying the same image in multiple containers across multiple hosts and load balancing between them, OpenShift Container Platform can provide redundancy and horizontal scaling for a service packaged into an image.
 
-You can use the [podman](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html-single/managing_containers/#using_podman_to_work_with_containers) or `docker` CLI directly to build images, but OpenShift Container Platform also supplies builder images that assist with creating new images by adding your code or configuration to existing images.
+You can use the podman or `docker` CLI directly to build images, but OpenShift Container Platform also supplies builder images that assist with creating new images by adding your code or configuration to existing images.
 
 Because applications develop over time, a single image name can actually refer to many different versions of the same image. Each different image is referred to uniquely by its hash, a long hexadecimal number such as `fd44297e2ddb050ec4f…​`, which is usually shortened to 12 characters, such as `fd44297e2ddb`.
 
 # Additional resources
+
+- [podman](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html-single/managing_containers/#using_podman_to_work_with_containers)
 
 - [Creating images](create-images.md#creating-images)
 
@@ -24,7 +26,7 @@ Because applications develop over time, a single image name can actually refer t
 
 An image registry is a content server that stores and serves container images in OpenShift Container Platform. You can use registries to access container images from external sources or the integrated registry in OpenShift Container Platform.
 
-Registries contain a collection of one or more image repositories, which contain one or more tagged images. Red Hat provides a registry at [registry.redhat.io](https://catalog.redhat.com/en) for subscribers. OpenShift Container Platform can also supply its own OpenShift image registry for managing custom container images.
+Registries contain a collection of one or more image repositories, which contain one or more tagged images. Red Hat provides a registry at registry.redhat.io for subscribers. OpenShift Container Platform can also supply its own OpenShift image registry for managing custom container images.
 
 # Image repository
 
@@ -73,11 +75,11 @@ Containers are isolated running instances of container images that serve as the 
 
 Many application instances can be running in containers on a single host without visibility into each others' processes, files, network, and so on. Typically, each container provides a single service, often called a micro-service, such as a web server or a database, though containers can be used for arbitrary workloads.
 
-The Linux kernel has been incorporating capabilities for container technologies for years. The Docker project developed a convenient management interface for Linux containers on a host. More recently, the [Open Container Initiative](https://github.com/opencontainers/) has developed open standards for container formats and container runtimes. OpenShift Container Platform and Kubernetes add the ability to orchestrate OCI- and Docker-formatted containers across multi-host installations.
+The Linux kernel has been incorporating capabilities for container technologies for years. The Docker project developed a convenient management interface for Linux containers on a host. More recently, the Open Container Initiative has developed open standards for container formats and container runtimes. OpenShift Container Platform and Kubernetes add the ability to orchestrate OCI- and Docker-formatted containers across multi-host installations.
 
 Though you do not directly interact with container runtimes when using OpenShift Container Platform, understanding their capabilities and terminology is important for understanding their role in OpenShift Container Platform and how your applications function inside of containers.
 
-Tools such as [Podman](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html-single/managing_containers/#using_podman_to_work_with_containers) can be used to replace Docker command-line tools for running and managing containers directly. By using the `podman` CLI, you can experiment with containers separately from OpenShift Container Platform.
+Tools such as Podman can be used to replace Docker command-line tools for running and managing containers directly. By using the `podman` CLI, you can experiment with containers separately from OpenShift Container Platform.
 
 # Using image streams
 
@@ -121,6 +123,10 @@ Using image streams has several significant benefits:
 
 # Additional resources
 
+- [Open Container Initiative](https://github.com/opencontainers/)
+
+- [Podman](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html-single/managing_containers/#using_podman_to_work_with_containers)
+
 - [Managing image streams](image-streams-manage.md#managing-image-streams)
 
 - [Using image streams with Kubernetes resources](using-imagestreams-with-kube-resources.md#using-imagestreams-with-kube-resources)
@@ -154,3 +160,5 @@ To manage sample image streams and templates in OpenShift Container Platform, yo
 - [Understanding templates](../applications/creating_applications/using-templates.md#templates-overview)
 
 - [Creating applications using Ruby on Rails](../applications/creating_applications/templates-using-ruby-on-rails.md#templates-using-ruby-on-rails)
+
+- [registry.redhat.io](https://catalog.redhat.com/en)

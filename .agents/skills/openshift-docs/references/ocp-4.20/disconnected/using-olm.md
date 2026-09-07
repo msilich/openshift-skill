@@ -23,13 +23,15 @@ After enabling OLM in a disconnected environment, you can continue to use your u
 >
 > - Reference all specified images by a digest (SHA) and not by a tag.
 >
-> You can search software on the [Red Hat Ecosystem Catalog](https://catalog.redhat.com/software/search?p=1&deployed_as=Operator&type=Containerized%20application&badges_and_features=Disconnected) for a list of Red Hat Operators that support running in disconnected mode by filtering with the following selections:
+> You can search software on the Red Hat Ecosystem Catalog for a list of Red Hat Operators that support running in disconnected mode by filtering with the following selections:
 >
 > |                         |                           |
 > |-------------------------|---------------------------|
 > | Type                    | Containerized application |
 > | Deployment method       | Operator                  |
 > | Infrastructure features | Disconnected              |
+>
+> For more information, see "Red Hat Ecosystem Catalog".
 
 <div>
 
@@ -39,11 +41,15 @@ Additional resources
 
 </div>
 
-- [Red Hat-provided Operator catalogs](../operators/understanding/olm-rh-catalogs.md#olm-rh-catalogs)
+- [Red Hat Ecosystem Catalog](https://catalog.redhat.com/software/search?p=1&deployed_as=Operator&type=Containerized%20application&badges_and_features=Disconnected)
 
 </div>
 
 # Prerequisites
+
+You must meet several prerequisites before using OLM in a disconnected environment.
+
+The following prerequisites must be met:
 
 - You are logged in to your OpenShift Container Platform cluster as a user with `cluster-admin` privileges.
 
@@ -51,9 +57,7 @@ Additional resources
 
 # Disabling the default software catalog sources
 
-In a restricted network environment, you must disable the default catalogs as a cluster administrator. You can then configure the OperatorHub custom resource definition (CRD) to use local catalog sources for the software catalog.
-
-Operator catalogs that source content provided by Red Hat and community projects are configured for the software catalog by default during an OpenShift Container Platform installation.
+To use only trusted or locally available Operator catalogs, disable the default software catalog sources that OpenShift Container Platform configures during installation. In a restricted network environment, you must disable the default catalogs as a cluster administrator. You can then configure the OperatorHub custom resource definition (CRD) to use local catalog sources for the software catalog.
 
 <div>
 
@@ -71,24 +75,44 @@ Procedure
   ```
 
   > [!TIP]
-  > Alternatively, you can use the web console to manage catalog sources. From the **Administration** → **Cluster Settings** → **Configuration** → **OperatorHub** page, click the **Sources** tab, where you can create, update, delete, disable, and enable individual sources.
+  > Or, you can use the web console to manage catalog sources. From the **Administration** → **Cluster Settings** → **Configuration** → **OperatorHub** page, click the **Sources** tab, where you can create, update, delete, disable, and enable individual sources.
 
 </div>
 
 # Mirroring an Operator catalog
 
-For instructions about mirroring Operator catalogs for use with disconnected clusters, see [Mirroring Operator catalogs for use with disconnected clusters](installing-mirroring-installation-images.md#olm-mirror-catalog_installing-mirroring-installation-images).
+For instructions about mirroring Operator catalogs for use with disconnected clusters, see "Mirroring Operator catalogs for use with disconnected clusters".
 
 > [!IMPORTANT]
 > As of OpenShift Container Platform 4.11, the default Red Hat-provided Operator catalog releases in the file-based catalog format. The default Red Hat-provided Operator catalogs for OpenShift Container Platform 4.6 through 4.10 released in the deprecated SQLite database format.
 >
 > The `opm` subcommands, flags, and functionality related to the SQLite database format are also deprecated and will be removed in a future release. The features are still supported and must be used for catalogs that use the deprecated SQLite database format.
 >
-> Many of the `opm` subcommands and flags for working with the SQLite database format, such as `opm index prune`, do not work with the file-based catalog format. For more information about working with file-based catalogs, see [Operator Framework packaging format](../operators/understanding/olm-packaging-format.md#olm-file-based-catalogs_olm-packaging-format), [Managing custom catalogs](../operators/admin/olm-managing-custom-catalogs.md#olm-managing-custom-catalogs-fb), and [Mirroring images for a disconnected installation by using the oc-mirror plugin v2](about-installing-oc-mirror-v2.md#about-installing-oc-mirror-v2).
+> Many of the `opm` subcommands and flags for working with the SQLite database format, such as `opm index prune`, do not work with the file-based catalog format. For more information about working with file-based catalogs, see "Operator Framework packaging format", "Managing custom catalogs", and "Mirroring images for a disconnected installation by using the oc-mirror plugin v2".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Mirroring Operator catalogs for use with disconnected clusters](installing-mirroring-installation-images.md#olm-mirror-catalog_installing-mirroring-installation-images)
+
+- [Operator Framework packaging format](../operators/understanding/olm-packaging-format.md#olm-file-based-catalogs_olm-packaging-format)
+
+- [Managing custom catalogs](../operators/admin/olm-managing-custom-catalogs.md#olm-managing-custom-catalogs-fb)
+
+- [Mirroring images for a disconnected installation by using the oc-mirror plugin v2](about-installing-oc-mirror-v2.md#about-installing-oc-mirror-v2)
+
+</div>
 
 # Adding a catalog source to a cluster
 
-Adding a catalog source to an OpenShift Container Platform cluster enables the discovery and installation of Operators for users. Cluster administrators can create a `CatalogSource` object that references an index image. The software catalog uses catalog sources to populate the user interface.
+To make Operators from a custom index image available for installation, create a catalog source that adds the catalog content to your cluster.
+
+Cluster administrators can create a `CatalogSource` object that references an index image. The software catalog uses catalog sources to populate the user interface.
 
 > [!TIP]
 > Alternatively, you can use the web console to manage catalog sources. From the **Administration** → **Cluster Settings** → **Configuration** → **OperatorHub** page, click the **Sources** tab, where you can create, update, delete, disable, and enable individual sources.
@@ -129,7 +153,7 @@ Procedure
           sourceType: grpc
           grpcPodConfig:
             securityContextConfig: <security_mode>
-          image: <registry>/<namespace>/redhat-operator-index:v4.17
+          image: <registry>/<namespace>/redhat-operator-index:v4.20
           displayName: My Operator Catalog
           publisher: <publisher_name>
           updateStrategy:
@@ -137,20 +161,28 @@ Procedure
               interval: 30m
         ```
 
-        - If you mirrored content to local files before uploading to a registry, remove any backslash (`/`) characters from the `metadata.name` field to avoid an "invalid resource name" error when you create the object.
+        where:
 
-        - If you want the catalog source to be available globally to users in all namespaces, specify the `openshift-marketplace` namespace. Otherwise, you can specify a different namespace for the catalog to be scoped and available only for that namespace.
+        `metadata.name`
+        Specifies the value for the `metadata.name` parameter. If you mirrored content to local files before uploading to a registry, remove any backslash (`/`) characters from the `metadata.name` field to avoid an "invalid resource name" error when you create the object.
 
-        - Specify the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
+        `metadata.namespace`
+        Specifies the value for the `metadata.namespace` parameter. If you want the catalog source to be available globally to users in all namespaces, specify the `openshift-marketplace` namespace. Otherwise, you can specify a different namespace for the catalog to be scoped and available only for that namespace.
 
-          > [!NOTE]
-          > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
+        `spec.grpcPodConfig.securityContextConfig`
+        Specifies the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
 
-        - Specify your index image. If you specify a tag after the image name, for example `:v4.17`, the catalog source pod uses an image pull policy of `Always`, meaning the pod always pulls the image prior to starting the container. If you specify a digest, for example `@sha256:<id>`, the image pull policy is `IfNotPresent`, meaning the pod pulls the image only if it does not already exist on the node.
+        > [!NOTE]
+        > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
 
-        - Specify your name or an organization name publishing the catalog.
+        `spec.image`
+        Specifies your index image. If you specify a tag after the image name, for example `:v4.20`, the catalog source pod uses an image pull policy of `Always`, meaning the pod always pulls the image before starting the container. If you specify a digest, for example `@sha256:<id>`, the image pull policy is `IfNotPresent`, meaning the pod pulls the image only if it does not already exist on the node.
 
-        - Catalog sources can automatically check for new versions to keep up to date.
+        `spec.publisher`
+        Specifies your name or an organization name publishing the catalog.
+
+        `spec.updateStrategy.registryPoll`
+        Specifies the value for the `spec.updateStrategy.registryPoll` parameter. The catalog sources can automatically check for new versions to keep up to date.
 
     2.  Use the file to create the `CatalogSource` object:
 
@@ -204,13 +236,9 @@ Procedure
 
 </div>
 
-<div>
+# Additional resources
 
-<div class="title">
-
-Additional resources
-
-</div>
+- [Red Hat-provided Operator catalogs](../operators/understanding/olm-rh-catalogs.md#olm-rh-catalogs)
 
 - [Accessing images for Operators from private registries](../operators/admin/olm-managing-custom-catalogs.md#olm-accessing-images-private-registries_olm-managing-custom-catalogs)
 
@@ -218,8 +246,4 @@ Additional resources
 
 - [Image pull policy](../openshift_images/managing_images/image-pull-policy.md#image-pull-policy)
 
-</div>
-
-# Next steps
-
-- [Updating installed Operators](../operators/admin/olm-upgrading-operators.md#olm-upgrading-operators)
+- [Update installed Operators](../operators/admin/olm-upgrading-operators.md#olm-upgrading-operators)

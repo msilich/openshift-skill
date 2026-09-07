@@ -75,22 +75,22 @@ Procedure
         > [!NOTE]
         > A default cluster contains three control plane machines. List all of your control plane machines as shown, no matter how many your cluster uses.
 
-        <div class="formalpara">
+      <div class="formalpara">
 
-        <div class="title">
+      <div class="title">
 
-        Example output
+      Example output
 
-        </div>
+      </div>
 
-        ``` terminal
-        INFO Pulling debug logs from the bootstrap machine
-        INFO Bootstrap gather logs captured here "<installation_directory>/log-bundle-<timestamp>.tar.gz"
-        ```
+      ``` terminal
+      INFO Pulling debug logs from the bootstrap machine
+      INFO Bootstrap gather logs captured here "<installation_directory>/log-bundle-<timestamp>.tar.gz"
+      ```
 
-        </div>
+      </div>
 
-        If you open a Red Hat support case about your installation failure, include the compressed logs when opening a Red Hat support case.
+      If you open a Red Hat support case about your installation failure, include the compressed logs when opening a Red Hat support case.
 
 </div>
 

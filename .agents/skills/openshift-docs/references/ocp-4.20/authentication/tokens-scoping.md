@@ -35,7 +35,7 @@ The role scope allows you to have the same level of access as a given role filte
 
 # Adding unauthenticated groups to cluster roles
 
-As a cluster administrator, you can grant unauthenticated users access to specific cluster roles to enable features, such as external webhooks or automated token management, that require cluster access without authentication. Only grant this access when required and after verifying compliance with your organization’s security standards.
+Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 
 You can add unauthenticated users to the following cluster roles:
 

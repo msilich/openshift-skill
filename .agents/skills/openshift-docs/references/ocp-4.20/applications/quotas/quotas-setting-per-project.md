@@ -1,12 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-A *resource quota*, defined by a `ResourceQuota` object, provides constraints that limit aggregate resource consumption per project. It can limit the quantity of objects that can be created in a project by type, as well as the total amount of compute resources and storage that might be consumed by resources in that project.
+A resource quota, defined by a `ResourceQuota` object, limits aggregate resource consumption per project. It limits the quantity of objects that you can create in a project by type, and the total amount of compute resources and storage consumed by the resources in that project.
 
 This guide describes how resource quotas work, how cluster administrators can set and manage resource quotas on a per project basis, and how developers and cluster administrators can view them.
 
 # Resources managed by quotas
 
-The following describes the set of compute resources and object types that can be managed by a quota.
+Review the specific compute resources, storage resources, and object counts that you can manage with a project quota.
 
 > [!NOTE]
 > A pod is in a terminal state if `status.phase in (Failed, Succeeded)` is true.
@@ -51,13 +51,12 @@ Object counts managed by quota {#quotas-object-counts-managed_quotas-setting-per
 
 # Quota scopes
 
+Measure resource usage with a quota, and add scopes to restrict the allowed set of target resources to prevent validation errors.
+
 Each quota can have an associated set of *scopes*. A quota only measures usage for a resource if it matches the intersection of enumerated scopes.
 
-Adding a scope to a quota restricts the set of resources to which that quota can apply. Specifying a resource outside of the allowed set results in a validation error.
-
-|  |  |
-|----|----|
 | Scope | Description |
+|----|----|
 | `BestEffort` | Match pods that have best effort quality of service for either `cpu` or `memory`. |
 | `NotBestEffort` | Match pods that do not have best effort quality of service for `cpu` and `memory`. |
 
@@ -83,6 +82,8 @@ A `NotBestEffort` scope restricts a quota to tracking the following resources:
 
 # Quota enforcement
 
+Track project resource usage, such as compute and storage, and automatically deny modifications that exceed defined limits to prevent quota violations.
+
 After a resource quota for a project is first created, the project restricts the ability to create any new resources that may violate a quota constraint until it has calculated updated usage statistics.
 
 After a quota is created and usage statistics are updated, the project accepts the creation of new content. When you create or modify resources, your quota usage is incremented immediately upon the request to create or modify the resource.
@@ -93,11 +94,13 @@ If project modifications exceed a quota usage limit, the server denies the actio
 
 # Requests versus limits
 
-When allocating compute resources, each container might specify a request and a limit value each for CPU, memory, and ephemeral storage. Quotas can restrict any of these values.
+To manage cluster capacity, use a project quota to restrict container compute resources. When you configure CPU and memory quotas, incoming containers can explicitly request or limit resources to ensure stable performance.
 
 If the quota has a value specified for `requests.cpu` or `requests.memory`, then it requires that every incoming container make an explicit request for those resources. If the quota has a value specified for `limits.cpu` or `limits.memory`, then it requires that every incoming container specify an explicit limit for those resources.
 
 # Sample resource quota definitions
+
+View sample YAML definitions for resource quotas, including specifications for object counts, compute resources, QoS scopes, and storage classes, to configure custom quota manifests for your project.
 
 <div class="formalpara">
 
@@ -124,17 +127,25 @@ spec:
 
 </div>
 
-- The total number of `ConfigMap` objects that can exist in the project.
+where:
 
-- The total number of persistent volume claims (PVCs) that can exist in the project.
+`spec.hard.configmaps`
+The total number of `ConfigMap` objects that can exist in the project.
 
-- The total number of replication controllers that can exist in the project.
+`spec.hard.persistentvolumeclaims`
+The total number of persistent volume claims (PVCs) that can exist in the project.
 
-- The total number of secrets that can exist in the project.
+`spec.hard.replicationcontrollers`
+The total number of replication controllers that can exist in the project.
 
-- The total number of services that can exist in the project.
+`spec.hard.secrets`
+The total number of secrets that can exist in the project.
 
-- The total number of services of type `LoadBalancer` that can exist in the project.
+`spec.hard.services`
+The total number of services that can exist in the project.
+
+`spec.hard.services.loadbalancers`
+The total number of services of type `LoadBalancer` that can exist in the project.
 
 <div class="formalpara">
 
@@ -156,7 +167,10 @@ spec:
 
 </div>
 
-- The total number of image streams that can exist in the project.
+where:
+
+`spec.hard.openshift.io/imagestreams`
+The total number of image streams that can exist in the project.
 
 <div class="formalpara">
 
@@ -182,15 +196,22 @@ spec:
 
 </div>
 
-- The total number of pods in a non-terminal state that can exist in the project.
+where:
 
-- Across all pods in a non-terminal state, the sum of CPU requests cannot exceed 1 core.
+`spec.hard.pods`
+The total number of pods in a non-terminal state that can exist in the project.
 
-- Across all pods in a non-terminal state, the sum of memory requests cannot exceed 1Gi.
+`spec.hard.requests.cpu`
+Across all pods in a non-terminal state, the sum of CPU requests cannot exceed 1 core.
 
-- Across all pods in a non-terminal state, the sum of CPU limits cannot exceed 2 cores.
+`spec.hard.requests.memory`
+Across all pods in a non-terminal state, the sum of memory requests cannot exceed 1Gi.
 
-- Across all pods in a non-terminal state, the sum of memory limits cannot exceed 2Gi.
+`spec.hard.limits.cpu`
+Across all pods in a non-terminal state, the sum of CPU limits cannot exceed 2 cores.
+
+`spec.hard.limits.memory`
+Across all pods in a non-terminal state, the sum of memory limits cannot exceed 2Gi.
 
 <div class="formalpara">
 
@@ -214,9 +235,13 @@ spec:
 
 </div>
 
-- The total number of pods in a non-terminal state with `BestEffort` quality of service that can exist in the project.
+where:
 
-- Restricts the quota to only matching pods that have `BestEffort` quality of service for either memory or CPU.
+`spec.hard.pods`
+The total number of pods in a non-terminal state with `BestEffort` quality of service that can exist in the project.
+
+`spec.scopes`
+Restricts the quota to only matching pods that have `BestEffort` quality of service for either memory or CPU.
 
 <div class="formalpara">
 
@@ -242,13 +267,19 @@ spec:
 
 </div>
 
-- The total number of pods in a non-terminal state.
+where:
 
-- Across all pods in a non-terminal state, the sum of CPU limits cannot exceed this value.
+`spec.hard.pods`
+The total number of pods in a non-terminal state.
 
-- Across all pods in a non-terminal state, the sum of memory limits cannot exceed this value.
+`spec.hard.limits.cpu`
+Across all pods in a non-terminal state, the sum of CPU limits cannot exceed this value.
 
-- Restricts the quota to only matching pods where `spec.activeDeadlineSeconds` is set to `nil`. Build pods fall under `NotTerminating` unless the `RestartNever` policy is applied.
+`spec.hard.limits.memory`
+Across all pods in a non-terminal state, the sum of memory limits cannot exceed this value.
+
+`spec.scopes`
+Restricts the quota to only matching pods where `spec.activeDeadlineSeconds` is set to `nil`. Build pods fall under `NotTerminating` unless the `RestartNever` policy is applied.
 
 <div class="formalpara">
 
@@ -274,13 +305,19 @@ spec:
 
 </div>
 
-- The total number of pods in a terminating state.
+where:
 
-- Across all pods in a terminating state, the sum of CPU limits cannot exceed this value.
+`spec.hard.pods`
+The total number of pods in a terminating state.
 
-- Across all pods in a terminating state, the sum of memory limits cannot exceed this value.
+`spec.hard.limits.cpu`
+Across all pods in a terminating state, the sum of CPU limits cannot exceed this value.
 
-- Restricts the quota to only matching pods where `spec.activeDeadlineSeconds >=0`. For example, this quota charges for build or deployer pods, but not long running pods like a web server or database.
+`spec.hard.limits.memory`
+Across all pods in a terminating state, the sum of memory limits cannot exceed this value.
+
+`spec.scopes`
+Restricts the quota to only matching pods where `spec.activeDeadlineSeconds >=0`. For example, this quota charges for build or deployer pods, but not long running pods like a web server or database.
 
 <div class="formalpara">
 
@@ -310,27 +347,38 @@ spec:
 
 </div>
 
-- The total number of persistent volume claims in a project
+where:
 
-- Across all persistent volume claims in a project, the sum of storage requested cannot exceed this value.
+`spec.hard.persistentvolumeclaims`
+The total number of persistent volume claims in a project.
 
-- Across all persistent volume claims in a project, the sum of storage requested in the gold storage class cannot exceed this value.
+`spec.hard.requests.storage`
+Across all persistent volume claims in a project, the sum of storage requested cannot exceed this value.
 
-- Across all persistent volume claims in a project, the sum of storage requested in the silver storage class cannot exceed this value.
+`spec.hard.gold.storageclass.storage.k8s.io/requests.storage`
+Across all persistent volume claims in a project, the sum of storage requested in the gold storage class cannot exceed this value.
 
-- Across all persistent volume claims in a project, the total number of claims in the silver storage class cannot exceed this value.
+`spec.hard.silver.storageclass.storage.k8s.io/requests.storage`
+Across all persistent volume claims in a project, the sum of storage requested in the silver storage class cannot exceed this value.
 
-- Across all persistent volume claims in a project, the sum of storage requested in the bronze storage class cannot exceed this value. When this is set to `0`, it means bronze storage class cannot request storage.
+`spec.hard.silver.storageclass.storage.k8s.io/persistentvolumeclaims`
+Across all persistent volume claims in a project, the total number of claims in the silver storage class cannot exceed this value.
 
-- Across all persistent volume claims in a project, the sum of storage requested in the bronze storage class cannot exceed this value. When this is set to `0`, it means bronze storage class cannot create claims.
+`spec.hard.bronze.storageclass.storage.k8s.io/requests.storage`
+Across all persistent volume claims in a project, the sum of storage requested in the bronze storage class cannot exceed this value. When this is set to `0`, it means bronze storage class cannot request storage.
 
-- Across all pods in a non-terminal state, the sum of ephemeral storage requests cannot exceed 2Gi.
+`spec.hard.bronze.storageclass.storage.k8s.io/persistentvolumeclaims`
+Across all persistent volume claims in a project, the sum of storage requested in the bronze storage class cannot exceed this value. When this is set to `0`, it means bronze storage class cannot create claims.
 
-- Across all pods in a non-terminal state, the sum of ephemeral storage limits cannot exceed 4Gi.
+`spec.hard.requests.ephemeral-storage`
+Across all pods in a non-terminal state, the sum of ephemeral storage requests cannot exceed 2Gi.
+
+`spec.hard.limits.ephemeral-storage`
+Across all pods in a non-terminal state, the sum of ephemeral storage limits cannot exceed 4Gi.
 
 # Creating a quota
 
-You can create a quota to constrain resource usage in a given project.
+Create a defined quota in the project to limit resource consumption and object counts, preventing cluster resource exhaustion.
 
 <div>
 
@@ -358,11 +406,13 @@ Procedure
 
 ## Creating object count quotas
 
-You can create an object count quota for all standard namespaced resource types on OpenShift Container Platform, such as `BuildConfig` and `DeploymentConfig` objects. An object quota count places a defined quota on all standard namespaced resource types.
+Restrict resource consumption and standard object creation in a project by creating an object count quota for standard namespaced resource types.
+
+You can create an object count quota for all standard namespaced resource types on OpenShift Container Platform, such as `BuildConfig` and `DeploymentConfig` objects.
 
 When using a resource quota, an object is charged against the quota upon creation. These types of quotas are useful to protect against exhaustion of resources. The quota can only be created if there are enough spare resources within the project.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -370,41 +420,35 @@ Procedure
 
 </div>
 
-To configure an object count quota for a resource:
-
-</div>
-
-1.  Run the following command:
+1.  To configure an object count quota for a resource, run the following command:
 
     ``` terminal
     $ oc create quota <name> \
         --hard=count/<resource>.<group>=<quota>,count/<resource>.<group>=<quota>
     ```
 
-    - The `<resource>` variable is the name of the resource, and `<group>` is the API group, if applicable. Use the `oc api-resources` command for a list of resources and their associated API groups.
+    where:
 
-      For example:
+    `<resource>`
+    Specifies the name of the resource
 
-      ``` terminal
-      $ oc create quota test \
-          --hard=count/deployments.apps=2,count/replicasets.apps=4,count/pods=3,count/secrets=4
-      ```
+    `<group>`
+    Specifies the API group, if applicable. Use the `oc api-resources` command for a list of resources and their associated API groups.
 
-      <div class="formalpara">
+    For example:
 
-      <div class="title">
+    ``` terminal
+    $ oc create quota test \
+        --hard=count/deployments.apps=2,count/replicasets.apps=4,count/pods=3,count/secrets=4
+    ```
 
-      Example output
+    The following is an example output:
 
-      </div>
+    ``` terminal
+    resourcequota "test" created
+    ```
 
-      ``` terminal
-      resourcequota "test" created
-      ```
-
-      </div>
-
-      This example limits the listed resources to the hard limit in each project in the cluster.
+    This example limits the listed resources to the hard limit in each project in the cluster.
 
 2.  Verify that the quota was created:
 
@@ -433,7 +477,11 @@ To configure an object count quota for a resource:
 
     </div>
 
+</div>
+
 ## Setting resource quota for extended resources
+
+Configure extended resources, such as GPUs, in a resource quota file and apply it to a project to enforce strict capacity limits and prevent pods from exceeding available capacity.
 
 Overcommitment of resources is not allowed for extended resources, so you must specify `requests` and `limits` for the same extended resource in a quota. Currently, only quota items with the prefix `requests.` is allowed for extended resources. The following is an example scenario of how to set resource quota for the GPU resource `nvidia.com/gpu`.
 
@@ -643,9 +691,9 @@ Procedure
 
 # Viewing a quota
 
-You can view usage statistics related to any hard limits defined in a quota for a project by navigating in the web console to the project’s **Quota** page.
+View the usage statistics for the hard limits defined in a project quota to monitor resource consumption and plan cluster capacity.
 
-You can also use the CLI to view quota details.
+You can view quota usage statistics on the project’s **Quota** page in the web console or by using the CLI.
 
 <div>
 
@@ -763,19 +811,28 @@ Procedure
                 bronze.storageclass.storage.k8s.io/persistentvolumeclaims: "0"
           ```
 
-          - The total number of persistent volume claims in a project.
+          where:
 
-          - Across all persistent volume claims in a project, the sum of storage requested cannot exceed this value.
+          `spec.hard.persistentvolumeclaims`
+          The total number of persistent volume claims in a project.
 
-          - Across all persistent volume claims in a project, the sum of storage requested in the gold storage class cannot exceed this value.
+          `spec.hard.requests.storage`
+          Across all persistent volume claims in a project, the sum of storage requested cannot exceed this value.
 
-          - Across all persistent volume claims in a project, the sum of storage requested in the silver storage class cannot exceed this value.
+          `spec.hard.gold.storageclass.storage.k8s.io/requests.storage`
+          Across all persistent volume claims in a project, the sum of storage requested in the gold storage class cannot exceed this value.
 
-          - Across all persistent volume claims in a project, the total number of claims in the silver storage class cannot exceed this value.
+          `spec.hard.silver.storageclass.storage.k8s.io/requests.storage`
+          Across all persistent volume claims in a project, the sum of storage requested in the silver storage class cannot exceed this value.
 
-          - Across all persistent volume claims in a project, the sum of storage requested in the bronze storage class cannot exceed this value. When this value is set to `0`, the bronze storage class cannot request storage.
+          `spec.hard.silver.storageclass.storage.k8s.io/persistentvolumeclaims`
+          Across all persistent volume claims in a project, the total number of claims in the silver storage class cannot exceed this value.
 
-          - Across all persistent volume claims in a project, the sum of storage requested in the bronze storage class cannot exceed this value. When this value is set to `0`, the bronze storage class cannot create claims.
+          `spec.hard.bronze.storageclass.storage.k8s.io/requests.storage`
+          Across all persistent volume claims in a project, the sum of storage requested in the bronze storage class cannot exceed this value. When this value is set to `0`, the bronze storage class cannot request storage.
+
+          `spec.hard.bronze.storageclass.storage.k8s.io/persistentvolumeclaims`
+          Across all persistent volume claims in a project, the sum of storage requested in the bronze storage class cannot exceed this value. When this value is set to `0`, the bronze storage class cannot create claims.
 
       3.  Create a project request template from the modified `template.yaml` file in the `openshift-config` namespace:
 

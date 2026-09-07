@@ -6,25 +6,25 @@ Before you can install Red Hat OpenShift Service Mesh, you must subscribe to Op
 
 - Maintain an active OpenShift Container Platform subscription on your Red Hat account. If you do not have a subscription, contact your sales representative for more information.
 
-- Review the [OpenShift Container Platform 4.17 overview](../../architecture/architecture-installation.md#installation-overview_architecture-installation).
+- Review the [OpenShift Container Platform 4.20 overview](../../architecture/architecture-installation.md#installation-overview_architecture-installation).
 
-- Install OpenShift Container Platform 4.17. If you are installing Red Hat OpenShift Service Mesh on a [restricted network](../../installing/overview/installing-preparing.md#supported-installation-methods-for-different-platforms), follow the instructions for your chosen OpenShift Container Platform infrastructure.
+- Install OpenShift Container Platform 4.20. If you are installing Red Hat OpenShift Service Mesh on a [restricted network](../../installing/overview/installing-preparing.md#installing-preparing-supported-installation-methods-reference_installing-preparing), follow the instructions for your chosen OpenShift Container Platform infrastructure.
 
-  - [Install OpenShift Container Platform 4.17 on AWS](../../installing/installing_aws/ipi/installing-aws-default.md#installing-aws-default)
+  - [Install OpenShift Container Platform 4.20 on AWS](../../installing/installing_aws/ipi/installing-aws-default.md#installing-aws-default)
 
-  - [Install OpenShift Container Platform 4.17 on AWS with user-provisioned infrastructure](../../installing/installing_aws/upi/installing-aws-user-infra.md#installing-aws-user-infra)
+  - [Install OpenShift Container Platform 4.20 on AWS with user-provisioned infrastructure](../../installing/installing_aws/upi/installing-aws-user-infra.md#installing-aws-user-infra)
 
-  - [Install OpenShift Container Platform 4.17 on bare metal](../../installing/installing_bare_metal/upi/installing-bare-metal.md#installing-bare-metal)
+  - [Install OpenShift Container Platform 4.20 on bare metal](../../installing/installing_bare_metal/upi/installing-bare-metal.md#installing-bare-metal)
 
-  - [Install OpenShift Container Platform 4.17 on vSphere](../../installing/installing_vsphere/upi/installing-vsphere.md#installing-vsphere)
+  - [Install OpenShift Container Platform 4.20 on vSphere](../../installing/installing_vsphere/upi/installing-vsphere.md#installing-vsphere)
 
-  - [Install OpenShift Container Platform 4.17 on IBM Z® and IBM® LinuxONE](../../installing/installing_ibm_z/upi/installing-ibm-z.md#installing-ibm-z)
+  - [Install OpenShift Container Platform 4.20 on IBM Z® and IBM® LinuxONE](../../installing/installing_ibm_z/upi/installing-ibm-z.md#installing-ibm-z)
 
-  - [Install OpenShift Container Platform 4.17 on IBM Power®](../../installing/installing_ibm_power/installing-ibm-power.md#installing-ibm-power)
+  - [Install OpenShift Container Platform 4.20 on IBM Power®](../../installing/installing_ibm_power/installing-ibm-power.md#installing-ibm-power)
 
 - Install the version of the OpenShift Container Platform command-line utility (the `oc` client tool) that matches your OpenShift Container Platform version and add it to your path.
 
-  - If you are using OpenShift Container Platform 4.17, see [About the OpenShift CLI](../../cli_reference/openshift_cli/getting-started-cli.md#cli-about-cli_cli-developer-commands).
+  - If you are using OpenShift Container Platform 4.20, see [About the OpenShift CLI](../../cli_reference/openshift_cli/getting-started-cli.md#cli-about-cli_cli-developer-commands).
 
 For additional information about Red Hat OpenShift Service Mesh lifecycle and supported platforms, refer to the [Support Policy](https://access.redhat.com/support/policy/updates/openshift#ossm).
 

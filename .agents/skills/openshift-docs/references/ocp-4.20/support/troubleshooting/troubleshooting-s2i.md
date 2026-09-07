@@ -1,8 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+A cluster administrator can observe the S2I stages to determine where in the S2I process a failure occurred and gather diagnostic data to resolve Source-to-Image issues.
+
 # Strategies for Source-to-Image troubleshooting
 
-Use Source-to-Image (S2I) to build reproducible, Docker-formatted container images. You can create ready-to-run images by injecting application source code into a container image and assembling a new image. The new image incorporates the base image (the builder) and built source.
+Use Source-to-Image (S2I) to build reproducible, Docker-formatted container images. You can create ready-to-run images by injecting application source code into a container image and assembling a new image.
+
+The new image incorporates the base image (the builder) and built source.
 
 <div>
 
@@ -32,7 +36,9 @@ Procedure
 
 # Gathering Source-to-Image diagnostic data
 
-The S2I tool runs a build pod and a deployment pod in sequence. The deployment pod is responsible for deploying the application pods based on the application container image created in the build stage. Watch build, deployment and application pod status to determine where in the S2I process a failure occurs. Then, focus diagnostic data collection accordingly.
+The S2I tool runs a build pod and a deployment pod in sequence. The deployment pod is responsible for deploying the application pods based on the application container image created in the build stage.
+
+Watch build, deployment and application pod status to determine where in the S2I process a failure occurs. Then, focus diagnostic data collection accordingly.
 
 <div>
 
@@ -64,7 +70,7 @@ Procedure
     $ oc get pods -w
     ```
 
-    - Use `-w` to monitor pods for changes until you quit the command using `Ctrl+C`.
+    Use the `-w` flag to monitor pods for changes until you quit the command using `Ctrl+C`.
 
 2.  Review a failed pod’s logs for errors.
 
@@ -185,7 +191,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>` instead.
+        > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>` instead.
 
     3.  Determine the target container ID:
 
@@ -212,4 +218,4 @@ Procedure
 
 # Additional resources
 
-- See [Source-to-Image (S2I) build](../../cicd/builds/build-strategies.md#build-strategy-s2i_build-strategies) for more details about the S2I build strategy.
+- [Source-to-Image (S2I) build](../../cicd/builds/build-strategies.md#build-strategy-s2i_build-strategies)

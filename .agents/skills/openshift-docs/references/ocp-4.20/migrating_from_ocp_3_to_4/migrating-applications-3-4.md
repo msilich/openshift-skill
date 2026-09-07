@@ -66,7 +66,7 @@ Internal images
 
 - If your application uses internal images from the `openshift` namespace, you must ensure that the required versions of the images are present on the target cluster.
 
-  You can manually update an image stream tag in order to use a deprecated OpenShift Container Platform 3 image on an OpenShift Container Platform 4.17 cluster.
+  You can manually update an image stream tag in order to use a deprecated OpenShift Container Platform 3 image on an OpenShift Container Platform 4.20 cluster.
 
 </div>
 

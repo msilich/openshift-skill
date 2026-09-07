@@ -70,11 +70,7 @@ A hosted cluster supports only one infrastructure platform. For example, you can
 The following table indicates which OpenShift Container Platform versions are supported for each platform of hosted control planes.
 
 > [!IMPORTANT]
-> For IBM Power and IBM Z:
->
-> - You must run the control plane on machine types that are based on 64-bit x86 architecture or s390x architecture
->
-> - You must run node pools on IBM Power or IBM Z
+> For hosted control planes on IBM Power or IBM Z, the control plane must run on either 64_bit x86 architecture or s390x architecture. Node pools must run on either IBM Power or IBM Z. No other combinations are supported.
 
 In the following table, the management cluster version is the OpenShift Container Platform version where the multicluster engine Operator is enabled:
 
@@ -92,288 +88,23 @@ Required OpenShift Container Platform versions for platforms
 
 ## Multi-architecture support
 
-The following tables indicate the support status for hosted control planes on multiple architectures, organized by platform.
+The following table indicates the supported architectures for hosted control planes, organized by platform. If an architecture is not listed, it is not yet fully supported.
 
-<table>
-<caption>Multi-architecture support for hosted control planes on AWS</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">OpenShift Container Platform version</th>
-<th style="text-align: left;">Control planes</th>
-<th style="text-align: left;">Compute nodes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>4.17 - 4.20</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: General Availability</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>ARM64: General Availability</p></li>
-<li><p>64-bit x86: General Availability</p></li>
-</ul></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>4.14 - 4.16</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Technology Preview</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: General Availability</p></li>
-</ul></td>
-</tr>
-</tbody>
-</table>
+| Platform | Control planes | Compute nodes | OpenShift Container Platform version |
+|----|----|----|----|
+| AWS | 64-bit x86 | 64-bit x86 | 4.14, 4.16, 4.18 - 4.20 |
+| AWS | 64-bit x86 | ARM64 | 4.18 - 4.20 |
+| AWS | ARM64 | ARM64 | 4.18 - 4.20 |
+| AWS | ARM64 | 64-bit x86 | 4.18 - 4.20 |
+| Bare metal (Agent platform) | 64-bit x86 | 64-bit x86 | 4.14, 4.16, 4.18 - 4.20 |
+| IBM Power | 64-bit x86 | ppc64le | 4.18 - 4.20 |
+| IBM Z | 64-bit x86 | s390x | 4.18 - 4.20 |
+| IBM Z | s390x | s390x | 4.20 |
+| Non-bare metal Agent machines (Technology Preview) | 64-bit x86 | 64-bit x86 | 4.16, 4.18 - 4.20 |
+| OpenShift Virtualization | 64-bit x86 | 64-bit x86 | 4.14, 4.16, 4.18 - 4.20 |
+| Red Hat OpenStack Platform (RHOSP) (Technology Preview) | 64-bit x86 | 64-bit x86 | 4.19 - 4.20 |
 
-<table>
-<caption>Multi-architecture support for hosted control planes on bare metal (Agent)</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">OpenShift Container Platform version</th>
-<th style="text-align: left;">Control planes</th>
-<th style="text-align: left;">Compute nodes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>4.14 - 4.20</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Technology Preview</p></li>
-</ul></td>
-</tr>
-</tbody>
-</table>
-
-<table>
-<caption>Multi-architecture support for hosted control planes on non-bare-metal agent machines</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">OpenShift Container Platform version</th>
-<th style="text-align: left;">Control planes</th>
-<th style="text-align: left;">Compute nodes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>4.17 - 4.20</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: Technology Preview</p></li>
-<li><p>ARM64: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: Technology Preview</p></li>
-<li><p>ARM64: Not available</p></li>
-</ul></td>
-</tr>
-</tbody>
-</table>
-
-<table>
-<caption>Multi-architecture support for hosted control planes on IBM Power</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">OpenShift Container Platform version</th>
-<th style="text-align: left;">Control planes</th>
-<th style="text-align: left;">Compute nodes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>4.20</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: General Availability</p></li>
-</ul></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>4.19</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: General Availability</p></li>
-</ul></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>4.18</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: Not available</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: General Availability</p></li>
-</ul></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>4.17</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: Not available</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: General Availability</p></li>
-</ul></td>
-</tr>
-</tbody>
-</table>
-
-<table>
-<caption>Multi-architecture support for hosted control planes on IBM Z</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">OpenShift Container Platform version</th>
-<th style="text-align: left;">Control planes</th>
-<th style="text-align: left;">Compute nodes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>4.20</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: General Availability</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: General Availability</p></li>
-</ul></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>4.19</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: General Availability</p></li>
-</ul></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>4.18</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: General Availability</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>4.17</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: Not available</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-<li><p>s390x: General Availability</p></li>
-<li><p>ppc64le: Not available</p></li>
-</ul></td>
-</tr>
-</tbody>
-</table>
-
-<table>
-<caption>Multi-architecture support for hosted control planes on OpenShift Virtualization</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">OpenShift Container Platform version</th>
-<th style="text-align: left;">Control planes</th>
-<th style="text-align: left;">Compute nodes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>4.16 - 4.20</p></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-</ul></td>
-<td style="text-align: left;"><ul>
-<li><p>64-bit x86: General Availability</p></li>
-<li><p>ARM64: Not available</p></li>
-</ul></td>
-</tr>
-</tbody>
-</table>
+Multi-architecture support for hosted control planes
 
 ## Updates of multicluster engine Operator
 
@@ -386,7 +117,7 @@ When you update to another version of the multicluster engine Operator, your hos
 |----|----|
 | Updating from 2.5 to 2.6 | OpenShift Container Platform 4.14, 4.16 |
 | Updating from 2.6 to 2.7 | OpenShift Container Platform 4.14, 4.16 |
-| Updating from 2.7 to 2.8 | OpenShift Container Platform 4.14, 4.16 |
+| Updating from 2.7 to 2.8 | OpenShift Container Platform 4.16 |
 | Updating from 2.8 to 2.9 | OpenShift Container Platform 4.16, 4.18 |
 | Updating from 2.9 to 2.10 | OpenShift Container Platform 4.18, 4.19 |
 

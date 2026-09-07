@@ -1,15 +1,15 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can upgrade the Migration Toolkit for Containers (MTC) on OpenShift Container Platform 4.17 by using Operator Lifecycle Manager.
+You can upgrade the Migration Toolkit for Containers (MTC) on OpenShift Container Platform 4.20 by using Operator Lifecycle Manager.
 
 You can upgrade MTC on OpenShift Container Platform 4.5, and earlier versions, by reinstalling the legacy Migration Toolkit for Containers Operator.
 
 > [!IMPORTANT]
 > If you are upgrading from MTC version 1.3, you must perform an additional procedure to update the `MigPlan` custom resource (CR).
 
-# Upgrading the Migration Toolkit for Containers on OpenShift Container Platform 4.17
+# Upgrading the Migration Toolkit for Containers on OpenShift Container Platform 4.20
 
-You can upgrade the Migration Toolkit for Containers (MTC) on OpenShift Container Platform 4.17 by using the Operator Lifecycle Manager.
+You can upgrade the Migration Toolkit for Containers (MTC) on OpenShift Container Platform 4.20 by using the Operator Lifecycle Manager.
 
 > [!IMPORTANT]
 > When upgrading the MTC by using the Operator Lifecycle Manager, you must use a supported migration path.

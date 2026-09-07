@@ -4,6 +4,8 @@ Encrypt and decrypt etcd data in OpenShift Container Platform to protect sensiti
 
 # etcd encryption
 
+You can encrypt sensitive resource data in etcd to provide an additional layer of protection if an etcd backup or storage data is exposed.
+
 By default, etcd data is not encrypted in OpenShift Container Platform. You can enable etcd encryption for your cluster to provide an additional layer of data security. For example, it can help protect the loss of sensitive data if an etcd backup is exposed to the incorrect parties.
 
 When you enable etcd encryption, the following OpenShift API server and Kubernetes API server resources are encrypted:

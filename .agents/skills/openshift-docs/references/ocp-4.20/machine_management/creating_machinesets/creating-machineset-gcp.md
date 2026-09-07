@@ -503,19 +503,24 @@ Procedure
 
 - Add the following line under the `providerSpec` field:
 
-  ``` yaml
-  providerSpec:
-    value:
-      preemptible: true
-  ```
-
-  If `preemptible` is set to `true`, the machine is labeled as an `interruptible-instance` after the instance is launched.
+  \+
 
 </div>
 
+    providerSpec:
+      value:
+        provisioningModel: "Spot"
+
+\+ If you specify `provisioningModel: "Spot"`, the machine is labeled as an `interruptible-instance` after the instance is launched.
+
+\+
+
+> [!NOTE]
+> This parameter is not compatible with setting the `providerSpec.value.preemptible` value to `true`.
+
 # Configuring Shielded VM options by using machine sets
 
-Configure Shielded Virtual Machine (VM) options for your machine sets on Google Cloud to help secure your cluster instances. By editing the `MachineSet` YAML file, you can configure the Shielded VM options that a machine set uses for machines that it deploys.
+To help secure your cluster instances, you can configure Shielded Virtual Machine (VM) options for your machine sets on Google Cloud by editing the `MachineSet` YAML file.
 
 For more information about Shielded VM features and functionality, see the Google Cloud Compute Engine documentation about [Shielded VM](https://cloud.google.com/compute/shielded-vm/docs/shielded-vm).
 
@@ -1064,14 +1069,14 @@ Procedure
     - Change the `machineType` of the new `MachineSet` definition to `a2-highgpu-1g`, which includes an NVIDIA A100 GPU.
 
       ``` terminal
-      jq .spec.template.spec.providerSpec.value.machineType ocp_4.17_machineset-a2-highgpu-1g.json
+      jq .spec.template.spec.providerSpec.value.machineType ocp_4.20_machineset-a2-highgpu-1g.json
 
       "a2-highgpu-1g"
       ```
 
-      The `<output_file.json>` file is saved as `ocp_4.17_machineset-a2-highgpu-1g.json`.
+      The `<output_file.json>` file is saved as `ocp_4.20_machineset-a2-highgpu-1g.json`.
 
-9.  Update the following fields in `ocp_4.17_machineset-a2-highgpu-1g.json`:
+9.  Update the following fields in `ocp_4.20_machineset-a2-highgpu-1g.json`:
 
     - Change `.metadata.name` to a name containing `gpu`.
 
@@ -1091,7 +1096,7 @@ Procedure
 10. To verify your changes, perform a `diff` of the original compute definition and the new GPU-enabled node definition by running the following command:
 
     ``` terminal
-    $ oc get machineset/myclustername-2pt9p-worker-a -n openshift-machine-api -o json | diff ocp_4.17_machineset-a2-highgpu-1g.json -
+    $ oc get machineset/myclustername-2pt9p-worker-a -n openshift-machine-api -o json | diff ocp_4.20_machineset-a2-highgpu-1g.json -
     ```
 
     <div class="formalpara">
@@ -1127,7 +1132,7 @@ Procedure
 11. Create the GPU-enabled compute machine set from the definition file by running the following command:
 
     ``` terminal
-    $ oc create -f ocp_4.17_machineset-a2-highgpu-1g.json
+    $ oc create -f ocp_4.20_machineset-a2-highgpu-1g.json
     ```
 
     <div class="formalpara">

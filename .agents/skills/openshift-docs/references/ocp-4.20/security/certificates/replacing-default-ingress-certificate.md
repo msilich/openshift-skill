@@ -112,4 +112,4 @@ Procedure
 
 - [Replacing the CA Bundle certificate](updating-ca-bundle.md#ca-bundle-understanding_updating-ca-bundle)
 
-- [Proxy certificate customization](../certificate_types_descriptions/proxy-certificates.md#customization)
+- [Proxy certificate customization](../certificate_types_descriptions/proxy-certificates.md#proxy-cert-customization_proxy-certificates)

@@ -95,13 +95,11 @@ As a cluster administrator, you can increase or decrease the maximum transmissio
 
 The following procedures describe how to change the cluster network MTU by using machine configs, Dynamic Host Configuration Protocol (DHCP), or an ISO image. If you use either the DHCP or ISO approaches, you must refer to configuration artifacts that you kept after installing your cluster to complete the procedure.
 
-<div>
+# Prerequisites for changing the cluster network MTU
 
-<div class="title">
+Before you change the cluster network maximum transmission unit (MTU), verify that you have the required access, tools, and network infrastructure to support the new MTU value.
 
-Prerequisites
-
-</div>
+Ensure that the following conditions are met before you begin:
 
 - You have installed the OpenShift CLI (`oc`).
 
@@ -112,8 +110,6 @@ Prerequisites
 - If your nodes are physical machines, ensure that the cluster network and the connected network switches support jumbo frames.
 
 - If your nodes are virtual machines (VMs), ensure that the hypervisor and the connected network switches support jumbo frames.
-
-</div>
 
 ## Checking the current cluster MTU value
 
@@ -235,11 +231,11 @@ Procedure
     1.  Create the following Butane config in the `control-plane-interface.bu` file:
 
         > [!NOTE]
-        > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+        > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
         ``` yaml
         variant: openshift
-        version: 4.17.0
+        version: 4.20.0
         metadata:
           name: 01-control-plane-interface
           labels:
@@ -263,11 +259,11 @@ Procedure
     2.  Create the following Butane config in the `worker-interface.bu` file:
 
         > [!NOTE]
-        > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.17.0`. See "Creating machine configs with Butane" for information about Butane.
+        > The [Butane version](https://coreos.github.io/butane/specs/) you specify in the config file should match the OpenShift Container Platform version and always ends in `0`. For example, `4.20.0`. See "Creating machine configs with Butane" for information about Butane.
 
         ``` yaml
         variant: openshift
-        version: 4.17.0
+        version: 4.20.0
         metadata:
           name: 01-worker-interface
           labels:

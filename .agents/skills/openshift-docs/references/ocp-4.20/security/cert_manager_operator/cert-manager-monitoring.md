@@ -92,13 +92,15 @@ Additional resources
 
 </div>
 
-- [Setting up metrics collection for user-defined projects](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/4.20/html/configuring_user_workload_monitoring/configuring-metrics-uwm#setting-up-metrics-collection-for-user-defined-projects_configuring-metrics-uwm)
+- [Setting up metrics collection for user-defined projects](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/configuring_user_workload_monitoring/configuring-metrics-uwm#setting-up-metrics-collection-for-user-defined-projects_configuring-metrics-uwm)
 
 </div>
 
 # Configuring metrics collection for cert-manager Operator for Red Hat OpenShift operands by using a ServiceMonitor
 
-The cert-manager Operator for Red Hat OpenShift operands expose metrics by default on port `9402` at the `/metrics` service endpoint. You can configure metrics collection for the cert-manager operands by creating a `ServiceMonitor` custom resource (CR) that enables Prometheus Operator to collect custom metrics. For more information, see "Configuring user workload monitoring".
+You can configure metrics collection for the cert-manager Operator for Red Hat OpenShift operands by creating a `ServiceMonitor` custom resource (CR).
+
+The cert-manager Operator for Red Hat OpenShift operands expose metrics by default on port `9402` at the `/metrics` service endpoint. The `ServiceMonitor` CR enables Prometheus Operator to collect custom metrics.
 
 <div>
 

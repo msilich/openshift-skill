@@ -18,7 +18,7 @@ In some cluster configurations, application pods and ingress router pods run on 
 > Egress IP addresses must not be configured in any Linux network configuration files, such as `ifcfg-eth0`.
 
 > [!IMPORTANT]
-> The assignment of egress IP addresses to control plane nodes with the EgressIP feature is not supported on a cluster provisioned on Amazon Web Services (AWS). For more information, see "BZ#2039656" in the *Additional resources* section.
+> The assignment of egress IP addresses to control plane nodes with the EgressIP feature is not supported on a cluster provisioned on Amazon Web Services (AWS). For more information, see "BZ#2039656".
 
 The following example illustrates the annotation from nodes on several public cloud providers. The annotations are indented for readability.
 
@@ -45,7 +45,7 @@ cloud.network.openshift.io/egress-ipconfig: [
 The following sections describe the IP address capacity for supported public cloud environments for use in your capacity calculation.
 
 Amazon Web Services (AWS) IP address capacity limits
-On AWS, constraints on IP address assignments depend on the instance type configured. For more information, see "IP addresses per network interface per instance type" in the *Additional resources* section.
+On AWS, constraints on IP address assignments depend on the instance type configured. For more information, see "IP addresses per network interface per instance type".
 
 Google Cloud IP address capacity limits
 On Google Cloud, the networking model implements additional node IP addresses through IP address aliasing, rather than IP address assignments. However, IP address capacity maps directly to IP aliasing capacity.
@@ -56,7 +56,7 @@ The following capacity limits exist for IP aliasing assignment:
 
 - Per VPC, the maximum number of IP aliases is unspecified, but OpenShift Container Platform scalability testing reveals the maximum to be approximately 15,000.
 
-For more information, see "Per instance" quotas and "Alias IP ranges overview" in the *Additional resources* section.
+For more information, see "Per instance" quotas and "Alias IP ranges overview".
 
 Microsoft Azure IP address capacity limits
 On Azure, the following capacity limits exist for IP address assignment:
@@ -65,9 +65,15 @@ On Azure, the following capacity limits exist for IP address assignment:
 
 - Per virtual network, the maximum number of assigned IP addresses cannot exceed 65,536.
 
-For more information, see "Networking limits" in the *Additional resources* section.
+For more information, see "Networking limits".
 
-# Additional resources
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [BZ#2039656 (Red Hat Bugzilla)](https://bugzilla.redhat.com/show_bug.cgi?id=2039656)
 
@@ -78,6 +84,8 @@ For more information, see "Networking limits" in the *Additional resources* sect
 - [Networking limits (Microsoft Azure documentation)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits?toc=/azure/virtual-network/toc.json#networking-limits)
 
 - [IP addresses per network interface per instance type (AWS documentation)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI)
+
+</div>
 
 ## Platform support
 
@@ -175,7 +183,7 @@ cloud.network.openshift.io/egress-ipconfig: [
 
 ## Considerations for using an egress IP address on additional network interfaces
 
-In OpenShift Container Platform, egress IP addresses provide administrators a way to control network traffic. Egress IP addresses can be used with a `br-ex` Open vSwitch (OVS) bridge interface and any physical interface that has IP connectivity enabled.
+In OpenShift Container Platform, egress IP addresses provide administrators a way to control network traffic. You can use egress IP addresses with a `br-ex` Open vSwitch (OVS) bridge interface. You can also use any physical interface that has IP connectivity enabled.
 
 You can inspect your network interface type by running the following command:
 
@@ -183,16 +191,16 @@ You can inspect your network interface type by running the following command:
 $ ip -details link show
 ```
 
-The primary network interface is assigned a node IP address which also contains a subnet mask. Information for this node IP address can be retrieved from the Kubernetes node object for each node within your cluster by inspecting the `k8s.ovn.org/node-primary-ifaddr` annotation. In an IPv4 cluster, this annotation is similar to the following example: `"k8s.ovn.org/node-primary-ifaddr: {"ipv4":"192.168.111.23/24"}"`.
+The primary network interface is assigned a node IP address which also contains a subnet mask. You can retrieve this node IP address information from the Kubnernetes node object. Inspect the `k8s.ovn.org/node-primary-ifaddr` annotation for each node in your cluster. In an IPv4 cluster, this annotation is similar to the following example: `"k8s.ovn.org/node-primary-ifaddr: {"ipv4":"192.168.111.23/24"}"`.
 
-If the egress IP address is not within the subnet of the primary network interface subnet, you can use an egress IP address on another Linux network interface that is not of the primary network interface type. By doing so, OpenShift Container Platform administrators are provided with a greater level of control over networking aspects such as routing, addressing, segmentation, and security policies. This feature provides users with the option to route workload traffic over specific network interfaces for purposes such as traffic segmentation or meeting specialized requirements.
+If the egress IP address is not within the subnet of the primary network interface subnet, use another Linux network interface. This interface must not be of the primary network interface type. With this approach, an administrator can provide a greater level of control over networking aspects such as routing, addressing, segmentation, and security policies. With this feature, you can route workload traffic over specific network interfaces for purposes such as traffic segmentation or meeting specialized requirements.
 
 If the egress IP address is not within the subnet of the primary network interface, then the selection of another network interface for egress traffic might occur if they are present on a node.
 
 You can determine which other network interfaces might support egress IP address addresses by inspecting the `k8s.ovn.org/host-cidrs` Kubernetes node annotation. This annotation contains the addresses and subnet mask found for the primary network interface. The annotation also contains additional network interface addresses and subnet mask information. These addresses and subnet masks are assigned to network interfaces that use the longest prefix match routing mechanism to determine which network interface supports the egress IP address. For more information, see "Longest prefix match routing" in the *Additional resources* section.
 
 > [!NOTE]
-> OVN-Kubernetes provides a mechanism to control and direct outbound network traffic from specific namespaces and pods. This ensures that it exits the cluster through a particular network interface and with a specific egress IP address.
+> By using OVN-Kubernetes, you can control how outbound traffic leaves the cluster. You can configure traffic from specific namespaces or pods to exit through a chosen network interface and use a designated egress IP address. This configuration routes application traffic over specific network paths, providing better network isolation and traffic management.
 
 As an administrator who wants an egress IP address and traffic to route over a particular interface that is not the primary network interface, you must meet the following conditions:
 
@@ -202,15 +210,26 @@ As an administrator who wants an egress IP address and traffic to route over a p
 
 - You understand that if a network interface is removed or if the IP address and subnet mask which allows the egress IP address to be hosted on the interface is removed, reconfiguration of the egress IP address occurs. Consequently, the egress IP address might get assigned to another node and interface.
 
-- If you use an Egress IP address on a secondary network interface card (NIC), you must use the Node Tuning Operator to enable IP forwarding on the secondary NIC.
-
 - You configured a NIC with routes by ensuring a gateway exists in the main routing table. As a postinstallation task, Red Hat does not support configuring a NIC on a cluster that uses OVN-Kubernetes.
 
 - Routes associated with an egress interface get copied from the main routing table to the routing table that was created to support the Egress IP object.
 
-<!-- -->
+- You can use an Egress IP address on a secondary network interface card (NIC). However, you must use the Node Tuning Operator to enable IP forwarding on the secondary NIC.
+
+  > [!IMPORTANT]
+  > Red Hat does not support EgressIP multi-NIC configurations when the target network interface is bound to a VRF instance.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Longest prefix match routing (NetworkLessons documentation)](https://networklessons.com/cisco/ccna-200-301/longest-prefix-match-routing)
+
+</div>
 
 ## Architectural diagram of an egress IP address configuration
 

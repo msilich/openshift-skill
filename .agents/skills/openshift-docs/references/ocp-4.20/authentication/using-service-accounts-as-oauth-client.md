@@ -2,9 +2,9 @@
 
 To authenticate users when restricting access to a specific namespace, you can configure a service account as a constrained OAuth client by using static or dynamic redirect URI annotations.
 
-# Service accounts as OAuth clients
+# About service accounts as OAuth clients
 
-To authenticate users when restricting access to a specific namespace, you can use a service account as a constrained form of OAuth client.
+You can configure a service account to function as a constrained OAuth client that can request a limited subset of scopes.
 
 Service accounts can request only a subset of scopes that allow access to the following basic user information and role-based power inside of the service account’s own namespace:
 

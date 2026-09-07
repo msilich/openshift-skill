@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The following terms are related to the Operator Framework, including Operator Lifecycle Manager (OLM) v1.
+Review the Operator Framework terminology, including Operator Lifecycle Manager (OLM) v1 terms, used throughout the documentation.
 
 # Bundle
 

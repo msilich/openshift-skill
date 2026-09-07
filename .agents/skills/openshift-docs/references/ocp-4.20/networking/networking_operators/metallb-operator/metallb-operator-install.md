@@ -204,7 +204,7 @@ The verification steps assume the MetalLB Operator is installed in the `metallb-
 
     ``` terminal
     NAME            CSV                                                 APPROVAL    APPROVED
-    install-wzg94   metallb-operator.4.17.0-nnnnnnnnnnnn   Automatic   true
+    install-wzg94   metallb-operator.4.20.0-nnnnnnnnnnnn   Automatic   true
     ```
 
 # Starting MetalLB on your cluster

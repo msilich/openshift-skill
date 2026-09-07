@@ -1,8 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-After you install an OpenShift Container Platform version 4.17 cluster, you can set some of its core components to be private.
+After installing OpenShift Container Platform, you can restrict access to cluster DNS, ingress, API server, and Azure registry storage endpoints to make core cluster services private.
 
 # About private clusters
+
+You can make a deployed cluster private by restricting DNS, Ingress Controller, and API server access to internal networks.
 
 By default, OpenShift Container Platform is provisioned using publicly-accessible DNS and endpoints. You can set the DNS, Ingress Controller, and API server to private after you deploy your private cluster.
 
@@ -32,6 +34,8 @@ On Google Cloud, a single load balancer is created to manage both internal and e
 On Microsoft Azure, both public and private load balancers are created. However, because of limitations in current implementation, you just retain both load balancers in a private cluster.
 
 # Configuring DNS records to be published in a private zone
+
+You can remove the public zone from the cluster DNS configuration so that new DNS records are published only to the private zone and remain available to internal clients.
 
 For all OpenShift Container Platform clusters, whether public or private, DNS records are published in a public zone by default.
 
@@ -161,6 +165,8 @@ Verification
 </div>
 
 # Setting the Ingress Controller to private
+
+You can configure the default Ingress Controller to use an internal endpoint so that application routes are published only in the private DNS zone.
 
 After you deploy a cluster, you can modify its Ingress Controller to use only a private zone.
 
@@ -433,6 +439,8 @@ Additional resources
 
 # Configuring a private storage endpoint on Azure
 
+You can configure the Image Registry Operator to use a private Azure storage endpoint so that registry storage is not exposed through a public-facing endpoint.
+
 You can leverage the Image Registry Operator to use private endpoints on Azure, which enables seamless configuration of private storage accounts when OpenShift Container Platform is deployed on private Azure clusters. This allows you to deploy the image registry without exposing public-facing storage endpoints.
 
 > [!IMPORTANT]
@@ -453,6 +461,8 @@ The following limitations apply when configuring a private storage endpoint on A
 - This operation cannot be undone by the Image Registry Operator.
 
 ## Configuring a private storage endpoint on Azure by enabling the Image Registry Operator to discover VNet and subnet names
+
+You can configure a private Azure storage endpoint by enabling the Image Registry Operator to discover the VNet and subnet, allowing registry storage without public network access.
 
 The following procedure shows you how to set up a private storage endpoint on Azure by configuring the Image Registry Operator to discover VNet and subnet names.
 
@@ -607,6 +617,8 @@ Verification
 
 ## Configuring a private storage endpoint on Azure with user-provided VNet and subnet names
 
+You can configure a private Azure storage endpoint for the image registry by specifying user-provided VNet and subnet names, enabling registry storage without public network access.
+
 Use the following procedure to configure a storage account that has public network access disabled and is exposed behind a private storage endpoint on Azure.
 
 <div>
@@ -758,11 +770,11 @@ Verification
 
 ## Optional: Disabling redirect when using a private storage endpoint on Azure
 
+You can disable redirect when using a private Azure storage endpoint so that users outside the cluster can pull images through the image registry route.
+
 By default, redirect is enabled when using the image registry. Redirect allows off-loading of traffic from the registry pods into the object storage, which makes pull faster. When redirect is enabled and the storage account is private, users from outside of the cluster are unable to pull images from the registry.
 
 In some cases, users might want to disable redirect so that users from outside of the cluster can pull images from the registry.
-
-Use the following procedure to disable redirect.
 
 <div>
 

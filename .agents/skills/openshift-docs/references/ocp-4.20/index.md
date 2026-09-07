@@ -151,6 +151,7 @@
   - [Installing a cluster on IBM Cloud into an existing VPC](installing/installing_ibm_cloud/installing-ibm-cloud-vpc.md)
   - [Installing a private cluster on IBM Cloud](installing/installing_ibm_cloud/installing-ibm-cloud-private.md)
   - [Installing a cluster on IBM Cloud in a disconnected environment](installing/installing_ibm_cloud/installing-ibm-cloud-restricted.md)
+  - [Postinstallation configuration for a disconnected IBM Cloud cluster](installing/installing_ibm_cloud/installing-ibm-cloud-restricted-postinstallation-configuration.md)
   - [Installation configuration parameters for IBM Cloud](installing/installing_ibm_cloud/installation-config-parameters-ibm-cloud-vpc.md)
   - [Uninstalling a cluster on IBM Cloud](installing/installing_ibm_cloud/uninstalling-cluster-ibm-cloud.md)
 - **Installing on Nutanix**
@@ -565,6 +566,7 @@
   - [Configuring Zero Trust Workload Identity Manager SPIRE Federation](security/zero_trust_workload_identity_manager/zero-trust-manager-spire-federation.md)
   - [Using the SPIFFE Helper container image](security/zero_trust_workload_identity_manager/zero-trust-manager-spiffe-helper.md)
   - [Integrating OpenShift Service Mesh with Zero Trust Workload Identity Manager](security/zero_trust_workload_identity_manager/zero-trust-manager-mesh-integration.md)
+  - [Integrating SPIRE federation with multi-cluster Red Hat OpenShift Service Mesh](security/zero_trust_workload_identity_manager/zero-trust-manager-mesh-integration-multi-cluster.md)
   - [Enabling create-only mode for the Zero Trust Workload Identity Manager](security/zero_trust_workload_identity_manager/zero-trust-manager-reconciliation.md)
   - [SPIRE UpstreamAuthority plugins for Zero Trust Workload Identity Manager](security/zero_trust_workload_identity_manager/zero-trust-manager-plugins.md)
   - [Monitoring Zero Trust Workload Identity Manager](security/zero_trust_workload_identity_manager/zero-trust-manager-monitoring.md)
@@ -1122,6 +1124,7 @@
 - [Ensuring reliable etcd performance and scalability](etcd/etcd-performance.md)
 - **Backing up and restoring etcd data**
   - [Backing up etcd](etcd/etcd-backup-restore/etcd-backup.md)
+  - [Replacing a healthy etcd member](etcd/etcd-backup-restore/replace-healthy-etcd-member.md)
   - [Replacing an unhealthy etcd member](etcd/etcd-backup-restore/replace-unhealthy-etcd-member.md)
   - [Disaster recovery](etcd/etcd-backup-restore/etcd-disaster-recovery.md)
 - [Enabling etcd encryption](etcd/etcd-encrypt.md)
@@ -1164,7 +1167,7 @@
 - **High availability for hosted control planes**
   - [About high availability for hosted control planes](hosted_control_planes/hcp_high_availability/about-hcp-ha.md)
   - [Recovering a failing etcd cluster](hosted_control_planes/hcp_high_availability/hcp-recovering-etcd-cluster.md)
-  - [Backing up and restoring etcd in an on-premise environment](hosted_control_planes/hcp_high_availability/hcp-backup-restore-on-premise.md)
+  - [Backing up and restoring etcd on a hosted cluster](hosted_control_planes/hcp_high_availability/hcp-backup-restore-on-premise.md)
   - [Backing up and restoring etcd on the management cluster](hosted_control_planes/hcp_high_availability/hcp-backup-restore-aws.md)
   - [Backing up and restoring a hosted cluster on OpenShift Virtualization](hosted_control_planes/hcp_high_availability/hcp-backup-restore-virt.md)
   - [Disaster recovery for a hosted cluster in AWS](hosted_control_planes/hcp_high_availability/hcp-disaster-recovery-aws.md)
@@ -1333,8 +1336,6 @@
   - [About the Red Hat build of OpenTelemetry](observability/otel/otel-architecture.md)
 - **Network Observability**
   - [Network Observability Operator release notes](observability/network_observability/network-observability-operator-release-notes.md)
-  - **Network Observability Operator release notes archive**
-    - [Network Observability Operator release notes archive](observability/network_observability/release_notes_archive/network-observability-operator-release-notes-archive.md)
   - [Network observability overview](observability/network_observability/network-observability-overview.md)
   - [Installing the Network Observability Operator](observability/network_observability/installing-operators.md)
   - [Scaling network flow collection with Kafka](observability/network_observability/network-observability-kafka-operator-scaling-network-flow-collection.md)
@@ -1584,11 +1585,12 @@
     - [OADP monitoring](backup_and_restore/application_backup_and_restore/troubleshooting/oadp-monitoring.md)
 - **Control plane backup and restore**
   - [Backing up etcd data](backup_and_restore/control_plane_backup_and_restore/backing-up-etcd.md)
+  - [Replacing a healthy etcd member](backup_and_restore/control_plane_backup_and_restore/replacing-healthy-etcd-member.md)
   - [Replacing an unhealthy etcd member](backup_and_restore/control_plane_backup_and_restore/replacing-unhealthy-etcd-member.md)
   - **Disaster recovery**
     - [About disaster recovery](backup_and_restore/control_plane_backup_and_restore/disaster_recovery/about-disaster-recovery.md)
     - [Quorum restoration](backup_and_restore/control_plane_backup_and_restore/disaster_recovery/quorum-restoration.md)
-    - [Restoring to a previous cluster state](backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md)
+    - [Restoring to an earlier cluster state](backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md)
     - [Recovering from expired control plane certificates](backup_and_restore/control_plane_backup_and_restore/disaster_recovery/scenario-3-expired-certs.md)
 
 ### Migrating from version 3 to 4

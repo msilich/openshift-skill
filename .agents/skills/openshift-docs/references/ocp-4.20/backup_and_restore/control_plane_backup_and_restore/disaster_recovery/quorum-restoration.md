@@ -1,14 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can use the `quorum-restore.sh` script to restore etcd quorum on clusters that are offline due to quorum loss. When quorum is lost, the OpenShift Container Platform API becomes read-only. After quorum is restored, the OpenShift Container Platform API returns to read/write mode.
+You can restore etcd quorum on your OpenShift Container Platform cluster by running the `quorum-restore.sh` script on a recovery host when quorum loss leaves the API read-only. After quorum is restored, the API returns to read/write mode.
 
 # Restoring etcd quorum for high availability clusters
 
-You can use the `quorum-restore.sh` script to restore etcd quorum on clusters that are offline due to quorum loss. When quorum is lost, the OpenShift Container Platform API becomes read-only. After quorum is restored, the OpenShift Container Platform API returns to read/write mode.
+You can restore etcd quorum on high availability (HA) clusters by running the `quorum-restore.sh` script on a recovery host. Restored quorum returns the OpenShift Container Platform API to read/write mode when quorum loss takes the cluster offline.
 
-The `quorum-restore.sh` script instantly brings back a new single-member etcd cluster based on its local data directory and marks all other members as invalid by retiring the previous cluster identifier. No prior backup is required to restore the control plane from.
+The `quorum-restore.sh` script creates a new single-member etcd cluster from the local data directory on the recovery host. No prior backup is required.
 
-For high availability (HA) clusters, a three-node HA cluster requires you to shut down etcd on two hosts to avoid a cluster split. On four-node and five-node HA clusters, you must shut down three hosts. Quorum requires a simple majority of nodes. The minimum number of nodes required for quorum on a three-node HA cluster is two. On four-node and five-node HA clusters, the minimum number of nodes required for quorum is three. If you start a new cluster from backup on your recovery host, the other etcd members might still be able to form quorum and continue service.
+For high availability (HA) clusters, a three-node HA cluster requires you to shut down etcd on two hosts to avoid a cluster split. On four-node and five-node HA clusters, you must shut down three hosts. Quorum requires a majority of nodes. The minimum number of nodes required for quorum on a three-node HA cluster is two. On four-node and five-node HA clusters, the minimum number of nodes required for quorum is three. If you start a new cluster from backup on your recovery host, the other etcd members might still be able to form quorum and continue service.
 
 > [!WARNING]
 > You might experience data loss if the host that runs the restoration does not have all data replicated to it.
@@ -52,11 +52,13 @@ Procedure
 
         Note the IP address of a member that is not a learner and has the highest Raft index.
 
-    3.  Run the following command and note the node name that corresponds to the IP address of the chosen etcd member:
+    3.  List nodes by running the following command:
 
         ``` terminal
         $ oc get nodes -o jsonpath='{range .items[*]}[{.metadata.name},{.status.addresses[?(@.type=="InternalIP")].address}]{end}'
         ```
+
+        Note the node name that corresponds to the IP address of the chosen etcd member.
 
 2.  Using SSH, connect to the chosen recovery node and run the following command to restore etcd quorum:
 
@@ -82,9 +84,7 @@ Procedure
       >
       > For bare-metal installations on installer-provisioned infrastructure, control plane machines are not re-created. For more information, see "Replacing a bare-metal control plane node".
 
-      1.  Obtain the machine for one of the offline nodes.
-
-          In a terminal that has access to the cluster as a `cluster-admin` user, run the following command:
+      1.  In a terminal that has access to the cluster as a `cluster-admin` user, obtain the machine for one of the offline nodes by running the following command:
 
           ``` terminal
           $ oc get machines -n openshift-machine-api -o wide
@@ -110,19 +110,19 @@ Procedure
 
           </div>
 
-          - This is the control plane machine for the offline node, `ip-10-0-131-183.ec2.internal`.
+          In the example output, `clustername-8qw5l-master-0` is the control plane machine for the offline node, `ip-10-0-131-183.ec2.internal`.
 
-      2.  Delete the machine of the offline node by running:
+      2.  Delete the machine of the offline node by running the following command:
 
           ``` terminal
           $ oc delete machine -n openshift-machine-api clustername-8qw5l-master-0
           ```
 
-          - Specify the name of the control plane machine for the offline node.
+          Specify the name of the control plane machine for the offline node.
 
-            A new machine is automatically provisioned after deleting the machine of the offline node.
+          A new machine is automatically provisioned after deleting the machine of the offline node.
 
-5.  Verify that a new machine has been created by running:
+5.  Verify that a new machine has been created by running the following command:
 
     ``` terminal
     $ oc get machines -n openshift-machine-api -o wide
@@ -148,13 +148,13 @@ Procedure
 
     </div>
 
-    - The new machine, `clustername-8qw5l-master-3` is being created and is ready after the phase changes from `Provisioning` to `Running`.
+    In the example output, `clustername-8qw5l-master-3` is being created and is ready after the phase changes from `Provisioning` to `Running`.
 
-      It might take a few minutes for the new machine to be created. The etcd cluster Operator will automatically synchronize when the machine or node returns to a healthy state.
+    It might take a few minutes for the new machine to be created. The etcd cluster Operator automatically synchronizes when the machine or node returns to a healthy state.
 
-      1.  Repeat these steps for each node that is offline.
+6.  For each node that is offline, repeat the previous steps to delete and re-create the node.
 
-6.  Wait until the control plane recovers by running the following command:
+7.  Wait until the control plane recovers by running the following command:
 
     ``` terminal
     $ oc adm wait-for-stable-cluster

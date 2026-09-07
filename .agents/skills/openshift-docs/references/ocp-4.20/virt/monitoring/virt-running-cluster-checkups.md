@@ -245,7 +245,7 @@ Procedure
           restartPolicy: Never
           containers:
             - name: vm-latency-checkup
-              image: registry.redhat.io/container-native-virtualization/vm-network-latency-checkup-rhel9:v4.17.0
+              image: registry.redhat.io/container-native-virtualization/vm-network-latency-checkup-rhel9:v4.20.0
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:

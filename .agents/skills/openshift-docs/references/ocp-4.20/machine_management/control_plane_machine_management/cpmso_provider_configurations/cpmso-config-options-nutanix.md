@@ -82,7 +82,7 @@ Specifies the boot type that the control plane machines use. For more informatio
 Valid values are `Legacy`, `SecureBoot`, or `UEFI`. The default is `Legacy`.
 
 > [!NOTE]
-> You must use the `Legacy` boot type in OpenShift Container Platform 4.17.
+> You must use the `Legacy` boot type in OpenShift Container Platform 4.20.
 
 `spec.template.spec.providerSpec.value.categories`
 Specifies one or more Nutanix Prism categories to apply to control plane machines. This stanza requires `key` and `value` parameters for a category key-value pair that exists in Prism Central. For more information about categories, see [Category management](https://portal.nutanix.com/page/documents/details?targetId=Prism-Central-Guide-vpc_2022_6:ssp-ssp-categories-manage-pc-c.html).
@@ -133,7 +133,7 @@ Specifies the number of vCPUs for each control plane vCPU socket.
 
 # Failure domains for Nutanix clusters
 
-Update failure domain configurations on a Nutanix cluster by coordinating changes to specific resources. You must modify the cluster infrastructure, control plane machine set, and compute machine set custom resources (CRs) to apply the new configuration.
+To modify failure domain configurations on a Nutanix cluster, you must modify the cluster infrastructure, control plane machine set, and compute machine set custom resources (CRs) to apply the new configuration.
 
 To add or update the failure domain configuration on a Nutanix cluster, you must make coordinated changes to several resources. The following actions are required:
 
@@ -143,7 +143,7 @@ To add or update the failure domain configuration on a Nutanix cluster, you must
 
 3.  Modify or replace the compute machine set CRs.
 
-For more information, see "Adding failure domains to an existing Nutanix cluster" in the *Post-installation configuration* content.
+For more information, see "Adding failure domains to an existing Nutanix cluster".
 
 # Improving reliability for multiple subnet configurations on Nutanix
 

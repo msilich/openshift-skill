@@ -209,7 +209,7 @@ Procedure
 
 For OpenShift Container Platform 4.1 and earlier versions, you must configure proxies in the `MigrationController` custom resource (CR) manifest after you install the Migration Toolkit for Containers Operator because these versions do not support a cluster-wide `proxy` object.
 
-For OpenShift Container Platform 4.2 to 4.17, the MTC inherits the cluster-wide proxy settings. You can change the proxy parameters if you want to override the cluster-wide proxy settings.
+For OpenShift Container Platform 4.2 to 4.20, the MTC inherits the cluster-wide proxy settings. You can change the proxy parameters if you want to override the cluster-wide proxy settings.
 
 ### Direct volume migration
 

@@ -1,17 +1,15 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-There are several profiles available as part of the Compliance Operator (CO) installation. While you can use the following profiles to assess gaps in a cluster, usage alone does not infer or guarantee compliance with a particular profile and is not an auditor.
+There are several profiles available as part of the Compliance Operator (CO) installation. Although you can use these profiles to assess gaps in a cluster, usage alone does not infer or guarantee compliance with a particular profile and is not an auditor.
 
-In order to be compliant or certified under these various standards, you need to engage an authorized auditor such as a Qualified Security Assessor (QSA), Joint Authorization Board (JAB), or other industry recognized regulatory authority to assess your environment. You are required to work with an authorized auditor to achieve compliance with a standard.
-
-For more information on compliance support for all Red Hat products, see [Product Compliance](https://access.redhat.com/compliance).
+To be compliant or certified under these various standards, you need to engage an authorized auditor such as a Qualified Security Assessor (QSA), Joint Authorization Board (JAB), or other industry recognized regulatory authority to assess your environment. You are required to work with an authorized auditor to achieve compliance with a standard.
 
 > [!IMPORTANT]
-> The Compliance Operator might report incorrect results on some managed platforms, such as OpenShift Dedicated and Azure Red Hat OpenShift. For more information, see the [Red Hat Knowledgebase Solution \#6983418](https://access.redhat.com/solutions/6983418).
+> The Compliance Operator might report incorrect results on some managed platforms, such as OpenShift Dedicated and Azure Red Hat OpenShift. For more information, see Red Hat Knowledgebase Solution \#6983418.
 
 # Compliance profiles
 
-The Compliance Operator provides profiles to meet industry standard benchmarks.
+When working with the Compliance Operator (CO), you can use the profiles provided by the Operator to meet industry standard benchmarks.
 
 > [!NOTE]
 > The following tables reflect the latest available profiles in the Compliance Operator. The only supported versions of CIS and DISA STIG profiles will be the latest. Our recommendation to customers is to use `ocp4-cis` and `ocp4-cis-node`, `ocp4-stig`, and `ocp4-stig-node`, which always point to the latest version.
@@ -68,7 +66,7 @@ Supported Essential Eight compliance profiles
 ## FedRAMP High compliance profiles
 
 > [!IMPORTANT]
-> Applying automatic remedations to any profile, such as `rhcos4-stig`, that uses the `service-sshd-disabled` rule, automatically disables the `sshd` service. This situation blocks SSH access to control plane nodes and compute nodes. To keep the SSH access enabled, create a `TailoredProfile` object and set the `rhcos4-service-sshd-disabled` rule value for the `disableRules` parameter.
+> Applying automatic remediations to any profile, such as `rhcos4-stig`, that uses the `service-sshd-disabled` rule, automatically disables the `sshd` service. This situation blocks SSH access to control plane nodes and compute nodes. To keep the SSH access enabled, create a `TailoredProfile` object and set the `rhcos4-service-sshd-disabled` rule value for the `disableRules` parameter.
 
 | Profile | Profile title | Application | Industry compliance benchmark | Supported architectures | Supported platforms |
 |----|----|----|----|----|----|
@@ -136,16 +134,16 @@ Supported PCI-DSS compliance profiles
 ## STIG compliance profiles
 
 > [!IMPORTANT]
-> Applying automatic remedations to any profile, such as `rhcos4-stig`, that uses the `service-sshd-disabled` rule, automatically disables the `sshd` service. This situation blocks SSH access to control plane nodes and compute nodes. To keep the SSH access enabled, create a `TailoredProfile` object and set the `rhcos4-service-sshd-disabled` rule value for the `disableRules` parameter.
+> Applying automatic remediations to any profile, such as `rhcos4-stig`, that uses the `service-sshd-disabled` rule, automatically disables the `sshd` service. This situation blocks SSH access to control plane nodes and compute nodes. To keep the SSH access enabled, create a `TailoredProfile` object and set the `rhcos4-service-sshd-disabled` rule value for the `disableRules` parameter.
 
 | Profile | Profile title | Application | Industry compliance benchmark | Supported architectures | Supported platforms |
 |----|----|----|----|----|----|
-| ocp4-stig <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat Openshift<sup>\[3\]</sup> | Platform | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
-| ocp4-stig-node <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat Openshift<sup>\[3\]</sup> | Node <sup>\[2\]</sup> | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
-| ocp4-stig-v2r3 | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat Openshift V2R3 | Platform | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
-| ocp4-stig-node-v2r3 <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat Openshift V2R3 | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
-| rhcos4-stig<sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat Openshift<sup>\[3\]</sup> | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
-| rhcos4-stig-v2r3 | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat Openshift V2R3 | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
+| ocp4-stig <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift<sup>\[3\]</sup> | Platform | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
+| ocp4-stig-node <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift<sup>\[3\]</sup> | Node <sup>\[2\]</sup> | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
+| ocp4-stig-v2r3 | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R3 | Platform | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
+| ocp4-stig-node-v2r3 <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R3 | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
+| rhcos4-stig<sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift<sup>\[3\]</sup> | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
+| rhcos4-stig-v2r3 | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R3 | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
 
 Supported STIG compliance profiles
 
@@ -176,18 +174,24 @@ Profile extensions
 
 ## Compliance Operator profile types
 
-Compliance Operator rules are organized into profiles. Profiles can target the Platform or Nodes for OpenShift Container Platform, and some benchmarks include `rhcos4` Node profiles.
+To assess both platform and node compliance for your required benchmarks, you can select from different Compliance Operator profile types.
 
 Platform
 Platform profiles evaluate your OpenShift Container Platform cluster components. For example, a Platform-level rule can confirm whether APIServer configurations are using strong encryption cyphers.
 
 Node
-Node profiles evaluate the OpenShift or RHCOS configuration of each host. You can use two Node profiles: `ocp4` Node profiles and `rhcos4` Node profiles. The `ocp4` Node profiles evaluate the OpenShift configuration of each host. For example, they can confirm whether `kubeconfig` files have the correct permissions to meet a compliance standard. The `rhcos4` Node profiles evaluate the Red Hat Enterprise Linux CoreOS (RHCOS) configuration of each host. For example, they can confirm whether the SSHD service is configured to disable password logins.
+Node profiles evaluate the OpenShift or RHCOS configuration of each host. You can use two node profiles: `ocp4` node profiles and `rhcos4` node profiles. The `ocp4` node profiles evaluate the OpenShift configuration of each host. For example, they can confirm whether `kubeconfig` files have the correct permissions to meet a compliance standard. The `rhcos4` node profiles evaluate the Red Hat Enterprise Linux CoreOS (RHCOS) configuration of each host. For example, they can confirm whether the SSHD service is configured to disable password logins.
 
 > [!IMPORTANT]
 > For benchmarks that have Node and Platform profiles, such as PCI-DSS, you must run both profiles in your OpenShift Container Platform environment.
 >
-> For benchmarks that have `ocp4` Platform, `ocp4` Node, and `rhcos4` Node profiles, such as FedRAMP High, you must run all three profiles in your OpenShift Container Platform environment.
+> For benchmarks that have `ocp4` Platform, `ocp4` Node, and `rhcos4` node profiles, such as FedRAMP High, you must run all three profiles in your OpenShift Container Platform environment.
 
 > [!NOTE]
 > In a cluster with many Nodes, both `ocp4` Node and `rhcos4` Node scans might take a long time to complete.
+
+# Additional resources
+
+- [Red Hat Knowledgebase Solution \#6983418](https://access.redhat.com/solutions/6983418)
+
+- [Product Compliance](https://access.redhat.com/compliance)

@@ -1,22 +1,24 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-In OpenShift Container Platform, *projects* are used to group and isolate related objects. When a request is made to create a new project using the web console or `oc new-project` command, an endpoint in OpenShift Container Platform is used to provision the project according to a template, which can be customized.
-
 As a cluster administrator, you can allow and configure how developers and service accounts can create, or *self-provision*, their own projects.
+
+In OpenShift Container Platform, *projects* are used to group and isolate related objects. When you request to create a new project by using the web console or `oc new-project` command, an endpoint in OpenShift Container Platform provisions the project according to a template. You can customize this template to meet your needs.
 
 # About project creation
 
-The OpenShift Container Platform API server automatically provisions new projects based on the project template that is identified by the `projectRequestTemplate` parameter in the cluster’s project configuration resource. If the parameter is not defined, the API server creates a default template that creates a project with the requested name, and assigns the requesting user to the `admin` role for that project.
+When you request a new project, the OpenShift Container Platform API server automatically provisions the new project based on the project template. The project template is identified by the `projectRequestTemplate` parameter in the project configuration resource of the cluster.
+
+If the parameter is not defined, the API server creates a default template that creates a project with the requested name. The API server then assigns the requesting user to the `admin` role for that project.
 
 When a project request is submitted, the API substitutes the following parameters into the template:
 
-| Parameter                 | Description                                    |
-|---------------------------|------------------------------------------------|
-| `PROJECT_NAME`            | The name of the project. Required.             |
-| `PROJECT_DISPLAYNAME`     | The display name of the project. May be empty. |
-| `PROJECT_DESCRIPTION`     | The description of the project. May be empty.  |
-| `PROJECT_ADMIN_USER`      | The user name of the administrating user.      |
-| `PROJECT_REQUESTING_USER` | The user name of the requesting user.          |
+| Parameter | Description |
+|----|----|
+| `PROJECT_NAME` | The name of the project. Required. |
+| `PROJECT_DISPLAYNAME` | The display name of the project. Might be empty. |
+| `PROJECT_DESCRIPTION` | The description of the project. Might be empty. |
+| `PROJECT_ADMIN_USER` | The user name of the administrating user. |
+| `PROJECT_REQUESTING_USER` | The user name of the requesting user. |
 
 Default project template parameters
 
@@ -68,7 +70,7 @@ Procedure
 
 5.  Edit the project configuration resource using the web console or CLI.
 
-    - Using the web console:
+    - Using the web console, complete the following tasks:
 
       1.  Navigate to the **Administration** → **Cluster Settings** page.
 
@@ -76,7 +78,7 @@ Procedure
 
       3.  Find the entry for **Project** and click **Edit YAML**.
 
-    - Using the CLI:
+    - Using the CLI, complete the following tasks:
 
       1.  Edit the `project.config.openshift.io/cluster` resource:
 
@@ -84,7 +86,7 @@ Procedure
           $ oc edit project.config.openshift.io/cluster
           ```
 
-6.  Update the `spec` section to include the `projectRequestTemplate` and `name` parameters, and set the name of your uploaded project template. The default name is `project-request`.
+6.  Update the `spec` section to include the `projectRequestTemplate` and `name` parameters. Ensure you set the name of your uploaded project template. The default name is `project-request`.
 
     <div class="formalpara">
 
@@ -174,9 +176,9 @@ Procedure
 
 4.  Edit the `self-provisioners` cluster role binding to prevent automatic updates to the role. Automatic updates reset the cluster roles to the default state.
 
-    - To update the role binding using the CLI:
+    - To update the role binding by using the CLI, complete the following steps:
 
-      1.  Run the following command:
+      1.  To edit the `self-provisioners` cluster role binding, enter the following command:
 
           ``` terminal
           $ oc edit clusterrolebinding.rbac self-provisioners
@@ -193,13 +195,13 @@ Procedure
           # ...
           ```
 
-    - To update the role binding by using a single command:
+    - To update the role binding, run the following single command:
 
       ``` terminal
       $ oc patch clusterrolebinding.rbac self-provisioners -p '{ "metadata": { "annotations": { "rbac.authorization.kubernetes.io/autoupdate": "false" } } }'
       ```
 
-5.  Log in as an authenticated user and verify that it can no longer self-provision a project:
+5.  Log in as an authenticated user and verify that the user can no longer self-provision a project:
 
     ``` terminal
     $ oc new-project test
@@ -225,19 +227,19 @@ Procedure
 
 # Customizing the project request message
 
-When a developer or a service account that is unable to self-provision projects makes a project creation request using the web console or CLI, the following error message is returned by default:
+A developer or a service account that is unable to self-provision projects can make a project creation request by using the web console or CLI.
+
+The following error message is returned by default:
 
 ``` terminal
 You may not request a new project via this API.
 ```
 
-Cluster administrators can customize this message. Consider updating it to provide further instructions on how to request a new project specific to your organization. For example:
+Cluster administrators can customize this message. Consider updating the message to provide further instructions on how to request a new project specific to your organization. The following examples show a customized message:
 
 - To request a project, contact your system administrator at `projectname@example.com`.
 
 - To request a new project, fill out the project request form located at `https://internal.example.com/openshift-project-request`.
-
-To customize the project request message:
 
 <div>
 
@@ -249,7 +251,7 @@ Procedure
 
 1.  Edit the project configuration resource using the web console or CLI.
 
-    - Using the web console:
+    - By using the web console, complete the following steps:
 
       1.  Navigate to the **Administration** → **Cluster Settings** page.
 
@@ -257,7 +259,7 @@ Procedure
 
       3.  Find the entry for **Project** and click **Edit YAML**.
 
-    - Using the CLI:
+    - By using the CLI, complete the following steps:
 
       1.  Log in as a user with `cluster-admin` privileges.
 
@@ -289,7 +291,7 @@ Procedure
 
     </div>
 
-    For example:
+    The following example uses actual values:
 
     ``` yaml
     apiVersion: config.openshift.io/v1
@@ -301,6 +303,6 @@ Procedure
     # ...
     ```
 
-3.  After you save your changes, attempt to create a new project as a developer or service account that is unable to self-provision projects to verify that your changes were successfully applied.
+3.  After saving your changes, attempt to create a new project by using a developer or service account that cannot self-provision projects. By doing this task, you can verify that your changes were successfully applied.
 
 </div>

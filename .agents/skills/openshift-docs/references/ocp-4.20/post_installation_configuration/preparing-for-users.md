@@ -1,5 +1,7 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+You can prepare your cluster for users by configuring authentication and permissions, managing initial administrative access, and making Operators available through the software catalog.
+
 After installing OpenShift Container Platform, you can further expand and customize your cluster to your requirements, including taking steps to prepare for users.
 
 # Understanding identity provider configuration
@@ -8,12 +10,12 @@ The OpenShift Container Platform control plane includes a built-in OAuth server.
 
 As an administrator, you can configure OAuth to specify an identity provider after you install your cluster.
 
-## About identity providers in OpenShift Container Platform
+## Identity providers in OpenShift Container Platform
 
 You can configure identity providers by creating a custom resource (CR) that describes the provider and adding it to the cluster. Identity providers enable user authentication in OpenShift Container Platform beyond the default `kubeadmin` user.
 
 > [!NOTE]
-> OpenShift Container Platform user names containing `/`, `:`, and `%` are not supported.
+> OpenShift Container Platform usernames containing `/`, `:`, and `%` are not supported.
 
 ## Supported identity providers
 
@@ -31,7 +33,7 @@ You can configure the following types of identity providers:
 | [Google](../authentication/identity_providers/configuring-google-identity-provider.md#configuring-google-identity-provider) | Configure a `google` identity provider using [Google’s OpenID Connect integration](https://developers.google.com/identity/protocols/OpenIDConnect). |
 | [OpenID Connect](../authentication/identity_providers/configuring-oidc-identity-provider.md#configuring-oidc-identity-provider) | Configure an `oidc` identity provider to integrate with an OpenID Connect identity provider using an [Authorization Code Flow](http://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth). |
 
-After you define an identity provider, you can [use RBAC to define and apply permissions](../authentication/using-rbac.md#authorization-overview_using-rbac).
+Once an identity provider has been defined, you can [use RBAC to define and apply permissions](../authentication/using-rbac.md#authorization-overview_using-rbac).
 
 ## Identity provider parameters
 
@@ -121,9 +123,11 @@ Specifies an existing secret containing a file generated using [`htpasswd`](http
 
 # Using RBAC to define and apply permissions
 
-Understand and apply role-based access control.
+Understand and apply role-based access control (RBAC) to manage user and service account permissions in your cluster.
 
 ## RBAC overview
+
+You can use role-based access control to configure whether users and groups can perform specific actions on cluster or project resources by evaluating roles, rules, and bindings.
 
 Role-based access control (RBAC) objects determine whether a user is allowed to perform a given action within a project.
 
@@ -185,7 +189,7 @@ The relationships between cluster roles, local roles, cluster role bindings, loc
 </figure>
 
 > [!WARNING]
-> The `get pods/exec`, `get pods/*`, and `get *` rules grant execution privileges when they are applied to a role. Apply the principle of least privilege and assign only the minimal RBAC rights required for users and agents. For more information, see [RBAC rules allow execution privileges](https://access.redhat.com/solutions/6989997).
+> The `get pods/exec`, `get pods/*`, and `get *` rules grant execution privileges when they are applied to a role. Apply the principle of least privilege and assign only the minimal RBAC rights required for users and agents. For more information, see "RBAC rules allow execution privileges".
 
 ### Evaluating authorization
 
@@ -228,13 +232,29 @@ Project administrators can use the CLI to view local roles and bindings, includi
 >
 > Cluster roles are roles defined at the cluster level but can be bound either at the cluster level or at the project level.
 
-#### Cluster role aggregation
+### Cluster role aggregation
 
-The default admin, edit, view, and cluster-reader cluster roles support [cluster role aggregation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles), where the cluster rules for each role are dynamically updated as new rules are created. This feature is relevant only if you extend the Kubernetes API by creating custom resources.
+The default admin, edit, view, and cluster-reader cluster roles support cluster role aggregation, where the cluster rules for each role are dynamically updated as new rules are created. This feature is relevant only if you extend the Kubernetes API by creating custom resources.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [RBAC rules allow execution privileges](https://access.redhat.com/solutions/6989997)
+
+- [Aggregated ClusterRoles (Kubernetes documentation)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles)
+
+</div>
 
 ## Projects and namespaces
 
-A Kubernetes *namespace* provides a mechanism to scope resources in a cluster. The [Kubernetes documentation](https://kubernetes.io/docs/tasks/administer-cluster/namespaces/) has more information on namespaces.
+You can use projects and namespaces to organize and isolate cluster resources. These resources provide boundaries for access control, policies, quotas, and service accounts.
+
+A Kubernetes *namespace* provides a mechanism to scope resources in a cluster. The Kubernetes documentation has more information on namespaces.
 
 Namespaces provide a unique scope for:
 
@@ -269,16 +289,44 @@ Cluster administrators can create projects and delegate administrative rights fo
 
 Developers and administrators can interact with projects by using the CLI or the web console.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Kubernetes documentation on namespaces](https://kubernetes.io/docs/tasks/administer-cluster/namespaces/)
+
+</div>
+
 ## Default projects
 
-OpenShift Container Platform comes with a number of default projects, and projects starting with `openshift-` are the most essential to users. These projects host master components that run as pods and other infrastructure components. The pods created in these namespaces that have a [critical pod annotation](https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#rescheduler-guaranteed-scheduling-of-critical-add-ons) are considered critical, and the have guaranteed admission by kubelet. Pods created for master components in these namespaces are already marked as critical.
+Default projects host critical cluster and infrastructure components. By understanding their purpose, you can avoid making changes that could disrupt essential cluster services.
+
+OpenShift Container Platform includes several default projects, and projects starting with `openshift-` are the most essential to users. These projects host master components that run as pods and other infrastructure components. The pods created in these namespaces that have a critical pod annotation are considered critical, and they have guaranteed admission by kubelet. Pods created for master components in these namespaces are already marked as critical.
 
 > [!IMPORTANT]
 > Do not run workloads in or share access to default projects. Default projects are reserved for running core cluster components.
 >
 > The following default projects are considered highly privileged: `default`, `kube-public`, `kube-system`, `openshift`, `openshift-infra`, `openshift-node`, and other system-created projects that have the `openshift.io/run-level` label set to `0` or `1`. Functionality that relies on admission plugins, such as pod security admission, security context constraints, cluster resource quotas, and image reference resolution, does not work in highly privileged projects.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Guaranteed Scheduling For Critical Add-On Pods (Kubernetes documentation)](https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#rescheduler-guaranteed-scheduling-of-critical-add-ons)
+
+</div>
+
 ## Viewing cluster roles and bindings
+
+You can view cluster roles and bindings by using the `oc` CLI to determine the permissions associated with roles and identify the users, groups, and service accounts assigned to them.
 
 You can use the `oc` CLI to view cluster roles and bindings by using the `oc describe` command.
 
@@ -600,6 +648,8 @@ Procedure
 
 ## Viewing local roles and bindings
 
+You can view local role bindings by using the `oc` CLI to identify the users, groups, and service accounts that have roles within the current project or another project.
+
 You can use the `oc` CLI to view local roles and bindings by using the `oc describe` command.
 
 <div>
@@ -708,6 +758,8 @@ Procedure
 </div>
 
 ## Adding roles to users
+
+To grant a user access within a project, you can bind an appropriate role to the user and verify the resulting role binding.
 
 You can use the `oc adm` administrator CLI to manage the roles and bindings.
 
@@ -842,13 +894,13 @@ Procedure
 
     </div>
 
-    - The `alice` user has been added to the `admins` `RoleBinding`.
+    The `alice` user has been added to the `admins` `RoleBinding`.
 
 </div>
 
 ## Creating a local role
 
-You can create a local role for a project and then bind it to a user.
+You can create a local role and bind it to a user to define custom permissions within a project.
 
 <div>
 
@@ -890,7 +942,7 @@ Procedure
 
 ## Creating a cluster role
 
-You can create a cluster role.
+To define custom cluster-wide permissions, you can create a cluster role that specifies the verbs and resources users can access.
 
 <div>
 
@@ -900,29 +952,31 @@ Procedure
 
 </div>
 
-1.  To create a cluster role, run the following command:
+- To create a cluster role, run the following command:
 
-    ``` terminal
-    $ oc create clusterrole <name> --verb=<verb> --resource=<resource>
-    ```
+  ``` terminal
+  $ oc create clusterrole <name> --verb=<verb> --resource=<resource>
+  ```
 
-    In this command, specify:
+  In this command, specify:
 
-    - `<name>`, the local role’s name
+  - `<name>`, the local role’s name
 
-    - `<verb>`, a comma-separated list of the verbs to apply to the role
+  - `<verb>`, a comma-separated list of the verbs to apply to the role
 
-    - `<resource>`, the resources that the role applies to
+  - `<resource>`, the resources that the role applies to
 
-    For example, to create a cluster role that allows a user to view pods, run the following command:
+  For example, to create a cluster role that allows a user to view pods, run the following command:
 
-    ``` terminal
-    $ oc create clusterrole podviewonly --verb=get --resource=pod
-    ```
+  ``` terminal
+  $ oc create clusterrole podviewonly --verb=get --resource=pod
+  ```
 
 </div>
 
 ## Local role binding commands
+
+You can use local role binding commands to review, grant, or remove user and group permissions within the current or a specified project.
 
 When you manage a user or group’s associated roles for local role bindings using the following operations, a project may be specified with the `-n` flag. If it is not specified, then the current project is used.
 
@@ -942,6 +996,8 @@ Local role binding operations
 
 ## Cluster role binding commands
 
+You can use cluster role binding commands to grant or remove roles for users and groups across all projects in the cluster.
+
 You can also manage cluster role bindings using the following operations. The `-n` flag is not used for these operations because cluster role bindings use non-namespaced resources.
 
 | Command | Description |
@@ -954,6 +1010,8 @@ You can also manage cluster role bindings using the following operations. The `-
 Cluster role binding operations
 
 ## Creating a cluster admin
+
+To grant a user full administrative access to the cluster, you can bind the `cluster-admin` cluster role to that user.
 
 The `cluster-admin` role is required to perform administrator level tasks on the OpenShift Container Platform cluster, such as modifying cluster resources.
 
@@ -987,10 +1045,12 @@ Procedure
 
 ## Cluster role bindings for unauthenticated groups
 
+Unauthenticated groups do not have default access to cluster roles. As a cluster administrator, you can grant limited unauthenticated access when required, while ensuring that the change complies with organizational security standards.
+
 > [!NOTE]
 > Before OpenShift Container Platform 4.17, unauthenticated groups were allowed access to some cluster roles. Clusters updated from versions before OpenShift Container Platform 4.17 retain this access for unauthenticated groups.
 
-For security reasons OpenShift Container Platform 4.17 does not allow unauthenticated groups to have default access to cluster roles.
+For security reasons OpenShift Container Platform 4.20 does not allow unauthenticated groups to have default access to cluster roles.
 
 There are use cases where it might be necessary to add `system:unauthenticated` to a cluster role.
 
@@ -1009,7 +1069,7 @@ Cluster administrators can add unauthenticated users to the following cluster ro
 
 ## Adding unauthenticated groups to cluster roles
 
-As a cluster administrator, you can grant unauthenticated users access to specific cluster roles to enable features, such as external webhooks or automated token management, that require cluster access without authentication. Only grant this access when required and after verifying compliance with your organization’s security standards.
+Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 
 You can add unauthenticated users to the following cluster roles:
 
@@ -1130,11 +1190,25 @@ Procedure
 
 If you mirrored Operator catalogs for use with disconnected clusters, you can populate the software catalog with the Operators from your mirrored catalogs. You can use the generated manifests from the mirroring process to create the required `ImageContentSourcePolicy` and `CatalogSource` objects.
 
-## Prerequisites
+**Prerequisites**
+
+- You mirrored Operator catalogs for use with disconnected clusters.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Mirroring Operator catalogs for use with disconnected clusters](../disconnected/installing-mirroring-installation-images.md#olm-mirror-catalog_installing-mirroring-installation-images)
 
-### Creating the ImageContentSourcePolicy object
+</div>
+
+## Creating the ImageContentSourcePolicy object
+
+To make mirrored Operator images available to a disconnected cluster, you can create an `ImageContentSourcePolicy` object that redirects image references to your mirror registry.
 
 After mirroring Operator catalog content to your mirror registry, create the required `ImageContentSourcePolicy` (ICSP) object. The ICSP object configures nodes to translate between the image references stored in Operator manifests and the mirrored registry.
 
@@ -1158,9 +1232,11 @@ Procedure
 
 </div>
 
-### Adding a catalog source to a cluster
+## Adding a catalog source to a cluster
 
-Adding a catalog source to an OpenShift Container Platform cluster enables the discovery and installation of Operators for users. Cluster administrators can create a `CatalogSource` object that references an index image. The software catalog uses catalog sources to populate the user interface.
+To make Operators from a custom index image available for installation, create a catalog source that adds the catalog content to your cluster.
+
+Cluster administrators can create a `CatalogSource` object that references an index image. The software catalog uses catalog sources to populate the user interface.
 
 > [!TIP]
 > Alternatively, you can use the web console to manage catalog sources. From the **Administration** → **Cluster Settings** → **Configuration** → **OperatorHub** page, click the **Sources** tab, where you can create, update, delete, disable, and enable individual sources.
@@ -1201,7 +1277,7 @@ Procedure
           sourceType: grpc
           grpcPodConfig:
             securityContextConfig: <security_mode>
-          image: <registry>/<namespace>/redhat-operator-index:v4.17
+          image: <registry>/<namespace>/redhat-operator-index:v4.20
           displayName: My Operator Catalog
           publisher: <publisher_name>
           updateStrategy:
@@ -1209,20 +1285,28 @@ Procedure
               interval: 30m
         ```
 
-        - If you mirrored content to local files before uploading to a registry, remove any backslash (`/`) characters from the `metadata.name` field to avoid an "invalid resource name" error when you create the object.
+        where:
 
-        - If you want the catalog source to be available globally to users in all namespaces, specify the `openshift-marketplace` namespace. Otherwise, you can specify a different namespace for the catalog to be scoped and available only for that namespace.
+        `metadata.name`
+        Specifies the value for the `metadata.name` parameter. If you mirrored content to local files before uploading to a registry, remove any backslash (`/`) characters from the `metadata.name` field to avoid an "invalid resource name" error when you create the object.
 
-        - Specify the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
+        `metadata.namespace`
+        Specifies the value for the `metadata.namespace` parameter. If you want the catalog source to be available globally to users in all namespaces, specify the `openshift-marketplace` namespace. Otherwise, you can specify a different namespace for the catalog to be scoped and available only for that namespace.
 
-          > [!NOTE]
-          > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
+        `spec.grpcPodConfig.securityContextConfig`
+        Specifies the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
 
-        - Specify your index image. If you specify a tag after the image name, for example `:v4.17`, the catalog source pod uses an image pull policy of `Always`, meaning the pod always pulls the image prior to starting the container. If you specify a digest, for example `@sha256:<id>`, the image pull policy is `IfNotPresent`, meaning the pod pulls the image only if it does not already exist on the node.
+        > [!NOTE]
+        > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
 
-        - Specify your name or an organization name publishing the catalog.
+        `spec.image`
+        Specifies your index image. If you specify a tag after the image name, for example `:v4.20`, the catalog source pod uses an image pull policy of `Always`, meaning the pod always pulls the image before starting the container. If you specify a digest, for example `@sha256:<id>`, the image pull policy is `IfNotPresent`, meaning the pod pulls the image only if it does not already exist on the node.
 
-        - Catalog sources can automatically check for new versions to keep up to date.
+        `spec.publisher`
+        Specifies your name or an organization name publishing the catalog.
+
+        `spec.updateStrategy.registryPoll`
+        Specifies the value for the `spec.updateStrategy.registryPoll` parameter. The catalog sources can automatically check for new versions to keep up to date.
 
     2.  Use the file to create the `CatalogSource` object:
 
@@ -1294,7 +1378,7 @@ Additional resources
 
 # About Operator installation from the software catalog
 
-The software catalog is a user interface for discovering Operators; it works in conjunction with Operator Lifecycle Manager (OLM), which installs and manages Operators on a cluster.
+The software catalog in OpenShift Container Platform is the interface for discovering Operators that Operator Lifecycle Manager (OLM) installs and manages on your cluster. You can choose installation settings such as install mode, namespace, and approval strategy during subscription.
 
 As a cluster administrator, you can install an Operator from the software catalog by using the OpenShift Container Platform web console or CLI. Subscribing an Operator to one or more namespaces makes the Operator available to developers on your cluster.
 
@@ -1315,7 +1399,7 @@ If you select manual updates, when a newer version of an Operator is available, 
 
 ## Installing from the software catalog by using the web console
 
-You can install and subscribe to an Operator from software catalog by using the OpenShift Container Platform web console.
+To install and subscribe to an Operator from the software catalog, you can use the OpenShift Container Platform web console. The console guides you through selecting an install mode, namespace, and approval strategy.
 
 <div>
 
@@ -1416,7 +1500,7 @@ Verification
 
 ## Installing from the software catalog by using the CLI
 
-Instead of using the OpenShift Container Platform web console, you can install an Operator from the software catalog by using the CLI. Use the `oc` command to create or update a `Subscription` object.
+To install an Operator from the software catalog without using the web console, you can create or update a `Subscription` object by using the `oc` command in OpenShift Container Platform.
 
 For `SingleNamespace` install mode, you must also ensure an appropriate Operator group exists in the related namespace. An Operator group, defined by an `OperatorGroup` object, selects target namespaces in which to generate required RBAC access for all Operators in the same namespace as the Operator group.
 
@@ -1451,7 +1535,7 @@ Procedure
     $ oc get packagemanifests -n openshift-marketplace
     ```
 
-    <div class="example">
+    <div class="formalpara">
 
     <div class="title">
 
@@ -1485,7 +1569,7 @@ Procedure
     $ oc describe packagemanifests <operator_name> -n openshift-marketplace
     ```
 
-    <div class="example">
+    <div class="formalpara">
 
     <div class="title">
 
@@ -1523,13 +1607,9 @@ Procedure
       Default Channel:  stable-3.8
     ```
 
-    - Indicates which install modes are supported.
-
-    - Example channel names.
-
-    - The channel selected by default if one is not specified.
-
     </div>
+
+    In the example output, `Install Modes` indicates which install modes are supported; `Name` shows example channel names; and `Default Channel` is the channel selected by default if one is not specified.
 
     > [!TIP]
     > You can print an Operator’s version and channel information in YAML format by running the following command:
@@ -1584,7 +1664,7 @@ Procedure
 
         </div>
 
-        - For `SingleNamespace` install mode, use the same `<namespace>` value for both the `metadata.namespace` and `spec.targetNamespaces` fields.
+        For `SingleNamespace` install mode, use the same `<namespace>` value for both the `metadata.namespace` and `spec.targetNamespaces` fields.
 
     2.  Create the `OperatorGroup` object:
 
@@ -1599,7 +1679,7 @@ Procedure
         > [!NOTE]
         > If you want to subscribe to a specific version of an Operator, set the `startingCSV` field to the desired version and set the `installPlanApproval` field to `Manual` to prevent the Operator from automatically upgrading if a later version exists in the catalog. For details, see the following "Example `Subscription` object with a specific starting Operator version".
 
-        <div class="example">
+        <div class="formalpara">
 
         <div class="title">
 
@@ -1645,33 +1725,47 @@ Procedure
               foo: bar
         ```
 
-        - For default `AllNamespaces` install mode usage, specify the `openshift-operators` namespace. Alternatively, you can specify a custom global namespace, if you have created one. For `SingleNamespace` install mode usage, specify the relevant single namespace.
-
-        - Name of the channel to subscribe to.
-
-        - Name of the Operator to subscribe to.
-
-        - Name of the catalog source that provides the Operator.
-
-        - Namespace of the catalog source. Use `openshift-marketplace` for the default software catalog sources.
-
-        - The `env` parameter defines a list of environment variables that must exist in all containers in the pod created by OLM.
-
-        - The `envFrom` parameter defines a list of sources to populate environment variables in the container.
-
-        - The `volumes` parameter defines a list of volumes that must exist on the pod created by OLM.
-
-        - The `volumeMounts` parameter defines a list of volume mounts that must exist in all containers in the pod created by OLM. If a `volumeMount` references a `volume` that does not exist, OLM fails to deploy the Operator.
-
-        - The `tolerations` parameter defines a list of tolerations for the pod created by OLM.
-
-        - The `resources` parameter defines resource constraints for all the containers in the pod created by OLM.
-
-        - The `nodeSelector` parameter defines a `NodeSelector` for the pod created by OLM.
-
         </div>
 
-        <div class="example">
+        where:
+
+        `<namespace_per_install_mode>`
+        Specifies the namespace for your chosen install mode. For default `AllNamespaces` install mode usage, specify the `openshift-operators` namespace. Alternatively, you can specify a custom global namespace, if you have created one. For `SingleNamespace` install mode usage, specify the relevant single namespace.
+
+        `<channel_name>`
+        Specifies the name of the channel to subscribe to.
+
+        `<operator_name>`
+        Specifies the name of the Operator to subscribe to.
+
+        `<catalog_name>`
+        Specifies the name of the catalog source that provides the Operator.
+
+        `<catalog_source_namespace>`
+        Specifies the namespace of the catalog source. Use `openshift-marketplace` for the default software catalog sources.
+
+        `config.env`
+        Specifies a list of environment variables that must exist in all containers in the pod created by OLM.
+
+        `config.envFrom`
+        Specifies a list of sources to populate environment variables in the container.
+
+        `config.volumes`
+        Specifies a list of volumes that must exist on the pod created by OLM.
+
+        `config.volumeMounts`
+        Specifies a list of volume mounts that must exist in all containers in the pod created by OLM. If a `volumeMount` references a `volume` that does not exist, OLM fails to deploy the Operator.
+
+        `config.tolerations`
+        Specifies a list of tolerations for the pod created by OLM.
+
+        `config.resources`
+        Specifies resource constraints for all the containers in the pod created by OLM.
+
+        `config.nodeSelector`
+        Specifies a `NodeSelector` for the pod created by OLM.
+
+        <div class="formalpara">
 
         <div class="title">
 
@@ -1694,17 +1788,21 @@ Procedure
           startingCSV: example-operator.v3.7.10
         ```
 
-        - Set the approval strategy to `Manual` in case your specified version is superseded by a later version in the catalog. This plan prevents an automatic upgrade to a later version and requires manual approval before the starting CSV can complete the installation.
-
-        - Set a specific version of an Operator CSV.
-
         </div>
+
+        where:
+
+        `installPlanApproval`
+        Specifies the approval strategy. Set to `Manual` in case your specified version is superseded by a later version in the catalog. This plan prevents an automatic upgrade to a later version and requires manual approval before the starting CSV can complete the installation.
+
+        `startingCSV`
+        Specifies a specific version of an Operator CSV.
 
     2.  For clusters on cloud providers with token authentication enabled, such as Amazon Web Services (AWS) Security Token Service (STS), Microsoft Entra Workload ID, or Google Cloud Platform Workload Identity, configure your `Subscription` object by following these steps:
 
         1.  Ensure the `Subscription` object is set to manual update approvals:
 
-            <div class="example">
+            <div class="formalpara">
 
             <div class="title">
 
@@ -1719,15 +1817,15 @@ Procedure
               installPlanApproval: Manual
             ```
 
-            - Subscriptions with automatic approvals for updates are not recommended because there might be permission changes to make before updating. Subscriptions with manual approvals for updates ensure that administrators have the opportunity to verify the permissions of the later version, take any necessary steps, and then update.
-
             </div>
+
+            Set the `spec.installPlanApproval` parameter to `Manual`. Subscriptions with manual approvals for updates ensure that administrators have the opportunity to verify the permissions of the later version, take any necessary steps, and then update. Subscriptions with automatic approvals for updates are not recommended because there might be permission changes to make before updating.
 
         2.  Include the relevant cloud provider-specific fields in the `Subscription` object’s `config` section:
 
             If the cluster is in AWS STS mode, include the following fields:
 
-            <div class="example">
+            <div class="formalpara">
 
             <div class="title">
 
@@ -1745,81 +1843,86 @@ Procedure
                   value: "<role_arn>"
             ```
 
-            - Include the role ARN details.
-
             </div>
 
-            If the cluster is in Workload ID mode, include the following fields:
+            - `ROLEARN` is the Amazon Resource Name (ARN) of the role that the Operator assumes.
 
-            <div class="example">
+              If the cluster is in Workload ID mode, include the following fields:
 
-            <div class="title">
+              <div class="formalpara">
 
-            Example `Subscription` object with Workload ID variables
+              <div class="title">
 
-            </div>
+              Example `Subscription` object with Workload ID variables
 
-            ``` yaml
-            kind: Subscription
-            # ...
-            spec:
-             config:
-               env:
-               - name: CLIENTID
-                 value: "<client_id>"
-               - name: TENANTID
-                 value: "<tenant_id>"
-               - name: SUBSCRIPTIONID
-                 value: "<subscription_id>"
-            ```
+              </div>
 
-            - Include the client ID.
+              ``` yaml
+              kind: Subscription
+              # ...
+              spec:
+               config:
+                 env:
+                 - name: CLIENTID
+                   value: "<client_id>"
+                 - name: TENANTID
+                   value: "<tenant_id>"
+                 - name: SUBSCRIPTIONID
+                   value: "<subscription_id>"
+              ```
 
-            - Include the tenant ID.
+              </div>
 
-            - Include the subscription ID.
+              where:
 
-            </div>
+              `<client_id>`
+              Specifies the client ID.
 
-            If the cluster is in GCP Workload Identity mode, include the following fields:
+              `<tenant_id>`
+              Specifies the tenant ID.
 
-            <div class="example">
+              `<subscription_id>`
+              Specifies the subscription ID.
 
-            <div class="title">
+              If the cluster is in GCP Workload Identity mode, include the following fields:
 
-            Example `Subscription` object with GCP Workload Identity variables
+              <div class="formalpara">
 
-            </div>
+              <div class="title">
 
-            ``` yaml
-            kind: Subscription
-            # ...
-            spec:
-             config:
-               env:
-               - name: AUDIENCE
-                 value: "<audience_url>"
-               - name: SERVICE_ACCOUNT_EMAIL
-                 value: "<service_account_email>"
-            ```
+              Example `Subscription` object with GCP Workload Identity variables
 
-            </div>
+              </div>
 
-            where:
+              ``` yaml
+              kind: Subscription
+              # ...
+              spec:
+               config:
+                 env:
+                 - name: AUDIENCE
+                   value: "<audience_url>"
+                 - name: SERVICE_ACCOUNT_EMAIL
+                   value: "<service_account_email>"
+              ```
 
-            `<audience>`
-            Created in Google Cloud by the administrator when they set up GCP Workload Identity, the `AUDIENCE` value must be a preformatted URL in the following format:
+              </div>
 
-            ``` text
-            //iam.googleapis.com/projects/<project_number>/locations/global/workloadIdentityPools/<pool_id>/providers/<provider_id>
-            ```
+              where:
 
-            `<service_account_email>`
-            The `SERVICE_ACCOUNT_EMAIL` value is a Google Cloud service account email that is impersonated during Operator operation, for example:
+              `<audience_url>`
+              Created in Google Cloud by the administrator when they set up GCP Workload Identity, the `AUDIENCE` value must be a preformatted URL in the following format:
 
-            ``` text
-            <service_account_name>@<project_id>.iam.gserviceaccount.com
-            ```
+              ``` text
+              //iam.googleapis.com/projects/<project_number>/locations/global/workloadIdentityPools/<pool_id>/providers/<provider_id>
+              ```
+
+              `<service_account_email>`
+              Specifies a Google Cloud service account email that is impersonated during Operator operation, for example:
+
+              ``` text
+              <service_account_name>@<project_id>.iam.gserviceaccount.com
+              ```
 
     3.  Create the `Subscription` object by running the following command:
 
@@ -1829,15 +1932,17 @@ Procedure
 
 6.  If you set the `installPlanApproval` field to `Manual`, manually approve the pending install plan to complete the Operator installation. For more information, see "Manually approving a pending Operator update".
 
-    At this point, OLM is now aware of the selected Operator. A cluster service version (CSV) for the Operator should appear in the target namespace, and APIs provided by the Operator should be available for creation.
-
 </div>
 
-<div>
+<div class="formalpara">
 
 <div class="title">
 
 Verification
+
+</div>
+
+At this point, OLM is now aware of the selected Operator. A cluster service version (CSV) for the Operator should appear in the target namespace, and APIs provided by the Operator should be available for creation.
 
 </div>
 
@@ -1852,8 +1957,6 @@ Verification
     ``` terminal
     $ oc describe operatorgroup <operatorgroup_name> -n <namespace>
     ```
-
-</div>
 
 <div>
 

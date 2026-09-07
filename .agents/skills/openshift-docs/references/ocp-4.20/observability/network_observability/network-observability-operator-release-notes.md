@@ -4,7 +4,55 @@ Review new features, enhancements, fixed issues, and known issues for the Networ
 
 The Network Observability Operator enables administrators to observe and analyze network traffic flows for OpenShift Container Platform clusters.
 
-These release notes track the development of the Network Observability Operator in the OpenShift Container Platform.
+These release notes track the development of the Network Observability Operator in the OpenShift Container Platform. It follows a rolling-stream release methodology, and customers are expected to continuously upgrade to new versions as they become available on the cluster.
+
+Some referenced tickets are not linked. This means that the ticket is not accessible without Red Hat credentials.
+
+# Network Observability Operator 1.12.2 advisory
+
+Network Observability Operator 1.12.2 includes a product enhancement advisory.
+
+- [RHEA-2026:56870 Network Observability Operator 1.12.2](https://access.redhat.com/errata/RHEA-2026:56870)
+
+# Network Observability Operator 1.12.2 fixed issues
+
+The Network Observability Operator 1.12.2 release contains several fixed issues that improve system status reporting and user experience.
+
+Narrowed Operator ClusterRole to least-privilege RBAC permissions
+Before this update, the Network Observability Operator’s generated `ClusterRole` granted cluster-wide write access to core resources such as secrets and namespaces, and allowed creating `SecurityContextConstraints` and `ClusterRoleBindings` without resource-name scoping. As a consequence, the Network Observability Operator service account held broader permissions than required to manage its operands.
+
+With this release, the Network Observability Operator’s RBAC permissions are scoped to only the namespaces it manages, the `securitycontextconstraints` rule is restricted by resource name, and `ClusterRoleBinding` permissions are constrained to the specific bindings the Operator creates. As a result, the Operator follows the principle of least privilege and reduces the attack surface of the service account.
+
+After upgrading to Network Observability Operator 1.12.2, you must manually grant RBAC permissions if any of the following conditions apply:
+
+- You configured `spec.namespace` in the `FlowCollector` resource to a namespace other than `netobserv`.
+
+- You configured the `FlowCollector` resource with `spec.deploymentModel: Kafka` and TLS or mTLS enabled.
+
+- You use the Loki Operator with `LokiStack` installed in a namespace other than `netobserv`.
+
+  For instructions, see "Granting permissions for custom namespace and secret access".
+
+Inherited scheduling configuration for the console plugin static deployment
+Before this update, the `netobserv-plugin-static` deployment in the `openshift-netobserv-operator` namespace did not inherit `nodeSelector` and `tolerations` settings from the Operator Subscription. As a consequence, you could not schedule the static console plugin pod onto infrastructure nodes alongside the controller manager.
+
+With this release, the `netobserv-plugin-static` deployment inherits the scheduling configuration set on the Operator Subscription. As a result, node placement for the static console plugin is consistent with the controller manager.
+
+[NETOBSERV-2575](https://redhat.atlassian.net/browse/NETOBSERV-2575)
+
+Resolved Operator startup failure with custom console logos
+Before this update, the Network Observability Operator failed to start when the `Console.operator.openshift.io` resource had the `spec.customization.logos` field configured. The Operator incorrectly reported a validation conflict between `logos` and the deprecated `customLogoFile` field, even when only `logos` was set.
+
+With this release, the Network Observability Operator correctly handles web console configurations that use the `spec.customization.logos` field. As a result, the Operator starts successfully on clusters with custom console branding.
+
+[NETOBSERV-2767](https://redhat.atlassian.net/browse/NETOBSERV-2767)
+
+Fixed controller crash when FlowCollector is on hold and ServiceAccount is absent
+Before this update, the Operator controller panicked with a nil pointer dereference when the `FlowCollector` resource was in `OnHold` mode and the eBPF agent `ServiceAccount` did not exist. As a consequence, the controller manager pod entered a `CrashLoopBackOff` state and all reconciliation stopped.
+
+With this release, the Network Observability Operator gracefully skips the deletion step when the `ServiceAccount` is absent during an `OnHold` reconciliation. As a result, the controller manager no longer crashes in this scenario.
+
+[NETOBSERV-2839](https://redhat.atlassian.net/browse/NETOBSERV-2839)
 
 # Network Observability Operator 1.12.1 advisory
 
@@ -149,3 +197,7 @@ When you configure custom product logos in the `Console.operator.openshift.io` r
 To work around this problem, manually enable the Network Observability Operator OpenShift Container Platform web console plugin by adding `netobserv-plugin-static` to the `spec.plugins` list in the `Console` cluster resource, or by enabling the plugin through the web console under **Administration** → **Cluster Settings** → **Configuration** → **Console** → **Console plugins**.
 
 [NETOBSERV-2767](https://issues.redhat.com/browse/NETOBSERV-2767)
+
+# Additional resources
+
+- [Grant permissions for custom namespace and secret access](configuring-operator.md#network-observability-grant-permissions-custom-namespace-and-secret-access_network_observability)

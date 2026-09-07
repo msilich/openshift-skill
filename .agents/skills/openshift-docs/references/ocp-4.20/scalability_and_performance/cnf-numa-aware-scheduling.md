@@ -169,7 +169,7 @@ Procedure
           name: numaresources-operator
           namespace: openshift-numaresources
         spec:
-          channel: "4.17"
+          channel: "4.20"
           name: numaresources-operator
           source: redhat-operators
           sourceNamespace: openshift-marketplace
@@ -208,7 +208,7 @@ Verification
 
     ``` terminal
     NAME                             DISPLAY                  VERSION   REPLACES   PHASE
-    numaresources-operator.v4.17.2   numaresources-operator   4.17.2               Succeeded
+    numaresources-operator.v4.20.2   numaresources-operator   4.20.2               Succeeded
     ```
 
     </div>
@@ -286,7 +286,7 @@ kind: NUMAResourcesScheduler
 metadata:
   name: example-auto-ha
 spec:
-  imageSpec: 'registry.redhat.io/openshift4/noderesourcetopology-scheduler-rhel9:v4.17'
+  imageSpec: 'registry.redhat.io/openshift4/noderesourcetopology-scheduler-rhel9:v4.20'
   # The 'replicas' field is not included, enabling auto-detection.
 ```
 
@@ -316,7 +316,7 @@ Procedure
     metadata:
       name: example-custom
     spec:
-      imageSpec: 'registry.redhat.io/openshift4/noderesourcetopology-scheduler-rhel9:v4.17'
+      imageSpec: 'registry.redhat.io/openshift4/noderesourcetopology-scheduler-rhel9:v4.20'
       replicas: 2
     # ...
     ```
@@ -349,7 +349,7 @@ Procedure
     metadata:
       name: example-disable
     spec:
-      imageSpec: 'registry.redhat.io/openshift4/noderesourcetopology-scheduler-rhel9:v4.17'
+      imageSpec: 'registry.redhat.io/openshift4/noderesourcetopology-scheduler-rhel9:v4.20'
       replicas: 0
     # ...
     ```
@@ -952,7 +952,7 @@ Procedure
         metadata:
           name: numaresourcesscheduler
         spec:
-          imageSpec: "registry.redhat.io/openshift4/noderesourcetopology-scheduler-rhel9:v4.17"
+          imageSpec: "registry.redhat.io/openshift4/noderesourcetopology-scheduler-rhel9:v4.20"
         # ...
         ```
 
@@ -2002,7 +2002,7 @@ Procedure
     metadata:
       name: numaresourcesscheduler
     spec:
-      imageSpec: "registry.redhat.io/openshift4/noderesourcetopology-scheduler-container-rhel8:v4.17"
+      imageSpec: "registry.redhat.io/openshift4/noderesourcetopology-scheduler-container-rhel8:v4.20"
       cacheResyncPeriod: "5s"
     ```
 
@@ -2402,7 +2402,7 @@ Procedure
     metadata:
       name: numaresourcesscheduler
     spec:
-      imageSpec: "registry.redhat.io/openshift4/noderesourcetopology-scheduler-container-rhel8:v4.17"
+      imageSpec: "registry.redhat.io/openshift4/noderesourcetopology-scheduler-container-rhel8:v4.20"
       logLevel: Debug
     # ...
     ```
@@ -2856,7 +2856,7 @@ Procedure
 - To collect NUMA Resources Operator data with `must-gather`, you must specify the NUMA Resources Operator `must-gather` image.
 
   ``` terminal
-  $ oc adm must-gather --image=registry.redhat.io/openshift4/numaresources-must-gather-rhel9:v4.17
+  $ oc adm must-gather --image=registry.redhat.io/openshift4/numaresources-must-gather-rhel9:v4.20
   ```
 
 </div>

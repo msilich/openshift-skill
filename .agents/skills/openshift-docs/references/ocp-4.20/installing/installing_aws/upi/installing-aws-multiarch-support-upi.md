@@ -1,15 +1,15 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-An OpenShift Container Platform cluster with multi-architecture compute machines supports compute machines with different architectures.
+To run workloads across `x86_64` and ARM nodes, you can install an OpenShift Container Platform cluster on Amazon Web Services (AWS) with multi-architecture compute machine support.
 
 > [!NOTE]
-> When you have nodes with multiple architectures in your cluster, the architecture of your image must be consistent with the architecture of the node. You must ensure that the pod is assigned to the node with the appropriate architecture and that it matches the image architecture. For more information on assigning pods to nodes, see [Scheduling workloads on clusters with multi-architecture compute machines](../../../post_installation_configuration/configuring-multi-arch-compute-machines/multi-architecture-compute-managing.md#scheduling-workloads-on-clusters-with-multi-architecture-compute-machines).
+> When you have nodes with multiple architectures in your cluster, the architecture of your image must be consistent with the architecture of the node. You must ensure that the pod is assigned to the node with the appropriate architecture and that it matches the image architecture.
 
 You can install an AWS cluster with the support for configuring multi-architecture compute machines. After installing the AWS cluster, you can add multi-architecture compute machines to the cluster in the following ways:
 
-- Adding 64-bit x86 compute machines to a cluster that uses 64-bit ARM control plane machines and already includes 64-bit ARM compute machines. In this case, 64-bit x86 is considered the secondary architecture.
+- Adding 64-bit x86 compute machines to a cluster that uses 64-bit ARM control plane machines and already includes 64-bit ARM compute machines. In this case, 64-bit x86 is the secondary architecture.
 
-- Adding 64-bit ARM compute machines to a cluster that uses 64-bit x86 control plane machines and already includes 64-bit x86 compute machines. In this case, 64-bit ARM is considered the secondary architecture.
+- Adding 64-bit ARM compute machines to a cluster that uses 64-bit x86 control plane machines and already includes 64-bit x86 compute machines. In this case, 64-bit ARM is the secondary architecture.
 
 > [!NOTE]
 > Before adding a secondary architecture node to your cluster, it is recommended to install the Multiarch Tuning Operator, and deploy a `ClusterPodPlacementConfig` custom resource. For more information, see "Managing workloads on multi-architecture clusters by using the Multiarch Tuning Operator".
@@ -111,21 +111,13 @@ Procedure
 
 <div class="title">
 
-Next steps
+Additional resources
 
 </div>
 
 - [Deploying the cluster](../ipi/installing-aws-localzone.md#installation-launching-installer_installing-aws-localzone)
 
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+- [Scheduling workloads on clusters with multi-architecture compute machines](../../../post_installation_configuration/configuring-multi-arch-compute-machines/multi-architecture-compute-managing.md#scheduling-workloads-on-clusters-with-multi-architecture-compute-machines)
 
 - [Managing workloads on multi-architecture clusters by using the Multiarch Tuning Operator](../../../post_installation_configuration/configuring-multi-arch-compute-machines/multiarch-tuning-operator.md#multiarch-tuning-operator)
 

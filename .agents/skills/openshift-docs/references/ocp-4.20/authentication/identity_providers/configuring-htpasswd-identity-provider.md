@@ -1,42 +1,42 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Configure the `htpasswd` identity provider to allow users to log in to OpenShift Container Platform with credentials from an htpasswd file.
+Configure the `htpasswd` identity provider so users can log in to OpenShift Container Platform with credentials from an `htpasswd` file.
 
-To define an htpasswd identity provider, perform the following tasks:
+To define an `htpasswd` identity provider, complete these tasks:
 
-1.  [Create an `htpasswd` file](configuring-htpasswd-identity-provider.md#creating-htpasswd-file) to store the user and password information.
+1.  Create an `htpasswd` file to store the user and password information.
 
-2.  [Create a secret](configuring-htpasswd-identity-provider.md#identity-provider-creating-htpasswd-secret_configuring-htpasswd-identity-provider) to represent the `htpasswd` file.
+2.  Create a secret to represent the `htpasswd` file.
 
-3.  [Define an htpasswd identity provider resource](configuring-htpasswd-identity-provider.md#identity-provider-htpasswd-CR_configuring-htpasswd-identity-provider) that references the secret.
+3.  Define an `htpasswd` identity provider resource that references the secret.
 
-4.  [Apply the resource](configuring-htpasswd-identity-provider.md#add-identity-provider_configuring-htpasswd-identity-provider) to the default OAuth configuration to add the identity provider.
+4.  Apply the resource to the default OAuth configuration to add the identity provider.
 
-# About identity providers in OpenShift Container Platform
+# Identity providers in OpenShift Container Platform
 
 You can configure identity providers by creating a custom resource (CR) that describes the provider and adding it to the cluster. Identity providers enable user authentication in OpenShift Container Platform beyond the default `kubeadmin` user.
 
 > [!NOTE]
-> OpenShift Container Platform user names containing `/`, `:`, and `%` are not supported.
+> OpenShift Container Platform usernames containing `/`, `:`, and `%` are not supported.
 
 # About htpasswd authentication
 
-Using htpasswd authentication in OpenShift Container Platform allows you to identify users based on an htpasswd file. An htpasswd file is a flat file that contains the user name and hashed password for each user. You can use the `htpasswd` utility to create this file.
+Configure `htpasswd` authentication to use a flat password file for login to OpenShift Container Platform. The file stores hashed credentials for each user and enables local authentication without an external identity provider.
 
 > [!WARNING]
-> Do not use htpasswd authentication in OpenShift Container Platform for production environments. Use htpasswd authentication only for development environments.
+> Do not use `htpasswd` authentication in OpenShift Container Platform for production environments. Use `htpasswd` authentication only for development environments.
 
 # Creating the htpasswd file
 
-See one of the following sections for instructions about how to create the htpasswd file:
+To configure the `htpasswd` identity provider, create an `htpasswd` file so usernames and hashed passwords are available for the cluster secret. The following procedures describe how to create the file on Linux and Windows Operating Systems.
 
-- [Creating an htpasswd file using Linux](configuring-htpasswd-identity-provider.md#identity-provider-creating-htpasswd-file-linux_configuring-htpasswd-identity-provider)
+- Creating an `htpasswd` file using Linux
 
-- [Creating an htpasswd file using Windows](configuring-htpasswd-identity-provider.md#identity-provider-creating-htpasswd-file-windows_configuring-htpasswd-identity-provider)
+- Creating an `htpasswd` file using Windows
 
 ## Creating an htpasswd file using Linux
 
-To use the htpasswd identity provider, you must generate a flat file that contains the user names and passwords for your cluster by using [`htpasswd`](http://httpd.apache.org/docs/2.4/programs/htpasswd.html).
+Create a flat `htpasswd` file on Red Hat Enterprise Linux (RHEL) with the `htpasswd` utility to store usernames and hashed passwords for your cluster. The file enables the `htpasswd` identity provider to authenticate users in OpenShift Container Platform from locally stored credentials.
 
 <div>
 
@@ -46,7 +46,7 @@ Prerequisites
 
 </div>
 
-- Have access to the `htpasswd` utility. On Red Hat Enterprise Linux this is available by installing the `httpd-tools` package.
+- You have access to the `htpasswd` utility. On Red Hat Enterprise Linux (RHEL), this is available by installing the `httpd-tools` package.
 
 </div>
 
@@ -58,7 +58,7 @@ Procedure
 
 </div>
 
-1.  Create or update your flat file with a user name and hashed password:
+1.  Create or update your `htpasswd` file with a username and hashed password by running the following command:
 
     ``` terminal
     $ htpasswd -c -B -b </path/to/users.htpasswd> <username> <password>
@@ -86,7 +86,7 @@ Procedure
 
     </div>
 
-2.  Continue to add or update credentials to the file:
+2.  Continue to add or update credentials to the file by running the following command:
 
     ``` terminal
     $ htpasswd -B -b </path/to/users.htpasswd> <user_name> <password>
@@ -96,7 +96,7 @@ Procedure
 
 ## Creating an htpasswd file using Windows
 
-To use the htpasswd identity provider, you must generate a flat file that contains the user names and passwords for your cluster by using [`htpasswd`](http://httpd.apache.org/docs/2.4/programs/htpasswd.html).
+Create a flat `htpasswd` file on Windows with the `htpasswd.exe` utility to store usernames and hashed passwords for your cluster. The file enables the `htpasswd` identity provider to authenticate users in OpenShift Container Platform from locally stored credentials.
 
 <div>
 
@@ -106,7 +106,7 @@ Prerequisites
 
 </div>
 
-- Have access to `htpasswd.exe`. This file is included in the `\bin` directory of many Apache httpd distributions.
+- You have access to the `htpasswd.exe` utility. On Windows, this utility is included in the `\bin` subdirectory of many Apache httpd distributions.
 
 </div>
 
@@ -118,10 +118,10 @@ Procedure
 
 </div>
 
-1.  Create or update your flat file with a user name and hashed password:
+1.  Create or update your `htpasswd` file with a username and hashed password by running the following command:
 
     ``` terminal
-    > htpasswd.exe -c -B -b <\path\to\users.htpasswd> <username> <password>
+    $ htpasswd.exe -c -B -b <\path\to\users.htpasswd> <username> <password>
     ```
 
     The command generates a hashed version of the password.
@@ -129,7 +129,7 @@ Procedure
     For example:
 
     ``` terminal
-    > htpasswd.exe -c -B -b users.htpasswd <username> <password>
+    $ htpasswd.exe -c -B -b users.htpasswd <username> <password>
     ```
 
     <div class="formalpara">
@@ -146,17 +146,17 @@ Procedure
 
     </div>
 
-2.  Continue to add or update credentials to the file:
+2.  Continue to add or update credentials to the file by running the following command:
 
     ``` terminal
-    > htpasswd.exe -b <\path\to\users.htpasswd> <username> <password>
+    $ htpasswd.exe -b <\path\to\users.htpasswd> <username> <password>
     ```
 
 </div>
 
 # Creating the htpasswd secret
 
-To use the htpasswd identity provider, you must define a secret that contains the htpasswd user file.
+Create an OpenShift Container Platform secret from your `htpasswd` file so the `htpasswd` identity provider can read user credentials for cluster login.
 
 <div>
 
@@ -166,7 +166,7 @@ Prerequisites
 
 </div>
 
-- Create an htpasswd file.
+- You created an `htpasswd` file.
 
 </div>
 
@@ -178,33 +178,33 @@ Procedure
 
 </div>
 
-- Create a `Secret` object that contains the htpasswd users file:
+- Create a `Secret` object that contains the `htpasswd` users file by running the following command:
 
   ``` terminal
   $ oc create secret generic htpass-secret --from-file=htpasswd=<path_to_users.htpasswd> -n openshift-config
   ```
 
-  - The secret key containing the users file for the `--from-file` argument must be named `htpasswd`, as shown in the above command.
+  The `--from-file` key must be named `htpasswd`.
 
-    > [!TIP]
-    > You can alternatively apply the following YAML to create the secret:
-    >
-    > ``` yaml
-    > apiVersion: v1
-    > kind: Secret
-    > metadata:
-    >   name: htpass-secret
-    >   namespace: openshift-config
-    > type: Opaque
-    > data:
-    >   htpasswd: <base64_encoded_htpasswd_file_contents>
-    > ```
+  > [!TIP]
+  > You can alternatively apply the following YAML to create the secret:
+  >
+  > ``` yaml
+  > apiVersion: v1
+  > kind: Secret
+  > metadata:
+  >   name: htpass-secret
+  >   namespace: openshift-config
+  > type: Opaque
+  > data:
+  >   htpasswd: <base64_encoded_htpasswd_file_contents>
+  > ```
 
 </div>
 
 # Sample htpasswd CR
 
-The following custom resource (CR) shows the parameters and acceptable values for an htpasswd identity provider.
+Review the custom resource fields and acceptable values for configuring an `htpasswd` identity provider in OpenShift Container Platform.
 
 <div class="formalpara">
 
@@ -231,11 +231,16 @@ spec:
 
 </div>
 
-- This provider name is prefixed to provider user names to form an identity name.
+where:
 
-- Controls how mappings are established between this provider’s identities and `User` objects.
+`spec.identityProviders.name`
+Specifies the provider name, which is prefixed to provider usernames to form an identity name.
 
-- An existing secret containing a file generated using [`htpasswd`](http://httpd.apache.org/docs/2.4/programs/htpasswd.html).
+`spec.identityProviders.mappingMethod`
+Specifies how mappings are established between identities from this provider and `User` objects.
+
+`spec.identityProviders.htpasswd.fileData.name`
+Specifies an existing secret containing a file generated using `htpasswd`. For more information, see "htpasswd".
 
 <div>
 
@@ -245,13 +250,13 @@ Additional resources
 
 </div>
 
-- See [Identity provider parameters](../understanding-identity-provider.md#identity-provider-parameters_understanding-identity-provider) for information on parameters, such as `mappingMethod`, that are common to all identity providers.
+- [Identity provider parameters](../understanding-identity-provider.md#identity-provider-parameters_understanding-identity-provider)
 
 </div>
 
 # Adding an identity provider to your cluster
 
-After you install your cluster, add an identity provider to it so your users can authenticate.
+Apply the identity provider custom resource (CR) to your cluster after you define it. With this configuration, you can authenticate with the configured identity provider.
 
 <div>
 
@@ -261,11 +266,11 @@ Prerequisites
 
 </div>
 
-- Create an OpenShift Container Platform cluster.
+- You have access to a OpenShift Container Platform cluster.
 
-- Create the custom resource (CR) for your identity providers.
+- You have created the CR for your identity providers.
 
-- You must be logged in as an administrator.
+- You are logged in as an administrator.
 
 </div>
 
@@ -277,7 +282,7 @@ Procedure
 
 </div>
 
-1.  Apply the defined CR:
+1.  Apply the defined CR by running the following command:
 
     ``` terminal
     $ oc apply -f </path/to/CR>
@@ -292,7 +297,7 @@ Procedure
     $ oc login -u <username>
     ```
 
-3.  Confirm that the user logged in successfully, and display the user name.
+3.  Confirm that the user logged in successfully and that the username displays by running the following command:
 
     ``` terminal
     $ oc whoami
@@ -302,7 +307,7 @@ Procedure
 
 # Updating users for an htpasswd identity provider
 
-You can add or remove users from an existing htpasswd identity provider.
+Update users in the `htpasswd` identity provider so login credentials in OpenShift Container Platform stay in sync when you add or remove accounts.
 
 <div>
 
@@ -312,11 +317,11 @@ Prerequisites
 
 </div>
 
-- You have created a `Secret` object that contains the htpasswd user file. This procedure assumes that it is named `htpass-secret`.
+- You have created a `Secret` object named `htpass-secret` that contains the `htpasswd` user file.
 
-- You have configured an htpasswd identity provider. This procedure assumes that it is named `my_htpasswd_provider`.
+- You have configured an `htpasswd` identity provider named `my_htpasswd_provider`.
 
-- You have access to the `htpasswd` utility. On Red Hat Enterprise Linux this is available by installing the `httpd-tools` package.
+- You have access to the `htpasswd` utility. On Red Hat Enterprise Linux (RHEL), this is available by installing the `httpd-tools` package.
 
 - You have cluster administrator privileges.
 
@@ -330,62 +335,62 @@ Procedure
 
 </div>
 
-1.  Retrieve the htpasswd file from the `htpass-secret` `Secret` object and save the file to your file system:
+1.  Retrieve the `htpasswd` file from the `htpass-secret` `Secret` object and save it to your local machine by running the following command:
 
     ``` terminal
     $ oc get secret htpass-secret -ojsonpath={.data.htpasswd} -n openshift-config | base64 --decode > users.htpasswd
     ```
 
-2.  Add or remove users from the `users.htpasswd` file.
+2.  Add or remove users from the `users.htpasswd` file by running the following commands:
 
-    - To add a new user:
+    1.  To add a new user:
 
-      ``` terminal
-      $ htpasswd -bB users.htpasswd <username> <password>
-      ```
+        ``` terminal
+        $ htpasswd -bB users.htpasswd <username> <password>
+        ```
 
-      <div class="formalpara">
+        <div class="formalpara">
 
-      <div class="title">
+        <div class="title">
 
-      Example output
+        Example output
 
-      </div>
+        </div>
 
-      ``` terminal
-      Adding password for user <username>
-      ```
+        ``` terminal
+        Adding password for user <username>
+        ```
 
-      </div>
+        </div>
 
-    - To remove an existing user:
+    2.  To remove an existing user:
 
-      ``` terminal
-      $ htpasswd -D users.htpasswd <username>
-      ```
+        ``` terminal
+        $ htpasswd -D users.htpasswd <username>
+        ```
 
-      <div class="formalpara">
+        <div class="formalpara">
 
-      <div class="title">
+        <div class="title">
 
-      Example output
+        Example output
 
-      </div>
+        </div>
 
-      ``` terminal
-      Deleting password for user <username>
-      ```
+        ``` terminal
+        Deleting password for user <username>
+        ```
 
-      </div>
+        </div>
 
-3.  Replace the `htpass-secret` `Secret` object with the updated users in the `users.htpasswd` file:
+3.  Replace the `htpass-secret` `Secret` object with the updated users in the `users.htpasswd` file by running the following command:
 
     ``` terminal
     $ oc create secret generic htpass-secret --from-file=htpasswd=users.htpasswd --dry-run=client -o yaml -n openshift-config | oc replace -f -
     ```
 
     > [!TIP]
-    > You can alternatively apply the following YAML to replace the secret:
+    > You can also apply the following YAML to replace the secret:
     >
     > ``` yaml
     > apiVersion: v1
@@ -398,7 +403,7 @@ Procedure
     >   htpasswd: <base64_encoded_htpasswd_file_contents>
     > ```
 
-4.  If you removed one or more users, you must additionally remove existing resources for each user.
+4.  If you removed one or more users, you must remove the existing resources for each user by running the following commands:
 
     1.  Delete the `User` object:
 
@@ -446,7 +451,7 @@ Procedure
 
 # Configuring identity providers using the web console
 
-Configure your identity provider (IDP) through the web console instead of the CLI.
+You can configure identity providers on your OpenShift Container Platform cluster through the web console by updating the **OAuth** settings in the **Cluster Settings**.
 
 <div>
 
@@ -456,7 +461,7 @@ Prerequisites
 
 </div>
 
-- You must be logged in to the web console as a cluster administrator.
+- You are logged in to the web console as a cluster administrator.
 
 </div>
 
@@ -472,9 +477,13 @@ Procedure
 
 2.  Under the **Configuration** tab, click **OAuth**.
 
-3.  Under the **Identity Providers** section, select your identity provider from the **Add** drop-down menu.
+3.  Under the **Identity Providers** section, select your identity provider from the **Add** drop-down list.
+
+    > [!NOTE]
+    > You can specify multiple identity providers through the web console without overwriting existing identity providers.
 
 </div>
 
-> [!NOTE]
-> You can specify multiple IDPs through the web console without overwriting existing IDPs.
+# Additional resources
+
+- [htpasswd utility (Apache HTTP Server documentation)](http://httpd.apache.org/docs/2.4/programs/htpasswd.html)

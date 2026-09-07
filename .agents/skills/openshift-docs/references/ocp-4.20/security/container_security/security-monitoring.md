@@ -1,12 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The ability to monitor and audit an OpenShift Container Platform cluster is an important part of safeguarding the cluster and its users against inappropriate usage.
-
-There are two main sources of cluster-level information that are useful for this purpose: events and logging.
+Monitoring and auditing an OpenShift Container Platform cluster is an important part of safeguarding the cluster and its users against inappropriate usage. There are two main sources of cluster-level information that are useful for this purpose: events and logging.
 
 # Watching cluster events
 
-Cluster administrators are encouraged to familiarize themselves with the `Event` resource type and review the list of system events to determine which events are of interest. Events are associated with a namespace, either the namespace of the resource they are related to or, for cluster events, the `default` namespace. The default namespace holds relevant events for monitoring or auditing a cluster, such as node events and resource events related to infrastructure components.
+Cluster administrators are encouraged to familiarize themselves with the `Event` resource type and review the list of system events to determine which events are of interest.
+
+Events are associated with a namespace, either the namespace of the resource they are related to or, for cluster events, the `default` namespace. The default namespace holds relevant events for monitoring or auditing a cluster, such as node events and resource events related to infrastructure components.
 
 The master API and `oc` command do not provide parameters to scope a listing of events to only those related to nodes. A simple approach would be to use `grep`:
 
@@ -86,7 +86,7 @@ Example output
 
 # Logging
 
-Using the `oc log` command, you can view container logs, build configs and deployments in real time. Different can users have access different access to logs:
+Using the `oc log` command, you can view container logs, build configs and deployments in real time. Different users can have access different access to logs:
 
 - Users who have access to a project are able to see the logs for that project by default.
 

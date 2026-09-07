@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-OpenShift Container Platform is a cloud-based Kubernetes container platform. The foundation of OpenShift Container Platform is based on Kubernetes and therefore shares the same technology. To learn more about OpenShift Container Platform and Kubernetes, see [product architecture](architecture.md#architecture).
+OpenShift Container Platform is a cloud-based Kubernetes platform that provides the foundational architecture to build, deploy, and manage enterprise container workloads.
+
+To learn more about OpenShift Container Platform and Kubernetes, see "Product architecture".
 
 # Glossary of common terms for OpenShift Container Platform architecture
 
-This glossary defines common terms that are used in the architecture content.
+Review the architecture terms and concepts to plan and deploy the cluster infrastructure.
 
 access policies
 A set of roles that dictate how users, applications, and entities within a cluster interact with one another. An access policy increases cluster security.
@@ -196,21 +198,25 @@ Additional resources
 
 </div>
 
-- For more information on networking, see [OpenShift Container Platform networking](../networking/networking_overview/understanding-networking.md#understanding-networking).
+- [Product architecture](architecture.md#architecture)
 
-- For more information on storage, see [OpenShift Container Platform storage](../storage/index.md#index).
+- [OpenShift Container Platform networking](../networking/networking_overview/understanding-networking.md#understanding-networking)
 
-- For more information on authentication, see [OpenShift Container Platform authentication](../authentication/index.md#index).
+- [OpenShift Container Platform storage](../storage/index.md#index)
 
-- For more information on Operator Lifecycle Manager (OLM), see [OLM](../operators/understanding/olm/olm-understanding-olm.md#olm-understanding-olm).
+- [OpenShift Container Platform authentication](../authentication/index.md#index)
 
-- For more information on over-the-air (OTA) updates, see [Introduction to OpenShift updates](../updating/understanding_updates/intro-to-updates.md#understanding-openshift-updates).
+- [OLM](../operators/understanding/olm/olm-understanding-olm.md#olm-understanding-olm)
+
+- [Introduction to OpenShift updates](../updating/understanding_updates/intro-to-updates.md#understanding-openshift-updates)
 
 </div>
 
 # About installation and updates
 
-As a cluster administrator, you can use the OpenShift Container Platform [installation program](architecture-installation.md#architecture-installation) to install and deploy a cluster by using one of the following methods:
+OpenShift Container Platform provides different deployment methodologies and infrastructure requirements for cluster environments. You can deploy a cluster on infrastructure that is provisioned either automatically by the installation program or manually by the user.
+
+Choose one of the following methods:
 
 - Installer-provisioned infrastructure
 
@@ -218,7 +224,9 @@ As a cluster administrator, you can use the OpenShift Container Platform [instal
 
 # About the control plane
 
-The [control plane](control-plane.md#control-plane) manages the worker nodes and the pods in your cluster. You can configure nodes with the use of machine config pools (MCPs). MCPs are groups of machines, such as control plane components or user workloads, that are based on the resources that they handle. OpenShift Container Platform assigns different roles to hosts. These roles define the function of a machine in a cluster. The cluster contains definitions for the standard control plane and worker role types.
+The control plane manages compute nodes and pods in OpenShift Container Platform clusters, with configurable machine config pools for different workload types.
+
+The control plane manages the compute nodes and the pods in your cluster. You can configure nodes with the use of machine config pools (MCPs). MCPs are groups of machines, such as control plane components or user workloads, that are based on the resources that they handle. OpenShift Container Platform assigns different roles to hosts. These roles define the function of a machine in a cluster. The cluster contains definitions for the standard control plane and compute role types.
 
 You can use Operators to package, deploy, and manage services on the control plane. Operators are important components in OpenShift Container Platform because they provide the following services:
 
@@ -230,21 +238,11 @@ You can use Operators to package, deploy, and manage services on the control pla
 
 - Ensure applications stay in the specified state
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Hosted control planes overview](../hosted_control_planes/index.md#hcp-overview)
-
-</div>
-
 # About containerized applications for developers
 
-As a developer, you can use different tools, methods, and formats to [develop your containerized application](understanding-development.md#understanding-development) based on your unique requirements, for example:
+As a developer, you can improve your development workflow by choosing the right tools, templates, and Operator-based methods to build containerized applications in OpenShift Container Platform.
+
+Depending on your unique requirements, you can choose from the following approaches:
 
 - Use various build-tool, base-image, and registry options to build a simple container application.
 
@@ -256,9 +254,11 @@ You can also create a Kubernetes manifest and store it in a Git repository. Kube
 
 # About Red Hat Enterprise Linux CoreOS (RHCOS) and Ignition
 
+Red Hat Enterprise Linux CoreOS (RHCOS) is a single-purpose container operating system that uses Ignition for initial configuration during cluster deployment.
+
 As a cluster administrator, you can perform the following Red Hat Enterprise Linux CoreOS (RHCOS) tasks:
 
-- Learn about the next generation of [single-purpose container operating system technology](architecture-rhcos.md#architecture-rhcos).
+- Learn about the next generation of single-purpose container operating system technology.
 
 - Choose how to configure Red Hat Enterprise Linux CoreOS (RHCOS)
 
@@ -270,17 +270,19 @@ As a cluster administrator, you can perform the following Red Hat Enterprise Li
 
 The OpenShift Container Platform installation program creates the Ignition configuration files that you need to deploy your cluster. Red Hat Enterprise Linux CoreOS (RHCOS) uses Ignition during the initial configuration to perform common disk tasks, such as partitioning, formatting, writing files, and configuring users. During the first boot, Ignition reads its configuration from the installation media or the location that you specify and applies the configuration to the machines.
 
-You can learn how [Ignition works](architecture-rhcos.md#architecture-rhcos), the process for a Red Hat Enterprise Linux CoreOS (RHCOS) machine in an OpenShift Container Platform cluster, view Ignition configuration files, and change Ignition configuration after an installation.
+You can learn how Ignition works, the process for a Red Hat Enterprise Linux CoreOS (RHCOS) machine in an OpenShift Container Platform cluster, view Ignition configuration files, and change Ignition configuration after an installation.
 
 # About admission plugins
 
-You can use [admission plugins](admission-plug-ins.md#admission-plug-ins) to regulate how OpenShift Container Platform functions. After a resource request is authenticated and authorized, admission plugins intercept the resource request to the master API to validate resource requests and to ensure that scaling policies are adhered to. Admission plugins are used to enforce security policies, resource limitations, configuration requirements, and other settings.
+Admission plugins process resource requests to the control plane API to validate requests and enforce security policies, resource limitations, and configuration requirements.
+
+You can use admission plugins to regulate how OpenShift Container Platform functions. After a resource request is authenticated and authorized, admission plugins intercept the resource request to the master API to validate resource requests and to ensure that scaling policies are adhered to. Admission plugins are used to enforce security policies, resource limitations, configuration requirements, and other settings.
 
 # About Linux cgroup version 2
 
-OpenShift Container Platform uses [Linux control group version 2](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html) (cgroup v2) in your cluster.
+OpenShift Container Platform uses Linux control group version 2 (cgroup v2) to deliver improved resource management. Because cgroup v2 handles resources differently than control group version 1 (cgroup v1), you must update specific third-party agents and Java applications to supported versions.
 
-cgroup v2 offers several improvements over cgroup v1, including a unified hierarchy, safer sub-tree delegation, features such as [Pressure Stall Information](https://www.kernel.org/doc/html/latest/accounting/psi.html), and enhanced resource management and isolation. However, cgroup v2 has different CPU, memory, and I/O management characteristics than cgroup v1. Therefore, some workloads might experience slight differences in memory or CPU usage on clusters that run cgroup v2.
+cgroup v2 offers several improvements over cgroup v1, including a unified hierarchy, safer sub-tree delegation, features such as Pressure Stall Information, and enhanced resource management and isolation. However, cgroup v2 has different CPU, memory, and I/O management characteristics than cgroup v1. Therefore, some workloads might experience slight differences in memory or CPU usage on clusters that run cgroup v2.
 
 <div class="note">
 
@@ -303,3 +305,19 @@ cgroup v2 offers several improvements over cgroup v1, including a unified hierar
   - IBM SDK Java Technology Edition Version (IBM Java): 8.0.7.15 and later
 
 </div>
+
+# Additional resources
+
+- [Hosted control planes overview](../hosted_control_planes/index.md#hcp-overview)
+
+- [Installation and update](architecture-installation.md#architecture-installation)
+
+- [Red Hat Enterprise Linux CoreOS (RHCOS) architecture](architecture-rhcos.md#architecture-rhcos)
+
+- [Understanding OpenShift Container Platform development](understanding-development.md#understanding-development)
+
+- [Admission plugins](admission-plug-ins.md#admission-plug-ins)
+
+- [Linux control group version 2](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html)
+
+- [Pressure Stall Information](https://www.kernel.org/doc/html/latest/accounting/psi.html)

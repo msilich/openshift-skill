@@ -1,12 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-When opening a support case, it is helpful to provide debugging information about your cluster to Red Hat Support.
-
-It is recommended to provide:
-
-- [Data gathered using the `oc adm must-gather` command](gathering-cluster-data.md#support_gathering_data_gathering-cluster-data)
-
-- The [unique cluster ID](gathering-cluster-data.md#support-get-cluster-id_gathering-cluster-data)
+You can gather debugging information about your OpenShift Container Platform cluster to provide to Red Hat Support when opening a support case.
 
 # About the must-gather tool
 
@@ -26,28 +20,28 @@ Alternatively, you can collect specific information by running the command with 
 
   ``` terminal
   $ oc adm must-gather \
-    --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.21
+    --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.24
   ```
 
-  - To collect the audit logs, use the `-- /usr/bin/gather_audit_logs` argument, as described in a following section.
+- To collect the audit logs, use the `-- /usr/bin/gather_audit_logs` argument, as described in a following section.
 
-    For example:
+  For example:
 
-    ``` terminal
-    $ oc adm must-gather -- /usr/bin/gather_audit_logs
-    ```
+  ``` terminal
+  $ oc adm must-gather -- /usr/bin/gather_audit_logs
+  ```
 
-    <div class="note">
+  <div class="note">
 
-    <div class="title">
+  <div class="title">
 
-    </div>
+  </div>
 
-    - Audit logs are not collected as part of the default set of information to reduce the size of the files.
+  - Audit logs are not collected as part of the default set of information to reduce the size of the files.
 
-    - On a Windows operating system, install the `cwRsync` client and add to the `PATH` variable for use with the `oc rsync` command.
+  - On a Windows operating system, install the `cwRsync` client and add to the `PATH` variable for use with the `oc rsync` command.
 
-    </div>
+  </div>
 
 When you run `oc adm must-gather`, a new pod with a random name is created in a new project on the cluster. The data is collected on that pod and saved in a new directory that starts with `must-gather.local` in the current working directory.
 
@@ -67,7 +61,7 @@ For example:
 
 ``` terminal
 $ oc adm must-gather --run-namespace <namespace> \
-  --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.21
+  --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.24
 ```
 
 ## Gathering data about your cluster for Red Hat Support
@@ -130,21 +124,54 @@ Procedure
     $ tar cvaf must-gather-`date +"%m-%d-%Y-%H-%M-%S"`-<cluster_id>.tar.gz <must_gather_local_dir>
     ```
 
-    - Replace `<must_gather_local_dir>` with the actual directory name.
+    where:
+
+    `<must_gather_local_dir>`
+    Replace with the actual directory name.
 
 4.  Attach the compressed file to your support case on the [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 
 </div>
 
+# Reducing the size of must-gather output
+
+The `oc adm must-gather` command collects comprehensive cluster information. However, a full data collection can result in a large file that is difficult to upload and analyze and could result in timeouts.
+
+To manage the output size and target your data collection for more effective troubleshooting, you can pass specific flags to the underlying `gather` script or scope the collection to particular resources.
+
+## Gathering data for specific resources
+
+Instead of collecting data for the entire cluster, you can direct the `must-gather` tool to inspect a specific resource. This method is highly effective for isolating issues within a single project, Operator, or application.
+
+The `must-gather` tool uses `oc adm inspect` internally. You can specify what to inspect by passing the `inspect` command and its arguments after the `--` separator.
+
 <div>
 
 <div class="title">
 
-Additional resources
+Procedure
 
 </div>
 
-- [Gathering information to troubleshoot hosted control planes](../hosted_control_planes/hcp-troubleshooting.md#hosted-control-planes-troubleshooting_hcp-troubleshooting)
+- To gather data for a specific namespace, such as `my-project`, run the following command:
+
+  ``` terminal
+  $ oc adm must-gather --dest-dir=my-project-must-gather -- oc adm inspect ns/my-project
+  ```
+
+- This command collects all standard resources within the `my-project` namespace, including logs from pods in that namespace, but excludes cluster-scoped resources.
+
+- To gather data related to a specific Cluster Operator, such as `openshift-apiserver`, run the following command:
+
+  ``` terminal
+  $ oc adm must-gather --dest-dir=apiserver-must-gather -- oc adm inspect clusteroperator/openshift-apiserver
+  ```
+
+- To exclude logs entirely and significantly reduce the size of the `must-gather` archive, add a double dash (`--`) after `oc adm must-gather` command and add the `--no-logs` argument:
+
+  ``` terminal
+  $ oc adm must-gather -- /usr/bin/gather --no-logs
+  ```
 
 </div>
 
@@ -188,7 +215,7 @@ You can gather debugging information about specific features by using the `oc ad
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><p><code>registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.21</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.24</code></p></td>
 <td style="text-align: left;"><p>Data collection for OpenShift Virtualization.</p></td>
 </tr>
 <tr>
@@ -240,7 +267,7 @@ You can gather debugging information about specific features by using the `oc ad
 <p>For more information, see the "Gathering data" section for the specific Operator in <a href="https://docs.redhat.com/en/documentation/workload_availability_for_red_hat_openshift/latest/html/remediation_fencing_and_maintenance/index">Remediation, fencing, and maintenance</a> (Workload Availability for Red Hat OpenShift documentation).</p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p><code>registry.redhat.io/numaresources/numaresources-must-gather-rhel9:v&lt;installed-version-nro&gt;</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/openshift4/numaresources-must-gather-rhel9:v&lt;installed-version-nro&gt;</code></p></td>
 <td style="text-align: left;"><p>Data collection for the NUMA Resources Operator (NRO).</p></td>
 </tr>
 <tr>
@@ -312,166 +339,162 @@ Procedure
     ``` terminal
     $ oc adm must-gather \
       --image-stream=openshift/must-gather \
-      --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.21
+      --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.24
     ```
 
-    - The default OpenShift Container Platform `must-gather` image
+    You can use the `must-gather` tool with additional arguments to gather data that is specifically related to OpenShift Logging and the Red Hat OpenShift Logging Operator in your cluster. For OpenShift Logging, run the following command:
 
-    - The must-gather image for OpenShift Virtualization
+    ``` terminal
+    $ oc adm must-gather --image=$(oc -n openshift-logging get deployment.apps/cluster-logging-operator \
+      -o jsonpath='{.spec.template.spec.containers[?(@.name == "cluster-logging-operator")].image}')
+    ```
 
-      You can use the `must-gather` tool with additional arguments to gather data that is specifically related to OpenShift Logging and the Red Hat OpenShift Logging Operator in your cluster. For OpenShift Logging, run the following command:
+    <div class="formalpara">
 
-      ``` terminal
-      $ oc adm must-gather --image=$(oc -n openshift-logging get deployment.apps/cluster-logging-operator \
-        -o jsonpath='{.spec.template.spec.containers[?(@.name == "cluster-logging-operator")].image}')
-      ```
+    <div class="title">
 
-      <div class="example">
+    Example `must-gather` output for OpenShift Logging
 
-      <div class="title">
+    </div>
 
-      Example `must-gather` output for OpenShift Logging
+    ``` terminal
+    ├── cluster-logging
+    │  ├── clo
+    │  │  ├── cluster-logging-operator-74dd5994f-6ttgt
+    │  │  ├── clusterlogforwarder_cr
+    │  │  ├── cr
+    │  │  ├── csv
+    │  │  ├── deployment
+    │  │  └── logforwarding_cr
+    │  ├── collector
+    │  │  ├── fluentd-2tr64
+    │  ├── eo
+    │  │  ├── csv
+    │  │  ├── deployment
+    │  │  └── elasticsearch-operator-7dc7d97b9d-jb4r4
+    │  ├── es
+    │  │  ├── cluster-elasticsearch
+    │  │  │  ├── aliases
+    │  │  │  ├── health
+    │  │  │  ├── indices
+    │  │  │  ├── latest_documents.json
+    │  │  │  ├── nodes
+    │  │  │  ├── nodes_stats.json
+    │  │  │  └── thread_pool
+    │  │  ├── cr
+    │  │  ├── elasticsearch-cdm-lp8l38m0-1-794d6dd989-4jxms
+    │  │  └── logs
+    │  │     ├── elasticsearch-cdm-lp8l38m0-1-794d6dd989-4jxms
+    │  ├── install
+    │  │  ├── co_logs
+    │  │  ├── install_plan
+    │  │  ├── olmo_logs
+    │  │  └── subscription
+    │  └── kibana
+    │     ├── cr
+    │     ├── kibana-9d69668d4-2rkvz
+    ├── cluster-scoped-resources
+    │  └── core
+    │     ├── nodes
+    │     │  ├── ip-10-0-146-180.eu-west-1.compute.internal.yaml
+    │     └── persistentvolumes
+    │        ├── pvc-0a8d65d9-54aa-4c44-9ecc-33d9381e41c1.yaml
+    ├── event-filter.html
+    ├── gather-debug.log
+    └── namespaces
+       ├── openshift-logging
+       │  ├── apps
+       │  │  ├── daemonsets.yaml
+       │  │  ├── deployments.yaml
+       │  │  ├── replicasets.yaml
+       │  │  └── statefulsets.yaml
+       │  ├── batch
+       │  │  ├── cronjobs.yaml
+       │  │  └── jobs.yaml
+       │  ├── core
+       │  │  ├── configmaps.yaml
+       │  │  ├── endpoints.yaml
+       │  │  ├── events
+       │  │  │  ├── elasticsearch-im-app-1596020400-gm6nl.1626341a296c16a1.yaml
+       │  │  │  ├── elasticsearch-im-audit-1596020400-9l9n4.1626341a2af81bbd.yaml
+       │  │  │  ├── elasticsearch-im-infra-1596020400-v98tk.1626341a2d821069.yaml
+       │  │  │  ├── elasticsearch-im-app-1596020400-cc5vc.1626341a3019b238.yaml
+       │  │  │  ├── elasticsearch-im-audit-1596020400-s8d5s.1626341a31f7b315.yaml
+       │  │  │  ├── elasticsearch-im-infra-1596020400-7mgv8.1626341a35ea59ed.yaml
+       │  │  ├── events.yaml
+       │  │  ├── persistentvolumeclaims.yaml
+       │  │  ├── pods.yaml
+       │  │  ├── replicationcontrollers.yaml
+       │  │  ├── secrets.yaml
+       │  │  └── services.yaml
+       │  ├── openshift-logging.yaml
+       │  ├── pods
+       │  │  ├── cluster-logging-operator-74dd5994f-6ttgt
+       │  │  │  ├── cluster-logging-operator
+       │  │  │  │  └── cluster-logging-operator
+       │  │  │  │     └── logs
+       │  │  │  │        ├── current.log
+       │  │  │  │        ├── previous.insecure.log
+       │  │  │  │        └── previous.log
+       │  │  │  └── cluster-logging-operator-74dd5994f-6ttgt.yaml
+       │  │  ├── cluster-logging-operator-registry-6df49d7d4-mxxff
+       │  │  │  ├── cluster-logging-operator-registry
+       │  │  │  │  └── cluster-logging-operator-registry
+       │  │  │  │     └── logs
+       │  │  │  │        ├── current.log
+       │  │  │  │        ├── previous.insecure.log
+       │  │  │  │        └── previous.log
+       │  │  │  ├── cluster-logging-operator-registry-6df49d7d4-mxxff.yaml
+       │  │  │  └── mutate-csv-and-generate-sqlite-db
+       │  │  │     └── mutate-csv-and-generate-sqlite-db
+       │  │  │        └── logs
+       │  │  │           ├── current.log
+       │  │  │           ├── previous.insecure.log
+       │  │  │           └── previous.log
+       │  │  ├── elasticsearch-cdm-lp8l38m0-1-794d6dd989-4jxms
+       │  │  ├── elasticsearch-im-app-1596030300-bpgcx
+       │  │  │  ├── elasticsearch-im-app-1596030300-bpgcx.yaml
+       │  │  │  └── indexmanagement
+       │  │  │     └── indexmanagement
+       │  │  │        └── logs
+       │  │  │           ├── current.log
+       │  │  │           ├── previous.insecure.log
+       │  │  │           └── previous.log
+       │  │  ├── fluentd-2tr64
+       │  │  │  ├── fluentd
+       │  │  │  │  └── fluentd
+       │  │  │  │     └── logs
+       │  │  │  │        ├── current.log
+       │  │  │  │        ├── previous.insecure.log
+       │  │  │  │        └── previous.log
+       │  │  │  ├── fluentd-2tr64.yaml
+       │  │  │  └── fluentd-init
+       │  │  │     └── fluentd-init
+       │  │  │        └── logs
+       │  │  │           ├── current.log
+       │  │  │           ├── previous.insecure.log
+       │  │  │           └── previous.log
+       │  │  ├── kibana-9d69668d4-2rkvz
+       │  │  │  ├── kibana
+       │  │  │  │  └── kibana
+       │  │  │  │     └── logs
+       │  │  │  │        ├── current.log
+       │  │  │  │        ├── previous.insecure.log
+       │  │  │  │        └── previous.log
+       │  │  │  ├── kibana-9d69668d4-2rkvz.yaml
+       │  │  │  └── kibana-proxy
+       │  │  │     └── kibana-proxy
+       │  │  │        └── logs
+       │  │  │           ├── current.log
+       │  │  │           ├── previous.insecure.log
+       │  │  │           └── previous.log
+       │  └── route.openshift.io
+       │     └── routes.yaml
+       └── openshift-operators-redhat
+          ├── ...
+    ```
 
-      </div>
-
-      ``` terminal
-      ├── cluster-logging
-      │  ├── clo
-      │  │  ├── cluster-logging-operator-74dd5994f-6ttgt
-      │  │  ├── clusterlogforwarder_cr
-      │  │  ├── cr
-      │  │  ├── csv
-      │  │  ├── deployment
-      │  │  └── logforwarding_cr
-      │  ├── collector
-      │  │  ├── fluentd-2tr64
-      │  ├── eo
-      │  │  ├── csv
-      │  │  ├── deployment
-      │  │  └── elasticsearch-operator-7dc7d97b9d-jb4r4
-      │  ├── es
-      │  │  ├── cluster-elasticsearch
-      │  │  │  ├── aliases
-      │  │  │  ├── health
-      │  │  │  ├── indices
-      │  │  │  ├── latest_documents.json
-      │  │  │  ├── nodes
-      │  │  │  ├── nodes_stats.json
-      │  │  │  └── thread_pool
-      │  │  ├── cr
-      │  │  ├── elasticsearch-cdm-lp8l38m0-1-794d6dd989-4jxms
-      │  │  └── logs
-      │  │     ├── elasticsearch-cdm-lp8l38m0-1-794d6dd989-4jxms
-      │  ├── install
-      │  │  ├── co_logs
-      │  │  ├── install_plan
-      │  │  ├── olmo_logs
-      │  │  └── subscription
-      │  └── kibana
-      │     ├── cr
-      │     ├── kibana-9d69668d4-2rkvz
-      ├── cluster-scoped-resources
-      │  └── core
-      │     ├── nodes
-      │     │  ├── ip-10-0-146-180.eu-west-1.compute.internal.yaml
-      │     └── persistentvolumes
-      │        ├── pvc-0a8d65d9-54aa-4c44-9ecc-33d9381e41c1.yaml
-      ├── event-filter.html
-      ├── gather-debug.log
-      └── namespaces
-         ├── openshift-logging
-         │  ├── apps
-         │  │  ├── daemonsets.yaml
-         │  │  ├── deployments.yaml
-         │  │  ├── replicasets.yaml
-         │  │  └── statefulsets.yaml
-         │  ├── batch
-         │  │  ├── cronjobs.yaml
-         │  │  └── jobs.yaml
-         │  ├── core
-         │  │  ├── configmaps.yaml
-         │  │  ├── endpoints.yaml
-         │  │  ├── events
-         │  │  │  ├── elasticsearch-im-app-1596020400-gm6nl.1626341a296c16a1.yaml
-         │  │  │  ├── elasticsearch-im-audit-1596020400-9l9n4.1626341a2af81bbd.yaml
-         │  │  │  ├── elasticsearch-im-infra-1596020400-v98tk.1626341a2d821069.yaml
-         │  │  │  ├── elasticsearch-im-app-1596020400-cc5vc.1626341a3019b238.yaml
-         │  │  │  ├── elasticsearch-im-audit-1596020400-s8d5s.1626341a31f7b315.yaml
-         │  │  │  ├── elasticsearch-im-infra-1596020400-7mgv8.1626341a35ea59ed.yaml
-         │  │  ├── events.yaml
-         │  │  ├── persistentvolumeclaims.yaml
-         │  │  ├── pods.yaml
-         │  │  ├── replicationcontrollers.yaml
-         │  │  ├── secrets.yaml
-         │  │  └── services.yaml
-         │  ├── openshift-logging.yaml
-         │  ├── pods
-         │  │  ├── cluster-logging-operator-74dd5994f-6ttgt
-         │  │  │  ├── cluster-logging-operator
-         │  │  │  │  └── cluster-logging-operator
-         │  │  │  │     └── logs
-         │  │  │  │        ├── current.log
-         │  │  │  │        ├── previous.insecure.log
-         │  │  │  │        └── previous.log
-         │  │  │  └── cluster-logging-operator-74dd5994f-6ttgt.yaml
-         │  │  ├── cluster-logging-operator-registry-6df49d7d4-mxxff
-         │  │  │  ├── cluster-logging-operator-registry
-         │  │  │  │  └── cluster-logging-operator-registry
-         │  │  │  │     └── logs
-         │  │  │  │        ├── current.log
-         │  │  │  │        ├── previous.insecure.log
-         │  │  │  │        └── previous.log
-         │  │  │  ├── cluster-logging-operator-registry-6df49d7d4-mxxff.yaml
-         │  │  │  └── mutate-csv-and-generate-sqlite-db
-         │  │  │     └── mutate-csv-and-generate-sqlite-db
-         │  │  │        └── logs
-         │  │  │           ├── current.log
-         │  │  │           ├── previous.insecure.log
-         │  │  │           └── previous.log
-         │  │  ├── elasticsearch-cdm-lp8l38m0-1-794d6dd989-4jxms
-         │  │  ├── elasticsearch-im-app-1596030300-bpgcx
-         │  │  │  ├── elasticsearch-im-app-1596030300-bpgcx.yaml
-         │  │  │  └── indexmanagement
-         │  │  │     └── indexmanagement
-         │  │  │        └── logs
-         │  │  │           ├── current.log
-         │  │  │           ├── previous.insecure.log
-         │  │  │           └── previous.log
-         │  │  ├── fluentd-2tr64
-         │  │  │  ├── fluentd
-         │  │  │  │  └── fluentd
-         │  │  │  │     └── logs
-         │  │  │  │        ├── current.log
-         │  │  │  │        ├── previous.insecure.log
-         │  │  │  │        └── previous.log
-         │  │  │  ├── fluentd-2tr64.yaml
-         │  │  │  └── fluentd-init
-         │  │  │     └── fluentd-init
-         │  │  │        └── logs
-         │  │  │           ├── current.log
-         │  │  │           ├── previous.insecure.log
-         │  │  │           └── previous.log
-         │  │  ├── kibana-9d69668d4-2rkvz
-         │  │  │  ├── kibana
-         │  │  │  │  └── kibana
-         │  │  │  │     └── logs
-         │  │  │  │        ├── current.log
-         │  │  │  │        ├── previous.insecure.log
-         │  │  │  │        └── previous.log
-         │  │  │  ├── kibana-9d69668d4-2rkvz.yaml
-         │  │  │  └── kibana-proxy
-         │  │  │     └── kibana-proxy
-         │  │  │        └── logs
-         │  │  │           ├── current.log
-         │  │  │           ├── previous.insecure.log
-         │  │  │           └── previous.log
-         │  └── route.openshift.io
-         │     └── routes.yaml
-         └── openshift-operators-redhat
-            ├── ...
-      ```
-
-      </div>
+    </div>
 
 3.  Run the `oc adm must-gather` command with one or more `--image` or `--image-stream` arguments. For example, the following command gathers both the default cluster data and information specific to KubeVirt:
 
@@ -481,17 +504,16 @@ Procedure
      --image=quay.io/kubevirt/must-gather
     ```
 
-    - The default OpenShift Container Platform `must-gather` image
-
-    - The must-gather image for KubeVirt
-
 4.  Create a compressed file from the `must-gather` directory that was just created in your working directory. Make sure you provide the date and cluster ID for the unique must-gather data. For more information about how to find the cluster ID, see [How to find the cluster-id or name on OpenShift cluster](https://access.redhat.com/solutions/5280291). For example, on a computer that uses a Linux operating system, run the following command:
 
     ``` terminal
     $ tar cvaf must-gather-`date +"%m-%d-%Y-%H-%M-%S"`-<cluster_id>.tar.gz <must_gather_local_dir>
     ```
 
-    - Replace `<must_gather_local_dir>` with the actual directory name.
+    where:
+
+    `<must_gather_local_dir>`
+    Replace with the actual directory name.
 
 5.  Attach the compressed file to your support case on the [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 
@@ -505,7 +527,7 @@ Additional resources
 
 </div>
 
-- [Gathering debugging data](../nodes/cma/nodes-cma-autoscaling-custom.md#nodes-cma-autoscaling-custom-gather) for the Custom Metrics Autoscaler.
+- [Gathering debugging data for the Custom Metrics Autoscaler](../nodes/cma/nodes-cma-autoscaling-custom.md#nodes-cma-autoscaling-custom-gather)
 
 - [Red Hat OpenShift Container Platform Life Cycle Policy](https://access.redhat.com/support/policy/updates/openshift)
 
@@ -538,31 +560,17 @@ Procedure
     $ tar cvaf must-gather-`date +"%m-%d-%Y-%H-%M-%S"`-<cluster_id>.tar.gz <must_gather_local_dir>
     ```
 
-    - Replace `<must_gather_local_dir>` with the actual directory name.
+    Replace the `<must_gather_local_dir>` placeholder with the actual directory name.
 
-3.  Attach the compressed file to your support case on the [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
+3.  Attach the compressed file to your support case on the [**Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 
 </div>
 
 ## Changing the must-gather storage limit
 
-When using the `oc adm must-gather` command to collect data the default maximum storage for the information is 30% of the storage capacity of the container. After the 30% limit is reached the container is killed and the gathering process stops. Information already gathered is downloaded to your local storage. To run the must-gather command again, you need either a container with more storage capacity or to adjust the maximum volume percentage.
+When using the `oc adm must-gather` command to collect data the default maximum storage for the information is 30% of the storage capacity of the container. After the 30% limit is reached the container is killed and the gathering process stops.
 
-If the container reaches the storage limit, an error message similar to the following example is generated.
-
-<div class="formalpara">
-
-<div class="title">
-
-Example output
-
-</div>
-
-``` terminal
-Disk usage exceeds the volume percentage of 30% for mounted directory. Exiting...
-```
-
-</div>
+Information already gathered is downloaded to your local storage. To run the must-gather command again, you need either a container with more storage capacity or to adjust the maximum volume percentage.
 
 <div>
 
@@ -590,6 +598,12 @@ Procedure
 
   ``` terminal
   $ oc adm must-gather --volume-percentage <storage_percentage>
+  ```
+
+  If the container reaches the storage limit, an error message similar to the following example is generated:
+
+  ``` terminal
+  Disk usage exceeds the volume percentage of 30% for mounted directory. Exiting...
   ```
 
 </div>
@@ -849,7 +863,9 @@ Verification
 
 ## Configuring a Support Log Gather instance
 
-You must create a `MustGather` custom resource (CR) from the command-line interface (CLI) to automate the collection of diagnostic data from your cluster. This process also automatically uploads the data to a Red Hat Support case.
+You must create a `MustGather` custom resource (CR) from the command-line interface (CLI) to automate the collection of diagnostic data from your cluster.
+
+This process also automatically uploads the data to a Red Hat Support case.
 
 > [!IMPORTANT]
 > Support Log Gather is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
@@ -872,7 +888,9 @@ Prerequisites
 
 - You have created a Kubernetes secret containing your Red Hat Customer Portal credentials. The secret must contain a username field and a password field.
 
-- You have created a service account.
+- If you are using a custom image, you have configured an `ImageStream` resource in the Operator namespace that references an approved custom image URL.
+
+- You have created a service account. If you are using a custom image, you have created a service account with permissions to access the `ImageStream` resource.
 
 </div>
 
@@ -884,7 +902,7 @@ Procedure
 
 </div>
 
-1.  Create a YAML file for the `MustGather` CR, such as `support-log-gather.yaml`, that contains the following basic configuration::
+1.  Create a YAML file for the `MustGather` CR, such as `support-log-gather.yaml`, that contains the following configuration:
 
     <div class="formalpara">
 
@@ -901,8 +919,16 @@ Procedure
       name: example-mg
       namespace: must-gather-operator
     spec:
-      serviceAccountName: must-gather-operator
-      audit: true
+      serviceAccountName: my-service-account
+      gatherSpec:
+        command:
+        - "/usr/bin/custom-gather"
+        args:
+        - "--verbose"
+        - "--subsystem=network"
+      imageStreamRef:
+        name: "network-debug-tools"
+        tag: "v1.2"
       proxyConfig:
         httpProxy: "http://proxy.example.com:8080"
         httpsProxy: "https://proxy.example.com:8443"
@@ -1013,7 +1039,9 @@ Additional resources
 
 ## Configuration parameters for MustGather custom resource
 
-You can manage your `MustGather` custom resource (CR) by creating a YAML file that specifies the parameters for data collection and the upload process. The following table provides an overview of the parameters that you can configure in the `MustGather` CR.
+You can manage your `MustGather` custom resource (CR) by creating a YAML file that specifies the parameters for data collection and the upload process.
+
+The following table provides an overview of the parameters that you can configure in the `MustGather` CR.
 
 | Parameter name | Description | Type |
 |----|----|----|
@@ -1150,7 +1178,9 @@ Procedure
 
 # Obtaining your cluster ID
 
-When providing information to Red Hat Support, it is helpful to provide the unique identifier for your cluster. You can have your cluster ID autofilled by using the OpenShift Container Platform web console. You can also manually obtain your cluster ID by using the web console or the OpenShift CLI (`oc`).
+When providing information to Red Hat Support, it is helpful to provide the unique identifier for your cluster. You can have your cluster ID autofilled by using the OpenShift Container Platform web console.
+
+You can also manually obtain your cluster ID by using the web console or the OpenShift CLI (`oc`).
 
 <div>
 
@@ -1202,7 +1232,7 @@ In some support interactions, Red Hat Support may ask you to collect a `sosrepor
 
 # Generating a sosreport archive for an OpenShift Container Platform cluster node
 
-The recommended way to generate a `sosreport` for an OpenShift Container Platform 4.17 cluster node is through a debug pod.
+The recommended way to generate a `sosreport` for an OpenShift Container Platform 4.20 cluster node is through a debug pod.
 
 <div>
 
@@ -1267,7 +1297,7 @@ Procedure
     ```
 
     > [!NOTE]
-    > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>` instead.
+    > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>` instead.
 
 4.  Start a `toolbox` container, which includes the required binaries and plugins to run `sosreport`:
 
@@ -1286,7 +1316,9 @@ Procedure
         # sos report -k crio.all=on -k crio.logs=on  -k podman.all=on -k podman.logs=on
         ```
 
-        - `-k` enables you to define `sosreport` plugin parameters outside of the defaults.
+        where:
+
+        `-k` enables you to define `sosreport` plugin parameters outside of the defaults.
 
     2.  Optional: To include information on OVN-Kubernetes networking configurations from a node in your report, run the following command:
 
@@ -1307,7 +1339,9 @@ Procedure
         The checksum is: 382ffc167510fd71b4f12a4f40b97a4e
         ```
 
-        - The `sosreport` archive’s file path is outside of the `chroot` environment because the toolbox container mounts the host’s root directory at `/host`.
+        where:
+
+        The `sosreport` archive’s file path is outside of the `chroot` environment because the toolbox container mounts the host’s root directory at `/host`.
 
 6.  Provide the `sosreport` archive to Red Hat Support for analysis, using one of the following methods.
 
@@ -1319,10 +1353,12 @@ Procedure
           $ oc debug node/my-cluster-node -- bash -c 'cat /host/var/tmp/sosreport-my-cluster-node-01234567-2020-05-28-eyjknxt.tar.xz' > /tmp/sosreport-my-cluster-node-01234567-2020-05-28-eyjknxt.tar.xz
           ```
 
-          - The debug container mounts the host’s root directory at `/host`. Reference the absolute path from the debug container’s root directory, including `/host`, when specifying target files for concatenation.
+          where:
 
-            > [!NOTE]
-            > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Transferring a `sosreport` archive from a cluster node by using `scp` is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to copy a `sosreport` archive from a node by running `scp core@<node>.<cluster_name>.<base_domain>:<file_path> <local_path>`.
+          The debug container mounts the host’s root directory at `/host`. Reference the absolute path from the debug container’s root directory, including `/host`, when specifying target files for concatenation.
+
+          > [!NOTE]
+          > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Transferring a `sosreport` archive from a cluster node by using `scp` is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to copy a `sosreport` archive from a node by running `scp core@<node>.<cluster_name>.<base_domain>:<file_path> <local_path>`.
 
       2.  Navigate to an existing support case within [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 
@@ -1432,7 +1468,7 @@ Procedure
         ```
 
         > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
+        > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. Before attempting to collect diagnostic data over SSH, review whether the data collected by running `oc adm must gather` and other `oc` commands is sufficient instead. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>`.
 
 </div>
 
@@ -1517,19 +1553,28 @@ Procedure
         -w /tmp/tcpdump/%Y-%m-%dT%H:%M:%S.pcap -W 1 -G 300
     ```
 
-    - The `--dest-dir` argument specifies that `oc adm must-gather` stores the packet captures in directories that are relative to `/tmp/captures` on the client machine. You can specify any writable directory.
+    where:
 
-    - When `tcpdump` is run in the debug pod that `oc adm must-gather` starts, the `--source-dir` argument specifies that the packet captures are temporarily stored in the `/tmp/tcpdump` directory on the pod.
+    `--dest-dir /tmp/captures`
+    The `--dest-dir` argument specifies that `oc adm must-gather` stores the packet captures in directories that are relative to `/tmp/captures` on the client machine. You can specify any writable directory.
 
-    - The `--image` argument specifies a container image that includes the `tcpdump` command.
+    `--source-dir '/tmp/tcpdump/'`
+    When `tcpdump` is run in the debug pod that `oc adm must-gather` starts, the `--source-dir` argument specifies that the packet captures are temporarily stored in the `/tmp/tcpdump` directory on the pod.
 
-    - The `--node-selector` argument and example value specifies to perform the packet captures on the worker nodes. As an alternative, you can specify the `--node-name` argument instead to run the packet capture on a single node. If you omit both the `--node-selector` and the `--node-name` argument, the packet captures are performed on all nodes.
+    `--image registry.redhat.io/openshift4/network-tools-rhel8:latest`
+    The `--image` argument specifies a container image that includes the `tcpdump` command.
 
-    - The `--host-network=true` argument is required so that the packet captures are performed on the network interfaces of the node.
+    `--node-selector 'node-role.kubernetes.io/worker'`
+    The `--node-selector` argument and example value specifies to perform the packet captures on the worker nodes. As an alternative, you can specify the `--node-name` argument instead to run the packet capture on a single node. If you omit both the `--node-selector` and the `--node-name` argument, the packet captures are performed on all nodes.
 
-    - The `--timeout` argument and value specify to run the debug pod for 30 seconds. If you do not specify the `--timeout` argument and a duration, the debug pod runs for 10 minutes.
+    `--host-network=true`
+    The `--host-network=true` argument is required so that the packet captures are performed on the network interfaces of the node.
 
-    - The `-i any` argument for the `tcpdump` command specifies to capture packets on all network interfaces. As an alternative, you can specify a network interface name.
+    `--timeout 30s`
+    The `--timeout` argument and value specify to run the debug pod for 30 seconds. If you do not specify the `--timeout` argument and a duration, the debug pod runs for 10 minutes.
+
+    `-i any`
+    The `-i any` argument for the `tcpdump` command specifies to capture packets on all network interfaces. As an alternative, you can specify a network interface name.
 
 2.  Perform the action, such as accessing a web application, that triggers the network communication issue while the network trace captures packets.
 
@@ -1548,13 +1593,18 @@ Procedure
     └── timestamp
     ```
 
-    - The packet captures are stored in directories that identify the hostname, container, and file name. If you did not specify the `--node-selector` argument, then the directory level for the hostname is not present.
+    where:
+
+    `ip-10-0-192-217-ec2-internal`, `ip-10-0-201-178-ec2-internal`
+    The packet captures are stored in directories that identify the hostname, container, and file name. If you did not specify the `--node-selector` argument, then the directory level for the hostname is not present.
 
 </div>
 
 # Collecting a network trace from an OpenShift Container Platform node or container
 
-When investigating potential network-related OpenShift Container Platform issues, Red Hat Support might request a network packet trace from a specific OpenShift Container Platform cluster node or from a specific container. The recommended method to capture a network trace in OpenShift Container Platform is through a debug pod.
+When investigating potential network-related OpenShift Container Platform issues, Red Hat Support might request a network packet trace from a specific OpenShift Container Platform cluster node or from a specific container.
+
+The recommended method to capture a network trace in OpenShift Container Platform is through a debug pod.
 
 <div>
 
@@ -1605,7 +1655,7 @@ Procedure
     ```
 
     > [!NOTE]
-    > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>` instead.
+    > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Accessing cluster nodes by using SSH is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to access nodes using `ssh core@<node>.<cluster_name>.<base_domain>` instead.
 
 4.  From within the `chroot` environment console, obtain the node’s interface names:
 
@@ -1628,7 +1678,10 @@ Procedure
     $ tcpdump -nn -s 0 -i ens5 -w /host/var/tmp/my-cluster-node_$(date +%d_%m_%Y-%H_%M_%S-%Z).pcap
     ```
 
-    - The `tcpdump` capture file’s path is outside of the `chroot` environment because the toolbox container mounts the host’s root directory at `/host`.
+    where:
+
+    `/host/var/tmp/my-cluster-node_$(date +%d_%m_%Y-%H_%M_%S-%Z).pcap`
+    The `tcpdump` capture file’s path is outside of the `chroot` environment because the toolbox container mounts the host’s root directory at `/host`.
 
 7.  If a `tcpdump` capture is required for a specific container on the node, follow these steps.
 
@@ -1650,7 +1703,10 @@ Procedure
         # nsenter -n -t 49628 -- tcpdump -nn -i ens5 -w /host/var/tmp/my-cluster-node-my-container_$(date +%d_%m_%Y-%H_%M_%S-%Z).pcap
         ```
 
-        - The `tcpdump` capture file’s path is outside of the `chroot` environment because the toolbox container mounts the host’s root directory at `/host`.
+        where:
+
+        `/host/var/tmp/my-cluster-node-my-container_$(date +%d_%m_%Y-%H_%M_%S-%Z).pcap`
+        The `tcpdump` capture file’s path is outside of the `chroot` environment because the toolbox container mounts the host’s root directory at `/host`.
 
 8.  Provide the `tcpdump` capture file to Red Hat Support for analysis, using one of the following methods.
 
@@ -1662,10 +1718,13 @@ Procedure
           $ oc debug node/my-cluster-node -- bash -c 'cat /host/var/tmp/my-tcpdump-capture-file.pcap' > /tmp/my-tcpdump-capture-file.pcap
           ```
 
-          - The debug container mounts the host’s root directory at `/host`. Reference the absolute path from the debug container’s root directory, including `/host`, when specifying target files for concatenation.
+          where:
 
-            > [!NOTE]
-            > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Transferring a `tcpdump` capture file from a cluster node by using `scp` is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to copy a `tcpdump` capture file from a node by running `scp core@<node>.<cluster_name>.<base_domain>:<file_path> <local_path>`.
+          `/host/var/tmp/my-tcpdump-capture-file.pcap`
+          The debug container mounts the host’s root directory at `/host`. Reference the absolute path from the debug container’s root directory, including `/host`, when specifying target files for concatenation.
+
+          > [!NOTE]
+          > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Transferring a `tcpdump` capture file from a cluster node by using `scp` is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to copy a `tcpdump` capture file from a node by running `scp core@<node>.<cluster_name>.<base_domain>:<file_path> <local_path>`.
 
       2.  Navigate to an existing support case within [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 
@@ -1715,10 +1774,13 @@ Procedure
       $ oc debug node/my-cluster-node -- bash -c 'cat /host/var/tmp/my-diagnostic-data.tar.gz' > /var/tmp/my-diagnostic-data.tar.gz
       ```
 
-      - The debug container mounts the host’s root directory at `/host`. Reference the absolute path from the debug container’s root directory, including `/host`, when specifying target files for concatenation.
+      where:
 
-        > [!NOTE]
-        > OpenShift Container Platform 4.17 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Transferring files from a cluster node by using `scp` is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to copy diagnostic files from a node by running `scp core@<node>.<cluster_name>.<base_domain>:<file_path> <local_path>`.
+      `/host/var/tmp/my-diagnostic-data.tar.gz`
+      The debug container mounts the host’s root directory at `/host`. Reference the absolute path from the debug container’s root directory, including `/host`, when specifying target files for concatenation.
+
+      > [!NOTE]
+      > OpenShift Container Platform 4.20 cluster nodes running Red Hat Enterprise Linux CoreOS (RHCOS) are immutable and rely on Operators to apply cluster changes. Transferring files from a cluster node by using `scp` is not recommended. However, if the OpenShift Container Platform API is not available, or the kubelet is not properly functioning on the target node, `oc` operations will be impacted. In such situations, it is possible to copy diagnostic files from a node by running `scp core@<node>.<cluster_name>.<base_domain>:<file_path> <local_path>`.
 
   2.  Navigate to an existing support case within [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 
@@ -1734,7 +1796,9 @@ The primary purpose for a `toolbox` container is to gather diagnostic informatio
 
 ## Installing packages to a `toolbox` container
 
-By default, running the `toolbox` command starts a container with the `registry.redhat.io/rhel9/support-tools:latest` image. This image contains the most frequently used support tools. If you need to collect node-specific data that requires a support tool that is not part of the image, you can install additional packages.
+By default, running the `toolbox` command starts a container with the `registry.redhat.io/rhel9/support-tools:latest` image. This image contains the most frequently used support tools.
+
+If you need to collect node-specific data that requires a support tool that is not part of the image, you can install additional packages.
 
 <div>
 
@@ -1783,7 +1847,7 @@ Procedure
 By default, running the `toolbox` command starts a container with the `registry.redhat.io/rhel9/support-tools:latest` image.
 
 > [!NOTE]
-> You can start an alternative image by creating a `.toolboxrc` file and specifying the image to run. However, running an older version of the `support-tools` image, such as `registry.redhat.io/rhel8/support-tools:latest`, is not supported on OpenShift Container Platform 4.17.
+> You can start an alternative image by creating a `.toolboxrc` file and specifying the image to run. However, running an older version of the `support-tools` image, such as `registry.redhat.io/rhel8/support-tools:latest`, is not supported on OpenShift Container Platform 4.20.
 
 <div>
 
@@ -1821,11 +1885,16 @@ Procedure
     TOOLBOX_NAME=toolbox-fedora-latest
     ```
 
-    - Optional: Specify an alternative container registry.
+    where:
 
-    - Specify an alternative image to start.
+    `REGISTRY=quay.io`
+    Optional: Specify an alternative container registry.
 
-    - Optional: Specify an alternative name for the toolbox container.
+    `IMAGE=fedora/fedora:latest`
+    Specify an alternative image to start.
+
+    `TOOLBOX_NAME=toolbox-fedora-latest`
+    Optional: Specify an alternative name for the toolbox container.
 
 3.  Start a toolbox container by entering the following command:
 

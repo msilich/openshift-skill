@@ -1,16 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The Operator Lifecycle Manager (OLM) controller is configured by an `OLMConfig` custom resource (CR) named `cluster`. Cluster administrators can modify this resource to enable or disable certain features.
-
-This document outlines the features currently supported by OLM that are configured by the `OLMConfig` resource.
+Cluster administrators can enable or disable Operator Lifecycle Manager (OLM) cluster features by editing the `OLMConfig` custom resource (CR) named `cluster` in OpenShift Container Platform.
 
 # Disabling copied CSVs
+
+To reduce memory, etcd, and network usage on large OpenShift Container Platform clusters, you can disable copied cluster service versions (CSVs) for Operators installed in `AllNamespaces` mode through the cluster `OLMConfig`.
 
 When an Operator is installed by Operator Lifecycle Manager (OLM), a simplified copy of its cluster service version (CSV) is created by default in every namespace that the Operator is configured to watch. These CSVs are known as *copied CSVs* and communicate to users which controllers are actively reconciling resource events in a given namespace.
 
 When an Operator is configured to use the `AllNamespaces` install mode, versus targeting a single or specified set of namespaces, a copied CSV for the Operator is created in every namespace on the cluster. On especially large clusters, with namespaces and installed Operators potentially in the hundreds or thousands, copied CSVs consume an untenable amount of resources, such as OLM’s memory usage, cluster etcd limits, and networking.
-
-To support these larger clusters, cluster administrators can disable copied CSVs for Operators globally installed with the `AllNamespaces` mode.
 
 > [!NOTE]
 > If you disable copied CSVs, an Operator installed in `AllNamespaces` mode has their CSV copied only to the `openshift` namespace, instead of every namespace on the cluster. In disabled copied CSVs mode, the behavior differs between the web console and CLI:

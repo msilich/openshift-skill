@@ -4,15 +4,13 @@ When proving compliance for your OpenShift Container Platform cluster, you might
 
 # Obtaining Compliance Operator raw results from a persistent volume
 
-<div class="formalpara">
+You can view the results of Compliance Operator scans for auditing purposes. The Operator stores the raw results in a persistent volume in Asset Reporting Format (ARF).
+
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-The Compliance Operator generates and stores the raw results in a persistent volume. These results are in Asset Reporting Format (ARF).
 
 </div>
 
@@ -128,3 +126,5 @@ The Compliance Operator generates and stores the raw results in a persistent vol
     ``` terminal
     $ oc delete pod pv-extract -n openshift-compliance
     ```
+
+</div>

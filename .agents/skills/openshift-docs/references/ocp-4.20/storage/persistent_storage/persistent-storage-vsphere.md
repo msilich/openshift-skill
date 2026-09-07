@@ -5,16 +5,18 @@ OpenShift Container Platform allows use of VMware vSphere’s Virtual Machine Di
 VMware vSphere volumes can be provisioned dynamically. OpenShift Container Platform creates the disk in vSphere and attaches this disk to the correct image.
 
 > [!NOTE]
-> OpenShift Container Platform provisions new volumes as independent persistent disks that can freely attach and detach the volume on any node in the cluster. Consequently, you cannot back up volumes that use snapshots, or restore volumes from snapshots. See [Snapshot Limitations](https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.vm_admin.doc/GUID-53F65726-A23B-4CF0-A7D5-48E584B88613.html) for more information.
+> OpenShift Container Platform provisions new volumes as independent persistent disks that can freely attach and detach the volume on any node in the cluster. Consequently, you cannot back up volumes that use snapshots, or restore volumes from snapshots. For more information, see "Snapshot Limitations".
 
 The Kubernetes persistent volume framework allows administrators to provision a cluster with persistent storage and gives users a way to request those resources without having any knowledge of the underlying infrastructure.
 
 Persistent volumes are not bound to a single project or namespace; they can be shared across the OpenShift Container Platform cluster. Persistent volume claims are specific to a project or namespace and can be requested by users.
 
 > [!IMPORTANT]
-> For new installations, OpenShift Container Platform 4.13 and later provides automatic migration for the vSphere in-tree volume plugin to its equivalent CSI driver. Updating to OpenShift Container Platform 4.15 and later also provides automatic migration. For more information about updating and migration, see [CSI automatic migration](../container_storage_interface/persistent-storage-csi-migration.md#persistent-storage-csi-migration).
+> For new installations, OpenShift Container Platform 4.13 and later provides automatic migration for the vSphere in-tree volume plugin to its equivalent CSI driver. Updating to OpenShift Container Platform 4.15 and later also provides automatic migration. For more information about updating and migration, see "CSI automatic migration".
 >
 > CSI automatic migration should be seamless. Migration does not change how you use all existing API objects, such as persistent volumes, persistent volume claims, and storage classes.
+
+You can provision VMware vSphere volumes dynamically or statically. However, dynamically provisioning VMware vSphere volumes is the recommended method.
 
 <div>
 
@@ -26,21 +28,17 @@ Additional resources
 
 - [VMware vSphere](https://www.vmware.com/au/products/vsphere.html)
 
+- [Installing a cluster on vSphere](../../installing/installing_vsphere/upi/installing-vsphere.md#installing-vsphere)
+
 </div>
 
-# Dynamically provisioning VMware vSphere volumes
+# Dynamically provisioning VMware vSphere volumes using the UI
 
-Dynamically provisioning VMware vSphere volumes is the recommended method.
-
-# Prerequisites
-
-- An OpenShift Container Platform cluster installed on a VMware vSphere version that meets the requirements for the components that you use. See [Installing a cluster on vSphere](../../installing/installing_vsphere/upi/installing-vsphere.md) for information about vSphere version support.
-
-You can use either of the following procedures to dynamically provision these volumes using the default storage class.
-
-## Dynamically provisioning VMware vSphere volumes using the UI
+You can dynamically provision VMware vSphere volumes by using the OpenShift Container Platform web console to create persistent volume claims with the default `thin` storage class, so that your applications have on-demand access to vSphere storage without manual volume creation.
 
 OpenShift Container Platform installs a default storage class, named `thin`, that uses the `thin` disk format for provisioning volumes.
+
+You can use the following procedure to dynamically provision these volumes using the default storage class.
 
 <div>
 
@@ -49,6 +47,8 @@ OpenShift Container Platform installs a default storage class, named `thin`, tha
 Prerequisites
 
 </div>
+
+- An OpenShift Container Platform cluster installed on a VMware vSphere version that meets the requirements for the components that you use. For more information, see "Installing a cluster on vSphere".
 
 - Storage must exist in the underlying infrastructure before it can be mounted as a volume in OpenShift Container Platform.
 
@@ -80,9 +80,9 @@ Procedure
 
 </div>
 
-## Dynamically provisioning VMware vSphere volumes using the CLI
+# Dynamically provisioning VMware vSphere volumes using the CLI
 
-OpenShift Container Platform installs a default StorageClass, named `thin`, that uses the `thin` disk format for provisioning volumes.
+You can dynamically provision VMware vSphere volumes from the CLI to provide persistent storage for your applications on-demand. OpenShift Container Platform installs a default StorageClass, named `thin`, that uses the `thin` disk format for provisioning.
 
 <div>
 
@@ -92,6 +92,8 @@ Prerequisites
 
 </div>
 
+- An OpenShift Container Platform cluster installed on a VMware vSphere version that meets the requirements for the components that you use. For more information, see "Installing a cluster on vSphere".
+
 - Storage must exist in the underlying infrastructure before it can be mounted as a volume in OpenShift Container Platform.
 
 </div>
@@ -100,7 +102,7 @@ Prerequisites
 
 <div class="title">
 
-Procedure (CLI)
+Procedure
 
 </div>
 
@@ -119,11 +121,16 @@ Procedure (CLI)
           storage: 1Gi
     ```
 
-    - A unique name that represents the persistent volume claim.
+    where:
 
-    - The access mode of the persistent volume claim. With `ReadWriteOnce`, the volume can be mounted with read and write permissions by a single node.
+    `metadata.name`
+    Specifies a unique name that represents the persistent volume claim.
 
-    - The size of the persistent volume claim.
+    `spec.accessModes.ReadWriteOnce`
+    Specifies the access mode of the persistent volume claim. With `ReadWriteOnce`, the volume can be mounted with read and write permissions by a single node.
+
+    `spec.resources.requests.storage`
+    Specifies the size of the persistent volume claim.
 
 2.  Enter the following command to create the `PersistentVolumeClaim` object from the file:
 
@@ -189,26 +196,35 @@ Procedure
         fsType: ext4
     ```
 
-    - The name of the volume. This name is how it is identified by persistent volume claims or pods.
+    where:
 
-    - The amount of storage allocated to this volume.
+    `metadata.name`
+    Specifies the name of the volume. This name is how it is identified by persistent volume claims or pods.
 
-    - The volume type used, with `vsphereVolume` for vSphere volumes. The label is used to mount a vSphere VMDK volume into pods. The contents of a volume are preserved when it is unmounted. The volume type supports VMFS and VSAN datastore.
+    `spec.capacity.storage`
+    Specifies the amount of storage allocated to this volume.
 
-    - The existing VMDK volume to use. If you used `vmkfstools`, you must enclose the datastore name in square brackets, `[]`, in the volume definition, as shown previously.
+    `spec.vsphereVolume`
+    Specifies the volume type used, with `vsphereVolume` for vSphere volumes. The label is used to mount a vSphere VMDK volume into pods. The contents of a volume are preserved when it is unmounted. The volume type supports VMFS and VSAN datastore.
 
-    - The file system type to mount. For example, ext4, xfs, or other file systems.
+    `spec.vsphereVolume.volumePath`
+    Specifies the existing VMDK volume to use. If you used `vmkfstools`, you must enclose the datastore name in square brackets, `[]`, in the volume definition, as shown previously.
 
-      > [!IMPORTANT]
-      > Changing the value of the fsType parameter after the volume is formatted and provisioned can result in data loss and pod failure.
+    `spec.vsphereVolume.fsType`
+    Specifies the file system type to mount. For example, ext4, xfs, or other file systems.
 
-3.  Create the `PersistentVolume` object from the file:
+</div>
+
+> [!IMPORTANT]
+> Changing the value of the fsType parameter after the volume is formatted and provisioned can result in data loss and pod failure.
+
+1.  Create the `PersistentVolume` object from the file:
 
     ``` terminal
     $ oc create -f pv1.yaml
     ```
 
-4.  Create a persistent volume claim that maps to the persistent volume you created in the previous step. Create a file, `pvc1.yaml`, with the `PersistentVolumeClaim` object definition:
+2.  Create a persistent volume claim that maps to the persistent volume you created in the previous step. Create a file, `pvc1.yaml`, with the `PersistentVolumeClaim` object definition:
 
     ``` yaml
     apiVersion: v1
@@ -224,24 +240,28 @@ Procedure
       volumeName: pv1
     ```
 
-    - A unique name that represents the persistent volume claim.
+    where:
 
-    - The access mode of the persistent volume claim. With ReadWriteOnce, the volume can be mounted with read and write permissions by a single node.
+    `metadata.name`
+    Specifies a unique name that represents the persistent volume claim.
 
-    - The size of the persistent volume claim.
+    `spec.accessModes.ReadWriteOnce`
+    Specifies the access mode of the persistent volume claim. With `ReadWriteOnce`, the volume can be mounted with read and write permissions by a single node.
 
-    - The name of the existing persistent volume.
+    `spec.resources.requests.storage`
+    Specifies the size of the persistent volume claim.
 
-5.  Create the `PersistentVolumeClaim` object from the file:
+    `spec.volumeName`
+    Specifies the name of the existing persistent volume.
+
+3.  Create the `PersistentVolumeClaim` object from the file:
 
     ``` terminal
     $ oc create -f pvc1.yaml
     ```
 
-</div>
-
 ## Formatting VMware vSphere volumes
 
-Before OpenShift Container Platform mounts the volume and passes it to a container, it checks that the volume contains a file system that is specified by the `fsType` parameter value in the `PersistentVolume` (PV) definition. If the device is not formatted with the file system, all data from the device is erased, and the device is automatically formatted with the specified file system.
+You can use unformatted vSphere volumes as PVs because OpenShift Container Platform formats them before the first use.
 
-Because OpenShift Container Platform formats them before the first use, you can use unformatted vSphere volumes as PVs.
+Before OpenShift Container Platform mounts the volume and passes it to a container, it checks that the volume contains a file system that is specified by the `fsType` parameter value in the `PersistentVolume` (PV) definition. If the device is not formatted with the file system, all data from the device is erased, and the device is automatically formatted with the specified file system.

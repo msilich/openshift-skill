@@ -4,7 +4,7 @@ Red Hat build of Kueue is released as an Operator that is supported on OpenShif
 
 # Compatible environments
 
-Before you install Red Hat build of Kueue, review this section to ensure that your cluster meets the requirements.
+Your cluster must meet specific architecture and platform requirements before you can install Red Hat build of Kueue.
 
 ## Supported architectures
 
@@ -29,7 +29,34 @@ Red Hat build of Kueue version 1.1 and later is supported on the following plat
 > [!IMPORTANT]
 > Currently, Red Hat build of Kueue is not supported on Red Hat build of MicroShift (MicroShift).
 
-/ Module included in the following assemblies:
+# Release notes for Red Hat build of Kueue version 1.3.2
+
+Red Hat build of Kueue version 1.3.2 is a generally available release that is supported on OpenShift Container Platform versions 4.18 and later. Red Hat build of Kueue version 1.3 uses [Kueue](https://kueue.sigs.k8s.io/docs/overview/) version 0.16.
+
+## Fixed issues
+
+Updates Operator and Operand images to the latest Red Hat Universal Base Image (UBI) layers to incorporate security fixes.
+
+# Release notes for Red Hat build of Kueue version 1.4.1
+
+Red Hat build of Kueue version 1.4.1 is a generally available release that is supported on OpenShift Container Platform versions 4.18 and later. Red Hat build of Kueue version 1.4.1 uses [Kueue](https://kueue.sigs.k8s.io/docs/overview/) version 0.18.
+
+## Fixed issues
+
+Red Hat build of Kueue no longer accepts invalid webhook configurations at admission time
+Before this update, Red Hat build of Kueue filtered out core validating webhooks during reconciliation. As a consequence, the Operator silently accepted invalid webhook configurations for the following resources:
+
+- `Cohort`
+
+- `ClusterQueue`
+
+- `Workload`
+
+- `ResourceFlavor`
+
+With this release, the Operator always registers validating webhooks. As a result, Red Hat build of Kueue rejects invalid configurations at admission time.
+
+([OCPBUGS-99316](https://redhat.atlassian.net/browse/OCPBUGS-99316))
 
 # Release notes for Red Hat build of Kueue version 1.4
 
@@ -47,6 +74,26 @@ This release introduces admission fair sharing, which balances workload admissio
 - Applies immediate admission penalties to prevent resource monopolization
 
 For more information, see [Admission fair sharing](admission-fair-sharing.md#admission-fair-sharing).
+
+## Fixed issues
+
+Use the `resourceNames` object to limit webhooks to only Red Hat build of Kueue resources
+You can restrict the `kueue-manager-role` `ClusterRole` webhook configurations and CRD rules to specific `resourceNames`, preventing the controller from modifying other Operators' webhook configurations or CRDs. Webhook rules are scoped to `kueue-mutating-webhook-configuration` and `kueue-validating-webhook-configuration`, as shown in this example:
+
+``` yaml
+resourceNames:
+  - kueue-mutating-webhook-configuration
+  - kueue-validating-webhook-configuration
+```
+
+([OCPBUGS-88495](https://issues.redhat.com/browse/OCPBUGS-88495))
+
+Removed secrets from the core API resources list
+The upstream version of Kueue moved the `secrets` RBAC to a namespace-scoped role (`kueue-manager-secrets-role`), but the `ClusterRole` was not updated to remove the cluster-wide secrets permission.
+
+This version of Red Hat build of Kueue removes the `secrets` resource type from the cluster-wide openshift-kueue-operator `ClusterRole`. The namespace-scoped `kueue-manager-secrets-role` role already exists and provides the necessary access.
+
+([OCPBUGS-88040](https://issues.redhat.com/browse/OCPBUGS-88040))
 
 # Release notes for Red Hat build of Kueue version 1.3.1
 
@@ -188,7 +235,7 @@ After you uninstall the Red Hat Build of Kueue Operator using the **Delete all o
 
 Red Hat build of Kueue version 1.0.1 is a patch release that is supported on OpenShift Container Platform versions 4.18 and 4.19 on the 64-bit x86 architecture.
 
-Red Hat build of Kueue version 1.0.1 uses [Kueue](https://kueue.sigs.k8s.io/docs/overview/) version 0.11.
+Red Hat build of Kueue version 1.0.1 uses Kueue version 0.11.
 
 ## Bug fixes in Red Hat build of Kueue version 1.0.1
 
@@ -229,3 +276,7 @@ You cannot create a `Kueue` custom resource by using the OpenShift Container Pla
 If you try to use the OpenShift Container Platform web console to create a `Kueue` custom resource (CR) by using the form view, the web console shows an error and the resource cannot be created. As a workaround, use the YAML view to create a `Kueue` CR instead.
 
 ([OCPBUGS-58118](https://issues.redhat.com/browse/OCPBUGS-58118))
+
+# Additional resources
+
+- [Kueue (upstream documentation)](https://kueue.sigs.k8s.io/docs/overview/)

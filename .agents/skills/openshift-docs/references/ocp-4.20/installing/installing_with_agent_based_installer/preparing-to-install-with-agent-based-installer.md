@@ -355,6 +355,21 @@ In addition to static IP addresses, you can apply any network configuration that
 > [!NOTE]
 > By default, Podman uses a subnet of `10.88.0.0/16` as a bridge network. Do not set the `network.machineNetwork.cidr` parameter to include this address range, otherwise a conflict causes the cluster installation to fail.
 
+## Port requirements for the rendezvous host
+
+During the discovery and bootstrap phases of an installation, all the hosts connect to the Assisted Service that runs on the rendezvous host. Configure your firewall to allow the following traffic from each host to the rendezvous host:
+
+| Port | Protocol | Description |
+|----|----|----|
+| `8090` | TCP | Assisted Service API. Hosts use this port to register with the Assisted Service, report hardware information, and retrieve installation instructions. |
+
+Ports required to reach the Assisted Service on the rendezvous host
+
+> [!NOTE]
+> Port `8090` is required only during installation. After installation completes, the Assisted Service is no longer exposed on the rendezvous host.
+
+This specific port requirement is in addition to the standard OpenShift Container Platform networking requirements for installation.
+
 ## DHCP
 
 When using Dynamic Host Configuration Protocol (DHCP), you must specify the value for the `rendezvousIP` field in the `agent-config.yaml` file, and the `networkConfig` fields can be left blank:
@@ -762,6 +777,9 @@ The load balancing infrastructure must meet the following requirements:
 
     API load balancer
 
+    > [!IMPORTANT]
+    > The Agent-based Installer requires TCP port `8090` to be open between all hosts and the rendezvous host so that the hosts can access the Assisted Service API. Port `8090` is required only during the discovery and bootstrap phases. For more information, see "Port requirements for the rendezvous host".
+
     > [!NOTE]
     > The load balancer must be configured to take a maximum of 30 seconds from the time the API server turns off the `/readyz` endpoint to the removal of the API server instance from the pool. Within the time frame after `/readyz` returns an error or becomes healthy, the endpoint must have been removed or added. Probing every 5 or 10 seconds, with two successful requests to become healthy and three to become unhealthy, are well-tested values.
 
@@ -875,6 +893,8 @@ listen ingress-router-80
 Additional resources
 
 </div>
+
+- [Port requirements for the rendezvous host](preparing-to-install-with-agent-based-installer.md#agent-install-networking-ports_preparing-to-install-with-agent-based-installer)
 
 - [Cluster capabilities](../overview/cluster-capabilities.md#cluster-capabilities)
 

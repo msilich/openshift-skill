@@ -1,6 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-When you update a custom resource definition (CRD) that is provided by a cluster extension, Operator Lifecycle Manager (OLM) v1 runs a CRD upgrade safety preflight check to ensure backwards compatibility with previous versions of that CRD. The CRD update must pass the validation checks before the change is allowed to progress on a cluster.
+When you update a custom resource definition (CRD) provided by a cluster extension, Operator Lifecycle Manager (OLM) v1 runs a CRD upgrade safety preflight check to ensure compatibility with earlier versions.
+
+The CRD update must pass the validation checks before the change is allowed to progress on a cluster.
 
 <div>
 
@@ -16,57 +18,61 @@ Additional resources
 
 # Prohibited CRD upgrade changes
 
-The following changes to an existing custom resource definition (CRD) are caught by the CRD upgrade safety preflight check and prevent the upgrade:
+To avoid making a modification that does not validate, review the custom resource definiton (CRD) changes that are blocked by the upgrade safety preflight check.
 
-- A new required field is added to an existing version of the CRD
+The CRD upgrade safety preflight check blocks an upgrade if it detects any of the following changes to an existing CRD:
 
-- An existing field is removed from an existing version of the CRD
+- Adding a new required field to an existing version
 
-- An existing field type is changed in an existing version of the CRD
+- Removing an existing field from an existing version
 
-- A new default value is added to a field that did not previously have a default value
+- Changing an existing field type in an existing version
 
-- The default value of a field is changed
+- Adding a default value to a field that did not previously have one
 
-- An existing default value of a field is removed
+- Changing the default value of an existing field
 
-- New enum restrictions are added to an existing field which did not previously have enum restrictions
+- Removing the default value of an existing field
 
-- Existing enum values from an existing field are removed
+- Adding enum restrictions to a field that did not previously have them
 
-- The minimum value of an existing field is increased in an existing version
+- Removing existing enum values from an existing field
 
-- The maximum value of an existing field is decreased in an existing version
+- Increasing the minimum value of an existing field in an existing version
 
-- Minimum or maximum field constraints are added to a field that did not previously have constraints
+- Decreasing the maximum value of an existing field in an existing version
+
+- Adding minimum or maximum constraints to a field that did not previously have them
 
 > [!NOTE]
-> The rules for changes to minimum and maximum values apply to `minimum`, `minLength`, `minProperties`, `minItems`, `maximum`, `maxLength`, `maxProperties`, and `maxItems` constraints.
+> Rules for minimum and maximum values apply to the `minimum`, `minLength`, `minProperties`, `minItems`, `maximum`, `maxLength`, `maxProperties`, and `maxItems` constraints.
 
-The following changes to an existing CRD are reported by the CRD upgrade safety preflight check and prevent the upgrade, though the operations are technically handled by the Kubernetes API server:
+The preflight check also blocks an upgrade for the following structural changes, which are handled by the Kubernetes API server:
 
-- The scope changes from `Cluster` to `Namespace` or from `Namespace` to `Cluster`
+- Changing the CRD scope between `Cluster` and `Namespace`
 
-- An existing stored version of the CRD is removed
+- Removing an existing stored version of the CRD
 
-If the CRD upgrade safety preflight check encounters one of the prohibited upgrade changes, it logs an error for each prohibited change detected in the CRD upgrade.
+If the CRD upgrade safety preflight check detects any prohibited change, it logs an error for each violation.
 
 > [!TIP]
-> In cases where a change to the CRD does not fall into one of the prohibited change categories, but is also unable to be properly detected as allowed, the CRD upgrade safety preflight check will prevent the upgrade and log an error for an "unknown change".
+> If a CRD change is neither explicitly allowed nor categorized as a known prohibited change, the preflight check blocks the upgrade and logs an "unknown change" error.
 
 # Allowed CRD upgrade changes
 
-The following changes to an existing custom resource definition (CRD) are safe for backwards compatibility and will not cause the CRD upgrade safety preflight check to halt the upgrade:
+Reference which custom resource definition (CRD) changes are compatible with earlier versions to avoid unexpected halts during the upgrade safety preflight check.
 
-- Adding new enum values to the list of allowed enum values in a field
+The following CRD changes are compatible with earlier versions and pass the upgrade safety preflight check:
 
-- An existing required field is changed to optional in an existing version
+- Adding new values to an existing enum field
 
-- The minimum value of an existing field is decreased in an existing version
+- Changing an existing required field to optional in an existing version
 
-- The maximum value of an existing field is increased in an existing version
+- Decreasing the minimum value of an existing field in an existing version
 
-- A new version of the CRD is added with no modifications to existing versions
+- Increasing the maximum value of an existing field in an existing version
+
+- Adding a new version of the CRD without modifying existing versions
 
 # Disabling the CRD upgrade safety preflight check
 
@@ -146,11 +152,11 @@ Procedure
 
 # Examples of unsafe CRD changes
 
-The following examples demonstrate specific changes to sections of an example custom resource definition (CRD) that would be caught by the CRD upgrade safety preflight check.
+Review the example unsafe custom resource definition (CRD) changes to recognize modifications that trigger the CRD upgrade safety preflight check.
 
-For the following examples, consider a CRD object in the following starting state:
+The following examples use this baseline `CustomResourceDefinition` object:
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -201,9 +207,9 @@ spec:
 
 ## Scope change
 
-In the following custom resource definition (CRD) example, the `scope` field is changed from `Namespaced` to `Cluster`:
+The following example changes the `spec.scope` field from `Namespaced` to `Cluster`:
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -212,21 +218,21 @@ Example scope change in a CRD
 </div>
 
 ``` yaml
-    spec:
-      group: test.example.com
-      names:
-        kind: Sample
-        listKind: SampleList
-        plural: samples
-        singular: sample
-      scope: Cluster
-      versions:
-      - name: v1alpha1
+spec:
+  group: test.example.com
+  names:
+    kind: Sample
+    listKind: SampleList
+    plural: samples
+    singular: sample
+  scope: Cluster
+  versions:
+  - name: v1alpha1
 ```
 
 </div>
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -242,9 +248,9 @@ validating upgrade for CRD "test.example.com" failed: CustomResourceDefinition t
 
 ## Removal of a stored version
 
-In the following custom resource definition (CRD) example, the existing stored version, `v1alpha1`, is removed:
+The following example removes the existing stored version, `v1alpha1`:
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -253,29 +259,29 @@ Example removal of a stored version in a CRD
 </div>
 
 ``` yaml
-      versions:
-      - name: v1alpha2
-        schema:
-          openAPIV3Schema:
-            properties:
-              apiVersion:
-                type: string
-              kind:
-                type: string
-              metadata:
-                type: object
-              spec:
-                type: object
-              status:
-                type: object
-              pollInterval:
-                type: string
-            type: object
+versions:
+- name: v1alpha2
+  schema:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          type: string
+        kind:
+          type: string
+        metadata:
+          type: object
+        spec:
+          type: object
+        status:
+          type: object
+        pollInterval:
+          type: string
+      type: object
 ```
 
 </div>
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -291,9 +297,9 @@ validating upgrade for CRD "test.example.com" failed: CustomResourceDefinition t
 
 ## Removal of an existing field
 
-In the following custom resource definition (CRD) example, the `pollInterval` property field is removed from the `v1alpha1` schema:
+The following example removes the `pollInterval` property field from the `v1alpha1` schema:
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -302,27 +308,27 @@ Example removal of an existing field in a CRD
 </div>
 
 ``` yaml
-      versions:
-      - name: v1alpha1
-        schema:
-          openAPIV3Schema:
-            properties:
-              apiVersion:
-                type: string
-              kind:
-                type: string
-              metadata:
-                type: object
-              spec:
-                type: object
-              status:
-                type: object
-            type: object
+versions:
+- name: v1alpha1
+  schema:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          type: string
+        kind:
+          type: string
+        metadata:
+          type: object
+        spec:
+          type: object
+        status:
+          type: object
+      type: object
 ```
 
 </div>
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -338,9 +344,9 @@ validating upgrade for CRD "test.example.com" failed: CustomResourceDefinition t
 
 ## Addition of a required field
 
-In the following custom resource definition (CRD) example, the `pollInterval` property has been changed to a required field:
+The following example changes the `pollInterval` property to a required field:
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 
@@ -349,31 +355,31 @@ Example addition of a required field in a CRD
 </div>
 
 ``` yaml
-      versions:
-      - name: v1alpha2
-        schema:
-          openAPIV3Schema:
-            properties:
-              apiVersion:
-                type: string
-              kind:
-                type: string
-              metadata:
-                type: object
-              spec:
-                type: object
-              status:
-                type: object
-              pollInterval:
-                type: string
-            type: object
-            required:
-            - pollInterval
+versions:
+- name: v1alpha2
+  schema:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          type: string
+        kind:
+          type: string
+        metadata:
+          type: object
+        spec:
+          type: object
+        status:
+          type: object
+        pollInterval:
+          type: string
+      type: object
+      required:
+      - pollInterval
 ```
 
 </div>
 
-<div class="example">
+<div class="formalpara">
 
 <div class="title">
 

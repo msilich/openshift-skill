@@ -70,9 +70,7 @@ You can specify one of the following TLS security profiles for each component:
 
 # Configuring the TLS security profile for the kubelet
 
-You can configure a TLS security profile for the kubelet when it is acting as an HTTP server by creating a `KubeletConfig` custom resource (CR) to specify a predefined or custom TLS security profile for specific nodes.
-
-If a TLS security profile is not configured, the default TLS security profile, `Intermediate`, is used.
+To configure TLS ciphers and minimum versions for the kubelet HTTP server in OpenShift Container Platform, apply a predefined or custom TLS security profile through a `KubeletConfig` custom resource (CR). Without a custom profile, the kubelet defaults to the `Intermediate` profile.
 
 <div class="formalpara">
 

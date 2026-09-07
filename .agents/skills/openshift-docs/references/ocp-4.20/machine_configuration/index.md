@@ -13,7 +13,7 @@ Tasks in this section describe how to use features of the Machine Config Operato
 
 The Machine Config Operator (MCO) manages the lifecycle of your cluster nodes by coordinating operating system updates and configuration changes. You can use the MCO to simplify node upgrades and ensures consistent host environments across your cluster.
 
-OpenShift Container Platform 4.17 integrates both operating system and cluster management. Because the cluster manages its own updates, including updates to Red Hat Enterprise Linux CoreOS (RHCOS) on cluster nodes, OpenShift Container Platform provides an opinionated lifecycle management experience that simplifies the orchestration of node upgrades.
+OpenShift Container Platform 4.20 integrates both operating system and cluster management. Because the cluster manages its own updates, including updates to Red Hat Enterprise Linux CoreOS (RHCOS) on cluster nodes, OpenShift Container Platform provides an opinionated lifecycle management experience that simplifies the orchestration of node upgrades.
 
 OpenShift Container Platform employs three daemon sets and controllers to simplify node management. These daemon sets orchestrate operating system updates and configuration changes to the hosts by using standard Kubernetes-style constructs. They include:
 
@@ -199,7 +199,7 @@ After you make the changes, the MCO generates a new rendered machine config. In 
 Throughout this process, the MCO maintains the required number of pods based on the `MaxUnavailable` value set in the machine config pool.
 
 > [!NOTE]
-> There are conditions which can prevent the MCO from draining a node. If the MCO fails to drain a node, the Operator will be unable to reboot the node, preventing any changes made to the node through a machine config. For more information and mitigation steps, see the "MCCDrainError" runbook in the *Additional resources* section.
+> There are conditions which can prevent the MCO from draining a node. If the MCO fails to drain a node, the Operator will be unable to reboot the node, preventing any changes made to the node through a machine config. For more information and mitigation steps, see the "MCCDrainError" runbook.
 
 If the MCO drains pods on the master node, note the following conditions:
 
@@ -566,11 +566,25 @@ The node update process consists of the following phases and subphases that are 
 
 - **Update Executed**. The MCO cordons and drains the node and applies the new machine config to the node files and operating system, as needed. It contains the following sub-phases:
 
-  - **Cordoned**
+  - **Cordoned**. The MCO cordoned the node.
 
-  - **Drained**
+  - **Drained**. The MCO drained the node.
 
-  - **AppliedFilesAndOS**
+  - **AppliedFilesAndOS**. The MCO has updated the node files and operating system.
+
+  - **AppliedFiles**. The MCO has updated the node files.
+
+  - **AppliedOSImage**. The MCO has updated the operating system.
+
+    In order to see **AppliedFiles** and **AppliedOSImage** in the output, you must enable the `TechPreviewNoUpgrade` feature set on the cluster. These conditions replace **AppliedFilesAndOS**. For more information, see "Enabling features using feature gates".
+
+    > [!NOTE]
+    > Enabling the `TechPreviewNoUpgrade` feature set cannot be undone and prevents minor version updates. These feature sets are not recommended on production clusters.
+
+    > [!IMPORTANT]
+    > The `AppliedFiles` and `AppliedOSImage` condition is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+    >
+    > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
 - **PinnedImageSetsProgressing** The MCO is performing the steps needed to pin and pre-load container images.
 
@@ -589,6 +603,18 @@ The node update process consists of the following phases and subphases that are 
 - **Updated** The MCO completed a node update and the current config version of the node is equal to the desired updated version.
 
 - **Resumed**. The MCO restarted the config drift monitor process and the node returns to operational state.
+
+- **ImagePulledFromRegistry**. The MCO has pulled the desired custom layered image. This condition applies only to nodes on which on-cluster image mode has been configured.
+
+  In order to see **ImagePulledFromRegistry** in the output, you must enable the `TechPreviewNoUpgrade` feature set on the cluster. For more information, see "Enabling features using feature gates".
+
+  > [!NOTE]
+  > Enabling the `TechPreviewNoUpgrade` feature set cannot be undone and prevents minor version updates. These feature sets are not recommended on production clusters.
+
+  > [!IMPORTANT]
+  > The `ImagePulledFromRegistry` condition is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+  >
+  > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
 As the update moves through these phases, you can query the `MachineConfigNode` custom resource, which reports one of the following conditions for each phase:
 
@@ -855,11 +881,11 @@ status:
     current: rendered-master-34f96af2e41acb615410b97ce1c819e6
     desired: rendered-master-34f96af2e41acb615410b97ce1c819e6
   observedGeneration: 4
-----
-where:
 ```
 
 </div>
+
+where:
 
 `metadata.name`
 Specifies the `MachineConfigNode` object name.
@@ -1043,9 +1069,9 @@ Procedure
 
 # Viewing and interacting with certificates
 
-Machine Config Operator certificates are used to secure connections between the Red Hat Enterprise Linux CoreOS (RHCOS) nodes and the Machine Config Server.
+You can secure connections between Red Hat Enterprise Linux CoreOS (RHCOS) nodes and the Machine Config Server by viewing, interacting with, and extracting detailed information from Machine Config Operator and image registry certificates.
 
-For more information, see "Machine Config Operator certificates" in the *Additional resources* section.
+For more information, see "Machine Config Operator certificates".
 
 The following certificates are handled in the cluster by the Machine Config Controller (MCC) and can be found in the `ControllerConfig` resource:
 

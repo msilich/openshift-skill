@@ -2,7 +2,7 @@
 
 The telco core reference design specifications (RDS) configures an OpenShift Container Platform cluster running on commodity hardware to host telco core workloads.
 
-# Telco core RDS 4.17 use model overview
+# Telco core RDS 4.20 use model overview
 
 The Telco core reference design specification (RDS) describes a platform that supports large-scale telco applications including control plane functions such as signaling and aggregation. It also includes some centralized data plane functions, for example, user plane functions (UPF). These functions generally require scalability, complex networking support, resilient software-defined storage, and support performance requirements that are less stringent and constrained than far-edge deployments such as RAN.
 
@@ -178,7 +178,7 @@ Additional resources
 
 - [Applying MachineConfigPool labels to nodes before the update](../updating/updating_a_cluster/update-using-custom-machine-config-pools.md#update-using-custom-machine-config-pools)
 
-- [Understanding how to use pod disruption budgets to specify the number of pods that must be up](../nodes/pods/nodes-pods-configuring.md#nodes-pods-pod-distruption-about_nodes-pods-configuring)
+- [Understanding how to use pod disruption budgets to specify the number of pods that must be up](../nodes/pods/nodes-pods-configuring.md#nodes-pods-pod-disruption-about_nodes-pods-configuring)
 
 - [Placing pods relative to other pods using affinity and anti-affinity rules](../nodes/scheduling/nodes-scheduler-pod-affinity.md#nodes-scheduler-pod-affinity)
 
@@ -1655,7 +1655,7 @@ Storage CRs
 
 # Telco core reference configuration software specifications
 
-The Red Hat telco core 4.17 solution has been validated using the following Red Hat software products for OpenShift Container Platform clusters.
+The Red Hat telco core 4.20 solution has been validated using the following Red Hat software products for OpenShift Container Platform clusters.
 
 | Component                                   | Software version |
 |---------------------------------------------|------------------|

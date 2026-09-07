@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-OpenShift Container Platform supports Fibre Channel, allowing you to provision your OpenShift Container Platform cluster with persistent storage using Fibre channel volumes. Some familiarity with Kubernetes and Fibre Channel is assumed.
+You can provision your OpenShift Container Platform cluster with persistent storage by using Fibre Channel volumes for workloads that require high-speed, reliable block-level storage.
 
 > [!IMPORTANT]
 > Persistent storage using Fibre Channel is not supported on ARM architecture based infrastructures.
@@ -22,9 +22,11 @@ Additional resources
 
 </div>
 
-# Provisioning
+# About provisioning storage using Fibre Channel
 
-To provision Fibre Channel volumes using the `PersistentVolume` API the following must be available:
+You can provision Fibre Channel volumes by using the `PersistentVolume` API.
+
+Before provisioning the volumes, the following items must be available.
 
 - The `targetWWNs` (array of Fibre Channel target’s World Wide Names).
 
@@ -34,17 +36,8 @@ To provision Fibre Channel volumes using the `PersistentVolume` API the followin
 
 A persistent volume and a LUN have a one-to-one mapping between them.
 
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- Fibre Channel LUNs must exist in the underlying infrastructure.
-
-</div>
+> [!NOTE]
+> Fibre Channel LUNs must exist in the underlying infrastructure.
 
 <div class="formalpara">
 
@@ -65,7 +58,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   fc:
-    wwids: [scsi-3600508b400105e210000900000490000]
+    wwids: [3600508b400105e210000900000490000]
     targetWWNs: ['500a0981891b8dc5', '500a0981991b8dc5']
     lun: 2
     fsType: ext4
@@ -73,21 +66,28 @@ spec:
 
 </div>
 
-- World wide identifiers (WWIDs). Either FC `wwids` or a combination of FC `targetWWNs` and `lun` must be set, but not both simultaneously. The FC WWID identifier is recommended over the WWNs target because it is guaranteed to be unique for every storage device, and independent of the path that is used to access the device. The WWID identifier can be obtained by issuing a SCSI Inquiry to retrieve the Device Identification Vital Product Data (`page 0x83`) or Unit Serial Number (`page 0x80`). FC WWIDs are identified as `/dev/disk/by-id/` to reference the data on the disk, even if the path to the device changes and even when accessing the device from different systems.
+where:
 
-- Fibre Channel WWNs are identified as `/dev/disk/by-path/pci-<IDENTIFIER>-fc-0x<WWN>-lun-<LUN#>`, but you do not need to provide any part of the path leading up to the `WWN`, including the `0x`, and anything after, including the `-` (hyphen).
+`spec.fc.wwids`
+Specifies the world wide identifiers (WWIDs). Either FC `wwids` or a combination of FC `targetWWNs` and `lun` must be set, but not both simultaneously. The FC WWID identifier is recommended over the WWNs target because it is guaranteed to be unique for every storage device, and independent of the path that is used to access the device. The WWID identifier can be obtained by issuing a SCSI Inquiry to retrieve the Device Identification Vital Product Data (`page 0x83`) or Unit Serial Number (`page 0x80`). FC WWIDs are identified as `/dev/disk/by-id/` to reference the data on the disk, even if the path to the device changes and even when accessing the device from different systems.
+
+`spec.fc.targetWWNs`
+Specifies the Fibre Channel World Wide Names (WWNs). Fibre Channel WWNs are identified as `/dev/disk/by-path/pci-<IDENTIFIER>-fc-0x<WWN>-lun-<LUN#>`, but you do not need to provide any part of the path leading up to the `WWN`, including the `0x`, and anything after, including the `-` (hyphen).
+
+`spec.fc.lun`
+Specifies the LUN number.
 
 > [!IMPORTANT]
 > Changing the value of the `fstype` parameter after the volume has been formatted and provisioned can result in data loss and pod failure.
 
 ## Enforcing disk quotas
 
-Use LUN partitions to enforce disk quotas and size constraints. Each LUN is mapped to a single persistent volume, and unique names must be used for persistent volumes.
+You can use LUN partitions to enforce disk quotas and size constraints. Each LUN is mapped to a single persistent volume, and unique names must be used for persistent volumes.
 
-Enforcing quotas in this way allows the end user to request persistent storage by a specific amount, such as 10Gi, and be matched with a corresponding volume of equal or greater capacity.
+Enforcing quotas in this way allows the user to request persistent storage by a specific amount, such as 10Gi, and be matched with a corresponding volume of equal or greater capacity.
 
 ## Fibre Channel volume security
 
-Users request storage with a persistent volume claim. This claim only lives in the user’s namespace, and can only be referenced by a pod within that same namespace. Any attempt to access a persistent volume across a namespace causes the pod to fail.
+You can request storage with a persistent volume claim. This claim only lives in the user’s namespace, and can only be referenced by a pod within that same namespace. Any attempt to access a persistent volume across a namespace causes the pod to fail.
 
 Each Fibre Channel LUN must be accessible by all nodes in the cluster.

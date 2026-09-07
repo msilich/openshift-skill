@@ -6,6 +6,34 @@ The Kube Descheduler Operator allows you to evict pods so that they can be resch
 
 For more information, see [About the descheduler](index.md#nodes-descheduler-about_nodes-descheduler-about).
 
+# Release notes for Kube Descheduler Operator 5.3.4
+
+Review the release notes for Kube Descheduler Operator 5.3.4 to learn what is new and updated with this release.
+
+Issued: 14 August 2026
+
+The following advisory is available for the Kube Descheduler Operator 5.3.4:
+
+- [RHBA-2026:54868](https://access.redhat.com/errata/RHBA-2026:54868)
+
+## New features and enhancements
+
+- This release rebuilds the base image for the Kube Descheduler Operator to improve its image grade.
+
+# Release notes for Kube Descheduler Operator 5.3.3
+
+Review the release notes for Kube Descheduler Operator 5.3.3 to learn what is new and updated with this release.
+
+Issued: 13 August 2026
+
+The following advisory is available for the Kube Descheduler Operator 5.3.3:
+
+- [RHBA-2026:54795](https://access.redhat.com/errata/RHBA-2026:54795)
+
+## New features and enhancements
+
+- This release rebuilds the base image for the Kube Descheduler Operator to improve its image grade.
+
 # Release notes for Kube Descheduler Operator 5.3.2
 
 Review the release notes for Kube Descheduler Operator 5.3.2 to learn what is new and updated with this release.
@@ -51,6 +79,34 @@ The following advisory is available for the Kube Descheduler Operator 5.3.0:
   For more information, see [Configuring descheduler evictions for virtual machines](../../../virt/managing_vms/advanced_vm_management/virt-enabling-descheduler-evictions.md#virt-configuring-descheduler-evictions_virt-enabling-descheduler-evictions).
 
 - This release of the Kube Descheduler Operator updates the Kubernetes version to 1.33.
+
+# Release notes for Kube Descheduler Operator 5.2.3
+
+Review the release notes for Kube Descheduler Operator 5.2.3 to learn what is new and updated with this release.
+
+Issued: 14 August 2026
+
+The following advisory is available for the Kube Descheduler Operator 5.2.3:
+
+- [RHBA-2026:54865](https://access.redhat.com/errata/RHBA-2026:54865)
+
+## New features and enhancements
+
+- This release rebuilds the base image for the Kube Descheduler Operator to improve its image grade.
+
+# Release notes for Kube Descheduler Operator 5.2.2
+
+Review the release notes for Kube Descheduler Operator 5.2.2 to learn what is new and updated with this release.
+
+Issued: 13 August 2026
+
+The following advisory is available for the Kube Descheduler Operator 5.2.2:
+
+- [RHBA-2026:54798](https://access.redhat.com/errata/RHBA-2026:54798)
+
+## New features and enhancements
+
+- This release rebuilds the base image for the Kube Descheduler Operator to improve its image grade.
 
 # Release notes for Kube Descheduler Operator 5.2.1
 

@@ -103,7 +103,8 @@ Procedure
 
     </div>
 
-    - If your `multiclusterHub` CR does not have `.spec.imagePullSecret` defined and the secret does not exist on the `open-cluster-management-agent` namespace in your hub cluster, remove `v1/secrets/open-cluster-management-agent/open-cluster-management-image-pull-credentials`.
+    > [!NOTE]
+    > If your `multiclusterHub` CR does not have `.spec.imagePullSecret` defined and the secret does not exist on the `open-cluster-management-agent` namespace in your hub cluster, remove `v1/secrets/open-cluster-management-agent/open-cluster-management-image-pull-credentials` from the `metadata.annotations.lca.openshift.io/apply-label` value in the `acm-klusterlet` `Backup` CR.
 
     > [!NOTE]
     > If you perform the image-based upgrade directly on managed clusters, use the `PlatformBackupRestore.yaml` file.
@@ -343,9 +344,13 @@ Procedure
       disableNameSuffixHash: true
     ```
 
-    - Creates the `oadp-cm` `ConfigMap` object on the hub cluster with `Backup` and `Restore` CRs.
+    where:
 
-    - The namespace must exist on all managed clusters and the hub for the OADP `ConfigMap` to be generated and copied to the clusters.
+    `configMapGenerator`
+    Creates the `oadp-cm` `ConfigMap` object on the hub cluster with `Backup` and `Restore` CRs.
+
+    `namespace: openshift-adp`
+    The namespace must exist on all managed clusters and the hub for the OADP `ConfigMap` to be generated and copied to the clusters.
 
 4.  Push the changes to your Git repository.
 
@@ -468,9 +473,13 @@ Procedure
               image: quay.io/example-org/example-catalog:v1
     ```
 
-    - Ensure that the `lca.openshift.io/target-ocp-version` label matches either the y-stream or the z-stream of the target OpenShift Container Platform version that is specified in the `spec.seedImageRef.version` field of the `ImageBasedUpgrade` CR. The Lifecycle Agent only applies the CRs that match the specified version.
+    where:
 
-    - If you do not want to use custom catalog sources, remove this entry.
+    `lca.openshift.io/target-ocp-version`
+    Ensure that this label matches either the y-stream or the z-stream of the target OpenShift Container Platform version that is specified in the `spec.seedImageRef.version` field of the `ImageBasedUpgrade` CR. The Lifecycle Agent only applies the CRs that match the specified version.
+
+    `DefaultCatsrc.yaml`
+    If you do not want to use custom catalog sources, remove this entry.
 
 2.  Push the changes to your Git repository.
 

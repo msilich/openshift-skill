@@ -1,11 +1,9 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can specify Content Security Policy (CSP) directives for your dynamic plugin using the `contentSecurityPolicy` field in the `ConsolePluginSpec` file. This field helps mitigate potential security risks by specifying which sources are allowed for fetching content like scripts, styles, images, and fonts. For dynamic plugins that require loading resources from external sources, defining custom CSP rules ensures secure integration into the OpenShift Container Platform console.
+Specify Content Security Policy (CSP) directives for your dynamic plugin using the `contentSecurityPolicy` field in `ConsolePluginSpec`. CSP restricts which sources supply scripts, styles, images, and fonts, mitigating risks for plugins loading resources externally.
 
 > [!IMPORTANT]
 > The console currently uses the `Content-Security-Policy-Report-Only` response header, so the browser will only warn about CSP violations in the web console and enforcement of CSP policies will be limited. CSP violations will be logged in the browser console, but the associated CSP directives will not be enforced. This feature is behind a `feature-gate`, so you will need to manually enable it.
->
-> For more information, see [Enabling feature sets using the web console](../../nodes/clusters/nodes-cluster-enabling-features.md#nodes-cluster-enabling-features-console_nodes-cluster-enabling-features).
 
 # Key features of Content Security Policy (CSP)
 
@@ -34,3 +32,5 @@ The OpenShift Container Platform web console aggregates the CSP directives acros
 # Additional resources
 
 - [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
+
+- [Enabling feature sets using the web console](../../nodes/clusters/nodes-cluster-enabling-features.md#nodes-cluster-enabling-features-console_nodes-cluster-enabling)

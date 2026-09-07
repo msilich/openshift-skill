@@ -1,26 +1,38 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The Compliance Operator in the OpenShift Container Platform provides you with several Custom Resource Definitions (CRDs) to accomplish the compliance scans. To run a compliance scan, it leverages the predefined security policies, which are derived from the [ComplianceAsCode](https://github.com/ComplianceAsCode/content) community project. The Compliance Operator converts these security policies into CRDs, which you can use to run compliance scans and get remediations for the issues found.
+You can use the Custom Resource Definitions (CRDs) provided by the Compliance Operator to run compliance scans and get remediation for the issues found.
 
-# CRDs workflow
+The Compliance Operator in the OpenShift Container Platform provides you with several Custom Resource Definitions (CRDs) to run the compliance scans. The Compliance Operator converts security policies into CRDs, which you can use.
 
-The CRD provides you the following workflow to complete the compliance scans:
+The CRD workflow uses these objects:
 
-1.  Define your compliance scan requirements
+- `ProfileBundle`, `Profile`, and `TailoredProfile` to define scan requirements
 
-2.  Configure the compliance scan settings
+- `ScanSetting` to configure the scan type, occurrence, and location
 
-3.  Process compliance requirements with compliance scans settings
+- `ScanSettingBinding` to process requirements with those settings
 
-4.  Monitor the compliance scans
+- `ComplianceSuite` to monitor deployed scans
 
-5.  Check the compliance scan results
+- Scan results and remediation after the suite reaches the `DONE` phase
 
-# Defining the compliance scan requirements
+# Compliance Operator custom resource definition workflow
 
-By default, the Compliance Operator CRDs include `ProfileBundle` and `Profile` objects, in which you can define and set the rules for your compliance scan requirements. You can also customize the default profiles by using a `TailoredProfile` object.
+You can use the Compliance Operator Custom Resource Definition (CRD) workflow to define requirements, configure settings, process scans, monitor compliance checks, and review results.
 
-## ProfileBundle object
+The CRD workflow includes the following steps:
+
+1.  Define your compliance scan requirements.
+
+2.  Configure the compliance scan settings.
+
+3.  Process compliance requirements with compliance scans settings.
+
+4.  Monitor the compliance scans.
+
+5.  Check the compliance scan results.
+
+# ProfileBundle object
 
 When you install the Compliance Operator, it includes ready-to-run `ProfileBundle` objects. The Compliance Operator parses the `ProfileBundle` object and creates a `Profile` object for each profile in the bundle. It also parses `Rule` and `Variable` objects, which are used by the `Profile` object.
 
@@ -43,26 +55,22 @@ status:
 
 </div>
 
-- Indicates whether the Compliance Operator was able to parse the content files.
+where:
+
+`status.dataStreamStatus`
+Specifies whether the Compliance Operator was able to parse the content files. Value is `VALID` when parsing succeeds.
 
 > [!NOTE]
-> When the `contentFile` fails, an `errorMessage` attribute appears, which provides details of the error that occurred.
+> When the `contentFile` fails, an `errorMessage` attribute is displayed, which provides details of the error that occurred.
 
-<div class="formalpara">
+> [!NOTE]
+> When you roll back to a known content image from an invalid image, the `ProfileBundle` object stops responding and displays `PENDING` state. As a workaround, you can move to a different image than the earlier one or you can delete and re-create the `ProfileBundle` object to return to the working state.
 
-<div class="title">
+# Profile object
 
-Troubleshooting
+You can use the `Profile` object to review parsed out details about an OpenSCAP profile, such as its XCCDF identifier and profile checks for a `Node` or `Platform` type.
 
-</div>
-
-When you roll back to a known content image from an invalid image, the `ProfileBundle` object stops responding and displays `PENDING` state. As a workaround, you can move to a different image than the previous one. Alternatively, you can delete and re-create the `ProfileBundle` object to return to the working state.
-
-</div>
-
-## Profile object
-
-The `Profile` object defines the rules and variables that can be evaluated for a certain compliance standard. It contains parsed out details about an OpenSCAP profile, such as its XCCDF identifier and profile checks for a `Node` or `Platform` type. You can either directly use the `Profile` object or further customize it using a `TailorProfile` object.
+The `Profile` object defines the rules and variables that can be evaluated for a certain compliance standard. You can either directly use the `Profile` object or further customize it using a `TailorProfile` object.
 
 > [!NOTE]
 > You cannot create or modify the `Profile` object manually because it is derived from a single `ProfileBundle` object. Typically, a single `ProfileBundle` object can include several `Profile` objects.
@@ -110,15 +118,22 @@ title: <title of the profile>
 
 </div>
 
-- Specify the XCCDF name of the profile. Use this identifier when you define a `ComplianceScan` object as the value of the profile attribute of the scan.
+where:
 
-- Specify either a `Node` or `Platform`. Node profiles scan the cluster nodes and platform profiles scan the Kubernetes platform.
+`id`
+Specifies the XCCDF name of the profile. Use this identifier when you define a `ComplianceScan` object as the value of the profile attribute of the scan.
 
-- Specify the list of rules for the profile. Each rule corresponds to a single check.
+`metadata.annotations.compliance.openshift.io/product-type`
+Specifies either a `Node` or `Platform`. Node profiles scan the cluster nodes and platform profiles scan the Kubernetes platform.
 
-## Rule object
+`rules`
+Specifies the list of rules for the profile. Each rule corresponds to a single check.
 
-The `Rule` object, which forms the profiles, are also exposed as objects. Use the `Rule` object to define your compliance check requirements and specify how it could be fixed.
+# Rule object
+
+You can use the `Rule` object, which represents an individual compliance check, to view check details and understand why a scan result passed or failed.
+
+The `Rule` objects, which form the profiles, are also exposed as objects. You can use the `Rule` object to define your compliance check requirements and specify how a failed compliance check can be remediated.
 
 <div class="formalpara">
 
@@ -154,18 +169,25 @@ Example `Rule` object
 
 </div>
 
-- Specify the type of check this rule executes. `Node` profiles scan the cluster nodes and `Platform` profiles scan the Kubernetes platform. An empty value indicates there is no automated check.
+where:
 
-- Specify the XCCDF name of the rule, which is parsed directly from the datastream.
+`checkType`
+Specifies the type of check this rule executes. `Node` profiles scan the cluster nodes and `Platform` profiles scan the Kubernetes platform. An empty value indicates there is no automated check.
 
-- Specify the severity of the rule when it fails.
+`id`
+Specifies the XCCDF name of the rule, which is parsed directly from the datastream.
+
+`severity`
+Specifies the severity of the rule when it fails.
 
 > [!NOTE]
 > The `Rule` object gets an appropriate label for an easy identification of the associated `ProfileBundle` object. The `ProfileBundle` also gets specified in the `OwnerReferences` of this object.
 
-## TailoredProfile object
+# TailoredProfile object
 
-Use the `TailoredProfile` object to modify the default `Profile` object based on your organization requirements. You can enable or disable rules, set variable values, and provide justification for the customization. After validation, the `TailoredProfile` object creates a `ConfigMap`, which can be referenced by a `ComplianceScan` object.
+You can use the `TailoredProfile` object to modify the default `Profile` object based on your organization requirements. You can enable or disable rules, set variable values, and provide justification for the customization.
+
+After validation, the `TailoredProfile` object creates a `ConfigMap`, which can be referenced by a `ComplianceScan` object.
 
 > [!TIP]
 > You can use the `TailoredProfile` object by referencing it in a `ScanSettingBinding` object. For more information about `ScanSettingBinding`, see ScanSettingBinding object.
@@ -199,15 +221,21 @@ status:
 
 </div>
 
-- This is optional. Name of the `Profile` object upon which the `TailoredProfile` is built. If no value is set, a new profile is created from the `enableRules` list.
+where:
 
-- Specifies the XCCDF name of the tailored profile.
+`spec.extends`
+Optional parameter. Specifies the name of the `Profile` object upon which the `TailoredProfile` is built. If no value is set, a new profile is created from the `enableRules` list.
 
-- Specifies the `ConfigMap` name, which can be used as the value of the `tailoringConfigMap.name` attribute of a `ComplianceScan`.
+`status.id`
+Specifies the XCCDF name of the tailored profile.
 
-- Shows the state of the object such as `READY`, `PENDING`, and `FAILURE`. If the state of the object is `ERROR`, then the attribute `status.errorMessage` provides the reason for the failure.
+`status.outputRef.name`
+Specifies the `ConfigMap` name, which can be used as the value of the `tailoringConfigMap.name` attribute of a `ComplianceScan`.
 
-With the `TailoredProfile` object, it is possible to create a new `Profile` object using the `TailoredProfile` construct. To create a new `Profile`, set the following configuration parameters :
+`status.state`
+Specifies the state of the object such as `READY`, `PENDING`, and `FAILURE`. If the state of the object is `ERROR`, then the attribute `status.errorMessage` provides the reason for the failure.
+
+With the `TailoredProfile` object, you can create a new `Profile` object by using the `TailoredProfile` construct. To create a new `Profile`, set the following configuration parameters:
 
 - an appropriate title
 
@@ -222,17 +250,15 @@ With the `TailoredProfile` object, it is possible to create a new `Profile` obje
   > [!NOTE]
   > If you have not set the `product-type` annotation, the Compliance Operator defaults to `Platform` scan type. Adding the `-node` suffix to the name of the `TailoredProfile` object results in `node` scan type.
 
-# Configuring the compliance scan settings
+# ScanSetting object
 
-After you have defined the requirements of the compliance scan, you can configure it by specifying the type of the scan, occurrence of the scan, and location of the scan. To do so, Compliance Operator provides you with a `ScanSetting` object.
+You can use the `ScanSetting` object to define and reuse the operational policies to run your scans, reducing configuration repetition across many scan bindings.
 
-## ScanSetting object
+By default, the Compliance Operator creates the following `ScanSetting` objects:
 
-Use the `ScanSetting` object to define and reuse the operational policies to run your scans. By default, the Compliance Operator creates the following `ScanSetting` objects:
+- **default** - Runs a scan every day at 1 AM on both control plane and worker nodes by using a 1Gi Persistent Volume (PV) and keeps the last three results. Remediation is neither applied nor updated automatically.
 
-- **default** - it runs a scan every day at 1 AM on both master and worker nodes using a 1Gi Persistent Volume (PV) and keeps the last three results. Remediation is neither applied nor updated automatically.
-
-- **default-auto-apply** - it runs a scan every day at 1AM on both control plane and worker nodes using a 1Gi Persistent Volume (PV) and keeps the last three results. Both `autoApplyRemediations` and `autoUpdateRemediations` are set to true.
+- **default-auto-apply** - Runs a scan every day at 1 AM on both control plane and worker nodes by using a 1Gi Persistent Volume (PV) and keeps the last three results. Both `autoApplyRemediations` and `autoUpdateRemediations` are set to `true`.
 
 <div class="formalpara">
 
@@ -290,28 +316,34 @@ timeout: 30m
 
 </div>
 
-- Set to `true` to enable auto remediations. Set to `false` to disable auto remediations.
+where:
 
-- Set to `true` to enable auto remediations for content updates. Set to `false` to disable auto remediations for content updates.
+`autoApplyRemediations`
+Set to `true` to enable auto remediations. Set to `false` to disable auto remediations.
 
-- Specify the number of stored scans in the raw result format. The default value is `3`. As the older results get rotated, the administrator must store the results elsewhere before the rotation happens.
+`autoUpdateRemediations`
+Set to `true` to enable auto remediations for content updates. Set to `false` to disable auto remediations for content updates.
 
-- Specify the storage size that should be created for the scan to store the raw results. The default value is `1Gi`
+`rawResultStorage.rotation`
+Specifies the number of stored scans in the raw result format. The default value is `3`. As the older results get rotated, the administrator must store the results elsewhere before the rotation happens. To disable the rotation policy, set the value to `0`.
 
-- Specify how often the scan should be run in cron format.
+`rawResultStorage.size`
+Specifies the storage size that must be created for the scan to store the raw results. The default value is `1Gi`.
 
-  > [!NOTE]
-  > To disable the rotation policy, set the value to `0`.
+`schedule`
+Specifies how often the scan must be run in cron format.
 
-- Specify the `node-role.kubernetes.io` label value to schedule the scan for `Node` type. This value has to match the name of a `MachineConfigPool`.
+> [!NOTE]
+> To disable the rotation policy, set the value to `0`.
 
-# Processing the compliance scan requirements with compliance scans settings
-
-When you have defined the compliance scan requirements and configured the settings to run the scans, then the Compliance Operator processes it using the `ScanSettingBinding` object.
+`roles`
+Specifies the `node-role.kubernetes.io` label value to schedule the scan for `Node` type. This value must match the name of a `MachineConfigPool`.
 
 ## ScanSettingBinding object
 
-Use the `ScanSettingBinding` object to specify your compliance requirements with reference to the `Profile` or `TailoredProfile` object. It is then linked to a `ScanSetting` object, which provides the operational constraints for the scan. Then the Compliance Operator generates the `ComplianceSuite` object based on the `ScanSetting` and `ScanSettingBinding` objects.
+You can use the `ScanSettingBinding` object to specify your compliance requirements with reference to the `Profile` or `TailoredProfile` object.
+
+The `ScanSettingBinding` object is linked to a `ScanSetting` object, which provides the operational constraints for the scan. Then the Compliance Operator generates the `ComplianceSuite` object based on the `ScanSetting` and `ScanSettingBinding` objects.
 
 <div class="formalpara">
 
@@ -343,9 +375,13 @@ settingsRef:
 
 </div>
 
-- Specify the details of `Profile` or `TailoredProfile` object to scan your environment.
+where:
 
-- Specify the operational constraints, such as schedule and storage size.
+`profiles`
+Specifies the details of `Profile` or `TailoredProfile` object to scan your environment.
+
+`settingsRef`
+Specifies the operational constraints, such as schedule and storage size.
 
 The creation of `ScanSetting` and `ScanSettingBinding` objects results in the compliance suite. To get the list of compliance suite, run the following command:
 
@@ -356,15 +392,11 @@ $ oc get compliancesuites
 > [!IMPORTANT]
 > If you delete `ScanSettingBinding`, then compliance suite also is deleted.
 
-# Tracking the compliance scans
-
-After the creation of compliance suite, you can monitor the status of the deployed scans using the `ComplianceSuite` object.
-
 ## ComplianceSuite object
 
-The `ComplianceSuite` object helps you keep track of the state of the scans. It contains the raw settings to create scans and the overall result.
+You can review a `ComplianceSuite` object to keep track of the state of the scans. The object has the raw settings to create scans and an overall result.
 
-For `Node` type scans, you should map the scan to the `MachineConfigPool`, since it contains the remediations for any issues. If you specify a label, ensure it directly applies to a pool.
+For `Node` type scans, map the scan to the `MachineConfigPool`, because the scan has the remediation for any issues. If you specify a label, ensure the label directly applies to a pool.
 
 <div class="formalpara">
 
@@ -402,15 +434,22 @@ status:
 
 </div>
 
-- Set to `true` to enable auto remediations. Set to `false` to disable auto remediations.
+where:
 
-- Specify how often the scan should be run in cron format.
+`spec.autoApplyRemediations`
+Set to `true` to enable auto remediations. Set to `false` to disable auto remediations.
 
-- Specify a list of scan specifications to run in the cluster.
+`spec.schedule`
+Specifies how often the scan should be run in cron format.
 
-- Indicates the progress of the scans.
+`spec.scans`
+Specifies a list of scan specifications to run in the cluster.
 
-- Indicates the overall verdict of the suite.
+`status.Phase`
+Specifies the progress of the scans.
+
+`status.Result`
+Specifies the overall verdict of the suite.
 
 The suite in the background creates the `ComplianceScan` object based on the `scans` parameter. You can programmatically fetch the `ComplianceSuites` events. To get the events for the suite, run the following command:
 
@@ -423,7 +462,9 @@ $ oc get events --field-selector involvedObject.kind=ComplianceSuite,involvedObj
 
 ## Advanced ComplianceScan Object
 
-The Compliance Operator includes options for advanced users for debugging or integrating with existing tooling. While it is recommended that you not create a `ComplianceScan` object directly, you can instead manage it using a `ComplianceSuite` object.
+You can use the `ComplianceScan` object to configure advanced options such as custom result storage, debug pods, and scan suspension for troubleshooting and tool integration.
+
+The Compliance Operator includes options for advanced users for debugging or integrating with existing tool. While Red Hat recommends that you should not create a `ComplianceScan` object directly, you can instead manage the object by using a `ComplianceSuite` object.
 
 <div class="formalpara">
 
@@ -453,25 +494,34 @@ status:
 
 </div>
 
-- Specify either `Node` or `Platform`. Node profiles scan the cluster nodes and platform profiles scan the Kubernetes platform.
+where:
 
-- Specify the XCCDF identifier of the profile that you want to run.
+`spec.scanType`
+Specifies either `Node` or `Platform`. Node profiles scan the cluster nodes and platform profiles scan the Kubernetes platform.
 
-- Specify the container image that encapsulates the profile files.
+`spec.profile`
+Specifies the XCCDF (Extensible Configuration Checklist Description Format) identifier of the profile that you want to run.
 
-- It is optional. Specify the scan to run a single rule. This rule has to be identified with the XCCDF ID, and has to belong to the specified profile.
+`spec.contentImage`
+Specifies the container image that encapsulates the profile files.
 
-  > [!NOTE]
-  > If you skip the `rule` parameter, then scan runs for all the available rules of the specified profile.
+`spec.rule`
+Specifies the scan to run a single rule. This rule must be identified with the XCCDF ID, and must belong to the specified profile.
 
-- If you are on the OpenShift Container Platform and wants to generate a remediation, then nodeSelector label has to match the `MachineConfigPool` label.
+> [!NOTE]
+> If you skip the `rule` parameter, then scan runs for all the available rules of the specified profile.
 
-  > [!NOTE]
-  > If you do not specify `nodeSelector` parameter or match the `MachineConfig` label, scan will still run, but it will not create remediation.
+`spec.nodeSelector`
+If you are on the OpenShift Container Platform and wants to generate a remediation, the `nodeSelector` label must match the `MachineConfigPool` label.
 
-- Indicates the current phase of the scan.
+> [!NOTE]
+> If you do not specify `nodeSelector` parameter or match the `MachineConfig` label, scan will still run, but it will not create remediation.
 
-- Indicates the verdict of the scan.
+`status.phase`
+Specifies the current phase of the scan.
+
+`status.result`
+Specifies the verdict of the scan.
 
 > [!IMPORTANT]
 > If you delete a `ComplianceSuite` object, then all the associated scans get deleted.
@@ -479,12 +529,8 @@ status:
 When the scan is complete, it generates the result as Custom Resources of the `ComplianceCheckResult` object. However, the raw results are available in ARF format. These results are stored in a Persistent Volume (PV), which has a Persistent Volume Claim (PVC) associated with the name of the scan. You can programmatically fetch the `ComplianceScans` events. To generate events for the suite, run the following command:
 
 ``` terminal
-oc get events --field-selector involvedObject.kind=ComplianceScan,involvedObject.name=<name_of_the_compliance_scan>
+$ oc get events --field-selector involvedObject.kind=ComplianceScan,involvedObject.name=<name_of_the_compliance_scan>
 ```
-
-# Viewing the compliance results
-
-When the compliance suite reaches the `DONE` phase, you can view the scan results and possible remediations.
 
 ## ComplianceCheckResult object
 
@@ -524,32 +570,38 @@ status: FAIL
 
 </div>
 
-- Describes the severity of the scan check.
+where:
 
-- Describes the result of the check. The possible values are:
+`severity`
+Specifies the severity of the scan check.
 
-  - PASS: check was successful.
+`status`
+Specifies the result of the check. The possible values are:
 
-  - FAIL: check was unsuccessful.
+- `PASS`: Specifies if the check was successful.
 
-  - INFO: check was successful and found something not severe enough to be considered an error.
+- `FAIL`: Specifies if the check was unsuccessful.
 
-  - MANUAL: check cannot automatically assess the status and manual check is required.
+- `INFO`: Specifies if the check was successful and found something not severe enough to be considered an error.
 
-  - INCONSISTENT: different nodes report different results.
+- `MANUAL`: Specifies if the check cannot automatically assess the status and manual check is required.
 
-  - ERROR: check run successfully, but could not complete.
+- `INCONSISTENT`: Specifies that the different nodes are reporting different results.
 
-  - NOTAPPLICABLE: check did not run as it is not applicable.
+- `ERROR`: Specifies if the check ran successfully, but could not complete.
 
-To get all the check results from a suite, run the following command:
+- `NOTAPPLICABLE`: Specifies if the check did not run as it is not applicable.
+
+  To get all the check results from a suite, run the following command:
 
 ``` terminal
-oc get compliancecheckresults \
+$ oc get compliancecheckresults \
 -l compliance.openshift.io/suite=workers-compliancesuite
 ```
 
 ## ComplianceRemediation object
+
+If a Kubernetes fix is available, the Compliance Operator creates a `ComplianceRemediation` object, which you can use to determine a way to fix a problem described in a `ComplianceCheckResult` object.
 
 For a specific check you can have a datastream specified fix. However, if a Kubernetes fix is available, then the Compliance Operator creates a `ComplianceRemediation` object.
 
@@ -600,29 +652,34 @@ spec:
 
 </div>
 
-- `true` indicates the remediation was applied. `false` indicates the remediation was not applied.
+where:
 
-- Includes the definition of the remediation.
+`spec.apply`
+A `true` value specifies the remediation was applied. A `false` value indicates the remediation was not applied.
 
-- Indicates remediation that was previously parsed from an earlier version of the content. The Compliance Operator still retains the outdated objects to give the administrator a chance to review the new remediations before applying them.
+`spec.object.current`
+Specifies the definition of the remediation.
+
+`spec.object.outdated`
+Specifies remediation that was before parsed from an earlier version of the content. The Compliance Operator still retains the outdated objects to give the administrator a chance to review the new remediations before applying them.
 
 To get all the remediations from a suite, run the following command:
 
 ``` terminal
-oc get complianceremediations \
+$ oc get complianceremediations \
 -l compliance.openshift.io/suite=workers-compliancesuite
 ```
 
 To list all failing checks that can be remediated automatically, run the following command:
 
 ``` terminal
-oc get compliancecheckresults \
+$ oc get compliancecheckresults \
 -l 'compliance.openshift.io/check-status in (FAIL),compliance.openshift.io/automated-remediation'
 ```
 
 To list all failing checks that can be remediated manually, run the following command:
 
 ``` terminal
-oc get compliancecheckresults \
+$ oc get compliancecheckresults \
 -l 'compliance.openshift.io/check-status in (FAIL),!compliance.openshift.io/automated-remediation'
 ```

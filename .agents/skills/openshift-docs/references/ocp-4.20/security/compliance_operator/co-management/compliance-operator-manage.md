@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-This section describes the lifecycle of security content, including how to use an updated version of compliance content and how to create a custom `ProfileBundle` object.
+You can manage the Compliance Operator security content lifecycle to keep compliance profiles current and create custom `ProfileBundle` objects tailored to your organization security requirements.
 
 # ProfileBundle CR example
 
-The `ProfileBundle` object requires two pieces of information: the URL of a container image that contains the `contentImage` and the file that contains the compliance content. The `contentFile` parameter is relative to the root of the file system. You can define the built-in `rhcos4` `ProfileBundle` object as shown in the following example:
+You can configure a `ProfileBundle` to provide the Compliance Operator with the security profiles it needs to scan your cluster.
+
+A `ProfileBundle` custom resource (CR) defines the container image URL in `contentImage` and the compliance content file path in `contentFile`, relative to the root of the file system.
 
 ``` yaml
 apiVersion: compliance.openshift.io/v1alpha1
@@ -31,16 +33,22 @@ status:
   dataStreamStatus: VALID
 ```
 
-- Location of the file containing the compliance content.
+where:
 
-- Content image location.
+`spec.contentFile`
+Specifies the location of the file containing the compliance content.
 
-  > [!IMPORTANT]
-  > The base image used for the content images must include `coreutils`.
+`spec.contentImage`
+Specifies the content image location.
+
+> [!IMPORTANT]
+> The base image used for the content images must include `coreutils`.
 
 # Updating security content
 
-Security content is included as container images that the `ProfileBundle` objects refer to. To accurately track updates to `ProfileBundles` and the custom resources parsed from the bundles such as rules or profiles, identify the container image with the compliance content using a digest instead of a tag:
+Track `ProfileBundle` updates accurately and ensure predictable compliance profile versions across cluster deployments, by using container image digests instead of tags.
+
+Security content is included as container images that the `ProfileBundle` objects refer to. To accurately track updates to `ProfileBundles` and the custom resources parsed from the bundles, such as rules or profiles, you can view the container image digest in the `ProfileBundle` status.
 
 ``` terminal
 $ oc -n openshift-compliance get profilebundles rhcos4 -oyaml
@@ -81,7 +89,10 @@ status:
 
 </div>
 
-- Security container image.
+where:
+
+`spec.contentImage`
+Specifies the security container image.
 
 Each `ProfileBundle` is backed by a deployment. When the Compliance Operator detects that the container image digest has changed, the deployment is updated to reflect the change and parse the content again. Using the digest instead of a tag ensures that you use a stable and predictable set of profiles.
 

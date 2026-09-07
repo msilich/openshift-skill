@@ -1,13 +1,15 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-A hostPath volume in an OpenShift Container Platform cluster mounts a file or directory from the host node’s filesystem into your pod. Most pods will not need a hostPath volume, but it does offer a quick option for testing should an application require it.
+A hostPath volume mounts a file or directory from the host node’s filesystem into your pod. Use hostPath volumes primarily for testing or development, as they require privileged pods and grant access to the host node’s filesystem.
+
+# Overview of hostPath
+
+A hostPath volume mounts files or directories from the host node’s filesystem into pods for development and testing on single-node clusters. Because hostPath requires privileged pods and must be statically provisioned, it is not recommended for production. Use network storage with dynamic provisioning instead.
 
 > [!IMPORTANT]
 > The cluster administrator must configure pods to run as privileged. This grants access to pods in the same node.
 
-# Overview
-
-OpenShift Container Platform supports hostPath mounting for development and testing on a single-node cluster.
+Most pods do not need a hostPath volume, but it does offer a quick option for testing should an application require it.
 
 In a production cluster, you would not use hostPath. Instead, a cluster administrator would provision a network resource, such as a GCE Persistent Disk volume, an NFS share, or an Amazon EBS volume. Network resources support the use of storage classes to set up dynamic provisioning.
 
@@ -37,6 +39,8 @@ A hostPath volume must be provisioned statically.
 > ```
 
 # Statically provisioning hostPath volumes
+
+Statically provision hostPath volumes by creating a persistent volume (PV) that maps to a path on the host node’s filesystem, then creating a persistent volume claim (PVC) that binds to the PV. Dynamic provisioning is not supported for hostPath volumes.
 
 A pod that uses a hostPath volume must be referenced by manual (static) provisioning.
 
@@ -68,13 +72,13 @@ Procedure
         path: "/mnt/data"
     ```
 
-    - The name of the volume. This name is how the volume is identified by persistent volume (PV) claims or pods.
+    - `metadata.name`: Specifies the name of the volume. This name is how the volume is identified by persistent volume (PV) claims or pods.
 
-    - Used to bind persistent volume claim (PVC) requests to the PV.
+    - `spec.storageClassName`: The storage class is used to bind persistent volume claim (PVC) requests to the PV.
 
-    - The volume can be mounted as `read-write` by a single node.
+    - `spec.accessModes`: Specifies the access mode. The volume can be mounted as `read-write` by a single node.
 
-    - The configuration file specifies that the volume is at `/mnt/data` on the cluster’s node. To avoid corrupting your host system, do not mount to the container root, `/`, or any path that is the same in the host and the container. You can safely mount the host by using `/host`
+    - `spec.hostPath.path`: The configuration file specifies that the volume is at `/mnt/data` on the cluster’s node. To avoid corrupting your host system, do not mount to the container root, `/`, or any path that is the same in the host and the container. You can safely mount the host by using `/host`
 
 2.  Create the PV from the file:
 
@@ -108,7 +112,9 @@ Procedure
 
 # Mounting the hostPath share in a privileged pod
 
-After the persistent volume claim has been created, it can be used inside by an application. The following example demonstrates mounting this share inside of a pod.
+Mount a hostPath share in a privileged pod by referencing an existing persistent volume claim (PVC) in the pod specification. The pod must run as privileged to access the node’s storage. Do not mount to the container root or any path that matches the host to avoid corrupting the host system.
+
+After the PVC has been created, it can be used inside by an application. The following example demonstrates mounting this share inside of a pod.
 
 <div>
 
@@ -153,12 +159,12 @@ Procedure
           claimName: task-pvc-volume
   ```
 
-  - The name of the pod.
+  - `metadata.name`: Specifies the name of the pod.
 
-  - The pod must run as privileged to access the node’s storage.
+  - `spec.containers.securityContext.privileged`: The pod must run as privileged to access the node’s storage.
 
-  - The path to mount the host path share inside the privileged pod. Do not mount to the container root, `/`, or any path that is the same in the host and the container. This can corrupt your host system if the container is sufficiently privileged, such as the host `/dev/pts` files. It is safe to mount the host by using `/host`.
+  - `spec.containers.volumeMounts.mountPath`: The path to mount the host path share inside the privileged pod. Do not mount to the container root, `/`, or any path that is the same in the host and the container. This can corrupt your host system if the container is sufficiently privileged, such as the host `/dev/pts` files. It is safe to mount the host by using `/host`.
 
-  - The name of the `PersistentVolumeClaim` object that has been previously created.
+  - `spec.volumes.persistentVolumeClaim.claimName`: Specifies the name of the `PersistentVolumeClaim` object that has been previously created.
 
 </div>

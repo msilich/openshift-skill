@@ -128,7 +128,7 @@ Additional resources
 
 </div>
 
-- [Learn more about Cluster Administrator](../welcome/learn_more_about_openshift.md#cluster-administrator)
+- [Learn more about Cluster Administrator](../welcome/learn_more_about_openshift.md#learn_more_about_openshift)
 
 - [Viewing the applications in your project](../applications/odc-viewing-application-composition-using-topology-view.md#odc-viewing-application-composition-using-topology-view)
 

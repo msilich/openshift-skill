@@ -18,7 +18,7 @@ The machine hosting your Windows node is managed the same as a Linux-based node.
 
 With multiple operating systems, and the ability to run multiple Windows OS variants in the same cluster, you must map your Windows pods to a base Windows OS variant by using a `RuntimeClass` object. For example, if you have multiple Windows nodes running on different Windows Server container versions, the cluster could schedule your Windows pods to an incompatible Windows OS variant. You must have `RuntimeClass` objects configured for each Windows OS variant on your cluster. Using a `RuntimeClass` object is also recommended if you have only one Windows OS variant available in your cluster.
 
-For more information, see "Host and container version compatibility" in the Microsoft Windows documentation, which is linked in the "Additional resources" section.
+For more information, see "Host and container version compatibility" in the Microsoft Windows documentation.
 
 Also, it is recommended that you set the `spec.os.name.windows` parameter in your workload pods. The Windows Machine Config Operator (WMCO) uses this field to authoritatively identify the pod operating system for validation and is used to enforce Windows-specific pod security context constraints (SCCs). Currently, this parameter has no effect on pod scheduling. For more information about this parameter, see the Kubernetes Pod OS documentation.
 
@@ -215,9 +215,9 @@ Specifies the runtime class you created for the Windows operating system variant
 
 You can use the CSI PROXY plug-in to perform storage operations on the nodes in your cluster.
 
-Red Hat OpenShift support for Windows Containers installs CSI Proxy, which is a plug-in that enables CSI drivers for performing storage operations, on all Windows nodes in the cluster. For more information, see the CSI Proxy link in the "Additional resources" section.
+Red Hat OpenShift support for Windows Containers installs CSI Proxy, which is a plug-in that enables CSI drivers for performing storage operations, on all Windows nodes in the cluster. For more information, see "CSI Proxy".
 
-To use persistent storage with Windows workloads, you must deploy a specific Windows CSI driver daemon set, as described in your storage provider’s documentation. By default, the WMCO does not automatically create the Windows CSI driver daemon set. See the list of production drivers in the Kubernetes CSI Developer Documentation by using the link in the "Additional resources" section.
+To use persistent storage with Windows workloads, you must deploy a specific Windows CSI driver daemon set, as described in your storage provider’s documentation. By default, the WMCO does not automatically create the Windows CSI driver daemon set. For more information, see the list of production drivers in the Kubernetes CSI Developer Documentation.
 
 > [!NOTE]
 > Red Hat does not provide support for the third-party production drivers listed in the Kubernetes CSI Developer Documentation.
@@ -327,6 +327,8 @@ Verification
 - [Pod OS (Kubernetes documentation)](https://kubernetes.io/docs/concepts/workloads/pods/#pod-os)
 
 - [Windows container version compatibility (Microsoft Windows documentation)](https://learn.microsoft.com/en-us/virtualization/windowscontainers/deploy-containers/version-compatibility?tabs=windows-server-2022%2Cwindows-11-21H2)
+
+- [CSI Proxy (Kubernetes GitHub)](https://github.com/kubernetes-csi/csi-proxy)
 
 - [Production Drivers (Kubernetes CSI Developer Documentation)](https://kubernetes-csi.github.io/docs/drivers.html#production-drivers)
 

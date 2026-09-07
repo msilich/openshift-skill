@@ -2,7 +2,7 @@
 
 To troubleshoot OVN-Kubernetes in OpenShift Container Platform, you can use built-in health checks, alerting, logs, and connectivity checks. Follow these sections to examine your cluster before opening a support case.
 
-OVN-Kubernetes has many sources of built-in health checks and logs. Follow the instructions in these sections to examine your cluster. If a support case is necessary, collect additional information through a `must-gather` as described in the Additional resources section. Only use the `-- gather_network_logs` option when instructed by support.
+OVN-Kubernetes has many sources of built-in health checks and logs. Follow the instructions in these sections to examine your cluster. If a support case is necessary, collect additional information through a `must-gather` as described in "Gathering data about your cluster for Red Hat Support". Only use the `-- gather_network_logs` option when instructed by support.
 
 # Monitoring OVN-Kubernetes health by using readiness probes
 

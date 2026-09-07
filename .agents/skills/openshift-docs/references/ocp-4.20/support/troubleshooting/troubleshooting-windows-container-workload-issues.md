@@ -1,12 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Use the following sections to troubleshoot Windows container workload issues.
+
 # Windows Machine Config Operator does not install
 
 If you have completed the process of installing the Windows Machine Config Operator (WMCO), but the Operator is stuck in the `InstallWaiting` phase, your issue is likely caused by a networking issue.
 
 The WMCO requires your OpenShift Container Platform cluster to be configured with hybrid networking using OVN-Kubernetes; the WMCO cannot complete the installation process without hybrid networking available. This is necessary to manage nodes on multiple operating systems (OS) and OS variants. This must be completed during the installation of your cluster.
-
-For more information, see [Configuring hybrid networking](../../networking/ovn_kubernetes_network_provider/configuring-hybrid-networking.md#configuring-hybrid-ovnkubernetes).
 
 # Investigating why Windows Machine does not become compute node
 
@@ -276,6 +276,8 @@ Procedure
 </div>
 
 # Additional resources
+
+- [Configuring hybrid networking](../../networking/ovn_kubernetes_network_provider/configuring-hybrid-networking.md#configuring-hybrid-ovnkubernetes)
 
 - [Containers on Windows troubleshooting](https://docs.microsoft.com/en-us/virtualization/windowscontainers/troubleshooting)
 

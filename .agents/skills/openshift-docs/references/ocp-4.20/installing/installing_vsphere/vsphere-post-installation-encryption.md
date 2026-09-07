@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can encrypt your virtual machines after installing OpenShift Container Platform 4.17 on vSphere by draining and shutting down your nodes one at a time. While each virtual machine is shutdown, you can enable encryption in the vCenter web interface.
+You can encrypt your virtual machines after installing OpenShift Container Platform 4.20 on vSphere by draining and shutting down your nodes one at a time. While each virtual machine is shutdown, you can enable encryption in the vCenter web interface.
 
 # Encrypting virtual machines
 

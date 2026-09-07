@@ -1,11 +1,17 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can ensure your clusters only use container images that satisfy your organizational controls on external content. Before you install a cluster on infrastructure that you provision in a restricted network, you must mirror the required container images into that environment. By using the `oc adm` command, you can mirror release and catalog images in OpenShift. To mirror container images, you must have a registry for mirroring.
+You can ensure your clusters only use container images that satisfy your organizational controls on external content. Before you install a cluster on infrastructure that you provision in a restricted network, you must mirror the required container images into that environment.
+
+By using the `oc adm` command, you can mirror release and catalog images in OpenShift. To mirror container images, you must have a registry for mirroring.
 
 > [!IMPORTANT]
-> You must have access to the internet to obtain the necessary container images. In this procedure, you place your mirror registry on a mirror host that has access to both your network and the internet. If you do not have access to a mirror host, use the [Mirroring Operator catalogs for use with disconnected clusters](installing-mirroring-installation-images.md#olm-mirror-catalog_installing-mirroring-installation-images) procedure to copy images to a device you can move across network boundaries with.
+> You must have access to the internet to obtain the necessary container images. In this procedure, you place your mirror registry on a mirror host that has access to both your network and the internet. If you do not have access to a mirror host, use the "Mirroring Operator catalogs for use with disconnected clusters" procedure to copy images to a device you can move across network boundaries with.
 
 # Prerequisites
+
+You must meet several prerequisites before you can mirror images using the `oc adm release mirror` command.
+
+You must meet the following prerequisites:
 
 - You must have a container image registry that supports [Docker v2-2](https://docs.docker.com/registry/spec/manifest-v2-2) in the location that will host the OpenShift Container Platform cluster, such as one of the following registries:
 
@@ -27,7 +33,7 @@ You must have access to the internet to obtain the necessary container images. U
 
 You can mirror the images that are required for OpenShift Container Platform installation and subsequent product updates to a container mirror registry such as Red Hat Quay, JFrog Artifactory, Sonatype Nexus Repository, or Harbor. If you do not have access to a large-scale container registry, you can use the *mirror registry for Red Hat OpenShift*, a small-scale container registry included with OpenShift Container Platform subscriptions.
 
-You can use any container registry that supports [Docker v2-2](https://docs.docker.com/registry/spec/manifest-v2-2), such as Red Hat Quay, the *mirror registry for Red Hat OpenShift*, Artifactory, Sonatype Nexus Repository, or Harbor. Regardless of your chosen registry, the procedure to mirror content from Red Hat hosted sites on the internet to an isolated image registry is the same. After you mirror the content, you configure each cluster to retrieve this content from your mirror registry.
+You can use any container registry that supports Docker v2-2, such as Red Hat Quay, the *mirror registry for Red Hat OpenShift*, Artifactory, Sonatype Nexus Repository, or Harbor. Regardless of your chosen registry, the procedure to mirror content from Red Hat hosted sites on the internet to an isolated image registry is the same. After you mirror the content, you configure each cluster to retrieve this content from your mirror registry.
 
 > [!IMPORTANT]
 > The OpenShift image registry cannot be used as the target registry because it does not support pushing without a tag, which is required during the mirroring process.
@@ -41,21 +47,21 @@ For mirrored registries, to view the source of pulled images, you must review th
 > [!NOTE]
 > Red Hat does not test third party registries with OpenShift Container Platform.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
-Additional information
+Additional resources
 
 </div>
 
-For information about viewing the CRI-O logs to view the image source, see [Viewing the image pull source](../installing/validation_and_troubleshooting/validating-an-installation.md#viewing-the-image-pull-source_validating-an-installation).
+- [Viewing the image pull source](../installing/validation_and_troubleshooting/validating-an-installation.md#viewing-the-image-pull-source_validating-an-installation)
 
 </div>
 
 # Preparing your mirror host
 
-Before you perform the mirror procedure, you must prepare the host to retrieve content and push it to the remote location.
+Before you begin mirroring images, you must prepare the host to retrieve content and push it to the remote location.
 
 ## Installing the OpenShift CLI on Linux
 
@@ -80,7 +86,7 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 Linux Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 Linux Clients** entry and save the file.
 
 5.  Unpack the archive:
 
@@ -90,7 +96,7 @@ Procedure
 
 6.  Place the `oc` binary in a directory that is on your `PATH`.
 
-    To check your `PATH`, execute the following command:
+    To check your `PATH`, run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -135,13 +141,13 @@ Procedure
 
 2.  Select the appropriate version from the **Version** list.
 
-3.  Click **Download Now** next to the **OpenShift v4.17 Windows Client** entry and save the file.
+3.  Click **Download Now** next to the **OpenShift v4.20 Windows Client** entry and save the file.
 
 4.  Extract the archive with a ZIP program.
 
 5.  Move the `oc` binary to a directory that is on your `PATH` variable.
 
-    To check your `PATH` variable, open the command prompt and execute the following command:
+    To check your `PATH` variable, open the Command Prompt and run the following command:
 
     ``` terminal
     C:\> path
@@ -188,16 +194,16 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 macOS Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 macOS Clients** entry and save the file.
 
     > [!NOTE]
-    > For macOS arm64, choose the **OpenShift v4.17 macOS arm64 Client** entry.
+    > For macOS arm64, choose the **OpenShift v4.20 macOS arm64 Client** entry.
 
-5.  Unpack and unzip the archive.
+5.  Extract the archive.
 
 6.  Move the `oc` binary to a directory on your `PATH` variable.
 
-    To check your `PATH` variable, open a terminal and execute the following command:
+    To check your `PATH` variable, open a terminal and run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -555,7 +561,9 @@ Procedure
 
 # The Cluster Samples Operator in a disconnected environment
 
-In a disconnected environment, you must take additional steps after you install a cluster to configure the Cluster Samples Operator. Review the following information in preparation.
+In a disconnected environment, you must take additional steps after you install a cluster to configure the Cluster Samples Operator.
+
+Review the following information in preparation.
 
 ## Cluster Samples Operator assistance for mirroring
 
@@ -584,7 +592,7 @@ Use the following principles to determine which images you need to mirror for yo
 
 # Mirroring Operator catalogs for use with disconnected clusters
 
-You can mirror the Operator contents of a Red Hat-provided catalog, or a custom catalog, into a container image registry using the `oc adm catalog mirror` command. The target registry must support [Docker v2-2](https://docs.docker.com/registry/spec/manifest-v2-2/). For a cluster on a restricted network, this registry can be one that the cluster has network access to, such as a mirror registry created during a restricted network cluster installation.
+You can mirror the Operator contents of a Red Hat-provided catalog, or a custom catalog, into a container image registry using the `oc adm catalog mirror` command. The target registry must support Docker v2-2. For a cluster on a restricted network, this registry can be one that the cluster has network access to, such as a mirror registry created during a restricted network cluster installation.
 
 <div class="important">
 
@@ -594,7 +602,7 @@ You can mirror the Operator contents of a Red Hat-provided catalog, or a custom 
 
 - The OpenShift image registry cannot be used as the target registry because it does not support pushing without a tag, which is required during the mirroring process.
 
-- Running `oc adm catalog mirror` might result in the following error: `error: unable to retrieve source image`. This error occurs when image indexes include references to images that no longer exist on the image registry. Image indexes might retain older references to allow users running those images an upgrade path to newer points on the upgrade graph. As a temporary workaround, you can use the `--skip-missing` option to bypass the error and continue downloading the image index. For more information, see [Service Mesh Operator mirroring failed](https://access.redhat.com/solutions/6975305).
+- Running `oc adm catalog mirror` might result in the following error: `error: unable to retrieve source image`. This error occurs when image indexes include references to images that no longer exist on the image registry. Image indexes might retain older references to allow users running those images an upgrade path to newer points on the upgrade graph. As a temporary workaround, you can use the `--skip-missing` option to bypass the error and continue downloading the image index. For more information, see "Service Mesh Operator mirroring failed".
 
 </div>
 
@@ -610,11 +618,19 @@ Additional resources
 
 - [Using Operator Lifecycle Manager in disconnected environments](using-olm.md#olm-restricted-networks)
 
+- [Docker v2-2](https://docs.docker.com/registry/spec/manifest-v2-2/)
+
+- [Service Mesh Operator mirroring failed](https://access.redhat.com/solutions/6975305)
+
 </div>
 
-## Prerequisites
+## Prerequisites for mirroring Operator catalogs
 
-Mirroring Operator catalogs for use with disconnected clusters has the following prerequisites:
+You must meet several prerequisites before you can mirror Operator catalogs for use with disconnected clusters.
+
+Mirroring Operator catalogs for use with disconnected clusters has several prerequisites.
+
+The following prerequisites must be met:
 
 - Workstation with unrestricted network access.
 
@@ -652,6 +668,8 @@ Alternatively, if your mirror registry is on a completely disconnected, or *airg
 
 ### Mirroring catalog contents to registries on the same network
 
+You can mirror catalog contents to registries on the same network.
+
 If your mirror registry is co-located on the same network as your workstation with unrestricted network access, take the following actions on your workstation.
 
 <div>
@@ -680,17 +698,25 @@ Procedure
         [--manifests-only]
     ```
 
-    - Specify the index image for the catalog that you want to mirror.
+    where:
 
-    - Specify the fully qualified domain name (FQDN) for the target registry to mirror the Operator contents to. The mirror registry `<repository>` can be any existing repository, or namespace, on the registry, for example `olm-mirror` as outlined in the prerequisites. If there is an existing repository found during mirroring, the repository name is added to the resulting image name. If you do not want the image name to include the repository name, omit the `<repository>` value from this line, for example `<mirror_registry>:<port>`.
+    `<index_image>`
+    Specifies the index image for the catalog that you want to mirror.
 
-    - Optional: If required, specify the location of your registry credentials file. `{REG_CREDS}` is required for `registry.redhat.io`.
+    `<mirror_registry>:<port>[/<repository>]`
+    Specifies the fully qualified domain name (FQDN) for the target registry to mirror the Operator contents to. The mirror registry `<repository>` can be any existing repository, or namespace, on the registry, for example `olm-mirror` as outlined in the prerequisites. If there is an existing repository found during mirroring, the repository name is added to the resulting image name. If you do not want the image name to include the repository name, omit the `<repository>` value from this line, for example `<mirror_registry>:<port>`.
 
-    - Optional: If you do not want to configure trust for the target registry, add the `--insecure` flag.
+    `-a ${REG_CREDS}`
+    Specifies the location of your registry credentials file. `{REG_CREDS}` is required for `registry.redhat.io`. This is optional.
 
-    - Optional: Specify which platform and architecture of the index image to select when multiple variants are available. Images are passed as `'<platform>/<arch>[/<variant>]'`. This does not apply to images referenced by the index. Valid values are `linux/amd64`, `linux/ppc64le`, `linux/s390x`, `linux/arm64`.
+    `--insecure`
+    Specifies the `--insecure` flag. If you do not want to configure trust for the target registry, add the `--insecure` flag. This is optional.
 
-    - Optional: Generate only the manifests required for mirroring without actually mirroring the image content to a registry. This option can be useful for reviewing what will be mirrored, and lets you make any changes to the mapping list, if you require only a subset of packages. You can then use the `mapping.txt` file with the `oc image mirror` command to mirror the modified list of images in a later step. This flag is intended for only advanced selective mirroring of content from the catalog.
+    `--index-filter-by-os='<platform>/<arch>'`
+    Specifies which platform and architecture of the index image to select when multiple variants are available. This is optional. Images are specified as `'<platform>/<arch>[/<variant>]'`. This does not apply to images referenced by the index. Valid values are `linux/amd64`, `linux/ppc64le`, `linux/s390x`, `linux/arm64`, and `.*`
+
+    `--manifests-only`
+    Specifies the `--manifests-only` flag. This flag is optional. Generates only the manifests required for mirroring without actually mirroring the image content to a registry. This option can be useful for reviewing what will be mirrored, and lets you make any changes to the mapping list, if you require only a subset of packages. You can then use the `mapping.txt` file with the `oc image mirror` command to mirror the modified list of images in a later step. This flag is intended for only advanced selective mirroring of content from the catalog.
 
     <div class="formalpara">
 
@@ -710,16 +736,22 @@ Procedure
 
     </div>
 
-    - Directory for the temporary `index.db` database generated by the command.
+    where:
 
-    - Record the manifests directory name that is generated. This directory is referenced in subsequent procedures.
+    `/tmp/153048078`
+    Specifies the directory for the temporary `index.db` database generated by the command.
 
-      > [!NOTE]
-      > Red Hat Quay does not support nested repositories. As a result, running the `oc adm catalog mirror` command will fail with a `401` unauthorized error. As a workaround, you can use the `--max-components=2` option when running the `oc adm catalog mirror` command to disable the creation of nested repositories. For more information on this workaround, see the [Unauthorized error thrown while using catalog mirror command with Quay registry](https://access.redhat.com/solutions/5440741) Knowledgebase Solution.
+    `manifests-redhat-operator-index-1614211642`
+    Records the manifests directory name that is generated. This directory is referenced in subsequent procedures.
+
+    > [!NOTE]
+    > Red Hat Quay does not support nested repositories. As a result, running the `oc adm catalog mirror` command will fail with a `401` unauthorized error. As a workaround, you can use the `--max-components=2` option when running the `oc adm catalog mirror` command to disable the creation of nested repositories. For more information on this workaround, see the [Unauthorized error thrown while using catalog mirror command with Quay registry](https://access.redhat.com/solutions/5440741) Knowledgebase Solution.
 
 </div>
 
 ### Mirroring catalog contents to airgapped registries
+
+You can mirror catalog contents into airgapped registries.
 
 If your mirror registry is on a completely disconnected, or airgapped, host, take the following actions.
 
@@ -742,15 +774,22 @@ Procedure
         --index-filter-by-os='<platform>/<arch>'
     ```
 
-    - Specify the index image for the catalog that you want to mirror.
+    where:
 
-    - Specify the content to mirror to local files in your current directory.
+    `<index image>`
+    Specifies the index image for the catalog that you want to mirror.
 
-    - Optional: If required, specify the location of your registry credentials file.
+    `file:///local/index`
+    Specifies the content to mirror to local files in your current directory.
 
-    - Optional: If you do not want to configure trust for the target registry, add the `--insecure` flag.
+    `-a ${REG_CREDS}`
+    Specifies the location of your registry credentials file. This is optional.
 
-    - Optional: Specify which platform and architecture of the index image to select when multiple variants are available. Images are specified as `'<platform>/<arch>[/<variant>]'`. This does not apply to images referenced by the index. Valid values are `linux/amd64`, `linux/ppc64le`, `linux/s390x`, `linux/arm64`, and `.*`
+    `--insecure`
+    Specifies the `--insecure` flag. This flag is optional. If you do not want to configure trust for the target registry, add the `--insecure` flag.
+
+    `<platform>/<arch>`
+    Specifies which platform and architecture of the index image to select when multiple variants are available. This is optional. Images are specified as `'<platform>/<arch>[/<variant>]'`. This does not apply to images referenced by the index. Valid values are `linux/amd64`, `linux/ppc64le`, `linux/s390x`, `linux/arm64`, and `.*`
 
     <div class="formalpara">
 
@@ -799,18 +838,25 @@ Procedure
         --index-filter-by-os='<platform>/<arch>'
     ```
 
-    - Specify the `file://` path from the previous command output.
+    where:
 
-    - Specify the fully qualified domain name (FQDN) for the target registry to mirror the Operator contents to. The mirror registry `<repository>` can be any existing repository, or namespace, on the registry, for example `olm-mirror` as outlined in the prerequisites. If there is an existing repository found during mirroring, the repository name is added to the resulting image name. If you do not want the image name to include the repository name, omit the `<repository>` value from this line, for example `<mirror_registry>:<port>`.
+    `file://`
+    Specifies the `file://` path from the previous command output.
 
-    - Optional: If required, specify the location of your registry credentials file.
+    `<mirror_registry>:<port>[/<repository>]`
+    Specifies the fully qualified domain name (FQDN) for the target registry to mirror the Operator contents to. The mirror registry `<repository>` can be any existing repository, or namespace, on the registry, for example `olm-mirror` as outlined in the prerequisites. If there is an existing repository found during mirroring, the repository name is added to the resulting image name. If you do not want the image name to include the repository name, omit the `<repository>` value from this line, for example `<mirror_registry>:<port>`.
 
-    - Optional: If you do not want to configure trust for the target registry, add the `--insecure` flag.
+    `-a ${REG_CREDS}`
+    Specifies the location of your registry credentials file. This is optional.
 
-    - Optional: Specify which platform and architecture of the index image to select when multiple variants are available. Images are specified as `'<platform>/<arch>[/<variant>]'`. This does not apply to images referenced by the index. Valid values are `linux/amd64`, `linux/ppc64le`, `linux/s390x`, `linux/arm64`, and `.*`
+    `--insecure`
+    Specifies the `--insecure` flag. This flag is optional. If you do not want to configure trust for the target registry, add the `--insecure` flag.
 
-      > [!NOTE]
-      > Red Hat Quay does not support nested repositories. As a result, running the `oc adm catalog mirror` command will fail with a `401` unauthorized error. As a workaround, you can use the `--max-components=2` option when running the `oc adm catalog mirror` command to disable the creation of nested repositories. For more information on this workaround, see the [Unauthorized error thrown while using catalog mirror command with Quay registry](https://access.redhat.com/solutions/5440741) Knowledgebase Solution.
+    `--index-filter-by-os='<platform>/<arch>'`
+    Specifies which platform and architecture of the index image to select when multiple variants are available. This is optional. Images are specified as `'<platform>/<arch>[/<variant>]'`. This does not apply to images referenced by the index. Valid values are `linux/amd64`, `linux/ppc64le`, `linux/s390x`, `linux/arm64`, and `.*`
+
+    > [!NOTE]
+    > Red Hat Quay does not support nested repositories. As a result, running the `oc adm catalog mirror` command will fail with a `401` unauthorized error. As a workaround, you can use the `--max-components=2` option when running the `oc adm catalog mirror` command to disable the creation of nested repositories. For more information on this workaround, see the [Unauthorized error thrown while using catalog mirror command with Quay registry](https://access.redhat.com/solutions/5440741) Knowledgebase Solution.
 
 6.  Run the `oc adm catalog mirror` command again. Use the newly mirrored index image as the source and the same mirror registry target used in the previous step:
 
@@ -823,14 +869,26 @@ Procedure
         [--insecure]
     ```
 
-    - The `--manifests-only` flag is required for this step so that the command does not copy all of the mirrored content again.
+    The `--manifests-only` flag is required for this step so that the command does not copy all of the mirrored content again.
 
-      > [!IMPORTANT]
-      > This step is required because the image mappings in the `imageContentSourcePolicy.yaml` file generated during the previous step must be updated from local paths to valid mirror locations. Failure to do so will cause errors when you create the `ImageContentSourcePolicy` object in a later step.
+    > [!IMPORTANT]
+    > This step is required because the image mappings in the `imageContentSourcePolicy.yaml` file generated during the previous step must be updated from local paths to valid mirror locations. Failure to do so will cause errors when you create the `ImageContentSourcePolicy` object in a later step.
+
+    After you mirror the catalog, you can continue with the remainder of your cluster installation. After your cluster installation has finished successfully, you must specify the manifests directory from this procedure to create the `ImageContentSourcePolicy` and `CatalogSource` objects. These objects are required to enable installation of Operators from the software catalog.
 
 </div>
 
-After you mirror the catalog, you can continue with the remainder of your cluster installation. After your cluster installation has finished successfully, you must specify the manifests directory from this procedure to create the `ImageContentSourcePolicy` and `CatalogSource` objects. These objects are required to enable installation of Operators from the software catalog.
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Unauthorized error thrown while using catalog mirror command with Quay registry](https://access.redhat.com/solutions/5440741)
+
+</div>
 
 ## Generated manifests
 
@@ -880,16 +938,18 @@ Additional resources
 
 </div>
 
-- [Populating the software catalog from mirrored Operator catalogs](../post_installation_configuration/preparing-for-users.md#post-install-mirrored-catalogs)
+- [Populating the software catalog from mirrored Operator catalogs](../post_installation_configuration/preparing-for-users.md#post-install-mirrored-catalogs_post-install-preparing-for-users)
 
 - [Updating or filtering a file-based catalog image](../operators/admin/olm-managing-custom-catalogs.md#olm-filtering-fbc_olm-managing-custom-catalogs)
 
 </div>
 
-# Next steps
-
-- Install a cluster on infrastructure that you provision in your restricted network, such as on [VMware vSphere](../installing/installing_vsphere/upi/installing-restricted-networks-vsphere.md#installing-restricted-networks-vsphere), [bare metal](../installing/installing_bare_metal/upi/installing-restricted-networks-bare-metal.md#installing-restricted-networks-bare-metal), or [Amazon Web Services](../installing/installing_aws/upi/installing-restricted-networks-aws.md#installing-restricted-networks-aws).
-
 # Additional resources
 
-- See [Gathering data about specific features](../support/gathering-cluster-data.md#gathering-data-specific-features_gathering-cluster-data) for more information about using must-gather.
+- [Gathering data about specific features](../support/gathering-cluster-data.md#gathering-data-specific-features_gathering-cluster-data)
+
+- [Installing a cluster on vSphere in a disconnected environment with user-provisioned infrastructure](../installing/installing_vsphere/upi/installing-restricted-networks-vsphere.md#installing-restricted-networks-vsphere)
+
+- [Installing a user-provisioned bare-metal cluster on a disconnected environment](../installing/installing_bare_metal/upi/installing-restricted-networks-bare-metal.md#installing-restricted-networks-bare-metal)
+
+- [Installing a cluster on AWS in a disconnected environment with user-provisioned infrastructure](../installing/installing_aws/upi/installing-restricted-networks-aws.md#installing-restricted-networks-aws)

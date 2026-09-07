@@ -316,7 +316,7 @@ Additional resources
 
 ## OADP backup and restore guidelines
 
-Use the OADP Operator to back up and restore applications during the image-based upgrade by creating `Backup` and `Restore` CRs wrapped in `ConfigMap` objects.
+Use the OADP Operator to back up and restore applications during the image-based upgrade by creating `Backup` and `Restore` custom resources (CRs) wrapped in `ConfigMap` objects.
 
 With the OADP Operator, you can back up and restore your applications on your target clusters by using `Backup` and `Restore` CRs wrapped in `ConfigMap` objects. The application must work on the current and the target OpenShift Container Platform versions so that they can be restored after the upgrade. The backups must include resources that were initially created.
 
@@ -339,7 +339,7 @@ The following resources must be excluded from the backup:
 There are two local storage implementations for single-node OpenShift:
 
 Local Storage Operator (LSO)
-The Lifecycle Agent automatically backs up and restores the required artifacts, including `localvolume` resources and their associated `StorageClass` resources. You must exclude the `persistentvolumes` resource in the application `Backup` CR.
+The Lifecycle Agent automatically backs up and restores the required artifacts, including `LocalVolume` resources and their associated `StorageClass` resources. You must exclude the `persistentvolumes` resource in the application `Backup` CR. The image-based upgrade does not support the `LocalVolumeSet` and `LocalVolumeDiscovery` CRs. If you use these CRs, the Lifecycle Agent does not restore them. Only persistent volumes that a `LocalVolume` CR created are preserved and available after the upgrade.
 
 LVM Storage
 You must create the `Backup` and `Restore` CRs for LVM Storage artifacts. You must include the `persistentVolumes` resource in the application `Backup` CR.

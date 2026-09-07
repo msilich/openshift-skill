@@ -1,14 +1,16 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can update the global pull secret for your cluster by either replacing the current pull secret or appending a new pull secret. The procedure is required when users use a separate registry to store images than the registry used during installation. For more information, see [Using image pull secrets](../openshift_images/managing_images/using-image-pull-secrets.md#using-image-pull-secrets).
+You can configure image streams, image registries, and pull secrets after installation to control how your cluster accesses, imports, and stores container images.
+
+You can update the global pull secret for your cluster by either replacing the current pull secret or appending a new pull secret. The procedure is required when users use a separate registry to store images than the registry used during installation. For more information, see "Using image pull secrets".
 
 For information about images and configuring image streams or image registries, see the following documentation:
 
-- [Overview of images](../openshift_images/index.md#overview-of-images)
+- Overview of images
 
-- [Image Registry Operator in OpenShift Container Platform](../registry/configuring-registry-operator.md#configuring-registry-operator)
+- Image Registry Operator in OpenShift Container Platform
 
-- [Configuring image registry settings](../openshift_images/image-configuration.md#image-configuration)
+- Configuring image registry settings
 
 # Configuring image streams for a disconnected cluster
 
@@ -117,6 +119,8 @@ Procedure
 
 ## Preparing your cluster to gather support data
 
+You can prepare a cluster on a restricted network to gather support data by importing the default must-gather image and configuring access to the mirror registry.
+
 Clusters using a restricted network must import the default must-gather image to gather debugging data for Red Hat support. The must-gather image is not imported by default, and clusters on a restricted network do not have access to the internet to pull the latest image from a remote repository.
 
 <div>
@@ -156,6 +160,8 @@ Procedure
 </div>
 
 # Configuring periodic importing of Cluster Sample Operator image stream tags
+
+You can configure scheduled imports for Cluster Sample Operator image stream tags to periodically retrieve updated images and retry imports after temporary failures.
 
 You can ensure that you always have access to the latest versions of the Cluster Sample Operator images by periodically importing the image stream tags when new versions become available.
 
@@ -249,3 +255,13 @@ Procedure
     </div>
 
 </div>
+
+# Additional resources
+
+- [Using image pull secrets](../openshift_images/managing_images/using-image-pull-secrets.md#using-image-pull-secrets)
+
+- [Overview of images](../openshift_images/index.md#overview-of-images)
+
+- [Image Registry Operator in OpenShift Container Platform](../registry/configuring-registry-operator.md#configuring-registry-operator)
+
+- [Configuring image registry settings](../openshift_images/image-configuration.md#image-configuration)

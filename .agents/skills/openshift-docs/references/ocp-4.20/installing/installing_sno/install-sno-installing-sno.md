@@ -187,7 +187,7 @@ Procedure
     $ export OCP_VERSION=<ocp_version>
     ```
 
-    Replace `<ocp_version>` with the current version, for example, `latest-4.17`
+    Replace `<ocp_version>` with the current version, for example, `latest-4.20`
 
 2.  Set the target cluster architecture:
 
@@ -348,7 +348,7 @@ Additional resources
 
 - [Cluster capabilities](../overview/cluster-capabilities.md#cluster-capabilities)
 
-- [Optional cluster capabilities in OpenShift Container Platform 4.17](../overview/cluster-capabilities.md#explanation_of_capabilities_cluster-capabilities)
+- [Optional cluster capabilities in OpenShift Container Platform 4.20](../overview/cluster-capabilities.md#explanation_of_capabilities_cluster-capabilities)
 
 </div>
 
@@ -856,7 +856,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       name: sshd
       labels:
@@ -876,10 +876,10 @@ Procedure
     $ butane -pr embedded.yaml -o embedded.ign
     ```
 
-5.  After the Ignition file is created, you can include the configuration in a new live RHCOS ISO, which is named `rhcos-sshd-4.17.0-x86_64-live.x86_64.iso`, with the `coreos-installer` utility:
+5.  After the Ignition file is created, you can include the configuration in a new live RHCOS ISO, which is named `rhcos-sshd-4.20.0-x86_64-live.x86_64.iso`, with the `coreos-installer` utility:
 
     ``` terminal
-    $ coreos-installer iso ignition embed -i embedded.ign rhcos-4.17.0-x86_64-live.x86_64.iso -o rhcos-sshd-4.17.0-x86_64-live.x86_64.iso
+    $ coreos-installer iso ignition embed -i embedded.ign rhcos-4.20.0-x86_64-live.x86_64.iso -o rhcos-sshd-4.20.0-x86_64-live.x86_64.iso
     ```
 
 </div>
@@ -895,7 +895,7 @@ Verification
 - Check that the custom live ISO can be used to boot the server by running the following command:
 
   ``` terminal
-  # coreos-installer iso ignition show rhcos-sshd-4.17.0-x86_64-live.x86_64.iso
+  # coreos-installer iso ignition show rhcos-sshd-4.20.0-x86_64-live.x86_64.iso
   ```
 
   <div class="formalpara">
@@ -998,7 +998,7 @@ Procedure
     $ OCP_VERSION=<ocp_version>
     ```
 
-    Replace `<ocp_version>` with the current version. For example, `latest-4.17`.
+    Replace `<ocp_version>` with the current version. For example, `latest-4.20`.
 
 2.  Set the host architecture by running the following command:
 
@@ -1287,7 +1287,7 @@ Procedure
     $ OCP_VERSION=<ocp_version>
     ```
 
-    Replace `<ocp_version>` with the current version. For example, `latest-4.17`.
+    Replace `<ocp_version>` with the current version. For example, `latest-4.20`.
 
 2.  Set the host architecture by running the following command:
 
@@ -1492,7 +1492,7 @@ Procedure
     $ OCP_VERSION=<ocp_version>
     ```
 
-    Replace `<ocp_version>` with the current version. For example, `latest-4.17`.
+    Replace `<ocp_version>` with the current version. For example, `latest-4.20`.
 
 2.  Set the host architecture by running the following command:
 

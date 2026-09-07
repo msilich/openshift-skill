@@ -6,7 +6,7 @@ For known issues, see the [MTC release notes](../migration_toolkit_for_container
 
 # MTC workflow
 
-You can migrate Kubernetes resources, persistent volume data, and internal container images to OpenShift Container Platform 4.17 by using the Migration Toolkit for Containers (MTC) web console or the Kubernetes API.
+You can migrate Kubernetes resources, persistent volume data, and internal container images to OpenShift Container Platform 4.20 by using the Migration Toolkit for Containers (MTC) web console or the Kubernetes API.
 
 MTC migrates the following resources:
 
@@ -1205,7 +1205,7 @@ This section describes common issues and concerns that can cause issues during m
 
 If your application uses images from the `openshift` namespace, the required versions of the images must be present on the target cluster.
 
-If an OpenShift Container Platform 3 image is deprecated in OpenShift Container Platform 4.17, you can manually update the image stream tag by using `podman`.
+If an OpenShift Container Platform 3 image is deprecated in OpenShift Container Platform 4.20, you can manually update the image stream tag by using `podman`.
 
 <div>
 

@@ -4,7 +4,7 @@ The cert-manager Operator for Red Hat OpenShift is a cluster-wide service that p
 
 # About the cert-manager Operator for Red Hat OpenShift
 
-The cert-manager project introduces certificate authorities and certificates as resource types in the Kubernetes API, which makes it possible to provide certificates on-demand to developers working within your cluster. The cert-manager Operator for Red Hat OpenShift provides a supported way to integrate cert-manager into your OpenShift Container Platform cluster.
+The `cert-manager` project introduces certificate authorities and certificates as resource types in the Kubernetes API, which makes it possible to provide certificates on-demand to developers working within your cluster. The cert-manager Operator for Red Hat OpenShift provides a supported way to integrate `cert-manager` into your OpenShift Container Platform cluster.
 
 The cert-manager Operator for Red Hat OpenShift provides the following features:
 
@@ -31,16 +31,16 @@ To configure certificate authorities for your cluster, review the issuer provide
 
 - Self-signed
 
-- [Vault](https://cert-manager.io/docs/configuration/vault/)
+- Vault
 
-- [Venafi](https://cert-manager.io/docs/configuration/venafi/)
+- Venafi
 
-- [Nokia NetGuard Certificate Manager](https://www.nokia.com/networks/security-portfolio/netguard/certificate-manager/) (NCM)
+- Nokia NetGuard Certificate Manager (NCM)
 
-- [Google cloud Certificate Authority Service](https://cloud.google.com/security/products/certificate-authority-service) (Google CAS)
+- Google Cloud Certificate Authority Service (Google CAS)
 
 > [!NOTE]
-> OpenShift Container Platform does not test all factors associated with third-party cert-manager Operator for Red Hat OpenShift provider functionality. For more information about third-party support, see the [OpenShift Container Platform third-party support policy](https://access.redhat.com/third-party-software-support).
+> OpenShift Container Platform does not test all factors associated with third-party cert-manager Operator for Red Hat OpenShift provider functionality. For more information about third-party support, see "OpenShift Container Platform third-party support policy" in Additional resources.
 
 # Certificate request methods
 
@@ -76,4 +76,14 @@ To enable FIPS mode, you must install cert-manager Operator for Red Hat OpenShif
 
 - [Installing a cluster in FIPS mode](../../installing/overview/installing-fips.md#installing-fips-mode_installing-fips)
 
-- [Do you need extra security for your cluster?](../../installing/overview/installing-preparing.md#installing-preparing-security)
+- [Do you need extra security for your cluster?](../../installing/overview/installing-preparing.md#installing-preparing-security_installing-preparing)
+
+- [Vault](https://cert-manager.io/docs/configuration/vault/)
+
+- [Venafi](https://cert-manager.io/docs/configuration/venafi/)
+
+- [Nokia NetGuard Certificate Manager](https://www.nokia.com/networks/security-portfolio/netguard/certificate-manager/)
+
+- [Google Cloud Certificate Authority Service](https://cloud.google.com/security/products/certificate-authority-service)
+
+- [OpenShift Container Platform third-party support policy](https://access.redhat.com/third-party-software-support)

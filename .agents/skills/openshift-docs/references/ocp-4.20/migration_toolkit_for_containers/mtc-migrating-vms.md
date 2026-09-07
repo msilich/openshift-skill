@@ -71,21 +71,6 @@ Before migrating virtual machine storage, you must install [OpenShift Virtualiza
 
 To support storage live migration, you need to deploy OpenShift Virtualization version 4.17 or later. Earlier versions of OpenShift Virtualization do not support live storage migration.
 
-You also need to configure `KubeVirt` to enable storage live migration according to the [Configuring live migration](../virt/live_migration/virt-configuring-live-migration.md#virt-configuring-live-migration-limits_virt-configuring-live-migration).
-
-In OpenShift Virtualization 4.17.0, not all the required feature gates are enabled. However, to use the storage live migration feature, you must enable the feature gate.
-
-Enable the feature gate by running the following command:
-
-``` terminal
-$ oc annotate --overwrite -n openshift-cnv hco kubevirt-hyperconverged kubevirt.kubevirt.io/jsonpatch='[ {"op": "add", "path": "/spec/configuration/developerConfiguration/featureGates/-", "value": "VolumesUpdateStrategy"}, {"op": "add", "path": "/spec/configuration/developerConfiguration/featureGates/-", "value": "VolumeMigration"} ]'
-```
-
-> [!WARNING]
-> Red Hat does not support clusters with the annotation enabling this feature gate.
->
-> Do not add this annotation in a production cluster, if you add that annotation you receive a cluster wide alert indicating that your cluster is no longer supported.
-
 For more information about the deployments and custom resource definitions (CRDs) that the migration controller uses to manipulate the VMs, see [Migration controller options](../migrating_from_ocp_3_to_4/advanced-migration-options-3-4.md#migration-controller-options_advanced-migration-options-3-4).
 
 > [!NOTE]

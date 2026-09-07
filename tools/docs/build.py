@@ -193,11 +193,13 @@ def write_source_metadata(
             "arguments": {
                 "distro": "openshift-enterprise",
                 "branch": "enterprise-4.20",
+                "product-version": "4.20",
                 "topics": "all",
             },
             "successful_topics": topics,
             "failed_topics": 0,
             "modifications": [
+                "Resolved product-version=4.20 from the explicit enterprise-4.20 branch because the source distro map is stale.",
                 "Converted the source AsciiDoc files to GitHub-Flavored Markdown.",
                 "Removed the generated HTML index and CDN-dependent viewer.",
                 "Replaced the rolling weekly-update statement with pinned-snapshot provenance.",

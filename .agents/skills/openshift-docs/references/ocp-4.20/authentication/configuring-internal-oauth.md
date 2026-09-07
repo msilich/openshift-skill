@@ -216,7 +216,7 @@ Procedure
 
     ``` terminal
     NAME             VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
-    authentication   4.17.0    True        False         False      145m
+    authentication   4.20.0    True        False         False      145m
     ```
 
     </div>
@@ -239,7 +239,7 @@ Procedure
 
     ``` terminal
     NAME             VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
-    kube-apiserver   4.17.0     True        False         False      145m
+    kube-apiserver   4.20.0     True        False         False      145m
     ```
 
     </div>
@@ -287,7 +287,7 @@ Verification
 Customize the internal OAuth server URL to use a custom hostname and TLS certificate by configuring the cluster Ingress component routes.
 
 > [!WARNING]
-> If you update the internal OAuth server URL, you might break trust from components in the cluster that need to communicate with the OpenShift OAuth server to retrieve OAuth access tokens. Components that need to trust the OAuth server will need to include the proper CA bundle when calling OAuth endpoints. For example:
+> If you update the internal OAuth server URL, you might break trust from components in the cluster that need to communicate with the OpenShift Container Platform OAuth server to retrieve OAuth access tokens. Components that need to trust the OAuth server will need to include the proper CA bundle when calling OAuth endpoints. For example:
 >
 > ``` terminal
 > $ oc login -u <username> -p <password> --certificate-authority=<path_to_ca.crt>
@@ -358,7 +358,7 @@ Procedure
 
 # OAuth server metadata
 
-Applications can discover OAuth server information such as endpoints and supported features using the OAuth 2.0 Authorization Server Metadata specification.
+Applications running in the cluster can query the OAuth 2.0 Authorization Server Metadata endpoint to dynamically discover OAuth server endpoints, supported scopes, and grant types for automated client configuration.
 
 Any application running inside the cluster can issue a `GET` request to ***https://openshift.default.svc/.well-known/oauth-authorization-server*** to fetch the following information:
 

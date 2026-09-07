@@ -2,7 +2,7 @@
 
 You can use the Cloud-native Network Functions (CNF) tests image to run latency tests on a CNF-enabled OpenShift Container Platform cluster, where all the components required for running CNF workloads are installed. Run the latency tests to validate node tuning for your workload.
 
-The `cnf-tests` container image is available at `registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17`.
+The `cnf-tests` container image is available at `registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20`.
 
 # Prerequisites for running latency tests
 
@@ -60,7 +60,11 @@ The tests introduce the following environment variables:
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>LATENCY_TEST_CPUS</code></p></td>
-<td style="text-align: left;"><p>Specifies the number of CPUs that the pod running the latency tests uses. If you do not set the variable, the default configuration includes all isolated CPUs.</p></td>
+<td style="text-align: left;"><p>Specifies the number of CPUs that the pod running the latency tests uses. If you do not set the variable, the default configuration includes all isolated CPUs. When <code>LATENCY_TEST_MEMORY</code> is unset, this value is also used to calculate the default memory request and limit for the latency test pod.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>LATENCY_TEST_MEMORY</code></p></td>
+<td style="text-align: left;"><p>Specifies the memory request and limit for the pod that runs the latency tests. If you do not set the variable, the test allocates 32Mi of memory per <code>LATENCY_TEST_CPUS</code>, with a minimum of 1Gi. To override the calculated value, set <code>LATENCY_TEST_MEMORY</code> to a valid Kubernetes quantity greater than <code>0</code>, for example <code>2Gi</code>.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>LATENCY_TEST_RUNTIME</code></p></td>
@@ -121,21 +125,33 @@ Procedure
 
     ``` terminal
     $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
-    -e LATENCY_TEST_RUNTIME=600\
+    -e LATENCY_TEST_RUNTIME=600 \
     -e MAXIMUM_LATENCY=20 \
-    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 /usr/bin/test-run.sh \
+    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 /usr/bin/test-run.sh \
     --ginkgo.v --ginkgo.timeout="24h"
     ```
 
-    The LATENCY_TEST_RUNTIME is shown in seconds, in this case 600 seconds (10 minutes). The test runs successfully when the maximum observed latency is lower than MAXIMUM_LATENCY (20 μs).
+    The `LATENCY_TEST_RUNTIME` is shown in seconds, in this case 600 seconds (10 minutes). The test runs successfully when the maximum observed latency is lower than `MAXIMUM_LATENCY` (20 μs).
 
     If the results exceed the latency threshold, the test fails.
 
-3.  Optional: Append `--ginkgo.dry-run` flag to run the latency tests in dry-run mode. This is useful for checking what commands the tests run.
+3.  Optional: To override the default memory request and limit for the latency test pod, set the `LATENCY_TEST_MEMORY` variable. Use this option when the default value, which is the greater of `32Mi` multiplied by `LATENCY_TEST_CPUS` or `1Gi`, is not enough for your test. For example:
 
-4.  Optional: Append `--ginkgo.v` flag to run the tests with increased verbosity.
+    ``` terminal
+    $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
+    -e LATENCY_TEST_RUNTIME=600 \
+    -e LATENCY_TEST_CPUS=40 \
+    -e LATENCY_TEST_MEMORY=2Gi \
+    -e MAXIMUM_LATENCY=20 \
+    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 /usr/bin/test-run.sh \
+    --ginkgo.v --ginkgo.timeout="24h"
+    ```
 
-5.  Optional: Append `--ginkgo.timeout="24h"` flag to ensure the Ginkgo 2.0 test suite does not timeout before the latency tests complete.
+4.  Optional: Append `--ginkgo.dry-run` flag to run the latency tests in dry-run mode. This is useful for checking what commands the tests run.
+
+5.  Optional: Append `--ginkgo.v` flag to run the tests with increased verbosity.
+
+6.  Optional: Append `--ginkgo.timeout="24h"` flag to ensure the Ginkgo 2.0 test suite does not timeout before the latency tests complete.
 
     > [!IMPORTANT]
     > During testing shorter time periods, as shown, can be used to run the tests. However, for final verification and valid results, the test should run for at least 12 hours (43200 seconds).
@@ -174,11 +190,13 @@ Procedure
   ``` terminal
   $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
   -e LATENCY_TEST_RUNTIME=600 -e MAXIMUM_LATENCY=20 \
-  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
   /usr/bin/test-run.sh --ginkgo.focus="hwlatdetect" --ginkgo.v --ginkgo.timeout="24h"
   ```
 
   The `hwlatdetect` test runs for 10 minutes (600 seconds). The test runs successfully when the maximum observed latency is lower than `MAXIMUM_LATENCY` (20 μs).
+
+  If you do not set `LATENCY_TEST_MEMORY`, the test allocates 32Mi of memory per `LATENCY_TEST_CPUS`, with a minimum of `1Gi`. To override that value, set `LATENCY_TEST_MEMORY` to a valid Kubernetes quantity, for example `2Gi`.
 
   If the results exceed the latency threshold, the test fails.
 
@@ -386,11 +404,13 @@ Procedure
   ``` terminal
   $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
   -e LATENCY_TEST_CPUS=10 -e LATENCY_TEST_RUNTIME=600 -e MAXIMUM_LATENCY=20 \
-  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
   /usr/bin/test-run.sh --ginkgo.focus="cyclictest" --ginkgo.v --ginkgo.timeout="24h"
   ```
 
   The command runs the `cyclictest` tool for 10 minutes (600 seconds). The test runs successfully when the maximum observed latency is lower than `MAXIMUM_LATENCY` (in this example, 20 μs). Latency spikes of 20 μs and above are generally not acceptable for telco RAN workloads.
+
+  If you do not set `LATENCY_TEST_MEMORY`, the test allocates 32Mi of memory per `LATENCY_TEST_CPUS`, with a minimum of `1Gi`. To override that value, set `LATENCY_TEST_MEMORY` to a valid Kubernetes quantity, for example `2Gi`.
 
   If the results exceed the latency threshold, the test fails.
 
@@ -550,11 +570,13 @@ Procedure
   ``` terminal
   $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
   -e LATENCY_TEST_CPUS=10 -e LATENCY_TEST_RUNTIME=600 -e MAXIMUM_LATENCY=20 \
-  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
   /usr/bin/test-run.sh --ginkgo.focus="oslat" --ginkgo.v --ginkgo.timeout="24h"
   ```
 
   `LATENCY_TEST_CPUS` specifies the number of CPUs to test with the `oslat` command.
+
+  If you do not set `LATENCY_TEST_MEMORY`, the test allocates 32Mi of memory per `LATENCY_TEST_CPUS`, with a minimum of `1Gi`. To override that value, set `LATENCY_TEST_MEMORY` to a valid Kubernetes quantity, for example `2Gi`.
 
   The command runs the `oslat` tool for 10 minutes (600 seconds). The test runs successfully when the maximum observed latency is lower than `MAXIMUM_LATENCY` (20 μs).
 
@@ -563,13 +585,7 @@ Procedure
   > [!IMPORTANT]
   > During testing shorter time periods, as shown, can be used to run the tests. However, for final verification and valid results, the test should run for at least 12 hours (43200 seconds).
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example failure output
-
-  </div>
+  The following shows a sample output:
 
   ``` terminal
   running /usr/bin/cnftests -ginkgo.v -ginkgo.focus=oslat
@@ -604,9 +620,7 @@ Procedure
   FAIL
   ```
 
-  </div>
-
-  - In this example, the measured latency is outside the maximum allowed value.
+  In this example, the measured latency is outside the maximum allowed value as indicated by the line "The current latency 304 is bigger than the expected one".
 
 </div>
 
@@ -640,7 +654,7 @@ Procedure
 
   ``` terminal
   $ podman run -v $(pwd)/:/kubeconfig:Z -v $(pwd)/reportdest:<report_folder_path> \
-  -e KUBECONFIG=/kubeconfig/kubeconfig registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+  -e KUBECONFIG=/kubeconfig/kubeconfig registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
   /usr/bin/test-run.sh --report <report_folder_path> --ginkgo.v
   ```
 
@@ -681,7 +695,7 @@ Procedure
 
   ``` terminal
   $ podman run -v $(pwd)/:/kubeconfig:Z -v $(pwd)/junit:/junit \
-  -e KUBECONFIG=/kubeconfig/kubeconfig registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+  -e KUBECONFIG=/kubeconfig/kubeconfig registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
   /usr/bin/test-run.sh --ginkgo.junit-report junit/<file_name>.xml --ginkgo.v
   ```
 
@@ -727,7 +741,7 @@ Procedure
 
   ``` terminal
   $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
-  -e LATENCY_TEST_RUNTIME=<time_in_seconds> registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+  -e LATENCY_TEST_RUNTIME=<time_in_seconds> registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
   /usr/bin/test-run.sh --ginkgo.v --ginkgo.timeout="24h"
   ```
 
@@ -766,7 +780,7 @@ Procedure
 
     ``` terminal
     $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
-    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
     /usr/bin/mirror -registry <disconnected_registry> | oc image mirror -f -
     ```
 
@@ -780,9 +794,9 @@ Procedure
     ``` terminal
     $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
     -e IMAGE_REGISTRY="<disconnected_registry>" \
-    -e CNF_TESTS_IMAGE="cnf-tests-rhel9:v4.17" \
+    -e CNF_TESTS_IMAGE="cnf-tests-rhel9:v4.20" \
     -e LATENCY_TEST_RUNTIME=<time_in_seconds> \
-    <disconnected_registry>/cnf-tests-rhel9:v4.17 /usr/bin/test-run.sh --ginkgo.v --ginkgo.timeout="24h"
+    <disconnected_registry>/cnf-tests-rhel9:v4.20 /usr/bin/test-run.sh --ginkgo.v --ginkgo.timeout="24h"
     ```
 
 </div>
@@ -818,7 +832,7 @@ Procedure
   -e IMAGE_REGISTRY="<custom_image_registry>" \
   -e CNF_TESTS_IMAGE="<custom_cnf-tests_image>" \
   -e LATENCY_TEST_RUNTIME=<time_in_seconds> \
-  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 /usr/bin/test-run.sh --ginkgo.v --ginkgo.timeout="24h"
+  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 /usr/bin/test-run.sh --ginkgo.v --ginkgo.timeout="24h"
   ```
 
   where:
@@ -893,7 +907,7 @@ Procedure
 
     ``` terminal
     $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
-    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
     /usr/bin/mirror -registry $REGISTRY/cnftests |  oc image mirror --insecure=true \
     -a=$(pwd)/dockerauth.json -f -
     ```
@@ -926,7 +940,7 @@ Procedure
     [
         {
             "registry": "public.registry.io:5000",
-            "image": "imageforcnftests:4.17"
+            "image": "imageforcnftests:4.20"
         }
     ]
     ```
@@ -935,7 +949,7 @@ Procedure
 
     ``` terminal
     $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
-    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 /usr/bin/mirror \
+    registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 /usr/bin/mirror \
     --registry "my.local.registry:5000/" --images "/kubeconfig/images.json" \
     |  oc image mirror -f -
     ```
@@ -972,10 +986,12 @@ Procedure
 
   ``` terminal
   $ podman run -v $(pwd)/:/kubeconfig:Z -e KUBECONFIG=/kubeconfig/kubeconfig \
-  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.17 \
+  registry.redhat.io/openshift4/cnf-tests-rhel9:v4.20 \
   oc get nodes
   ```
 
   If this command does not work, an error related to spanning across DNS, MTU size, or firewall access might be occurring.
+
+- If the latency test pod is terminated with an `OOMKilled` status when you use a high `LATENCY_TEST_CPUS` value, set the `LATENCY_TEST_MEMORY` environment variable to a larger memory quantity, for example `2Gi`, and run the test again.
 
 </div>

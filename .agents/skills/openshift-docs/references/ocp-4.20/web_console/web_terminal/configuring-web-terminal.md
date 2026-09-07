@@ -34,7 +34,7 @@ Procedure
 
     1.  Click Timeout.
 
-    2.  In the field that appears, enter the timeout value.
+    2.  In the field that is displayed, enter the timeout value.
 
     3.  From the drop-down list, select a timeout interval of **Seconds**, **Minutes**, **Hours**, or **Milliseconds**.
 
@@ -42,7 +42,7 @@ Procedure
 
     1.  Click Image.
 
-    2.  In the field that appears, enter the URL of the image that you want to use.
+    2.  In the field that is displayed, enter the URL of the image that you want to use.
 
 4.  Click **Start** to begin a terminal instance using the specified timeout setting.
 
@@ -74,7 +74,7 @@ Procedure
 
 </div>
 
-1.  In the **Administrator** perspective, navigate to **Administation** → **Cluster Settings**.
+1.  In the **Administrator** perspective, navigate to **Administration** → **Cluster Settings**.
 
 2.  On the **Cluster Settings** page, click the **Configuration** tab.
 
@@ -156,7 +156,7 @@ Procedure
 
 </div>
 
-1.  In the **Administrator** perspective, navigate to **Administation** → **Cluster Settings**.
+1.  In the **Administrator** perspective, navigate to **Administration** → **Cluster Settings**.
 
 2.  On the **Cluster Settings** page, click the **Configuration** tab.
 

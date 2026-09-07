@@ -92,7 +92,7 @@ apiVersion: olm.operatorframework.io/v1
 
 </div>
 
-- Optional: Installs the latest release that can be resolved from the specified channel. Updates to the channel are automatically installed. Specify the value of the `channels` parameter as an array.
+Installs the latest release that can be resolved from the specified channel. Updates to the channel are automatically installed. Specify the value of the `channels` parameter as an array. This field is optional
 
 If you specify the Operator or extension’s target version in the CR, OLM v1 installs the specified version. When the target version is specified in the CR, OLM v1 does not change the target version when updates are published to the catalog.
 
@@ -124,7 +124,7 @@ apiVersion: olm.operatorframework.io/v1
 
 </div>
 
-- Optional: Specifies the target version. If you want to update the version of the Operator or extension that is installed, you must manually update this field the CR to the desired target version.
+Specifies the target version. If you want to update the version of the Operator or extension that is installed, you must manually update this field the CR to the desired target version. This field is optional.
 
 If you want to define a range of acceptable versions for an Operator or extension, you can specify a version range by using a comparison string. When you specify a version range, OLM v1 installs the latest version of an Operator or extension that can be resolved by the Operator Controller.
 
@@ -154,7 +154,7 @@ apiVersion: olm.operatorframework.io/v1
 
 </div>
 
-- Optional: Specifies that the desired version range is greater than version `1.11.1`. For more information, see "Support for version ranges".
+Specifies that the desired version range is greater than version `1.11.1`. This field is optional.
 
 After you create or update a CR, apply the configuration file by running the following command:
 
@@ -178,15 +178,7 @@ In Operator Lifecycle Manager (OLM) v1, a Kubernetes object can only be owned by
 
 ## Single ownership
 
-The core ownership principle enforced by OLM v1 is that each object can only have one cluster extension as its owner. This prevents overlapping or conflicting management by multiple cluster extensions, ensuring that each object is uniquely associated with only one bundle.
-
-<div>
-
-<div class="title">
-
-Implications of single ownership
-
-</div>
+The core ownership principle enforced by OLM v1 is that each object can only have one cluster extension as its owner. This prevents overlapping or conflicting management by multiple cluster extensions, ensuring that each object is uniquely associated with only one bundle. Single ownership has the following implications:
 
 - Bundles that provide a `CustomResourceDefinition` (CRD) object can only be installed once.
 
@@ -195,8 +187,6 @@ Implications of single ownership
 - Cluster extensions cannot share objects.
 
   The single-owner policy of OLM v1 means that cluster extensions cannot share ownership of any objects. If one cluster extension manages a specific object, such as a `Deployment`, `CustomResourceDefinition`, or `Service` object, another cluster extension cannot claim ownership of the same object. Any attempt to do so is blocked by OLM v1.
-
-</div>
 
 ## Error messages
 

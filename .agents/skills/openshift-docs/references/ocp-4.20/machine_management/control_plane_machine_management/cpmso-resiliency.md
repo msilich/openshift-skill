@@ -59,7 +59,9 @@ Some changes to the failure domain configuration cause the control plane machine
 
 # Recovery of failed control plane machines
 
-The Control Plane Machine Set Operator automates the recovery of control plane machines to maintain cluster availability without manual intervention. When a control plane machine is deleted, the Operator creates a replacement with the configuration that is specified in the `ControlPlaneMachineSet` custom resource (CR).
+The Control Plane Machine Set Operator automates the recovery of control plane machines to maintain cluster availability without manual intervention.
+
+When a control plane machine is deleted, the Operator creates a replacement with the configuration that is specified in the `ControlPlaneMachineSet` custom resource (CR).
 
 For clusters that use control plane machine sets, you can configure a machine health check. The machine health check deletes unhealthy control plane machines so that they are replaced.
 

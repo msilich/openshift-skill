@@ -204,9 +204,9 @@ Procedure
 
 4.  Optional: Add additional filters to further refine the list.
 
-</div>
+    Only recommendations from the selected categories are shown in the list.
 
-Only recommendations from the selected categories are shown in the list.
+</div>
 
 <div>
 
@@ -375,9 +375,9 @@ Additional resources
 
 </div>
 
-# Displaying the Red Hat Lightspeed status in the web console
+# Display the Red Hat Lightspeed advisor status in the web console
 
-Red Hat Lightspeed repeatedly analyzes your cluster and you can display the status of identified potential issues of your cluster in the OpenShift Container Platform web console. This status shows the number of issues in the different categories and, for further details, links to the reports in [OpenShift Cluster Manager](https://console.redhat.com/openshift).
+View the health status of your cluster and potential issues identified by the Red Hat Lightspeed advisor service in the OpenShift Container Platform web console. Issues are grouped by risk category with links to detailed reports in the Hybrid Cloud Console.
 
 <div>
 

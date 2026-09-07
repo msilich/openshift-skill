@@ -60,7 +60,7 @@ The following table lists the [Windows Server versions](https://docs.microsoft.c
 </tbody>
 </table>
 
-1.  For disconnected clusters, the Windows AMI must have the EC2LaunchV2 agent version 2.0.2107 or later installed. For more information, see the [Install the latest version of EC2Launch v2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2launch-v2-install.html) in the AWS documentation.
+1.  For disconnected clusters, the Windows AMI must have the EC2LaunchV2 agent version 2.0.2107 or later installed. For more information, see "Install the latest version of EC2Launch v2 (AWS documentation)".
 
 # Supported networking
 
@@ -125,5 +125,7 @@ Additional resources
 </div>
 
 - [Hybrid networking](../../networking/ovn_kubernetes_network_provider/configuring-hybrid-networking.md#configuring-hybrid-networking)
+
+- [Install the latest version of EC2Launch v2 (AWS documentation)](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2launch-v2-install.html)
 
 </div>

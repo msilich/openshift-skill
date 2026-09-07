@@ -1,40 +1,47 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can hibernate your OpenShift Container Platform cluster for up to 90 days.
+Hibernate your OpenShift Container Platform cluster for up to 90 days to pause cluster operation without deprovisioning it. You can resume the cluster within that window to restore normal operation.
 
 # About cluster hibernation
 
-OpenShift Container Platform clusters can be hibernated in order to save money on cloud hosting costs. You can hibernate your OpenShift Container Platform cluster for up to 90 days and expect it to resume successfully.
+Review cluster hibernation limits and supported behavior before you pause a cluster. Understanding timing, node, and resume requirements helps you hibernate and resume successfully within 90 days.
 
-You must wait at least 24 hours after cluster installation before hibernating your cluster to allow for the first certification rotation.
+You must wait at least 24 hours after cluster installation before hibernating your cluster to allow for the first certificate rotation.
+
+Take an etcd backup before hibernating so that your cluster can be restored if you encounter issues when resuming the cluster.
+
+You might need to restore from the backup if any of the following conditions occur:
+
+- etcd data is corrupted during hibernation
+
+- A node fails because of hardware
+
+- Network connectivity is interrupted
+
+If the cluster does not recover after restart, follow the steps to restore to a previous cluster state.
 
 > [!IMPORTANT]
-> If you must hibernate your cluster before the 24 hour certificate rotation, use the following procedure instead: [Enabling OpenShift 4 Clusters to Stop and Resume Cluster VMs](https://www.redhat.com/en/blog/enabling-openshift-4-clusters-to-stop-and-resume-cluster-vms).
+> If you must hibernate your cluster before the 24 hour certificate rotation, use the workaround in "Enabling OpenShift 4 Clusters to Stop and Resume Cluster VMs" instead.
 
-When hibernating a cluster, you must hibernate all cluster nodes. It is not supported to suspend only certain nodes.
+When hibernating a cluster, you must hibernate all cluster nodes. Suspending only selected nodes is not supported.
 
 After resuming, it can take up to 45 minutes for the cluster to become ready.
 
-# Prerequisites
+<div>
 
-- Take an [etcd backup](control_plane_backup_and_restore/backing-up-etcd.md#backing-up-etcd-data_backup-etcd) prior to hibernating the cluster.
+<div class="title">
 
-  > [!IMPORTANT]
-  > It is important to take an etcd backup before hibernating so that your cluster can be restored if you encounter any issues when resuming the cluster.
-  >
-  > For example, the following conditions can cause the resumed cluster to malfunction:
-  >
-  > - etcd data corruption during hibernation
-  >
-  > - Node failure due to hardware
-  >
-  > - Network connectivity issues
-  >
-  > If your cluster fails to recover, follow the steps to [restore to a previous cluster state](control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state).
+Additional resources
+
+</div>
+
+- [Enabling OpenShift 4 Clusters to Stop and Resume Cluster VMs (Red Hat Blog)](https://www.redhat.com/en/blog/enabling-openshift-4-clusters-to-stop-and-resume-cluster-vms)
+
+</div>
 
 # Hibernating a cluster
 
-You can hibernate a cluster for up to 90 days. The cluster can recover if certificates expire while the cluster was in hibernation.
+Hibernate your cluster by verifying node and Operator health, then stopping the cluster virtual machines. This process pauses the cluster in a supported state so you can resume it later.
 
 <div>
 
@@ -46,10 +53,10 @@ Prerequisites
 
 - The cluster has been running for at least 24 hours to allow the first certificate rotation to complete.
 
-  > [!IMPORTANT]
-  > If you must hibernate your cluster before the 24 hour certificate rotation, use the following procedure instead: [Enabling OpenShift 4 Clusters to Stop and Resume Cluster VMs](https://www.redhat.com/en/blog/enabling-openshift-4-clusters-to-stop-and-resume-cluster-vms).
+- You created an etcd backup before hibernating the cluster.
 
-- You have taken an etcd backup.
+  > [!IMPORTANT]
+  > Without a recent etcd backup, you might not be able to restore the cluster if hibernation or resume fails.
 
 - You have access to the cluster as a user with the `cluster-admin` role.
 
@@ -150,7 +157,7 @@ Procedure
 
 5.  Stop the cluster virtual machines:
 
-    Use the tools native to your cluster’s cloud environment to shut down the cluster’s virtual machines.
+    Use the tools native to the cloud environment of your cluster to shut down the cluster virtual machines.
 
     > [!IMPORTANT]
     > If you use a bastion virtual machine, do not shut down this virtual machine.
@@ -167,11 +174,13 @@ Additional resources
 
 - [Backing up etcd](control_plane_backup_and_restore/backing-up-etcd.md#backup-etcd)
 
+- [Restoring to an earlier cluster state](control_plane_backup_and_restore/disaster_recovery/scenario-2-restoring-cluster-state.md#dr-restoring-cluster-state)
+
 </div>
 
 # Resuming a hibernated cluster
 
-When you resume a hibernated cluster within 90 days, you might have to approve certificate signing requests (CSRs) for the nodes to become ready.
+Resume a hibernated cluster by starting the cluster virtual machines and approving certificate signing requests (CSRs) as needed. This process restores the cluster to a ready state within the supported 90-day window.
 
 It can take around 45 minutes for the cluster to resume, depending on the size of your cluster.
 
@@ -199,13 +208,13 @@ Procedure
 
 1.  Within 90 days of cluster hibernation, resume the cluster virtual machines:
 
-    Use the tools native to your cluster’s cloud environment to resume the cluster’s virtual machines.
+    Use the tools native to the cloud environment of your cluster to resume the cluster virtual machines.
 
 2.  Wait about 5 minutes, depending on the number of nodes in your cluster.
 
 3.  Approve CSRs for the nodes:
 
-    1.  Check that there is a CSR for each node in the `NotReady` state:
+    1.  Check that there is a CSR for each node in the `NotReady` state by running the following command:
 
         ``` terminal
         $ oc get csr

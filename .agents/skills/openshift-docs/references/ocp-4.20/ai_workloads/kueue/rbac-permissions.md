@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The following procedures provide information about how you can configure role-based access control (RBAC) for your Red Hat build of Kueue deployment. These RBAC permissions determine which types of users can create which types of Red Hat build of Kueue objects.
+You can configure role-based access control (RBAC) for your Red Hat build of Kueue deployment to control which users can create specific Red Hat build of Kueue objects.
 
 # Cluster roles
 
@@ -67,11 +67,16 @@ Procedure
 
     </div>
 
-    - Provide a name for the `ClusterRoleBinding` object.
+    where:
 
-    - Add details about which user or group of users you want to provide user permissions for.
+    `metadata.name`
+    Specifies the name of the `ClusterRoleBinding` object.
 
-    - Add details about the `kueue-batch-admin-role` cluster role.
+    `subjects`
+    Specifies the user or group of users you want to provide user permissions for.
+
+    `roleRef`
+    Specifies the `kueue-batch-admin-role` cluster role.
 
 2.  Apply the `ClusterRoleBinding` object:
 
@@ -178,13 +183,19 @@ Procedure
 
     </div>
 
-    - Provide a name for the `RoleBinding` object.
+    where:
 
-    - Add details about which namespace the `RoleBinding` object applies to.
+    `metadata.name`
+    Specifies the name of the `RoleBinding` object.
 
-    - Add details about which user or group of users you want to provide user permissions for.
+    `metadata.namespace`
+    Specifies the namespace the `RoleBinding` object applies to.
 
-    - Add details about the `kueue-batch-user-role` cluster role.
+    `subjects`
+    Specifies the user or group of users you want to provide user permissions for.
+
+    `roleRef`
+    Specifies the `kueue-batch-user-role` cluster role.
 
 2.  Apply the `RoleBinding` object:
 

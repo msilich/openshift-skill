@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Pod security admission is an implementation of the [Kubernetes pod security standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/). Use pod security admission to restrict the behavior of pods.
+You can configure pod security admission to enforce the Kubernetes pod security standards. You can apply this enforcement at both the global and namespace levels.
 
 # About pod security admission
 
-OpenShift Container Platform includes [Kubernetes pod security admission](https://kubernetes.io/docs/concepts/security/pod-security-admission). Pods that do not comply with the pod security admission defined globally or at the namespace level are not admitted to the cluster and cannot run.
+You can use pod security admission modes, such as `enforce`, `warn`, or `audit`, along with security profiles to restrict which pods run in your cluster. You can apply this control at both the global and namespace levels.
 
 Globally, the `privileged` profile is enforced, and the `restricted` profile is used for warnings and audits.
 
@@ -76,7 +76,9 @@ metadata:
 
 ## Pod security admission and security context constraints
 
-Pod security admission standards and security context constraints are reconciled and enforced by two independent controllers. The two controllers work independently using the following processes to enforce security policies:
+Pod security admission and security context constraints operate as two independent mechanisms in OpenShift Container Platform. You must ensure your workloads comply with both to avoid unexpected pod rejections.
+
+The two controllers independently enforce security policies by using the following processes:
 
 1.  The security context constraint controller may mutate some security context fields per the pod’s assigned SCC. For example, if the seccomp profile is empty or not set and if the pod’s assigned SCC enforces `seccompProfiles` field to be `runtime/default`, the controller sets the default type to `RuntimeDefault`.
 
@@ -86,7 +88,7 @@ Pod security admission standards and security context constraints are reconciled
 
 # About pod security admission synchronization
 
-In addition to the global pod security admission control configuration, a controller applies pod security admission control `warn` and `audit` labels to namespaces according to the SCC permissions of the service accounts that are in a given namespace.
+Pod security admission `warn` and `audit` labels are automatically synchronized on your namespaces. This synchronization maps security context constraints to pod security profiles based on the service account permissions in each namespace.
 
 The controller examines `ServiceAccount` object permissions to use security context constraints in each namespace. Security context constraints (SCCs) are mapped to pod security profiles based on their field values; the controller uses these translated profiles. Pod security admission `warn` and `audit` labels are set to the most privileged pod security profile in the namespace to prevent displaying warnings and logging audit events when pods are created.
 
@@ -96,7 +98,9 @@ Applying pods directly might use the SCC privileges of the user who runs the pod
 
 ## Pod security admission synchronization namespace exclusions
 
-Pod security admission synchronization is permanently disabled on most system-created namespaces. Synchronization is also initially disabled on user-created `openshift-*` prefixed namespaces, but you can enable synchronization on them later.
+If you use pod security admission synchronization, the system-created namespaces are permanently disabled from synchronization.
+
+User-created `openshift-*` prefixed namespaces are also initially disabled, but you can enable synchronization on them later.
 
 > [!IMPORTANT]
 > If a pod security admission label (`pod-security.kubernetes.io/<mode>`) is manually modified from the automatically labeled value on a label-synchronized namespace, synchronization is disabled for that label.
@@ -136,7 +140,7 @@ If an Operator is installed in a user-created `openshift-*` namespace, synchroni
 
 # Controlling pod security admission synchronization
 
-You can enable or disable automatic pod security admission synchronization for most namespaces.
+To customize which namespaces have their pod security admission labels automatically updated, you can enable or disable synchronization for most namespaces.
 
 > [!IMPORTANT]
 > You cannot enable pod security admission synchronization on some system-created namespaces. For more information, see *Pod security admission synchronization namespace exclusions*.
@@ -186,7 +190,7 @@ Additional resources
 
 # Configuring pod security admission for a namespace
 
-You can configure the pod security admission settings at the namespace level. For each of the pod security admission modes on the namespace, you can set which pod security admission profile to use.
+You can configure pod security admission modes and profiles at the namespace level to control the security standards that pods must meet in a specific namespace.
 
 <div>
 
@@ -204,23 +208,32 @@ Procedure
       --overwrite
   ```
 
-  - Set `<namespace>` to the namespace to configure.
+  where:
 
-  - Set `<mode>` to `enforce`, `warn`, or `audit`. Set `<profile>` to `restricted`, `baseline`, or `privileged`.
+  `<namespace>`
+  Specifies the namespace to configure.
+
+  `<mode>`
+  Specifies the pod security admission mode. Valid values are `enforce`, `warn`, or `audit`.
+
+  `<profile>`
+  Specifies the pod security profile. Valid values are `restricted`, `baseline`, or `privileged`.
 
 </div>
 
 # About pod security admission alerts
 
-A `PodSecurityViolation` alert is triggered when the Kubernetes API server reports that there is a pod denial on the audit level of the pod security admission controller. This alert persists for one day.
+If your pods violate the configured pod security standards, you receive a `PodSecurityViolation` alert. This alert persists for one day so that you can investigate and resolve compliance issues.
 
-View the Kubernetes API server audit logs to investigate alerts that were triggered. As an example, a workload is likely to fail admission if global enforcement is set to the `restricted` pod security level.
+You can view the Kubernetes API server audit logs to investigate alerts that were triggered. As an example, a workload is likely to fail admission if global enforcement is set to the `restricted` pod security level.
 
-For assistance in identifying pod security admission violation audit events, see [Audit annotations](https://kubernetes.io/docs/reference/labels-annotations-taints/audit-annotations/#pod-security-kubernetes-io-audit-violations) in the Kubernetes documentation.
+To identify pod security admission violation audit events, see "Audit annotations" in the Kubernetes documentation.
 
 ## Identifying pod security violations
 
-The `PodSecurityViolation` alert does not provide details on which workloads are causing pod security violations. You can identify the affected workloads by reviewing the Kubernetes API server audit logs. This procedure uses the `must-gather` tool to gather the audit logs and then searches for the `pod-security.kubernetes.io/audit-violations` annotation.
+To identify which workloads are causing pod security violations, you can review the Kubernetes API server audit logs by using the `must-gather` tool.
+
+The `PodSecurityViolation` alert does not provide details on which workloads are causing pod security violations.
 
 <div>
 
@@ -277,6 +290,14 @@ Procedure
 </div>
 
 # Additional resources
+
+- [Pod Security Admission (Kubernetes documentation)](https://kubernetes.io/docs/concepts/security/pod-security-admission)
+
+- [Pod Security Standards (Kubernetes documentation)](https://kubernetes.io/docs/concepts/security/pod-security-standards/)
+
+- [Audit Annotations (Kubernetes documentation)](https://kubernetes.io/docs/reference/labels-annotations-taints/audit-annotations/#pod-security-kubernetes-io-audit-violations)
+
+<!-- -->
 
 - [Viewing audit logs](../security/audit-log-view.md#nodes-nodes-audit-log-basic-viewing_audit-log-view)
 

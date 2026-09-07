@@ -122,7 +122,7 @@ Procedure
 
     </div>
 
-3.  Update your cluster to OpenShift Container Platform 4.17.
+3.  Update your cluster to OpenShift Container Platform 4.20.
 
 4.  Set the allowed source ranges API for the `ingresscontroller` by running the following command:
 

@@ -327,7 +327,7 @@ When AWS terminates an instance, a termination handler running on the Spot Insta
 
 ## Capacity Reservation configuration options
 
-OpenShift Container Platform version 4.17 and later supports Capacity Reservations on Amazon Web Services clusters, including On-Demand Capacity Reservations and Capacity Blocks for ML.
+OpenShift Container Platform version 4.20 and later supports Capacity Reservations on Amazon Web Services clusters, including On-Demand Capacity Reservations and Capacity Blocks for ML.
 
 You can deploy machines on any available resources that match the parameters of a capacity request that you define. These parameters specify the instance type, region, and number of instances that you want to reserve. If your Capacity Reservation can accommodate the capacity request, the deployment succeeds.
 

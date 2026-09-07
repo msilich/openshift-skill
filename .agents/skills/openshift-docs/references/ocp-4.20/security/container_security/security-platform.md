@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-OpenShift Container Platform and Kubernetes APIs are key to automating container management at scale. APIs are used to:
+To make your OpenShift Container Platform cluster more secure, you should understand the security enhancements you can make to APIs used by OpenShift Container Platform. OpenShift Container Platform and Kubernetes APIs are key to automating container management at scale. APIs are used to:
 
 - Validate and configure the data for pods, services, and replication controllers.
 
-- Perform project validation on incoming requests and invoke triggers on other major system components.
+- Perform project validation on incoming requests and start triggers on other major system components.
 
 Security-related features in OpenShift Container Platform that are based on Kubernetes include:
 
@@ -16,7 +16,9 @@ OpenShift Container Platform uses Operators to automate and simplify the managem
 
 # Isolating containers with multitenancy
 
-Multitenancy allows applications on an OpenShift Container Platform cluster that are owned by multiple users, and run across multiple hosts and namespaces, to remain isolated from each other and from outside attacks. You obtain multitenancy by applying role-based access control (RBAC) to Kubernetes namespaces.
+You can configure multitenancy to allow applications on an OpenShift Container Platform cluster that are owned by multiple users, and run across multiple hosts and namespaces, to remain isolated from each other and from outside attacks.
+
+You obtain multitenancy by applying role-based access control (RBAC) to Kubernetes namespaces.
 
 In Kubernetes, *namespaces* are areas where applications can run in ways that are separate from other applications. OpenShift Container Platform uses and extends namespaces by adding extra annotations, including MCS labeling in SELinux, and identifying these extended namespaces as *projects*. Within the scope of a project, users can maintain their own cluster resources, including service accounts, policies, constraints, and various other objects.
 
@@ -32,7 +34,9 @@ Local RBAC roles and bindings attach a user or group to a particular project. Cl
 
 # Protecting control plane with admission plugins
 
-While RBAC controls access rules between users and groups and available projects, *admission plugins* define access to the OpenShift Container Platform master API. Admission plugins form a chain of rules that consist of:
+Where RBAC controls access rules between users and groups and available projects, you can define access to the OpenShift Container Platform master API by using *admission plugins* .
+
+API requests go through a chain of rules that consist of the following admission plugins:
 
 - Default admissions plugins: These implement a default set of policies and resources limits that are applied to components of the OpenShift Container Platform control plane.
 
@@ -76,7 +80,7 @@ Service accounts associated with platform components automatically have their ke
 
 ## Controlling access using OAuth
 
-You can use API access control via authentication and authorization for securing your container platform. The OpenShift Container Platform master includes a built-in OAuth server. Users can obtain OAuth access tokens to authenticate themselves to the API.
+You can use API access control through authentication and authorization for securing your container platform. The OpenShift Container Platform master includes a built-in OAuth server. Users can obtain OAuth access tokens to authenticate themselves to the API.
 
 As an administrator, you can configure OAuth to authenticate using an *identity provider*, such as LDAP, GitHub, or Google. The identity provider is used by default for new OpenShift Container Platform deployments, but you can configure this at initial installation time or postinstallation.
 
@@ -87,8 +91,6 @@ Applications can have multiple, independent API services which have different en
 3scale gives you a variety of standard options for API authentication and security, which can be used alone or in combination to issue credentials and control access: standard API keys, application ID and key pair, and OAuth 2.0.
 
 You can restrict access to specific endpoints, methods, and services and apply access policy for groups of users. Application plans allow you to set rate limits for API usage and control traffic flow for groups of developers.
-
-For a tutorial on using APIcast v2, the containerized 3scale API Gateway, see [Running APIcast on Red Hat OpenShift](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.0/html/deployment_options/apicast-openshift) in the 3scale documentation.
 
 ## Red Hat Single Sign-On
 
@@ -108,7 +110,9 @@ OpenShift Container Platform provides a self-service web console to ensure that 
 
 # Managing certificates for the platform
 
-OpenShift Container Platform has multiple components within its framework that use REST-based HTTPS communication leveraging encryption via TLS certificates. OpenShift Container Platform’s installer configures these certificates during installation. There are some primary components that generate this traffic:
+OpenShift Container Platform has multiple components within its framework that use REST-based HTTPS communication leveraging encryption via TLS certificates. You can configure these certificates during installation.
+
+There are some primary components that generate this traffic:
 
 - masters (API server and controllers)
 
@@ -151,5 +155,7 @@ Additional resources
 - [Certificate types and descriptions](../certificate_types_descriptions/user-provided-certificates-for-api-server.md#cert-types-user-provided-certificates-for-the-api-server)
 
 - [Proxy certificates](../certificate_types_descriptions/proxy-certificates.md#proxy-certificates)
+
+- [Running APIcast on Red Hat OpenShift](https://access.redhat.com/documentation/en-us/red_hat_3scale_api_management/2.0/html/deployment_options/apicast-openshift)
 
 </div>

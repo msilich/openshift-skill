@@ -156,7 +156,7 @@ Specifies the control plane user data secret. Do not change this value.
 
 # Sample AWS failure domain configuration
 
-To prevent downtime for your application due to the failure of a single Amazon Web Services (AWS) region, you can configure failure domains in the control plane machine set. To use failure domains, you configure appropriate values in the `failureDomains` section of the `ControlPlaneMachineSet` custom resource (CR).
+To prevent downtime for your applications due to the failure of a single Amazon Web Services (AWS) region, you can configure failure domains in the control plane machine set by configuring appropriate values in the `failureDomains` section of the `ControlPlaneMachineSet` object.
 
 The control plane machine set concept of a failure domain is analogous to the AWS concept of an [*Availability Zone (AZ)*](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones). The `ControlPlaneMachineSet` CR spreads control plane machines across more than one failure domain when possible.
 

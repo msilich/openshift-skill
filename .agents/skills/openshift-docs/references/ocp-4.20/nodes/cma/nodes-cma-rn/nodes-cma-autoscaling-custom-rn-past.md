@@ -4,6 +4,22 @@ You can review the following release notes to learn about changes in previous ve
 
 For the current version, see [Custom Metrics Autoscaler Operator release notes](nodes-cma-autoscaling-custom-rn.md#nodes-cma-autoscaling-custom-rn).
 
+# Custom Metrics Autoscaler Operator 2.19.0-2 release notes
+
+Issued: 09 July 2026
+
+You can review the following release notes to learn about the bug fixes provided in this release of the Custom Metrics Autoscaler Operator.
+
+The following advisory is available for the Custom Metrics Autoscaler Operator:
+
+- [RHBA-2026:37467](https://access.redhat.com/errata/RHBA-2026:37467)
+
+> [!IMPORTANT]
+> Before installing this version of the Custom Metrics Autoscaler Operator, remove any previously installed Technology Preview versions or the community-supported version of Kubernetes-based Event Driven Autoscaler (KEDA).
+
+Bug fixes
+- Before this update, the addition of an immutable label in the deployment selector that was not compatible with the existing deployment was causing automatic upgrades from Custom Metrics Autoscaler Operator version 2.18.1-2 to version 2.19.0-1 to fail. With the fix, automatic upgrades from version 2.18.1-2 to version 2.19.0-2 succeed without manual intervention. ([OCPBUGS-91950](https://redhat.atlassian.net/browse/OCPBUGS-91950))
+
 # Custom Metrics Autoscaler Operator 2.19.0-1 release notes
 
 Issued: 17 June 2026
@@ -405,7 +421,7 @@ Note the new features and enhancements in this release:
 
 - must-gather support
 
-  You can now collect data about the Custom Metrics Autoscaler Operator and its components by using the OpenShift Container Platform `must-gather` tool. Currently, the process for using the `must-gather` tool with the Custom Metrics Autoscaler is different from that of other operators. See "Gathering debugging data" in the *Additional resources* section for more information.
+  You can now collect data about the Custom Metrics Autoscaler Operator and its components by using the OpenShift Container Platform `must-gather` tool. Currently, the process for using the `must-gather` tool with the Custom Metrics Autoscaler is different from that of other Operators. For more information, see "Gathering debugging data".
 
 ## Custom Metrics Autoscaler Operator 2.8.2 release notes
 

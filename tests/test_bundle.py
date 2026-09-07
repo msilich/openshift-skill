@@ -114,7 +114,7 @@ class SkillBundleTest(unittest.TestCase):
         )
         self.assertEqual(
             sources["openshift_docs"]["commit"],
-            "5aee2719f9ad01a82bb80b391e5af25f566c73c0",
+            "3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98",
         )
 
     def test_opencode_profiles_are_airgap_scoped(self) -> None:
@@ -406,14 +406,35 @@ class SkillBundleTest(unittest.TestCase):
         docs = docs_skill / "references" / "ocp-4.20"
         source = json.loads((docs / "SOURCE.json").read_text(encoding="utf-8"))
         self.assertEqual(source["artifact"]["version"], "4.20")
-        self.assertEqual(source["artifact"]["converted_topics"], 1746)
+        self.assertIn(
+            "OpenShift Container Platform 4.20 documentation",
+            (docs / "welcome/index.md").read_text(),
+        )
+        self.assertTrue((docs / "release_notes/ocp-4-20-release-notes.md").is_file())
+        self.assertEqual(source["artifact"]["converted_topics"], 1749)
         self.assertEqual(source["conversion"]["failed_topics"], 0)
         self.assertEqual(
             source["sources"]["openshift_docs"]["commit"],
-            "5aee2719f9ad01a82bb80b391e5af25f566c73c0",
+            "3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98",
         )
         markdown_files = sorted(docs.rglob("*.md"))
-        self.assertEqual(len(markdown_files), 1748)
+        self.assertEqual(len(markdown_files), 1751)
+        build_lock = json.loads((ROOT / "tools/docs/build.lock.json").read_text())
+        source_lock = json.loads((ROOT / "sources.lock.json").read_text())
+        self.assertEqual(source["sources"], build_lock["sources"])
+        self.assertEqual(source["artifact"]["version"], source_lock["documentation_version"])
+        self.assertEqual(
+            source["sources"]["openshift_docs"]["commit"],
+            source_lock["sources"]["openshift_docs"]["commit"],
+        )
+        self.assertEqual(
+            hashlib.sha256((ROOT / "tools/docs/convert.py").read_bytes()).hexdigest(),
+            build_lock["sources"]["agentic_skills_converter"]["sha256"],
+        )
+        self.assertEqual(
+            source["integrity"]["markdown_manifest_sha256"],
+            build_lock["expected_output"]["markdown_manifest_sha256"],
+        )
         manifest = "".join(
             f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.relative_to(docs).as_posix()}\n"
             for path in markdown_files

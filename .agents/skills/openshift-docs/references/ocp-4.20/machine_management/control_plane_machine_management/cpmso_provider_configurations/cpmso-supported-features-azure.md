@@ -334,7 +334,7 @@ Procedure
 
 </div>
 
-1.  Create a custom secret in the `openshift-machine-api` namespace using the `master` data secret by running the following command:
+1.  Create a custom secret in the `openshift-machine-api` namespace by using the `master` data secret by running the following command:
 
     ``` terminal
     $ oc -n openshift-machine-api \
@@ -614,7 +614,9 @@ Additional resources
 
 # Configuring trusted launch for Azure virtual machines by using machine sets
 
-OpenShift Container Platform 4.17 supports trusted launch for Microsoft Azure virtual machines (VMs). By editing the machine set YAML file, you can configure the trusted launch options that a machine set uses for machines that it deploys. For example, you can configure these machines to use UEFI security features such as Secure Boot or a dedicated virtual Trusted Platform Module (vTPM) instance.
+By editing the machine set YAML file, you can configure the trusted launch for Microsoft Azure virtual machines (VMs) options that a machine set uses for machines that it deploys.
+
+For example, you can configure these machines to use UEFI security features such as Secure Boot or a dedicated virtual Trusted Platform Module (vTPM) instance.
 
 > [!NOTE]
 > Some feature combinations result in an invalid configuration.
@@ -710,7 +712,7 @@ Verification
 
 # Configuring Azure confidential virtual machines by using machine sets
 
-OpenShift Container Platform 4.17 supports Microsoft Azure confidential virtual machines (VMs). By enabling Azure confidential VMs, you can use memory encryption to improve data confidentiality.
+You can enable Microsoft Azure confidential virtual machines (VMs) to use memory encryption to improve data confidentiality.
 
 > [!NOTE]
 > Confidential VMs are currently not supported on 64-bit ARM architectures.
@@ -768,8 +770,6 @@ Procedure
     # ...
     ```
 
-    </div>
-
     where:
 
     `spec.template.spec.providerSpec.value.osDisk.managedDisk.securityProfile`
@@ -796,6 +796,8 @@ Procedure
     `spec.template.spec.providerSpec.value.vmSize`
     Specifies an instance type that supports confidential VMs.
 
+    </div>
+
 </div>
 
 <div>
@@ -810,9 +812,9 @@ Verification
 
 </div>
 
-# Configuring Capacity Reservation by using machine sets
+# Configuring Capacity Reservations by using machine sets
 
-OpenShift Container Platform version 4.17 and later supports on-demand Capacity Reservation with Capacity Reservation groups on Microsoft Azure clusters.
+You can configure a machine set to deploy machines on any available resources that match the parameters of a capacity request that you define by using on-demand Capacity Reservation with Capacity Reservation groups on Microsoft Azure clusters.
 
 You can configure a machine set to deploy machines on any available resources that match the parameters of a capacity request that you define.
 
@@ -835,7 +837,7 @@ Prerequisites
 
 - You installed the OpenShift CLI (`oc`).
 
-- You created a Capacity Reservation group. For more information, see [Create a Capacity Reservation](https://learn.microsoft.com/en-us/azure/virtual-machines/capacity-reservation-create) in the Microsoft Azure documentation.
+- You have created a Capacity Reservation group. For more information, see [Create a Capacity Reservation](https://learn.microsoft.com/en-us/azure/virtual-machines/capacity-reservation-create) in the Microsoft Azure documentation.
 
 </div>
 
@@ -847,9 +849,13 @@ Procedure
 
 </div>
 
-1.  In a text editor, open the YAML file for an existing machine set or create a new one.
+1.  Edit your control plane machine set custom resource (CR) by running the following command:
 
-2.  Edit the following section under the `providerSpec` field:
+    ``` terminal
+    $ oc edit controlplanemachineset.machine.openshift.io cluster --namespace openshift-machine-api
+    ```
+
+2.  Update the CR to implement your configuration changes:
 
     <div class="formalpara">
 
@@ -880,6 +886,14 @@ Procedure
     `<capacity_reservation_group>`
     Specifies the ID of the Capacity Reservation group that you want the machine set to deploy machines on.
 
+3.  Save your changes and exit the object specification.
+
+    When you save an update to the control plane machine set, the Control Plane Machine Set Operator updates the control plane machines according to your configured update strategy.
+
+    - For clusters that use the default `RollingUpdate` update strategy, the Operator automatically propagates the changes to your control plane configuration.
+
+    - For clusters that are configured to use the `OnDelete` update strategy, you must replace your control plane machines manually.
+
 </div>
 
 <div>
@@ -904,7 +918,7 @@ Verification
 
 # Accelerated Networking for Microsoft Azure VMs
 
-Accelerated Networking uses single root I/O virtualization (SR-IOV) to provide Microsoft Azure VMs with a more direct path to the switch. This enhances network performance. You can enable this feature after installation.
+You can enable Accelerated Networking, which uses single root I/O virtualization (SR-IOV) to provide Microsoft Azure VMs with a more direct path to the switch, after installation. This enhances network performance.
 
 ## Limitations
 
@@ -916,7 +930,7 @@ Consider the following limitations when deciding whether to use Accelerated Netw
 
 ## Enabling Accelerated Networking on an existing Microsoft Azure cluster
 
-You can enable Accelerated Networking on Microsoft Azure by adding `acceleratedNetworking` to your machine set YAML file. This uses SR-IOV to help improve network performance for new node.
+You can enable Accelerated Networking on Microsoft Azure by adding `acceleratedNetworking` to your machine set YAML file. Accelerated Networking uses SR-IOV to help improve network performance for new nodes.
 
 <div>
 

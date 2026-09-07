@@ -242,41 +242,29 @@ Procedure
 
     where:
 
-    `<hosted_cluster_name>`
-    Specifies the name of your hosted cluster, such as `example`.
+    - `--name` specifies the name of your hosted cluster, such as `example`.
 
-    `<path_to_pull_secret>`
-    Specifies the path to your pull secret, such as `/user/name/pullsecret`.
+    - `--pull-secret` specifies the path to your pull secret, such as `/user/name/pullsecret`.
 
-    `<hosted_control_plane_namespace>`
-    Specifies your hosted control plane namespace, such as `clusters-example`. Ensure that agents are available in this namespace by using the `oc get agent -n <hosted_control_plane_namespace>` command.
+    - `--agent-namespace` specifies your hosted control plane namespace, such as `clusters-example`. Ensure that agents are available in this namespace by using the `oc get agent -n <hosted_control_plane_namespace>` command.
 
-    `<base_domain>`
-    Specifies your base domain, such as `krnl.es`.
+    - `--base-domain` specifies your base domain, such as `krnl.es`.
 
-    `api-server-address`
-    Specifies the IP address that gets used for the Kubernetes API communication in the hosted cluster. If you do not set the `--api-server-address` flag, you must log in to connect to the management cluster.
+    - `--api-server-address` specifies the IP address that gets used for the Kubernetes API communication in the hosted cluster. If you do not set the `--api-server-address` flag, you must log in to connect to the management cluster.
 
-    `<etcd_storage_class>`
-    Specifies the etcd storage class name, such as `lvm-storageclass`.
+    - `--etcd-storage-class` specifies the etcd storage class name, such as `lvm-storageclass`.
 
-    `<path_to_ssh_key>`
-    Specifies the path to your SSH public key. The default file path is `~/.ssh/id_rsa.pub`.
+    - `--ssh-key` specifies the path to your SSH public key. The default file path is `~/.ssh/id_rsa.pub`.
 
-    `<hosted_cluster_namespace>`
-    Specifies your hosted cluster namespace.
+    - `--namespace` specifies your hosted cluster namespace.
 
-    `control-plane-availability-policy`
-    Specifies the availability policy for the hosted control plane components. Supported options are `SingleReplica` and `HighlyAvailable`. The default value is `HighlyAvailable`.
+    - `--control-plane-availability-policy` specifies the availability policy for the hosted control plane components. Supported options are `SingleReplica` and `HighlyAvailable`. The default value is `HighlyAvailable`.
 
-    `<ocp_release_image>`
-    Specifies the supported OpenShift Container Platform version that you want to use, such as `4.20.0-multi`. If you are using a disconnected environment, replace `<ocp_release_image>` with the digest image. To extract the OpenShift Container Platform release image digest, see "Extracting the OpenShift Container Platform release image digest".
+    - `--release-image` specifies the supported OpenShift Container Platform version that you want to use, such as `4.20.0-multi`. If you are using a disconnected environment, replace `<ocp_release_image>` with the digest image. To extract the OpenShift Container Platform release image digest, see "Extracting the OpenShift Container Platform release image digest".
 
-    `<node_pool_replica_count>`
-    Specifies the node pool replica count, such as `3`. You must specify the replica count as `0` or greater to create the same number of replicas. Otherwise, you do not create node pools.
+    - `--node-pool-replicas` specifies the node pool replica count, such as `3`. You must specify the replica count as `0` or greater to create the same number of replicas. Otherwise, you do not create node pools.
 
-    `<home_directory>/<path_to_ssh_key>/<ssh_key>`
-    Specifies the path to the SSH key, such as `user/.ssh/id_rsa`.
+    - `--ssh-key` specifies the path to the SSH key, such as `user/.ssh/id_rsa`.
 
 3.  Apply the changes to the hosted cluster configuration file by entering the following command:
 

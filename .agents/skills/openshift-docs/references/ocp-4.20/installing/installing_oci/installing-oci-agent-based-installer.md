@@ -1,10 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-In OpenShift Container Platform 4.17, you can use the Agent-based Installer to install a cluster on Oracle® Distributed Cloud, so that you can run cluster workloads on infrastructure that supports dedicated, hybrid, public, and multiple cloud environments.
+You can use the Agent-based Installer to install a cluster on Oracle® Distributed Cloud, so that you can run cluster workloads on infrastructure that supports dedicated, hybrid, public, and multiple cloud environments.
 
 Installing a cluster on Oracle Distributed Cloud is supported for virtual machines (VMs) and bare-metal machines.
 
 # Supported Oracle Distributed Cloud infrastructures
+
+There are several different Oracle® Distributed Cloud infrastructure offerings you can choose for your installation.
 
 The following table describes the support status of each Oracle® Distributed Cloud infrastructure offering:
 
@@ -84,7 +86,9 @@ Additional resources
 
 # Installation process workflow
 
-The following workflow describes a high-level outline for the process of installing an OpenShift Container Platform cluster on Oracle Distributed Cloud using the Agent-based Installer:
+To better understand the process, see a high-level outline of installing an OpenShift Container Platform cluster on Oracle Distributed Cloud using the Agent-based Installer.
+
+The following workflow describes the general installation process:
 
 1.  Create Oracle Cloud Infrastructure (OCI) resources and services (Oracle).
 
@@ -108,7 +112,9 @@ The following workflow describes a high-level outline for the process of install
 
 # Creating OCI infrastructure resources and services
 
-You must create an Oracle Distributed Cloud environment on your virtual machine (VM) or bare-metal shape. By creating this environment, you can install OpenShift Container Platform and deploy a cluster on an infrastructure that supports a wide range of cloud options and strong security policies. Having prior knowledge of Oracle Cloud Infrastructure (OCI) components can help you with understanding the concept of OCI resources and how you can configure them to meet your organizational needs.
+You must create an Oracle Distributed Cloud environment on your virtual machine (VM) or bare-metal shape. By creating this environment, you can install OpenShift Container Platform and deploy a cluster on an infrastructure that supports a wide range of cloud options and strong security policies.
+
+Having prior knowledge of Oracle Cloud Infrastructure (OCI) components can help you with understanding the concept of OCI resources and how you can configure them to meet your organizational needs.
 
 The Agent-based Installer method for installing an OpenShift Container Platform cluster on Oracle Distributed Cloud requires that you manually create OCI resources and services.
 
@@ -165,7 +171,9 @@ Additional resources
 
 # Creating configuration files for installing a cluster on Oracle Distributed Cloud
 
-You must create the `install-config.yaml` and the `agent-config.yaml` configuration files so that you can use the Agent-based Installer to generate a bootable ISO image. The Agent-based installation comprises a bootable ISO that has the Assisted discovery agent and the Assisted Service. Both of these components are required to perform the cluster installation, but the latter component runs on only one of the hosts.
+You must create the `install-config.yaml` and the `agent-config.yaml` configuration files so that you can use the Agent-based Installer to generate a bootable ISO image. The Agent-based installation comprises a bootable ISO that has the Assisted discovery agent and the Assisted Service.
+
+Both of these components are required to perform the cluster installation, but the latter component runs on only one of the hosts.
 
 > [!NOTE]
 > You can also use the Agent-based Installer to generate or accept Zero Touch Provisioning (ZTP) custom resources.
@@ -274,17 +282,28 @@ Procedure
 
     </div>
 
-    - The base domain of your cloud provider.
+    where:
 
-    - The IP address from the virtual cloud network (VCN) that the CIDR allocates to resources and components that operate on your network.
+    `baseDomain`
+    Specifies the base domain of your cloud provider.
 
-    - Depending on your infrastructure, you can select either `arm64` or `amd64`.
+    `machineNetwork.cidr`
+    Specifies the IP address from the virtual cloud network (VCN) that the CIDR allocates to resources and components that operate on your network.
 
-    - Set `OCI` as the external platform, so that OpenShift Container Platform can integrate with OCI.
+    `compute.architecture`
+    Specifies the `compute.architecture` parameter. Depending on your infrastructure, you can select either `arm64` or `amd64`.
 
-    - Specify your SSH public key.
+    `controlPlane.architecture`
+    Specifies the `controlPlane.architecture` parameter. Depending on your infrastructure, you can select either `arm64` or `amd64`.
 
-    - The pull secret that you need for authenticate purposes when downloading container images for OpenShift Container Platform components and services, such as Quay.io. See [Install OpenShift Container Platform 4](https://console.redhat.com/openshift/install/pull-secret) from the Red Hat Hybrid Cloud Console.
+    `platformName`
+    Specifies `OCI` as the external platform, so that OpenShift Container Platform can integrate with OCI.
+
+    `sshKey`
+    Specifies you SSH public key.
+
+    `pullSecret`
+    Specifies the pull secret that you need for authenticate purposes when downloading container images for OpenShift Container Platform components and services, such as Quay.io. See [Install OpenShift Container Platform 4](https://console.redhat.com/openshift/install/pull-secret) from the Red Hat Hybrid Cloud Console.
 
 3.  Create a directory on your local system named `openshift`. This must be a subdirectory of the installation directory.
 
@@ -323,13 +342,19 @@ Procedure
 
     </div>
 
-    - The cluster name that you specified in your DNS record.
+    where:
 
-    - The namespace of your cluster on OpenShift Container Platform.
+    `name`
+    Specifies the cluster name that you specified in your DNS record.
 
-    - If you use IPv4 as the network IP address format, ensure that you set the `rendezvousIP` parameter to an IPv4 address that the VCN’s Classless Inter-Domain Routing (CIDR) method allocates on your network. Also ensure that at least one instance from the pool of instances that you booted with the ISO matches the IP address value you set for the `rendezvousIP` parameter.
+    `namespace`
+    Specifies the namespace of your cluster on OpenShift Container Platform.
 
-    - The URL of the server where you want to upload the rootfs image. This parameter is required only for disconnected environments.
+    `rendezvousIP`
+    Specifies the `rendezvousIP` parameter. If you use IPv4 as the network IP address format, ensure that you set the `rendezvousIP` parameter to an IPv4 address that the VCN’s Classless Inter-Domain Routing (CIDR) method allocates on your network. Also ensure that at least one instance from the pool of instances that you booted with the ISO matches the IP address value you set for the `rendezvousIP` parameter.
+
+    `bootArtifactsBaseURL`
+    Specifies the URL of the server where you want to upload the rootfs image. This parameter is required only for disconnected environments.
 
 7.  Generate a minimal ISO image, which excludes the rootfs image, by entering the following command in your installation directory:
 
@@ -374,7 +399,7 @@ Additional resources
 
 - [About OpenShift Container Platform installation](../../architecture/architecture-installation.md#installation-overview_architecture-installation)
 
-- [Selecting a cluster installation type](../overview/installing-preparing.md#installing-preparing-selecting-cluster-type)
+- [Selecting a cluster installation type](../overview/installing-preparing.md#installing-preparing-selecting-cluster-type_installing-preparing)
 
 - [Preparing to install with the Agent-based Installer](../installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.md#preparing-to-install-with-agent-based-installer)
 
@@ -486,7 +511,9 @@ Procedure
 
 # Running a cluster on Oracle Distributed Cloud
 
-To run a cluster on Oracle® Distributed Cloud, you must upload the generated agent ISO image to the default Object Storage bucket on Oracle Distributed Cloud. Additionally, you must create a compute instance from the supplied base image, so that OpenShift Container Platform and Oracle Distributed Cloud can communicate with each other for the purposes of running the cluster on Oracle Distributed Cloud.
+To run a cluster on Oracle® Distributed Cloud, you must upload the generated agent ISO image to the default Object Storage bucket on Oracle Distributed Cloud.
+
+Additionally, you must create a compute instance from the supplied base image, so that OpenShift Container Platform and Oracle Distributed Cloud can communicate with each other for the purposes of running the cluster on Oracle Distributed Cloud.
 
 > [!NOTE]
 > Oracle Distributed Cloud supports the following OpenShift Container Platform cluster topologies:
@@ -562,7 +589,7 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -570,70 +597,70 @@ Procedure
 
 </div>
 
-After you deploy the compute instance on a self-managed node in your OpenShift Container Platform cluster, you can monitor the cluster’s status by choosing one of the following options:
+- After you deploy the compute instance on a self-managed node in your OpenShift Container Platform cluster, monitor the cluster’s status by choosing one of the following options:
+
+  - From the OpenShift Container Platform CLI, enter the following command:
+
+    ``` terminal
+    $ ./openshift-install agent wait-for install-complete --log-level debug
+    ```
+
+    Check the status of the `rendezvous` host node that runs the bootstrap node. After the host reboots, the host forms part of the cluster.
+
+  - Use the `kubeconfig` API to check the status of various OpenShift Container Platform components. For the `KUBECONFIG` environment variable, set the relative path of the cluster’s `kubeconfig` configuration file:
+
+    ``` terminal
+    $  export KUBECONFIG=~/auth/kubeconfig
+    ```
+
+    Check the status of each of the cluster’s self-managed nodes. CCM applies a label to each node to designate the node as running in a cluster on OCI.
+
+    ``` terminal
+    $ oc get nodes -A
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Output example
+
+    </div>
+
+    ``` terminal
+    NAME                                   STATUS ROLES                 AGE VERSION
+    main-0.private.agenttest.oraclevcn.com Ready  control-plane, master 7m  v1.27.4+6eeca63
+    main-1.private.agenttest.oraclevcn.com Ready  control-plane, master 15m v1.27.4+d7fa83f
+    main-2.private.agenttest.oraclevcn.com Ready  control-plane, master 15m v1.27.4+d7fa83f
+    ```
+
+    </div>
+
+    Check the status of each of the cluster’s Operators, with the CCM Operator status being a good indicator that your cluster is running.
+
+    ``` terminal
+    $ oc get co
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Truncated output example
+
+    </div>
+
+    ``` terminal
+    NAME           VERSION     AVAILABLE  PROGRESSING    DEGRADED   SINCE   MESSAGE
+    authentication 4.20.0-0    True       False          False      6m18s
+    baremetal      4.20.0-0    True       False          False      2m42s
+    network        4.20.0-0    True       True           False      5m58s  Progressing: …
+        …
+    ```
+
+    </div>
 
 </div>
-
-- From the OpenShift Container Platform CLI, enter the following command:
-
-  ``` terminal
-  $ ./openshift-install agent wait-for install-complete --log-level debug
-  ```
-
-  Check the status of the `rendezvous` host node that runs the bootstrap node. After the host reboots, the host forms part of the cluster.
-
-- Use the `kubeconfig` API to check the status of various OpenShift Container Platform components. For the `KUBECONFIG` environment variable, set the relative path of the cluster’s `kubeconfig` configuration file:
-
-  ``` terminal
-  $  export KUBECONFIG=~/auth/kubeconfig
-  ```
-
-  Check the status of each of the cluster’s self-managed nodes. CCM applies a label to each node to designate the node as running in a cluster on OCI.
-
-  ``` terminal
-  $ oc get nodes -A
-  ```
-
-  <div class="formalpara">
-
-  <div class="title">
-
-  Output example
-
-  </div>
-
-  ``` terminal
-  NAME                                   STATUS ROLES                 AGE VERSION
-  main-0.private.agenttest.oraclevcn.com Ready  control-plane, master 7m  v1.27.4+6eeca63
-  main-1.private.agenttest.oraclevcn.com Ready  control-plane, master 15m v1.27.4+d7fa83f
-  main-2.private.agenttest.oraclevcn.com Ready  control-plane, master 15m v1.27.4+d7fa83f
-  ```
-
-  </div>
-
-  Check the status of each of the cluster’s Operators, with the CCM Operator status being a good indicator that your cluster is running.
-
-  ``` terminal
-  $ oc get co
-  ```
-
-  <div class="formalpara">
-
-  <div class="title">
-
-  Truncated output example
-
-  </div>
-
-  ``` terminal
-  NAME           VERSION     AVAILABLE  PROGRESSING    DEGRADED   SINCE   MESSAGE
-  authentication 4.20.0-0    True       False          False      6m18s
-  baremetal      4.20.0-0    True       False          False      2m42s
-  network        4.20.0-0    True       True           False      5m58s  Progressing: …
-      …
-  ```
-
-  </div>
 
 # Additional resources
 

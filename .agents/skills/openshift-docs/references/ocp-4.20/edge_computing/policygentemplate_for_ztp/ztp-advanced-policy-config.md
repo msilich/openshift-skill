@@ -77,7 +77,7 @@ Procedure
     2.  Extract the source CRs:
 
         ``` terminal
-        $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17.1 extract /home/ztp --tar | tar x -C ./out
+        $ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.20.1 extract /home/ztp --tar | tar x -C ./out
         ```
 
 2.  Review the baseline `PerformanceProfile` CR in `./out/source-crs/PerformanceProfile.yaml`:
@@ -843,14 +843,14 @@ Procedure
     - fileName: StorageLVMOSubscription.yaml
       spec:
         name: lvms-operator
-        channel: stable-4.17
+        channel: stable-4.20
       policyName: subscription-policies
     ```
 
     > [!NOTE]
     > The Storage LVMO subscription is deprecated. In future releases of OpenShift Container Platform, the storage LVMO subscription will not be available. Instead, you must use the Storage LVMS subscription.
     >
-    > In OpenShift Container Platform 4.17, you can use the Storage LVMS subscription instead of the LVMO subscription. The LVMS subscription does not require manual overrides in the `common-ranGen.yaml` file. Add the following YAML to `spec.sourceFiles` in the `common-ranGen.yaml` file to use the Storage LVMS subscription:
+    > In OpenShift Container Platform 4.20, you can use the Storage LVMS subscription instead of the LVMO subscription. The LVMS subscription does not require manual overrides in the `common-ranGen.yaml` file. Add the following YAML to `spec.sourceFiles` in the `common-ranGen.yaml` file to use the Storage LVMS subscription:
     >
     > ``` yaml
     > - fileName: StorageLVMSubscriptionNS.yaml

@@ -22,40 +22,32 @@ A dynamic plugin allows you to make the following customizations to the OpenShif
 
 When creating your plugin, follow these general guidelines:
 
-- [`Node.js`](https://nodejs.org/en/) and [`yarn`](https://yarnpkg.com/) are required to build and run your plugin.
+- `Node.js` is required to build and run your plugin. You can use any package manager, such as npm or yarn. For download links, see Additional resources.
 
 - Prefix your CSS class names with your plugin name to avoid collisions. For example, `my-plugin__heading` and `my-plugin_\_icon`.
 
 - Maintain a consistent look, feel, and behavior with other console pages.
 
-- Follow [react-i18next](https://www.i18next.com/) localization guidelines when creating your plugin. You can use the `useTranslation` hook like the one in the following example:
+- Follow the react-i18next localization guidelines, linked in Additional resources, when creating your plugin. You can use the `useTranslation` hook such as the one in the following example:
 
   ``` tsx
-  conster Header: React.FC = () => {
+  const Header: React.FC = () => {
     const { t } = useTranslation('plugin__console-demo-plugin');
     return <h1>{t('Hello, World!')}</h1>;
   };
   ```
 
-- Avoid selectors that could affect markup outside of your plugins components, such as element selectors. These are not APIs and are subject to change. Using them might break your plugin. Avoid selectors like element selectors that could affect markup outside of your plugins components.
+- Avoid selectors that could affect markup outside of your plugin’s components, such as element selectors. These are not APIs and are subject to change. Using them might break your plugin.
 
 - Provide valid JavaScript Multipurpose Internet Mail Extension (MIME) type using the `Content-Type` response header for all assets served by your plugin web server. Each plugin deployment should include a web server that hosts the generated assets of the given plugin.
 
 - You must build your plugin with Webpack using Webpack version 5 and later.
 
-- You should prefix CSS class names with your plugin name to avoid collisions. For example, `my-plugin__heading` and `my-plugin_\_icon`.
-
-- You should maintain a consistent look, feel, and behavior with other console pages.
-
-- You should avoid selectors that could affect markup outside of your plugin components, such as element selectors. These are not APIs and are subject to change.
-
-- You must provide a valid JavaScript Multipurpose Internet Mail Extension (MIME) type using the `Content-Type` response header for all assets served by your plugin web server. Each plugin deployment should include a web server that hosts the generated assets of the given plugin.
-
 # PatternFly guidelines
 
 When creating your plugin, follow these guidelines for using PatternFly:
 
-- Use [PatternFly](https://www.patternfly.org/components/all-components/) components and PatternFly CSS variables. Core PatternFly components are available through the SDK. Using PatternFly components and variables help your plugin look consistent in future console versions.
+- Use PatternFly components and PatternFly CSS variables. Core PatternFly components are available through the SDK. Using PatternFly components and variables helps your plugin look consistent in future console versions. For a list of available components, see Additional resources.
 
   - Use PatternFly 4.x if you are using OpenShift Container Platform versions 4.14 and earlier.
 
@@ -63,7 +55,7 @@ When creating your plugin, follow these guidelines for using PatternFly:
 
   - Use PatternFly 6.x if you are using OpenShift Container Platform versions 4.19 and later.
 
-- Make your plugin accessible by following [PatternFly’s accessibility fundamentals](https://www.patternfly.org/accessibility/accessibility-fundamentals/).
+- Make your plugin accessible by following PatternFly’s accessibility fundamentals, linked in Additional resources.
 
 - Avoid using other CSS libraries such as Bootstrap or Tailwind. They might conflict with PatternFly and not match the rest of the console. Plugins should only include styles that are specific to their user interfaces to be evaluated on top of base PatternFly styles. Do not import styles directly from `@patternfly/react-styles/*/.css` or `@patternfly/patternfly`. Instead, use components and CSS variables provided by the console SDK.
 
@@ -71,7 +63,7 @@ When creating your plugin, follow these guidelines for using PatternFly:
 
 ## Translating messages with react-i18next
 
-The [plugin template](https://github.com/openshift/console-plugin-template) demonstrates how you can translate messages with [react-i18next](https://www.i18next.com/).
+The `console-plugin-template` plugin template demonstrates how you can translate messages with react-i18next.
 
 <div>
 
@@ -152,5 +144,37 @@ Procedure
     ``` terminal
     $ yarn i18n
     ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [react-i18next](https://www.i18next.com/)
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Node.js](https://nodejs.org/en/)
+
+- [yarn](https://yarnpkg.com/)
+
+- [react-i18next localization guidelines](https://www.i18next.com/)
+
+- [PatternFly components](https://www.patternfly.org/components/all-components/)
+
+- [PatternFly’s accessibility fundamentals](https://www.patternfly.org/accessibility/accessibility-fundamentals/)
 
 </div>

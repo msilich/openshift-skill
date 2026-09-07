@@ -80,6 +80,193 @@ Procedure
 
 </div>
 
+# Configuring cluster network MTU at installation time
+
+You can explicitly set the cluster network maximum transmission unit (MTU) during installation by including a `Network` custom resource (CR) as an extra manifest in the GitOps Zero Touch Provisioning (ZTP) pipeline.
+
+Setting the cluster network MTU with additional headroom during deployment prevents the need for a Day 2 MTU update that requires at least two rolling reboots of all cluster nodes.
+
+During installation, the Cluster Network Operator (CNO) automatically calculates the cluster network MTU based on the primary network interface MTU. When you enable IPsec at installation time, the calculation includes both the OVN-Kubernetes overhead of 100 bytes and the IPsec overhead. If you plan to enable IPsec or another encapsulation technology as a Day 2 operation, the calculated MTU includes only the OVN-Kubernetes overhead and might be insufficient.
+
+By explicitly setting the cluster network MTU at installation time, you can include additional headroom for those future needs and avoid a disruptive MTU migration.
+
+> [!IMPORTANT]
+> The cluster network MTU value must be lower than the machine network MTU by at least 100 bytes to account for OVN-Kubernetes overlay overhead. If you plan to enable IPsec as a Day 2 operation, allow an additional 46 bytes for IPsec headroom. For example, with a machine network MTU of `9100` bytes, set the cluster network MTU to `8900` bytes, which accounts for the following offset:
+>
+> - OVN-Kubernetes overhead: 100 bytes
+>
+> - IPsec headroom: 46 bytes
+>
+> - Extra headroom: 54 bytes
+>
+> - Total offset: 200 bytes
+>
+> To avoid selecting an MTU value that a node cannot support, verify the maximum MTU (`maxmtu`) that the network interface accepts by running the `ip -d link` command.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have configured the hub cluster to provision managed clusters by using the GitOps ZTP pipeline.
+
+- You have a Git repository where you manage your custom site configuration data. The repository must be accessible from the hub cluster and be defined as a source repository for the Argo CD application.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In your `SiteConfig` CR, set the machine network MTU on the network interface for all nodes.
+
+    The following example configures a VLAN interface with MTU `9100`:
+
+    ``` yaml
+    apiVersion: ran.openshift.io/v1
+    kind: SiteConfig
+    metadata:
+      name: "site1-sno-du"
+      namespace: "site1-sno-du"
+    spec:
+      clusters:
+        - clusterName: "site1-sno-du"
+          nodes:
+            - hostName: "node1.example.com"
+              nodeNetwork:
+                interfaces:
+                  - name: "bond0.120"
+                    macAddress: "00:00:00:00:00:00"
+                config:
+                  interfaces:
+                    - name: bond0.120
+                      type: vlan
+                      state: up
+                      mtu: 9100
+                      ipv4:
+                        enabled: true
+                        dhcp: false
+                        address:
+                          - ip: "192.168.120.15"
+                            prefix-length: 25
+                      vlan:
+                        base-iface: bond0
+                        id: 120
+      # ...
+    ```
+
+2.  Create a `Network` CR manifest file named `set-cluster-mtu.yaml` that sets the cluster network MTU:
+
+    ``` yaml
+    apiVersion: operator.openshift.io/v1
+    kind: Network
+    metadata:
+      name: cluster
+    spec:
+      defaultNetwork:
+        ovnKubernetesConfig:
+          mtu: 8900
+    ```
+
+    where:
+
+    `mtu`
+    Specifies the cluster network MTU value. This value must be at least 100 bytes less than the machine network MTU. In this example, the value is 200 bytes less than the machine network MTU of 9100 to allow headroom for IPsec and other future requirements.
+
+3.  In your `siteconfig` directory, place the manifest file in a custom extra manifests subdirectory:
+
+    ``` text
+    siteconfig/
+    ├── site1-sno-du.yaml
+    ├── extra-manifest/
+    └── custom-manifest/
+        └── set-cluster-mtu.yaml
+    ```
+
+4.  In your `SiteConfig` CR, enter the directory name in the `extraManifests.searchPaths` field:
+
+    ``` yaml
+    apiVersion: ran.openshift.io/v1
+    kind: SiteConfig
+    metadata:
+      name: "site1-sno-du"
+      namespace: "site1-sno-du"
+    spec:
+      clusters:
+        - clusterName: "site1-sno-du"
+          networkType: "OVNKubernetes"
+          extraManifests:
+            searchPaths:
+              - extra-manifest/
+              - custom-manifest/
+      # ...
+    ```
+
+5.  Commit the `SiteConfig` CR and the `set-cluster-mtu.yaml` manifest to your Git repository and push the changes.
+
+    During cluster provisioning, the GitOps ZTP pipeline applies the `Network` CR as an extra manifest, and the CNO uses the specified MTU value instead of auto-calculating it.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- After the cluster installation is complete, verify the cluster network MTU by running the following command:
+
+  ``` terminal
+  $ oc get networks.operator.openshift.io cluster -o yaml
+  ```
+
+  <div class="formalpara">
+
+  <div class="title">
+
+  Example output
+
+  </div>
+
+  ``` yaml
+  apiVersion: operator.openshift.io/v1
+  kind: Network
+  metadata:
+    name: cluster
+  # ...
+  spec:
+    # ...
+    defaultNetwork:
+      ovnKubernetesConfig:
+        # ...
+        mtu: 8900
+  ```
+
+  </div>
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Customizing extra installation manifests in the GitOps ZTP pipeline](ztp-advanced-install-ztp.md#ztp-customizing-the-install-extra-manifests_ztp-advanced-install-ztp)
+
+</div>
+
 # Filtering custom resources using SiteConfig filters
 
 By using filters, you can easily customize `SiteConfig` custom resources (CRs) to include or exclude other CRs for use in the installation phase of the GitOps Zero Touch Provisioning (ZTP) pipeline.
@@ -124,7 +311,7 @@ Procedure
       baseDomain: "example.com"
       pullSecretRef:
         name: "assisted-deployment-pull-secret"
-      clusterImageSetNameRef: "openshift-4.17"
+      clusterImageSetNameRef: "openshift-4.20"
       sshPublicKey: "<ssh_public_key>"
       clusters:
     - clusterName: "site1-sno-du"

@@ -21,7 +21,7 @@ In general, three infrastructure nodes are recommended per cluster.
 > These recommendations apply only to infrastructure nodes hosting Monitoring, Ingress and Registry infrastructure components installed during cluster creation.
 
 > [!NOTE]
-> In OpenShift Container Platform 4.17, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. This influences the stated sizing recommendations.
+> In OpenShift Container Platform 4.20, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. This influences the stated sizing recommendations.
 
 # Scaling the Cluster Monitoring Operator
 

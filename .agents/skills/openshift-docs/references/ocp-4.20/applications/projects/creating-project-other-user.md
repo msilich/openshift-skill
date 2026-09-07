@@ -1,10 +1,10 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Impersonation allows you to create a project as a different user.
+You can use impersonation to create a project on behalf of a different user account.
 
 # API impersonation
 
-You can configure a request to the OpenShift Container Platform API to act as though it originated from another user. For more information, see [User impersonation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation) in the Kubernetes documentation.
+You can configure API requests in OpenShift Container Platform to act as another user. Impersonation allows you to perform actions on behalf of another account without switching credentials.
 
 # Impersonating a user when you create a project
 
@@ -26,3 +26,7 @@ Procedure
   ```
 
 </div>
+
+# Additional resources
+
+- [User impersonation (Kubernetes documentation)](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation)

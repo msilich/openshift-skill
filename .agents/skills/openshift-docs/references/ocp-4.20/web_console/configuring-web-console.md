@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can modify the OpenShift Container Platform web console to set a logout redirect URL or disable the quick start tutorials.
+You can change the OpenShift Container Platform web console to set a logout redirect URL or disable the quick start tutorials.
 
 # Prerequisites
 
@@ -10,29 +10,39 @@ You can modify the OpenShift Container Platform web console to set a logout redi
 
 You can configure the web console settings by editing the `console.config.openshift.io` resource.
 
-- Edit the `console.config.openshift.io` resource:
+<div>
 
-  ``` terminal
-  $ oc edit console.config.openshift.io cluster
-  ```
+<div class="title">
 
-  The following example displays the sample resource definition for the console:
+Procedure
 
-  ``` yaml
-  apiVersion: config.openshift.io/v1
-  kind: Console
-  metadata:
-    name: cluster
-  spec:
-    authentication:
-      logoutRedirect: ""
-  status:
-    consoleURL: ""
-  ```
+</div>
 
-  - Specify the URL of the page to load when a user logs out of the web console. If you do not specify a value, the user returns to the login page for the web console. Specifying a `logoutRedirect` URL allows your users to perform single logout (SLO) through the identity provider to destroy their single sign-on session.
+1.  Edit the `console.config.openshift.io` resource:
 
-  - The web console URL. To update this to a custom value, see **Customizing the web console URL**.
+    ``` terminal
+    $ oc edit console.config.openshift.io cluster
+    ```
+
+    The following example displays the sample resource definition for the console:
+
+    ``` yaml
+    apiVersion: config.openshift.io/v1
+    kind: Console
+    metadata:
+      name: cluster
+    spec:
+      authentication:
+        logoutRedirect: ""
+    status:
+      consoleURL: ""
+    ```
+
+    The `logoutRedirect` field specifies the URL of the page to load when a user logs out of the web console. If you do not specify a value, the user returns to the login page for the web console. Specifying a `logoutRedirect` URL allows your users to perform single logout (SLO) through the identity provider to delete their single sign-on session.
+
+    The `consoleURL` field is the web console URL. To update this to a custom value, see **Customizing the web console URL**.
+
+</div>
 
 # Disabling quick starts in the web console
 
@@ -58,7 +68,7 @@ Procedure
 
 </div>
 
-1.  In the **Administrator** perspective, navigate to **Administation** → **Cluster Settings**.
+1.  In the **Administrator** perspective, navigate to **Administration** → **Cluster Settings**.
 
 2.  On the **Cluster Settings** page, click the **Configuration** tab.
 

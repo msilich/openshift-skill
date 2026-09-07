@@ -7,7 +7,7 @@ When installed, the PTP Operator searches your cluster for Precision Time Protoc
 Network interface controller (NIC) hardware with built-in PTP capabilities sometimes require a device-specific configuration. You can use hardware-specific NIC features for supported hardware with the PTP Operator by configuring a plugin in the `PtpConfig` custom resource (CR). The `linuxptp-daemon` service uses the named parameters in the `plugin` stanza to start `linuxptp` processes, `ptp4l` and `phc2sys`, based on the specific hardware configuration.
 
 > [!IMPORTANT]
-> In OpenShift Container Platform 4.17, the Intel E810 NIC is supported with a `PtpConfig` plugin.
+> In OpenShift Container Platform 4.20, the Intel E810 NIC is supported with a `PtpConfig` plugin.
 
 # Installing the PTP Operator using the CLI
 
@@ -119,7 +119,7 @@ Procedure
 
     ``` terminal
     Name                         Phase
-    4.17.0-202301261535          Succeeded
+    4.20.0-202301261535          Succeeded
     ```
 
     </div>
@@ -2156,7 +2156,7 @@ Leap second information is stored in an automatically generated `ConfigMap` reso
 If the GPS satellite broadcasts new leap second data, the PTP Operator updates the `leap-configmap` resource with the new data. The `ts2phc` process picks up the changes automatically.
 
 > [!NOTE]
-> The following procedure is provided as reference. The 4.17 version of the PTP Operator enables automatic leap second management by default.
+> The following procedure is provided as reference. The 4.20 version of the PTP Operator enables automatic leap second management by default.
 
 <div>
 
@@ -5702,7 +5702,7 @@ Procedure
 - To collect PTP Operator data with `must-gather`, you must specify the PTP Operator `must-gather` image.
 
   ``` terminal
-  $ oc adm must-gather --image=registry.redhat.io/openshift4/ptp-must-gather-rhel9:v4.17
+  $ oc adm must-gather --image=registry.redhat.io/openshift4/ptp-must-gather-rhel9:v4.20
   ```
 
 </div>

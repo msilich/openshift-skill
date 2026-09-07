@@ -4,7 +4,7 @@ You can install an OpenShift Container Platform cluster on Nutanix by using a va
 
 # Nutanix version requirements
 
-You must install the OpenShift Container Platform cluster to a Nutanix environment that meets the following requirements:
+You must install the OpenShift Container Platform cluster to a Nutanix environment that meets specific version requirements.
 
 | Component     | Required version   |
 |---------------|--------------------|
@@ -15,17 +15,27 @@ Version requirements for Nutanix virtual environments
 
 # Agent-based Installer
 
-You can install an OpenShift Container Platform cluster on Nutanix by using the Agent-based Installer. For example, the Agent-based Installer can be used to install a three-node cluster, which is a smaller, more resource efficient cluster for testing, development, and production. See [Preparing to install with the Agent-based Installer](../installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.md#preparing-to-install-with-agent-based-installer) for additional details.
+You can install an OpenShift Container Platform cluster on Nutanix by using the Agent-based Installer. The Agent-based Installer can be used to install a three-node cluster, which is a smaller, more resource efficient cluster for testing, development, and production.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Preparing to install with the Agent-based Installer](../installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.md#preparing-to-install-with-agent-based-installer)
+
+</div>
 
 # Environment requirements
 
-Before you install an OpenShift Container Platform cluster, review the following Nutanix AOS environment requirements.
+Before you install an OpenShift Container Platform cluster, verify that your infrastructure, account privileges, and network configuration meet the Nutanix AOS environment requirements needed for a successful installation.
 
 ## Infrastructure requirements
 
 You can install OpenShift Container Platform on on-premise Nutanix clusters, Nutanix Cloud Clusters (NC2) on Amazon Web Services (AWS), or NC2 on Microsoft Azure.
-
-For more information, see [Nutanix Cloud Clusters on AWS](https://www.nutanix.com/products/nutanix-cloud-clusters/aws) and [Nutanix Cloud Clusters on Microsoft Azure](https://www.nutanix.com/products/nutanix-cloud-clusters/azure).
 
 ## Required account privileges
 
@@ -41,17 +51,8 @@ Consider the following when managing this user account:
 
 - Ensure that the user is a member of the project to which it needs to assign virtual machines.
 
-For more information, see the Nutanix documentation about creating a [Custom Cloud Native role](https://opendocs.nutanix.com/guides/cloud_native_role/), [assigning a role](https://portal.nutanix.com/page/documents/details?targetId=Nutanix-Security-Guide:ssp-ssp-role-assignment-pc-t.html), and [adding a user to a project](https://portal.nutanix.com/page/documents/details?targetId=Prism-Central-Admin-Center-Guide-vpc_2023_1_0_1:ssp-projects-add-users-t.html).
-
-<div class="example">
-
-<div class="title">
-
-Required permissions for creating a Custom Cloud Native role
-
-</div>
-
 <table>
+<caption>Required permissions for creating a Custom Cloud Native role</caption>
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 25%" />
@@ -70,31 +71,37 @@ Required permissions for creating a Custom Cloud Native role
 <tr>
 <td style="text-align: left;"><p>Categories</p></td>
 <td style="text-align: left;"><p>Always</p></td>
-<td style="text-align: left;"><p><code>Create_Category_Mapping</code><br />
-<code>Create_Or_Update_Name_Category</code><br />
-<code>Create_Or_Update_Value_Category</code><br />
-<code>Delete_Category_Mapping</code><br />
-<code>Delete_Name_Category</code><br />
-<code>Delete_Value_Category</code><br />
-<code>View_Category_Mapping</code><br />
-<code>View_Name_Category</code><br />
-<code>View_Value_Category</code></p></td>
+<td style="text-align: left;"><ul>
+<li><p><code>Create_Category_Mapping</code></p></li>
+<li><p><code>Create_Or_Update_Name_Category</code></p></li>
+<li><p><code>Create_Or_Update_Value_Category</code></p></li>
+<li><p><code>Delete_Category_Mapping</code></p></li>
+<li><p><code>Delete_Name_Category</code></p></li>
+<li><p><code>Delete_Value_Category</code></p></li>
+<li><p><code>View_Category_Mapping</code></p></li>
+<li><p><code>View_Name_Category</code></p></li>
+<li><p><code>View_Value_Category</code></p></li>
+</ul></td>
 <td style="text-align: left;"><p>Create, read, and delete categories that are assigned to the OpenShift Container Platform machines.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Images</p></td>
 <td style="text-align: left;"><p>Always</p></td>
-<td style="text-align: left;"><p><code>Create_Image</code><br />
-<code>Delete_Image</code><br />
-<code>View_Image</code></p></td>
+<td style="text-align: left;"><ul>
+<li><p><code>Create_Image</code></p></li>
+<li><p><code>Delete_Image</code></p></li>
+<li><p><code>View_Image</code></p></li>
+</ul></td>
 <td style="text-align: left;"><p>Create, read, and delete the operating system images used for the OpenShift Container Platform machines.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Virtual Machines</p></td>
 <td style="text-align: left;"><p>Always</p></td>
-<td style="text-align: left;"><p><code>Create_Virtual_Machine</code><br />
-<code>Delete_Virtual_Machine</code><br />
-<code>View_Virtual_Machine</code></p></td>
+<td style="text-align: left;"><ul>
+<li><p><code>Create_Virtual_Machine</code></p></li>
+<li><p><code>Delete_Virtual_Machine</code></p></li>
+<li><p><code>View_Virtual_Machine</code></p></li>
+</ul></td>
 <td style="text-align: left;"><p>Create, read, and delete the OpenShift Container Platform machines.</p></td>
 </tr>
 <tr>
@@ -130,8 +137,6 @@ Required permissions for creating a Custom Cloud Native role
 </tbody>
 </table>
 
-</div>
-
 ## Cluster limits
 
 Available resources vary between clusters. The number of possible clusters within a Nutanix environment is limited primarily by available storage space and any limitations associated with the resources that the cluster creates, and resources that you require to deploy the cluster, such a IP addresses and networks.
@@ -164,12 +169,12 @@ You must use either AHV IP Address Management (IPAM) or Dynamic Host Configurati
 
 - DNS records
 
-Nutanix Flow Virtual Networking is supported for new cluster installations. To use this feature, enable Flow Virtual Networking on your AHV cluster before installing. For more information, see [Flow Virtual Networking overview](https://portal.nutanix.com/page/documents/details?targetId=Nutanix-Flow-Virtual-Networking-Guide-vpc_2024_1:ear-flow-nw-overview-pc.html).
+Nutanix Flow Virtual Networking is supported for new cluster installations. To use this feature, enable Flow Virtual Networking on your AHV cluster before installing.
 
 > [!NOTE]
 > It is recommended that each OpenShift Container Platform node in the cluster have access to a Network Time Protocol (NTP) server that is discoverable via DHCP. Installation is possible without an NTP server. However, an NTP server prevents errors typically associated with asynchronous server clocks.
 
-### Required IP Addresses
+## Required IP Addresses
 
 An installer-provisioned installation requires two static virtual IP (VIP) addresses:
 
@@ -179,7 +184,7 @@ An installer-provisioned installation requires two static virtual IP (VIP) addre
 
 You specify these IP addresses when you install the OpenShift Container Platform cluster.
 
-### DNS records
+## DNS records
 
 You must create DNS records for two static IP addresses in the appropriate DNS server for the Nutanix instance that hosts your OpenShift Container Platform cluster. In each record, `<cluster_name>` is the cluster name and `<base_domain>` is the cluster base domain that you specify when you install the cluster.
 
@@ -193,6 +198,20 @@ A complete DNS record takes the form: `<component>.<cluster_name>.<base_domain>.
 | Ingress VIP | `*.apps.<cluster_name>.<base_domain>.` | A wildcard DNS A/AAAA or CNAME record that points to the load balancer that targets the machines that run the Ingress router pods, which are the worker nodes by default. This record must be resolvable by both clients external to the cluster and from all the nodes within the cluster. |
 
 Required DNS records
+
+## Additional resources
+
+- [Nutanix Cloud Clusters on AWS](https://www.nutanix.com/products/nutanix-cloud-clusters/aws)
+
+- [Nutanix Cloud Clusters on Microsoft Azure](https://www.nutanix.com/products/nutanix-cloud-clusters/azure)
+
+- [Custom Cloud Native role](https://opendocs.nutanix.com/guides/cloud_native_role/)
+
+- [Assigning a role](https://portal.nutanix.com/page/documents/details?targetId=Nutanix-Security-Guide:ssp-ssp-role-assignment-pc-t.html)
+
+- [Adding a user to a project](https://portal.nutanix.com/page/documents/details?targetId=Prism-Central-Admin-Center-Guide-vpc_2023_1_0_1:ssp-projects-add-users-t.html)
+
+- [Flow Virtual Networking overview](https://portal.nutanix.com/page/documents/details?targetId=Nutanix-Flow-Virtual-Networking-Guide-vpc_2024_1:ear-flow-nw-overview-pc.html)
 
 # Configuring the Cloud Credential Operator utility
 

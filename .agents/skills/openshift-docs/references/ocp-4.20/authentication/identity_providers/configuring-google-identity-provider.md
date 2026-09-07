@@ -1,24 +1,26 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Configure the `google` identity provider using the [Google OpenID Connect integration](https://developers.google.com/identity/protocols/OpenIDConnect).
+Configure a Google identity provider so users can authenticate to OpenShift Container Platform with Google accounts. When configured, sign-in is permitted only for Google accounts in that hosted domain.
 
-# About identity providers in OpenShift Container Platform
+# Identity providers in OpenShift Container Platform
 
 You can configure identity providers by creating a custom resource (CR) that describes the provider and adding it to the cluster. Identity providers enable user authentication in OpenShift Container Platform beyond the default `kubeadmin` user.
 
 > [!NOTE]
-> OpenShift Container Platform user names containing `/`, `:`, and `%` are not supported.
+> OpenShift Container Platform usernames containing `/`, `:`, and `%` are not supported.
 
-# About Google authentication
+# Google authentication
 
-Using Google as an identity provider allows any Google user to authenticate to your server. You can limit authentication to members of a specific hosted domain with the `hostedDomain` configuration attribute.
+By using Google as an identity provider, you can authenticate to your server. You can use the `hostedDomain` configuration attribute to limit authentication to members of a specific hosted domain.
+
+Google authentication uses OpenID Connect through the cluster OAuth server.
 
 > [!NOTE]
 > Using Google as an identity provider requires users to get a token using `<namespace_route>/oauth/token/request` to use with command-line tools.
 
 # Creating the secret
 
-Identity providers use OpenShift Container Platform `Secret` objects in the `openshift-config` namespace to contain the client secret, client certificates, and keys.
+Create a `Secret` object in the `openshift-config` namespace to store the client secret for your identity provider. The identity provider custom resource (CR) references this secret during configuration.
 
 <div>
 
@@ -28,45 +30,36 @@ Procedure
 
 </div>
 
-- Create a `Secret` object containing a string by using the following command:
+1.  Create a `Secret` object containing the client secret by running the following command:
 
-  ``` terminal
-  $ oc create secret generic <secret_name> --from-literal=clientSecret=<secret> -n openshift-config
-  ```
+    ``` terminal
+    $ oc create secret generic <secret_name> --from-literal=clientSecret=<secret> -n openshift-config
+    ```
 
-  > [!TIP]
-  > You can alternatively apply the following YAML to create the secret:
-  >
-  > ``` yaml
-  > apiVersion: v1
-  > kind: Secret
-  > metadata:
-  >   name: <secret_name>
-  >   namespace: openshift-config
-  > type: Opaque
-  > data:
-  >   clientSecret: <base64_encoded_client_secret>
-  > ```
+2.  Optional: Apply the following YAML to create the secret:
 
-- You can define a `Secret` object containing the contents of a file by using the following command:
+    ``` yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: <secret_name>
+      namespace: openshift-config
+    type: Opaque
+    data:
+      clientSecret: <base64_encoded_client_secret>
+    ```
 
-  ``` terminal
-  $ oc create secret generic <secret_name> --from-file=<path_to_file> -n openshift-config
-  ```
+3.  Create a `Secret` object from a file by running the following command:
 
-</div>
-
-# Sample Google CR
-
-The following custom resource (CR) shows the parameters and acceptable values for a Google identity provider.
-
-<div class="formalpara">
-
-<div class="title">
-
-Google CR
+    ``` terminal
+    $ oc create secret generic <secret_name> --from-file=<path_to_file> -n openshift-config
+    ```
 
 </div>
+
+# Sample Google custom resource
+
+Review the custom resource (CR) fields and acceptable values for configuring a Google identity provider in OpenShift Container Platform. Use these definitions to set client credentials and hosted domain restrictions before applying the configuration to the cluster.
 
 ``` yaml
 apiVersion: config.openshift.io/v1
@@ -85,17 +78,22 @@ spec:
       hostedDomain: "example.com"
 ```
 
-</div>
+where:
 
-- This provider name is prefixed to the Google numeric user ID to form an identity name. It is also used to build the redirect URL.
+`spec.identityProviders.name`
+Specifies the provider name, which is prefixed to the Google numeric user ID to form an identity name. The provider name is also used to build the redirect URL.
 
-- Controls how mappings are established between this provider’s identities and `User` objects.
+`spec.identityProviders.mappingMethod`
+Specifies how mappings are established between identities from this provider and `User` objects.
 
-- The client ID of a [registered Google project](https://console.developers.google.com/). The project must be configured with a redirect URI of `https://oauth-openshift.apps.<cluster-name>.<cluster-domain>/oauth2callback/<idp-provider-name>`.
+`spec.identityProviders.google.clientID`
+Specifies the client ID from the Google Cloud project where you create the OAuth client. The project must be configured with a redirect URI of `https://oauth-openshift.apps.<cluster-name>.<cluster-domain>/oauth2callback/<idp-provider-name>`.
 
-- Reference to an OpenShift Container Platform `Secret` object containing the client secret issued by Google.
+`spec.identityProviders.google.clientSecret`
+Specifies a reference to an OpenShift Container Platform `Secret` object containing the client secret issued by Google.
 
-- A [hosted domain](https://developers.google.com/identity/protocols/OpenIDConnect#hd-param) used to restrict sign-in accounts. Optional if the `lookup` `mappingMethod` is used. If empty, any Google account is allowed to authenticate.
+`spec.identityProviders.google.hostedDomain`
+Specifies a hosted domain used to restrict sign-in accounts. Optional if the `lookup` `mappingMethod` is used. If empty, any Google account is allowed to authenticate.
 
 <div>
 
@@ -105,13 +103,13 @@ Additional resources
 
 </div>
 
-- See [Identity provider parameters](../understanding-identity-provider.md#identity-provider-parameters_understanding-identity-provider) for information on parameters, such as `mappingMethod`, that are common to all identity providers.
+- [Identity provider parameters](../understanding-identity-provider.md#identity-provider-parameters_understanding-identity-provider)
 
 </div>
 
 # Adding an identity provider to your cluster
 
-After you install your cluster, add an identity provider to it so your users can authenticate.
+Apply the identity provider custom resource (CR) to your cluster after you define it. With this configuration, you can authenticate with the configured identity provider.
 
 <div>
 
@@ -121,11 +119,11 @@ Prerequisites
 
 </div>
 
-- Create an OpenShift Container Platform cluster.
+- You have access to a OpenShift Container Platform cluster.
 
-- Create the custom resource (CR) for your identity providers.
+- You have created the CR for your identity providers.
 
-- You must be logged in as an administrator.
+- You are logged in as an administrator.
 
 </div>
 
@@ -137,7 +135,7 @@ Procedure
 
 </div>
 
-1.  Apply the defined CR:
+1.  Apply the defined CR by running the following command:
 
     ``` terminal
     $ oc apply -f </path/to/CR>
@@ -152,19 +150,22 @@ Procedure
 
     You can also access this page from the web console by navigating to **(?) Help** → **Command Line Tools** → **Copy Login Command**.
 
-3.  Log in to the cluster, passing in the token to authenticate.
+3.  Log in to the cluster by running the following command, passing in the token to authenticate:
 
     ``` terminal
     $ oc login --token=<token>
     ```
 
-    > [!NOTE]
-    > This identity provider does not support logging in with a user name and password.
+</div>
 
-4.  Confirm that the user logged in successfully, and display the user name.
+This identity provider does not support logging in with a username and password.
+
+1.  Confirm that the user logged in successfully and that the username displays by running the following command:
 
     ``` terminal
     $ oc whoami
     ```
 
-</div>
+# Additional resources
+
+- [OpenID Connect (Google Identity documentation)](https://developers.google.com/identity/protocols/OpenIDConnect)

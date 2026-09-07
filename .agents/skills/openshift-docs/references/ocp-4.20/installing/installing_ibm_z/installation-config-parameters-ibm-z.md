@@ -1,13 +1,13 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Before you deploy an OpenShift Container Platform cluster, you provide a customized `install-config.yaml` installation configuration file that describes the details for your environment.
+Before you deploy an OpenShift Container Platform cluster on IBM Z® or IBM® LinuxONE, you provide a customized `install-config.yaml` file. This reference describes the required and optional parameters for that file.
 
 > [!NOTE]
 > While this document refers only to IBM Z®, all information in it also applies to IBM® LinuxONE.
 
 # Available installation configuration parameters for IBM Z
 
-To customize your cluster installation, configuration parameters are available to use in the `install-config.yaml` file.
+To customize your cluster installation, you can use configuration parameters in the `install-config.yaml` file.
 
 The following tables specify the required, optional, and IBM Z-specific installation configuration parameters that you can set as part of the installation process.
 
@@ -199,7 +199,7 @@ If you configure your cluster to use both IP address families, review the follow
 <div class="note">
 <div class="title">
 &#10;</div>
-<p>Set the <code>networking.machineNetwork</code> to match the CIDR that the preferred NIC resides in.</p>
+<p>Set the <code>networking.machineNetwork</code> to match the CIDR of the preferred NIC.</p>
 </div></td>
 </tr>
 <tr>

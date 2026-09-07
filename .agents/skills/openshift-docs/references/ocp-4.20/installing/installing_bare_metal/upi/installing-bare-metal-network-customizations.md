@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-In OpenShift Container Platform 4.17, you can install a cluster on bare-metal infrastructure that you provision with customized network configuration options. By customizing your network configuration, your cluster can coexist with existing IP address allocations in your environment and integrate with existing MTU and VXLAN configurations.
+In OpenShift Container Platform 4.20, you can install a cluster on bare-metal infrastructure that you provision with customized network configuration options. By customizing your network configuration, your cluster can coexist with existing IP address allocations in your environment and integrate with existing MTU and VXLAN configurations.
 
 When you customize OpenShift Container Platform networking, you must set most of the network configuration parameters during installation. You can modify only `kubeProxy` network configuration parameters in a running cluster.
 
@@ -14,7 +14,7 @@ When you customize OpenShift Container Platform networking, you must set most of
 
 # Internet access for OpenShift Container Platform
 
-In OpenShift Container Platform 4.17, you require access to the internet to install your cluster.
+In OpenShift Container Platform 4.20, you require access to the internet to install your cluster.
 
 You must have internet access to perform the following actions:
 
@@ -52,7 +52,7 @@ You must specify the minimum required machines or hosts for your cluster so that
 The smallest OpenShift Container Platform clusters require the following hosts:
 
 > [!IMPORTANT]
-> For a cluster that contains user-provisioned infrastructure, you must deploy all of the required machines.
+> For a cluster that has user-provisioned infrastructure, you must deploy all of the required machines.
 
 | Hosts | Description |
 |----|----|
@@ -68,15 +68,15 @@ Minimum required hosts
 > [!IMPORTANT]
 > To maintain high availability of your cluster, use separate physical hosts for these cluster machines.
 
-The bootstrap and control plane machines must use Red Hat Enterprise Linux CoreOS (RHCOS) as the operating system. However, the compute machines can choose between Red Hat Enterprise Linux CoreOS (RHCOS), Red Hat Enterprise Linux (RHEL) 8.6 and later.
+The bootstrap and control plane machines must use Red Hat Enterprise Linux CoreOS (RHCOS) as the operating system. However, the compute machines can use Red Hat Enterprise Linux CoreOS (RHCOS), Red Hat Enterprise Linux (RHEL) 8.6 and later.
 
-Note that RHCOS is based on Red Hat Enterprise Linux (RHEL) 9.2 and inherits all of its hardware certifications and requirements. See [Red Hat Enterprise Linux technology capabilities and limits](https://access.redhat.com/articles/rhel-limits).
+RHCOS is based on Red Hat Enterprise Linux (RHEL) 9.2 and inherits all of its hardware certifications and requirements. See [Red Hat Enterprise Linux technology capabilities and limits](https://access.redhat.com/articles/rhel-limits).
 
 ## Minimum resource requirements for cluster installation
 
-Each created cluster must meet minimum requirements so that the cluster runs as expected.
+To ensure that your OpenShift Container Platform cluster runs as expected, each cluster machine must meet minimum CPU, memory, and storage requirements.
 
-| Machine | Operating System | CPU <sup>\[1\]</sup> | RAM | Storage | Input/Output Per Second (IOPS)<sup>\[2\]</sup> |
+| Machine | Operating system | CPU | RAM | Storage | Input/Output Per Second (IOPS) |
 |----|----|----|----|----|----|
 | Bootstrap | RHCOS | 4 | 16 GB | 100 GB | 300 |
 | Control plane | RHCOS | 4 | 16 GB | 100 GB | 300 |
@@ -84,38 +84,26 @@ Each created cluster must meet minimum requirements so that the cluster runs as 
 
 Minimum resource requirements
 
-1.  One CPU is equivalent to one physical core when simultaneous multithreading (SMT), or Hyper-Threading, is not enabled. When enabled, use the following formula to calculate the corresponding ratio: (threads per core × cores) × sockets = CPUs.
+- One CPU is equal to one physical core when simultaneous multithreading (SMT), or Hyper-Threading, is not enabled. When enabled, use the following formula to calculate the corresponding ratio: (threads per core × cores) × sockets = CPUs.
 
-2.  OpenShift Container Platform and Kubernetes are sensitive to disk performance, and faster storage is recommended, particularly for etcd on the control plane nodes which require a 10 ms p99 fsync duration. Note that on many cloud platforms, storage size and IOPS scale together, so you might need to over-allocate storage volume to obtain sufficient performance.
+- OpenShift Container Platform and Kubernetes are sensitive to disk performance, and Red Hat recommends faster storage, particularly for etcd on the control plane nodes which require a 10 ms p99 fsync duration. On many cloud platforms, storage size and IOPS scale together, so you might need to provision more storage to get enough performance.
 
-3.  As with all user-provisioned installations, if you choose to use RHEL compute machines in your cluster, you take responsibility for all operating system life cycle management and maintenance, including performing system updates, applying patches, and completing all other required tasks. Use of RHEL 7 compute machines is deprecated and has been removed in OpenShift Container Platform 4.10 and later.
+- As with all user-provisioned installations, if you choose to use RHEL compute machines in your cluster, you take responsibility for all operating system life cycle management and maintenance, including performing system updates, applying patches, and completing all other required tasks. OpenShift Container Platform 4.10 and later do not support RHEL 7 compute machines.
 
 > [!NOTE]
-> For OpenShift Container Platform version 4.19, RHCOS is based on RHEL version 9.6, which updates the micro-architecture requirements. The following list contains the minimum instruction set architectures (ISA) that each architecture requires:
+> In OpenShift Container Platform version 4.19, RHCOS uses RHEL version 9.6, which updates the micro-architecture requirements. Each architecture requires the following minimum instruction set architectures (ISA):
 >
 > - x86-64 architecture requires x86-64-v2 ISA
 >
 > - ARM64 architecture requires ARMv8.0-A ISA
 >
-> - IBM Power architecture requires Power 9 ISA
+> - ppc64le architecture requires IBM® Power9 ISA
 >
-> - s390x architecture requires z14 ISA
+> - s390x architecture requires IBM® z14 ISA
 >
-> For more information, see "Architectures".
+> For more information, see [Architectures](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.8_release_notes/index#architectures) in the RHEL documentation.
 
 If an instance type for your platform meets the minimum requirements for cluster machines, it is supported to use in OpenShift Container Platform.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Architectures (RHEL documentation)](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html-single/9.2_release_notes/index#architectures)
-
-</div>
 
 <div>
 
@@ -131,9 +119,9 @@ Additional resources
 
 ## Certificate signing requests management
 
-On user-provisioned infrastructure, you must provide a mechanism for approving cluster certificate signing requests (CSRs) after installation when your cluster has limited access to automatic machine management.
+On user-provisioned infrastructure, you must implement a mechanism for approving cluster certificate signing requests (CSRs) after installation when your cluster has limited access to automatic machine management.
 
-The `kube-controller-manager` only approves the kubelet client CSRs. The `machine-approver` cannot guarantee the validity of a serving certificate that is requested by using kubelet credentials because it cannot confirm that the correct machine issued the request. You must determine and implement a method of verifying the validity of the kubelet serving certificate requests and approving them.
+The `kube-controller-manager` only approves the kubelet client CSRs. The `machine-approver` cannot guarantee the validity of a serving certificate that kubelet credentials request because it cannot confirm that the correct machine issued the request. You must find and implement a method of verifying the validity of the kubelet serving certificate requests and approving them.
 
 <div>
 
@@ -171,7 +159,7 @@ The Kubernetes API server must be able to resolve the node names of the cluster 
 
 ### Setting the cluster node hostnames through DHCP
 
-On Red Hat Enterprise Linux CoreOS (RHCOS) machines, the hostname is set through NetworkManager. By default, the machines obtain their hostname through DHCP. If the hostname is not provided by DHCP, set statically through kernel arguments, or another method, it is obtained through a reverse DNS lookup. Reverse DNS lookup occurs after the network has been initialized on a node and can take time to resolve. Other system services can start prior to this and detect the hostname as `localhost` or similar. You can avoid this by using DHCP to provide the hostname for each cluster node.
+On Red Hat Enterprise Linux CoreOS (RHCOS) machines, the hostname is set through NetworkManager. By default, the machines obtain their hostname through DHCP. If the hostname is not provided by DHCP, set statically through kernel arguments, or another method, it is obtained through a reverse DNS lookup. Reverse DNS lookup occurs after the network has been initialized on a node and can take time to resolve. Other system services can start before this and detect the hostname as `localhost` or similar. You can avoid this by using DHCP to provide the hostname for each cluster node.
 
 Additionally, setting the hostnames through DHCP can bypass any manual DNS record name configuration errors in environments that have a DNS split-horizon implementation.
 
@@ -810,7 +798,7 @@ Next steps
 
 </div>
 
-- Scaling compute nodes to apply the manifest object that includes a customized `br-ex` bridge to each compute node that exists in your cluster. For more information, see "Expanding the cluster" in the *Additional resources* section.
+- Scaling compute nodes to apply the manifest object that includes a customized `br-ex` bridge to each compute node that exists in your cluster. For more information, see "Expanding the cluster".
 
 </div>
 
@@ -909,7 +897,13 @@ Procedure
     $ oc scale machineset <machineset_name> --replicas=<n>
     ```
 
-    - \<n\>: Where `<machineset_name>` is the name of the machine set and `<n>` is the number of compute nodes.
+    where:
+
+    `<machineset_name>`
+    Specifies the name of the machine set.
+
+    `<n>`
+    Specifies the number of compute nodes.
 
 </div>
 
@@ -1302,7 +1296,7 @@ Procedure
     $ ssh-add <path>/<file_name>
     ```
 
-    Specifies the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`
+    Specify the path and file name for your SSH private key, such as `~/.ssh/id_ed25519`.
 
     <div class="formalpara">
 
@@ -1346,7 +1340,7 @@ Additional resources
 
 # Obtaining the installation program
 
-Before you install OpenShift Container Platform, download the installation file on the host you are using for installation.
+Before you install OpenShift Container Platform, download the installation file on the host you are using for installation, so that installation assets exist for deployment in your environment.
 
 <div>
 
@@ -1427,7 +1421,7 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 Linux Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 Linux Clients** entry and save the file.
 
 5.  Unpack the archive:
 
@@ -1437,7 +1431,7 @@ Procedure
 
 6.  Place the `oc` binary in a directory that is on your `PATH`.
 
-    To check your `PATH`, execute the following command:
+    To check your `PATH`, run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -1482,13 +1476,13 @@ Procedure
 
 2.  Select the appropriate version from the **Version** list.
 
-3.  Click **Download Now** next to the **OpenShift v4.17 Windows Client** entry and save the file.
+3.  Click **Download Now** next to the **OpenShift v4.20 Windows Client** entry and save the file.
 
 4.  Extract the archive with a ZIP program.
 
 5.  Move the `oc` binary to a directory that is on your `PATH` variable.
 
-    To check your `PATH` variable, open the command prompt and execute the following command:
+    To check your `PATH` variable, open the Command Prompt and run the following command:
 
     ``` terminal
     C:\> path
@@ -1535,16 +1529,16 @@ Procedure
 
 3.  Select the appropriate version from the **Version** list.
 
-4.  Click **Download Now** next to the **OpenShift v4.17 macOS Clients** entry and save the file.
+4.  Click **Download Now** next to the **OpenShift v4.20 macOS Clients** entry and save the file.
 
     > [!NOTE]
-    > For macOS arm64, choose the **OpenShift v4.17 macOS arm64 Client** entry.
+    > For macOS arm64, choose the **OpenShift v4.20 macOS arm64 Client** entry.
 
-5.  Unpack and unzip the archive.
+5.  Extract the archive.
 
 6.  Move the `oc` binary to a directory on your `PATH` variable.
 
-    To check your `PATH` variable, open a terminal and execute the following command:
+    To check your `PATH` variable, open a terminal and run the following command:
 
     ``` terminal
     $ echo $PATH
@@ -1744,7 +1738,7 @@ Additional resources
 
 # Network configuration phases
 
-There are two phases prior to OpenShift Container Platform installation where you can customize the network configuration. Customize settings in the `install-config.yaml` file and in the Cluster Network Operator manifest across two configuration phases.
+You can customize your OpenShift Container Platform network plugin configuration, such as cluster network CIDR and service network ranges, during two phases before installation to integrate with your existing network environment.
 
 Phase 1
 You can customize the following network-related fields in the `install-config.yaml` file before you create the manifest files:
@@ -1774,7 +1768,9 @@ During phase 2, you cannot override the values that you specified in phase 1 in 
 
 # Specifying advanced network configuration
 
-To integrate your OpenShift Container Platform cluster with your existing network environment, you can specify advanced network configuration in a manifest before you install the cluster. Advanced network configuration can be configured only during cluster installation.
+You can use advanced network configuration for your OpenShift Container Platform network plugin to integrate your cluster into your existing network environment.
+
+You can specify advanced network configuration only before you install the cluster.
 
 > [!IMPORTANT]
 > Customizing your network configuration by modifying the OpenShift Container Platform manifest files created by the installation program is not supported. Applying a manifest file that you create, as in the following procedure, is supported.
@@ -1805,7 +1801,7 @@ Procedure
     $ ./openshift-install create manifests --dir <installation_directory>
     ```
 
-    The `<installation_directory>` specifies the name of the directory that contains the `install-config.yaml` file for your cluster.
+    where `<installation_directory>` specifies the name of the directory that contains the `install-config.yaml` file for your cluster.
 
 2.  Create a stub manifest file for the advanced network configuration that is named `cluster-network-03-config.yml` in the `<installation_directory>/manifests/` directory:
 
@@ -1819,13 +1815,7 @@ Procedure
 
 3.  Specify the advanced network configuration for your cluster in the `cluster-network-03-config.yml` file, such as in the following example:
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Enable IPsec for the OVN-Kubernetes network provider
-
-    </div>
+    The following example enables IPsec for the OVN-Kubernetes network provider:
 
     ``` yaml
     apiVersion: operator.openshift.io/v1
@@ -1838,8 +1828,6 @@ Procedure
           ipsecConfig:
             mode: Full
     ```
-
-    </div>
 
 4.  Optional: Back up the `manifests/cluster-network-03-config.yml` file. The installation program consumes the `manifests/` directory when you create the Ignition config files.
 
@@ -2154,7 +2142,7 @@ The following table describes the configuration fields for the OVN-Kubernetes ne
 </dd>
 <dt><code>unix:&lt;file&gt;</code></dt>
 <dd>
-<p>A Unix Domain Socket file specified by <code>&lt;file&gt;</code>.</p>
+<p>A UNIX Domain Socket file specified by <code>&lt;file&gt;</code>.</p>
 </dd>
 <dt><code>null</code></dt>
 <dd>
@@ -2232,7 +2220,7 @@ The following table describes the configuration fields for the OVN-Kubernetes ne
 <tr>
 <td style="text-align: left;"><p><code>internalMasqueradeSubnet</code></p></td>
 <td style="text-align: left;"><p><code>string</code></p></td>
-<td style="text-align: left;"><p>The masquerade IPv4 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses as well as the shared gateway bridge interface. The default value is <code>169.254.169.0/29</code>.</p>
+<td style="text-align: left;"><p>The masquerade IPv4 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses and the shared gateway bridge interface. The default value is <code>169.254.169.0/29</code>.</p>
 <div class="important">
 <div class="title">
 &#10;</div>
@@ -2260,7 +2248,7 @@ The following table describes the configuration fields for the OVN-Kubernetes ne
 <tr>
 <td style="text-align: left;"><p><code>internalMasqueradeSubnet</code></p></td>
 <td style="text-align: left;"><p><code>string</code></p></td>
-<td style="text-align: left;"><p>The masquerade IPv6 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses as well as the shared gateway bridge interface. The default value is <code>fd69::/125</code>.</p>
+<td style="text-align: left;"><p>The masquerade IPv6 addresses that are used internally to enable host to service traffic. The host is configured with these IP addresses and the shared gateway bridge interface. The default value is <code>fd69::/125</code>.</p>
 <div class="important">
 <div class="title">
 &#10;</div>
@@ -2302,7 +2290,7 @@ The following table describes the configuration fields for the OVN-Kubernetes ne
 
 <div class="title">
 
-Example OVN-Kubernetes configuration with IPSec enabled
+Example OVN-Kubernetes configuration with IPsec enabled
 
 </div>
 
@@ -2360,21 +2348,21 @@ Procedure
   $ ./openshift-install create ignition-configs --dir <installation_directory>
   ```
 
-  - For `<installation_directory>`, specify the directory name to store the files that the installation program creates.
+  For `<installation_directory>`, specify the directory name to store the files that the installation program creates.
 
-    > [!IMPORTANT]
-    > If you created an `install-config.yaml` file, specify the directory that contains it. Otherwise, specify an empty directory. Some installation assets, like bootstrap X.509 certificates have short expiration intervals, so you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
+  > [!IMPORTANT]
+  > If you created an `install-config.yaml` file, specify the directory that contains it. Otherwise, specify an empty directory. Some installation assets, like bootstrap X.509 certificates have short expiration intervals, so you must not reuse an installation directory. If you want to reuse individual files from another cluster installation, you can copy them into your directory. However, the file names for the installation assets might change between releases. Use caution when copying installation files from an earlier OpenShift Container Platform version.
 
-    The following files are generated in the directory:
+  The following files are generated in the directory:
 
-        .
-        ├── auth
-        │   ├── kubeadmin-password
-        │   └── kubeconfig
-        ├── bootstrap.ign
-        ├── master.ign
-        ├── metadata.json
-        └── worker.ign
+      .
+      ├── auth
+      │   ├── kubeadmin-password
+      │   └── kubeconfig
+      ├── bootstrap.ign
+      ├── master.ign
+      ├── metadata.json
+      └── worker.ign
 
 </div>
 
@@ -2902,7 +2890,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     metadata:
       labels:
         machineconfiguration.openshift.io/role: worker
@@ -3058,7 +3046,7 @@ Additional resources
 
 ### Default console configuration
 
-Red Hat Enterprise Linux CoreOS (RHCOS) nodes installed from an OpenShift Container Platform 4.17 boot image use a default console that is meant to accomodate most virtualized and bare metal setups. Different cloud and virtualization platforms may use different default settings depending on the chosen architecture.
+Red Hat Enterprise Linux CoreOS (RHCOS) nodes installed from an OpenShift Container Platform 4.20 boot image use a default console that is meant to accomodate most virtualized and bare metal setups. Different cloud and virtualization platforms may use different default settings depending on the chosen architecture.
 
 Bare-metal installations use the kernel default settings which typically means the graphical console is the primary console and the serial console is disabled.
 
@@ -4542,7 +4530,8 @@ Procedure
 
       where:
 
-    - `<wwn_ID>`:: Indicates the WWN ID of the target multipathed device. For example, `0xx194e957fcedb4841`.
+      `<wwn_ID>`
+      Indicates the WWN ID of the target multipathed device. For example, `0xx194e957fcedb4841`.
 
       This symlink can also be used as the `coreos.inst.install_dev` kernel argument when using special `coreos.inst.*` arguments to direct the live installer. For more information, see "Installing RHCOS and starting the OpenShift Container Platform bootstrap process".
 
@@ -4620,7 +4609,7 @@ Procedure
 
     ``` yaml
     variant: openshift
-    version: 4.17.0
+    version: 4.20.0
     systemd:
       units:
         - name: mpath-configure.service
@@ -4924,13 +4913,15 @@ Procedure
     </div>
 
     ``` terminal
-    INFO Waiting up to 30m0s for the Kubernetes API at https://api.test.example.com:6443...
+    INFO Waiting up to 20m0s for the Kubernetes API at https://api.test.example.com:6443...
     INFO API v1.33.4 up
-    INFO Waiting up to 30m0s for bootstrapping to complete...
+    INFO Waiting up to 1h0m0s for bootstrapping to complete...
     INFO It is now safe to remove the bootstrap resources
     ```
 
     </div>
+
+    The bootstrapping completion wait time varies per platform.
 
     The command succeeds when the Kubernetes API server signals that it has been bootstrapped on the control plane machines.
 
@@ -4957,7 +4948,7 @@ Additional resources
 
 To log in to your cluster as the default system user, export the `kubeconfig` file. This configuration enables the CLI to authenticate and connect to the specific API server created during OpenShift Container Platform installation.
 
-The `kubeconfig` file is specific to a cluster and is created during OpenShift Container Platform installation.
+The `kubeconfig` file is specific to a cluster and OpenShift Container Platform generates it during installation.
 
 <div>
 
@@ -5030,7 +5021,7 @@ Next steps
 
 # Approving the certificate signing requests for your machines
 
-When you add machines to a cluster, two pending certificate signing requests (CSRs) are generated for each machine that you added. You must confirm that these CSRs are approved or, if necessary, approve them yourself. The client requests must be approved first, followed by the server requests.
+To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 
 <div>
 
@@ -5078,7 +5069,7 @@ Procedure
     The output lists all of the machines that you created.
 
     > [!NOTE]
-    > The preceding output might not include the compute nodes until some CSRs are approved.
+    > The preceding output might not include the compute nodes until you approve some CSRs.
 
 2.  Review the pending CSRs and ensure that you see the client requests with the `Pending` or `Approved` status for each machine that you added to the cluster:
 
@@ -5108,10 +5099,10 @@ Procedure
 3.  If the CSRs were not approved, after all of the pending CSRs for the machines you added are in `Pending` status, approve the CSRs for your cluster machines:
 
     > [!NOTE]
-    > You must approve your CSRs within an hour of adding the machines to the cluster. If you do not approve them within an hour, the certificates will rotate, and more than two certificates will be present for each node. You must approve all of these certificates. After the client CSR is approved, the Kubelet creates a secondary CSR for the serving certificate, which requires manual approval. The subsequent serving certificate renewal requests are then automatically approved by the `machine-approver` if the Kubelet requests a new certificate with identical parameters.
+    > You must approve your CSRs within an hour of adding the machines to the cluster. If you do not approve them within an hour, the certificates rotate, and more than two certificates are present for each node. You must approve all of these certificates. After you approve the client CSR, the kubelet creates a secondary CSR for the serving certificate, which requires manual approval. The `machine-approver` then automatically approves later serving certificate renewal requests if the kubelet requests a new certificate with the same parameters.
 
     > [!NOTE]
-    > For clusters running on platforms that are not machine API enabled, such as bare metal and other user-provisioned infrastructure, you must implement a method of automatically approving the kubelet serving certificate requests (CSRs). If a request is not approved, then the `oc exec`, `oc rsh`, and `oc logs` commands cannot succeed, because a serving certificate is required when the API server connects to the kubelet. Any operation that contacts the Kubelet endpoint requires this certificate approval to be in place. The method must watch for new CSRs, confirm that the CSR was submitted by the `node-bootstrapper` service account in the `system:node` or `system:admin` groups, and confirm the identity of the node.
+    > For clusters running on platforms that are not machine API enabled, such as bare metal and other user-provisioned infrastructure, you must implement a method of automatically approving the kubelet serving certificate requests (CSRs). If you do not approve a request, the `oc exec`, `oc rsh`, and `oc logs` commands cannot succeed, because the API server requires a serving certificate when it connects to the kubelet. Any operation that contacts the kubelet endpoint requires this certificate approval to be in place. The method must watch for new CSRs, confirm that the `node-bootstrapper` service account in the `system:node` or `system:admin` groups submitted the CSR, and confirm the identity of the node.
 
     - To approve them individually, run the following command for each valid CSR:
 
@@ -5131,9 +5122,9 @@ Procedure
       ```
 
       > [!NOTE]
-      > Some Operators might not become available until some CSRs are approved.
+      > Some Operators might not become available until you approve some CSRs.
 
-4.  Now that your client requests are approved, you must review the server requests for each machine that you added to the cluster:
+4.  After you approve your client requests, review the server requests for each machine that you added to the cluster:
 
     ``` terminal
     $ oc get csr
@@ -5175,7 +5166,7 @@ Procedure
       $ oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
       ```
 
-6.  After all client and server CSRs have been approved, the machines have the `Ready` status. Verify this by running the following command:
+6.  After you approve all client and server CSRs, the machines have the `Ready` status. Verify this by running the following command:
 
     ``` terminal
     $ oc get nodes
@@ -5201,7 +5192,7 @@ Procedure
     </div>
 
     > [!NOTE]
-    > You might need to wait a few minutes after approval of the server CSRs for the machines to transition to the `Ready` status.
+    > You might need to wait a few minutes after approval of the server CSRs for the machines to reach the `Ready` status.
 
 </div>
 
@@ -5245,37 +5236,37 @@ Procedure
 
     ``` terminal
     NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
-    authentication                             4.17.0    True        False         False      19m
-    baremetal                                  4.17.0    True        False         False      37m
-    cloud-credential                           4.17.0    True        False         False      40m
-    cluster-autoscaler                         4.17.0    True        False         False      37m
-    config-operator                            4.17.0    True        False         False      38m
-    console                                    4.17.0    True        False         False      26m
-    csi-snapshot-controller                    4.17.0    True        False         False      37m
-    dns                                        4.17.0    True        False         False      37m
-    etcd                                       4.17.0    True        False         False      36m
-    image-registry                             4.17.0    True        False         False      31m
-    ingress                                    4.17.0    True        False         False      30m
-    insights                                   4.17.0    True        False         False      31m
-    kube-apiserver                             4.17.0    True        False         False      26m
-    kube-controller-manager                    4.17.0    True        False         False      36m
-    kube-scheduler                             4.17.0    True        False         False      36m
-    kube-storage-version-migrator              4.17.0    True        False         False      37m
-    machine-api                                4.17.0    True        False         False      29m
-    machine-approver                           4.17.0    True        False         False      37m
-    machine-config                             4.17.0    True        False         False      36m
-    marketplace                                4.17.0    True        False         False      37m
-    monitoring                                 4.17.0    True        False         False      29m
-    network                                    4.17.0    True        False         False      38m
-    node-tuning                                4.17.0    True        False         False      37m
-    openshift-apiserver                        4.17.0    True        False         False      32m
-    openshift-controller-manager               4.17.0    True        False         False      30m
-    openshift-samples                          4.17.0    True        False         False      32m
-    operator-lifecycle-manager                 4.17.0    True        False         False      37m
-    operator-lifecycle-manager-catalog         4.17.0    True        False         False      37m
-    operator-lifecycle-manager-packageserver   4.17.0    True        False         False      32m
-    service-ca                                 4.17.0    True        False         False      38m
-    storage                                    4.17.0    True        False         False      37m
+    authentication                             4.20.0    True        False         False      19m
+    baremetal                                  4.20.0    True        False         False      37m
+    cloud-credential                           4.20.0    True        False         False      40m
+    cluster-autoscaler                         4.20.0    True        False         False      37m
+    config-operator                            4.20.0    True        False         False      38m
+    console                                    4.20.0    True        False         False      26m
+    csi-snapshot-controller                    4.20.0    True        False         False      37m
+    dns                                        4.20.0    True        False         False      37m
+    etcd                                       4.20.0    True        False         False      36m
+    image-registry                             4.20.0    True        False         False      31m
+    ingress                                    4.20.0    True        False         False      30m
+    insights                                   4.20.0    True        False         False      31m
+    kube-apiserver                             4.20.0    True        False         False      26m
+    kube-controller-manager                    4.20.0    True        False         False      36m
+    kube-scheduler                             4.20.0    True        False         False      36m
+    kube-storage-version-migrator              4.20.0    True        False         False      37m
+    machine-api                                4.20.0    True        False         False      29m
+    machine-approver                           4.20.0    True        False         False      37m
+    machine-config                             4.20.0    True        False         False      36m
+    marketplace                                4.20.0    True        False         False      37m
+    monitoring                                 4.20.0    True        False         False      29m
+    network                                    4.20.0    True        False         False      38m
+    node-tuning                                4.20.0    True        False         False      37m
+    openshift-apiserver                        4.20.0    True        False         False      32m
+    openshift-controller-manager               4.20.0    True        False         False      30m
+    openshift-samples                          4.20.0    True        False         False      32m
+    operator-lifecycle-manager                 4.20.0    True        False         False      37m
+    operator-lifecycle-manager-catalog         4.20.0    True        False         False      37m
+    operator-lifecycle-manager-packageserver   4.20.0    True        False         False      32m
+    service-ca                                 4.20.0    True        False         False      38m
+    storage                                    4.20.0    True        False         False      37m
     ```
 
     </div>
@@ -5441,37 +5432,37 @@ Procedure
 
     ``` terminal
     NAME                                       VERSION   AVAILABLE   PROGRESSING   DEGRADED   SINCE
-    authentication                             4.17.0    True        False         False      19m
-    baremetal                                  4.17.0    True        False         False      37m
-    cloud-credential                           4.17.0    True        False         False      40m
-    cluster-autoscaler                         4.17.0    True        False         False      37m
-    config-operator                            4.17.0    True        False         False      38m
-    console                                    4.17.0    True        False         False      26m
-    csi-snapshot-controller                    4.17.0    True        False         False      37m
-    dns                                        4.17.0    True        False         False      37m
-    etcd                                       4.17.0    True        False         False      36m
-    image-registry                             4.17.0    True        False         False      31m
-    ingress                                    4.17.0    True        False         False      30m
-    insights                                   4.17.0    True        False         False      31m
-    kube-apiserver                             4.17.0    True        False         False      26m
-    kube-controller-manager                    4.17.0    True        False         False      36m
-    kube-scheduler                             4.17.0    True        False         False      36m
-    kube-storage-version-migrator              4.17.0    True        False         False      37m
-    machine-api                                4.17.0    True        False         False      29m
-    machine-approver                           4.17.0    True        False         False      37m
-    machine-config                             4.17.0    True        False         False      36m
-    marketplace                                4.17.0    True        False         False      37muser
-    monitoring                                 4.17.0    True        False         False      29m
-    network                                    4.17.0    True        False         False      38m
-    node-tuning                                4.17.0    True        False         False      37m
-    openshift-apiserver                        4.17.0    True        False         False      32muser
-    openshift-controller-manager               4.17.0    True        False         False      30m
-    openshift-samples                          4.17.0    True        False         False      32m
-    operator-lifecycle-manager                 4.17.0    True        False         False      37m
-    operator-lifecycle-manager-catalog         4.17.0    True        False         False      37m
-    operator-lifecycle-manager-packageserver   4.17.0    True        False         False      32m
-    service-ca                                 4.17.0    True        False         False      38m
-    storage                                    4.17.0    True        False         False      37m
+    authentication                             4.20.0    True        False         False      19m
+    baremetal                                  4.20.0    True        False         False      37m
+    cloud-credential                           4.20.0    True        False         False      40m
+    cluster-autoscaler                         4.20.0    True        False         False      37m
+    config-operator                            4.20.0    True        False         False      38m
+    console                                    4.20.0    True        False         False      26m
+    csi-snapshot-controller                    4.20.0    True        False         False      37m
+    dns                                        4.20.0    True        False         False      37m
+    etcd                                       4.20.0    True        False         False      36m
+    image-registry                             4.20.0    True        False         False      31m
+    ingress                                    4.20.0    True        False         False      30m
+    insights                                   4.20.0    True        False         False      31m
+    kube-apiserver                             4.20.0    True        False         False      26m
+    kube-controller-manager                    4.20.0    True        False         False      36m
+    kube-scheduler                             4.20.0    True        False         False      36m
+    kube-storage-version-migrator              4.20.0    True        False         False      37m
+    machine-api                                4.20.0    True        False         False      29m
+    machine-approver                           4.20.0    True        False         False      37m
+    machine-config                             4.20.0    True        False         False      36m
+    marketplace                                4.20.0    True        False         False      37muser
+    monitoring                                 4.20.0    True        False         False      29m
+    network                                    4.20.0    True        False         False      38m
+    node-tuning                                4.20.0    True        False         False      37m
+    openshift-apiserver                        4.20.0    True        False         False      32muser
+    openshift-controller-manager               4.20.0    True        False         False      30m
+    openshift-samples                          4.20.0    True        False         False      32m
+    operator-lifecycle-manager                 4.20.0    True        False         False      37m
+    operator-lifecycle-manager-catalog         4.20.0    True        False         False      37m
+    operator-lifecycle-manager-packageserver   4.20.0    True        False         False      32m
+    service-ca                                 4.20.0    True        False         False      38m
+    storage                                    4.20.0    True        False         False      37m
     ```
 
     </div>
