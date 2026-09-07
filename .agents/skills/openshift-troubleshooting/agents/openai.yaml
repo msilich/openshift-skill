@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift troubleshooting"
+  short_description: "Investigate OpenShift workload and cluster failures"
+  default_prompt: "Use $openshift-troubleshooting to investigate this task using the bundled documentation and permitted MCP tools."

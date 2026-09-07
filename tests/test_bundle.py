@@ -13,7 +13,11 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_ROOT = ROOT / ".agents" / "skills"
-SKILL_NAMES = ("openshift-mcp", "openshift-api", "openshift-docs")
+SKILL_NAMES = (
+    "openshift-mcp", "openshift-api", "openshift-docs",
+    "openshift-troubleshooting", "openshift-disconnected", "openshift-gitops",
+    "openshift-upgrade", "openshift-backup-restore",
+)
 EXAMPLES = SKILLS_ROOT / "openshift-mcp" / "assets"
 
 

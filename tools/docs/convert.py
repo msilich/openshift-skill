@@ -2,7 +2,7 @@
 """
 Convert OpenShift AsciiDoc documentation to GitHub-Flavored Markdown.
 
-Local modification: resolve an explicit OpenShift enterprise version branch
+Local modification: resolve an explicit OpenShift enterprise or GitOps version branch
 when the source distro map is stale; reject unknown versions instead of
 silently substituting 4.17. See build.lock.json for upstream provenance.
 
@@ -86,9 +86,13 @@ def get_distro_attributes(distro_map: dict, distro: str, branch: str = "main") -
     branches = distro_config.get("branches", {})
     branch_config = branches.get(branch, {})
     version = branch_config.get("name")
-    enterprise_version = re.fullmatch(r"enterprise-(\d+\.\d+)", branch)
-    if distro == "openshift-enterprise" and enterprise_version:
-        requested_version = enterprise_version.group(1)
+    version_pattern = {
+        "openshift-enterprise": r"enterprise-(\d+\.\d+)",
+        "openshift-gitops": r"gitops-docs-(\d+\.\d+)",
+    }.get(distro)
+    explicit_version = re.fullmatch(version_pattern, branch) if version_pattern else None
+    if explicit_version:
+        requested_version = explicit_version.group(1)
         if version and str(version) != requested_version:
             raise ValueError(f"Distro map version {version} disagrees with {branch}")
         version = requested_version

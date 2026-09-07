@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift backup and restore"
+  short_description: "Check backup coverage and guide verified recovery"
+  default_prompt: "Use $openshift-backup-restore to investigate this task using the bundled documentation and permitted MCP tools."

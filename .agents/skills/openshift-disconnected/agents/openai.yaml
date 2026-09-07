@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift disconnected operations"
+  short_description: "Diagnose mirrors and plan offline image transfers"
+  default_prompt: "Use $openshift-disconnected to investigate this task using the bundled documentation and permitted MCP tools."

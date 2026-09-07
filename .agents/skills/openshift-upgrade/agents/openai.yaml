@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift update readiness and execution"
+  short_description: "Assess update blockers and verify requested updates"
+  default_prompt: "Use $openshift-upgrade to investigate this task using the bundled documentation and permitted MCP tools."

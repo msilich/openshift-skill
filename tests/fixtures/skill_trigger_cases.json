@@ -1,7 +1,7 @@
 [
   {
     "prompt": "Diagnose why deployment payments-api is unavailable in namespace payments.",
-    "expected_skill": "openshift-mcp"
+    "expected_skill": "openshift-troubleshooting"
   },
   {
     "prompt": "Skaliere das Deployment api im Namespace shop auf drei Replicas und pruefe den Rollout.",
@@ -36,7 +36,43 @@
     "expected_skill": "openshift-docs"
   },
   {
-    "prompt": "Wie funktioniert ein disconnected Cluster-Update in OpenShift 4.20?",
+    "prompt": "Finde ausschließlich die lokale OCP-Dokumentation zu disconnected Cluster-Updates; führe keine Diagnose aus.",
     "expected_skill": "openshift-docs"
+  },
+  {
+    "prompt": "Warum hat mein Service keine bereiten Endpunkte?",
+    "expected_skill": "openshift-troubleshooting"
+  },
+  {
+    "prompt": "Plan the oc-mirror v2 transfer from the connected preparation host into our airgap.",
+    "expected_skill": "openshift-disconnected"
+  },
+  {
+    "prompt": "Unser Image-Pull aus der Mirror-Registry scheitert mit x509; grenze das Problem ein.",
+    "expected_skill": "openshift-disconnected"
+  },
+  {
+    "prompt": "Explain why this Application is OutOfSync and which controller owns the changed fields.",
+    "expected_skill": "openshift-gitops"
+  },
+  {
+    "prompt": "Untersuche die fehlgeschlagene ApplicationSet-Reconciliation, ohne zu synchronisieren.",
+    "expected_skill": "openshift-gitops"
+  },
+  {
+    "prompt": "Assess whether the cluster can take the offered update; check blocking PDBs.",
+    "expected_skill": "openshift-upgrade"
+  },
+  {
+    "prompt": "Prüfe den angebotenen Updatepfad und die Voraussetzungen unseres Offline-Cluster-Updates.",
+    "expected_skill": "openshift-upgrade"
+  },
+  {
+    "prompt": "Check whether this OADP backup is sufficient to restore application data.",
+    "expected_skill": "openshift-backup-restore"
+  },
+  {
+    "prompt": "Ist unser etcd-Backup für die geplante Control-Plane-Wiederherstellung geeignet?",
+    "expected_skill": "openshift-backup-restore"
   }
 ]

@@ -41,6 +41,22 @@
       "commit": "3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0"
+    },
+    "openshift_gitops_docs": {
+      "branch": "gitops-docs-1.21",
+      "commit": "ca5db8539a097b38e2975980963e0959782d105f",
+      "url": "https://github.com/openshift/openshift-docs",
+      "license": "Apache-2.0",
+      "version": "1.21"
+    },
+    "agentic_skills_workflows": {
+      "commit": "7aca4bee317cd70a4204795db6b1d7b9eb78f48c",
+      "url": "https://github.com/openshift/agentic-skills",
+      "license": "Apache-2.0",
+      "paths": [
+        "cluster-troubleshoot/investigate-alert/SKILL.md",
+        "cluster-update/cluster-update-advisor/SKILL.md"
+      ]
     }
   },
   "runtime_inputs": {

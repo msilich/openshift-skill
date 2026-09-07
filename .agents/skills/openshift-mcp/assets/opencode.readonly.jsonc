@@ -27,7 +27,12 @@
       "*": "deny",
       "openshift-api": "allow",
       "openshift-docs": "allow",
-      "openshift-mcp": "allow"
+      "openshift-mcp": "allow",
+      "openshift-troubleshooting": "allow",
+      "openshift-disconnected": "allow",
+      "openshift-gitops": "allow",
+      "openshift-upgrade": "allow",
+      "openshift-backup-restore": "allow"
     },
     "read": {
       "*": "deny",
@@ -39,6 +44,8 @@
     "ocp_read_*": "allow",
     "bash": {
       "*": "deny",
+      "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} adm upgrade": "ask",
+      "oc-mirror --help": "ask",
       "bash *openshift-api/scripts/collect-discovery.sh *": "ask",
       "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} api-resources": "ask",
       "oc --kubeconfig {env:OPENSHIFT_MCP_READ_KUBECONFIG} api-resources *": "ask",

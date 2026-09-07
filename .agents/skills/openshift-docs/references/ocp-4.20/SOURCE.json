@@ -27,7 +27,8 @@
       "Removed the generated HTML index and CDN-dependent viewer.",
       "Replaced the rolling weekly-update statement with pinned-snapshot provenance.",
       "Added a format-modification notice to every Markdown file.",
-      "Rewrote DocBook .xml cross-references to bundled Markdown targets."
+      "Rewrote DocBook .xml cross-references to bundled Markdown targets.",
+      "Verified local Markdown links; set navigation titles to the selected product."
     ],
     "successful_topics": 1749
   },
@@ -47,10 +48,10 @@
       "license": "Apache-2.0",
       "license_file": "LICENSE.agentic-skills",
       "modifications": [
-        "Resolve the product version from explicit enterprise-X.Y branches when the distro map is stale; reject missing or conflicting versions."
+        "Resolve product versions from explicit enterprise-X.Y and gitops-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions."
       ],
       "path": "documentation/openshift-docs/convert.py",
-      "sha256": "8cade26df02b28923235698b5932adcdf16ff9dd1a9b72c525e574a664bd4060",
+      "sha256": "498468d67bbb9c0e05c8b0df77b807a1d56277bf0ed54801150ab21c2a32efd8",
       "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
       "url": "https://github.com/openshift/agentic-skills"
     },
