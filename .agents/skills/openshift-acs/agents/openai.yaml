@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenShift ACS"
+  short_description: "RHACS operations with offline docs and read-only MCP"
+  default_prompt: "Use $openshift-acs to investigate this RHACS issue using local documentation and scoped, permitted access."

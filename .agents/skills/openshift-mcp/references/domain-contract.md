@@ -1,8 +1,8 @@
 # Contract for documentation-based workflows
 
 This is project-authored OpenCode/MCP integration guidance, not a Red Hat procedure.
-The six domain skills depend on the sibling `openshift-mcp`, `openshift-api`, and
-`openshift-docs` directories. Install all nine complete directories together.
+The seven domain skills depend on the sibling `openshift-mcp`, `openshift-api`, and
+`openshift-docs` directories. Install all ten complete directories together.
 
 ## Establish evidence
 
@@ -13,7 +13,7 @@ The six domain skills depend on the sibling `openshift-mcp`, `openshift-api`, an
 2. Read [the MCP contract](../SKILL.md) before cluster access. Establish the explicit
    cluster, kubeconfig, identity and namespace. For GitOps also establish the Argo CD
    instance and destination cluster; its API server is not necessarily that cluster.
-3. Compare observed OCP, GitOps, Dev Spaces, Dev Workspace Operator, OADP and CLI versions with the selected source.
+3. Compare observed OCP, GitOps, Dev Spaces, Dev Workspace Operator, RHACS, OADP and CLI versions with the selected source.
    An API may exist without the combination being supported. Continue only generic
    read-only investigation across a version mismatch; mark version-specific advice
    unverified until matching local evidence is supplied.
@@ -28,12 +28,15 @@ The six domain skills depend on the sibling `openshift-mcp`, `openshift-api`, an
 - Prefer narrow MCP resource reads. Use bounded events, current/previous container
   logs and metrics only for the affected objects and time range. Do not run the
   upstream token setup scripts or `eval` shell exports.
-- If a tool is absent or cannot express the operation, use the same explicit
+- If an OpenShift MCP tool is absent or cannot express the cluster operation, use the same explicit
   kubeconfig with the permitted `oc` command. After a transient tool failure allow
   at most one retry. An authorization denial is not an unsupported capability:
   stop that access, report the missing permission and do not bypass it via another
   identity or tool. Continue only independent, permitted checks.
-- Before manifest or API changes load [openshift-api](../../openshift-api/SKILL.md).
+- For ACS Central, follow [the ACS execution contract](../../openshift-acs/references/execution.md):
+  a missing StackRox tool uses documented, permitted Central REST/roxctl, not `oc`.
+  Establish Central endpoint and secured-cluster ID independently of Kubernetes identity.
+- Before Kubernetes/OpenShift manifest or API changes load [openshift-api](../../openshift-api/SKILL.md).
   Unknown fields or versions remain unverified; documentation examples do not
   override served schemas. CLI-plugin configuration (for example ImageSetConfiguration)
   instead requires the installed plugin's version/help and matching local docs.

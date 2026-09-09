@@ -1,6 +1,6 @@
 # OpenShift Agent Skills for OpenCode
 
-Nine portable, English-language agent skills for operating and researching
+Ten portable, English-language agent skills for operating and researching
 OpenShift with [OpenCode](https://opencode.ai/):
 
 - `openshift-mcp` — MCP-first diagnosis and controlled Day-2 operations with
@@ -8,13 +8,14 @@ OpenShift with [OpenCode](https://opencode.ai/):
 - `openshift-api` — live API discovery with `oc api-resources`, `oc explain`,
   OpenAPI v3, and CRD schemas.
 - `openshift-docs` — a complete, searchable, offline OpenShift Container
-  Platform 4.22, OpenShift GitOps 1.21 and Dev Spaces 3.29 documentation snapshots.
+  Platform 4.22, OpenShift GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11 documentation snapshots.
 - `openshift-troubleshooting` — evidence-led workload, service, storage, node and Operator diagnosis.
 - `openshift-disconnected` — oc-mirror v2, internal registries, transfer workflows and image-pull diagnosis.
 - `openshift-gitops` — Application/ApplicationSet reconciliation, access, trust and reviewed configuration changes.
 - `openshift-upgrade` — update readiness, supported paths, disruption constraints and completion checks.
 - `openshift-backup-restore` — OADP coverage and documented application/control-plane recovery.
 - `openshift-devspaces` — CheCluster administration, workspaces, devfiles, airgap dependencies and startup/IDE diagnosis.
+- `openshift-acs` — RHACS platform, vulnerabilities, policies, compliance, airgap feeds and reviewed Central Day-2 operations.
 
 The skills are model-provider independent. An optional OpenAI-compatible Qwen
 provider example is included for local and air-gapped deployments.
@@ -37,12 +38,77 @@ The `main` branch retains the 4.20 snapshot.
 | `.agents/skills/openshift-mcp/assets/argocd-readonly-rbac/` | Optional additive Argo CD account and read-only RBAC patches |
 | `.agents/skills/openshift-mcp/scripts/` | CA-aware OpenShift and Argo CD/OpenCode bootstrap scripts |
 | `.agents/skills/openshift-api/` | Live API/schema discovery skill and helper |
-| `.agents/skills/openshift-docs/` | Offline OCP 4.22, GitOps 1.21 and Dev Spaces 3.29 documentation skill |
-| `.agents/skills/openshift-{troubleshooting,disconnected,gitops,upgrade,backup-restore,devspaces}/` | Documentation-based operational workflows |
+| `.agents/skills/openshift-docs/` | Offline OCP 4.22, GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11 documentation skill |
+| `.agents/skills/openshift-{troubleshooting,disconnected,gitops,upgrade,backup-restore,devspaces,acs}/` | Documentation-based operational workflows |
 | `manifests/openshift-gitops-argocd-mcp-readonly/` | Simple reviewed merge-patch YAMLs for an unchanged default OpenShift GitOps instance |
 | `sources.lock.json` | Exact source and compatibility baselines |
 | `tools/docs/` | Reproducible documentation conversion inputs |
 | `tests/` | Offline integrity and behavior checks |
+
+## RHACS / ACS 4.11
+
+The tenth skill, [`openshift-acs`](.agents/skills/openshift-acs/SKILL.md), covers
+self-managed RHACS platform health, CVEs, violations and enforcement, compliance
+coverage, network policies, disconnected Scanner data, upgrades and ACS recovery.
+The complete pinned RHACS 4.11 topic map includes REST services, the common object
+reference and cloud-service chapters. Cloud chapters are retained for source
+coverage; the operating workflows target self-managed air-gapped deployments.
+
+```bash
+python3 .agents/skills/openshift-docs/scripts/search_docs.py 'Scanner' --product acs
+```
+
+Optional Central reads use **StackRox MCP, Developer Preview** at
+`57264356341b0f5a6aa3cb3b31da33dcb3307104`. Read the
+[build, checksum, transfer and setup guide](.agents/skills/openshift-acs/references/stackrox-mcp.md).
+It explains how to obtain upstream source and build on a connected Linux x86_64
+preparation machine; no MCP binary or new runtime service is shipped here.
+
+- [ACS + OpenShift read-only example](.agents/skills/openshift-acs/assets/opencode.acs-readonly.jsonc)
+- [ACS + OpenShift Day-2 example](.agents/skills/openshift-acs/assets/opencode.acs-day2.jsonc)
+- [Central execution, credentials and fresh approval rules](.agents/skills/openshift-acs/references/execution.md)
+
+These are optional complete profile examples, not installer actions. Review the
+existing model/provider settings, OpenShift paths and permission rules before
+using one. Set the nonsecret binary, Central host and CA paths described in the
+guide and provision authentication outside OpenCode. For a user-home installation,
+point the profile's skill read permission at the installed skills directory.
+No customer configuration is changed by installing these skills.
+
+Both ACS profiles use local `stdio`, static Central authentication, verified TLS,
+and the same four explicitly allowlisted read tools. The Day-2 example additionally
+shows narrow Policy Service GET/preview/PUT commands with separate protected header
+files and `ask`. Other Central procedures require reviewed command-specific entries;
+there is no blanket `curl *` or `roxctl *` grant. Every write requires a fresh
+`once` approval. Never start Day-2 with `--auto` or use `always` approvals.
+OpenCode patterns are not a sandbox: RHACS permission sets, access scopes, process
+isolation and egress controls supply the actual security boundaries.
+
+OpenShift MCP handles Kubernetes resources. StackRox MCP reads its supported Central
+data; missing Central operations use documented REST/roxctl, not an `oc` substitute.
+The Central endpoint, secured-cluster ID and OpenShift context must be correlated;
+equal cluster names are insufficient. The existing four-choice Secret policy is
+unchanged. Denied access is not retried through another tool or identity.
+
+Documentation source is `openshift/openshift-docs`, `rhacs-docs-4.11`, commit
+`e516555e0cb6bcc6ba88c423e88c8dd054532425`. On a connected preparation machine,
+obtain that exact clean checkout and the existing pinned conversion dependencies:
+
+```bash
+git clone --branch rhacs-docs-4.11 https://github.com/openshift/openshift-docs.git rhacs-docs
+git -C rhacs-docs checkout --detach e516555e0cb6bcc6ba88c423e88c8dd054532425
+python3 tools/docs/build.py --lock tools/docs/acs.lock.json \
+  --source-dir rhacs-docs --output-dir /path/to/new-acs-docs
+```
+
+Repeat into a second output directory and compare SOURCE.json content manifests,
+CONVERSION.json and asset hashes. The build validates the complete topic inventory,
+code/table round trips, images and pinned Markdown hash. The bundled
+[conversion report](.agents/skills/openshift-docs/references/acs-4.11/CONVERSION.json)
+records external references, source warnings and adjusted links/fragments; these
+are not silently treated as available offline. See [ACS verification](tests/ACS_EVALUATION.md)
+for results and the distinction between synthetic tests and actual Qwen/MCP runs.
+Bundling RHACS 4.11 with either OCP branch is not a compatibility certification.
 
 ## Tested baseline
 
@@ -77,7 +143,7 @@ OpenCode discovers `.agents/skills/*/SKILL.md` when it is started in this
 repository. Keeping the full checkout is recommended because it preserves the
 offline documentation, tests, and configuration templates.
 
-Install all nine complete skill directories as siblings. Domain skills depend
+Install all ten complete skill directories as siblings. Domain skills depend
 on the shared MCP, API and documentation skills and their relative paths.
 
 For a user-wide installation, run the bundled installer as the user who runs
@@ -88,7 +154,7 @@ bash install-skills.sh --dry-run
 bash install-skills.sh
 ```
 
-It copies all nine complete directories, including offline documentation, to
+It copies all ten complete directories, including offline documentation, to
 `$HOME/.config/opencode/skills/`, the global location documented by
 [OpenCode](https://opencode.ai/docs/skills/#place-files). The source is resolved
 relative to the script, so an absolute script path works from any working directory.
@@ -356,6 +422,7 @@ openshift-gitops
 openshift-upgrade
 openshift-backup-restore
 openshift-devspaces
+openshift-acs
 ```
 
 Safe first prompts:

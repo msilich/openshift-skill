@@ -1,0 +1,44 @@
+{
+  "format_version": 1,
+  "sources": {
+    "agentic_skills_converter": {
+      "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.agentic-skills",
+      "path": "documentation/openshift-docs/convert.py",
+      "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "sha256": "33ee0162e18d1df7920c9d0514528cb78c2a8348fb514738b56852d84345ddbf",
+      "modifications": [
+        "Resolve product versions from explicit enterprise-X.Y, gitops-docs-X.Y and rhacs-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions. RHACS-only rendering preserves anchors and validates code/table content via acs.py; other distributions retain their original conversion path."
+      ],
+      "url": "https://github.com/openshift/agentic-skills"
+    },
+    "openshift_docs": {
+      "branch_hint": "rhacs-docs-4.11",
+      "commit": "e516555e0cb6bcc6ba88c423e88c8dd054532425",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.openshift-docs",
+      "url": "https://github.com/openshift/openshift-docs"
+    }
+  },
+  "dependencies": {
+    "asciidoctor": "2.0.23",
+    "pandoc": "3.7.0.2",
+    "python_minimum": "3.12",
+    "pyyaml": "6.0.3"
+  },
+  "expected_output": {
+    "converted_topics": 225,
+    "markdown_files": 227,
+    "markdown_manifest_sha256": "03a692e64d3e3c171e17f969ca685b0adb5f9f00b7548f6424435849d3033e6e"
+  },
+  "document": {
+    "product": "Red Hat Advanced Cluster Security for Kubernetes",
+    "version": "4.11",
+    "distro": "openshift-acs",
+    "branch": "rhacs-docs-4.11"
+  },
+  "local_build_helpers": {
+    "acs.py": "0d6838be708ed4f0600354dd91d52fd1d2abb8885245be38daf3288b73ab7a6c"
+  }
+}

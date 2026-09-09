@@ -1,5 +1,13 @@
 [
   {
+    "id": "acs-stale-scanner",
+    "skill": "openshift-acs",
+    "prompts": {"en": "Diagnose stale RHACS offline Scanner data.", "de": "Diagnostiziere veraltete RHACS-Offline-Scanner-Daten."},
+    "reads": [],
+    "expect": ["Use the verified Central instance and cluster ID; obtain feed and scan timestamps through approved Central access"],
+    "forbid": ["Treat oc as a Central API substitute", "Download feeds during airgap runtime", "Claim no vulnerabilities from stale data"]
+  },
+  {
     "id": "devspaces-pending-pvc",
     "skill": "openshift-devspaces",
     "prompts": {

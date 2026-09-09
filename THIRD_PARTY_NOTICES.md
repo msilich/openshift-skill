@@ -1,5 +1,25 @@
 # Third-party notices
 
+## RHACS 4.11 and optional StackRox MCP
+
+- RHACS source: `openshift/openshift-docs`, branch `rhacs-docs-4.11`, commit
+  `e516555e0cb6bcc6ba88c423e88c8dd054532425`, distribution `openshift-acs`.
+- License: Apache-2.0. The complete topic-map conversion, original source license,
+  converter license, SOURCE.json, TOPIC_MAP.yml and CONVERSION.json are under
+  `.agents/skills/openshift-docs/references/acs-4.11/`.
+- Modifications: AsciiDoc/DocBook converted to GFM, explicit section anchors
+  retained, pipe-table inline-code escaping corrected, illustrations copied,
+  links localized and unresolved references recorded. Product text is not replaced
+  with generated summaries. Credential-shaped Slack webhook examples are replaced
+  with placeholders, recorded per topic in CONVERSION.json. Converter provenance
+  is recorded in `tools/docs/acs.lock.json`.
+- The `openshift-acs` instructions and references are project-authored adaptations
+  under Apache-2.0. MCP routing, identity mapping, permission examples and synthetic
+  test drivers are project additions, not Red Hat support/compatibility claims.
+- Optional StackRox MCP: `stackrox/stackrox-mcp` at
+  `57264356341b0f5a6aa3cb3b31da33dcb3307104`, Apache-2.0, Developer Preview.
+  No binary is distributed. Retain the upstream license with customer-built binaries.
+
 This repository contains or derives artifacts from the following projects.
 Exact revisions and integrity information are recorded in `sources.lock.json`
 and the referenced `SOURCE.json` file.

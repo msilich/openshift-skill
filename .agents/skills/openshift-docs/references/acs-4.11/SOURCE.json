@@ -1,0 +1,83 @@
+{
+  "artifact": {
+    "converted_topics": 225,
+    "format": "GitHub-Flavored Markdown",
+    "markdown_files": 227,
+    "product": "Red Hat Advanced Cluster Security for Kubernetes",
+    "scope": "Complete openshift-acs topic map at the pinned revision",
+    "version": "4.11"
+  },
+  "conversion": {
+    "arguments": {
+      "branch": "rhacs-docs-4.11",
+      "distro": "openshift-acs",
+      "product-version": "4.11",
+      "topics": "all"
+    },
+    "build_tools": {
+      "asciidoctor": "2.0.23",
+      "pandoc": "3.7.0.2",
+      "python": "3.12.14",
+      "pyyaml": "6.0.3"
+    },
+    "failed_topics": 0,
+    "local_build_helpers": {
+      "acs.py": "0d6838be708ed4f0600354dd91d52fd1d2abb8885245be38daf3288b73ab7a6c"
+    },
+    "modifications": [
+      "Resolved product-version=4.11 from the explicit rhacs-docs-4.11 branch because the source distro map is stale.",
+      "Converted the source AsciiDoc files to GitHub-Flavored Markdown.",
+      "Removed the generated HTML index and CDN-dependent viewer.",
+      "Replaced the rolling weekly-update statement with pinned-snapshot provenance.",
+      "Added a format-modification notice to every Markdown file.",
+      "Rewrote DocBook .xml cross-references to bundled Markdown targets.",
+      "Verified local Markdown links; set navigation titles to the selected product.",
+      "RHACS-only: retain explicit anchors, verify code/table round trips, bundle images and record missing source links/fragments and external references in CONVERSION.json."
+    ],
+    "quality_report": "CONVERSION.json",
+    "successful_topics": 225
+  },
+  "integrity": {
+    "agentic_skills_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "algorithm": "sha256",
+    "asset_manifest": {
+      "images/acs-architecture-scannerv4.png": "a3714c3125c46393c9a1ace5b818860934c1ec50f46a30ce887be55c5512a391",
+      "images/acscs-architecture-scannerv4.png": "0c922e80216162646369f04e3b35c3397277319135928c81aa3fe23edece66f1",
+      "images/collection-rules.png": "d0f99e55b5d1e6bc022969397e7ad879af3cc2770de503a57acaa5a3e427d898",
+      "images/collection-side-panel.png": "163cf20672ad46256ec52757c79bb56056b30c6bbf064afc6a3532e738f69fb4",
+      "images/kebab.png": "c2ba0ae03449c805d8b73829c61ee80577830c3b16e14aa77e3921bcbf56dd2e",
+      "images/network-graph-20-deployment-mode-updated.png": "e928489b9445e489eed942f2909a8a5bbb18fa9fc6da254fc3a0d4493373eba5",
+      "images/network-graph-20-namespace-mode.png": "0e94e746811f8de55f4563e62c085cf443a3a2325a5ed75a6fbce0f3fd0500d2",
+      "images/network-graph-20-overview-updated.png": "0b0a61a953dcee412270426b1d88564976fcca1240b54433aecce3af40b1c385",
+      "images/network-graph-internal-entities.png": "ea8e6717eac4c8358c63c1a5f9e53466dd80009373da74eee1bed225a29b7c8e"
+    },
+    "conversion_report_sha256": "a550fef620bef2d514b51469e4f4da9e031072350138bbba0cfcc511fa50761c",
+    "markdown_manifest_algorithm": "SHA-256 of sorted UTF-8 lines: '<file-sha256>  <relative-path>\\n'",
+    "markdown_manifest_sha256": "03a692e64d3e3c171e17f969ca685b0adb5f9f00b7548f6424435849d3033e6e",
+    "openshift_docs_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "runtime_network_required": false,
+  "schema_version": 1,
+  "source_commit_time_utc": "2026-09-09T14:55:17Z",
+  "sources": {
+    "agentic_skills_converter": {
+      "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.agentic-skills",
+      "modifications": [
+        "Resolve product versions from explicit enterprise-X.Y, gitops-docs-X.Y and rhacs-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions. RHACS-only rendering preserves anchors and validates code/table content via acs.py; other distributions retain their original conversion path."
+      ],
+      "path": "documentation/openshift-docs/convert.py",
+      "sha256": "33ee0162e18d1df7920c9d0514528cb78c2a8348fb514738b56852d84345ddbf",
+      "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "url": "https://github.com/openshift/agentic-skills"
+    },
+    "openshift_docs": {
+      "branch_hint": "rhacs-docs-4.11",
+      "commit": "e516555e0cb6bcc6ba88c423e88c8dd054532425",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.openshift-docs",
+      "url": "https://github.com/openshift/openshift-docs"
+    }
+  }
+}

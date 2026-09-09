@@ -1,0 +1,134 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+An authentication provider connects to a third-party source of user identity (for example, an identity provider or IDP), gets the user identity, issues a token based on that identity, and returns the token to Red Hat Advanced Cluster Security for Kubernetes (RHACS). This token allows RHACS to authorize the user. RHACS uses the token within the user interface and API calls.
+
+After installing RHACS, you must set up your IDP to authorize users.
+
+> [!NOTE]
+> If you are using OpenID Connect (OIDC) as your IDP, RHACS relies on mapping rules that examine the values of specific claims like `groups`, `email`, `userid` and `name` from either the user ID token or the `UserInfo` endpoint response to authorize the users. If these details are absent, the mapping cannot succeed and the user does not get access to the required resources. Therefore, you need to ensure that the claims required to authorize users from your IDP, for example, `groups`, are included in the authentication response of your IDP to enable successful mapping.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Configuring Okta Identity Cloud as a SAML 2.0 identity provider](configuring-identity-providers/configure-okta-identity-cloud.md)
+
+- [Configuring Google Workspace as an OIDC identity provider](configuring-identity-providers/configure-google-workspace-identity.md)
+
+- [Configuring OpenShift Container Platform OAuth server as an identity provider](configuring-identity-providers/configure-ocp-oauth.md)
+
+- [Connecting Azure AD to RHACS using SSO configuration](configuring-identity-providers/connecting-azure-ad-to-rhacs-using-sso-configuration.md)
+
+</div>
+
+<a id="auth-provider-claim-mappings"></a>
+
+# Claim mappings
+
+A claim is the data an identity provider includes about a user inside the token they issue.
+
+Using claim mappings, you can specify if RHACS should customize the claim attribute it receives from an IDP to another attribute in the RHACS-issued token. If you do not use the claim mapping, RHACS does not include the claim attribute in the RHACS-issued token.
+
+For example, you can map from `roles` in the user identity to `groups` in the RHACS-issued token using claim mapping.
+
+RHACS uses different default claim mappings for every authentication provider.
+
+<a id="auth-provider-oidc-default-claim-mappings"></a>
+
+## OIDC default claim mappings
+
+The following list provides the default OIDC claim mappings:
+
+- `sub` to `userid`
+
+- `name` to `name`
+
+- `email` to `email`
+
+- `groups` to `groups`
+
+<a id="auth-provider-auth0-default-claim-mappings"></a>
+
+## Auth0 default claim mappings
+
+The `Auth0` default claim mappings are the same as the OIDC default claim mappings.
+
+<a id="auth-provider-saml20-default-claim-mappings"></a>
+
+## SAML 2.0 default claim mappings
+
+The following list applies to SAML 2.0 default claim mappings:
+
+- `Subject.NameID` is mapped to `userid`
+
+- every SAML `AttributeStatement.Attribute` from the response gets mapped to its name
+
+<a id="auth-provider-google-iap-default-claim-mappings"></a>
+
+## Google IAP default claim mappings
+
+The following list provides the Google IAP default claim mappings:
+
+- `sub` to `userid`
+
+- `email` to `email`
+
+- `hd` to `hd`
+
+- `google.access_levels` to `access_levels`
+
+<a id="auth-provider-userpki-default-claim-mappings"></a>
+
+## User certificates default claim mappings
+
+User certificates differ from all other authentication providers because instead of communicating with a third-party IDP, they get user information from certificates used by the user.
+
+The default claim mappings for user certificates include:
+
+- `CertFingerprint` to `userid`
+
+- `Subject → Common Name` to `name`
+
+- `EmailAddresses` to `email`
+
+- `Subject → Organizational Unit` to `groups`
+
+<a id="auth-provider-openshift-auth-default-claim-mappings"></a>
+
+## OpenShift Auth default claim mappings
+
+The following list provides the OpenShift Auth default claim mappings:
+
+- `groups` to `groups`
+
+- `uid` to `userid`
+
+- `name` to `name`
+
+<a id="auth-provider-rules"></a>
+
+# Rules
+
+To authorize users, RHACS relies on mapping rules that examine the values of specific claims such as `groups`, `email`, `userid`, and `name` from the user identity. Rules allow mapping of users who have attributes with a specific value to a specific role. As an example, a rule could include the following:\`key\` is `email`, `value` is `john@redhat.com`, `role` is `Admin`.
+
+If the claim is missing, the mapping cannot succeed, and the user does not get access to the required resources. Therefore, to enable successful mapping, you must ensure that the authentication response from your IDP includes the required claims to authorize users, for example, `groups`.
+
+<a id="auth-provider-minimum-access-role"></a>
+
+# Minimum access role
+
+RHACS assigns a minimum access role to every caller with a RHACS token issued by a particular authentication provider. The minimum access role is set to `None` by default.
+
+For example, suppose there is an authentication provider with the minimum access role of `Analyst`. In that case, all users who log in using this provider will have the `Analyst` role assigned to them.
+
+<a id="auth-provider-required-attributes"></a>
+
+# Required attributes
+
+Required attributes can restrict issuing of the RHACS token based on whether a user identity has an attribute with a specific value.
+
+For example, you can configure RHACS only to issue a token when the attribute with key `is_internal` has the attribute value `true`. Users with the attribute `is_internal` set to `false` or not set do not get a token.

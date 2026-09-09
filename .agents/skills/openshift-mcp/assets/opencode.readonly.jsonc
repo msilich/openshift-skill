@@ -33,7 +33,8 @@
       "openshift-gitops": "allow",
       "openshift-upgrade": "allow",
       "openshift-backup-restore": "allow",
-      "openshift-devspaces": "allow"
+      "openshift-devspaces": "allow",
+      "openshift-acs": "allow"
     },
     "read": {
       "*": "deny",
