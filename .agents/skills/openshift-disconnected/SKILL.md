@@ -14,7 +14,7 @@ Identify whether the task is mirror preparation, transfer, target-registry impor
 3. Use [mirroring.md](references/mirroring.md) for content preparation and import. Use [image-pulls.md](references/image-pulls.md) for registry, trust and mirror diagnosis.
 4. Use [openshift-api](../openshift-api/SKILL.md) to verify schemas and [openshift-mcp](../openshift-mcp/SKILL.md) to perform permitted operations.
 
-This skill depends on the other eight skills being installed as sibling directories.
+This skill depends on the other nine skills being installed as sibling directories.
 Resolve every path from this file. Missing documentation, a version mismatch, a
 denied access or an unknown schema must remain explicit; do not silently proceed
 with a substitute. Pure document lookup belongs to [openshift-docs](../openshift-docs/SKILL.md).

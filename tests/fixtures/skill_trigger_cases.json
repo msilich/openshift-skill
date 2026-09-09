@@ -1,4 +1,11 @@
 [
+  {"prompt": "Diagnose RHACS Sensor connection failures without changing the cluster.", "expected_skill": "openshift-acs"},
+  {"prompt": "Warum zeigt ACS keine Schwachstellen trotz veralteter Offline-Scanner-Daten?", "expected_skill": "openshift-acs"},
+  {"prompt": "Configure the optional read-only StackRox MCP for this Central.", "expected_skill": "openshift-acs"},
+  {"prompt": "Finde nur die lokale RHACS 4.11 REST-API-Dokumentation.", "expected_skill": "openshift-docs"},
+  {"prompt": "Find only the bundled RHACS policy API reference; do not operate Central.", "expected_skill": "openshift-docs"},
+  {"prompt": "Welche Felder bietet das Central-CR-Schema auf diesem Kubernetes-Cluster?", "expected_skill": "openshift-api"},
+  {"prompt": "Discover the served Kubernetes schema for SecuredCluster.spec.", "expected_skill": "openshift-api"},
   {"prompt": "Diagnose a Dev Spaces 3.29 workspace stuck Pending and inspect its PVC.", "expected_skill": "openshift-devspaces"},
   {"prompt": "Warum startet mein Dev-Spaces-Workspace nicht mit der internen Registry?", "expected_skill": "openshift-devspaces"},
   {"prompt": "Find only the bundled Dev Spaces 3.29 airgap installation documentation.", "expected_skill": "openshift-docs"},

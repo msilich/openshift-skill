@@ -2,7 +2,7 @@
 """
 Convert OpenShift AsciiDoc documentation to GitHub-Flavored Markdown.
 
-Local modification: resolve an explicit OpenShift enterprise or GitOps version branch
+Local modification: resolve an explicit OpenShift enterprise, GitOps or RHACS version branch
 when the source distro map is stale; reject unknown versions instead of
 silently substituting 4.17. See build.lock.json for upstream provenance.
 
@@ -89,6 +89,7 @@ def get_distro_attributes(distro_map: dict, distro: str, branch: str = "main") -
     version_pattern = {
         "openshift-enterprise": r"enterprise-(\d+\.\d+)",
         "openshift-gitops": r"gitops-docs-(\d+\.\d+)",
+        "openshift-acs": r"rhacs-docs-(\d+\.\d+)",
     }.get(distro)
     explicit_version = re.fullmatch(version_pattern, branch) if version_pattern else None
     if explicit_version:
@@ -296,6 +297,8 @@ def convert_file(
             else:
                 cmd_asciidoctor.extend(["-a", key])
 
+        if "openshift-acs" in attributes:
+            cmd_asciidoctor.extend(["-a", "data-uri!"])
         cmd_asciidoctor.append(str(source_path))
 
         result = subprocess.run(
@@ -311,6 +314,11 @@ def convert_file(
 
         # Step 1.5: Sanitize the DocBook XML (fix stray '<'/'>' in text)
         sanitize_docbook_xml(tmp_xml)
+
+        if "openshift-acs" in attributes:
+            from acs import render_topic
+            render_topic(Path(tmp_xml), dest_path, result.stderr, Path(source_dir))
+            return True, str(source_path), "OK"
 
         # Step 2: DocBook → GFM Markdown via pandoc
         cmd_pandoc = [

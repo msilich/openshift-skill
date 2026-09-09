@@ -1,0 +1,137 @@
+<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+
+Microsoft Sentinel is a security information and event management (SIEM) solution which acts on Red Hat Advanced Cluster Security for Kubernetes (RHACS) alerts and audit logs.
+
+<a id="viewing-the-log-analytics-to-detect-threats_integrate-with-sentinel"></a>
+
+# Viewing the log analytics to detect threats
+
+By creating a Microsoft Sentinel integration, you can view the log analytics to detect threats.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have created a data collection rule and a log analytics workspace on Microsoft Azure.
+
+- You have configured a service principal with a client secret, client certificate, or managed identity. The service principal or managed identity requires the `Monitoring Metrics Publisher` over a scope that includes all Sentinel resources.
+
+- You have created a log analytics schema by using the `TimeGenerated` and `msg` fields in JSON format.
+
+  > [!IMPORTANT]
+  > You need to create separate log analytics tables for audit logs and alerts, and both data sources use the same schema.
+
+  - To create a schema, upload the following content to Microsoft Sentinel:
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example JSON
+
+    </div>
+
+    ``` json
+    {
+     "TimeGenerated": "2024-09-03T10:56:58.5010069Z", #
+     "msg": {  #
+       "id": "1abe30d1-fa3a-xxxx-xxxx-781f0a12228a", #
+       "policy" : {}
+     }
+    }
+    ```
+
+    </div>
+
+    where:
+
+    `TimeGenerated`  
+    Specifies the timestamp for the alert.
+
+    `msg`  
+    Specifies the message details.
+
+    `id`  
+    Specifies the payload of the message, either alert or audit log.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In the RHACS portal, click **Platform Configuration** → **Integrations**.
+
+2.  Scroll down to the **Notifier Integrations** section, and then click **Microsoft Sentinel**.
+
+3.  To create a new integration, click **New integration**.
+
+4.  In the **Create integration** page, provide the following information:
+
+    - **Integration name**: Specify a name for the integration.
+
+    - **Log ingestion endpoint**: Enter the data collection endpoint. You can find the endpoint in the Microsoft Azure portal.
+
+      For more information, see [Data collection rules (DCRs) in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview) (Microsoft Azure documentation).
+
+    - **Directory tenant ID**: Enter your unique tenant ID within the Microsoft Azure cloud infrastructure. You can find the tenant ID in the Microsoft Azure portal.
+
+      For more information, see [Find tenant name and tenant ID in Azure Active Directory B2C](https://learn.microsoft.com/en-us/azure/active-directory-b2c/tenant-management-read-tenant-name) (Microsoft Azure documentation).
+
+    - **Application client ID**: Enter the client ID which uniquely identifies the specific application registered within your AAD that needs access to resources. You can find the client ID in the Microsoft Entra portal for the service principal you have created.
+
+      For more information, see [Register applications](https://learn.microsoft.com/en-us/security/zero-trust/develop/app-registration) (Microsoft Azure documentation).
+
+    - Choose the appropriate authentication method:
+
+      - If you want to use a secret, enter the secret value. You can find the secret in the Microsoft Azure portal.
+
+      - If you want to use a client certificate, enter the client certificate and private key. You can find the certificate ID and private key in the Microsoft Azure portal.
+
+      - If you want to use an Azure managed identity, select the **Use workload identity** checkbox.
+
+        For more information, see [The new App registrations experience for Azure Active Directory B2C](https://learn.microsoft.com/en-us/azure/active-directory-b2c/app-registrations-training-guide) (Microsoft Azure documentation).
+
+    - Optional: Choose the appropriate method to configure the data collection rule configuration:
+
+      - Select the **Enable alert DCR** checkbox, if you want to enable the alert data collection rule configuration.
+
+        To create an alert data collection rule, enter the alert data collection rule stream name and ID. You can find the stream name and ID in the Microsoft Azure portal.
+
+      - Select the **Enable audit log DCR** checkbox, if you want to enable audit data collection rule configuration.
+
+        To create an audit data collection rule, enter the stream name and ID. You can find the stream name and ID in the Microsoft Azure portal.
+
+        For more information, see [Data collection rules (DCRs) in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview) (Microsoft Azure documentation).
+
+5.  Optional: To test the new integration, click **Test**.
+
+6.  To save the new integration, click **Save**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  In the RHACS portal, click **Platform Configuration** → **Integrations**.
+
+2.  Scroll down to the **Notifier Integrations** section, and then click **Microsoft Sentinel**.
+
+3.  In the **Integrations Microsoft Sentinel** page, verify that the new integration has been created.
+
+4.  Verify that the messages receive the correct log tables in your log analytics workspace.
+
+</div>

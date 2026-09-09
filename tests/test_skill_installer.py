@@ -11,7 +11,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 NAMES = (
     "openshift-api", "openshift-docs", "openshift-mcp", "openshift-troubleshooting",
-    "openshift-disconnected", "openshift-gitops", "openshift-upgrade", "openshift-backup-restore", "openshift-devspaces",
+    "openshift-disconnected", "openshift-gitops", "openshift-upgrade", "openshift-backup-restore", "openshift-devspaces", "openshift-acs",
 )
 
 

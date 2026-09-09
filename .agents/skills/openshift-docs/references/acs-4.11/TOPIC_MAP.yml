@@ -1,0 +1,808 @@
+# This configuration file dictates the organization of the topic groups and
+# topics on the main page of the doc site for this branch. Each record
+# consists of the following:
+#
+# ---                                  <= Record delimiter
+# Name: Origin of the Species          <= Display name of topic group
+# Dir:  origin_of_the_species          <= Directory name of topic group
+# Topics:
+#   - Name: The Majestic Marmoset      <= Topic name
+#     File: the_majestic_marmoset      <= Topic file under group dir +/-
+#   - Name: The Curious Crocodile      <= Topic 2 name
+#     File: the_curious_crocodile      <= Topic 2 file
+#   - Name: The Numerous Nematodes     <= Sub-topic group name
+#     Dir: the_numerous_nematodes      <= Sub-topic group dir
+#     Topics:
+#       - Name: The Wily Worm          <= Sub-topic name
+#         File: the_wily_worm          <= Sub-topic file under <group dir>/<subtopic dir>
+#       - Name: The Acrobatic Ascarid  <= Sub-topic 2 name
+#         File: the_acrobatic_ascarid  <= Sub-topic 2 file under <group dir>/<subtopic dir>
+#
+# The ordering of the records in this document determines the ordering of the
+# topic groups and topics on the main page.
+
+---
+Name: About
+Dir: welcome
+Distros: openshift-acs
+Topics:
+- Name: Welcome
+  File: index
+---
+Name: Release notes
+Dir: release_notes
+Distros: openshift-acs
+Topics:
+- Name: Red Hat Advanced Cluster Security for Kubernetes 4.11
+  File: 411-release-notes
+---
+Name: RHACS Cloud Service
+Dir: cloud_service
+Distros: openshift-acs
+Topics:
+- Name: Service description
+  File: rhacs-cloud-service-service-description
+- Name: Overview of responsibilities for RHACS Cloud Service
+  File: acs-cloud-responsibility-matrix
+- Name: RHACS Cloud Service architecture
+  File: acscs-architecture
+- Name: Getting started with RHACS Cloud Service
+  File: getting-started-rhacs-cloud-ocp
+- Name: Default resource requirements for RHACS Cloud Service
+  File: acscs-default-requirements
+- Name: Recommended resource requirements for RHACS Cloud Service
+  File: acscs-recommended-requirements
+- Name: Setting up RHACS Cloud Service with Red Hat OpenShift secured clusters
+  Dir: installing_cloud_ocp
+  Distros: openshift-acs
+  Topics:
+  - Name: Creating a RHACS Cloud Service instance on Red Hat Cloud
+    File: cloud-create-instance-ocp
+  - Name: Creating a project on your Red Hat OpenShift secured cluster
+    File: cloud-ocp-create-project
+  - Name: Generating a cluster registration secret or init bundle for secured clusters
+    File: init-bundle-cloud-ocp-generate
+  - Name: Applying a cluster registration secret or init bundle for secured clusters
+    File: init-bundle-cloud-ocp-apply
+  - Name: Installing the RHACS Operator for RHACS Cloud Service
+    File: cloud-install-operator
+  - Name: Installing secured cluster services from RHACS Cloud Service
+    File: install-secured-cluster-cloud-ocp
+  - Name: Configuring the proxy for secured cluster services in RHACS Cloud Service
+    File: configuring-the-proxy-for-secured-cluster-services-in-rhacs-cloud-service
+  - Name: Verifying installation of secured clusters
+    File: verify-installation-cloud-ocp
+- Name: Setting up RHACS Cloud Service with Kubernetes secured clusters
+  Dir: installing_cloud_other
+  Distros: openshift-acs
+  Topics:
+  - Name: Creating a RHACS Cloud Service instance for Kubernetes clusters
+    File: cloud-create-instance-other
+  - Name: Generating a cluster registration secret or init bundle for Kubernetes secured clusters
+    File: init-bundle-cloud-other-generate
+  - Name: Applying a cluster registration secret or init bundle for Kubernetes secured clusters
+    File: init-bundle-cloud-other-apply
+  - Name: Installing secured cluster services from RHACS Cloud Service on Kubernetes clusters
+    File: install-secured-cluster-cloud-other
+  - Name: Verifying installation of secured clusters
+    File: verify-installation-cloud-other
+- Name: Upgrading RHACS Cloud Service
+  Dir: upgrading-cloud
+  Distros: openshift-acs
+  Topics:
+  - Name: Upgrading secured clusters in RHACS Cloud Service by using the Operator
+    File: upgrade-cloudsvc-operator
+  - Name: Upgrading secured clusters in RHACS Cloud Service by using Helm charts
+    File: upgrade-cloudsvc-helm
+  - Name: Upgrading secured clusters in RHACS Cloud Service by using the roxctl CLI
+    File: upgrade-cloudsvc-roxctl
+---
+Name: Architecture
+Dir: architecture
+Distros: openshift-acs
+Topics:
+- Name: RHACS architecture
+  File: acs-architecture
+---
+Name: Installing
+Dir: installing
+Distros: openshift-acs
+Topics:
+- Name: High-level RHACS installation overview
+  File: acs-high-level-overview
+  Distros: openshift-acs
+- Name: Default resource requirements for RHACS
+  File: acs-default-requirements
+  Distros: openshift-acs
+- Name: Recommended resource requirements for RHACS
+  File: acs-recommended-requirements
+  Distros: openshift-acs
+- Name: Installing RHACS on Red Hat OpenShift
+  Dir: installing_ocp
+  Distros: openshift-acs
+  Topics:
+  - Name: Installing Central services for RHACS on Red Hat OpenShift
+    File: install-central-ocp
+  - Name: Configuring Central configuration options for RHACS using the Operator
+    File: install-central-config-options-ocp
+  - Name: Generating and applying a cluster registration secret or init bundle for RHACS on Red Hat OpenShift
+    File: init-bundle-ocp
+  - Name: Installing Secured Cluster services for RHACS on Red Hat OpenShift
+    File: install-secured-cluster-ocp
+  - Name: Configuring Secured Cluster services options for RHACS using the Operator
+    File: install-secured-cluster-config-options-ocp
+  - Name: Verifying installation of RHACS on Red Hat OpenShift
+    File: verify-installation-rhacs-ocp
+- Name: Installing RHACS on other platforms
+  Dir: installing_other
+  Distros: openshift-acs
+  Topics:
+  - Name: High-level overview of installing RHACS on other platforms
+    File: install-rhacs-other
+  - Name: Installing Central services for RHACS on other platforms
+    File: install-central-other
+  - Name: Generating and applying a cluster registration secret or init bundle for RHACS on other platforms
+    File: init-bundle-other
+  - Name: Installing Secured Cluster services for RHACS on other platforms
+    File: install-secured-cluster-other
+  - Name: Verifying installation of RHACS on other platforms
+    File: verify-installation-rhacs-other
+- Name: Uninstalling Red Hat Advanced Cluster Security for Kubernetes
+  File: uninstall-acs
+---
+Name: Configuring
+Dir: configuration
+Distros: openshift-acs
+Topics:
+- Name: Adding custom certificates
+  File: add-custom-certificates
+- Name: Adding trusted certificate authorities
+  File: add-trusted-ca
+- Name: Internal certificate authority rotation for RHACS
+  File: internal-certificate-authority-rotation-for-rhacs
+- Name: Reissuing internal certificates
+  File: reissue-internal-certificates
+- Name: Adding security notices
+  File: add-security-notices
+- Name: Customizing platform components
+  File: customizing-platform-components
+- Name: Enabling offline mode
+  File: enable-offline-mode
+- Name: Enabling alert data retention
+  File: enable-alert-data-retention
+- Name: Exposing the RHACS portal over HTTP
+  File: expose-portal-over-http
+- Name: Configuring automatic upgrades for manifest-installed secured clusters
+  File: configure-automatic-upgrades
+- Name: Configuring automatic removal of nonactive clusters
+  File: configure-inactive-cluster-deletion
+- Name: Configuring a proxy for external network access
+  File: configure-proxy
+- Name: Generating a diagnostic bundle
+  File: generate-diagnostic-bundle
+- Name: Configuring endpoints
+  File: configure-endpoints
+- Name: Monitoring
+  File: monitor-acs
+- Name: Enabling audit logging
+  File: configure-audit-logging
+- Name: Configuring API tokens
+  File: configure-api-token
+- Name: Using RHACS with GitOps
+  File: using-rhacs-with-gitops
+- Name: Using declarative configuration
+  File: declarative-configuration-using
+- Name: Inviting users to your RHACS instance
+  File: inviting-users-to-your-rhacs-instance
+- Name: Managing preview features
+  File: managing-preview-features
+- Name: Configuring and integrating the RHACS plugin with Red Hat Developer Hub
+  File: configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub
+- Name: Accessing vulnerability information in the OpenShift Container Platform web console
+  File: accessing-vulnerability-information-in-web-console
+---
+Name: Operating
+Dir: operating
+Distros: openshift-acs
+Topics:
+- Name: Viewing the dashboard
+  File: view-dashboard
+- Name: Using Compliance Operator with RHACS
+  File: compliance-operator-rhacs
+- Name: Managing compliance
+  Dir: manage-compliance
+  Topics:
+  - Name: Compliance feature overview
+    File: compliance-feature-overview
+  - Name: Using OpenShift compliance
+    File: using-openshift-compliance
+- Name: Evaluating security risks
+  File: evaluate-security-risks
+- Name: Using policies to provide security
+  Dir: manage_security_policies
+  Distros: openshift-acs
+  Topics:
+  - Name: About policies in RHACS
+    File: about-security-policies
+  - Name: Using admission controller enforcement
+    File: use-admission-controller-enforcement
+  - Name: Configuring file activity monitoring
+    File: configuring-file-activity-monitoring
+  - Name: Creating and modifying security policies
+    File: custom-security-policies
+  - Name: Managing policies as code
+    File: managing-policies-as-code
+  - Name: Security policy reference
+    File: security-policy-reference
+- Name: Managing network policies
+  File: manage-network-policies
+- Name: Build-time network policy tools
+  File: build-time-network-policy-tools
+- Name: Visualizing external entities
+  File: visualizing-external-entities
+- Name: Using Collector runtime configuration
+  File: using-collector-runtime-configuration
+- Name: Auditing listening endpoints
+  File: audit-listening-endpoints
+- Name: Reviewing cluster configuration
+  File: review-cluster-configuration
+- Name: Examining images for vulnerabilities
+  File: examine-images-for-vulnerabilities
+- Name: Verifying image signatures
+  File: verify-image-signatures
+- Name: Managing vulnerabilities
+  Dir: manage-vulnerabilities
+  Topics:
+  - Name: Vulnerability management overview
+    File: vulnerability-management
+  - Name: Viewing and addressing vulnerabilities
+    File: common-vuln-management-tasks
+  - Name: Vulnerability reporting
+    File: vulnerability-reporting
+  - Name: Using the vulnerability management dashboard (deprecated)
+    File: vulnerability-management-dashboard
+  - Name: Scanning RHCOS node hosts
+    File: scan-rhcos-node-host
+  - Name: Generating SBOMs from scanned images
+    File: scanner-generate-sbom
+- Name: Responding to violations
+  File: respond-to-violations
+- Name: Using deployment collections
+  File: create-use-collections
+- Name: Searching and filtering
+  File: search-filter
+- Name: Managing user access
+  Dir: manage-user-access
+  Topics:
+  - Name: Managing RBAC in Red Hat Advanced Cluster Security for Kubernetes
+    File: manage-role-based-access-control-3630
+  - Name: Enabling PKI authentication
+    File: enable-pki-authentication
+  - Name: Understanding authentication providers
+    File: understanding-authentication-providers
+  - Name: Configuring identity providers
+    Dir: configuring-identity-providers
+    Topics:
+    - Name: Configuring Okta Identity Cloud as a SAML 2.0 identity provider
+      File: configure-okta-identity-cloud
+    - Name: Configuring Google Workspace as an OIDC identity provider
+      File: configure-google-workspace-identity
+    - Name: Configuring OpenShift Container Platform OAuth server as an identity provider
+      File: configure-ocp-oauth
+    - Name: Connecting Azure AD to RHACS using SSO configuration
+      File: connecting-azure-ad-to-rhacs-using-sso-configuration
+  - Name: Removing the admin user
+    File: remove-admin-user
+  - Name: Configuring short-lived access
+    File: configure-short-lived-access
+  - Name: Understanding multi-tenancy
+    File: understanding-multi-tenancy
+- Name: Using the system health dashboard
+  File: use-system-health-dashboard
+- Name: Using the administration events page
+  File: using-the-administration-events-page
+---
+Name: Integrating
+Dir: integration
+Distros: openshift-acs
+Topics:
+- Name: Integrating with image registries
+  File: integrate-with-image-registries
+- Name: Integrating with CI systems
+  File: integrate-with-ci-systems
+- Name: Integrating with PagerDuty
+  File: integrate-with-pagerduty
+- Name: Integrating with Slack
+  File: integrate-with-slack
+- Name: Integrating by using generic webhooks
+  File: integrate-using-generic-webhooks
+- Name: Integrating with QRadar
+  File: integrate-with-qradar
+- Name: Integrating with ServiceNow
+  File: integrate-with-servicenow
+- Name: Integrating with Sumo Logic
+  File: integrate-with-sumologic
+- Name: Integrating with Google Cloud Storage
+  File: integrate-with-google-cloud-storage
+- Name: Integrating by using the syslog protocol
+  File: integrate-using-syslog-protocol
+- Name: Integrating with Amazon S3
+  File: integrate-with-amazon-s3
+- Name: Integrating with S3 API compatible services
+  File: integrate-with-s3-api-compatible-services
+- Name: Integrating with Google Cloud Security Command Center
+  File: integrate-with-google-cloud-scc
+- Name: Integrating with Splunk
+  File: integrate-with-splunk
+- Name: Integrating with image vulnerability scanners
+  File: integrate-with-image-vulnerability-scanners
+- Name: Integrating with Jira
+  File: integrate-with-jira
+- Name: Integrating with email
+  File: integrate-with-email
+- Name: Integrating with cloud management platforms
+  File: integrate-with-cloud-management-platforms
+- Name: Integrating using short-lived tokens
+  File: integrate-using-short-lived-tokens
+- Name: Integrating with Microsoft Sentinel notifier
+  File: integrating-with-microsoft-sentinel-notifier
+---
+Name: Backup and restore
+Dir: backup_and_restore
+Distros: openshift-acs
+Topics:
+- Name: Backing up Red Hat Advanced Cluster Security for Kubernetes
+  File: backing-up-acs
+- Name: Restoring from a backup
+  File: restore-acs
+---
+Name: Upgrading
+Dir: upgrading
+Distros: openshift-acs
+Topics:
+- Name: Upgrading using the Operator
+  File: upgrade-operator
+- Name: Upgrading using Helm charts
+  File: upgrade-helm
+- Name: Upgrading using the roxctl CLI
+  File: upgrade-roxctl
+---
+Name: roxctl CLI
+Dir: cli
+Distros: openshift-acs
+Topics:
+- Name: Installing the roxctl CLI
+  File: installing-the-roxctl-cli
+- Name: Using the roxctl CLI
+  File: using-the-roxctl-cli
+- Name: Managing secured clusters
+  File: managing-secured-clusters
+- Name: Checking policy compliance
+  File: checking-policy-compliance
+- Name: Debugging issues
+  File: debugging-issues
+- Name: Image scanning by using the roxctl CLI
+  File: image-scanning-by-using-the-roxctl-cli
+- Name: roxctl CLI command reference
+  Dir: command-reference
+  Topics:
+  - Name: roxctl
+    File: roxctl
+  - Name: roxctl central
+    File: roxctl-central
+  - Name: roxctl cluster
+    File: roxctl-cluster
+  - Name: roxctl collector
+    File: roxctl-collector
+  - Name: roxctl completion
+    File: roxctl-completion
+  - Name: roxctl declarative-config
+    File: roxctl-declarative-config
+  - Name: roxctl deployment
+    File: roxctl-deployment
+  - Name: roxctl helm
+    File: roxctl-helm
+  - Name: roxctl image
+    File: roxctl-image
+  - Name: roxctl netpol
+    File: roxctl-netpol
+  - Name: roxctl scanner
+    File: roxctl-scanner
+  - Name: roxctl sensor
+    File: roxctl-sensor
+  - Name: roxctl version
+    File: roxctl-version
+---
+Name: Troubleshooting Collector
+Dir: troubleshooting
+Distros: openshift-acs
+Topics:
+- Name: Retrieving and analyzing the Collector logs and pod status
+  File: retrieving-and-analyzing-the-collector-logs-and-pod-status
+- Name: Commonly occurring error conditions
+  File: commonly-occurring-error-conditions
+---
+Name: Troubleshooting Central
+Dir: troubleshooting_central
+Distros: openshift-acs
+Topics:
+- Name: Backing up Central database by using the roxctl CLI
+  File: backing-up-central-database-by-using-the-roxctl-cli
+- Name: Restoring Central database by using the roxctl CLI
+  File: restoring-central-database-by-using-the-roxctl-cli
+---
+Name: Telemetry
+Dir: telemetry
+Distros: openshift-acs
+Topics:
+- Name: About Telemetry
+  File: about-telemetry
+- Name: Opting out of Telemetry
+  File: opting-out-of-telemetry
+---
+Name: Support
+Dir: support
+Distros: openshift-acs
+Topics:
+- Name: Getting support for Red Hat Advanced Cluster Security for Kubernetes
+  File: getting-support
+---
+Name: API reference
+Dir: rest_api
+Distros: openshift-acs
+Topics:
+  - Name: Administration Event Service
+    Dir: AdministrationEventService
+    Topics:
+    - Name: 'Administration Event Service'
+      File: AdministrationEventService
+  - Name: Administration Usage Service
+    Dir: AdministrationUsageService
+    Topics:
+    - Name: 'Administration Usage Service'
+      File: AdministrationUsageService
+  - Name: Alert Service
+    Dir: AlertService
+    Topics:
+    - Name: 'Alert Service'
+      File: AlertService
+  - Name: APIToken Service
+    Dir: APITokenService
+    Topics:
+    - Name: 'A P I Token Service'
+      File: APITokenService
+  - Name: Auth Provider Service
+    Dir: AuthProviderService
+    Topics:
+    - Name: 'Auth Provider Service'
+      File: AuthProviderService
+  - Name: Auth Service
+    Dir: AuthService
+    Topics:
+    - Name: 'Auth Service'
+      File: AuthService
+  - Name: Base Image Service V2
+    Dir: BaseImageServiceV2
+    Topics:
+    - Name: 'Base Image Service V2'
+      File: BaseImageServiceV2
+  - Name: Central Health Service
+    Dir: CentralHealthService
+    Topics:
+    - Name: 'Central Health Service'
+      File: CentralHealthService
+  - Name: Cloud Sources Service
+    Dir: CloudSourcesService
+    Topics:
+    - Name: 'Cloud Sources Service'
+      File: CloudSourcesService
+  - Name: Cluster CVEService
+    Dir: ClusterCVEService
+    Topics:
+    - Name: 'Cluster C V E Service'
+      File: ClusterCVEService
+  - Name: Cluster Init Service
+    Dir: ClusterInitService
+    Topics:
+    - Name: 'Cluster Init Service'
+      File: ClusterInitService
+  - Name: Clusters Service
+    Dir: ClustersService
+    Topics:
+    - Name: 'Clusters Service'
+      File: ClustersService
+  - Name: Collection Service
+    Dir: CollectionService
+    Topics:
+    - Name: 'Collection Service'
+      File: CollectionService
+  - Name: Compliance Integration Service
+    Dir: ComplianceIntegrationService
+    Topics:
+    - Name: 'Compliance Integration Service'
+      File: ComplianceIntegrationService
+  - Name: Compliance Management Service
+    Dir: ComplianceManagementService
+    Topics:
+    - Name: 'Compliance Management Service'
+      File: ComplianceManagementService
+  - Name: Compliance Profile Service
+    Dir: ComplianceProfileService
+    Topics:
+    - Name: 'Compliance Profile Service'
+      File: ComplianceProfileService
+  - Name: Compliance Results Service
+    Dir: ComplianceResultsService
+    Topics:
+    - Name: 'Compliance Results Service'
+      File: ComplianceResultsService
+  - Name: Compliance Results Stats Service
+    Dir: ComplianceResultsStatsService
+    Topics:
+    - Name: 'Compliance Results Stats Service'
+      File: ComplianceResultsStatsService
+  - Name: Compliance Rule Service
+    Dir: ComplianceRuleService
+    Topics:
+    - Name: 'Compliance Rule Service'
+      File: ComplianceRuleService
+  - Name: Compliance Scan Configuration Service
+    Dir: ComplianceScanConfigurationService
+    Topics:
+    - Name: 'Compliance Scan Configuration Service'
+      File: ComplianceScanConfigurationService
+  - Name: Compliance Service
+    Dir: ComplianceService
+    Topics:
+    - Name: 'Compliance Service'
+      File: ComplianceService
+  - Name: Config Service
+    Dir: ConfigService
+    Topics:
+    - Name: 'Config Service'
+      File: ConfigService
+  - Name: Credential Expiry Service
+    Dir: CredentialExpiryService
+    Topics:
+    - Name: 'Credential Expiry Service'
+      File: CredentialExpiryService
+  - Name: DBService
+    Dir: DBService
+    Topics:
+    - Name: 'D B Service'
+      File: DBService
+  - Name: Debug Service
+    Dir: DebugService
+    Topics:
+    - Name: 'Debug Service'
+      File: DebugService
+  - Name: Declarative Config Health Service
+    Dir: DeclarativeConfigHealthService
+    Topics:
+    - Name: 'Declarative Config Health Service'
+      File: DeclarativeConfigHealthService
+  - Name: Delegated Registry Config Service
+    Dir: DelegatedRegistryConfigService
+    Topics:
+    - Name: 'Delegated Registry Config Service'
+      File: DelegatedRegistryConfigService
+  - Name: Deployment Service
+    Dir: DeploymentService
+    Topics:
+    - Name: 'Deployment Service'
+      File: DeploymentService
+  - Name: Detection Service
+    Dir: DetectionService
+    Topics:
+    - Name: 'Detection Service'
+      File: DetectionService
+  - Name: Discovered Clusters Service
+    Dir: DiscoveredClustersService
+    Topics:
+    - Name: 'Discovered Clusters Service'
+      File: DiscoveredClustersService
+  - Name: External Backup Service
+    Dir: ExternalBackupService
+    Topics:
+    - Name: 'External Backup Service'
+      File: ExternalBackupService
+  - Name: Feature Flag Service
+    Dir: FeatureFlagService
+    Topics:
+    - Name: 'Feature Flag Service'
+      File: FeatureFlagService
+  - Name: Group Service
+    Dir: GroupService
+    Topics:
+    - Name: 'Group Service'
+      File: GroupService
+  - Name: GRPCPreferences Service
+    Dir: GRPCPreferencesService
+    Topics:
+    - Name: 'G R P C Preferences Service'
+      File: GRPCPreferencesService
+  - Name: Image Integration Service
+    Dir: ImageIntegrationService
+    Topics:
+    - Name: 'Image Integration Service'
+      File: ImageIntegrationService
+  - Name: Image Service
+    Dir: ImageService
+    Topics:
+    - Name: 'Image Service'
+      File: ImageService
+  - Name: Integration Health Service
+    Dir: IntegrationHealthService
+    Topics:
+    - Name: 'Integration Health Service'
+      File: IntegrationHealthService
+  - Name: Listening Endpoints Service
+    Dir: ListeningEndpointsService
+    Topics:
+    - Name: 'Listening Endpoints Service'
+      File: ListeningEndpointsService
+  - Name: Metadata Service
+    Dir: MetadataService
+    Topics:
+    - Name: 'Metadata Service'
+      File: MetadataService
+  - Name: Mitre Attack Service
+    Dir: MitreAttackService
+    Topics:
+    - Name: 'Mitre Attack Service'
+      File: MitreAttackService
+  - Name: Namespace Service
+    Dir: NamespaceService
+    Topics:
+    - Name: 'Namespace Service'
+      File: NamespaceService
+  - Name: Network Baseline Service
+    Dir: NetworkBaselineService
+    Topics:
+    - Name: 'Network Baseline Service'
+      File: NetworkBaselineService
+  - Name: Network Graph Service
+    Dir: NetworkGraphService
+    Topics:
+    - Name: 'Network Graph Service'
+      File: NetworkGraphService
+  - Name: Network Policy Service
+    Dir: NetworkPolicyService
+    Topics:
+    - Name: 'Network Policy Service'
+      File: NetworkPolicyService
+  - Name: Node CVEService
+    Dir: NodeCVEService
+    Topics:
+    - Name: 'Node C V E Service'
+      File: NodeCVEService
+  - Name: Node Service
+    Dir: NodeService
+    Topics:
+    - Name: 'Node Service'
+      File: NodeService
+  - Name: Notifier Service
+    Dir: NotifierService
+    Topics:
+    - Name: 'Notifier Service'
+      File: NotifierService
+  - Name: Ping Service
+    Dir: PingService
+    Topics:
+    - Name: 'Ping Service'
+      File: PingService
+  - Name: Pod Service
+    Dir: PodService
+    Topics:
+    - Name: 'Pod Service'
+      File: PodService
+  - Name: Policy Category Service
+    Dir: PolicyCategoryService
+    Topics:
+    - Name: 'Policy Category Service'
+      File: PolicyCategoryService
+  - Name: Policy Service
+    Dir: PolicyService
+    Topics:
+    - Name: 'Policy Service'
+      File: PolicyService
+  - Name: Probe Upload Service
+    Dir: ProbeUploadService
+    Topics:
+    - Name: 'Probe Upload Service'
+      File: ProbeUploadService
+  - Name: Process Baseline Service
+    Dir: ProcessBaselineService
+    Topics:
+    - Name: 'Process Baseline Service'
+      File: ProcessBaselineService
+  - Name: Process Service
+    Dir: ProcessService
+    Topics:
+    - Name: 'Process Service'
+      File: ProcessService
+  - Name: Rbac Service
+    Dir: RbacService
+    Topics:
+    - Name: 'Rbac Service'
+      File: RbacService
+  - Name: Report Configuration Service
+    Dir: ReportConfigurationService
+    Topics:
+    - Name: 'Report Configuration Service'
+      File: ReportConfigurationService
+  - Name: Report Service
+    Dir: ReportService
+    Topics:
+    - Name: 'Report Service'
+      File: ReportService
+  - Name: Role Service
+    Dir: RoleService
+    Topics:
+    - Name: 'Role Service'
+      File: RoleService
+  - Name: Search Service
+    Dir: SearchService
+    Topics:
+    - Name: 'Search Service'
+      File: SearchService
+  - Name: Secret Service
+    Dir: SecretService
+    Topics:
+    - Name: 'Secret Service'
+      File: SecretService
+  - Name: Sensor Upgrade Service
+    Dir: SensorUpgradeService
+    Topics:
+    - Name: 'Sensor Upgrade Service'
+      File: SensorUpgradeService
+  - Name: Service Account Service
+    Dir: ServiceAccountService
+    Topics:
+    - Name: 'Service Account Service'
+      File: ServiceAccountService
+  - Name: Service Identity Service
+    Dir: ServiceIdentityService
+    Topics:
+    - Name: 'Service Identity Service'
+      File: ServiceIdentityService
+  - Name: Signature Integration Service
+    Dir: SignatureIntegrationService
+    Topics:
+    - Name: 'Signature Integration Service'
+      File: SignatureIntegrationService
+  - Name: Telemetry Service
+    Dir: TelemetryService
+    Topics:
+    - Name: 'Telemetry Service'
+      File: TelemetryService
+  - Name: User Service
+    Dir: UserService
+    Topics:
+    - Name: 'User Service'
+      File: UserService
+  - Name: Virtual Machine Service
+    Dir: VirtualMachineService
+    Topics:
+    - Name: 'Virtual Machine Service'
+      File: VirtualMachineService
+  - Name: Virtual Machine V2Service
+    Dir: VirtualMachineV2Service
+    Topics:
+    - Name: 'Virtual Machine V2 Service'
+      File: VirtualMachineV2Service
+  - Name: Vulnerability Exception Service
+    Dir: VulnerabilityExceptionService
+    Topics:
+    - Name: 'Vulnerability Exception Service'
+      File: VulnerabilityExceptionService
+  - Name: Vuln Mgmt Service
+    Dir: VulnMgmtService
+    Topics:
+    - Name: 'Vuln Mgmt Service'
+      File: VulnMgmtService
+  - Name: Common Object Reference
+    Dir: CommonObjectReference
+    Topics:
+    - Name: 'Common Object Reference'
+      File: CommonObjectReference

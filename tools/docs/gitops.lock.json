@@ -7,9 +7,9 @@
       "license_file": "LICENSE.agentic-skills",
       "path": "documentation/openshift-docs/convert.py",
       "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
-      "sha256": "498468d67bbb9c0e05c8b0df77b807a1d56277bf0ed54801150ab21c2a32efd8",
+      "sha256": "33ee0162e18d1df7920c9d0514528cb78c2a8348fb514738b56852d84345ddbf",
       "modifications": [
-        "Resolve product versions from explicit enterprise-X.Y and gitops-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions."
+        "Resolve product versions from explicit enterprise-X.Y, gitops-docs-X.Y and rhacs-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions. RHACS-only rendering preserves anchors and validates code/table content via acs.py; other distributions retain their original conversion path."
       ],
       "url": "https://github.com/openshift/agentic-skills"
     },

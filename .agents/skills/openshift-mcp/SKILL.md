@@ -13,6 +13,7 @@ Use [openshift-troubleshooting](../openshift-troubleshooting/SKILL.md) for live 
 [openshift-upgrade](../openshift-upgrade/SKILL.md) for cluster updates, and
 [openshift-backup-restore](../openshift-backup-restore/SKILL.md) for data protection,
 and [openshift-devspaces](../openshift-devspaces/SKILL.md) for Dev Spaces platform and workspace operations.
+Use [openshift-acs](../openshift-acs/SKILL.md) for RHACS operations, Central API workflows and optional StackRox MCP setup.
 Those skills load [the shared domain contract](references/domain-contract.md)
 and this skill for execution. Keep connection/bootstrap tasks here.
 

@@ -11,6 +11,23 @@
     "notes": "Skills are text assets; adapt paths and revalidate binaries on other supported OpenCode platforms."
   },
   "sources": {
+    "openshift_acs_docs": {
+      "version": "4.11",
+      "branch": "rhacs-docs-4.11",
+      "commit": "e516555e0cb6bcc6ba88c423e88c8dd054532425",
+      "url": "https://github.com/openshift/openshift-docs",
+      "license": "Apache-2.0",
+      "build_lock": "tools/docs/acs.lock.json"
+    },
+    "stackrox_mcp": {
+      "commit": "57264356341b0f5a6aa3cb3b31da33dcb3307104",
+      "url": "https://github.com/stackrox/stackrox-mcp",
+      "license": "Apache-2.0",
+      "status": "Developer Preview",
+      "transport": "stdio",
+      "auth_type": "static",
+      "read_only_tools": true
+    },
     "devspaces_docs": {
       "version": "3.29",
       "url": "https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29",

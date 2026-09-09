@@ -113,6 +113,10 @@ def verify_converter(lock: dict[str, object]) -> None:
     expected = str(converter["sha256"])
     if actual != expected:
         raise RuntimeError(f"converter checksum mismatch: expected {expected}; found {actual}")
+    for filename, expected in lock.get("local_build_helpers", {}).items():
+        path = (TOOLS_DIR / filename).resolve()
+        if path.parent != TOOLS_DIR or sha256_file(path) != expected:
+            raise RuntimeError(f"build helper checksum mismatch: {filename}")
 
 
 def document_definition(lock: dict) -> dict:
@@ -344,6 +348,9 @@ def main() -> int:
             )
 
         post_process(staged_output, definition["product"])
+        if definition["distro"] == "openshift-acs":
+            from acs import finish_snapshot
+            finish_snapshot(staged_output, source_dir)
         print(f"Verified {verify_local_links(staged_output)} local Markdown links")
         shutil.copy2(source_dir / "LICENSE", staged_output / "LICENSE.openshift-docs")
         shutil.copy2(CONVERTER_LICENSE_PATH, staged_output / "LICENSE.agentic-skills")
@@ -370,6 +377,15 @@ def main() -> int:
             markdown_files,
             manifest_sha256,
         )
+        if definition["distro"] == "openshift-acs":
+            metadata_path = staged_output / "SOURCE.json"
+            metadata = json.loads(metadata_path.read_text())
+            metadata["conversion"]["quality_report"] = "CONVERSION.json"
+            metadata["conversion"]["local_build_helpers"] = lock["local_build_helpers"]
+            metadata["integrity"]["asset_manifest"] = json.loads((staged_output / "CONVERSION.json").read_text())["image_sha256"]
+            metadata["integrity"]["conversion_report_sha256"] = sha256_file(staged_output / "CONVERSION.json")
+            metadata["conversion"]["modifications"].append("RHACS-only: retain explicit anchors, verify code/table round trips, bundle images and record missing source links/fragments and external references in CONVERSION.json.")
+            metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
         replace_output(staged_output, output_dir, definition)
     finally:
         shutil.rmtree(staging_root, ignore_errors=True)

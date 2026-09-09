@@ -19,7 +19,7 @@ workspace. A running pod alone does not demonstrate that a workspace or IDE work
 4. For cluster operations load [openshift-mcp](../openshift-mcp/SKILL.md); verify
    served resources and fields with [openshift-api](../openshift-api/SKILL.md).
 
-Install all nine skills as sibling directories. Resolve paths from this file.
+Install all ten skills as sibling directories. Resolve paths from this file.
 Use [openshift-docs](../openshift-docs/SKILL.md) for pure document lookup. Documentation
 3.29 does not establish compatibility with either bundled OCP version: compare the
 installed Dev Spaces, Dev Workspace Operator and OCP versions with local support

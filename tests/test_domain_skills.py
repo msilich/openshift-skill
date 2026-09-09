@@ -38,7 +38,7 @@ class DomainBundleTest(unittest.TestCase):
             unrelated.mkdir()
             for name in SKILL_NAMES:
                 for path in (installed / name).rglob("*.md"):
-                    if any(part in str(path) for part in ("/references/ocp-", "/references/gitops-1.21/", "/references/devspaces-3.29/")):
+                    if any(part in str(path) for part in ("/references/ocp-", "/references/gitops-1.21/", "/references/devspaces-3.29/", "/references/acs-4.11/")):
                         continue  # Generated snapshots have their own manifest/link test.
                     for target in re.findall(r"\[[^]]*\]\(([^)]+)\)", path.read_text()):
                         local = target.split("#")[0]
@@ -48,7 +48,7 @@ class DomainBundleTest(unittest.TestCase):
                         self.assertTrue(resolved.is_relative_to(installed.resolve()), (path, target))
                         self.assertTrue(resolved.exists(), (path, target))
             script = installed / "openshift-docs/scripts/search_docs.py"
-            for product, query in (("ocp", "ingress"), ("gitops", "ApplicationSet"), ("devspaces", "CheCluster")):
+            for product, query in (("ocp", "ingress"), ("gitops", "ApplicationSet"), ("devspaces", "CheCluster"), ("acs", "Scanner")):
                 result = subprocess.run([sys.executable, str(script), query, "--product", product,
                                          "--max-results", "2"], cwd=unrelated, capture_output=True, text=True)
                 self.assertEqual(result.returncode, 0, result.stderr)
@@ -67,13 +67,15 @@ class DomainBundleTest(unittest.TestCase):
             text = (SKILLS_ROOT / name / "references/sources.md").read_text()
             if name == "openshift-devspaces":
                 self.assertIn(lock["sources"]["devspaces_docs"]["archive_sha256"], text)
+            elif name == "openshift-acs":
+                self.assertIn(lock["sources"]["openshift_acs_docs"]["commit"], text)
             else:
                 source = "openshift_gitops_docs" if name == "openshift-gitops" else "openshift_docs"
                 self.assertIn(lock["sources"][source]["commit"], text)
             self.assertIn("project-authored", text)
             self.assertIn("SOURCE.json", text)
 
-    def test_all_profiles_allow_nine_skills_without_new_readonly_writes(self):
+    def test_all_profiles_allow_ten_skills_without_new_readonly_writes(self):
         for filename in ("opencode.readonly.jsonc", "opencode.readonly-with-argocd.jsonc", "opencode.day2.jsonc"):
             config = load_jsonc(EXAMPLES / filename)
             for name in SKILL_NAMES:
@@ -92,7 +94,7 @@ class DomainBundleTest(unittest.TestCase):
                     "secret-choice", "image-pull", "service-endpoints", "blocking-pdb", "controller-drift",
                     "incomplete-backup", "day2-approval", "devspaces-pending-pvc", "devspaces-registry",
                     "devspaces-controller", "devspaces-version", "devspaces-secret", "devspaces-missing-tool",
-                    "devspaces-denied", "devspaces-schema", "devspaces-source"}
+                    "devspaces-denied", "devspaces-schema", "devspaces-source", "acs-stale-scanner"}
         self.assertEqual({case["id"] for case in CASES}, expected)
         self.assertEqual({case["skill"] for case in CASES}, set(DOMAINS))
         for case in CASES:

@@ -14,7 +14,7 @@ Correlate the Argo CD view with its destination cluster and declared Git source 
 3. Use [reconciliation.md](references/reconciliation.md) for applications and drift. Use [access-and-changes.md](references/access-and-changes.md) for repository access, TLS, RBAC and approved configuration changes.
 4. Use [openshift-api](../openshift-api/SKILL.md) to verify schemas and [openshift-mcp](../openshift-mcp/SKILL.md) to perform permitted operations.
 
-This skill depends on the other eight skills being installed as sibling directories.
+This skill depends on the other nine skills being installed as sibling directories.
 Resolve every path from this file. Missing documentation, a version mismatch, a
 denied access or an unknown schema must remain explicit; do not silently proceed
 with a substitute. Pure document lookup belongs to [openshift-docs](../openshift-docs/SKILL.md).

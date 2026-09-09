@@ -1,6 +1,6 @@
 ---
 name: openshift-docs
-description: Search the bundled official OCP 4.20, OpenShift GitOps 1.21 and Dev Spaces 3.29 documentation offline. Use for document lookup, procedure explanations and product-behavior questions. For live diagnosis, mirroring, GitOps reconciliation, Dev Spaces operations, updates or recovery, use the matching domain skill with this documentation as evidence.
+description: Search the bundled official OCP 4.20, OpenShift GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11 documentation offline. Use for document lookup, procedure explanations and product-behavior questions. For live diagnosis, mirroring, GitOps, Dev Spaces, ACS operations, updates or recovery, use the matching domain skill with this documentation as evidence.
 ---
 
 # OpenShift product documentation
@@ -20,9 +20,18 @@ they are not proof that the linked external information is available offline.
 
 Keep these boundaries explicit:
 
-- The snapshots cover OCP 4.20, GitOps 1.21 and Dev Spaces 3.29. State the limitation for another requested version. Bundling them together does not certify product compatibility.
+- The snapshots cover OCP 4.20, GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11. State the limitation for another requested version. Bundling them together does not certify product compatibility.
 - Documentation explains supported behavior; it does not prove the state of a live cluster.
 - When bundled documentation and the connected cluster disagree about a served API version, resource, or field, use live discovery through `openshift-api` as authoritative for that cluster and report the discrepancy.
 - Work offline. Do not fetch documentation, scripts, or dependencies from the network.
 - Treat examples from the documentation as examples. Adapt placeholders and verify prerequisites before suggesting execution.
 - Do not modify the bundled snapshot.
+
+For RHACS start with [the ACS 4.11 map](references/acs-4.11/AGENTS.md) and use
+`python3 <resolved-skill-directory>/scripts/search_docs.py "Scanner" --product acs`.
+Read only relevant chapters, including linked REST request/response models.
+Cite [ACS provenance](references/acs-4.11/SOURCE.json) and inspect
+[the conversion report](references/acs-4.11/CONVERSION.json) for source gaps,
+external references and fragment adjustments. Live Central API evidence is the
+authority for Central schemas; Kubernetes `oc explain` cannot substitute for it.
+Use openshift-acs for RHACS operations and optional StackRox MCP setup.

@@ -2,7 +2,7 @@
 
 ## What the automated tests establish
 
-`python3 -m unittest discover -s tests -v` validates nine skill definitions,
+`python3 -m unittest discover -s tests -v` validates ten skill definitions,
 source pins, both Markdown manifests, local links after a complete relocation,
 product selection, profile permission patterns, and the synthetic MCP/oc transport.
 The docs-build tests require the pinned PyYAML dependency. These are static and
@@ -22,6 +22,10 @@ images. Its second offline build must match the first content hash. This is form
 and integrity validation, not proof that all upstream product advice is correct.
 
 ## Scenario corpus
+
+ACS has additional [bilingual scenarios](fixtures/acs_scenarios.json), test-only
+Central/roxctl/MCP transports and [separate verification notes](ACS_EVALUATION.md).
+These are not model-selection, model-approval or live Central integration tests.
 
 [domain_scenarios.json](fixtures/domain_scenarios.json) supplies English and German
 prompts, synthetic observations, expected behavior and forbidden actions. It covers:
@@ -75,7 +79,7 @@ requested approval or showed the Secret warning. Review the transcript for those
 Use the pinned OpenCode runtime and the customer's internal Qwen endpoint. Do not
 download a model or contact a real cluster for these tests.
 
-1. Copy all nine skills to an isolated temporary project's `.agents/skills/`.
+1. Copy all ten skills to an isolated temporary project's `.agents/skills/`.
    Start from a dedicated configuration containing only the intended model/provider,
    the fake MCP below, and explicit read/grep/glob/skill/question permissions.
    Exclude inherited production MCP servers, kubeconfigs and shell permissions.
