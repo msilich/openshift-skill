@@ -8,7 +8,7 @@ To scale your OpenShift Container Platform cluster on Amazon Web Services (AWS) 
 
 - You have the JSON file and CloudFormation template that you used to create the compute machines during cluster installation. If you do not have these files, you must recreate them by following the instructions in the [installation procedure](../../installing/installing_aws/upi/installing-aws-user-infra.md#installing-aws-user-infra).
 
-# Adding more compute machines to your AWS cluster by using CloudFormation templates
+# Add more compute machines to your AWS cluster by using CloudFormation templates
 
 To scale your OpenShift Container Platform cluster on Amazon Web Services (AWS), you can add more compute machines by creating additional CloudFormation stacks from the sample templates that you used during installation.
 
@@ -66,7 +66,7 @@ Procedure
 
 </div>
 
-# Approving the certificate signing requests for your machines
+# Approve the certificate signing requests for your machines
 
 To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 
@@ -239,6 +239,6 @@ Procedure
     </div>
 
     > [!NOTE]
-    > You might need to wait a few minutes after approval of the server CSRs for the machines to change to the `Ready` status.
+    > You might need to wait a few minutes after approval of the server CSRs for the machines to reach the `Ready` status.
 
 </div>

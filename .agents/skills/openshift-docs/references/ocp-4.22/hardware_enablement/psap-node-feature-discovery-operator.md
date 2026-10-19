@@ -8,7 +8,7 @@ You can use the Node Feature Discovery Operator (NFD) to detect hardware feature
 
 The NFD Operator can be found on the OperatorHub by searching for “Node Feature Discovery”.
 
-# Installing the Node Feature Discovery Operator
+# Install the Node Feature Discovery Operator
 
 As a cluster administrator, you can install the NFD Operator by using the OpenShift Container Platform CLI or the web console. The Node Feature Discovery (NFD) Operator orchestrates all resources needed to run the NFD daemon set.
 
@@ -185,7 +185,7 @@ As a cluster administrator, you can create a `NodeFeatureDiscovery` CR by using 
 > [!NOTE]
 > Starting with version 4.12, the `operand.image` field in the `NodeFeatureDiscovery` CR is mandatory. If the NFD Operator is deployed by using Operator Lifecycle Manager (OLM), OLM automatically sets the `operand.image` field. If you create the `NodeFeatureDiscovery` CR by using the OpenShift Container Platform CLI or the OpenShift Container Platform web console, you must set the `operand.image` field explicitly.
 
-## Creating a NodeFeatureDiscovery CR by using the CLI
+## Create a NodeFeatureDiscovery CR by using the CLI
 
 Create a `NodeFeatureDiscovery` CR instance by using the OpenShift CLI (`oc`) to deploy the NFD operand and enable hardware feature detection on your cluster nodes.
 
@@ -589,7 +589,7 @@ Verification
 
 </div>
 
-## Creating a NodeFeatureDiscovery CR by using the web console
+## Create a NodeFeatureDiscovery CR by using the web console
 
 Create a `NodeFeatureDiscovery` CR by using the OpenShift Container Platform web console to deploy the NFD operand and enable hardware feature detection on your cluster nodes.
 
@@ -1113,7 +1113,7 @@ Procedure
 
 </div>
 
-# Using the NFD Topology Updater
+# Use the NFD Topology Updater
 
 Enable the NFD Topology Updater to detect allocated resources on worker nodes and report per-zone resource availability. This information helps the scheduler make topology-aware placement decisions for workloads that require specific NUMA node configurations.
 

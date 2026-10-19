@@ -15,9 +15,11 @@ For the Red Hat Enterprise Linux CoreOS (RHCOS) machines in your cluster, this 
 
 Because FIPS must be enabled before the operating system that your cluster uses boots for the first time, you cannot enable FIPS after you deploy a cluster.
 
-# Obtaining a FIPS-capable installation program using `oc adm extract`
+# Obtain a FIPS-capable installation program using `oc adm extract`
 
-You must get a FIPS-capable installation binary to install a OpenShift Container Platform cluster in FIPS mode. Extract the binary from the release image by using the OpenShift CLI (`oc`). After you get the binary, you must proceed with the cluster installation, replacing all instances of the `openshift-install` command with `openshift-install-fips`.
+To install a OpenShift Container Platform cluster in FIPS mode, extract the FIPS-capable installation binary from the release image by using the OpenShift CLI (`oc`).
+
+After you extract the binary, proceed with the cluster installation, replacing all instances of the `openshift-install` command with `openshift-install-fips`.
 
 <div>
 
@@ -70,9 +72,11 @@ Procedure
 
 - [Extracting the OpenShift Container Platform installation program](../installing_bare_metal/ipi/ipi-install-installation-workflow.md#retrieving-the-openshift-installer_ipi-install-installation-workflow)
 
-# Obtaining a FIPS-capable installation program using the public OpenShift mirror
+# Obtain a FIPS-capable installation program using the public OpenShift mirror
 
-OpenShift Container Platform requires the use of a FIPS-capable installation binary to install a cluster in FIPS mode. You can obtain this binary by downloading it from the public OpenShift mirror. After you have obtained the binary, proceed with the cluster installation, replacing all instances of the `openshift-install` binary with `openshift-install-fips`.
+To install a OpenShift Container Platform cluster in FIPS mode, download the FIPS-capable installation binary from the public OpenShift mirror.
+
+After you obtain the binary, proceed with the cluster installation, replacing all instances of the `openshift-install` binary with `openshift-install-fips`.
 
 <div>
 

@@ -20,7 +20,7 @@ Restore a workspace from a backup snapshot through the OpenShift Dev Spaces dash
 
     <figure>
     <br />
-    <img src="assets/0ca502de3ab93a0827e6.png" alt="Selecting the backup source during restoration" /><br />
+    <img src="assets/3d651f995687b9c8b009.png" alt="Selecting the backup source during restoration" /><br />
 
     <figcaption>Figure 1. Restore mode and backup source selection</figcaption>
     </figure>
@@ -28,7 +28,7 @@ Restore a workspace from a backup snapshot through the OpenShift Dev Spaces dash
 3.  Optional: Configure the memory limits, CPU limits, and the editor.
     <figure>
     <br />
-    <img src="assets/0f1e81022f34aad257a9.png" alt="Configuring resources and editors for a restored workspace" /><br />
+    <img src="assets/ecbcc03203bb1ba3900e.png" alt="Configuring resources and editors for a restored workspace" /><br />
 
     <figcaption>Figure 2. Resource limits and editor selection</figcaption>
     </figure>

@@ -135,6 +135,7 @@
   - [Installing a cluster on Google Cloud into an existing VPC](installing/installing_gcp/installing-gcp-vpc.md)
   - [Installing a cluster on Google Cloud into a shared VPC](installing/installing_gcp/installing-gcp-shared-vpc.md)
   - [Installing a private cluster on Google Cloud](installing/installing_gcp/installing-gcp-private.md)
+  - [Installing a cluster on Google Cloud Dedicated](installing/installing_gcp/installing-gcp-dedicated.md)
   - [Installing a cluster on Google Cloud using Infrastructure Manager templates](installing/installing_gcp/installing-gcp-user-infra.md)
   - [Installing a cluster into a shared VPC on Google Cloud using Infrastructure Manager templates](installing/installing_gcp/installing-gcp-user-infra-vpc.md)
   - [Installing a cluster on Google Cloud in a disconnected environment with user-provisioned infrastructure](installing/installing_gcp/installing-restricted-networks-gcp.md)
@@ -201,7 +202,7 @@
     - [Troubleshooting the installation](installing/installing_bare_metal/ipi/ipi-install-troubleshooting.md)
   - [Postinstallation configuration](installing/installing_bare_metal/bare-metal-postinstallation-configuration.md)
   - [Expanding the cluster](installing/installing_bare_metal/bare-metal-expanding-the-cluster.md)
-  - [Using Red Hat Bare Metal as a Service for OpenShift](installing/installing_bare_metal/bare-metal-using-bare-metal-as-a-service.md)
+  - [Using Red Hat Bare-Metal-as-a-Service for OpenShift](installing/installing_bare_metal/bare-metal-using-bare-metal-as-a-service.md)
 - **Installing IBM Cloud Bare Metal (Classic)**
   - [Prerequisites for IBM Cloud (Classic)](installing/installing_ibm_cloud_classic/install-ibm-cloud-prerequisites.md)
   - [Installation workflow for IBM Cloud Bare Metal (Classic)](installing/installing_ibm_cloud_classic/install-ibm-cloud-installation-workflow.md)
@@ -693,6 +694,15 @@
     - [Uninstalling the SR-IOV Operator](networking/networking_operators/sr-iov-operator/uninstalling-sriov-operator.md)
   - **DPU Operator**
     - [DPU Operator](networking/networking_operators/dpu-operator/dpu-operator.md)
+  - **NVIDIA DPF Operator**
+    - [NVIDIA DPF Operator release notes](networking/networking_operators/dpf_operator/dpf-release-notes.md)
+    - [About the NVIDIA DPF Operator](networking/networking_operators/dpf_operator/about-dpf-operator.md)
+    - [Set up the environment for DPF](networking/networking_operators/dpf_operator/dpf-environment-setup.md)
+    - [Install and configure the DPF Operator](networking/networking_operators/dpf_operator/dpf-operator-installation.md)
+    - [Provision the DPU hosted cluster](networking/networking_operators/dpf_operator/dpf-hosted-cluster-provisioning.md)
+    - [Add worker nodes and provision DPUs](networking/networking_operators/dpf_operator/dpf-worker-nodes-provisioning.md)
+    - [Validate traffic and configure telemetry](networking/networking_operators/dpf_operator/dpf-validation-telemetry.md)
+    - [Troubleshoot DPF](networking/networking_operators/dpf_operator/dpf-troubleshooting.md)
 - **Network Observability Operator**
   - [Network Observability Operator](networking/network_observability_operator/network-observability-operator.md)
 - **Network security**
@@ -790,13 +800,14 @@
     - [Patching existing ingress objects](networking/ingress_load_balancing/configuring_ingress_cluster_traffic/configuring-ingress-cluster-patch-fields.md)
     - [Configuring the Ingress Controller for manual DNS management](networking/ingress_load_balancing/configuring_ingress_cluster_traffic/ingress-controller-dnsmgt.md)
   - **Configuring Gateway API**
-    - [Understand Gateway API](networking/ingress_load_balancing/configuring_gateway_api/understand-gateway-api.md)
-    - [Enable Gateway API](networking/ingress_load_balancing/configuring_gateway_api/enable-gateway-api.md)
+    - [Understanding Gateway API](networking/ingress_load_balancing/configuring_gateway_api/understand-gateway-api.md)
+    - [Enabling Gateway API](networking/ingress_load_balancing/configuring_gateway_api/enable-gateway-api.md)
     - [Controlling incoming traffic with Gateway listeners](networking/ingress_load_balancing/configuring_gateway_api/controlling-incoming-traffic-gateway-listeners.md)
     - [Assigning network addresses to gateways](networking/ingress_load_balancing/configuring_gateway_api/assigning-network-addresses-gateways.md)
+    - [Configure DNS for gateways](networking/ingress_load_balancing/configuring_gateway_api/configure-dns-for-gateways.md)
     - [Routing HTTP requests to services](networking/ingress_load_balancing/configuring_gateway_api/routing-http-requests-to-services.md)
-    - [Securing HTTPRoutes](networking/ingress_load_balancing/configuring_gateway_api/securing-httproutes.md)
     - [Routing gRPC requests to services](networking/ingress_load_balancing/configuring_gateway_api/routing-grpc-requests-to-services.md)
+    - [Securing HTTPRoutes](networking/ingress_load_balancing/configuring_gateway_api/securing-httproutes.md)
     - [Verifying Gateway infrastructure status](networking/ingress_load_balancing/configuring_gateway_api/verifying-gateway-infrastructure-status.md)
   - [Load balancing on OpenStack](networking/ingress_load_balancing/load-balancing-openstack.md)
   - **Load balancing with MetalLB**
@@ -2064,18 +2075,14 @@
 - **Updating**
   - [Updating OpenShift Virtualization](virt/updating/upgrading-virt.md)
 - **Creating virtual machines**
+  - [Create virtual machines by using the web console](virt/creating_vm/virt-creating-vms-web.md)
   - [Creating virtual machines by using the CLI](virt/creating_vm/virt-creating-vms-from-cli.md)
-  - [Creating VMs by importing images from web pages](virt/creating_vm/virt-creating-vms-from-web-images.md)
-  - [Creating VMs by uploading images](virt/creating_vm/virt-creating-vms-uploading-images.md)
-  - [Creating VMs by using container disks](virt/creating_vm/virt-creating-vms-from-container-disks.md)
-  - [Creating VMs by cloning PVCs](virt/creating_vm/virt-creating-vms-by-cloning-pvcs.md)
   - [Configuring IBM Secure Execution virtual machines on IBM Z and IBM LinuxONE](virt/creating_vm/virt-configuring-ibm-secure-execution-vms-ibm-z.md)
   - [Creating AWS EC2 Windows License Included (LI) compliant VMs](virt/creating_vm/virt-creating-vms-aws-li-windows.md)
-  - [Creating VMs from instance types](virt/creating_vm/virt-creating-vms-from-instance-types.md)
-  - [Creating VMs from templates](virt/creating_vm/virt-creating-vms-from-templates.md)
-  - [Creating virtual machines from Red Hat images](virt/creating_vm/virt-creating-vms-from-rh-images-overview.md)
+  - [Instance types](virt/creating_vm/virt-creating-vms-from-instance-types.md)
+  - [Managing VM templates](virt/creating_vm/virt-creating-vms-from-templates.md)
+  - [Managing boot sources](virt/creating_vm/virt-creating-vms-from-rh-images-overview.md)
   - [Import a virtual machine image using the DataVolume API](virt/creating_vm/virt-import-dv-vms.md)
-  - [Cloning VMs](virt/creating_vm/virt-cloning-vms.md)
 - **Managing VMs**
   - [Listing virtual machines](virt/managing_vms/virt-list-vms.md)
   - [Install the QEMU guest agent](virt/managing_vms/virt-installing-qemu-guest-agent.md)
@@ -2159,7 +2166,6 @@
   - [Using preallocation for data volumes](virt/storage/virt-using-preallocation-for-datavolumes.md)
   - [Managing data volume annotations](virt/storage/virt-managing-data-volume-annotations.md)
   - [Understanding virtual machine storage with the CSI paradigm](virt/storage/virt-storage-with-csi-paradigm.md)
-  - [Using OpenShift Virtualization with IBM Fusion Access for SAN](virt/storage/install-configure-fusion-access-san.md)
 - **Live migration**
   - [About live migration](virt/live_migration/virt-about-live-migration.md)
   - [Configuring live migration](virt/live_migration/virt-configuring-live-migration.md)

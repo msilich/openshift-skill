@@ -32,7 +32,9 @@ After installation, you must edit the Image Registry Operator configuration to s
 
 # Image Registry Operator distribution across availability zones
 
-The default configuration of the Image Registry Operator spreads image registry pods across topology zones to prevent delayed recovery times in case of a complete zone failure where all pods are impacted. Reference the example YAML to understand the default parameter values that the Image Registry Operator uses when the Operator deploys with a zone-related topology constraint:
+The Image Registry Operator spreads image registry pods across topology zones by default to prevent delayed recovery times during a complete zone failure.
+
+The following example YAML shows the default topology constraint parameter values:
 
 ``` yaml
   topologySpreadConstraints:
@@ -183,9 +185,9 @@ You can configure the Image Registry Operator using the `configs.imageregistry.o
 </tbody>
 </table>
 
-# Enabling the Image Registry default route by using a CRD
+# Enable the Image Registry default route by using a CRD
 
-In OpenShift Container Platform, the `Registry` Operator controls the OpenShift image registry feature and you define this Operator in the `configs.imageregistry.operator.openshift.io` Custom Resource Definition (CRD). If you need to automatically enable the Image Registry default route, patch the Image Registry Operator CRD.
+In OpenShift Container Platform, the `Registry` Operator controls the OpenShift image registry feature by using the `configs.imageregistry.operator.openshift.io` CRD. Patch this CRD to automatically enable the Image Registry default route.
 
 <div>
 
@@ -203,7 +205,7 @@ Procedure
 
 </div>
 
-# Configuring additional trust stores for image registry access
+# Configure additional trust stores for image registry access
 
 You can add references to a config map that has additional certificate authorities (CAs) to be trusted during image registry access to the `image.config.openshift.io/cluster` custom resource (CR).
 
@@ -283,7 +285,7 @@ Procedure
 
 </div>
 
-# Configuring storage credentials for the Image Registry Operator
+# Configure storage credentials for the Image Registry Operator
 
 In addition to the `configs.imageregistry.operator.openshift.io` Custom Resource (CR) and ConfigMap resources, storage credential configuration is provided to the Operator by a separate secret resource. This resource is located within the `openshift-image-registry` namespace.
 

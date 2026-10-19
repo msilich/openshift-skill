@@ -33,7 +33,7 @@ The role scope allows you to have the same level of access as a given role filte
 
 - `role:<cluster-role name>:<namespace or * for all>:!` - This is similar to the example above, except that including the bang causes this scope to allow escalating access.
 
-# Adding unauthenticated groups to cluster roles
+# Add unauthenticated groups to cluster roles
 
 Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 

@@ -377,14 +377,14 @@ Supported access modes for persistent volumes
 
 Volumes can be found in one of the following phases:
 
-\+ .Volume phases
-
 | Phase | Description |
 |----|----|
 | Available | A free resource not yet bound to a claim. |
 | Bound | The volume is bound to a claim. |
 | Released | The claim was deleted, but the resource is not yet reclaimed by the cluster. |
 | Failed | The volume has failed its automatic reclamation. |
+
+Volume phases
 
 Last phase transition time
 The `LastPhaseTransitionTime` field has a timestamp that updates every time a persistent volume (PV) transitions to a different phase (`pv.Status.Phase`). To find the time of the last phase transition for a PV, run the following command:
@@ -518,11 +518,11 @@ status:
 
 - `storageClassName`: Specifies the name of the `StorageClass` required by the claim.
 
-## Volume Attributes Classes
+# Volume Attributes Classes
 
 Volume Attributes Classes enable dynamic modification of storage performance, such as IOPS and throughput, on persistent volume claims without re-provisioning or downtime. Administrators define classes representing quality-of-service levels, and users apply them for on-demand performance tuning.
 
-### Volume Attributes Classes Limitations
+## Volume Attributes Classes Limitations
 
 Volume Attributes Classes have the following limitations:
 
@@ -538,7 +538,7 @@ Volume Attributes Classes have the following limitations:
 
 - Volume Attributes Class parameters cannot be edited. If you need to change Volume Attributes Class parameters, create a new Volume Attributes Class with the desired parameters, and then apply it to a PVC.
 
-### Defining Volume Attributes Classes
+## Defining Volume Attributes Classes
 
 When defining Volume Attributes Classes, you must verify supported parameters with your storage provider and explicitly declare all parameters in every Volume Attributes Classes definition.
 
@@ -623,7 +623,7 @@ parameters:
 
 - `driverName`: Specifies the provisioner that determines what volume plugin is used for provisioning persistent volumes (PVs). In this example, it is "pd.csi.storage.gke.io" for GPC PD.
 
-### Applying a Volume Attributes Class to a PVC
+## Applying a Volume Attributes Class to a PVC
 
 Apply a Volume Attributes Class to a new or existing persistent volume claim (PVC) by setting the `volumeAttributesClassName` parameter to dynamically configure storage attributes, such as performance tiers without recreating the volume.
 
@@ -661,7 +661,7 @@ Procedure
 
 </div>
 
-### Deleting Volume Attributes Classes
+## Deleting Volume Attributes Classes
 
 Delete a Volume Attributes Class that is no longer needed by first removing or reassigning all persistent volume claims (PVCs) that reference it, since a Volume Attributes Class cannot be deleted while it is still in use.
 
@@ -741,7 +741,7 @@ Procedure
 
 </div>
 
-## Block volume support
+# Block volume support
 
 Raw block volumes are filesystem-free storage that applications access directly for improved performance. Specify `volumeMode: Block` in persistent volumes and claims, and configure privileged containers. Storage provider support varies: static only, dynamic only, both, or none.
 
@@ -776,7 +776,7 @@ Block volume support
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
-### Block volume examples
+## Block volume examples
 
 Raw block volume examples demonstrate configurations for applications requiring direct access to block storage devices without a filesystem. This approach is commonly used by databases and other applications that need low-level storage control, bypassing traditional filesystem layers.
 
@@ -906,7 +906,7 @@ Binding scenarios for block volumes
 > [!IMPORTANT]
 > Unspecified values result in the default value of `Filesystem`.
 
-## Reduce pod timeouts by using fsGroup
+# Reduce pod timeouts by using fsGroup
 
 To reduce pod timeouts when using a storage volume with many files, configure the `fsGroup` field. By specifying this field, you can manage how file ownership and permissions are applied, preventing delays caused by the default recursive permission changes on large volumes.
 
@@ -923,7 +923,7 @@ This can occur because, by default, OpenShift Container Platform recursively cha
 
 You can set `fsGroupChangePolicy` at either the namespace or pod level.
 
-### Changing fsGroup at the namespace level
+## Changing fsGroup at the namespace level
 
 You can change `fsGroupChangePolicy` at the namespace level to establish a default permission-change behavior for all pods in that namespace, reducing per-pod configuration overhead.
 
@@ -1005,7 +1005,7 @@ Verification
 
 </div>
 
-### Changing fsGroup at the pod level
+## Changing fsGroup at the pod level
 
 You can set `fsGroupChangePolicy` parameter in new or existing deployments and stateful sets, and then the pods that it manages will have this parameter value. You cannot edit `fsGroupChangePolicy` on an existing pod; however, you can set this parameter when creating a new pod.
 
@@ -1086,7 +1086,7 @@ Procedure
 
 </div>
 
-## Reducing pod timeouts using seLinuxChangePolicy
+# Reducing pod timeouts using seLinuxChangePolicy
 
 The SELinux mount option applies security contexts during mount without recursive relabeling, reducing pod startup times on volumes with many files. This optimization is enabled by default for ReadWriteOncePod volumes and will become the default for ReadWriteOnce and ReadWriteMany volumes.
 
@@ -1096,13 +1096,13 @@ When a pod starts, the container runtime recursively relabels all files on a vol
 
 Mount option specifies avoiding recursive relabeling of all files by attempting to mount the volume with the correct SELinux label directly using the -o context mount option, thus helping to avoid pod timeout problems.
 
-### RWOP and SELinux mount option
+## RWOP and SELinux mount option
 
 ReadWriteOncePod (RWOP) persistent volumes use the SELinux mount feature by default.
 
 The mount option feature is driver dependent, and enabled by default in AWS EBS , Azure Disk, GCP PD, IBM Cloud Block Storage volume, Cinder, vSphere, and Red Hat OpenShift Data Foundation. For third-party drivers, contact your storage vendor.
 
-### RWO and RWX and SELinux mount option
+## RWO and RWX and SELinux mount option
 
 ReadWriteOnce (RWO) and ReadWriteMany (RWX) volumes use recursive relabeling by default.
 
@@ -1127,7 +1127,7 @@ Additional resources
 
 </div>
 
-### Testing the RWO and RWX and SELinux mount option feature
+## Testing the RWO and RWX and SELinux mount option feature
 
 The SELinux mount option applies the correct security context during mount without recursive relabeling, reducing pod startup times on volumes with many files. In OpenShift Container Platform 4.21, you can evaluate the mount option feature for RWO and RWX volumes as a Technology Preview feature.
 
@@ -1176,11 +1176,11 @@ Additional resources
 
 </div>
 
-### Opting out of the SELinux mount option default
+## Opting out of the SELinux mount option default
 
 If you want to opt out of the future move to mount option as default, you can affirmatively set the `seLinuxChangePolicy` parameter to `Recursive` at either the individual pod or namespace level.
 
-#### Changing seLinuxChangePolicy at the namespace level
+### Changing seLinuxChangePolicy at the namespace level
 
 Configure `seLinuxChangePolicy` to `Recursive` at the namespace level to opt out of the SELinux mount option default for all pods in that namespace. This setting applies automatically to new pods while allowing pod-level overrides when workloads require different SELinux relabeling behavior.
 
@@ -1250,7 +1250,7 @@ Procedure
 
 </div>
 
-#### Changing seLinuxChangePolicy at the pod level
+### Changing seLinuxChangePolicy at the pod level
 
 Set `seLinuxChangePolicy` to `Recursive` at the pod level to override namespace defaults or opt out of the SELinux mount option default for specific workloads.
 
@@ -1309,6 +1309,6 @@ Procedure
 
 </div>
 
-## Additional resources
+# Additional resources
 
 - [Enabling features using feature gates](../nodes/clusters/nodes-cluster-enabling-features.md#nodes-cluster-enabling-features)

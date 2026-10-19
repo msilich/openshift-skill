@@ -20,11 +20,11 @@ To install Central, first install the Operator. Then, use the Operator to instal
 
 ## Operator annotations used during installation
 
-RHACS uses annotations attached to the custom resource (CR) so that for installations performed by using the Operator, the Operator determines the default values for certain configuration items at runtime based on the current environment, allowing the previously configured value of an item to persist.
+RHACS uses annotations attached to the custom resource (CR) so that for installations performed by using the Operator, the Operator decides the default values for certain configuration items at runtime based on the current environment, allowing a value that you configured before to persist.
 
-For some configuration items, using a static default value for the installation is not ideal. Beginning with RHACS version 4.8, the Operator can add annotations, attaching them to the CR that you apply to clusters. These annotations allow a default decision that the Operator made before to persist and reapply in the future, even if the default behavior for a fresh installation has changed. In summary, RHACS uses annotations to persist runtime defaults. This means that the Operator determines the default value for a certain configuration setting at runtime.
+For some configuration items, using a static default value for the installation is not ideal. Beginning with RHACS version 4.8, the Operator can add annotations attached to the CR that you apply to clusters. These annotations allow a default decision that the Operator made before to persist, and the Operator can reapply the decision in the future, even if the default behavior for a fresh installation has changed. In summary, RHACS uses annotations to persist runtime defaults. This means that the Operator decides the default value for a certain configuration setting at runtime.
 
-For example, in release 4.8 and later, if a value is not specified for enabling Scanner V4, the default behavior is to enable Scanner V4. However, if you configure a value in the CR, such as `disable`, then RHACS uses that value. In the Scanner V4 example, Scanner V4 disabled by default in version 4.7; when updating to version 4.8 by using the Operator, that disabled setting persists and Scanner V4 remains disabled.
+For example, in release 4.8 and later, if a value is not specified for enabling Scanner V4, the default behavior is to enable Scanner V4. However, if you configure a value in the CR, such as `disable`, then RHACS uses that value. In the Scanner V4 example, version 4.7 disabled Scanner V4 by default; when you update to version 4.8 by using the Operator, the disabled setting persists and Scanner V4 remains disabled.
 
 Annotations are in the form `feature-defaults.platform.stackrox.io/<identifier>`. For example, `feature-defaults.platform.stackrox.io/scannerV4` is the annotation that allows the Operator to keep the default Scanner V4 enablement toggle stable during updating to RHACS version 4.8.
 
@@ -108,7 +108,7 @@ Additional resources
 
 </div>
 
-- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix](https://access.redhat.com/articles/7045053)
+- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053)
 
 - [Red Hat Advanced Cluster Security for Kubernetes Support Policy](https://access.redhat.com/support/policy/updates/rhacs)
 
@@ -316,7 +316,7 @@ Additional resources
 
 </div>
 
-- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix](https://access.redhat.com/articles/7045053)
+- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053)
 
 - [Red Hat Advanced Cluster Security for Kubernetes Support Policy](https://access.redhat.com/support/policy/updates/rhacs)
 
@@ -563,9 +563,9 @@ Additional resources
 
 </div>
 
-- [Database Scope of Coverage](https://access.redhat.com/articles/7045053#database-scope-of-coverage-7)
+- [Database Scope of Coverage (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053#database-scope-of-coverage-7)
 
-- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix](https://access.redhat.com/articles/7045053)
+- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053)
 
 - [Requirements for using an external database](../acs-default-requirements.md#default-requirements-central-services_acs-default-requirements)
 
@@ -1779,7 +1779,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Linux/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Linux/roxctl${arch}"
     ```
 
 3.  Make the `roxctl` binary executable:
@@ -1840,7 +1840,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Darwin/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Darwin/roxctl${arch}"
     ```
 
 3.  Remove all extended attributes from the binary:
@@ -1901,7 +1901,7 @@ Procedure
 - Download the `roxctl` CLI:
 
   ``` terminal
-  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Windows/roxctl.exe
+  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Windows/roxctl.exe
   ```
 
 </div>

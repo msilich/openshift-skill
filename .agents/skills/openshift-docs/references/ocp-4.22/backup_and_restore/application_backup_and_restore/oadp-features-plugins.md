@@ -192,7 +192,7 @@ Federal Information Processing Standards (FIPS) are a set of computer security s
 
 OpenShift API for Data Protection (OADP) has been tested and works on FIPS-enabled OpenShift Container Platform clusters.
 
-# Avoiding the Velero plugin panic error
+# Avoid the Velero plugin panic error
 
 Label a custom Backup Storage Location (BSL) to resolve Velero plugin panic errors during `imagestream` backups. This helps you to ensure the OADP controller creates the required registry secret when you manage the BSL outside the `DataProtectionApplication` (DPA) CR.
 

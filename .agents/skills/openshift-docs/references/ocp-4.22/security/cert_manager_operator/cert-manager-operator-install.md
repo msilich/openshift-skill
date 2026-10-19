@@ -7,7 +7,7 @@ The cert-manager Operator for Red Hat OpenShift sets the `features.operators.ope
 > [!IMPORTANT]
 > The cert-manager Operator for Red Hat OpenShift version 1.15 or later supports the `AllNamespaces`, `SingleNamespace`, and `OwnNamespace` installation modes. Earlier versions, such as 1.14, support only the `SingleNamespace` and `OwnNamespace` installation modes.
 
-# Installing the cert-manager Operator for Red Hat OpenShift by using the web console
+# Install the cert-manager Operator for Red Hat OpenShift by using the web console
 
 You can use the web console to install the cert-manager Operator for Red Hat OpenShift.
 
@@ -106,7 +106,7 @@ Verification
 
 </div>
 
-# Installing the cert-manager Operator for Red Hat OpenShift by using the CLI
+# Install the cert-manager Operator for Red Hat OpenShift by using the CLI
 
 You can install the cert-manager Operator for Red Hat OpenShift by using the command-line interface (CLI).
 
@@ -307,7 +307,7 @@ Additional resources
 
 </div>
 
-# Understanding update channels of the cert-manager Operator for Red Hat OpenShift
+# Understand update channels of the cert-manager Operator for Red Hat OpenShift
 
 Update channels are the mechanism by which you can declare the version of your cert-manager Operator for Red Hat OpenShift in your cluster. The cert-manager Operator for Red Hat OpenShift offers the following update channels:
 

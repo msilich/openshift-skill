@@ -76,9 +76,9 @@ You can set one of the following VPA modes by using a `VerticalPodAutoscaler` CR
 
 ## About the in-place-or-recreate mode
 
-The Vertical Pod Autoscaler Operator (VPA) contains an optional `InPlaceOrRecreate` mode. This mode instructs the VPA to attempt to perform an *in-place pod resize* when updating CPU or memory resources, where the VPA first attempts to update the resources in a running pod without recreating the pod. If an in-place resize is not possible, the VPA falls back to the `Recreate` mode and restarts the pod in order to update the resources.
+The Vertical Pod Autoscaler Operator (VPA) contains an optional `InPlaceOrRecreate` mode. This mode instructs the VPA to attempt to perform an *in-place pod resize* when updating CPU or memory resources, where the VPA first attempts to update the resources in a running pod without recreating the pod.
 
-When in `InPlaceOrRecreate` mode, the VPA falls back to always recreating pods in the following scenarios:
+If an in-place resize is not possible, the VPA falls back to the `Recreate` mode and restarts the pod in order to update the resources. When in `InPlaceOrRecreate` mode, the VPA falls back to always recreating pods in the following scenarios:
 
 - The in-place update is considered *infeasible* for reasons including the following reasons:
 
@@ -102,7 +102,7 @@ If a container in a pod has a `RestartContainer` container resize policy, which 
 
 For more information on in-place updates, see "Adjust pod resource levels without pod disruption".
 
-# Installing the Vertical Pod Autoscaler Operator
+# Install the Vertical Pod Autoscaler Operator
 
 You can install the Vertical Pod Autoscaler Operator (VPA) by using the OpenShift Container Platform web console.
 
@@ -183,7 +183,7 @@ Verification
 
 </div>
 
-# Moving the Vertical Pod Autoscaler Operator components
+# Move the Vertical Pod Autoscaler Operator components
 
 You can move the VPA Operator and component pods to infrastructure or worker nodes by adding a node selector to the VPA subscription and the `VerticalPodAutoscalerController` CR.
 
@@ -1201,7 +1201,7 @@ spec:
 
 </div>
 
-## Using an alternative recommender
+## Use an alternative recommender
 
 You can use your own recommender to autoscale based on your own algorithms. If you do not specify an alternative recommender, OpenShift Container Platform uses the default recommender, which suggests CPU and memory requests based on historical usage.
 
@@ -1395,7 +1395,7 @@ Procedure
 
 </div>
 
-# Using the Vertical Pod Autoscaler Operator
+# Use the Vertical Pod Autoscaler Operator
 
 You can use the Vertical Pod Autoscaler Operator (VPA) to help you maintain the optimal CPU and memory usage for your pods by creating a VPA custom resource (CR). The CR indicates the pods to analyze and determines the actions for the VPA to take with those pods.
 
@@ -1675,7 +1675,7 @@ spec:
 
 </div>
 
-# Uninstalling the Vertical Pod Autoscaler Operator
+# Uninstall the Vertical Pod Autoscaler Operator
 
 You can remove the Vertical Pod Autoscaler Operator (VPA) from your OpenShift Container Platform cluster.
 

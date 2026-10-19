@@ -85,7 +85,7 @@ spec:
 
 </div>
 
-# Using a virtual function in DPDK mode with an Intel NIC
+# Use a virtual function in DPDK mode with an Intel NIC
 
 You can use a virtual function (VF) in Data Plane Development Kit (DPDK) mode with an Intel NIC by creating a `SriovNetworkNodePolicy` object and then deploying a pod.
 
@@ -255,7 +255,7 @@ Procedure
 
 </div>
 
-# Using a virtual function in DPDK mode with a Mellanox NIC
+# Use a virtual function in DPDK mode with a Mellanox NIC
 
 You can create a network node policy and create a Data Plane Development Kit (DPDK) pod by using a virtual function in DPDK mode with a Mellanox NIC.
 
@@ -432,9 +432,9 @@ Procedure
 
 </div>
 
-# Using the TAP CNI to run a rootless DPDK workload with kernel access
+# Use the TAP CNI to run a rootless DPDK workload with kernel access
 
-DPDK applications can use `virtio-user` as an exception path to inject certain types of packets, such as log messages, into the kernel for processing. For more information about this feature, see [Virtio_user as Exception Path](https://doc.dpdk.org/guides/howto/virtio_user_as_exception_path.html).
+DPDK applications can use `virtio-user` as an exception path to inject certain types of packets, such as log messages, into the kernel for processing.
 
 In OpenShift Container Platform version 4.14 and later, you can use non-privileged pods to run DPDK applications alongside the tap CNI plugin. To enable this functionality, you need to mount the `vhost-net` device by setting the `needVhostNet` parameter to `true` within the `SriovNetworkNodePolicy` object.
 
@@ -721,6 +721,8 @@ Additional resources
 
 </div>
 
+- [Virtio_user as Exception Path (DPDK documentation)](https://doc.dpdk.org/guides/howto/virtio_user_as_exception_path.html)
+
 - [Creating a performance profile](../../scalability_and_performance/cnf-tuning-low-latency-nodes-with-perf-profile.md#cnf-create-performance-profiles_cnf-tuning-low-latency-nodes-with-perf-profile)
 
 - [Configuring an SR-IOV network device](configuring-sriov-device.md#configuring-sriov-device)
@@ -760,7 +762,7 @@ The following diagram shows the components of a DPDK test environment:
 
 - **worker 0** and **worker 1**: OpenShift Container Platform nodes.
 
-# Using SR-IOV and the Node Tuning Operator to achieve a DPDK line rate
+# Use SR-IOV and the Node Tuning Operator to achieve a DPDK line rate
 
 You can use the Node Tuning Operator to configure isolated CPUs, hugepages, and a topology scheduler. You can then use the Node Tuning Operator with Single Root I/O Virtualization (SR-IOV) to achieve a specific Data Plane Development Kit (DPDK) line rate.
 
@@ -1101,7 +1103,7 @@ dpdk-testpmd -l ${CPU} -a ${PCIDEVICE_OPENSHIFT_IO_DPDK_NIC_1} -a ${PCIDEVICE_OP
 
 This example uses two different `sriovNetwork` CRs. The environment variable contains the Virtual Function (VF) PCI address that was allocated for the pod. If you use the same network in the pod definition, you must split the `pciAddress`. It is important to configure the correct MAC addresses of the traffic generator. This example uses custom MAC addresses.
 
-# Using a virtual function in RDMA mode with a Mellanox NIC
+# Use a virtual function in RDMA mode with a Mellanox NIC
 
 > [!IMPORTANT]
 > RDMA over Converged Ethernet (RoCE) is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.

@@ -18,7 +18,7 @@ Each container performs a distinct security and routing function. The security g
 
 <figure>
 <br />
-<img src="assets/9d127d569f33754a9cac.png" alt="Gateway interactions" /><br />
+<img src="assets/58bb3b017b32d6656b88.png" alt="Gateway interactions" /><br />
 
 <figcaption>Figure 1. OpenShift Dev Spaces gateway interactions with other components</figcaption>
 </figure>

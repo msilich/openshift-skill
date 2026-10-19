@@ -2,11 +2,47 @@
 
 OpenShift Container Platform includes a built-in OAuth server that you can use as an authentication provider for Red Hat Advanced Cluster Security for Kubernetes (RHACS).
 
+<a id="configure-ocp-oauth-requirements-notes_configure-ocp-oauth"></a>
+
+# Requirements and configuration notes
+
+Before configuring OpenShift Container Platform OAuth server as an identity provider, review the following requirements and important configuration notes.
+
+<div class="important">
+
+<div class="title">
+
+</div>
+
+- If you use a custom TLS certificate for OpenShift Container Platform OAuth server, you must add the root certificate of the CA to Red Hat Advanced Cluster Security for Kubernetes as a trusted root CA. Otherwise, Central cannot connect to the OpenShift Container Platform OAuth server.
+
+- To enable the OpenShift Container Platform OAuth server integration when installing Red Hat Advanced Cluster Security for Kubernetes using the `roxctl` CLI, set the `ROX_ENABLE_OPENSHIFT_AUTH` environment variable to `true` in Central:
+
+  ``` terminal
+  $ oc -n stackrox set env deploy/central ROX_ENABLE_OPENSHIFT_AUTH=true
+  ```
+
+- For access rules, the OpenShift Container Platform OAuth server does not return the key `Email`.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Adding trusted certificate authorities](../../../configuration/add-trusted-ca.md)
+
+</div>
+
 <a id="configure-ocp-oauth-identity-provider_configure-ocp-oauth"></a>
 
 # Configuring OpenShift Container Platform OAuth server as an identity provider
 
-To integrate the built-in OpenShift Container Platform OAuth server as an identity provider for RHACS, use the instructions in this section.
+To integrate the built-in OpenShift Container Platform OAuth server as an identity provider for RHACS, complete the following procedure.
 
 <div>
 
@@ -18,7 +54,7 @@ Prerequisites
 
 - You must have the `Access` permission to configure identity providers in RHACS.
 
-- You must have already configured users and groups in OpenShift Container Platform OAuth server through an identity provider. For information about the identity provider requirements, see [Understanding identity provider configuration](https://docs.openshift.com/container-platform/4.9/authentication/understanding-identity-provider.html).
+- You must have already configured users and groups in OpenShift Container Platform OAuth server through an identity provider. For information about the identity provider requirements, see "Understanding identity provider configuration".
 
 </div>
 
@@ -65,31 +101,13 @@ Procedure
 
     - `uid`: `12345-00aa-1234-123b-123fcdef1234`
 
-    You can add a rule for this administrator role using one of the following steps:
+    You can add a rule for this administrator role by using one of the following steps:
 
     - To configure a rule for a name, select `name` from the **Key** drop-down list, enter `administrator` in the **Value** field, then select **Administrator** under **Role**.
 
     - To configure a rule for a group, select `groups` from the **Key** drop-down list, enter `myAdministratorsGroup` in the **Value** field, then select **Admin** under **Role**.
 
     - To configure a rule for a user name, select `userid` from the **Key** drop-down list, enter `12345-00aa-1234-123b-123fcdef1234` in the **Value** field, then select **Admin** under **Role**.
-
-</div>
-
-<div class="important">
-
-<div class="title">
-
-</div>
-
-- If you use a custom TLS certificate for OpenShift Container Platform OAuth server, you must add the root certificate of the CA to Red Hat Advanced Cluster Security for Kubernetes as a trusted root CA. Otherwise, Central cannot connect to the OpenShift Container Platform OAuth server.
-
-- To enable the OpenShift Container Platform OAuth server integration when installing Red Hat Advanced Cluster Security for Kubernetes using the `roxctl` CLI, set the `ROX_ENABLE_OPENSHIFT_AUTH` environment variable to `true` in Central:
-
-  ``` terminal
-  $ oc -n stackrox set env deploy/central ROX_ENABLE_OPENSHIFT_AUTH=true
-  ```
-
-- For access rules, the OpenShift Container Platform OAuth server does not return the key `Email`.
 
 </div>
 
@@ -101,9 +119,9 @@ Additional resources
 
 </div>
 
-- [Configuring an LDAP identity provider](https://docs.openshift.com/container-platform/4.12/authentication/identity_providers/configuring-ldap-identity-provider.html)
+- [Understanding identity provider configuration](https://docs.openshift.com/container-platform/4.9/authentication/understanding-identity-provider.html)
 
-- [Adding trusted certificate authorities](../../../configuration/add-trusted-ca.md)
+- [Configuring an LDAP identity provider](https://docs.openshift.com/container-platform/4.12/authentication/identity_providers/configuring-ldap-identity-provider.html)
 
 </div>
 
@@ -121,7 +139,7 @@ Prerequisites
 
 </div>
 
-- You must have configured [Service accounts as OAuth clients](https://docs.openshift.com/container-platform/4.12/authentication/using-service-accounts-as-oauth-client.html#service-accounts-as-oauth-clients_using-service-accounts-as-oauth-client) for your OpenShift Container Platform OAuth server.
+- You must have configured service accounts as OAuth clients for your OpenShift Container Platform OAuth server.
 
 </div>
 
@@ -135,7 +153,7 @@ Procedure
 
 - If you installed RHACS using the RHACS Operator:
 
-  1.  Create a `CENTRAL_ADDITIONAL_ROUTES` environment variable that contains a patch for the Central custom resource:
+  1.  Create a `CENTRAL_ADDITIONAL_ROUTES` environment variable that has a patch for the Central custom resource:
 
       ``` terminal
       $ CENTRAL_ADDITIONAL_ROUTES='
@@ -180,7 +198,7 @@ Procedure
       ``` terminal
       $ oc patch centrals.platform.stackrox.io \
         -n <namespace> \
-        <custom-resource> \
+        <custom_resource> \
         --patch "$CENTRAL_ADDITIONAL_ROUTES" \
         --type=merge
       ```
@@ -188,9 +206,9 @@ Procedure
       where:
 
       `<namespace>`  
-      Specifies the name of the project that contains the Central custom resource.
+      Specifies the name of the project that has the Central custom resource.
 
-      `<custom-resource>`  
+      `<custom_resource>`  
       Specifies the name of the Central custom resource.
 
 - Or, if you installed RHACS using Helm:

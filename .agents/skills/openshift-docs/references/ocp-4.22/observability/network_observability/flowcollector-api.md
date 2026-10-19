@@ -4,6 +4,8 @@ The `FlowCollector` API is the underlying schema used to pilot and configure the
 
 # FlowCollector API specifications
 
+`FlowCollector` is the schema for the network flows collection API, which pilots and configures the underlying deployments.
+
 Description
 `FlowCollector` is the schema for the network flows collection API, which pilots and configures the underlying deployments.
 

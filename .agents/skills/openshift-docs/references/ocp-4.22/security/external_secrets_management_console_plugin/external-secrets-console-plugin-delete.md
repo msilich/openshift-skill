@@ -11,6 +11,11 @@ Delete certificates and secrets from installed secrets management Operators usin
 
 You can delete certificates and secrets from installed secrets management Operators across your clusters by using the OpenShift Container Platform web console.
 
+> [!IMPORTANT]
+> External Secrets Management Console Plug-in is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+>
+> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
 <div>
 
 <div class="title">

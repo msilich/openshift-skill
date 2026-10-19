@@ -8,7 +8,7 @@ The OpenShift Container Platform web console is a user interface accessible from
 
 - Review the OpenShift Container Platform 4.x Tested Integrations page before you create the supporting infrastructure for your cluster.
 
-# Understanding and accessing the web console
+# Understand and access the web console
 
 The web console runs as a pod on the control plane node. The static assets required to run the web console are served by the pod.
 

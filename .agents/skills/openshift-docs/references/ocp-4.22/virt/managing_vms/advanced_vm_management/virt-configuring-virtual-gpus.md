@@ -342,7 +342,14 @@ Procedure
 
 3.  Create and expose the mediated devices by updating the configuration:
 
-    1.  Expose the mediated devices to the cluster by adding the `mdevNameSelector` and `resourceName` values to the `spec.permittedHostDevices.mediatedDevices` stanza. The `resourceName` value is based on the `mdevNameSelector` value, but you use underscores instead of spaces.
+    1.  Enable the `disableMDevConfiguration` feature gate so that OpenShift Virtualization does not try to manage mediated devices that an external provider, such as the NVIDIA GPU Operator, already manages:
+
+        ``` terminal
+        $ oc patch hyperconvergeds.v1beta1.hco.kubevirt.io -n openshift-cnv kubevirt-hyperconverged \
+          --type='json' -p='[{"op": "add", "path": "/spec/featureGates/disableMDevConfiguration", "value": true}]'
+        ```
+
+    2.  Expose the mediated devices to the cluster by adding the `mdevNameSelector` and `resourceName` values to the `spec.permittedHostDevices.mediatedDevices` stanza. The `resourceName` value is based on the `mdevNameSelector` value, but you use underscores instead of spaces.
 
         Example `HyperConverged` CR:
 

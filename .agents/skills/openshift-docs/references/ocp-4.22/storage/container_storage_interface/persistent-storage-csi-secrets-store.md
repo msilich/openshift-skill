@@ -4,7 +4,7 @@ To improve secret security and integrate with enterprise secret management syste
 
 # Overview of Secrets Store CSI Driver Operator
 
-To store and manage your secrets securely, configure the Secrets Store CSI Driver Operator to mount secrets from an external secret management system, such as Azure Key Vault, by using a provider plugin. Applications can then use the secret, but the secret does not persist on the system after pod termination.
+The Secrets Store CSI Driver Operator mounts secrets from external secret management systems, such as Azure Key Vault, into pods by using a provider plugin. The secrets do not persist on the system after pod termination.
 
 Secret objects are stored with Base64 encoding. etcd provides encryption at rest for these secrets, but when secrets are retrieved, they are decrypted and presented to the user. If role-based access control is not configured properly on your cluster, anyone with API or etcd access can retrieve or modify a secret. Additionally, anyone who is authorized to create a pod in a namespace can use that access to read any secret in that namespace.
 
@@ -32,7 +32,7 @@ Additional resources
 
 ## Secrets store providers
 
-You can store sensitive information needed by your applications in an external secret management system and use the Secrets Store CSI Driver Operator to mount the secret content as a pod volume. Using an external secret store protects information that you do not want developers to have and can be more secure than `secret` objects.
+You can store sensitive application data in an external secret management system and use the Secrets Store CSI Driver Operator to mount the secret content as a pod volume.
 
 The Secrets Store CSI Driver Operator has been tested with the following secrets store providers:
 
@@ -100,7 +100,7 @@ The following table summarizes the default ingress and egress rules:
 | Secrets Store CSI Driver Operator | `8443` | `6443` | Accesses metrics and communicates with the API server |
 | Secrets Store CSI driver | `8095` | `6443` | Accesses metrics and communicates with the API server |
 
-# Installing the Secrets Store CSI driver
+# Install the Secrets Store CSI driver
 
 To enable OpenShift Container Platform to mount secrets from external secret management systems, install the Secrets Store CSI Driver Operator and create a `ClusterCSIDriver` instance.
 
@@ -315,7 +315,7 @@ Next steps
 
 </div>
 
-# Uninstalling the Secrets Store CSI Driver Operator
+# Uninstall the Secrets Store CSI Driver Operator
 
 To remove the Secrets Store CSI Driver Operator and free cluster resources, uninstall the Operator after stopping applications and removing the CSI driver.
 

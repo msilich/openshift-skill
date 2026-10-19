@@ -200,7 +200,7 @@ Procedure
 
 </div>
 
-# Configuring a watch namespace for a cluster extension (Technology Preview)
+# Configure a watch namespace for a cluster extension (Technology Preview)
 
 You can configure the watch namespace for extensions that support namespace-scoped resource watching.
 
@@ -716,7 +716,7 @@ The system assigns resources to the following phases in order:
 `admission`
 `ValidatingWebhookConfiguration` and `MutatingWebhookConfiguration` objects.
 
-# Inspecting ClusterObjectSets
+# Inspect ClusterObjectSets
 
 Monitor and troubleshoot cluster extension deployments by viewing ClusterObjectSet phases, resource status, and revision history.
 
@@ -1273,7 +1273,7 @@ annotations:
 
 </div>
 
-# Troubleshooting `deploymentConfig`
+# Troubleshoot `deploymentConfig`
 
 Common `deploymentConfig` issues include validation errors, configuration verification problems, and annotation conflicts that can prevent successful Operator installation.
 

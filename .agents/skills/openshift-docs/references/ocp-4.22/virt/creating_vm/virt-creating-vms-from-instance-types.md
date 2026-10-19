@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can simplify virtual machine (VM) creation by using instance types, whether you use the OpenShift Container Platform web console or the CLI to create VMs.
+You can simplify virtual machine (VM) creation by using instance types, which define a reusable set of resources, such as CPU and memory. You can create instance types or change the VMs that use them.
 
 # About instance types
 
@@ -95,150 +95,7 @@ When you create a VM by using an instance type, a `ControllerRevision` object re
 
 This snapshot is essential for versioning, and ensures that the VM instance created when starting a VM does not change if the underlying instance type object is updated while the VM is running.
 
-# Pre-defined instance types
-
-OpenShift Virtualization includes a set of pre-defined instance types called `common-instancetypes`. Some are specialized for specific workloads and others are workload-agnostic.
-
-These instance type resources are named according to their series, version, and size. The size value follows the `.` delimiter and ranges from `nano` to `8xlarge`.
-
-<table>
-<caption><code>common-instancetypes</code> series comparison</caption>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 12%" />
-<col style="width: 25%" />
-<col style="width: 12%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: center;">Use case</th>
-<th style="text-align: center;">Series</th>
-<th style="text-align: center;">Characteristics</th>
-<th style="text-align: center;">vCPU to memory ratio</th>
-<th style="text-align: center;">Example resource</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><p>Network</p></td>
-<td style="text-align: center;"><p>N</p></td>
-<td style="text-align: left;"><ul>
-<li><p>Hugepages</p></li>
-<li><p>Dedicated CPU</p></li>
-<li><p>Isolated emulator threads</p></li>
-<li><p>Requires nodes capable of running DPDK workloads</p></li>
-</ul></td>
-<td style="text-align: center;"><p>1:2</p></td>
-<td style="text-align: left;"><dl>
-<dt><code>n1.medium</code></dt>
-<dd>
-<ul>
-<li><p>4 vCPUs</p></li>
-<li><p>4GiB Memory</p></li>
-</ul>
-</dd>
-</dl></td>
-</tr>
-<tr>
-<td style="text-align: center;"><p>Overcommitted</p></td>
-<td style="text-align: center;"><p>O</p></td>
-<td style="text-align: left;"><ul>
-<li><p>Overcommitted memory</p></li>
-<li><p>Burstable CPU performance</p></li>
-</ul></td>
-<td style="text-align: center;"><p>1:4</p></td>
-<td style="text-align: left;"><dl>
-<dt><code>o1.small</code></dt>
-<dd>
-<ul>
-<li><p>1 vCPU</p></li>
-<li><p>2GiB Memory</p></li>
-</ul>
-</dd>
-</dl></td>
-</tr>
-<tr>
-<td style="text-align: center;"><p>Compute Exclusive</p></td>
-<td style="text-align: center;"><p>CX</p></td>
-<td style="text-align: left;"><ul>
-<li><p>Hugepages</p></li>
-<li><p>Dedicated CPU</p></li>
-<li><p>Isolated emulator threads</p></li>
-<li><p>vNUMA</p></li>
-</ul></td>
-<td style="text-align: center;"><p>1:2</p></td>
-<td style="text-align: left;"><dl>
-<dt><code>cx1.2xlarge</code></dt>
-<dd>
-<ul>
-<li><p>8 vCPUs</p></li>
-<li><p>16GiB Memory</p></li>
-</ul>
-</dd>
-</dl></td>
-</tr>
-<tr>
-<td style="text-align: center;"><p>General Purpose</p></td>
-<td style="text-align: center;"><p>U</p></td>
-<td style="text-align: left;"><ul>
-<li><p>Burstable CPU performance</p></li>
-</ul></td>
-<td style="text-align: center;"><p>1:4</p></td>
-<td style="text-align: left;"><dl>
-<dt><code>u1.medium</code></dt>
-<dd>
-<ul>
-<li><p>1 vCPU</p></li>
-<li><p>4GiB Memory</p></li>
-</ul>
-</dd>
-</dl></td>
-</tr>
-<tr>
-<td style="text-align: center;"><p>Memory Intensive</p></td>
-<td style="text-align: center;"><p>M</p></td>
-<td style="text-align: left;"><ul>
-<li><p>Hugepages</p></li>
-<li><p>Burstable CPU performance</p></li>
-</ul></td>
-<td style="text-align: center;"><p>1:8</p></td>
-<td style="text-align: left;"><dl>
-<dt><code>m1.large</code></dt>
-<dd>
-<ul>
-<li><p>2 vCPUs</p></li>
-<li><p>16GiB Memory</p></li>
-</ul>
-</dd>
-</dl></td>
-</tr>
-<tr>
-<td style="text-align: center;"><p>Dedicated</p></td>
-<td style="text-align: center;"><p>D</p></td>
-<td style="text-align: left;"><ul>
-<li><p>Dedicated CPU</p></li>
-<li><p>Isolated emulator threads</p></li>
-</ul></td>
-<td style="text-align: center;"><p>1:4</p></td>
-<td style="text-align: left;"><dl>
-<dt><code>d1.medium</code></dt>
-<dd>
-<ul>
-<li><p>1 vCPUs</p></li>
-<li><p>4GiB Memory</p></li>
-</ul>
-</dd>
-</dl></td>
-</tr>
-</tbody>
-</table>
-
-# Specifying an instance type or preference
-
-You can specify an instance type, a preference, or both to define a set of workload sizing and runtime characteristics for reuse across multiple VMs.
-
-## Using flags to specify instance types and preferences
+# Using flags to specify instance types and preferences
 
 You can specify instance types and preferences by using flags.
 
@@ -276,7 +133,7 @@ Procedure
 
 </div>
 
-## Inferring an instance type or preference
+# Inferring an instance type or preference
 
 Inferring instance types, preferences, or both is enabled by default, and the `inferFromVolumeFailure` policy of the `inferFromVolume` attribute is set to `Ignore`. When inferring from the boot volume, errors are ignored, and the VM is created with the instance type and preference left unset.
 
@@ -322,7 +179,7 @@ Procedure
 
 </div>
 
-## Setting the inferFromVolume labels
+# Setting the inferFromVolume labels
 
 Use the following labels on your PVC, data source, or data volume to instruct the inference mechanism which instance type, preference, or both to use when trying to boot from a volume.
 
@@ -361,114 +218,6 @@ Procedure
   ``` terminal
   $ oc label DataSource foo instancetype.kubevirt.io/default-instancetype=<my_instancetype>
   ```
-
-</div>
-
-# Creating a VM from an instance type by using the web console
-
-You can create a virtual machine (VM) from an instance type by using the OpenShift Container Platform web console. You can also use the web console to create a VM by copying an existing snapshot or to clone a VM.
-
-You can create a VM from a list of available bootable volumes. You can add Linux- or Windows-based volumes to the list.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  In the web console, navigate to **Virtualization** → **Catalog**.
-
-    The **InstanceTypes** tab opens by default.
-
-    > [!NOTE]
-    > When configuring a downward-metrics device on an IBM Z® system that uses a VM preference, set the `spec.preference.name` value to `rhel.9.s390x` or another available preference with the format `*.s390x`.
-
-2.  Heterogeneous clusters only: To filter the bootable volumes using the options provided, click **Architecture**.
-
-3.  Select either of the following options:
-
-    - Select a suitable bootable volume from the list. If the list is truncated, click the **Show all** button to display the entire list.
-
-      > [!NOTE]
-      > The bootable volume table lists only those volumes in the `openshift-virtualization-os-images` namespace that have the `instancetype.kubevirt.io/default-preference` label.
-
-      - Optional: Click the star icon to designate a bootable volume as a favorite. Starred bootable volumes appear first in the volume list.
-
-    - Click **Add volume** to upload a new volume or to use an existing persistent volume claim (PVC), a volume snapshot, or a `containerDisk` volume. Click **Save**.
-
-      Logos of operating systems that are not available in the cluster are shown at the bottom of the list. You can add a volume for the required operating system by clicking the **Add volume** link.
-
-      In addition, there is a link to the **Create a Windows bootable volume** quick start. The same link appears in a popover if you hover the pointer over the question mark icon next to the *Select volume to boot from* line.
-
-      Immediately after you install the environment or when the environment is disconnected, the list of volumes to boot from is empty. In that case, three operating system logos are displayed: Windows, RHEL, and Linux. You can add a new volume that meets your requirements by clicking the **Add volume** button.
-
-4.  Click an instance type tile and select the resource size appropriate for your workload. You can select huge pages for Red Hat-provided instance types of the **M** and **CX** series. Huge page options are identified by names that end with **1gi**.
-
-5.  Optional: Choose the virtual machine details, including the VM’s name, that apply to the volume you are booting from:
-
-    - For a Linux-based volume, follow these steps to configure SSH:
-
-      1.  If you have not already added a public SSH key to your project, click the edit icon beside **Authorized SSH key** in the **VirtualMachine details** section.
-
-      2.  Select one of the following options:
-
-          - **Use existing**: Select a secret from the secrets list.
-
-          - **Add new**: Follow these steps:
-
-            1.  Browse to the public SSH key file or paste the file in the key field.
-
-            2.  Enter the secret name.
-
-            3.  Optional: Select **Automatically apply this key to any new VirtualMachine you create in this project**.
-
-      3.  Click **Save**.
-
-    - For a Windows volume, follow either of these set of steps to configure sysprep options:
-
-      - If you have not already added sysprep options for the Windows volume, follow these steps:
-
-        1.  Click the edit icon beside **Sysprep** in the **VirtualMachine details** section.
-
-        2.  Add the **Autoattend.xml** answer file.
-
-        3.  Add the **Unattend.xml** answer file.
-
-        4.  Click **Save**.
-
-      - If you want to use existing sysprep options for the Windows volume, follow these steps:
-
-        1.  Click **Attach existing sysprep**.
-
-        2.  Enter the name of the existing sysprep **Unattend.xml** answer file.
-
-        3.  Click **Save**.
-
-6.  Optional: If you are creating a Windows VM, you can mount a Windows driver disk:
-
-    1.  Click the **Customize VirtualMachine** button.
-
-    2.  On the **VirtualMachine details** page, click **Storage**.
-
-    3.  Select the **Mount Windows drivers disk** checkbox.
-
-7.  Optional: Click **View YAML & CLI** to view the YAML file. Click **CLI** to view the CLI commands. You can also download or copy either the YAML file contents or the CLI commands.
-
-8.  Click **Create VirtualMachine**.
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Result
-
-</div>
-
-After the VM is created, you can monitor the status on the **VirtualMachine details** page.
 
 </div>
 

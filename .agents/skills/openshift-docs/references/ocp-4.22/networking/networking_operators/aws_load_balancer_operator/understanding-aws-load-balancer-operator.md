@@ -14,7 +14,7 @@ Review the following limitations before installing and using the AWS Load Balanc
 
 - The AWS Load Balancer Operator requires that the service type is `NodePort` and not `LoadBalancer` or `ClusterIP`.
 
-# Deploying the AWS Load Balancer Operator
+# Deploy the AWS Load Balancer Operator
 
 The AWS Load Balancer Operator can tag the public subnets if the `kubernetes.io/role/elb` tag is missing. Also, the AWS Load Balancer Operator detects information from the underlying AWS cloud.
 
@@ -69,7 +69,7 @@ Procedure
 
 </div>
 
-# Using the AWS Load Balancer Operator in an AWS VPC cluster extended into an Outpost
+# Use the AWS Load Balancer Operator in an AWS VPC cluster extended into an Outpost
 
 You can configure the AWS Load Balancer Operator to provision an AWS Application Load Balancer in an AWS VPC cluster extended into an Outpost. AWS Outposts does not support AWS Network Load Balancers. As a result, the AWS Load Balancer Operator cannot provision Network Load Balancers in an Outpost.
 

@@ -9,7 +9,7 @@ OpenShift Dev Spaces connects three groups of components through Dev Workspace c
 
 <figure>
 <br />
-<img src="assets/c025a53c95c1fc5cc9a3.png" alt="High-level architecture diagram showing OpenShift Dev Spaces components interacting with the Dev Workspace operator" /><br />
+<img src="assets/602b75d154c857c11a94.png" alt="High-level architecture diagram showing OpenShift Dev Spaces components interacting with the Dev Workspace operator" /><br />
 
 <figcaption>Figure 1. High-level OpenShift Dev Spaces architecture with the Dev Workspace operator</figcaption>
 </figure>

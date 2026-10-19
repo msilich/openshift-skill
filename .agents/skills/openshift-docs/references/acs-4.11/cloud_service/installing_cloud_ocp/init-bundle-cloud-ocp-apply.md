@@ -104,15 +104,19 @@ Prerequisites
 
 - You must have generated an init bundle containing secrets. The preferred way to set up a secured cluster is by using a CRS.
 
-- You must have created the `stackrox` project, or namespace, on the cluster where you will install secured cluster services. Using `stackrox` for the project is not required, but ensures that vulnerabilities for RHACS processes are not reported when scanning your clusters.
+- You must have created the `stackrox` project, or namespace, on the cluster where you will install the secured cluster services. Using `stackrox` for the project is not required, but ensures that vulnerabilities for RHACS processes are not reported when scanning your clusters.
 
 </div>
 
-<div>
+<div class="formalpara">
 
 <div class="title">
 
 Procedure
+
+</div>
+
+To create resources, perform only one of the following steps:
 
 </div>
 
@@ -138,8 +142,6 @@ Procedure
 
   `<stackrox>`  
   Specifies the name of the project where Central services are installed.
-
-</div>
 
 <div>
 

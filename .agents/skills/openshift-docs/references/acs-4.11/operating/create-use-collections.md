@@ -1,21 +1,29 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can use collections in RHACS to define and name a group of resources by using matching patterns. You can then configure system processes to use these collections.
+You can use collections in RHACS to define and name a group of resources by using matching patterns, and then configure system processes to use these collections.
+
+<a id="collections-availability-overview_create-use-collections"></a>
+
+# Collections availability and database requirements
+
+Deployment collections are available for use with vulnerability reporting and require the PostgreSQL database.
 
 Currently, collections are available only under the following conditions:
 
 - Collections are available only for deployments.
 
-- You can only use collections with vulnerability reporting. See "Vulnerability reporting" in the Additional resources section for more information.
+- You can only use collections with vulnerability reporting.
 
 - Deployment collections are only available to RHACS customers if they are using the PostgreSQL database.
 
   > [!NOTE]
   > By default, RHACS Cloud Service uses the PostgreSQL database, and it is also used by default when installing RHACS release 4.0 and later. RHACS customers using an earlier release than 3.74 can migrate to the PostgreSQL database with help from Red Hat.
 
-<a id="prerequisites_collections"></a>
+<a id="prerequisites_collections_create-use-collections"></a>
 
 # Prerequisites
+
+User accounts require specific permissions to view, create, change, or delete deployment collections.
 
 A user account must have the following permissions to use the Collections feature:
 
@@ -23,31 +31,45 @@ A user account must have the following permissions to use the Collections featur
 
 - `Deployment`: You need **Read Access** or **Read and Write Access** to understand how configured rules will match with deployments.
 
-These permissions are included in the `Admin` system role. For more information about roles and permissions, see "Managing RBAC in RHACS" in "Additional resources".
+The `Admin` system role includes these permissions.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Managing RBAC in RHACS](manage-user-access/manage-role-based-access-control-3630.md)
+
+</div>
 
 <a id="understanding-object-collections_create-use-collections"></a>
 
 # Understanding deployment collections
 
-Deployment collections are only available to RHACS customers using the PostgreSQL database. By default, RHACS Cloud Service uses the PostgreSQL database, and it is also used by default when installing RHACS release 4.0 and later. RHACS customers using an earlier release than 3.74 can migrate to the PostgreSQL database with help from Red Hat.
+Deployment collections offer a user-defined, named reference to logically group resources by using selection rules that match deployments, namespaces, or cluster names and labels.
 
-An RHACS collection is a user-defined, named reference. It defines a logical grouping by using selection rules. Those rules can match a deployment, namespace, or cluster name or label. You can specify rules by using exact matches or regular expressions. Collections are resolved at run time and can refer to objects that do not exist at the time of the collection definition. Collections can be constructed by using other collections to describe complex hierarchies.
+Deployment collections are only available to RHACS customers who use the PostgreSQL database. By default, RHACS Cloud Service uses the PostgreSQL database, and it is also used by default when installing RHACS release 4.0 and later. RHACS customers who use a release earlier than 3.74 can migrate to the PostgreSQL database with help from Red Hat.
 
-Collections provide you with a language to describe how your dynamic infrastructure is organized, eliminating the need for cloning and repetitive editing of RHACS properties such as inclusion and exclusion scopes.
+An RHACS collection is a user-defined, named reference. It defines a logical grouping by using selection rules. Those rules can match a deployment, namespace, or cluster name or label. You can specify rules by using exact matches or regular expressions. The system resolves collections at run time and can refer to objects that do not exist at the time of the collection definition. You can construct collections by using other collections to describe complex hierarchies.
+
+Collections give you a language to describe how you organize your dynamic infrastructure, eliminating the need for cloning and repetitive editing of RHACS properties such as inclusion and exclusion scopes.
 
 You can use collections to identify any group of deployments in your system, such as:
 
-- An infrastructure area that is owned by a specific development team
+- An infrastructure area that a specific development team owns
 
 - An application that requires different policy exceptions when running in a development or in a production cluster
 
-- A distributed application that spans multiple namespaces, defined with a common deployment label
+- A distributed application that spans many namespaces, defined with a common deployment label
 
 - An entire production or test environment
 
-Collections can be created and managed by using the RHACS portal. The collection editor helps you apply selection rules at the deployment, namespace, and cluster level. You can use simple and complex rules, including regular expressions. For regular expressions, [RE2 syntax](https://github.com/google/re2/wiki/Syntax) is supported. Perl syntax is not supported.
+You can create and manage collections by using the RHACS portal. The collection editor helps you apply selection rules at the deployment, namespace, and cluster level. You can use simple and complex rules, including regular expressions. For regular expressions, RE2 syntax is supported. Perl syntax is not supported.
 
-You can define a collection by selecting one or more deployments, namespaces, or clusters, as shown in the following image. This image shows a collection that contains deployments with the name `reporting` or that contain `db` in the name. The collection includes deployments matching those names in the namespace with a specific label of `kubernetes.io/metadata.name=medical`, and in clusters named `production`.
+You can define a collection by selecting one or more deployments, namespaces, or clusters, as shown in the following image. This image shows a collection that has deployments with the name `reporting` or that have `db` in the name. The collection includes deployments matching those names in the namespace with a specific label of `kubernetes.io/metadata.name=medical`, and in clusters named `production`.
 
 <figure>
 <img src="../images/collection-rules.png" alt="Collection rules showing rules configured for deployments with names matching" />
@@ -58,6 +80,18 @@ The collection editor also helps you to describe complex hierarchies by attachin
 <figure>
 <img src="../images/collection-side-panel.png" alt="Collection results from configuring a collection with two attached collections" />
 </figure>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [RE2 regular expression syntax](https://github.com/google/re2/wiki/Syntax)
+
+</div>
 
 <a id="access-object-collections_create-use-collections"></a>
 
@@ -92,6 +126,8 @@ Procedure
 
 # Creating deployment collections
 
+Create a deployment collection by naming it and defining collection rules or attaching existing collections.
+
 When creating a collection, you must name it and define the rules for the collection.
 
 <div>
@@ -122,6 +158,8 @@ Procedure
 
 ## Creating collection rules
 
+Configure collection rules to select resources by deployment names, labels, namespace criteria, or cluster criteria by using exact matches or regular expressions.
+
 When creating collections, you must configure at least one rule or attach another collection to the new collection that you are creating.
 
 > [!NOTE]
@@ -145,11 +183,23 @@ Procedure
 
       - **An exact value of**: Enter the exact name of the deployment.
 
-      - **A regex value of**: You can use regular expressions to search for a deployment. This option is useful if you do not know the exact name of the deployment. A regular expression is a string of letters, numbers, and symbols that defines a pattern. RHACS uses this pattern to match characters or groups of characters and return results. For regular expressions, [RE2 syntax](https://github.com/google/re2/wiki/Syntax) is supported. Perl syntax is not supported. To select *all deployments*, select this option and enter `.*`. See "Using regular expressions" for more information and examples.
+      - **A regex value of**: You can use regular expressions to search for a deployment. This option is useful if you do not know the exact name of the deployment. A regular expression is a string of letters, numbers, and symbols that defines a pattern. RHACS uses this pattern to match characters or groups of characters and return results. For regular expressions, RE2 syntax is supported. Perl syntax is not supported. To select *all deployments*, select this option and enter `.*`. See "Using regular expressions" for more information and examples.
 
     - **Deployments with labels matching exactly**: Select this option to select deployments with labels that match the exact text that you enter. The label must be a valid Kubernetes label in the format of `key=value`.
 
 2.  Optional: To add more deployments with names or labels that match additional criteria for inclusion, click **OR** and configure another exact or regular expression value.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [RE2 regular expression syntax](https://github.com/google/re2/wiki/Syntax)
 
 </div>
 
@@ -161,14 +211,14 @@ RHACS uses regular expressions in some areas of the portal, including when you c
 
 You can use regular expressions in some pages and fields when searching for specific items. For example, when configuring a collection, you can use regular expressions to search for a deployment. This option is useful if you do not know the exact name of the deployment. A regular expression is a string of letters, numbers, and symbols that defines a pattern. RHACS uses this pattern to match characters or groups of characters and return results. For regular expressions, note the following guidelines:
 
-- [RE2 syntax](https://github.com/google/re2/wiki/Syntax) is supported.
+- RE2 syntax is supported.
 
 - Perl syntax is not supported.
 
-- Testing your regular expressions syntax is helpful, for example, by using a site such as <https://regex101.com/>. Select **Golang** as the flavor.
+- Testing your regular expressions syntax is helpful, for example, by using an online regular expression testing site. Select **Golang** as the flavor.
 
 > [!NOTE]
-> The following examples assume naming conventions are followed where production clusters contain the word `prod` in the name.
+> The following examples assume you follow naming conventions where production clusters have the word `prod` in the name.
 
 To create a collection of production clusters:
 
@@ -212,11 +262,25 @@ The following example provides the steps for configuring a collection for a medi
 
 3.  Click **OR**.
 
-4.  Click **A regex value of** and enter `.*-db` to select all deployments with a name ending in `db` in your environment. The `regex value` option uses regular expressions for pattern matching. For regular expressions, [RE2 syntax](https://github.com/google/re2/wiki/Syntax) is supported. Perl syntax is not supported. The panel on the right might display databases that you do not want to include. You can exclude those databases by using additional filters. For example:
+4.  Click **A regex value of** and enter `.*-db` to select all deployments with a name ending in `db` in your environment. The `regex value` option uses regular expressions for pattern matching. For regular expressions, RE2 syntax is supported. Perl syntax is not supported. The panel on the right might display databases that you do not want to include. You can exclude those databases by using additional filters. For example:
 
-    1.  Filter by namespace labels by clicking **Namespaces with labels matching exactly** and entering `kubernetes.io/metadata.name=medical` to include only deployments in the namespace that is labeled `medical`.
+    1.  Filter by namespace labels by clicking **Namespaces with labels matching exactly** and entering `kubernetes.io/metadata.name=medical` to include only deployments in the namespace with the `medical` label.
 
     2.  If you know the name of the namespace, click **Namespaces with names matching** and enter the name.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [RE2 regular expression syntax](https://github.com/google/re2/wiki/Syntax)
+
+- [regex101.com online regular expression tester](https://regex101.com/)
+
+</div>
 
 <a id="adding-attached-collections_create-use-collections"></a>
 
@@ -243,7 +307,7 @@ Procedure
 3.  Click **+Attach**. The **Attached collections** section lists the collections that you attached.
 
     > [!NOTE]
-    > When you add an attached collection, the attached collection contains results based on the configured selection rules. For example, if an attached collection includes resources that would be filtered out by the rules used in the parent collection, then those items are still added to the parent collection because of the rules in the attached collection. Attached collections extend the original collection using an `OR` operator.
+    > When you add an attached collection, the attached collection has results based on the configured selection rules. For example, if an attached collection includes resources that the rules in the parent collection would filter out, then the parent collection still adds those items because of the rules in the attached collection. Attached collections extend the original collection using an `OR` operator.
 
 4.  Click **Save**.
 
@@ -253,32 +317,36 @@ Procedure
 
 # Migration of access scopes to collections
 
-Database changes in RHACS from `rocksdb` to PostgreSQL are provided as a Technology Preview beginning with release 3.74 and are generally available in release 4.0. When the database is migrated from `rocksdb` to PostgreSQL, existing access scopes used in vulnerability reporting are migrated to collections. You can verify that the migration resulted in the correct configuration for your existing reports by navigating to **Vulnerability Management** → **Reporting** and viewing the report information.
+When migrating from RocksDB to PostgreSQL, RHACS automatically converts existing access scopes used in vulnerability reporting to deployment collections.
 
-The migration process creates collection objects for access scopes that were used in report configurations. RHACS generates two or more collections for a single access scope, depending on the complexity of the access scope. The generated collections for a given access scope include the following types:
+Database changes in RHACS from `rocksdb` to PostgreSQL became available as a Technology Preview beginning with release 3.74 and became generally available in release 4.0. When you migrate the database from `rocksdb` to PostgreSQL, the system migrates existing access scopes used in vulnerability reporting to collections. You can verify that the migration resulted in the correct configuration for your existing reports by navigating to **Vulnerability Management** → **Reporting** and viewing the report information.
+
+The migration process creates collection objects for access scopes that you used in report configurations. RHACS generates two or more collections for a single access scope, depending on the complexity of the access scope. The generated collections for a given access scope include the following types:
 
 - Embedded collections: To mimic the exact selection logic of the original access scope, RHACS generates one or more collections where matched deployments result in the same selection of clusters and namespaces as the original access scope. The collection name is in the format of `System-generated embedded collection number for the scope` where *number* is a number starting from 0.
 
   > [!NOTE]
   > These embedded collections will not have any attached collections. They have cluster and namespace selection rules, but no deployment rules because the original access scopes did not filter on deployments.
 
-- Root collection for the access scope: This collection is added to the report configurations. The collection name is in the format of `System-generated root collection for the scope`. This collection does not define any rules, but attaches one or more embedded collections. The combination of these embedded collections results in the same selection of clusters and namespaces as the original access scope.
+- Root collection for the access scope: The system adds this collection to the report configurations. The collection name is in the format of `System-generated root collection for the scope`. This collection does not define any rules, but attaches one or more embedded collections. The combination of these embedded collections results in the same selection of clusters and namespaces as the original access scope.
 
-For access scopes that define cluster or namespace label selectors, RHACS can only migrate those scopes that have the 'IN' operator between the key and values. Access scopes with label selectors that were created by using the RHACS portal used the 'IN' operator by default. Migration of scopes that used the 'NOT_IN', 'EXISTS' and 'NOT_EXISTS' operators is not supported. If a collection cannot be created for an access scope, log messages are created during the migration. Log messages have the following format:
+For access scopes that define cluster or namespace label selectors, RHACS can only migrate those scopes that have the 'IN' operator between the key and values. Access scopes with label selectors that you created by using the RHACS portal used the 'IN' operator by default. Migration of scopes that used the 'NOT_IN', 'EXISTS' and 'NOT_EXISTS' operators is not supported. If the system cannot create a collection for an access scope, it creates log messages during the migration. Log messages have the following format:
 
     Failed to create collections for scope _scope-name_: Unsupported operator NOT_IN in scope's label selectors. Only operator 'IN' is supported.
     The scope is attached to the following report configurations: [list of report configs]; Please manually create an equivalent collection and edit the listed report configurations to use this collection. Note that reports will not function correctly until a collection is attached.
 
-You can also click the report in **Vulnerability Management** → **Reporting** to view the report information page. This page contains a message if a report needs a collection attached to it.
+You can also click the report in **Vulnerability Management** → **Reporting** to view the report information page. This page has a message if a report needs a collection attached to it.
 
 > [!NOTE]
 > The original access scopes are not removed during the migration. If you created an access scope only for use in filtering vulnerability management reports, you can manually remove the access scope.
 
-<a id="API_support_collections"></a>
+<a id="API_support_collections_create-use-collections"></a>
 
 # Managing collections by using the API
 
-You can configure collections by using the `CollectionService` API object. For example, you can use `CollectionService_DryRunCollection` to return a list of results equivalent to the live preview panel in the RHACS portal. For more information, go to **Help** → **API reference** in the RHACS portal.
+You can configure collections programmatically by using the `CollectionService` API object, which provides methods for creating, updating, and testing collection configurations.
+
+You can configure collections by using the `CollectionService` API object. For example, you can use `CollectionService_DryRunCollection` to return results equivalent to those in the live preview panel in the RHACS portal. For more information, go to **Help** → **API reference** in the RHACS portal.
 
 <div>
 

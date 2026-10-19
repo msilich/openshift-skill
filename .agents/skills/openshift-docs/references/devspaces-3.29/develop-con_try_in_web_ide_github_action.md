@@ -13,14 +13,14 @@ The Che documentation repository is a real-life example where the Try in Web IDE
 
 <figure>
 <br />
-<img src="assets/0357f1812c2213df683c.png" alt="Pull request comment created by the Try in Web IDE GitHub action" /><br />
+<img src="assets/853e35dad28ae52e1b8f.png" alt="Pull request comment created by the Try in Web IDE GitHub action" /><br />
 
 <figcaption>Figure 1. Pull request comment created by the Try in Web IDE GitHub action. Clicking the badge opens a new workspace for reviewers to test the pull request.</figcaption>
 </figure>
 
 <figure>
 <br />
-<img src="assets/818d8e4711f2cf377117.png" alt="Pull request status check created by the Try in Web IDE GitHub action" /><br />
+<img src="assets/c91a06e3499baf7a8cc9.png" alt="Pull request status check created by the Try in Web IDE GitHub action" /><br />
 
 <figcaption>Figure 2. Pull request status check created by the Try in Web IDE GitHub action. Clicking the "Details" link opens a new workspace for reviewers to test the pull request.</figcaption>
 </figure>

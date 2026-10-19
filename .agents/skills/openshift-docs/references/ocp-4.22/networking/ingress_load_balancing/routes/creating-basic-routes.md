@@ -2,7 +2,7 @@
 
 If you have unencrypted HTTP, you can create a basic route with a route object.
 
-# Creating an HTTP-based route
+# Create an HTTP-based route
 
 You can use the following procedure to create a simple HTTP-based route to a web application, using the `hello-openshift` application as an example.
 
@@ -160,9 +160,7 @@ spec:
 
 # Creating a route for Ingress Controller sharding
 
-You can use a route to host your application at a URL. Ingress Controller sharding helps balance incoming traffic load among a set of Ingress Controllers. Ingress Controller sharding can also isolate traffic to a specific Ingress Controller. For example, company A goes to one Ingress Controller and company B to another.
-
-The following procedure describes how to create a route for Ingress Controller sharding, using the `hello-openshift` application as an example.
+Ingress Controller sharding balances incoming traffic among a set of Ingress Controllers and can isolate traffic to a specific Ingress Controller. You create a route to direct traffic to the appropriate shard.
 
 <div>
 
@@ -505,7 +503,7 @@ The propagation behavior is controlled by the `route.openshift.io/reconcile-labe
 
 - Annotation re-enabled: The Operator resumes propagation. It will again replace all labels on the `Route` resource with the current labels from the `Ingress` resource.
 
-# Enabling label propagation from Ingress to Route resources
+# Enable label propagation from Ingress to Route resources
 
 You can enable the Ingress Operator to automatically propagate labels from an `Ingress` resource to the `Route` resource it manages. To enable this, you must add the `reconcile-labels` annotation to an `Ingress` resource.
 

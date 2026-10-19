@@ -1,14 +1,30 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-If you are using [Sumo Logic](https://www.sumologic.com/), you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to Sumo Logic.
+If you are using Sumo Logic, you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to Sumo Logic.
 
-The following steps represent a high-level workflow for integrating Red Hat Advanced Cluster Security for Kubernetes with Sumo Logic:
+<a id="sumologic-integration-workflow-overview_integrate-with-sumologic"></a>
+
+# Sumo Logic integration workflow
+
+The following steps represent a high-level workflow for integrating Red Hat Advanced Cluster Security for Kubernetes with Sumo Logic.
 
 1.  Add a new Custom App in Sumo Logic, set the HTTP source, and get the HTTP URL.
 
 2.  Use the HTTP URL to integrate Sumo Logic with Red Hat Advanced Cluster Security for Kubernetes.
 
 3.  Identify the policies you want to send notifications for, and update the notification settings for those policies.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Sumo Logic](https://www.sumologic.com/)
+
+</div>
 
 <a id="configure-sumologic_integrate-with-sumologic"></a>
 
@@ -91,7 +107,7 @@ Procedure
 4.  In the **Enable notification** window, select the **Sumo Logic** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 
@@ -121,8 +137,18 @@ Procedure
 
 You can view alerts from Red Hat Advanced Cluster Security for Kubernetes in Sumo Logic.
 
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
 1.  Log in to your Sumo Logic Home page and click **Log Search**.
 
 2.  In the search box, enter `_sourceCategory=rhacs`. Make sure to use the same **Source Category** name that you entered while configuring Sumo Logic.
 
 3.  Select the time and then click **Start**.
+
+</div>

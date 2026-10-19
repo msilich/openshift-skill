@@ -2,7 +2,7 @@
 
 Uninstall the JobSet Operator by using the OpenShift Container Platform web console to remove the Operator instance and its resources from your cluster.
 
-# Uninstalling the JobSet Operator
+# Uninstall the JobSet Operator
 
 Uninstall the JobSet Operator by using the OpenShift Container Platform web console to remove the Operator instance.
 
@@ -54,7 +54,7 @@ Procedure
 
 </div>
 
-# Uninstalling JobSet Operator resources
+# Uninstall JobSet Operator resources
 
 Optionally, after uninstalling the JobSet Operator, you can remove its related resources from your cluster.
 
@@ -98,7 +98,7 @@ Procedure
 
     1.  Navigate to **Administration** → **Namespaces**.
 
-    2.  Fine `openshift-jobset-operator` in the list of namespaces.
+    2.  Find `openshift-jobset-operator` in the list of namespaces.
 
     3.  Click the Options menu ![kebab](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAjCAIAAADqn+bCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA+0lEQVRIie2WMQqEMBBFJ47gUXRBLyBYqbUXULCx9CR2XsAb6AlUEM9kpckW7obdZhwWYWHXX/3i8TPJZEKEUgpOlXFu3JX4V4kmB2qaZhgGKSUiZlkWxzEBC84N9zxv27bdO47Tti0Bs3at4wBgXVca/lJnfN/XPggCGmadIwAsywIAiGhZFk1ydy2EYJKgGCqK4vZUVVU0zKpxnmftp2mi4S/1GhG1N82DMWNNYVmW4zgqpRAxTVMa5t4evlg11nXd9/1eY57nSZIQMKtG13WllLu3bbvrOgJmdUbHwfur8Xniqw6Hh5UYRdGDNowwDA+WvP4UV+JPJ94B1gKUWcTOCT0AAAAASUVORK5CYII=) next to the **openshift-jobset-operator** entry and select **Delete Namespace**.
 

@@ -95,7 +95,7 @@ As new containers are run, new images appear. All images are marked with a time 
 
 Once the collection starts, the oldest images get deleted first until the stopping criterion is met.
 
-# Configuring garbage collection for containers and images
+# Configure garbage collection for containers and images
 
 As an administrator, you can configure how OpenShift Container Platform performs garbage collection by creating a `kubeletConfig` object for each machine config pool. Performing garbage collection helps ensure that your nodes are running efficiently.
 

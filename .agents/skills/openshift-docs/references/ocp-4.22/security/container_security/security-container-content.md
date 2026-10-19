@@ -2,7 +2,7 @@
 
 To ensure the security of the content inside your containers you need to start with trusted base images, such as Red Hat Universal Base Images, and add trusted software. To check the ongoing security of your container images, there are both Red Hat and third-party tools for scanning images.
 
-# Securing inside the container
+# Secure inside the container
 
 For the security of your containers, you need to know where any source packages originally came from, what versions are used, who built them, and whether there is any malicious code inside them.
 
@@ -22,7 +22,7 @@ By building your containers from Red Hat Universal Base Images (UBI) you are ass
 
 To assure ongoing security of the containers themselves, security scanning features, used directly from RHEL or added to OpenShift Container Platform, can alert you when an image you are using has vulnerabilities. OpenSCAP image scanning is available in RHEL and the Red Hat Quay Container Security Operator can be added to check container images used in OpenShift Container Platform.
 
-# Creating redistributable images with UBI
+# Create redistributable images with UBI
 
 You can typically start with a trusted base image that offers the components that are usually provided by the operating system to create containerized applications. These include the libraries, utilities, and other features the application expects to see in the operating system’s file system.
 
@@ -51,7 +51,7 @@ For the container images that are running in OpenShift Container Platform and ar
 
 Container image scanning for Red Hat Quay is performed by Clair. In Red Hat Quay, Clair can search for and report vulnerabilities in images built from RHEL, CentOS, Oracle, Alpine, Debian, and Ubuntu operating system software.
 
-# Integrating external scanning
+# Integrate external scanning
 
 OpenShift Container Platform makes use of object annotations to extend functionality. You can use external tools, such as vulnerability scanners, to annotate image objects with metadata to summarize results and control pod execution.
 
@@ -63,47 +63,12 @@ There are different types of image quality data, including package vulnerabiliti
 
     quality.images.openshift.io/<qualityType>.<providerId>: {}
 
-<table>
-<caption>Annotation key format</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Component</th>
-<th style="text-align: left;">Description</th>
-<th style="text-align: left;">Acceptable values</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p><code>qualityType</code></p></td>
-<td style="text-align: left;"><p>Metadata type</p></td>
-<td style="text-align: left;"><p><code>vulnerability</code><br />
-<code>license</code><br />
-<code>operations</code><br />
-<code>policy</code></p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>providerId</code></p></td>
-<td style="text-align: left;"><p>Provider ID string</p></td>
-<td style="text-align: left;"><p><code>openscap</code><br />
-<code>redhatcatalog</code><br />
-<code>redhatinsights</code><br />
-<code>blackduck</code><br />
-<code>jfrog</code></p></td>
-</tr>
-</tbody>
-</table>
+| Component | Description | Acceptable values |
+|----|----|----|
+| `qualityType` | Metadata type | `vulnerability`, `license`, `operations`, `policy` |
+| `providerId` | Provider ID string | `openscap`, `redhatcatalog`, `redhatinsights`, `blackduck`, `jfrog` |
 
-### Example annotation keys
-
-    quality.images.openshift.io/vulnerability.blackduck: {}
-    quality.images.openshift.io/vulnerability.jfrog: {}
-    quality.images.openshift.io/license.blackduck: {}
-    quality.images.openshift.io/vulnerability.openscap: {}
+Annotation key format
 
 The value of the image quality annotation is structured data that must adhere to the following format:
 
@@ -129,6 +94,15 @@ The `summary` field must adhere to the following format:
 | `reference` | URL of information source or more details. Optional. | String |
 
 Summary field value format
+
+### Example annotation keys
+
+The following are example annotation keys:
+
+    quality.images.openshift.io/vulnerability.blackduck: {}
+    quality.images.openshift.io/vulnerability.jfrog: {}
+    quality.images.openshift.io/license.blackduck: {}
+    quality.images.openshift.io/vulnerability.openscap: {}
 
 ### Example annotation values
 
@@ -214,6 +188,8 @@ Use the `images.openshift.io/deny-execution` image policy to programmatically co
 
 ### Example annotation
 
+The following is an example annotation:
+
 ``` yaml
 annotations:
   images.openshift.io/deny-execution: true
@@ -221,7 +197,7 @@ annotations:
 
 ## Integration reference
 
-In most cases, external tools such as vulnerability scanners develop a script or plugin that watches for image updates, performs scanning, and annotates the associated image object with the results. Typically this automation calls the OpenShift Container Platform 4.22 REST APIs to write the annotation. See OpenShift Container Platform REST APIs for general information about the REST APIs.
+External tools such as vulnerability scanners typically develop a script or plugin that watches for image updates, performs scanning, and annotates the associated image object with the results by using OpenShift Container Platform REST APIs.
 
 ### Example REST API call
 

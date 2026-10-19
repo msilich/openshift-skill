@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-A two-node OpenShift cluster with fencing (TNF) enters a `degraded` state when one of its two control plane nodes becomes unavailable. The remaining node continues to host the active control plane; however, the cluster loses its high-availability (HA) redundancy until the failed node recovers.
+A two-node OpenShift Container Platform cluster with fencing (TNF) enters a `degraded` state when one of its two control plane nodes becomes unavailable. The remaining node continues to host the active control plane. However, the cluster loses its high-availability (HA) redundancy until the failed node recovers.
 
 Degraded operation is an intentional design state rather than a system failure. In this state, the cluster remains functional and core services continue to operate. Only specific capabilities that strictly require two-node redundancy are temporarily unavailable.
 
@@ -71,6 +71,32 @@ Degraded cluster operations include the following structural behaviors:
 
 > [!IMPORTANT]
 > Mutual fencing protection is unavailable during degraded operations. Fencing actions cannot execute against the surviving node because the communication and execution paths from the peer node are offline.
+
+# Automatic node tainting in a two-node OpenShift cluster with fencing
+
+In a two-node OpenShift Container Platform cluster with fencing (TNF) your applications recover quickly from node failures without manual intervention by using the automatic node tainting mechanism.
+
+When a node fails, the automatic tainting mechanism immediately evicts workloads to the surviving node, reducing failover time significantly.
+
+This mechanism is built into the deployment, requires no configuration, cannot be disabled, and applies exclusively to control plane nodes in a two-node topology.
+
+You do not need to take any action for this automation to run. However, you can observe its activity during a fencing event. You can view the applied taint and annotation immediately after a node is fenced by running the following command:
+
+``` terminal
+$ oc get node <node_name>
+```
+
+Persistent volumes and Deployment pods become eligible for rescheduling much sooner than they would normally.
+
+You can inspect the local logs on each control plane node by using the `journalctl` tool by filtering for the following tags:
+
+- `taint-fenced-node`
+
+- `untaint-fenced-node`
+
+- `tnf-taint-alert`
+
+- `tnf-untaint-alert`.
 
 # Cluster operator stability during degraded operation
 

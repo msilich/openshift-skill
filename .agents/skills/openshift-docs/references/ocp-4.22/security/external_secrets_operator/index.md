@@ -4,7 +4,9 @@ The External Secrets Operator for Red Hat OpenShift operates as a cluster-wide s
 
 # About the External Secrets Operator for Red Hat OpenShift
 
-Use the External Secrets Operator for Red Hat OpenShift to integrate the `external-secrets` application with the OpenShift Container Platform cluster. The `external-secrets` application fetches secrets stored in external providers such as AWS Secrets Manager, HashiCorp Vault, Google Secret Manager, Azure Key Vault, IBM Cloud Secrets Manager, and AWS Systems Manager Parameter Store, and integrates them with Kubernetes in a secure manner.
+Use the External Secrets Operator for Red Hat OpenShift to integrate the `external-secrets` application with the OpenShift Container Platform cluster.
+
+The `external-secrets` application fetches secrets stored in external providers such as AWS Secrets Manager, HashiCorp Vault, Google Secret Manager, Azure Key Vault, IBM Cloud Secrets Manager, and AWS Systems Manager Parameter Store, and integrates them with Kubernetes in a secure manner.
 
 Using the External Secrets Operator ensures the following:
 
@@ -44,7 +46,9 @@ The External Secrets Operator for Red Hat OpenShift is tested with the following
 
 # About FIPS compliance for External Secrets Operator for Red Hat OpenShift
 
-The External Secrets Operator for Red Hat OpenShift supports FIPS compliance. When running on OpenShift Container Platform in FIPS mode, External Secrets Operator uses the RHEL cryptographic libraries submitted to NIST for FIPS validation on the x86_64, ppc64le, and s390X architectures. For more information about the NIST validation program, see "Cryptographic module validation program" in Additional resources. For more information about the latest NIST status for the individual versions of the RHEL cryptographic libraries submitted for validation, see "Compliance activities and government standards" in Additional resources.
+The External Secrets Operator for Red Hat OpenShift supports FIPS compliance. When running on OpenShift Container Platform in FIPS mode, External Secrets Operator uses the RHEL cryptographic libraries submitted to NIST for FIPS validation on the x86_64, ppc64le, and s390X architectures.
+
+For more information about the NIST validation program, see "Cryptographic module validation program" in Additional resources. For more information about the latest NIST status for the individual versions of the RHEL cryptographic libraries submitted for validation, see "Compliance activities and government standards" in Additional resources.
 
 To enable FIPS mode, install the External Secrets Operator on an OpenShift Container Platform cluster that runs in FIPS mode. For more information, see "Do you need extra security for your cluster?".
 

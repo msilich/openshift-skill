@@ -81,7 +81,7 @@ spec:
 
 </div>
 
-# Deploying an egress service
+# Deploy an egress service
 
 You can deploy an egress service to manage egress traffic for pods behind a `LoadBalancer` service.
 

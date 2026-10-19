@@ -185,4 +185,4 @@ Procedure
 
 - [Creating CI/CD solutions for applications using Red Hat OpenShift Pipelines](https://docs.openshift.com/pipelines/latest/create/creating-applications-with-cicd-pipelines.html)
 
-- [Creating a Windows VM](../creating_vm/virt-creating-vms-uploading-images.md#virt-creating-windows-vm_virt-creating-vms-uploading-images)
+- [Creating a Windows VM](../creating_vm/virt-creating-vms-from-cli.md#virt-creating-windows-vm_virt-creating-vms-cli)

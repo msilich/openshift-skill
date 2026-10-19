@@ -20,7 +20,7 @@ The OpenShift Dev Spaces server is a Java web service exposing a Hypertext Trans
 
 <figure>
 <br />
-<img src="assets/69a69198f08ba7d2599c.png" alt="OpenShift Dev Spaces server interactions" /><br />
+<img src="assets/1e81d2c1f4efa2769cdf.png" alt="OpenShift Dev Spaces server interactions" /><br />
 
 <figcaption>Figure 1. OpenShift Dev Spaces server interactions with other components</figcaption>
 </figure>

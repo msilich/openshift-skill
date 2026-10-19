@@ -163,7 +163,7 @@ From an infrastructure perspective, the Developer Sandbox consists of multiple R
 
 <figure>
 <br />
-<img src="assets/7e0b230583c4d7f28ccc.png" alt="Scheme of a multi-cluster environment" /><br />
+<img src="assets/8fcc7807757c360fa602.png" alt="Scheme of a multi-cluster environment" /><br />
 
 <figcaption>Figure 1. Developer Sandbox multi-cluster architecture</figcaption>
 </figure>

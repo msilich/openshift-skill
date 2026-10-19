@@ -35,7 +35,9 @@ OVN-Kubernetes runs a daemon on each node. There are daemon sets for the databas
 
 # OVN-Kubernetes purpose
 
-The OVN-Kubernetes network plugin is an open-source, fully-featured Kubernetes CNI plugin that uses Open Virtual Network (OVN) to manage network traffic flows. OVN is a community developed, vendor-agnostic network virtualization solution. The OVN-Kubernetes network plugin uses the following technologies:
+The OVN-Kubernetes network plugin is an open-source, fully-featured Kubernetes CNI plugin that uses Open Virtual Network (OVN) to manage network traffic flows.
+
+OVN is a community developed, vendor-agnostic network virtualization solution. The OVN-Kubernetes network plugin uses the following technologies:
 
 - OVN to manage network traffic flows.
 

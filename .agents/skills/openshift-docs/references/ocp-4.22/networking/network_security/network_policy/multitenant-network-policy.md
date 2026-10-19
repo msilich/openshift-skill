@@ -7,7 +7,7 @@ As a cluster administrator, you can configure your network policies to provide m
 > [!NOTE]
 > Configuring network policies as described in this section provides network isolation similar to the multitenant mode of OpenShift SDN in previous versions of OpenShift Container Platform.
 
-# Configuring multitenant isolation by using network policy
+# Configure multitenant isolation by using network policy
 
 You can configure network policies to isolate workloads in a project from pods and services in other namespaces. This isolation helps control network traffic between projects and improves multitenant security in your cluster.
 

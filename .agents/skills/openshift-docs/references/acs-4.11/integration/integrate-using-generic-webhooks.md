@@ -1,6 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-With Red Hat Advanced Cluster Security for Kubernetes, you can send alert notifications as JSON messages to any webhook receiver. When a violation occurs, Red Hat Advanced Cluster Security for Kubernetes makes an HTTP POST request on the configured URL. The POST request body includes JSON-formatted information about the alert.
+With Red Hat Advanced Cluster Security for Kubernetes, you can send alert notifications as JSON messages to any webhook receiver. When a violation occurs, Red Hat Advanced Cluster Security for Kubernetes makes an HTTP POST request on the configured URL.
+
+<a id="generic-webhooks-integration-overview_integrate-using-generic-webhooks"></a>
+
+# Generic webhooks integration overview
+
+The webhook POST request body contains JSON-formatted information about the alert, along with any custom fields that you configure. You can create separate webhooks for different purposes.
 
 The webhook POST request’s JSON data includes a `v1.Alert` object and any custom fields that you configure, as shown in the following example:
 
@@ -19,15 +25,15 @@ The webhook POST request’s JSON data includes a `v1.Alert` object and any cust
 }
 ```
 
-You can create multiple webhooks. For example, you can create one webhook for receiving all audit logs and another webhook for alert notifications.
+You can create many webhooks. For example, you can create one webhook for receiving all audit logs and another webhook for alert notifications.
 
-To forward alerts from Red Hat Advanced Cluster Security for Kubernetes to any webhook receiver:
+Forwarding alerts from Red Hat Advanced Cluster Security for Kubernetes to a webhook receiver involves the following tasks:
 
-1.  Set up a webhook URL to receive alerts.
+1.  Set up a webhook URL to receive alerts. The webhook receiver is external to Red Hat Advanced Cluster Security for Kubernetes.
 
-2.  Use the webhook URL to set up notifications in Red Hat Advanced Cluster Security for Kubernetes.
+2.  Use the webhook URL to create a generic webhook integration in Red Hat Advanced Cluster Security for Kubernetes.
 
-3.  Identify the policies you want to send notifications for, and update the notification settings for those policies.
+3.  Identify the policies that you want to send notifications for, and update the notification settings for those policies.
 
 <a id="webhook-configuring-acs_integrate-using-generic-webhooks"></a>
 
@@ -56,7 +62,7 @@ Procedure
 6.  If your webhook receiver uses an untrusted certificate, enter a CA certificate in the **CA certificate** field. Otherwise, leave it blank.
 
     > [!NOTE]
-    > The server certificate used by the webhook receiver must be valid for the endpoint DNS name. You can click **Skip TLS verification** to ignore this validation. Red Hat does not suggest turning off TLS verification. Without TLS verification, data could be intercepted by an unintended recipient.
+    > The server certificate used by the webhook receiver must be valid for the endpoint DNS name. You can click **Skip TLS verification** to ignore this validation. Red Hat does not suggest turning off TLS verification. Without TLS verification, an unintended recipient could intercept data.
 
 7.  Optional: Click **Enable audit logging** to receive alerts about all the changes made in Red Hat Advanced Cluster Security for Kubernetes.
 
@@ -69,7 +75,7 @@ Procedure
 
     - Custom **Header**, for example: `Authorization: Bearer <access_token>`
 
-9.  Use **Extra fields** to include additional key-value pairs in the JSON object that Red Hat Advanced Cluster Security for Kubernetes sends. For example, if your webhook receiver accepts objects from multiple sources, you can add `"source": "rhacs"` as an extra field and filter on this value to identify all alerts from Red Hat Advanced Cluster Security for Kubernetes.
+9.  Use **Extra fields** to include additional key-value pairs in the JSON object that Red Hat Advanced Cluster Security for Kubernetes sends. For example, if your webhook receiver accepts objects from many sources, you can add `"source": "rhacs"` as an extra field and filter on this value to identify all alerts from Red Hat Advanced Cluster Security for Kubernetes.
 
 10. Select **Test** to send a test message to verify that the integration with your generic webhook is working.
 
@@ -100,7 +106,7 @@ Procedure
 4.  In the **Enable notification** window, select the **webhook** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 

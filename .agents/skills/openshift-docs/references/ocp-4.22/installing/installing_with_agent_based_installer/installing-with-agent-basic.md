@@ -36,7 +36,7 @@ Additional resources
 
 </div>
 
-# Downloading the Agent-based Installer
+# Download the Agent-based Installer
 
 Begin the installation process by downloading the Agent-based Installer and the CLI needed for your installation.
 
@@ -193,7 +193,7 @@ Procedure
 
 </div>
 
-# Creating and booting the agent image
+# Create and boot the agent image
 
 After you have prepared the configuration inputs for your installation, create the ISO image and boot it on your machines.
 
@@ -308,7 +308,7 @@ Procedure
 
 </div>
 
-# Tracking and verifying installation progress
+# Track and verify installation progress
 
 After the installation has started, you can track installation progress and verify a successful installation.
 
@@ -396,7 +396,7 @@ Procedure
 
 </div>
 
-# Gathering log data from a failed Agent-based installation
+# Gather log data from a failed Agent-based installation
 
 If you encounter a failed Agent-based installation, you can gather log data to provide for a support case.
 

@@ -233,18 +233,20 @@ Procedure
 
     </div>
 
-        apiVersion: storage.k8s.io/v1
-        kind: StorageClass
-        metadata:
-          name: <azure-disk-performance-plus-sc>
-        provisioner: disk.csi.azure.com
-        parameters:
-          skuName: Premium_LRS
-          cachingMode: ReadOnly
-          enablePerformancePlus: "true"
-        reclaimPolicy: Delete
-        volumeBindingMode: WaitForFirstConsumer
-        allowVolumeExpansion: true
+    ``` yaml
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      name: <azure-disk-performance-plus-sc>
+    provisioner: disk.csi.azure.com
+    parameters:
+      skuName: Premium_LRS
+      cachingMode: ReadOnly
+      enablePerformancePlus: "true"
+    reclaimPolicy: Delete
+    volumeBindingMode: WaitForFirstConsumer
+    allowVolumeExpansion: true
+    ```
 
     </div>
 

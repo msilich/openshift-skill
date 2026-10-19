@@ -324,7 +324,7 @@ Additional resources
 
 </div>
 
-## Viewing cluster roles and bindings
+## View cluster roles and bindings
 
 You can view cluster roles and bindings by using the `oc` CLI to determine the permissions associated with roles and identify the users, groups, and service accounts assigned to them.
 
@@ -646,7 +646,7 @@ Procedure
 
 </div>
 
-## Viewing local roles and bindings
+## View local roles and bindings
 
 You can view local role bindings by using the `oc` CLI to identify the users, groups, and service accounts that have roles within the current project or another project.
 
@@ -757,7 +757,7 @@ Procedure
 
 </div>
 
-## Adding roles to users
+## Add roles to users
 
 To grant a user access within a project, you can bind an appropriate role to the user and verify the resulting role binding.
 
@@ -898,7 +898,7 @@ Procedure
 
 </div>
 
-## Creating a local role
+## Create a local role
 
 You can create a local role and bind it to a user to define custom permissions within a project.
 
@@ -940,7 +940,7 @@ Procedure
 
 </div>
 
-## Creating a cluster role
+## Create a cluster role
 
 To define custom cluster-wide permissions, you can create a cluster role that specifies the verbs and resources users can access.
 
@@ -1009,7 +1009,7 @@ You can also manage cluster role bindings using the following operations. The `-
 
 Cluster role binding operations
 
-## Creating a cluster admin
+## Create a cluster admin
 
 To grant a user full administrative access to the cluster, you can bind the `cluster-admin` cluster role to that user.
 
@@ -1067,7 +1067,7 @@ Cluster administrators can add unauthenticated users to the following cluster ro
 > [!IMPORTANT]
 > Always verify compliance with your organization’s security standards when modifying unauthenticated access.
 
-## Adding unauthenticated groups to cluster roles
+## Add unauthenticated groups to cluster roles
 
 Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 
@@ -1147,7 +1147,7 @@ INFO Access the OpenShift web-console here: https://console-openshift-console.ap
 INFO Login to the console with user: kubeadmin, password: <provided>
 ```
 
-## Removing the kubeadmin user
+## Remove the kubeadmin user
 
 After you define an identity provider and create a new `cluster-admin` user, you can remove the `kubeadmin` to improve cluster security.
 
@@ -1232,7 +1232,7 @@ Procedure
 
 </div>
 
-## Adding a catalog source to a cluster
+## Add a catalog source to a cluster
 
 To make Operators from a custom index image available for installation, create a catalog source that adds the catalog content to your cluster.
 
@@ -1397,7 +1397,7 @@ If you choose automatic updates for an installed Operator, when a new version of
 
 If you select manual updates, when a newer version of an Operator is available, OLM creates an update request. As a cluster administrator, you must then manually approve that update request to have the Operator updated to the new version.
 
-## Installing from the software catalog by using the web console
+## Install from the software catalog by using the web console
 
 To install and subscribe to an Operator from the software catalog, you can use the OpenShift Container Platform web console. The console guides you through selecting an install mode, namespace, and approval strategy.
 
@@ -1498,7 +1498,7 @@ Verification
 
 </div>
 
-## Installing from the software catalog by using the CLI
+## Install from the software catalog by using the CLI
 
 To install an Operator from the software catalog without using the web console, you can create or update a `Subscription` object by using the `oc` command in OpenShift Container Platform.
 

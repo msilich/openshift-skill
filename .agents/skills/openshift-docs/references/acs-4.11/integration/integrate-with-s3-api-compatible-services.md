@@ -1,8 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Red Hat Advanced Cluster Security for Kubernetes can be integrated with S3 API compatible services to enable data backups. These backups can be used for data restoration in the case of an infrastructure disaster or corrupt data. After integrating with the S3 API compatible provider, you can schedule daily or weekly backups and do manual on-demand backups.
+Red Hat Advanced Cluster Security for Kubernetes enables integration with S3 API compatible services to back up data. Use these backups for data restoration in the case of an infrastructure disaster or corrupt data. After integrating with the S3 API compatible provider, you can schedule daily or weekly backups and do manual on-demand backups.
 
-The backup includes the entire RHACS database, which includes all configurations, resources, events, and certificates. Make sure that backups are stored securely.
+<a id="s3-api-compatible-integration-overview_integrate-with-s3-api-compatible-services"></a>
+
+# S3 API compatible integration overview
+
+The backup includes the entire RHACS database, which has all configurations, resources, events, and certificates. Make sure to store backups securely.
 
 <div class="important">
 
@@ -10,9 +14,21 @@ The backup includes the entire RHACS database, which includes all configurations
 
 </div>
 
-- To back up to Amazon S3, use the dedicated [Amazon S3](integrate-with-amazon-s3.md) integration to ensure the best compatibility.
+- To back up to Amazon S3, use the dedicated Amazon S3 integration to ensure the best compatibility.
 
-- Red Hat does not test this integration with every S3 API compatible provider, so the integration is not guaranteed to work with all providers.
+- Red Hat does not test this integration with every S3 API compatible provider, so the integration is not guaranteed to work with all providers.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Amazon S3](integrate-with-amazon-s3.md)
 
 </div>
 
@@ -60,15 +76,15 @@ Procedure
 
 8.  Optionally, enter an **Object Prefix** if you want to save the backups in a specific folder structure.
 
-9.  Enter the **Endpoint** under which the S3 compatible service is reachable. If no scheme is specified, the default, `https`, is used.
+9.  Enter the **Endpoint** under which the S3 compatible service is reachable. If you do not specify a scheme, the system uses the default, `https`.
 
 10. Enter the **Region** for the bucket. Consult your provider’s documentation to enter the correct region.
 
 11. Select the **URL style**:
 
-    - **Virtual hosted** style buckets are addressed as *https://\<bucket\>.\<endpoint\>*.  
+    - **Virtual hosted** style buckets use the address format *https://\<bucket\>.\<endpoint\>*.
 
-    - **Path** style buckets are addressed as *https://\<endpoint\>/\<bucket\>*.
+    - **Path** style buckets use the address format *https://\<endpoint\>/\<bucket\>*.
 
 12. Enter the **Access Key ID** and the **Secret Access Key**.
 
@@ -76,9 +92,9 @@ Procedure
 
 14. Select **Create** to generate the configuration.
 
-</div>
+    After you configure the integration, RHACS automatically backs up all data according to the specified schedule.
 
-After the integration is configured, RHACS automatically backs up all data according to the specified schedule.
+</div>
 
 <a id="perform-on-demand-backups-s3-api-compatible-services_integrate-with-s3-api-compatible-services"></a>
 
@@ -114,12 +130,12 @@ Procedure
 
 4.  Click **Trigger backup**.
 
+    > [!NOTE]
+    > When you select **Trigger backup**, there is no notification. However, RHACS begins the backup task in the background.
+
 </div>
 
-> [!NOTE]
-> When you select **Trigger backup**, there is no notification. However, RHACS begins the backup task in the background.
-
-<a id="_additional_resources"></a>
+<a id="additional-resources_integrate-with-s3-api-compatible-services"></a>
 
 # Additional resources
 

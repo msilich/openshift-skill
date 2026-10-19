@@ -111,7 +111,7 @@ Ensure that the following conditions are met before you begin:
 
 - If your nodes are virtual machines (VMs), ensure that the hypervisor and the connected network switches support jumbo frames.
 
-## Checking the current cluster MTU value
+## Check the current cluster MTU value
 
 To ensure network stability and performance in a hybrid environment where part of your cluster is in the cloud and part is an on-premise environment, you can obtain the current maximum transmission unit (MTU) for the cluster network.
 
@@ -154,9 +154,9 @@ Procedure
 
 </div>
 
-## Preparing your hardware MTU configuration
+## Prepare your hardware MTU configuration
 
-To maintain network stability during an MTU change, you must prepare the configuration for your underlying hardware using a method such as DHCP, PXE, or NetworkManager. This preparation ensures that all cluster nodes are ready to accept the new MTU value before you apply the changes to the cluster network.
+You must prepare the MTU configuration for your underlying hardware by using a method such as DHCP, PXE, or NetworkManager before you apply the changes to the cluster network.
 
 <div>
 
@@ -205,7 +205,14 @@ Procedure
     where:
 
     `<interface>`
-    Specifies the primary network interface name.
+    Specifies the primary network interface name or the bond if using bonding.
+
+    > [!IMPORTANT]
+    > Observe the following constraints when specifying the interface:
+    >
+    > - Do not specify subordinate interfaces of a bond, such as `eth0` or `eth1`. Subordinate interfaces automatically inherit the MTU value set on the parent bond.
+    >
+    > - The MTU of the VLAN interface cannot exceed the MTU of its parent physical or bonded interface. A parent interface with a larger MTU, such as `9000` for jumbo frames, can host VLANs with smaller MTUs, such as `1500`. However, raising the MTU of a VLAN interface beyond the MTU parent interface current limit requires updating the parent interface first.
 
     `<mtu>`
     Specifies the new hardware MTU value.
@@ -214,7 +221,7 @@ Procedure
 
 </div>
 
-## Creating MachineConfig objects
+## Create MachineConfig objects
 
 To prepare your nodes for a hardware MTU change, you must create `MachineConfig` objects for both control plane and compute nodes. Creating these objects ensures that the updated network interface settings are ready for deployment without causing immediate cluster instability.
 
@@ -297,7 +304,7 @@ Procedure
 
 </div>
 
-## Beginning the MTU migration
+## Begin the MTU migration
 
 Start the maximum transmission unit (MTU) migration by specifying the migration configuration for the cluster network and machine interfaces. The Machine Config Operator performs a rolling reboot of the nodes to prepare the cluster for the MTU change.
 
@@ -345,7 +352,7 @@ Procedure
 
 </div>
 
-## Verifying the machine configuration
+## Verify the machine configuration
 
 Verify the machine configuration on your hosts to confirm that the maximum transmission unit (MTU) migration applied successfully. Checking the configuration state and system settings help ensures that the nodes use the correct migration script.
 
@@ -408,9 +415,9 @@ Procedure
 
 </div>
 
-## Applying the new hardware MTU value
+## Apply the new hardware MTU value
 
-To ensure consistent network communication across your cluster, you must apply the new hardware maximum transmission unit (MTU) value to your nodes. This process involves updating the underlying network interfaces and verifying that the Machine Config Operator successfully reboots and updates each node.
+You must apply the new hardware maximum transmission unit (MTU) value to your nodes by updating the underlying network interfaces and verifying that the Machine Config Operator successfully reboots each node.
 
 <div>
 
@@ -490,7 +497,7 @@ Procedure
 
 </div>
 
-## Finalizing the MTU migration
+## Finalize the MTU migration
 
 Finalize the MTU migration to apply the new maximum transmission unit (MTU) settings to the OVN-Kubernetes network plugin. This updates the cluster configuration and triggers a rolling reboot of the nodes to complete the process.
 

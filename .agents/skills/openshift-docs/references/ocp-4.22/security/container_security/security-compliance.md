@@ -2,7 +2,7 @@
 
 You should understand the regulatory readiness, or compliance, that is required before any systems can be put into production. That regulatory readiness can be imposed by national standards, industry standards or the organization’s corporate governance framework.
 
-# Understanding compliance and risk management
+# Understand compliance and risk management
 
 FIPS compliance is one of the most critical components required in highly secure environments to ensure that only supported cryptographic technologies are allowed on nodes.
 

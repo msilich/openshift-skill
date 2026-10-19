@@ -1,18 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-RHEL golden images are published as container disks in a secure registry. The Containerized Data Importer (CDI) polls imports golden images into your cluster and stores them in the `openshift-virtualization-os-images` project as snapshots or persistent volume claims (PVCs).
+You can manage the RHEL boot sources that OpenShift Virtualization uses to create virtual machines (VMs), including where they are stored and how they are automatically updated.
+
+RHEL golden images are published as container disks in a secure registry. The Containerized Data Importer (CDI) polls and imports golden images into your cluster and stores them in the `openshift-virtualization-os-images` project as snapshots or persistent volume claims (PVCs).
 
 RHEL images are automatically updated. You can disable and re-enable automatic updates for these images. For more information, see "Additional resources".
 
 Cluster administrators can enable automatic subscription for RHEL virtual machines in the OpenShift Container Platform web console.
 
-You can create virtual machines (VMs) from operating system images provided by Red Hat by using one of the following methods:
-
-- Create a VM from a template by using the web console.
-
-- Create a VM from an instance type by using the web console.
-
-- Create a VM from a `VirtualMachine` manifest by using the command line.
+For information about creating VMs from these boot sources, see "Additional resources".
 
 > [!IMPORTANT]
 > Do not create VMs in the default `openshift-*` namespaces. Instead, create a new namespace or use an existing namespace without the `openshift` prefix.
@@ -129,8 +125,8 @@ Procedure
 
 - [Managing Red Hat boot source updates](../storage/virt-automatic-bootsource-updates.md#virt-managing-auto-update-all-system-boot-sources_virt-automatic-bootsource-updates)
 
-- [Creating a VM from a template by using the web console](virt-creating-vms-from-templates.md#virt-creating-vms-from-templates)
+- [Creating a VM from a template by using the web console](virt-creating-vms-web.md#virt-creating-vm-from-template-web_virt-creating-vms-web)
 
-- [Creating a VM from an instance type by using the web console](virt-creating-vms-from-instance-types.md#virt-creating-vms-from-instance-types)
+- [Creating a VM with custom configuration by using the web console](virt-creating-vms-web.md#virt-creating-vm-custom-configuration-web_virt-creating-vms-web)
 
 - [Creating a VM from a `VirtualMachine` manifest by using the command line](virt-creating-vms-from-cli.md#virt-creating-vms-from-cli)

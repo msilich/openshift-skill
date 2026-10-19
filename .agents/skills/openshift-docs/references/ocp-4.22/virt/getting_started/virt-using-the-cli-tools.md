@@ -297,10 +297,11 @@ You can use the following `virtctl` commands to add or remove resources from run
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><p><code>virtctl addvolume &lt;vm_name&gt; --volume-name=&lt;datavolume_or_PVC&gt; [--persist] [--serial=&lt;label&gt;]</code></p></td>
+<td style="text-align: left;"><p><code>virtctl addvolume &lt;vm_name&gt; --volume-name=&lt;datavolume_or_PVC&gt; [--bus=&lt;bus_type&gt;] [--persist] [--serial=&lt;label&gt;]</code></p></td>
 <td style="text-align: left;"><p>Hot plug a data volume or persistent volume claim (PVC).</p>
 <p>Optional:</p>
 <ul>
+<li><p><code>--bus=&lt;bus_type&gt;</code> specifies the bus type of the added disk. Supported values are <code>virtio</code> and <code>scsi</code>. The default bus type is <code>virtio</code>.</p></li>
 <li><p><code>--persist</code> mounts the virtual disk permanently on a VM. <strong>This flag does not apply to VMIs.</strong></p></li>
 <li><p><code>--serial=&lt;label&gt;</code> adds a label to the VM. If you do not specify a label, the default label is the data volume or PVC name.</p></li>
 </ul></td>

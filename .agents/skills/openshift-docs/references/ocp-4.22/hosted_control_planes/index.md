@@ -153,7 +153,7 @@ Additional resources
 
 # Relationship between hosted control planes, multicluster engine Operator, and RHACM
 
-You can configure hosted control planes by using the multicluster engine for Kubernetes Operator. The multicluster engine Operator cluster lifecycle defines the process of creating, importing, managing, and destroying Kubernetes clusters across various infrastructure cloud providers, private clouds, and on-premise data centers.
+Configure hosted control planes by using the multicluster engine for Kubernetes Operator. The multicluster engine Operator cluster lifecycle defines the process that creates, imports, manages, and destroys Kubernetes clusters across cloud providers, private clouds, and on-premises data centers.
 
 > [!NOTE]
 > The multicluster engine Operator is an integral part of Red Hat Advanced Cluster Management and is enabled by default with RHACM. However, you do not need Red Hat Advanced Cluster Management to use hosted control planes.

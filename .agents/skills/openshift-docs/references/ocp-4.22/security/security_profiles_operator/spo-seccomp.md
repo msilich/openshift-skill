@@ -5,7 +5,7 @@ Create and manage seccomp profiles and bind them to workloads.
 > [!IMPORTANT]
 > The Security Profiles Operator supports only Red Hat Enterprise Linux CoreOS (RHCOS) worker nodes. Red Hat Enterprise Linux (RHEL) nodes are not supported.
 
-# Creating seccomp profiles
+# Create seccomp profiles
 
 Use the `SeccompProfile` object to create seccomp profiles.
 
@@ -186,7 +186,7 @@ Verification
 
 </div>
 
-## Binding workloads to profiles with ProfileBindings
+## Bind workloads to profiles with ProfileBindings
 
 You can use the `ProfileBinding` resource to bind a security profile to the `SecurityContext` of a container.
 

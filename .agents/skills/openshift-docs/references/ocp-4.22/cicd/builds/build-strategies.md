@@ -230,11 +230,15 @@ Additional resources
 
 # Source-to-image build
 
-Source-to-image (S2I) is a tool for building reproducible container images. It produces ready-to-run images by injecting application source into a container image and assembling a new image. The new image incorporates the base image, the builder, and built source and is ready to use with the `buildah run` command. S2I supports incremental builds, which re-use previously downloaded dependencies, previously built artifacts, and so on.
+Source-to-image (S2I) is a tool for building reproducible container images. It produces ready-to-run images by injecting application source into a container image and assembling a new image.
 
-## Performing source-to-image incremental builds
+The new image incorporates the base image, the builder, and built source and is ready to use with the `buildah run` command. S2I supports incremental builds, which re-use previously downloaded dependencies, previously built artifacts, and so on.
+
+## Perform source-to-image incremental builds
 
 Source-to-image (S2I) can perform incremental builds, which means it reuses artifacts from previously-built images.
+
+See S2I Requirements for information on how to create a builder image supporting incremental builds.
 
 <div>
 
@@ -255,25 +259,17 @@ Procedure
       incremental: true
   ```
 
-  - Specify an image that supports incremental builds. Consult the documentation of the builder image to determine if it supports this behavior.
+  where:
 
-  - This flag controls whether an incremental build is attempted. If the builder image does not support incremental builds, the build will still succeed, but you will get a log message stating the incremental build was not successful because of a missing `save-artifacts` script.
+  `strategy.sourceStrategy.from.name`
+  Specifies an image that supports incremental builds. Consult the documentation of the builder image to determine if it supports this behavior.
 
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
+  `strategy.sourceStrategy.incremental`
+  Specifies whether an incremental build is attempted. If the builder image does not support incremental builds, the build will still succeed, but you will get a log message stating the incremental build was not successful because of a missing `save-artifacts` script.
 
 </div>
 
-- See S2I Requirements for information on how to create a builder image supporting incremental builds.
-
-</div>
-
-## Overriding source-to-image builder image scripts
+## Override source-to-image builder image scripts
 
 You can override the `assemble`, `run`, and `save-artifacts` source-to-image (S2I) scripts provided by the builder image.
 
@@ -300,10 +296,10 @@ Procedure
         scripts: "http://somehost.com/scripts_directory"
     ```
 
-    - The build process appends `run`, `assemble`, and `save-artifacts` to the path. If any or all scripts with these names exist, the build process uses these scripts in place of scripts with the same name that are provided in the image.
+    The build process appends `run`, `assemble`, and `save-artifacts` to the path. If any or all scripts with these names exist, the build process uses these scripts in place of scripts with the same name that are provided in the image.
 
-      > [!NOTE]
-      > Files located at the `scripts` URL take precedence over files located in `.s2i/bin` of the source repository.
+    > [!NOTE]
+    > Files located at the `scripts` URL take precedence over files located in `.s2i/bin` of the source repository.
 
 </div>
 
@@ -311,13 +307,13 @@ Procedure
 
 There are two ways to make environment variables available to the source build process and resulting image: environment files and `BuildConfig` environment values. The variables that you provide using either method will be present during the build process and in the output image.
 
-### Using source-to-image environment files
+### Use source-to-image environment files
 
 Source build enables you to set environment values, one per line, inside your application, by specifying them in a `.s2i/environment` file in the source repository. The environment variables specified in this file are present during the build process and in the output image.
 
-If you provide a `.s2i/environment` file in your source repository, source-to-image (S2I) reads this file during the build. This allows customization of the build behavior as the `assemble` script may use these variables.
+If you provide a `.s2i/environment` file in your source repository, source-to-image (S2I) reads this file during the build. This allows customization of the build behavior as the `assemble` script may use these variables. The complete list of supported environment variables is available in the using images section for each image.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -325,17 +321,19 @@ Procedure
 
 </div>
 
-For example, to disable assets compilation for your Rails application during the build:
+1.  To disable assets compilation for your Rails application during the build, add the following line to the `.s2i/environment` file:
+
+    ``` text
+    DISABLE_ASSET_COMPILATION=true
+    ```
+
+2.  In addition to builds, the specified environment variables are also available in the running application itself. To start the Rails application in `development` mode instead of `production` mode, add the following line to the `.s2i/environment` file:
+
+    ``` text
+    RAILS_ENV=development
+    ```
 
 </div>
-
-- Add `DISABLE_ASSET_COMPILATION=true` in the `.s2i/environment` file.
-
-In addition to builds, the specified environment variables are also available in the running application itself. For example, to cause the Rails application to start in `development` mode instead of `production`:
-
-- Add `RAILS_ENV=development` to the `.s2i/environment` file.
-
-The complete list of supported environment variables is available in the using images section for each image.
 
 ### Using source-to-image build configuration environment
 
@@ -375,17 +373,17 @@ Additional resources
 
 </div>
 
-## Ignoring source-to-image source files
+## Ignore source-to-image source files
 
 Source-to-image (S2I) supports a `.s2iignore` file, which contains a list of file patterns that should be ignored. Files in the build working directory, as provided by the various input sources, that match a pattern found in the `.s2iignore` file will not be made available to the `assemble` script.
 
-## Creating images from source code with source-to-image
+## Create images from source code with source-to-image
 
 Source-to-image (S2I) is a framework that makes it easy to write images that take application source code as an input and produce a new image that runs the assembled application as output.
 
 The main advantage of using S2I for building reproducible container images is the ease of use for developers. As a builder image author, you must understand two basic concepts in order for your images to provide the best S2I performance, the build process and S2I scripts.
 
-### Understanding the source-to-image build process
+### Understand the source-to-image build process
 
 Leverage the Source-to-image (S2I) process in OpenShift Container Platform to seamlessly transform application source code into ready-to-run, reproducible container images.
 

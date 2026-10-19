@@ -821,7 +821,7 @@ Additional resources
 
 Some organizations require the rotation of the cloud provider credentials. To allow the cluster to use the new credentials, you must update the secrets that the Cloud Credential Operator (CCO) uses to manage cloud provider credentials.
 
-## Rotating cloud provider credentials manually
+## Rotate cloud provider credentials manually
 
 If your cloud provider credentials are changed for any reason, you must manually update the secret that the Cloud Credential Operator (CCO) uses to manage cloud provider credentials.
 
@@ -981,7 +981,9 @@ Additional resources
 
 # Removing cloud provider credentials
 
-After installing OpenShift Container Platform, some organizations require the removal of the cloud provider credentials that were used during the initial installation. To allow the cluster to use the new credentials, you must update the secrets that the Cloud Credential Operator (CCO) uses to manage cloud provider credentials.
+After installing OpenShift Container Platform, some organizations require the removal of the cloud provider credentials that were used during the initial installation.
+
+To allow the cluster to use the new credentials, you must update the secrets that the Cloud Credential Operator (CCO) uses to manage cloud provider credentials.
 
 ## Removing cloud provider credentials
 

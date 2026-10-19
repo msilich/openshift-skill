@@ -4,7 +4,7 @@ You can switch the Bluefield-2 network device from data processing unit (DPU) mo
 
 Before you perform any tasks in the following documentation, ensure that you [installed the SR-IOV Network Operator](../networking_operators/sr-iov-operator/installing-sriov-operator.md#installing-sriov-operator).
 
-# Switching Bluefield-2 from DPU mode to NIC mode
+# Switch Bluefield-2 from DPU mode to NIC mode
 
 Use the following procedure to switch Bluefield-2 from data processing units (DPU) mode to network interface controller (NIC) mode.
 

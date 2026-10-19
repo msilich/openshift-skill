@@ -18,7 +18,7 @@ With its foundation in Kubernetes, OpenShift Container Platform incorporates the
 
 OpenShift Container Platform is a platform for developing and running containerized applications. It is designed to allow applications and the data centers that support them to expand from just a few machines and applications to thousands of machines that serve millions of clients.
 
-# Understanding OpenShift Container Platform
+# Understand OpenShift Container Platform
 
 You can use OpenShift Container Platform to deploy, configure, and manage the lifecycle of container-based applications.
 

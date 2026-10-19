@@ -5,8 +5,6 @@ The File Integrity Operator continually runs file integrity checks on the cluste
 > [!NOTE]
 > File Integrity Operator is not supported on HCP clusters.
 
-# Additional resources
-
 - [File Integrity Operator release notes](file-integrity-operator-release-notes.md#file-integrity-operator-release-notes)
 
 - [File Integrity Operator support](fio-support.md#fio-support)

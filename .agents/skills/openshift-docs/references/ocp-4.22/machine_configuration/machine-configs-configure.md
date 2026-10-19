@@ -11,7 +11,7 @@ There might be situations where the configuration on a node does not fully match
 > [!TIP]
 > Use the following "Configuring chrony time service" procedure as a model for how to go about adding other configuration files to OpenShift Container Platform nodes.
 
-# Configuring chrony time service
+# Configure chrony time service
 
 You can set the time server and related settings used by the chrony time service (`chronyd`) by modifying the contents of the `chrony.conf` file and passing those contents to your nodes as a machine config.
 
@@ -88,7 +88,7 @@ Procedure
 
 </div>
 
-# Disabling the chrony time service
+# Disable the chrony time service
 
 You can disable the chrony time service (`chronyd`) for nodes with a specific role by using a `MachineConfig` custom resource (CR).
 
@@ -174,7 +174,7 @@ Procedure
 
 </div>
 
-# Adding kernel arguments to nodes
+# Add kernel arguments to nodes
 
 In some special cases, you can add kernel arguments to a set of nodes in your cluster to customize the kernel behavior to meet specific needs you might have.
 
@@ -380,7 +380,7 @@ Procedure
 
 </div>
 
-# Enabling multipathing with kernel arguments on RHCOS
+# Enable multipathing with kernel arguments on RHCOS
 
 You can achieve higher host availability by enabling multipathing on the primary disk, which allows stronger resilience to hardware failure, by using a `MachineConfig` object.
 
@@ -550,7 +550,7 @@ Procedure
 
 </div>
 
-# Adding a real-time kernel to nodes
+# Add a real-time kernel to nodes
 
 If your OpenShift Container Platform workloads require real-time operating system characteristics, you can switch your machines to the Linux real-time kernel. Switching to the real-time kernel provides a higher degree of determinism for your OpenShift Container Platform workloads.
 
@@ -665,7 +665,7 @@ Procedure
 
 </div>
 
-# Configuring journald settings
+# Configure journald settings
 
 To configure settings for the `journald` service on OpenShift Container Platform nodes, you can modify the appropriate configuration file and pass the file to the appropriate pool of nodes as a machine config.
 
@@ -804,7 +804,7 @@ Procedure
 
 </div>
 
-# Adding extensions to RHCOS
+# Add extensions to RHCOS
 
 You can add software packages to Red Hat Enterprise Linux CoreOS (RHCOS) systems by using extension packages to add a minimal set of features to specific nodes.
 
@@ -998,7 +998,7 @@ Verification
 
 </div>
 
-# Loading custom firmware blobs in the machine config manifest
+# Load custom firmware blobs in the machine config manifest
 
 You can load local firmware blobs that are not managed by RHCOS into the machine config manifest by updating the search path with a machine config.
 
@@ -1081,7 +1081,7 @@ Procedure
 
 </div>
 
-# Changing the core user password for node access
+# Change the core user password for node access
 
 You can use the default `core` user to access a node through a cloud provider serial console or a bare metal baseboard controller manager (BMC) if a node is down and you cannot access that node by using SSH or the `oc debug node` command.
 
@@ -1212,7 +1212,7 @@ Verification
 
 </div>
 
-# Overriding storage or partition setup
+# Override storage or partition setup
 
 You can use a `MachineConfig` object to change the disk partition schema, file systems, and RAID configurations that were established during the cluster installation. This allows you to make specific configuration changes that are different from the initial cluster state.
 

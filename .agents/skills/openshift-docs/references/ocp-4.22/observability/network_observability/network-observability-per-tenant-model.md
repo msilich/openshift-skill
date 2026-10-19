@@ -195,7 +195,7 @@ Procedure
 
 </div>
 
-# Configure the FlowCollectorSlice as a project administrator
+# Configure FlowCollectorSlice as a project administrator
 
 Project administrators can manage flow collection and data enrichment within their own namespaces by configuring a `FlowCollectorSlice` custom resource for decentralized network traffic analysis.
 
@@ -260,6 +260,8 @@ Verification
 </div>
 
 # FlowCollectorSlice \[flows.netobserv.io/v1alpha1\]
+
+`FlowCollectorSlice` is the API allowing to decentralize some of the `FlowCollector` configuration per namespace tenant.
 
 Description
 FlowCollectorSlice is the API allowing to decentralize some of the FlowCollector configuration per namespace tenant.

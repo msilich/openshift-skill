@@ -8,6 +8,30 @@ These release notes track the development of the Network Observability Operator 
 
 Some referenced tickets are not linked. This means that the ticket is not accessible without Red Hat credentials.
 
+# Network Observability Operator 1.12.3 advisory
+
+Network Observability Operator 1.12.3 includes a security advisory.
+
+- [RHSA-2026:70593 Network Observability Operator 1.12.3](https://access.redhat.com/errata/RHSA-2026:70593)
+
+# Network Observability Operator 1.12.3 fixed issues
+
+The Network Observability Operator 1.12.3 release contains several fixed issues that improve flow enrichment accuracy and system status reporting.
+
+Surfaced missing RBAC permissions for customized namespaces in FlowCollector status
+Previously, setting `spec.namespace` in the `FlowCollector` resource to a non-default namespace without manually creating the required `ClusterRoleBindings` caused `FlowLogsPipeline` pods to enter a `CrashLoopBackOff` state without an explicit error in the `FlowCollector` status. Additionally, unused `ClusterRoleBindings` remained active in the default `netobserv` namespace, creating a potential namespace-squatting risk.
+
+With this release, missing RBAC permissions in custom namespaces are detected and surfaced directly in the `FlowCollector` status as actionable error messages. Unused `ClusterRoleBindings` are also cleanly removed.
+
+[NETOBSERV-2945](https://redhat.atlassian.net/browse/NETOBSERV-2945)
+
+Resolved incorrect flow attribution to terminated pods after pod IP reuse
+Previously, the flow enrichment process indexed pod IP addresses without filtering by lifecycle phase. If a pod reached a `Succeeded` or `Failed` phase and its IP was reassigned to a new pod, Prometheus metrics continued associating new network flows with the terminated pod’s name and namespace.
+
+With this release, the flow enrichment process excludes `Succeeded` and `Failed` pods from IP-to-pod mapping, ensuring metrics accurately reflect active workloads.
+
+[NETOBSERV-3001](https://redhat.atlassian.net/browse/NETOBSERV-3001)
+
 # Network Observability Operator 1.12.2 advisory
 
 Network Observability Operator 1.12.2 includes a product enhancement advisory.

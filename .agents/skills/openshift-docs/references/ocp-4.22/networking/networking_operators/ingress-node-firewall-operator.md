@@ -17,7 +17,7 @@ You configure `rules` of the `IngressNodeFirewall` CR and apply them to clusters
 >
 > For OpenShift Container Platform 4.14 or later, you must run Ingress Node Firewall Operator on RHEL 9.0 or later.
 
-# Installing the Ingress Node Firewall Operator
+# Install the Ingress Node Firewall Operator
 
 As a cluster administrator, you can install the Ingress Node Firewall Operator to enable node-level ingress firewalling by using the OpenShift Container Platform CLI.
 
@@ -132,7 +132,7 @@ Procedure
 
 </div>
 
-# Installing the Ingress Node Firewall Operator using the web console
+# Install the Ingress Node Firewall Operator using the web console
 
 As a cluster administrator, you can install the Ingress Node Firewall Operator to enable node-level ingress firewalling by using the web console.
 
@@ -194,7 +194,7 @@ Procedure
 
 </div>
 
-# Deploying Ingress Node Firewall Operator
+# Deploy Ingress Node Firewall Operator
 
 To deploy the Ingress Node Firewall Operator, create a `IngressNodeFirewallConfig` custom resource that will deploy the Operator’s daemon set. You can deploy one or multiple `IngressNodeFirewall` CRDs to nodes by applying firewall rules.
 
@@ -281,7 +281,7 @@ The fields for the Ingress Node Firewall configuration object are described in t
 <td style="text-align: left;"><p><code>spec.ebpfProgramManagerMode</code></p></td>
 <td style="text-align: left;"><p><code>boolean</code></p></td>
 <td style="text-align: left;"><p>Specifies if the Node Ingress Firewall Operator uses the eBPF Manager Operator or not to manage eBPF programs. This capability is a Technology Preview feature.</p>
-<p>For more information about the support scope of Red Hat Technology Preview features, see <a href="https://access.redhat.com/support/offerings/techpreview/">Technology Preview Features Support Scope</a>.</p></td>
+<p>For more information about the support scope of Red Hat Technology Preview features, see "Technology Preview Features Support Scope".</p></td>
 </tr>
 </tbody>
 </table>
@@ -318,6 +318,18 @@ EOF
 
 > [!NOTE]
 > The Operator consumes the CR object and creates an ingress node firewall daemon set on all the nodes that match the `nodeSelector`.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/)
+
+</div>
 
 ## Ingress Node Firewall rules object
 
@@ -485,7 +497,7 @@ spec:
 
 Learn when to use eBPF Manager to load and manage Ingress Node Firewall programs.
 
-The Ingress Node Firewall uses [eBPF](https://www.kernel.org/doc/html/latest/bpf/index.html) programs to implement some of its key firewall functionality. By default these eBPF programs are loaded into the kernel using a mechanism specific to the Ingress Node Firewall. You can configure the Ingress Node Firewall Operator to use the eBPF Manager Operator for loading and managing these programs instead.
+The Ingress Node Firewall uses "eBPF" programs to implement some of its key firewall functionality. By default these eBPF programs are loaded into the kernel using a mechanism specific to the Ingress Node Firewall. You can configure the Ingress Node Firewall Operator to use the eBPF Manager Operator for loading and managing these programs instead.
 
 When this integration is enabled, the following limitations apply:
 
@@ -495,7 +507,19 @@ When this integration is enabled, the following limitations apply:
 
 - The Ingress Node Firewall Operator daemon set pods run as privileged.
 
-# Configuring Ingress Node Firewall Operator to use the eBPF Manager Operator
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [eBPF](https://www.kernel.org/doc/html/latest/bpf/index.html)
+
+</div>
+
+# Configure Ingress Node Firewall Operator to use the eBPF Manager Operator
 
 Configure the Ingress Node Firewall to use eBPF Manager for program lifecycle control.
 
@@ -567,7 +591,7 @@ Procedure
 
 </div>
 
-# Viewing Ingress Node Firewall Operator rules
+# View Ingress Node Firewall Operator rules
 
 Inspect existing rules and configs to confirm the firewall is applied as intended.
 
@@ -593,7 +617,7 @@ Procedure
 
 </div>
 
-# Troubleshooting the Ingress Node Firewall Operator
+# Troubleshoot the Ingress Node Firewall Operator
 
 You can verify the status and view the logs to diagnose ingress firewall deployment or rule issues.
 

@@ -129,15 +129,13 @@ Additional resources
 
 - [Install and use the `virtctl` command-line interface (CLI) tool](virt-using-the-cli-tools.md#virt-using-the-cli-tools)
 
-- [Create a VM from a Red Hat image](../creating_vm/virt-creating-vms-from-rh-images-overview.md#virt-creating-vms-from-rh-images-overview)
+- [Create a VM by using the web console](../creating_vm/virt-creating-vms-web.md#virt-creating-vms-web)
 
-- [Create a VM from an instance type](../creating_vm/virt-creating-vms-from-instance-types.md#virt-creating-vms-from-instance-types)
+- [Import a custom image from a web page](../creating_vm/virt-creating-vms-from-cli.md#virt-creating-vm-web-page-cli_virt-creating-vms-cli)
 
-- [Import a custom image from a web page](../creating_vm/virt-creating-vms-from-web-images.md#virt-creating-vms-from-web-images)
+- [Upload an image from your local machine](../creating_vm/virt-creating-vms-from-cli.md#virt-uploading-image-virtctl_virt-creating-vms-cli)
 
-- [Upload an image from your local machine](../creating_vm/virt-creating-vms-uploading-images.md#virt-creating-vms-uploading-images)
-
-- [Clone a persistent volume claim (PVC)](../creating_vm/virt-creating-vms-by-cloning-pvcs.md#virt-creating-vms-by-cloning-pvcs)
+- [Clone a persistent volume claim (PVC)](../creating_vm/virt-creating-vms-from-cli.md#virt-creating-vm-by-cloning-pvcs-cli_virt-creating-vms-cli)
 
 - [Connect a VM to a Linux bridge network](../vm_networking/virt-connecting-vm-to-linux-bridge.md#virt-connecting-vm-to-linux-bridge)
 

@@ -7,7 +7,7 @@ Uninstall the External Secrets Management Console Plug-in from your OpenShift Co
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
-# Uninstalling the External Secrets Management Console Plug-in
+# Uninstalling the External Secrets Management Console Plug-in by using the web console
 
 You can uninstall the External Secrets Management Console Plug-in from your cluster using the OpenShift Container Platform web console.
 

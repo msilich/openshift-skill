@@ -274,9 +274,11 @@ status:
 
 - The `altNames` field lists any alternative interface names configured through the Kubernetes NMState Operator. You can use these names in the `nicSelector.pfNames` field of a `SriovNetworkNodePolicy` CR.
 
-## Configuring the SR-IOV Network Operator on Mellanox cards when Secure Boot is enabled
+## Configure the SR-IOV Network Operator on Mellanox cards when Secure Boot is enabled
 
-The SR-IOV Network Operator supports an option to skip the firmware configuration for Mellanox devices. This option allows you to create virtual functions by using the SR-IOV Network Operator when the system has secure boot enabled. You must manually configure and allocate the number of virtual functions in the firmware before switching the system to secure boot.
+The SR-IOV Network Operator supports skipping firmware configuration for Mellanox devices, allowing you to create virtual functions when secure boot is enabled.
+
+You must manually configure and allocate the number of virtual functions in the firmware before switching the system to secure boot.
 
 > [!NOTE]
 > The number of virtual functions in the firmware is the maximum number of virtual functions that you can request in the policy.
@@ -594,7 +596,7 @@ The paths specified in the previous list are compatible with the `app-netutil` l
 
 As with the paths that the Network Resources Injector can create, the paths in the preceding list can optionally end with a `_<container-name>` suffix.
 
-# Configuring SR-IOV network devices
+# Configure SR-IOV network devices
 
 The SR-IOV Network Operator adds the `SriovNetworkNodePolicy.sriovnetwork.openshift.io` custom resource definition (CRD) to OpenShift Container Platform. You can configure an SR-IOV network device by creating a `SriovNetworkNodePolicy` custom resource (CR).
 
@@ -667,7 +669,7 @@ Additional resources
 
 </div>
 
-# Creating a non-uniform memory access (NUMA) aligned SR-IOV pod
+# Create a non-uniform memory access (NUMA) aligned SR-IOV pod
 
 You can create a NUMA aligned SR-IOV pod by restricting SR-IOV and the CPU resources allocated from the same NUMA node with `restricted` or `single-numa-node` Topology Manager policies.
 
@@ -767,7 +769,7 @@ In some scenarios, it is a priority to maximize CPU and memory resources for a p
 
 For example, consider a compute node, `compute-1`, that features two NUMA nodes: `numa0` and `numa1`. The SR-IOV-enabled NIC is present on `numa0`. The CPUs available for pod scheduling are present on `numa1` only. By setting the `excludeTopology` specification to `true`, the Topology Manager can assign CPU and memory resources for the pod to `numa1` and can assign the SR-IOV network resource for the same pod to `numa0`. This is only possible when you set the `excludeTopology` specification to `true`. Otherwise, the Topology Manager attempts to place all resources on the same NUMA node.
 
-# Troubleshooting SR-IOV configuration
+# Troubleshoot SR-IOV configuration
 
 After following the procedure to configure an SR-IOV network device, the following sections address some error conditions.
 

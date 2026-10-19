@@ -24,7 +24,7 @@ Provide isolation for processes and resources. Each container keeps its processe
 Security-Enhanced Linux (SELinux)
 Enforces mandatory access controls to restrict access to files and directories by processes. SELinux adds an extra layer of security by preventing unauthorized access to files if a process tries to break its confinement.
 
-SELinux follows the security policy of denying everything unless explicitly allowed. If a process attempts to modify or access a file without permission, SELinux denies access. For more information, see [Introduction to SELinux](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/using_selinux/index#introduction-to-selinux_getting-started-with-selinux).
+SELinux follows the security policy of denying everything unless explicitly allowed. If a process attempts to modify or access a file without permission, SELinux denies access. For more information, see "Introduction to SELinux".
 
 Linux capabilities
 Assign specific privileges to processes at a granular level, minimizing the need for full root permissions. For more information, see "Linux capabilities".
@@ -34,6 +34,10 @@ Allocate and manage system resources, such as CPU and memory for processes and c
 
 CRI-O
 Serves as a lightweight container runtime that enforces security boundaries and manages container workloads.
+
+## Additional resources
+
+- [Introduction to SELinux](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html-single/using_selinux/index#introduction-to-selinux_getting-started-with-selinux)
 
 <div>
 
@@ -148,4 +152,8 @@ You can modify which capabilities that a pod can receive by configuring Security
 >
 > - `NET_ADMIN`: Allows control over networking, like SR-IOV ports, but can be replaced with alternative solutions in modern setups.
 >
-> For more information about Linux capabilities, see the [Linux capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html) man page.
+> For more information about Linux capabilities, see "Linux capabilities".
+
+## Additional resources
+
+- [Linux capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html)

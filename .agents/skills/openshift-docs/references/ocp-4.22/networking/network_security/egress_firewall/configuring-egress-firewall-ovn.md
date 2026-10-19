@@ -318,7 +318,7 @@ spec:
       type: Allow
 ```
 
-# Creating an EgressFirewall custom resource (CR)
+# Create an EgressFirewall custom resource (CR)
 
 As a cluster administrator, you can create an egress firewall policy object for a project.
 

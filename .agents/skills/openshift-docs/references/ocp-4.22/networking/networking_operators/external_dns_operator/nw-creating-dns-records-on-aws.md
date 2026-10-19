@@ -5,7 +5,7 @@ To create DNS records on AWS and AWS GovCloud, use the External DNS Operator. Th
 > [!IMPORTANT]
 > Usage of External DNS Operator on an STS-enabled cluster that runs in AWS Government (AWS GovCloud) regions is not supported.
 
-# Creating DNS records on a public hosted zone for AWS by using Red Hat External DNS Operator
+# Create DNS records on a public hosted zone for AWS by using Red Hat External DNS Operator
 
 You can create DNS records on a public hosted zone for AWS by using the Red Hat External DNS Operator. You can use the same instructions to create DNS records on a hosted zone for AWS GovCloud.
 
@@ -130,7 +130,7 @@ Procedure
 
 </div>
 
-# Creating DNS records in a different AWS account by using a shared VPC
+# Create DNS records in a different AWS account by using a shared VPC
 
 You can use the ExternalDNS Operator to create DNS records in a different AWS account using a shared Virtual Private Cloud (VPC).
 

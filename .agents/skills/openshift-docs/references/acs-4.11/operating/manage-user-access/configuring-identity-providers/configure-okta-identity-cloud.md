@@ -83,7 +83,17 @@ Procedure
 
 </div>
 
-After the configuration is complete, you are redirected to the **Sign On** settings page for the new app. A yellow box contains links to the information that you need to configure Red Hat Advanced Cluster Security for Kubernetes.
+<div class="formalpara">
+
+<div class="title">
+
+Result
+
+</div>
+
+After the configuration is complete, the system redirects you to the **Sign On** settings page for the new app. A highlighted box has links to the information that you need to configure Red Hat Advanced Cluster Security for Kubernetes.
+
+</div>
 
 After you have created the app, assign Okta users to this application. Go to the **Assignments** tab, and assign the set of individual users or groups that can access Red Hat Advanced Cluster Security for Kubernetes. For example, assign the group **Everyone** to allow all users in the organization to access Red Hat Advanced Cluster Security for Kubernetes.
 
@@ -91,7 +101,7 @@ After you have created the app, assign Okta users to this application. Go to the
 
 # Configuring a SAML 2.0 identity provider
 
-Use the instructions in this section to integrate a Security Assertion Markup Language (SAML) 2.0 identity provider with Red Hat Advanced Cluster Security for Kubernetes (RHACS).
+Integrate a Security Assertion Markup Language (SAML) 2.0 identity provider with Red Hat Advanced Cluster Security for Kubernetes (RHACS).
 
 <div>
 
@@ -119,13 +129,13 @@ Procedure
 
 2.  Click **Create auth provider** and select **SAML 2.0** from the drop-down list.
 
-3.  In the **Name** field, enter a name to identify this authentication provider; for example, **Okta** or **Google**. The integration name is shown on the login page to help users select the correct sign-in option.
+3.  In the **Name** field, enter a name to identify this authentication provider; for example, **Okta** or **Google**. The login page shows the integration name to help users select the correct sign-in option.
 
 4.  In the **ServiceProvider issuer** field, enter the value that you are using as the `Audience URI` or `SP Entity ID` in Okta, or a similar value in other providers.
 
 5.  Select the type of **Configuration**:
 
-    - **Option 1: Dynamic Configuration**: If you select this option, enter the **IdP Metadata URL**, or the URL of **Identity Provider metadata** available from your identity provider console. The configuration values are acquired from the URL.
+    - **Option 1: Dynamic Configuration**: If you select this option, enter the **IdP Metadata URL**, or the URL of **Identity Provider metadata** available from your identity provider console. The system acquires the configuration values from the URL.
 
     - **Option 2: Static Configuration**: Copy the required static fields from the **View Setup Instructions** link in the Okta console, or a similar location for other providers:
 
@@ -144,14 +154,14 @@ Procedure
 
 7.  Click **Save**.
 
-</div>
+    > [!IMPORTANT]
+    > If your SAML identity provider’s authentication response meets the following criteria:
+    >
+    > - Includes a `NotValidAfter` assertion: The user session remains valid until the time specified in the `NotValidAfter` field has elapsed. After the user session expires, users must reauthenticate.
+    >
+    > - Does not include a `NotValidAfter` assertion: The user session remains valid for 30 days, and then users must reauthenticate.
 
-> [!IMPORTANT]
-> If your SAML identity provider’s authentication response meets the following criteria:
->
-> - Includes a `NotValidAfter` assertion: The user session remains valid until the time specified in the `NotValidAfter` field has elapsed. After the user session expires, users must reauthenticate.
->
-> - Does not include a `NotValidAfter` assertion: The user session remains valid for 30 days, and then users must reauthenticate.
+</div>
 
 <div>
 
@@ -173,7 +183,7 @@ Verification
 
     - If you logged in successfully, RHACS shows the `User ID` and `User Attributes` that the identity provider sent for the credentials that you used to log in to the system.
 
-    - If your login attempt failed, RHACS shows a message describing why the identity provider’s response could not be processed.
+    - If your login try failed, RHACS shows a message describing why the system could not process the identity provider’s response.
 
 6.  Close the **Test login** browser tab.
 

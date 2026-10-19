@@ -125,7 +125,7 @@ Additional resources
 
 ## Certificates managed by etcd
 
-The etcd certificates are used for encrypted communication between etcd member peers as well as encrypted client traffic. The certificates are renewed automatically within the cluster provided that communication between all nodes and all services is current. Therefore, if your cluster might lose communication between components during a specific period of time, which is close to the end of the etcd certificate lifetime, it is recommended to renew the certificate in advance. For example, communication can be lost during an upgrade due to nodes rebooting at different times.
+The etcd certificates encrypt communication between etcd member peers and client traffic. Certificates renew automatically if all nodes and services can communicate, so renew them in advance if the cluster might lose communication near the end of the certificate lifetime.
 
 - You can manually renew etcd certificates by running the following command:
 
@@ -135,7 +135,7 @@ The etcd certificates are used for encrypted communication between etcd member p
   jsonpath="{.data.tls\.crt}" | base64 -d | openssl x509 -noout -enddate; done
   ```
 
-For more information about updating etcd certificates, see [Checking etcd certificate expiry in OpenShift 4](https://access.redhat.com/solutions/7000968). For more information about etcd certificates, see "etcd certificates" in *Security and compliance*.
+For more information about updating etcd certificates, see "Checking etcd certificate expiry in OpenShift 4". For more information about etcd certificates, see "etcd certificates" in *Security and compliance*.
 
 <div>
 
@@ -144,6 +144,8 @@ For more information about updating etcd certificates, see [Checking etcd certif
 Additional resources
 
 </div>
+
+- [Checking etcd certificate expiry in OpenShift 4](https://access.redhat.com/solutions/7000968)
 
 - [etcd certificates](../../../security/certificate_types_descriptions/etcd-certificates.md#cert-types-etcd-certificates_cert-types-etcd-certificates)
 

@@ -4,11 +4,15 @@ The telco core reference design specifications (RDS) configures an OpenShift Con
 
 # Telco core RDS use model overview
 
-The Telco core reference design specification (RDS) describes a platform that supports large-scale telco applications including control plane functions such as signaling and aggregation. It also includes some centralized data plane functions, for example, user plane functions (UPF). These functions generally require scalability, complex networking support, resilient software-defined storage, and support performance requirements that are less stringent and constrained than far-edge deployments such as RAN.
+The Telco core reference design specification (RDS) describes a platform that supports large-scale telco applications including control plane and centralized data plane functions such as user plane functions (UPF).
+
+These functions generally require scalability, complex networking support, resilient software-defined storage, and performance requirements that are less stringent than far-edge deployments such as RAN.
 
 # About the telco core cluster use model
 
-The telco core cluster use model is designed for clusters running on commodity hardware. Telco core clusters support large scale telco applications including control plane functions like signaling, aggregation, session border controller (SBC), and centralized data plane functions such as 5G user plane functions (UPF). Telco core cluster functions require scalability, complex networking support, resilient software-defined storage, and support performance requirements that are less stringent and constrained than far-edge RAN deployments.
+The telco core cluster use model supports large-scale telco applications on commodity hardware, including control plane functions and centralized data plane functions such as 5G user plane functions (UPF).
+
+Control plane functions include signaling, aggregation, and session border controller (SBC). These functions require scalability, complex networking support, resilient software-defined storage, and performance requirements that are less stringent than far-edge RAN deployments.
 
 Networking requirements for telco core functions vary widely across a range of networking features and performance points. IPv6 is a requirement and dual-stack is common. Some functions need maximum throughput and transaction rate and require support for user-plane DPDK networking. Other functions use typical cloud-native patterns and can rely on OVN-Kubernetes, kernel networking, and load balancing.
 
@@ -98,7 +102,7 @@ Proper deployment planning is essential for telco core clusters to ensure high a
 
 ## Worker Nodes and MachineConfigPools
 
-`MachineConfigPools` (MCPs) custom resources (CR) enable the subdivision of worker nodes in telco core clusters into different node groups based on customer planning parameters. Careful deployment planning using MCPs is crucial to minimize deployment and upgrade time and, more importantly, to minimize interruption of telco-grade services during cluster upgrades.
+`MachineConfigPools` (MCPs) custom resources (CR) subdivide worker nodes in telco core clusters into different node groups. Careful MCP planning minimizes deployment and upgrade time and interruption of telco-grade services.
 
 **Description**
 
@@ -146,7 +150,9 @@ Plan your MCP labeling with an appropriate strategy to split your worker nodes d
 
 ## Zones
 
-Designing the cluster to support disruption of multiple nodes simultaneously is critical for high availability (HA) and reduced upgrade times. OpenShift Container Platform and Kubernetes use the label `topology.kubernetes.io/zone` to create pools of nodes which are subject to a common failure domain. Annotating nodes for topology (availability) zones allows high-availability workloads to spread such that each zone holds only one replica from a set of HA replicated pods. With this spread the loss of a single zone will not violate HA constraints and minimum service availability will be maintained. OpenShift Container Platform and Kubernetes apply a default TopologySpreadConstraint to all replica constructs, such as `Service`, `ReplicaSet`, `StatefulSet` or `ReplicationController` resources, which spreads the replicas based on the `topology.kubernetes.io/zone` label. This default allows zone based spread to apply without any change to your workload pod specs.
+OpenShift Container Platform uses the `topology.kubernetes.io/zone` label to spread replicas across failure domains so that the loss of a single zone does not violate high-availability constraints.
+
+Annotating nodes for topology zones allows high-availability workloads to spread so that each zone holds only one replica from a set of replicated pods. OpenShift Container Platform applies a default `TopologySpreadConstraint` to all replica constructs, such as `Service`, `ReplicaSet`, `StatefulSet`, or `ReplicationController` resources.
 
 Cluster upgrades typically result in node disruption as the underlying OS is updated. In large clusters it is necessary to update multiple nodes concurrently in order to complete upgrades quickly and in as few maintenance windows as possible. By using zones to ensure pod spread, an upgrade can be applied to all nodes in a zone simultaneously (assuming sufficient spare capacity) while maintaining high availability and service availability. The recommended cluster design is to partition nodes into multiple MCPs based on the considerations above and label all nodes in a single MCP as a single zone which is distinct from zones attached to other MCPs. Using this strategy all nodes in an MCP can be updated simultaneously.
 
@@ -266,7 +272,9 @@ Plan telco core workloads and cluster resources by using the following informati
 
 ## Signaling workloads
 
-Signaling workloads typically use SCTP, REST, gRPC, or similar TCP or UDP protocols. Signaling workloads support hundreds of thousands of transactions per second (TPS) by using a secondary multus CNI configured as MACVLAN or SR-IOV interface. These workloads can run in pods with either guaranteed or burstable QoS.
+Signaling workloads typically use SCTP, REST, gRPC, or similar TCP or UDP protocols and support hundreds of thousands of transactions per second (TPS) by using a secondary multus CNI configured as MACVLAN or SR-IOV.
+
+These workloads can run in pods with either guaranteed or burstable QoS.
 
 # Telco core RDS components
 
@@ -1263,7 +1271,7 @@ Limits and requirements
 
 Use the following custom resources (CRs) to configure and deploy OpenShift Container Platform clusters with the telco core profile. Use the CRs to form the common baseline used in all the specific use models unless otherwise indicated.
 
-## Extracting the telco core reference design configuration CRs
+## Extract the telco core reference design configuration CRs
 
 You can extract the complete set of custom resources (CRs) for the telco core profile from the `telco-core-rds-rhel9` container image. The container image has both the required CRs, and the optional CRs, for the telco core profile.
 
@@ -1400,9 +1408,9 @@ Verification
 
 </div>
 
-## Comparing a cluster with the telco core reference configuration
+## Compare a cluster with the telco core reference configuration
 
-After you deploy a telco core cluster, you can use the `cluster-compare` plugin to assess the cluster’s compliance with the telco core reference design specifications (RDS). The `cluster-compare` plugin is an OpenShift CLI (`oc`) plugin. The plugin uses a telco core reference configuration to validate the cluster with the telco core custom resources (CRs).
+After you deploy a telco core cluster, you can use the `cluster-compare` OpenShift CLI (`oc`) plugin to assess compliance with the telco core reference design specifications (RDS).
 
 The plugin-specific reference configuration for telco core is packaged in a container image with the telco core CRs.
 
@@ -1752,7 +1760,7 @@ The Red Hat telco core 4.22 solution has been validated using the following Red
 | Red Hat Advanced Cluster Management (RHACM) | 2.17             |
 | Red Hat OpenShift GitOps                    | 1.20             |
 | cert-manager Operator                       | 1.19             |
-| Cluster Logging Operator                    | 6.5              |
+| Cluster Logging Operator                    | 6.6              |
 | OpenShift Data Foundation                   | 4.22             |
 | SR-IOV Network Operator                     | 4.22             |
 | MetalLB                                     | 4.22             |
@@ -1760,9 +1768,5 @@ The Red Hat telco core 4.22 solution has been validated using the following Red
 | NUMA-aware scheduler                        | 4.22             |
 
 Telco core cluster validated software components
-
-- OpenShift Data Foundation is expected to be updated to 4.22 when the aligned OpenShift Data Foundation version is released.
-
-- The Cluster Logging Operator is expected to be updated to 6.6 when the aligned version is released.
 
 - The cert-manager Operator and Red Hat OpenShift GitOps Operator are platform-agnostic operators. The support lifecycle for these operators is independent from the support lifecycle for OpenShift Container Platform. You might need to update to a newer minor version of these operators at the end of an operator lifecycle, or when planning to update the OpenShift Container Platform cluster to continue support. For support lifecycle details for platform-agnostic operators, see [OpenShift Operator Life Cycles](https://access.redhat.com/support/policy/updates/openshift_operators).

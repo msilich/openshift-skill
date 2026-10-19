@@ -6,7 +6,7 @@ Red Hat Advanced Cluster Security for Kubernetes assesses risk across your entir
 
 # Viewing deployments at risk
 
-The **Risk** view lists all deployments from all clusters, sorted by a multi-factor risk metric based on policy violations, image contents, deployment configuration, and other similar factors. Deployments at the top of the list present the most risk.
+The **Risk** view lists all deployments from all clusters, sorted by a multifactor risk metric based on policy violations, image contents, deployment configuration, and other similar factors. Deployments at the top of the list present the most risk.
 
 The **Risk** view shows list of deployments with following attributes for each row:
 
@@ -50,13 +50,13 @@ The **Risk indicators** tab explains the discovered risks.
 
 The **Risk indicators** tab includes the following sections:
 
-- **Policy Violations**: The names of the policies that are violated for the selected deployment.
+- **Policy Violations**: The policy names that the selected deployment violates.
 
 - **Suspicious Process Executions**: Suspicious processes, arguments, and container names that the process ran in.
 
 - **Image Vulnerabilities**: Images including total CVEs with their CVSS scores.
 
-- **Service Configurations**: Aspects of the configurations that are often problematic, such as read-write (RW) capability, whether capabilities are dropped, and the presence of privileged containers.
+- **Service Configurations**: Aspects of the configurations that are often problematic, such as read/write (RW) capability, whether the deployment drops capabilities, and the presence of privileged containers.
 
 - **Service Reachability**: Container ports exposed inside or outside the cluster.
 
@@ -99,13 +99,13 @@ The **Overview** section in the **Deployment details** tab shows details about t
 
 - **Annotations**: The Kubernetes annotations for the deployment.
 
-- **Created**: The time and date when the deployment was created.
+- **Created**: The deployment creation time and date.
 
 - **Cluster**: The name of the cluster where the deployment is running.
 
-- **Service Account**: Represents an identity for processes that run in a pod. When a process is authenticated through a service account, it can contact the Kubernetes API server and access cluster resources. If a pod does not have an assigned service account, it gets the default service account.
+- **Service Account**: Represents an identity for processes that run in a pod. When a process authenticates through a service account, it can contact the Kubernetes API server and access cluster resources. If a pod does not have an assigned service account, it gets the default service account.
 
-- **Port configuration**: Information about the ports that are configured in the deployment.
+- **Port configuration**: Information about the ports configured in the deployment.
 
 <a id="risk-deployment-details-container-configuration_evaluate-security-risks"></a>
 
@@ -113,7 +113,7 @@ The **Overview** section in the **Deployment details** tab shows details about t
 
 The container configuration section in the **Deployment details** tab shows details about the following items:
 
-- **Image Name**: The name of the image that is deployed.
+- **Image Name**: The name of the deployed image.
 
 - **Resources**
 
@@ -123,7 +123,7 @@ The container configuration section in the **Deployment details** tab shows deta
 
   - **Memory Request (MB)**: The memory size requested by the container.
 
-  - **Memory Limit (MB)**: The maximum amount of memory the container can use without being killed.
+  - **Memory Limit (MB)**: The maximum amount of memory the container can use before the system terminates it.
 
 - **Mounts**
 
@@ -141,25 +141,27 @@ The container configuration section in the **Deployment details** tab shows deta
 
 ### Security context section
 
-The **Security Context** section in the **Deployment details** tab shows the following details about the security context:
+The **Security Context** section in the **Deployment details** tab shows the privilege settings that apply to the containers in a deployment.
 
-- **Privileged**: Lists `true` if the container is privileged.
+The **Security Context** section shows the following details:
+
+- **Privileged**: Displays `true` when the container runs in privileged mode.
 
 <a id="process-discovery-tab_evaluate-security-risks"></a>
 
 ## Process discovery tab
 
-The **Process Discovery** tab provides a comprehensive list of all binaries that have been executed in a container in your environment for a deployment that you have selected.
+The **Process Discovery** tab provides a comprehensive list of all binaries that ran in a container in your environment for a deployment that you have selected.
 
 You can view information about processes and add or remove processes from the baseline. This page provides the following information and options:
 
 - **Event Timeline**: Displays the number of policy violations, process activities, restarts and terminations, and a link to a graphical representation of that information.
 
-- **History of Running Processes**: Displays a list of processes by name of the binary that was executed and the container in the deployment in which the process executed. Click a process to expand and show additional information such as the following fields:
+- **History of Running Processes**: Displays a list of processes by name of the binary that ran and the container in the deployment in which the process ran. Click a process to expand and show additional information such as the following fields:
 
-  - **Arguments**: The specific arguments that were passed with the binary.
+  - **Arguments**: The specific arguments passed with the binary.
 
-  - **Time**: The date and time of the most recent time the binary was executed in a given container.
+  - **Time**: The date and time when the binary most recently ran in a given container.
 
   - **Pod ID**: The identifier of the pod that includes the container.
 
@@ -197,7 +199,7 @@ The events appear as icons on a timeline. To see more details about an event, ho
 
 - You can expand the display to show events separately for each container in the selected pod.
 
-All events in the timeline are also visible in the minimap control at the bottom. The minimap controls the number of events visible in the event timeline. You can change the events shown in the timeline by modifying the highlighted area on the minimap. To do this, decrease the highlighted area from left or right sides (or both), and then drag the highlighted area.
+All events in the timeline are also visible in the minimap control at the bottom. The minimap controls how many events the timeline displays. You can change the events shown in the timeline by modifying the highlighted area on the minimap. To do this, decrease the highlighted area from left or right sides (or both), and then drag the highlighted area.
 
 <div class="note">
 
@@ -209,7 +211,7 @@ All events in the timeline are also visible in the minimap control at the bottom
 
   - Shows information about container termination and restart events for up to 10 inactive container instances for each container in a pod. For example, for a pod with two containers `app` and `sidecar`, RHACS keeps activity for up to 10 `app` instances and up to 10 `sidecar` instances.
 
-  - Does not track process activities associated with the previous instances of the container.
+  - Does not track process activities associated with the earlier instances of the container.
 
 - RHACS only shows the most recent execution of each (process name, process arguments, UID) tuple for each pod.
 
@@ -260,7 +262,7 @@ In a **locked** state:
 Independent of the locked or unlocked baseline state, you can always add or remove processes from the baseline.
 
 > [!NOTE]
-> For a deployment, if each pod has more than one container in it, RHACS creates a process baseline for each container type. For such a deployment, if some baselines are locked and some are unlocked, the baseline status for that deployment shows up as **Mixed**.
+> For a deployment, if each pod has more than one container in it, RHACS creates a process baseline for each container type. For such a deployment, if the deployment has both locked and unlocked baselines, the baseline status for that deployment shows up as **Mixed**.
 
 <a id="configuring-process-baseline-generation-duration_evaluate-security-risks"></a>
 
@@ -329,7 +331,7 @@ Procedure
 
 ### Adding a process to the baseline
 
-You can manually add a process to the baseline, for example, to add a safe process that was not running when the baseline was created.
+You can manually add a process to the baseline, for example, to add a safe process not running during baseline creation.
 
 <div>
 
@@ -409,13 +411,13 @@ You can configure Red Hat Advanced Cluster Security for Kubernetes (RHACS) to au
 
 Follow these guidelines when using auto-lock:
 
-- The feature is enabled in Central by default and disabled in the secured clusters by default. Therefore, enabling the feature does not require restarting Central. However, changing the state of the feature in Central does require a restart of Central.
+- Central enables the feature by default, and the secured clusters disable it by default. Therefore, enabling the feature does not require restarting Central. However, changing the state of the feature in Central does require a restart of Central.
 
-- The feature is only enabled for process baselines for secured clusters where the feature is enabled.
+- The feature only applies to process baselines for secured clusters that enable it.
 
-- Disabling the feature after it has been enabled does not unlock process baselines that have been locked by the feature.
+- Disabling the feature after enabling it does not unlock process baselines that the feature locked.
 
-- Enabling the feature does not lock process baselines that left the observation period before the feature was enabled.
+- Enabling the feature does not lock process baselines that left the observation period before you enabled the feature.
 
 <div>
 
@@ -447,9 +449,9 @@ Procedure
 
 ### Auto-lock process baselines known limitations
 
-Central, Central DB, and Sensor consume more CPU and memory resources when process baseline auto-lock is enabled. This can lead to CPU throttling and pods crashing due to running out of memory.
+Central, Central DB, and Sensor consume more CPU and memory resources when you enable process baseline auto-lock. This can lead to CPU throttling and pods crashing due to running out of memory.
 
-The following results were obtained from tests with 1,000 deployments in which 5,000 process were spawned every 30 seconds (166.67 processes per second). The test was run with the feature enabled and disabled. Resource usage was compared between the two tests. For the tests the process baseline generation duration was set to three minutes and the rate of process creation did not change after the baseline generation period ended.
+The following results come from tests with 1,000 deployments that spawned 5,000 processes every 30 seconds, a rate of 166.67 processes per second. Each test ran twice, once with the feature enabled and once with the feature disabled, to compare resource usage between the two runs. For the tests, the process baseline generation duration used a three-minute setting and the rate of process creation did not change after the baseline generation period ended.
 
 - Sensor used 24 Mb more memory.
 
@@ -513,13 +515,21 @@ Procedure
 
 2.  Apply the local page filtering criteria that you want to create a policy for. For example, you can filter by using criteria such as a specific CVE, a cluster, a deployment, an image, or various other criteria.
 
-3.  Click **Create policy** and complete the required fields to create a new policy. For the steps to create a policy, see "Creating a security policy from the system policies view".
+3.  Click **Create policy** and complete the required fields to create a new policy.
 
 </div>
 
-1.  Additional resources
+<div>
 
-    - [Creating a security policy from the system policies view ](manage_security_policies/custom-security-policies.md#create-policy-from-system-policies-view_custom-security-policies)
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Creating a security policy from the system policies view](manage_security_policies/custom-security-policies.md#create-policy-from-system-policies-view_custom-security-policies)
+
+</div>
 
 <a id="understanding-filtering-to-policy-mapping_evaluate-security-risks"></a>
 
@@ -546,13 +556,15 @@ These conversions preserve the filtering semantics when creating policies from R
 
 ### Local page filtering
 
-Local page filtering on the **Risk** view combines the search terms by using the following methods:
+Local page filtering on the **Risk** view determines which deployments a search query matches and which search attributes carry over to the policy criteria when you create a policy.
+
+RHACS combines the search terms by using the following methods:
 
 - RHACS combines the search terms within the same category with an `OR` operator. For example, if the search query is `Cluster:A,B`, the filter matches deployments in `cluster A` or `cluster B`.
 
 - RHACS combines the search terms from different categories with an `AND` operator. For example, if the search query is `Cluster:A+Namespace:Z`, the filter matches deployments in `cluster A` and in `namespace Z`.
 
-- When you add multiple scopes to a policy, the policy matches violations from any of the scopes. For example, if you search for `(Cluster A OR Cluster B) AND (Namespace Z)` it results in two policy resources, `(Cluster=A AND Namespace=Z)` OR `(Cluster=B AND Namespace=Z)`.
+- When you add many scopes to a policy, the policy matches violations from any of the scopes. For example, if you search for `(Cluster A OR Cluster B) AND (Namespace Z)` it results in two policy resources, `(Cluster=A AND Namespace=Z)` OR `(Cluster=B AND Namespace=Z)`.
 
 - RHACS drops or modifies filters that do not directly map to policy criteria and reports the dropped filters.
 
@@ -588,7 +600,7 @@ The following table lists how the filtering search attributes map to the policy 
 | External IP | Dropped |
 | Image | Dropped |
 | Image Command | Dropped |
-| Image Created Time | Days since image was created |
+| Image Created Time | Days since image creation |
 | Image Entrypoint | Dropped |
 | Image Label | Disallowed Image Label |
 | Image operating system | Image operating system |

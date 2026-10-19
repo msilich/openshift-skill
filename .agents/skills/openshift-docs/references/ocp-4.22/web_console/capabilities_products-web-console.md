@@ -2,7 +2,7 @@
 
 You can further customize the OpenShift Container Platform web console by adding additional capabilities to your existing workflows and integrations through products.
 
-# Enhancing the OpenShift Container Platform web console with Operators
+# Enhance the OpenShift Container Platform web console with Operators
 
 Cluster administrators can install Operators from the software catalog to extend the OpenShift Container Platform web console beyond layered products. For example, the Web Terminal Operator adds a browser-based terminal with common CLI tools for interacting with the cluster.
 
@@ -14,7 +14,7 @@ This early access program exists so that customers can provide feedback on the u
 
 # Red Hat OpenShift Pipelines in the web console
 
-Red Hat OpenShift Pipelines is a cloud-native, continuous integration and continuous delivery (CI/CD) solution based on Kubernetes resources. Install the Red Hat OpenShift Pipelines Operator by using the software catalog in the OpenShift Container Platform web console. Once the Operator is installed, you can create and modify pipeline objects on **Pipelines** page.
+Red Hat OpenShift Pipelines is a cloud-native, continuous integration and continuous delivery (CI/CD) solution based on Kubernetes resources. After installing the Red Hat OpenShift Pipelines Operator, you can create and modify pipeline objects on the **Pipelines** page.
 
 # Red Hat OpenShift Serverless in the web console
 
@@ -22,9 +22,9 @@ Red Hat OpenShift Serverless enables developers to create and deploy serverless,
 
 # Red Hat Developer Hub in the OpenShift Container Platform web console
 
-The Red Hat Developer Hub is a platform you can use to experience a streamlined development environment. Red Hat Developer Hub is driven by a centralized software catalog, providing efficiency to your microservices and infrastructure. It enables your product team to deliver quality code without any compromises. A quick start is available for you to learn more about how to install the developer hub.
+Red Hat Developer Hub provides a streamlined development environment driven by a centralized software catalog. A quick start is available to help you install the developer hub.
 
-## Installing the Red Hat Developer Hub using the OpenShift Container Platform web console
+## Install the Red Hat Developer Hub using the OpenShift Container Platform web console
 
 The web console provides a quick start with instructions on how to install the Red Hat Developer Hub Operator.
 

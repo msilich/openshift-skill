@@ -8,7 +8,7 @@ A key feature of OpenShift Container Platform and its Kubernetes engine is to be
 
 So, if you are setting out to harden RHCOS nodes in OpenShift Container Platform to meet your security needs, you should consider both what to harden and how to go about doing that hardening.
 
-# Choosing what to harden in RHCOS
+# Choose what to harden in RHCOS
 
 You can review the information on how to approach security for any RHEL system in the Red Hat Enterprise Linux 9 Security Hardening guide.
 
@@ -28,7 +28,7 @@ Additional resources
 
 </div>
 
-# Choosing how to harden RHCOS
+# Choose how to harden RHCOS
 
 Direct modification of RHCOS systems in OpenShift Container Platform is discouraged. Instead, you should think of modifying systems in pools of nodes, such as worker nodes and control plane nodes.
 
@@ -83,7 +83,7 @@ Additional resources
 
 - [Customizing nodes](../../installing/install_config/installing-customizing.md#installing-customizing)
 
-- [Adding kernel arguments to nodes](../../nodes/nodes/nodes-nodes-managing.md#nodes-nodes-kernel-arguments_nodes-nodes-managing)
+- [Add kernel arguments to nodes](../../nodes/nodes/nodes-nodes-managing.md#nodes-nodes-kernel-arguments_nodes-nodes-managing)
 
 - [Optional configuration parameters](../../installing/installing_aws/installation-config-parameters-aws.md#installation-configuration-parameters-optional_installation-config-parameters-aws)
 

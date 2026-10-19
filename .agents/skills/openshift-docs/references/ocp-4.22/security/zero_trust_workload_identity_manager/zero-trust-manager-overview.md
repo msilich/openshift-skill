@@ -14,7 +14,19 @@ The SPIFFE IDs are contained in the SPIFFE Verifiable Identity Document (SVID). 
 
 - JWT-SVIDs: JSON Web Tokens (JWTs) where the SPIFFE ID is included as the `sub` claim.
 
-For more information, see [SPIFFE Overview](https://spiffe.io/docs/latest/spiffe-about/overview/).
+For more information, see "SPIFFE Overview".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [SPIFFE Overview](https://spiffe.io/docs/latest/spiffe-about/overview/)
+
+</div>
 
 # SPIRE Server
 
@@ -36,7 +48,19 @@ Additional resources
 
 The SPIRE Agent performs workload attestation to ensure that workloads receive a verified identity when requesting authentication through the SPIFFE Workload API. The agent uses configured workload attestor plugins to verify these identities.
 
-SPIRE and the SPIRE Agent perform node attestation via node plugins. The plugins are used to verify the identity of the node on which the agent is running. For more information, see [About the SPIRE Agent](https://spiffe.io/docs/latest/spire-about/spire-concepts/#all-about-the-agent).
+SPIRE and the SPIRE Agent perform node attestation via node plugins. The plugins are used to verify the identity of the node on which the agent is running. For more information, see "About the SPIRE Agent".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [About the SPIRE Agent](https://spiffe.io/docs/latest/spire-about/spire-concepts/#all-about-the-agent)
+
+</div>
 
 # Attestation
 
@@ -48,4 +72,16 @@ The two main types of attestation in SPIFFE/SPIRE are:
 
 - Workload attestation: verifies the identity of an application or service running on an attested node before the SPIRE Agent on that node can provide it with a SPIFFE ID and SVID.
 
-For more information, see [Attestation](https://spiffe.io/docs/latest/spire-about/spire-concepts/#attestation).
+For more information, see "Attestation".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Attestation](https://spiffe.io/docs/latest/spire-about/spire-concepts/#attestation)
+
+</div>

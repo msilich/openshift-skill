@@ -7,7 +7,9 @@ Specify Content Security Policy (CSP) directives for your dynamic plugin using t
 
 # Key features of Content Security Policy (CSP)
 
-A Content Security Policy (CSP) is delivered to the browser in the `Content-Security-Policy-Report-Only` response header. The policy is specified as a series of directives and values. Each directive type serves a different purpose, and each directive can have a list of values representing allowed sources.
+A Content Security Policy (CSP) is delivered to the browser in the `Content-Security-Policy-Report-Only` response header.
+
+The policy is specified as a series of directives and values. Each directive type serves a different purpose, and each directive can have a list of values representing allowed sources.
 
 ## Directive Types
 

@@ -13,7 +13,7 @@ Use the `list` subcommand to display all the rendered machine configs in the clu
 > [!NOTE]
 > The `oc adm prune renderedmachineconfigs` command deletes only rendered machine configs that are not in use. If a rendered machine configs are in use by a machine config pool, the rendered machine config is not deleted. In this case, the command output specifies the reason that the rendered machine config was not deleted.
 
-# Viewing rendered machine configs
+# View rendered machine configs
 
 You can view a list of rendered machine configs by using the `oc adm prune renderedmachineconfigs` command with the `list` subcommand to determine which objects you can remove.
 
@@ -94,7 +94,7 @@ Procedure
 
 </div>
 
-# Removing unused rendered machine configs
+# Remove unused rendered machine configs
 
 You can remove unused rendered machine configs by using the `oc adm prune renderedmachineconfigs` command with the `--confirm` command, reducing disk space and performance issues.
 

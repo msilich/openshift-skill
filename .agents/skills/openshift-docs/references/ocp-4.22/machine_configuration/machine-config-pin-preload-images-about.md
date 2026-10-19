@@ -18,7 +18,7 @@ Another benefit to pinned images is that image garbage collection does not remov
 
 Before pulling the images, the Machine Config Operator (MCO) verifies that there is enough storage space available on each affected node. If the node has sufficient space, the MCO creates the pinned image file, pulls the images, and reloads CRI-O. If there is not sufficient space, the MCO does not pull the images and presents an error message.
 
-# Pinning images
+# Pin images
 
 You can pin images to your nodes by using a `PinnedImageSet` custom resource (CR) making the images available to your nodes when needed for operations such as updating a cluster or deploying an application.
 

@@ -38,7 +38,7 @@ With the migration to Go 1.25, the Data Mover defaults the `MaxParallelFileReads
 Changing PVC selected-node is removed
 The Changing PVC selected-node feature, which allowed overriding the `volume.kubernetes.io/selected-node` annotation to change the node selected for a persistent volume claim (PVC) during restore, is removed and is no longer supported. You can ensure PVCs are scheduled to the correct node by using the native Kubernetes `WaitForFirstConsumer` volume binding mode instead.
 
-# Backing up the DPA configuration
+# Back up the DPA configuration
 
 You must back up your current `DataProtectionApplication` (DPA) configuration.
 
@@ -68,7 +68,7 @@ Procedure
 
 </div>
 
-# Upgrading the OADP Operator
+# Upgrade the OADP Operator
 
 You can upgrade the OpenShift API for Data Protection (OADP) Operator by using the following procedure.
 
@@ -105,7 +105,7 @@ Procedure
 
 </div>
 
-# Converting DPA to the new version for OADP 1.6.0
+# Convert DPA to the new version for OADP 1.6.0
 
 OpenShift API for Data Protection (OADP) 1.5 is not supported on OpenShift 4.22. You can convert OADP to the new 1.6 version by using the new `spec.configuration.nodeAgent` field and its sub-fields.
 
@@ -169,7 +169,7 @@ Procedure
 
 </div>
 
-# Verifying the upgrade
+# Verify the upgrade
 
 You can verify the OpenShift API for Data Protection (OADP) upgrade by using the following procedure.
 

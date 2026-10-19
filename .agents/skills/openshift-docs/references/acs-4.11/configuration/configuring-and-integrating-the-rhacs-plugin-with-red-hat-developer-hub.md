@@ -1,11 +1,17 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-By configuring and integrating the Red Hat Advanced Cluster Security for Kubernetes (RHACS) plugin with Red Hat Developer Hub (RHDH), you can view the security information for your deployments in RHDH.
+You can integrate Red Hat Advanced Cluster Security for Kubernetes (RHACS) with Red Hat Developer Hub (RHDH) to view security information for your deployments directly in the RHDH environment.
 
 > [!IMPORTANT]
 > Integration of vulnerability findings into the RHDH is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
+
+<a id="configuring-rhacs-plugin-rhdh-overview_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub"></a>
+
+# Configuring RHACS plugin with Red Hat Developer Hub
+
+By configuring and integrating the Red Hat Advanced Cluster Security for Kubernetes (RHACS) plugin with Red Hat Developer Hub (RHDH), you can view the security information for your deployments in RHDH.
 
 <a id="viewing-security-information-in-red-hat-developer-hub_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub"></a>
 
@@ -13,7 +19,7 @@ By configuring and integrating the Red Hat Advanced Cluster Security for Kubern
 
 By configuring and integrating the Red Hat Advanced Cluster Security for Kubernetes (RHACS) plugin with Red Hat Developer Hub (RHDH), you can access vulnerability data, assess risks, and take proactive security actions without leaving the RHDH environment.
 
-Review the upstream plugin progress and details by visiting [Community plugins for Backstage](https://github.com/backstage/community-plugins).
+Review the upstream plugin progress and details by visiting "Community plugins for Backstage".
 
 <div>
 
@@ -25,7 +31,7 @@ Prerequisites
 
 - You have enabled the RHACS plugin installation in RHDH.
 
-  For more information, see [Installing dynamic plugins using the Helm chart](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.4/html/installing_and_viewing_plugins_in_red_hat_developer_hub/rhdh-installing-rhdh-plugins_title-plugins-rhdh-about#con-install-dynamic-plugin-helm_rhdh-installing-rhdh-plugins) (RHDH documentation).
+  For more information, see "Installing dynamic plugins by using the Helm chart" in the RHDH documentation.
 
 </div>
 
@@ -87,7 +93,7 @@ Procedure
     > [!NOTE]
     > To display the vulnerability data, each component entity in the RHDH catalog must reference the RHACS deployments.
     >
-    > The following values are associated with the entities in the RHDH catalog:
+    > The entities in the RHDH catalog can have the following values:
     >
     > - `API`
     >
@@ -133,23 +139,9 @@ Verification
 
 1.  In the RHDH portal, click **Catalog**.
 
-2.  Click an entity and verify that the **RHACS** tab appears.
+2.  Click an entity and verify that the **RHACS** tab is displayed.
 
 3.  To view the violations and vulnerability data, click the **RHACS** tab.
-
-</div>
-
-After you configure and integrate the RHACS plugin with RHDH, you need to rebuild the Open Container Initiative (OCI) artifact. See "Rebuilding the OCI artifact" for instructions.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Rebuilding the OCI artifact](configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub.md#rebuilding-the-oci-artifact_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub)
 
 </div>
 
@@ -177,3 +169,11 @@ Procedure
   ```
 
 </div>
+
+<a id="additional-resources_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub"></a>
+
+# Additional resources
+
+- [Community plugins for Backstage](https://github.com/backstage/community-plugins)
+
+- [Installing dynamic plugins using the Helm chart](https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.4/html/installing_and_viewing_plugins_in_red_hat_developer_hub/rhdh-installing-rhdh-plugins_title-plugins-rhdh-about#con-install-dynamic-plugin-helm_rhdh-installing-rhdh-plugins)

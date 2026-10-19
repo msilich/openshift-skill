@@ -1,16 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Red Hat Advanced Cluster Security for Kubernetes (RHACS) provides the ability to configure short-lived access to the user interface and API calls.
-
-You can configure this by exchanging OpenID Connect (OIDC) identity tokens for a RHACS-issued token. This is sometimes called machine to machine authentication.
-
-We recommend this especially for Continuous Integration (CI) usage, where short-lived access is preferable over long-lived API tokens.
-
-The following steps outline the high-level workflow on how to configure short-lived access to the user interface and API calls:
-
-1.  Configuring RHACS to trust OIDC identity token issuers for exchanging short-lived RHACS-issued tokens.
-
-2.  Exchanging an OIDC identity token for a short-lived RHACS-issued token by calling the API.
+Red Hat Advanced Cluster Security for Kubernetes (RHACS) provides the ability to configure short-lived access to the user interface and API calls by exchanging OpenID Connect (OIDC) identity tokens.
 
 <div class="note">
 
@@ -45,6 +35,20 @@ Additional resources
 - [Configuring API tokens](../../configuration/configure-api-token.md)
 
 </div>
+
+<a id="configure-short-lived-access-overview_configure-short-lived-access"></a>
+
+# Short-lived access overview
+
+You can configure short-lived access by exchanging OpenID Connect (OIDC) identity tokens for RHACS-issued tokens, enabling secure machine-to-machine authentication.
+
+Red Hat recommends this especially for Continuous Integration (CI) usage, where short-lived access is preferable over long-lived API tokens.
+
+The following steps outline the high-level workflow on how to configure short-lived access to the user interface and API calls:
+
+1.  Configure RHACS to trust OIDC identity token issuers for exchanging short-lived RHACS-issued tokens.
+
+2.  Exchange an OIDC identity token for a short-lived RHACS-issued token by calling the API.
 
 <a id="configure-short-lived-access_configure-short-lived-access"></a>
 
@@ -90,15 +94,29 @@ Procedure
       > [!NOTE]
       > Rules are similar to Authentication Provider rules to assign roles based on claim values.
       >
-      > As a general rule, Red Hat recommends to use unique, immutable claims within Rules. The general recommendation is to use the **sub** claim within the OIDC identity token. For more information about OIDC token claims, see [the list of standard OIDC claims](https://openid.net/specs/openid-connect-core-1_0.html#Claims).
+      > As a general rule, Red Hat recommends to use unique, immutable claims within Rules. The general recommendation is to use the **sub** claim within the OIDC identity token. For more information about OIDC token claims, see the "Standard OIDC claims" documentation.
 
 8.  Click **Save**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Standard OIDC claims](https://openid.net/specs/openid-connect-core-1_0.html#Claims)
 
 </div>
 
 <a id="exchanging-identity-token_configure-short-lived-access"></a>
 
 # Exchanging an identity token
+
+You can exchange a valid OpenID Connect (OIDC) identity token for a short-lived RHACS-issued access token by sending a POST request to the API.
 
 <div>
 
@@ -142,7 +160,19 @@ Procedure
 
 4.  Use the returned access token to access the RHACS instance.
 
+    > [!NOTE]
+    > If you are using **GitHub Actions**, you can use the "stackrox/central-login GitHub Action".
+
 </div>
 
-> [!NOTE]
-> If you are using **GitHub Actions**, you can use the [stackrox/central-login GitHub Action](https://github.com/marketplace/actions/central-login).
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [stackrox/central-login GitHub Action](https://github.com/marketplace/actions/central-login)
+
+</div>

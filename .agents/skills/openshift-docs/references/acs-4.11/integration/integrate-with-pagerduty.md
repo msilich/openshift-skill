@@ -1,6 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-If you are using [PagerDuty](https://www.pagerduty.com/), you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to PagerDuty.
+If you are using PagerDuty, you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to PagerDuty.
+
+<a id="pagerduty-integration-workflow-overview_integrate-with-pagerduty"></a>
+
+# PagerDuty integration workflow overview
+
+Integrating Red Hat Advanced Cluster Security for Kubernetes with PagerDuty involves creating a service in PagerDuty, configuring the integration in Red Hat Advanced Cluster Security for Kubernetes, and enabling notifications for specific policies.
 
 The following steps represent a high-level workflow for integrating Red Hat Advanced Cluster Security for Kubernetes with PagerDuty:
 
@@ -9,6 +15,18 @@ The following steps represent a high-level workflow for integrating Red Hat Adva
 2.  Use the integration key to set up notifications in Red Hat Advanced Cluster Security for Kubernetes.
 
 3.  Identify the policies you want to send notifications for, and update the notification settings for those policies.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [PagerDuty](https://www.pagerduty.com/)
+
+</div>
 
 <a id="configure-pagerduty_integrate-with-pagerduty"></a>
 
@@ -95,7 +113,7 @@ Procedure
 4.  In the **Enable notification** window, select the **PagerDuty** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 

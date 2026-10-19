@@ -32,7 +32,7 @@ The preceding graphic shows the following concepts pertaining to OpenShift Conta
 >
 > By default, ports are allocated automatically and you can access the port allocations for integrations. However, sometimes static port allocations are necessary to integrate with existing infrastructure which may not be easily reconfigured in response to dynamic ports. To achieve integrations with static node ports, you can update the managed service resource directly.
 
-For more information, see the [Kubernetes Services documentation on `NodePort`](https://kubernetes.io/docs/concepts/services-networking/service/#nodeport).
+For more information, see the "Kubernetes Services documentation on \`NodePort\`".
 
 `HostNetwork` endpoint publishing strategy\*
 The `HostNetwork` endpoint publishing strategy publishes the Ingress Controller on node ports where the Ingress Controller is deployed.
@@ -67,7 +67,11 @@ spec:
 
 </div>
 
-## Configuring the Ingress Controller endpoint publishing scope to Internal
+## Additional resources
+
+- [Kubernetes Services documentation on `NodePort`](https://kubernetes.io/docs/concepts/services-networking/service/#nodeport)
+
+## Configure the Ingress Controller endpoint publishing scope to Internal
 
 As a cluster administrator, when you install a new cluster without specifying that the cluster is private, the default Ingress Controller is created with a `scope` set to `External`. You can change an `External` scoped Ingress Controller to `Internal`.
 
@@ -123,7 +127,7 @@ Verification
 
 </div>
 
-## Configuring the Ingress Controller endpoint publishing scope to External
+## Configure the Ingress Controller endpoint publishing scope to External
 
 As an installation or post-installation task, a cluster administrator can configure the Ingress Controller to `Internal`. Additionally, a cluster administrator can change an `Internal` Ingress Controller to `External`.
 
@@ -186,7 +190,7 @@ Verification
 
 </div>
 
-## Adding a single NodePort service to an Ingress Controller
+## Add a single NodePort service to an Ingress Controller
 
 To prevent port conflicts, instead of creating a `NodePort`-type `Service` for each project, create a custom Ingress Controller that can use the `NodePortService` endpoint publishing strategy.
 

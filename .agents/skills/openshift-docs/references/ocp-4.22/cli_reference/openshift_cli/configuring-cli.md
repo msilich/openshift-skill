@@ -6,7 +6,7 @@ You can customize your command-line environment after installing the OpenShift C
 
 You can enable tab completion for the Bash or Zsh shells.
 
-## Enabling tab completion for Bash
+## Enable tab completion for Bash
 
 After you install the OpenShift CLI (`oc`), you can enable tab completion to automatically complete `oc` commands or suggest options when you press Tab. The following procedure enables tab completion for the Bash shell.
 
@@ -48,7 +48,7 @@ Procedure
 
 </div>
 
-## Enabling tab completion for Zsh
+## Enable tab completion for Zsh
 
 After you install the OpenShift CLI (`oc`), you can enable tab completion to automatically complete `oc` commands or suggest options when you press Tab. The following procedure enables tab completion for the Zsh shell.
 
@@ -89,7 +89,7 @@ Procedure
 
 </div>
 
-# Accessing kubeconfig by using the oc CLI
+# Access kubeconfig by using the oc CLI
 
 You can use the `oc` CLI to log in to your OpenShift cluster and retrieve a kubeconfig file for accessing the cluster from the command line.
 

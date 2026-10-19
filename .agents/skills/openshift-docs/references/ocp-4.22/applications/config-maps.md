@@ -4,7 +4,7 @@ By using a config map, you can decouple configuration artifacts from image conte
 
 The following sections define config maps, explain how to create and use them, and describe use cases for consuming `ConfigMap` objects in pods.
 
-# Understanding config maps
+# Understand config maps
 
 You can review the following sections to learn how to use config maps to make configuration values available to your pods separately from application code.
 
@@ -91,7 +91,7 @@ Additional resources
 
 </div>
 
-## Populating environment variables in containers by using config maps
+## Populate environment variables in containers by using config maps
 
 You can use config maps to populate individual environment variables in containers or to populate environment variables in containers from all keys that form valid environment variable names.
 
@@ -228,7 +228,7 @@ Procedure
 
 </div>
 
-## Setting command-line arguments for container commands with config maps
+## Set command-line arguments for container commands with config maps
 
 You can use config maps to set the value of the commands or arguments in a container by using the Kubernetes substitution syntax `$(VAR_NAME)`.
 
@@ -308,7 +308,7 @@ Procedure
 
 </div>
 
-## Injecting content into a volume by using config maps
+## Inject content into a volume by using config maps
 
 You can use config maps to inject content into a volume.
 

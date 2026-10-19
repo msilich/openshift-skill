@@ -5,7 +5,7 @@ You use catalogs to access the versions, patches, and over-the-air updates for e
 > [!NOTE]
 > For OpenShift Container Platform 4.22, documented procedures for OLM v1 are CLI-based only. Alternatively, administrators can create and view related objects in the web console by using normal methods, such as the **Import YAML** and **Search** pages. However, the existing **Software Catalog** and **Installed Operators** pages do not yet display OLM v1 components.
 
-# Finding Operators to install from a catalog
+# Find Operators to install from a catalog
 
 After you add a catalog to your cluster, you can query the catalog to find Operators and extensions to install.
 
@@ -1680,7 +1680,7 @@ Procedure
 
 </div>
 
-# Installing a cluster extension in all namespaces
+# Install a cluster extension in all namespaces
 
 You can install an extension from a catalog by creating a custom resource (CR) and applying it to the cluster. Operator Lifecycle Manager (OLM) v1 supports installing cluster extensions, including OLM (Classic) Operators in the `registry+v1` bundle format, that are scoped to the cluster.
 
@@ -1925,7 +1925,7 @@ Verification
 
 </div>
 
-# Configuring a watch namespace for a cluster extension (Technology Preview)
+# Configure a watch namespace for a cluster extension (Technology Preview)
 
 You can configure the watch namespace for extensions that support namespace-scoped resource watching.
 

@@ -46,7 +46,7 @@ The OpenShift Container Platform dashboard consists of the following cards:
 
 - **Activity** lists messages related to recent activity in the cluster, such as pod creation or virtual machine migration to another host.
 
-# Recognizing resource and project limits and quotas
+# Recognize resource and project limits and quotas
 
 You can view a graphical representation of available resources in the **Topology** view of the web console **Developer** perspective.
 

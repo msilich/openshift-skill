@@ -4,7 +4,7 @@ To route traffic using Gateway API, you must first enable the feature on your cl
 
 After you successfully enable Gateway API, you can begin deploying gateways, assigning network addresses, and configuring listeners to control your network traffic flow.
 
-# Enable Gateway API for the Ingress Operator
+# Enabling Gateway API for the Ingress Operator
 
 To configure Gateway API for use on your cluster, you must create a `GatewayClass` resource. During the creation of the `GatewayClass` resource, the Ingress Operator installs a lightweight Istio control plane, based on Red Hat OpenShift Service Mesh, in the `openshift-ingress` namespace.
 

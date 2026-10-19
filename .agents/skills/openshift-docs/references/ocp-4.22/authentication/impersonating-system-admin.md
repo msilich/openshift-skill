@@ -6,7 +6,7 @@ You can configure API requests to impersonate users or groups to test permission
 
 You can configure API requests in OpenShift Container Platform to act as another user. Impersonation allows you to perform actions on behalf of another account without switching credentials.
 
-# Impersonating the system:admin user
+# Impersonate the system:admin user
 
 You can use the OpenShift web console to impersonate a user and select multiple group memberships at the same time to reproduce that user’s effective permissions.
 
@@ -44,7 +44,7 @@ Procedure
 
 </div>
 
-# Impersonating the system:admin group
+# Impersonate the system:admin group
 
 To impersonate a user who has cluster administration privileges through group membership, you must specify both the user and the associated groups in the impersonation command.
 
@@ -65,7 +65,7 @@ Procedure
 
 </div>
 
-# Impersonating a user with multiple group memberships in the web console
+# Impersonate a user with multiple group memberships in the web console
 
 You can start user impersonation from multiple locations in the OpenShift Container Platform Console. Depending on where you start, you can impersonate a single user, a single group, or a user with one or more group memberships.
 
@@ -109,7 +109,7 @@ Procedure
 > [!NOTE]
 > Selecting one group uses the existing single-group impersonation behavior. Selecting no groups uses regular single-user impersonation.
 
-# Starting impersonation from the Users or Groups pages
+# Start impersonation from the Users or Groups pages
 
 You can start impersonation for users or groups from the **Users** or **Groups** pages in the OpenShift Container Platform Console.
 
@@ -129,7 +129,7 @@ Procedure
 
 </div>
 
-# Stopping impersonation
+# Stop impersonation
 
 You can stop impersonating a user or group at any time from the OpenShift Container Platform Console.
 
@@ -147,7 +147,7 @@ Procedure
 
 </div>
 
-# Adding unauthenticated groups to cluster roles
+# Add unauthenticated groups to cluster roles
 
 Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 

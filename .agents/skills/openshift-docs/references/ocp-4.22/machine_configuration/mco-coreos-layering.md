@@ -752,7 +752,7 @@ Verification
 
 </div>
 
-## Modifying an on-cluster custom layered image
+## Modify an on-cluster custom layered image
 
 You can modify an on-cluster custom layered image, as needed, to install additional packages, remove existing packages, change the pull or push repositories, update secrets, or other similar changes.
 
@@ -965,7 +965,7 @@ Verification
 
 </div>
 
-## Rebuilding an on-cluster custom layered image
+## Rebuild an on-cluster custom layered image
 
 You can rebuild an on-cluster custom layered image by either modifying your `MachineOSConfig` object or adding an annotation to the `MachineOSConfig` object. Both of these actions trigger an automatic rebuild of the object.
 
@@ -1623,7 +1623,9 @@ You can verify that the custom layered image is removed by performing any of the
 
 # Applying a custom layered image during OpenShift Container Platform installation
 
-You can use the standard OpenShift Container Platform installation process to apply a custom layered image to your nodes by adding a `MachineOSConfig` custom resource (CR) YAML and a push secret YAML to the `<installation_directory>/manifests/` directory. This allows you to use image mode for OpenShift to apply additional functionality to specific nodes upon cluster installation.
+You can use the standard OpenShift Container Platform installation process to apply a custom layered image to your nodes by adding a `MachineOSConfig` custom resource (CR) YAML and a push secret YAML to the `<installation_directory>/manifests/` directory.
+
+This allows you to use image mode for OpenShift to apply additional functionality to specific nodes upon cluster installation.
 
 After the installation, if you modify a machine config pool or update the OpenShift Container Platform version, the Machine Config Operator (MCO) builds and applies a new custom layered image, and pushes the updated image to your repository.
 
@@ -1811,7 +1813,7 @@ Verification
 
 </div>
 
-# Updating with a RHCOS custom layered image
+# Update with a RHCOS custom layered image
 
 When you configure image mode for OpenShift, OpenShift Container Platform no longer automatically updates the node pool that uses the custom layered image. You become responsible to manually update your nodes as appropriate.
 
@@ -1833,7 +1835,7 @@ To update a node that uses a custom layered image, follow these general steps:
 
 - [Pausing the machine config pools](../updating/updating_a_cluster/update-using-custom-machine-config-pools.md#update-using-custom-machine-config-pools-pause_update-using-custom-machine-config-pools)
 
-- [Rebuilding an on-cluster custom layered image](mco-coreos-layering.md#coreos-layering-configuring-on-rebuild_mco-coreos-layering)
+- [Rebuild an on-cluster custom layered image](mco-coreos-layering.md#coreos-layering-configuring-on-rebuild_mco-coreos-layering)
 
 - [Reverting an on-cluster custom layered image](mco-coreos-layering.md#coreos-layering-configuring-on-revert_mco-coreos-layering)
 
@@ -1845,7 +1847,7 @@ To update a node that uses a custom layered image, follow these general steps:
 
 - [Enabling features using feature gates](../nodes/clusters/nodes-cluster-enabling-features.md#nodes-cluster-enabling-features)
 
-- [Updating with a RHCOS custom layered image](mco-coreos-layering.md#coreos-layering-updating_mco-coreos-layering)
+- [Update with a RHCOS custom layered image](mco-coreos-layering.md#coreos-layering-updating_mco-coreos-layering)
 
 - [What is a Hotfix package? (Red Hat Knowledgebase article)](https://access.redhat.com/solutions/2996001)
 

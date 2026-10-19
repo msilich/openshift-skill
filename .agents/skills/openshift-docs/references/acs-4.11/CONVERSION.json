@@ -2,7 +2,6 @@
   "checks": "DocBook -> GFM -> AST code values and table text compared before link rewriting; explicit section IDs retained",
   "external_references": [
     "http://access.redhat.com",
-    "http://datatracker.ietf.org/doc/html/rfc1918",
     "http://releases.ubuntu.com/",
     "https://access.redhat.com/RegistryAuthentication",
     "https://access.redhat.com/RegistryAuthentication#red-hat-registries-1",
@@ -11,13 +10,12 @@
     "https://access.redhat.com/articles/7045053#database-scope-of-coverage-7",
     "https://access.redhat.com/articles/7106599",
     "https://access.redhat.com/articles/red_hat_sdl",
-    "https://access.redhat.com/articles/subscription-watch",
     "https://access.redhat.com/documentation/en-us/openshift_container_platform/4.15/html/operators/administrator-tasks#olm-approving-pending-upgrade_olm-upgrading-operators",
     "https://access.redhat.com/documentation/en-us/openshift_container_platform/4.15/html/operators/understanding-operators#olm-workflow",
     "https://access.redhat.com/documentation/en-us/openshift_container_platform/4.16/html/operators/administrator-tasks#olm-approving-pending-upgrade_olm-upgrading-operators",
     "https://access.redhat.com/documentation/en-us/openshift_container_platform/4.16/html/operators/understanding-operators#olm-workflow",
     "https://access.redhat.com/documentation/en-us/openshift_container_platform/4.21/html/operators/understanding-operators#operator-lifecycle-manager-olm",
-    "https://access.redhat.com/documentation/en-us/openshift_container_platform/latest/html/security_and_compliance/compliance-operator#compliance-operator-release-notes",
+    "https://access.redhat.com/documentation/en-us/openshift_container_platform/4.21/html/security_and_compliance/compliance-operator#compliance-operator-release-notes",
     "https://access.redhat.com/documentation/en-us/openshift_container_platform/latest/html/security_and_compliance/compliance-operator#compliance-operator-scans",
     "https://access.redhat.com/documentation/en-us/openshift_container_platform/latest/html/security_and_compliance/compliance-operator#understanding-compliance-operator",
     "https://access.redhat.com/errata/RHSA-2024:9102",
@@ -27,6 +25,7 @@
     "https://access.redhat.com/security/cve/CVE-2026-25681",
     "https://access.redhat.com/security/cve/CVE-2026-27136",
     "https://access.redhat.com/security/cve/CVE-2026-33811",
+    "https://access.redhat.com/security/cve/CVE-2026-33818",
     "https://access.redhat.com/security/cve/CVE-2026-39821",
     "https://access.redhat.com/security/cve/CVE-2026-39822",
     "https://access.redhat.com/security/cve/CVE-2026-39828",
@@ -36,10 +35,24 @@
     "https://access.redhat.com/security/cve/CVE-2026-42264",
     "https://access.redhat.com/security/cve/CVE-2026-42504",
     "https://access.redhat.com/security/cve/CVE-2026-46595",
+    "https://access.redhat.com/security/cve/CVE-2026-46600",
     "https://access.redhat.com/security/cve/CVE-2026-49978",
     "https://access.redhat.com/security/cve/CVE-2026-53488",
+    "https://access.redhat.com/security/cve/CVE-2026-56853",
+    "https://access.redhat.com/security/cve/CVE-2026-56858",
+    "https://access.redhat.com/security/cve/CVE-2026-56859",
+    "https://access.redhat.com/security/cve/CVE-2026-56860",
+    "https://access.redhat.com/security/cve/CVE-2026-56862",
+    "https://access.redhat.com/security/cve/CVE-2026-56864",
+    "https://access.redhat.com/security/cve/CVE-2026-56865",
     "https://access.redhat.com/security/cve/CVE-2026-59869",
+    "https://access.redhat.com/security/cve/CVE-2026-67313",
+    "https://access.redhat.com/security/cve/CVE-2026-67321",
     "https://access.redhat.com/security/cve/CVE-2026-69152",
+    "https://access.redhat.com/security/cve/CVE-2026-75838",
+    "https://access.redhat.com/security/cve/CVE-2026-82417",
+    "https://access.redhat.com/security/cve/CVE-2026-84375",
+    "https://access.redhat.com/security/cve/CVE-2026-84445",
     "https://access.redhat.com/security/cve/CVE-2026-9165",
     "https://access.redhat.com/security/cve/cve-2024-50349",
     "https://access.redhat.com/security/cve/cve-2025-24528",
@@ -52,6 +65,8 @@
     "https://access.redhat.com/support/offerings/techpreview/",
     "https://access.redhat.com/support/policy/updates/rhacs",
     "https://alas.aws.amazon.com/index.html",
+    "https://api.slack.com/apps",
+    "https://api.slack.com/apps/new",
     "https://api.slack.com/incoming-webhooks#getting_started_with_incoming_webhooks",
     "https://attack.mitre.org/matrices/enterprise/containers/",
     "https://aws.amazon.com/amazon-linux-ami",
@@ -87,9 +102,9 @@
     "https://console.cloud.google.com/security/command-center/settings/source-management",
     "https://console.developers.google.com/apis/credentials",
     "https://console.redhat.com/",
-    "https://console.redhat.com/beta/application-services/subscriptions/acs",
     "https://console.redhat.com/iam/service-accounts",
     "https://console.redhat.com/openshift/",
+    "https://console.redhat.com/subscriptions/usage/openshift",
     "https://datatracker.ietf.org/doc/html/rfc1918",
     "https://datatracker.ietf.org/doc/html/rfc7239#section-5.2",
     "https://datatracker.ietf.org/doc/html/rfc7522#section-3",
@@ -120,7 +135,7 @@
     "https://docs.openshift.com/container-platform/4.12/authentication/using-service-accounts-as-oauth-client.html#service-accounts-as-oauth-clients_using-service-accounts-as-oauth-client",
     "https://docs.openshift.com/container-platform/4.13/monitoring/monitoring-overview.html",
     "https://docs.openshift.com/container-platform/4.14/authentication/managing_cloud_provider_credentials/cco-short-term-creds.html",
-    "https://docs.openshift.com/container-platform/4.21/architecture/admission-plug-ins.html",
+    "https://docs.openshift.com/container-platform/4.19/architecture/admission-plug-ins.html",
     "https://docs.openshift.com/container-platform/4.21/authentication/managing_cloud_provider_credentials/cco-short-term-creds.html",
     "https://docs.openshift.com/container-platform/4.9/authentication/understanding-identity-provider.html",
     "https://docs.openshift.com/container-platform/latest/operators/admin/olm-upgrading-operators.html",
@@ -128,13 +143,15 @@
     "https://docs.openshift.com/container-platform/latest/security/compliance_operator/co-scans/compliance-operator-tailor.html",
     "https://docs.openshift.com/container-platform/latest/security/compliance_operator/co-scans/compliance-operator-troubleshooting.html",
     "https://docs.openshift.com/container-platform/latest/security/compliance_operator/co-scans/compliance-scans.html",
-    "https://docs.pingidentity.com/bundle/pingfederate-93/page/nfr1564003024683.html",
+    "https://docs.pingidentity.com/pingfederate/latest/developers_reference_guide/pf_authorization_endpoint.html",
+    "https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html-single/security_and_compliance/index#compliance-operator-supported-profiles",
     "https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/images/image-configuration#images-configuration-registry-mirror-configuring_image-configuration",
     "https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/operators/administrator-tasks#olm-configuring-proxy-support",
     "https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/operators/administrator-tasks#olm-restricted-networks",
     "https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/security_and_compliance/index#compliance-new-tailored-profiles_compliance-tailor",
     "https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/security_and_compliance/compliance-operator#compliance-operator-checkresult-custom-metadata-configure-customrules_compliance-operator-checkresult-metadata",
     "https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.4/html/installing_and_viewing_plugins_in_red_hat_developer_hub/rhdh-installing-rhdh-plugins_title-plugins-rhdh-about#con-install-dynamic-plugin-helm_rhdh-installing-rhdh-plugins",
+    "https://docs.redhat.com/en/documentation/red_hat_quay/3.14/html/about_quay_io/allow-robot-access-user-repo",
     "https://docs.redhat.com/en/documentation/red_hat_quay/3.18/html/about_quay_io/allow-robot-access-user-repo",
     "https://docs.redhat.com/en/documentation/red_hat_quay/latest/html/about_quay_io/allow-robot-access-user-repo",
     "https://docs.redhat.com/en/documentation/red_hat_quay/latest/html/about_quay_io/allow-robot-access-user-repo#setting-robot-federation",
@@ -166,10 +183,12 @@
     "https://github.com/openshift/openshift-docs",
     "https://github.com/quay/clair",
     "https://github.com/quay/claircore",
+    "https://github.com/stackrox/collector/issues/new/choose",
     "https://github.com/stackrox/contributions/blob/main/guides/cloud-provider-integrations/azure-service-principal-m2m-auth.md",
     "https://github.com/stackrox/scanner/blob/master/ext/vulnsrc/manual/manual.go",
     "https://github.com/stackrox/scanner/blob/master/pkg/vulnloader/nvdloader/manual.go",
     "https://github.com/stackrox/stackrox/blob/master/scanner/updater/manual/vulns.go",
+    "https://github.com/stackrox/stackrox/blob/master/scanner/updater/manual/vulns.yaml",
     "https://github.com/tidwall/gjson",
     "https://graphviz.org/",
     "https://helm.sh/docs/helm/helm_install/#synopsis",
@@ -181,7 +200,6 @@
     "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu",
     "https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
     "https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
-    "https://kubernetes.io/docs/concepts/services-networking/network-policies/",
     "https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/",
     "https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#securitycontext-v1-core",
     "https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1",
@@ -217,6 +235,7 @@
     "https://raw.githubusercontent.com/openshift/openshift-docs/rhacs-docs-main/files/create_certificate_values_file.sh",
     "https://red.ht/rhacsdocsissue",
     "https://redhat-connect.gitbook.io/partner-guide-red-hat-vulnerability-scanner-cert/",
+    "https://regex101.com/",
     "https://secdb.alpinelinux.org/",
     "https://security-metadata.canonical.com/oval/",
     "https://security-tracker.debian.org/tracker/data/json",
@@ -254,7 +273,7 @@
     "https://www.redhat.com/en/resources/site-reliability-engineering-services-datasheet",
     "https://www.redhat.com/en/technologies/cloud-computing/openshift/platform-plus",
     "https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux",
-    "https://www.redhat.com/licenses/Appendix_4_Red_Hat_Online_Services_20221213.pdf",
+    "https://www.redhat.com/licenses/Appendix-4-Red-Hat-Online-Services-English-20250805.pdf",
     "https://www.rfc-editor.org/rfc/rfc6749.html#section-2.2",
     "https://www.rfc-editor.org/rfc/rfc6749.html#section-2.3.1",
     "https://www.rfc-editor.org/rfc/rfc6749.html#section-3.3",
@@ -265,16 +284,6 @@
     "https://www.trusted-introducer.org/directory/teams/rh-isirt.html"
   ],
   "fragment_adjustments": [
-    {
-      "document": "architecture/acs-architecture.md",
-      "kind": "unresolved-output-fragment",
-      "target": "../operating/examine-images-for-vulnerabilities.md#scanner-v4-enabling"
-    },
-    {
-      "document": "backup_and_restore/backing-up-acs.md",
-      "kind": "unresolved-output-fragment",
-      "target": "../integration/integrate-with-s3-api-compatible-services.md#integrate-with-s3-api-compatible-services"
-    },
     {
       "document": "cli/using-the-roxctl-cli.md",
       "kind": "unresolved-output-fragment",
@@ -626,56 +635,6 @@
       "target": "install-central-config-options-ocp.md#install-central-config-options-ocp"
     },
     {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-1"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-2"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-3"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-4"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-5"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-6"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-7"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-8"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-9"
-    },
-    {
-      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
-      "kind": "unresolved-output-fragment",
-      "target": "#cb1-10"
-    },
-    {
       "document": "installing/installing_ocp/install-secured-cluster-ocp.md",
       "kind": "unresolved-output-fragment",
       "target": "init-bundle-ocp.md#init-bundle-ocp"
@@ -756,14 +715,9 @@
       "target": "integrate-with-image-registries.md#integrate-with-image-registries"
     },
     {
-      "document": "integration/integrate-with-email.md",
+      "document": "integration/integrate-with-image-registries.md",
       "kind": "unresolved-output-fragment",
-      "target": "../operating/manage-vulnerabilities/vulnerability-management.md#vulnerability-management20-configure-report-delivery-destinations-schedule_acs-operating-manage-vulnerabilities"
-    },
-    {
-      "document": "integration/integrate-with-email.md",
-      "kind": "unresolved-output-fragment",
-      "target": "../operating/manage-vulnerabilities/vulnerability-management.md#vulnerability-management20-configure-report-delivery-destinations-schedule_acs-operating-manage-vulnerabilities"
+      "target": "integrate-with-image-vulnerability-scanners.md#integrate-with-image-vulnerability-scanners"
     },
     {
       "document": "integration/integrate-with-s3-api-compatible-services.md",
@@ -773,12 +727,17 @@
     {
       "document": "integration/integrate-with-s3-api-compatible-services.md",
       "kind": "unresolved-output-fragment",
-      "target": "../backup_and_restore/backing-up-acs.md#backing-up-red-hat-advanced-cluster-security-for-kubernetes"
+      "target": "../backup_and_restore/backing-up-acs.md#backing-up-acs"
     },
     {
       "document": "integration/integrate-with-s3-api-compatible-services.md",
       "kind": "unresolved-output-fragment",
-      "target": "../backup_and_restore/restore-acs.md#restoring-from-a-backup"
+      "target": "../backup_and_restore/restore-acs.md#restore-acs"
+    },
+    {
+      "document": "operating/create-use-collections.md",
+      "kind": "unresolved-output-fragment",
+      "target": "manage-user-access/manage-role-based-access-control-3630.md#manage-role-based-access-control"
     },
     {
       "document": "operating/create-use-collections.md",
@@ -813,6 +772,11 @@
     {
       "document": "operating/examine-images-for-vulnerabilities.md",
       "kind": "unresolved-output-fragment",
+      "target": "examine-images-for-vulnerabilities.md#examine-images-for-vulnerabilities"
+    },
+    {
+      "document": "operating/examine-images-for-vulnerabilities.md",
+      "kind": "unresolved-output-fragment",
       "target": "../architecture/acs-architecture.md#vulnerability-sources_acs-architecture"
     },
     {
@@ -841,9 +805,14 @@
       "target": "../architecture/acs-architecture.md#vulnerability-sources_acs-architecture"
     },
     {
-      "document": "operating/examine-images-for-vulnerabilities.md",
+      "document": "operating/manage-compliance/compliance-feature-overview.md",
       "kind": "unresolved-output-fragment",
-      "target": "../operating/examine-images-for-vulnerabilities.xml#examine-images-for-vulnerabilities"
+      "target": "using-openshift-compliance.md#using-openshift-compliance"
+    },
+    {
+      "document": "operating/manage-compliance/compliance-feature-overview.md",
+      "kind": "unresolved-output-fragment",
+      "target": "../manage_security_policies/about-security-policies.md#about-security-policies"
     },
     {
       "document": "operating/manage-compliance/using-openshift-compliance.md",
@@ -1086,6 +1055,11 @@
       "target": "#cb1-10"
     },
     {
+      "document": "telemetry/opting-out-of-telemetry.md",
+      "kind": "unresolved-output-fragment",
+      "target": "about-telemetry.md#about-telemetry"
+    },
+    {
       "document": "upgrading/upgrade-helm.md",
       "kind": "unresolved-output-fragment",
       "target": "../backup_and_restore/backing-up-acs.md#on-demand-backups-roxctl"
@@ -1138,7 +1112,7 @@
     {
       "document": "welcome/index.md",
       "kind": "unresolved-output-fragment",
-      "target": "../operating/manage-vulnerabilities/vulnerability-management.md#manage-vulnerabilities"
+      "target": "../operating/manage-vulnerabilities/vulnerability-management.md#vulnerability-management"
     },
     {
       "document": "welcome/index.md",
@@ -1206,18 +1180,19 @@
         "acs-architecture_acs-architecture",
         "acs-central-services_acs-architecture",
         "con-vuln-sources_acs-architecture",
-        "scanner-v4-vuln-sources",
-        "stackrox-scanner-vuln-sources",
+        "scanner-v4-vuln-sources_acs-architecture",
+        "stackrox-scanner-vuln-sources_acs-architecture",
         "acs-secured-cluster-services_acs-architecture",
         "external-components_acs-architecture",
         "acs-architecture-interaction-between-services_acs-architecture",
-        "acs-architecture-connections_acs-architecture"
+        "acs-architecture-connections_acs-architecture",
+        "additional-resources_acs-architecture"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "3c1473d347f8d20681422dadfe58baeb70d685c0f12eb54432ec8fa4370ffb79",
+      "table_text_sha256": "550f2e9e2036b5e80c11bb2653db15e3d83ff97c71b3705f702501ccf5d1b640",
       "tables": 3
     },
     "backup_and_restore/backing-up-acs.md": {
@@ -1233,8 +1208,8 @@
         "backup-deployment-config-operator_backing-up-acs",
         "backup-deployment-config-helm_backing-up-acs"
       ],
-      "code_blocks": 11,
-      "code_sha256": "91fa7873277e7b41879313e664173c04c3f649f4e9caefb8b5afc5635112b23b",
+      "code_blocks": 16,
+      "code_sha256": "905464e60b29abb319049b8d205e8e0a6bb2bbc8dabe9221c616890f5f82666e",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -1280,57 +1255,137 @@
     },
     "cli/command-reference/roxctl-central.md": {
       "anchors": [
+        "roxctl-central-overview_roxctl-central",
+        "roxctl-central-overview-usage_roxctl-central",
+        "roxctl-central-available-commands_roxctl-central",
         "options-inherited-from-the-parent-command_roxctl-central",
         "roxctl-central-backup_roxctl-central",
+        "roxctl-central-backup-usage_roxctl-central",
+        "roxctl-central-backup-options_roxctl-central",
         "roxctl-central-cert_roxctl-central",
+        "roxctl-central-cert-usage_roxctl-central",
+        "roxctl-central-cert-options_roxctl-central",
         "roxctl-central-crs_roxctl-central",
+        "roxctl-central-crs-usage_roxctl-central",
         "roxctl-central-crs-generate_roxctl-central",
+        "roxctl-central-crs-generate-usage_roxctl-central",
+        "roxctl-central-crs-generate-flags_roxctl-central",
         "roxctl-central-crs-list_roxctl-central",
+        "roxctl-central-crs-list-usage_roxctl-central",
         "roxctl-central-crs-revoke_roxctl-central",
+        "roxctl-central-crs-revoke-usage_roxctl-central",
         "roxctl-central-login_roxctl-central",
+        "roxctl-central-login-usage_roxctl-central",
+        "roxctl-central-login-options_roxctl-central",
         "roxctl-central-whoami_roxctl-central",
+        "roxctl-central-whoami-usage_roxctl-central",
+        "roxctl-central-whoami-options_roxctl-central",
         "roxctl-central-db_roxctl-central",
+        "roxctl-central-db-usage_roxctl-central",
+        "roxctl-central-db-options_roxctl-central",
         "roxctl-central-db-restore_roxctl-central",
+        "roxctl-central-db-restore-usage_roxctl-central",
+        "roxctl-central-db-restore-options_roxctl-central",
         "roxctl-central-db-generate_roxctl-central",
+        "roxctl-central-db-generate-usage_roxctl-central",
+        "roxctl-central-db-generate-options_roxctl-central",
         "roxctl-central-db-generate-k8s_roxctl-central",
+        "roxctl-central-db-generate-k8s-usage_roxctl-central",
+        "roxctl-central-db-generate-k8s-options_roxctl-central",
         "roxctl-central-db-restore-cancel_roxctl-central",
+        "roxctl-central-db-restore-cancel-usage_roxctl-central",
+        "roxctl-central-db-restore-cancel-options_roxctl-central",
         "roxctl-central-db-restore-status_roxctl-central",
+        "roxctl-central-db-restore-status-usage_roxctl-central",
         "roxctl-central-db-generate-k8s-pvc_roxctl-central",
+        "roxctl-central-db-generate-k8s-pvc-usage_roxctl-central",
+        "roxctl-central-db-generate-k8s-pvc-options_roxctl-central",
         "roxctl-central-db-generate-openshift_roxctl-central",
+        "roxctl-central-db-generate-openshift-usage_roxctl-central",
+        "roxctl-central-db-generate-openshift-options_roxctl-central",
         "roxctl-central-db-generate-k8s-hostpath_roxctl-central",
+        "roxctl-central-db-generate-k8s-hostpath-usage_roxctl-central",
+        "roxctl-central-db-generate-k8s-hostpath-options_roxctl-central",
         "roxctl-central-db-generate-openshift-pvc_roxctl-central",
+        "roxctl-central-db-generate-openshift-pvc-usage_roxctl-central",
+        "roxctl-central-db-generate-openshift-pvc-options_roxctl-central",
         "roxctl-central-db-generate-openshift-hostpath_roxctl-central",
+        "roxctl-central-db-generate-openshift-hostpath-usage_roxctl-central",
+        "roxctl-central-db-generate-openshift-hostpath-options_roxctl-central",
         "roxctl-central-debug_roxctl-central",
+        "roxctl-central-debug-usage_roxctl-central",
         "roxctl-central-debug-db_roxctl-central",
+        "roxctl-central-debug-db-usage_roxctl-central",
+        "roxctl-central-debug-db-options_roxctl-central",
         "roxctl-central-debug-log_roxctl-central",
+        "roxctl-central-debug-log-usage_roxctl-central",
+        "roxctl-central-debug-log-options_roxctl-central",
         "roxctl-central-debug-dump_roxctl-central",
+        "roxctl-central-debug-dump-usage_roxctl-central",
+        "roxctl-central-debug-dump-options_roxctl-central",
         "roxctl-central-debug-db-stats_roxctl-central",
+        "roxctl-central-debug-db-stats-usage_roxctl-central",
         "roxctl-central-debug-authz-trace_roxctl-central",
+        "roxctl-central-debug-authz-trace-usage_roxctl-central",
+        "roxctl-central-debug-authz-trace-options_roxctl-central",
         "roxctl-central-debug-db-stats-reset_roxctl-central",
+        "roxctl-central-debug-db-stats-reset-usage_roxctl-central",
         "roxctl-central-debug-download-diagnostics_roxctl-central",
+        "roxctl-central-debug-download-diagnostics-usage_roxctl-central",
+        "roxctl-central-debug-download-diagnostics-options_roxctl-central",
         "roxctl-central-generate_roxctl-central",
+        "roxctl-central-generate-usage_roxctl-central",
+        "roxctl-central-generate-options_roxctl-central",
         "roxctl-central-generate-k8s_roxctl-central",
+        "roxctl-central-generate-k8s-usage_roxctl-central",
+        "roxctl-central-generate-k8s-options_roxctl-central",
         "roxctl-central-generate-k8s-pvc_roxctl-central",
+        "roxctl-central-generate-k8s-pvc-usage_roxctl-central",
+        "roxctl-central-generate-k8s-pvc-options_roxctl-central",
         "roxctl-central-generate-openshift_roxctl-central",
+        "roxctl-central-generate-openshift-usage_roxctl-central",
+        "roxctl-central-generate-openshift-options_roxctl-central",
         "roxctl-central-generate-interactive_roxctl-central",
+        "roxctl-central-generate-interactive-usage_roxctl-central",
         "roxctl-central-generate-k8s-hostpath_roxctl-central",
+        "roxctl-central-generate-k8s-hostpath-usage_roxctl-central",
+        "roxctl-central-generate-k8s-hostpath-options_roxctl-central",
         "roxctl-central-generate-openshift-pvc_roxctl-central",
+        "roxctl-central-generate-openshift-pvc-usage_roxctl-central",
+        "roxctl-central-generate-openshift-pvc-options_roxctl-central",
         "roxctl-central-generate-openshift-hostpath_roxctl-central",
+        "roxctl-central-generate-openshift-hostpath-usage_roxctl-central",
+        "roxctl-central-generate-openshift-hostpath-options_roxctl-central",
         "roxctl-central-init-bundles_roxctl-central",
+        "roxctl-central-init-bundles-usage_roxctl-central",
+        "roxctl-central-init-bundles-options_roxctl-central",
         "roxctl-central-init-bundles-list_roxctl-central",
+        "roxctl-central-init-bundles-list-usage_roxctl-central",
         "roxctl-central-init-bundles-revoke_roxctl-central",
+        "roxctl-central-init-bundles-revoke-usage_roxctl-central",
         "roxctl-central-init-bundles-fetch-ca_roxctl-central",
+        "roxctl-central-init-bundles-fetch-ca-usage_roxctl-central",
+        "roxctl-central-init-bundles-fetch-ca-options_roxctl-central",
         "roxctl-central-init-bundles-generate_roxctl-central",
+        "roxctl-central-init-bundles-generate-usage_roxctl-central",
+        "roxctl-central-init-bundles-generate-options_roxctl-central",
         "roxctl-central-userpki_roxctl-central",
+        "roxctl-central-userpki-usage_roxctl-central",
         "roxctl-central-userpki-list_roxctl-central",
+        "roxctl-central-userpki-list-usage_roxctl-central",
+        "roxctl-central-userpki-list-options_roxctl-central",
         "roxctl-central-userpki-create_roxctl-central",
-        "roxctl-central-userpki-delete_roxctl-central"
+        "roxctl-central-userpki-create-usage_roxctl-central",
+        "roxctl-central-userpki-create-options_roxctl-central",
+        "roxctl-central-userpki-delete_roxctl-central",
+        "roxctl-central-userpki-delete-usage_roxctl-central",
+        "roxctl-central-userpki-delete-options_roxctl-central"
       ],
       "code_blocks": 45,
       "code_sha256": "401eec055a337c5afa82479cd5d28b141caa0ee7f83c62e68ed8635f16015205",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "017b5706d2fff6fd13237f87b2163220441d3af0fa3bc9342d850202ca564249",
+      "table_text_sha256": "547487c8e3e689f620a26aaf59e8db3b39b4dbc9ae2584c0f52beac0533411d2",
       "tables": 35
     },
     "cli/command-reference/roxctl-cluster.md": {
@@ -1645,7 +1700,7 @@
         "run-roxctl-from-container_installing-roxctl-cli"
       ],
       "code_blocks": 17,
-      "code_sha256": "63254b717969c8519ac51d4e5dceef5df3fa51ce94a7991867e825509eab786c",
+      "code_sha256": "208a0cf24af0905b63d66b455d50fbb222a8a3bd090c9fe0a7875619a8b4dfa6",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -1670,7 +1725,6 @@
     },
     "cli/using-the-roxctl-cli.md": {
       "anchors": [
-        "setting-up-environment-variables_using-roxctl-cli",
         "getting-authentication-information_using-roxctl-cli",
         "authenticating-by-using-the-roxctl-cli_using-roxctl-cli",
         "create-api-token_using-roxctl-cli",
@@ -1702,8 +1756,8 @@
         "acscs-architecture-overview_acscs-architecture",
         "acscs-central_acscs-architecture",
         "con-vuln-sources_acscs-architecture",
-        "scanner-v4-vuln-sources",
-        "stackrox-scanner-vuln-sources",
+        "scanner-v4-vuln-sources_acscs-architecture",
+        "stackrox-scanner-vuln-sources_acscs-architecture",
         "acs-secured-cluster-services_acscs-architecture",
         "acscs-data-access-permissions_acscs-architecture"
       ],
@@ -1853,6 +1907,7 @@
         "installing-secured-cluster-services-quickly_install-secured-cluster-cloud-ocp",
         "configure-secured-cluster-services-helm-chart-customizations-cloud-ocp_install-secured-cluster-cloud-ocp",
         "secured-cluster-services-config_install-secured-cluster-cloud-ocp",
+        "secured-cluster-services-environment-variables_install-secured-cluster-cloud-ocp",
         "install-secured-cluster-services-helm-chart_install-secured-cluster-cloud-ocp",
         "change-config-options-after-deployment_install-secured-cluster-cloud-ocp",
         "installing-sc-roxctl-cloud-ocp_install-secured-cluster-cloud-ocp",
@@ -1863,11 +1918,11 @@
         "install-sensor-roxctl_install-secured-cluster-cloud-ocp",
         "next-steps_install-secured-cluster-cloud-ocp"
       ],
-      "code_blocks": 22,
-      "code_sha256": "1dfad36f055203112d61724b75101f2db5ce9c98827aef17b2b451873d2d648d",
+      "code_blocks": 23,
+      "code_sha256": "db28e91bb7d53bc4880860433cc13f54a147939f47c518d673ed61ad9d555abc",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "6fc338953e5ead38894c04bda734ab31344b8afe2ccbe0b463f295e7deab7d3e",
+      "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
       "tables": 1
     },
     "cloud_service/installing_cloud_ocp/verify-installation-cloud-ocp.md": {
@@ -1943,10 +1998,10 @@
         "install-sensor-roxctl_install-secured-cluster-cloud-other"
       ],
       "code_blocks": 23,
-      "code_sha256": "20100aed9fa73a730ee957137a800b59e8db475e63dbd73960dcb133f5667392",
+      "code_sha256": "db28e91bb7d53bc4880860433cc13f54a147939f47c518d673ed61ad9d555abc",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "6fc338953e5ead38894c04bda734ab31344b8afe2ccbe0b463f295e7deab7d3e",
+      "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
       "tables": 1
     },
     "cloud_service/installing_cloud_other/verify-installation-cloud-other.md": {
@@ -2043,7 +2098,7 @@
         "rhcos-enable-node-scan_upgrade-cloudsvc-roxctl"
       ],
       "code_blocks": 30,
-      "code_sha256": "9280292b5c60b5380e6f7f60c785d4346ae8901de5d91efd1fceaf056d201921",
+      "code_sha256": "33a152d43eb25587cb1a88f97745d6326bba7efe21ae10702df19ea3810a1884",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "e50bfb29446ee0bfa4dd454896cd71a126002bf08829a2ee9ed1551ee329e36d",
@@ -2051,6 +2106,7 @@
     },
     "configuration/accessing-vulnerability-information-in-web-console.md": {
       "anchors": [
+        "rhacs-console-plugin-overview_accessing-vulnerability-information-in-web-console",
         "enabling-the-plugin_accessing-vulnerability-information-in-web-console",
         "viewing-vulnerability-information-in-web-console_accessing-vulnerability-information-in-web-console"
       ],
@@ -2063,20 +2119,20 @@
     },
     "configuration/add-custom-certificates.md": {
       "anchors": [
-        "add-custom-security-cert",
+        "add-custom-security-cert_add-custom-cert",
         "custom-cert-prerequisites_add-custom-cert",
         "custom-cert-new-install_add-custom-cert",
         "custom-cert-existing_add-custom-cert",
         "update-custom-certificate-central_add-custom-cert",
         "restart-central_add-custom-cert",
-        "configure-sensor-to-trust-cert",
+        "configure-sensor-to-trust-cert_add-custom-cert",
         "proc_downloading-sensor-bundle_add-custom-cert",
         "trust-cert-new-sensor_add-custom-cert",
         "trust-cert-existing-sensor_add-custom-cert",
         "restart-sensor_add-custom-cert"
       ],
       "code_blocks": 25,
-      "code_sha256": "17127708d227c5d5209906cd529c69ad2dddbb58b7e41fa4a8d413b75a74d2bb",
+      "code_sha256": "4f437ffa1c71ec39e137310b0a0fc5ddd1dc4f9308a2dbc47589416a8a04d066",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -2097,13 +2153,15 @@
     },
     "configuration/add-trusted-ca.md": {
       "anchors": [
+        "add-trusted-ca-overview_add-trusted-ca",
         "configure-additional-cas_add-trusted-ca",
-        "_propagating_changes",
+        "propagating-changes-overview_add-trusted-ca",
         "restart-central_add-trusted-ca",
-        "restart-scanner_add-trusted-ca"
+        "restart-scanner_add-trusted-ca",
+        "post-configuration-notes_add-trusted-ca"
       ],
       "code_blocks": 7,
-      "code_sha256": "231a8feb2f3132b7942566b5eff7524b2a8707d51d5d8652828c7e9906cd1467",
+      "code_sha256": "9b4948ea4887310864be239804efa03e42f21f3941433e3b5f295f755eb1c3b8",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -2168,6 +2226,7 @@
     },
     "configuration/configure-inactive-cluster-deletion.md": {
       "anchors": [
+        "configure-inactive-cluster-deletion-overview_configure-nonactive-cluster-removal",
         "configure-cluster-decommissioning_configure-nonactive-cluster-removal",
         "view-nonactive-clusters_configure-nonactive-cluster-removal"
       ],
@@ -2193,8 +2252,10 @@
     },
     "configuration/configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub.md": {
       "anchors": [
+        "configuring-rhacs-plugin-rhdh-overview_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub",
         "viewing-security-information-in-red-hat-developer-hub_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub",
-        "rebuilding-the-oci-artifact_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub"
+        "rebuilding-the-oci-artifact_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub",
+        "additional-resources_configuring-and-integrating-the-rhacs-plugin-with-red-hat-developer-hub"
       ],
       "code_blocks": 4,
       "code_sha256": "be8ad1475515a18fed2cc306741ec097a42afceaf591bb2332895011a32709a3",
@@ -2269,10 +2330,10 @@
         "upload-kernel-support-package-to-central_enable-offline-mode"
       ],
       "code_blocks": 19,
-      "code_sha256": "39e880f960f4cdd4b549094d14065418c2a9863a2331e2a98b9f1341818c4a92",
+      "code_sha256": "b7fd6b7690f5a9d7a7b85d89f81bbf19b33ac8e7003b3aa786537d932db39e6d",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "aa6f1317f3efff88dfed927dcfb4f36a88844a809c476bd5b944fea7dce4b2b1",
+      "table_text_sha256": "150314d7d617e10ad1e704e026cfbf0302542d27120746265e3536621c493fcd",
       "tables": 1
     },
     "configuration/expose-portal-over-http.md": {
@@ -2484,12 +2545,17 @@
         "_memory_and_cpu_requirements_2",
         "recommended-requirements-central-services-scanner-stackrox_acs-recommended-requirements",
         "recommended-requirements-central-services-scanner-scannerv4_acs-recommended-requirements",
-        "_scanner_v4_indexer",
-        "_scanner_v4_matcher",
-        "_scanner_v4_db",
+        "recommended-requirements-scanner-v4-indexer_acs-recommended-requirements",
+        "recommended-requirements-scanner-v4-matcher_acs-recommended-requirements",
+        "recommended-requirements-scanner-v4-db_acs-recommended-requirements",
         "recommended-requirements-secured-cluster-services_acs-recommended-requirements",
+        "recommended-requirements-secured-cluster-services-sensor_acs-recommended-requirements",
+        "_memory_and_cpu_requirements_3",
+        "recommended-requirements-secured-cluster-services-admission-controller_acs-recommended-requirements",
+        "_memory_and_cpu_requirements_4",
         "recommended-requirements-vm-scanning_acs-recommended-requirements",
-        "_factors_affecting_throughput",
+        "recommended-requirements-vm-scanning-guidelines_acs-recommended-requirements",
+        "recommended-requirements-vm-scanning-throughput-factors_acs-recommended-requirements",
         "compliance-relay-concurrency_acs-recommended-requirements",
         "central-enrichment-throughput_acs-recommended-requirements"
       ],
@@ -2497,8 +2563,8 @@
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "69ca346dbb0aa03bc05a3aec15c7ec6a5474b3a2a1aced3308fbbf2a8a4147ee",
-      "tables": 7
+      "table_text_sha256": "7b5d2f5e87a21b22e919f557f8e8090a1d4b572040a428b23cf2108ab4ebdd59",
+      "tables": 9
     },
     "installing/installing_ocp/init-bundle-ocp.md": {
       "anchors": [
@@ -2542,7 +2608,7 @@
       "code_sha256": "023d477b57c93fdd346666b97281de789335d04db157411ebe98aded02562fc3",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "5e7b4a40644dc2f06bafcc109c21c0fbfaed7318299d593540790cb6f292a6f9",
+      "table_text_sha256": "ed1218aaaa0d72622cd50d5d7f5719f4276d68dfb5adde7707f6a9a09b4705c2",
       "tables": 4
     },
     "installing/installing_ocp/install-central-ocp.md": {
@@ -2590,7 +2656,7 @@
         "install-central-roxctl_install-central-ocp"
       ],
       "code_blocks": 49,
-      "code_sha256": "703e63c6a93c58694b1b410ef788a176afe21e0b45e1e301623b415e56e50735",
+      "code_sha256": "3021ca46dfcd7af8d1209f468a8f87caba831d064c033c22f17fe912f4d16eeb",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4a232be30719f61a3ef773bcece0a05342b226c5f27420b1fd95691b192fbc46",
@@ -2599,13 +2665,7 @@
     "installing/installing_ocp/install-secured-cluster-config-options-ocp.md": {
       "anchors": [
         "secured-cluster-configuration-options-operator_install-secured-cluster-config-options-ocp",
-        "required-configuration-settings_install-secured-cluster-config-options-ocp",
         "admission-controller-settings_install-secured-cluster-config-options-ocp",
-        "scanner-configuration-settings_install-secured-cluster-config-options-ocp",
-        "image-configuration-settings_install-secured-cluster-config-options-ocp",
-        "per-node-settings_install-secured-cluster-config-options-ocp",
-        "sensor-configuration-settings_install-secured-cluster-config-options-ocp",
-        "general-and-miscellaneous-settings-secured-cluster_install-secured-cluster-config-options-ocp",
         "customize-installation-operator-overlays_install-secured-cluster-config-options-ocp",
         "overlays_install-secured-cluster-config-options-ocp",
         "adding-an-overlay_install-secured-cluster-config-options-ocp",
@@ -2616,12 +2676,12 @@
         "changing-configmap-data_install-secured-cluster-config-options-ocp",
         "adding-a-container-to-a-deployment_install-secured-cluster-config-options-ocp"
       ],
-      "code_blocks": 7,
-      "code_sha256": "023d477b57c93fdd346666b97281de789335d04db157411ebe98aded02562fc3",
+      "code_blocks": 6,
+      "code_sha256": "8dea89ca6f1321927f2a2d5b81194525434da5bbfe05a25862ea8b92dd942222",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "d0374255175f4ccb8dafec2bc287e193919082ed23c030f6aeaff3f2f814a46a",
-      "tables": 7
+      "table_text_sha256": "e85c5e646f11ef883b718e2556ecc0c6863b2190f81746107b72a987b2ea30f8",
+      "tables": 1
     },
     "installing/installing_ocp/install-secured-cluster-ocp.md": {
       "anchors": [
@@ -2634,6 +2694,7 @@
         "installing-secured-cluster-services-quickly_install-secured-cluster-ocp",
         "configure-secured-cluster-services-helm-chart-customizations_install-secured-cluster-ocp",
         "secured-cluster-services-config_install-secured-cluster-ocp",
+        "secured-cluster-services-environment-variables_install-secured-cluster-ocp",
         "install-secured-cluster-services-helm-chart_install-secured-cluster-ocp",
         "change-config-options-after-deployment_install-secured-cluster-ocp",
         "installing-sc-roxctl_install-secured-cluster-ocp",
@@ -2643,11 +2704,11 @@
         "installing-cli-on-windows_install-secured-cluster-ocp",
         "install-sensor-roxctl_install-secured-cluster-ocp"
       ],
-      "code_blocks": 20,
-      "code_sha256": "f550e59a56ff357c9fad12bb5aec7bb1f4e0d86efc7f6f359c94a7d780092a0e",
+      "code_blocks": 21,
+      "code_sha256": "7a0253550fe173aca6c770dbe454e922ea4e5f07a37bd2145ec1f49d7f6d21da",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "6fc338953e5ead38894c04bda734ab31344b8afe2ccbe0b463f295e7deab7d3e",
+      "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
       "tables": 1
     },
     "installing/installing_ocp/verify-installation-rhacs-ocp.md": {
@@ -2673,7 +2734,7 @@
         "roxctl-generate-init-bundle_init-bundle-other",
         "create-resource-init-bundle_init-bundle-other",
         "next-steps_init-bundle-other_init-bundle-other",
-        "_additional_resources"
+        "additional-resources_init-bundle-other"
       ],
       "code_blocks": 12,
       "code_sha256": "d9bce537ac5a4e1ea12821d6b7f56337927f3b2019865b81ba44fc2090702307",
@@ -2720,7 +2781,7 @@
         "install-central-roxctl_install-central-other"
       ],
       "code_blocks": 33,
-      "code_sha256": "4ac3b2c49bf634aa8576206c99d06d508c5d2e6c4dfde3e32d1d0ed335f43818",
+      "code_sha256": "1896e6164f9c9098df1de20e305413976110cf0b855fc9f4419e531440f7d289",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "ec89c44ca26d8cca602639c8c1624563ac27a9b4c0b778ee61e4f417d28c050b",
@@ -2746,6 +2807,7 @@
         "installing-secured-cluster-services-quickly_install-secured-cluster-other",
         "configure-secured-cluster-services-helm-chart-customizations-other_install-secured-cluster-other",
         "secured-cluster-services-config_install-secured-cluster-other",
+        "secured-cluster-services-environment-variables_install-secured-cluster-other",
         "install-secured-cluster-services-helm-chart_install-secured-cluster-other",
         "change-config-options-after-deployment_install-secured-cluster-other",
         "installing-sc-roxctl-sc-other_install-secured-cluster-other",
@@ -2757,11 +2819,11 @@
         "installing-manifest-web-portal_install-secured-cluster-other",
         "manifest-roxctl_install-secured-cluster-other"
       ],
-      "code_blocks": 29,
-      "code_sha256": "d28ab94479fdc4561bbf7edfda634191f04fb48f76157be756c14f1664e81598",
+      "code_blocks": 30,
+      "code_sha256": "9b0cf9c78a1c99bdbe9b279f22265495e44efe7cdc22d7ed855a68cb0e72f70a",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "6fc338953e5ead38894c04bda734ab31344b8afe2ccbe0b463f295e7deab7d3e",
+      "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
       "tables": 1
     },
     "installing/installing_other/verify-installation-rhacs-other.md": {
@@ -2791,6 +2853,7 @@
     },
     "integration/integrate-using-generic-webhooks.md": {
       "anchors": [
+        "generic-webhooks-integration-overview_integrate-using-generic-webhooks",
         "webhook-configuring-acs_integrate-using-generic-webhooks",
         "configure-policy-notifications_integrate-using-generic-webhooks"
       ],
@@ -2823,6 +2886,7 @@
     },
     "integration/integrate-using-syslog-protocol.md": {
       "anchors": [
+        "syslog-integration-overview_integrate-using-syslog-protocol",
         "syslog-configuring-acs_integrate-using-syslog-protocol"
       ],
       "code_blocks": 0,
@@ -2848,25 +2912,25 @@
     },
     "integration/integrate-with-ci-systems.md": {
       "anchors": [
-        "configure-build-policies",
+        "ci-integration-overview_integrate-with-ci-systems",
+        "configure-build-policies_integrate-with-ci-systems",
         "integrate-ci-check-existing-build-phase-policies_integrate-with-ci-systems",
         "policy-enforcement-deploy_integrate-with-ci-systems",
-        "configure-registry-integration",
+        "configure-registry-integration_integrate-with-ci-systems",
         "check-for-existing-registry-integration_integrate-with-ci-systems",
-        "_additional_resources",
-        "configure-access",
+        "configure-access_integrate-with-ci-systems",
         "cli-authentication_integrate-with-ci-systems",
-        "install-roxctl-cli-binary",
+        "installing-the-roxctl-cli-by-downloading-the-binary_integrate-with-ci-systems",
         "installing-cli-on-linux_integrate-with-ci-systems",
         "installing-cli-on-macos_integrate-with-ci-systems",
         "installing-cli-on-windows_integrate-with-ci-systems",
         "run-roxctl-from-container_integrate-with-ci-systems",
-        "integrate-with-your-ci-pipeline",
-        "using-jenkins",
+        "integrate-with-your-ci-pipeline_integrate-with-ci-systems",
+        "using-jenkins_integrate-with-ci-systems",
         "integrate-circle-ci_integrate-with-ci-systems"
       ],
       "code_blocks": 20,
-      "code_sha256": "8ff825b2cb8b52632dd526540fb0b29de6badfd75c4c83ae6fa3b273722b5c90",
+      "code_sha256": "d3fe964b6c9da067a27365d5ec9ceb71308ed19c96a91ac31345e21f6328cd44",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -2903,6 +2967,7 @@
     },
     "integration/integrate-with-google-cloud-scc.md": {
       "anchors": [
+        "google-cloud-scc-integration-workflow-overview_integrate-with-google-cloud-scc",
         "configure-google-cloud-scc_integrate-with-google-cloud-scc",
         "google-cloud-scc-configuring-acs_integrate-with-google-cloud-scc",
         "configure-policy-notifications_integrate-with-google-cloud-scc"
@@ -2930,12 +2995,13 @@
     },
     "integration/integrate-with-image-registries.md": {
       "anchors": [
+        "integrate-image-registries-overview_integrate-with-image-registries",
         "automatic-configuration-image-registry_integrate-with-image-registries",
         "amazon_ecr_integrate-with-image-registries",
-        "manual-configuration-image-registry",
+        "manual-configuration-image-registry_integrate-with-image-registries",
         "manual-configuration-image-registry-ocp_integrate-with-image-registries",
         "manual-configuration-image-registry-ecr_integrate-with-image-registries",
-        "use-assumerole-with-ecr",
+        "use-assumerole-with-ecr_integrate-with-image-registries",
         "configuring-assumerole-with-iam_integrate-with-image-registries",
         "configuring-assumerole-without-iam_integrate-with-image-registries",
         "configuring-assumerole-acs_integrate-with-image-registries",
@@ -2947,7 +3013,8 @@
         "quay-keyless-eso_integrate-with-image-registries",
         "manual-configuration-image-registry-ghcr_integrate-with-image-registries",
         "manual-configuration-image-registry-ibm_integrate-with-image-registries",
-        "manual-configuration-image-registry-redhat_integrate-with-image-registries"
+        "manual-configuration-image-registry-redhat_integrate-with-image-registries",
+        "additional-resources_integrate-with-image-registries"
       ],
       "code_blocks": 11,
       "code_sha256": "9f7af153bd3f64054aa66b7159fb34eee6fdcdd67bad60f3ce38da2796810b97",
@@ -2958,7 +3025,7 @@
     },
     "integration/integrate-with-image-vulnerability-scanners.md": {
       "anchors": [
-        "_supported_container_image_registries",
+        "supported-container-image-registries_integrate-with-image-vulnerability-scanners",
         "rhacs-scanners_integrate-with-image-vulnerability-scanners",
         "alternative-scanners_integrate-with-image-vulnerability-scanners",
         "integrate-with-clair_integrate-with-image-vulnerability-scanners",
@@ -2991,6 +3058,7 @@
     },
     "integration/integrate-with-pagerduty.md": {
       "anchors": [
+        "pagerduty-integration-workflow-overview_integrate-with-pagerduty",
         "configure-pagerduty_integrate-with-pagerduty",
         "pagerduty-configuring-acs_integrate-with-pagerduty",
         "configure-policy-notifications_integrate-with-pagerduty"
@@ -3004,6 +3072,7 @@
     },
     "integration/integrate-with-qradar.md": {
       "anchors": [
+        "qradar-integration-workflow-overview_integrate-with-qradar",
         "webhook-configuring-acs_integrate-with-qradar",
         "configure-policy-notifications_integrate-with-qradar"
       ],
@@ -3016,9 +3085,10 @@
     },
     "integration/integrate-with-s3-api-compatible-services.md": {
       "anchors": [
+        "s3-api-compatible-integration-overview_integrate-with-s3-api-compatible-services",
         "s3-api-compatible-services-configuring-acs_integrate-with-s3-api-compatible-services",
         "perform-on-demand-backups-s3-api-compatible-services_integrate-with-s3-api-compatible-services",
-        "_additional_resources"
+        "additional-resources_integrate-with-s3-api-compatible-services"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -3029,6 +3099,7 @@
     },
     "integration/integrate-with-servicenow.md": {
       "anchors": [
+        "servicenow-integration-overview_integrate-with-servicenow",
         "webhook-configuring-acs_integrate-with-servicenow",
         "configure-policy-notifications_integrate-with-servicenow"
       ],
@@ -3041,6 +3112,7 @@
     },
     "integration/integrate-with-slack.md": {
       "anchors": [
+        "slack-integration-overview_integrate-with-slack",
         "configure-slack_integrate-with-slack",
         "send-alerts-to-different-slack-channels_integrate-with-slack",
         "slack-configuring-acs_integrate-with-slack",
@@ -3055,12 +3127,13 @@
     },
     "integration/integrate-with-splunk.md": {
       "anchors": [
-        "integrate-splunk-http-event-collector",
+        "integrate-splunk-overview_integrate-with-splunk",
+        "integrate-splunk-http-event-collector_integrate-with-splunk",
         "add-http-event-collector-splunk_integrate-with-splunk",
         "integrate-splunk-enable-http-event-collector_integrate-with-splunk",
         "splunk-configuring-acs_integrate-with-splunk",
         "configure-policy-notifications_integrate-with-splunk",
-        "integrate-splunk-add-on",
+        "integrate-splunk-add-on_integrate-with-splunk",
         "install-and-configure-the-splunk-add-on_integrate-with-splunk",
         "update-the-splunk-add-on_integrate-with-splunk",
         "troubleshoot-the-splunk-add-on_integrate-with-splunk"
@@ -3074,6 +3147,7 @@
     },
     "integration/integrate-with-sumologic.md": {
       "anchors": [
+        "sumologic-integration-workflow-overview_integrate-with-sumologic",
         "configure-sumologic_integrate-with-sumologic",
         "sumologic-configuring-acs_integrate-with-sumologic",
         "configure-policy-notifications_integrate-with-sumologic",
@@ -3098,7 +3172,9 @@
       "tables": 0
     },
     "operating/audit-listening-endpoints.md": {
-      "anchors": [],
+      "anchors": [
+        "audit-listening-endpoints-overview_audit-listening-endpoints"
+      ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
@@ -3108,14 +3184,16 @@
     },
     "operating/build-time-network-policy-tools.md": {
       "anchors": [
+        "build-time-network-policy-tools-commands_network-policy-tools",
         "build-time-network-policy-generator_network-policy-tools",
         "using-the-build-time-network-policy-generator_network-policy-tools",
+        "build-time-network-policy-generator-next-steps_network-policy-tools",
         "connectivity-mapping-using-the-roxctl-netpol-connectivity-map-command_network-policy-tools",
         "retrieving-connectivity-mapping-information-from-a-kubernetes-manifest-directory_network-policy-tools",
         "retrieving-explanations_network-policy-tools",
         "understanding-connectivity-explanations_network-policy-tools",
-        "_example_allowed_connections",
-        "_example_blocked_connections",
+        "understanding-connectivity-explanations-allowed_network-policy-tools",
+        "understanding-connectivity-explanations-blocked_network-policy-tools",
         "connectivity-map-output-formats-and-visualizations_network-policy-tools",
         "generating-svg-graphs-from-the-dot-output-using-graphviz_network-policy-tools",
         "identifying-the-differences-in-allowed-connections-between-project-versions_network-policy-tools",
@@ -3128,11 +3206,12 @@
       "code_sha256": "93dd6b373d8bd51cd1b33ac28aa4f565560ed8d25cf0f7dfd557282b1426cb06",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "3d4985f46d0fefa5030f911d27015d13278654be7cfb99d3f49e849283a961ce",
+      "table_text_sha256": "27e347496f526a055598b52144c976d5dc09e48fe14cfc54062b852d3dc017a9",
       "tables": 3
     },
     "operating/compliance-operator-rhacs.md": {
       "anchors": [
+        "compliance-operator-rhacs-overview_compliance-operator-rhacs",
         "compliance-operator-install_compliance-operator-rhacs"
       ],
       "code_blocks": 0,
@@ -3144,7 +3223,8 @@
     },
     "operating/create-use-collections.md": {
       "anchors": [
-        "prerequisites_collections",
+        "collections-availability-overview_create-use-collections",
+        "prerequisites_collections_create-use-collections",
         "understanding-object-collections_create-use-collections",
         "access-object-collections_create-use-collections",
         "creating-object-collections_create-use-collections",
@@ -3152,7 +3232,7 @@
         "using-regular-expression_create-use-collections",
         "adding-attached-collections_create-use-collections",
         "migrate-scope-collections_create-use-collections",
-        "API_support_collections"
+        "API_support_collections_create-use-collections"
       ],
       "code_blocks": 3,
       "code_sha256": "8a80c5b948d07d990035f18084dd869e890693c7eab64391fce1094b93b02b3e",
@@ -3189,7 +3269,7 @@
       "code_sha256": "9187dc0762d6a56fded6c3b9d8782cf0dc1fbae6b1d222bb7c5e786b7a0beac0",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "4b1ae7438bfc39d5321653e0a1cc1ca043aed4db269ddcd2d884190fa01ff5a7",
+      "table_text_sha256": "c9444b1128b07ca072dfe6ea6a55c21093c0e534640c0056ac405e9c99eb55af",
       "tables": 1
     },
     "operating/examine-images-for-vulnerabilities.md": {
@@ -3237,15 +3317,20 @@
         "base-images-api_examine-images-for-vulnerabilities",
         "additional-resources_examine-images-for-vulnerabilities"
       ],
-      "code_blocks": 22,
-      "code_sha256": "117ca2f7a458b3916e0148856e975094cb2ee36ca563d818c0b6c6c61bd14d72",
+      "code_blocks": 26,
+      "code_sha256": "f8891c683771ddb1fb615fe7e7ccc8c112bd64b00a1a7673ea0d8047109f0f0d",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "bcbaaa916c445e48e667dc7e5c1adea5d171a02fb9e6894eaba61b2438b77984",
+      "table_text_sha256": "0ad9e71355463e13d65a4d4c68f7998dac1261607cb28147c97526ef92580840",
       "tables": 6
     },
     "operating/manage-compliance/compliance-feature-overview.md": {
-      "anchors": [],
+      "anchors": [
+        "openshift-infrastructure-compliance_compliance-feature-overview",
+        "dashboard_compliance-feature-overview",
+        "compliance-assessment-and-reporting-by-using-rhacs_compliance-feature-overview",
+        "workload-compliance-for-non-openshift-clusters_compliance-feature-overview"
+      ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
@@ -3255,14 +3340,15 @@
     },
     "operating/manage-compliance/using-openshift-compliance.md": {
       "anchors": [
+        "using-openshift-compliance-overview_using-openshift-compliance",
         "customizing-and-automating-your-compliance-scans_using-openshift-compliance",
         "analyzing-compliance-scan-schedules_using-openshift-compliance",
         "schedules-page-overview_using-openshift-compliance",
         "configuration-details-tab_using-openshift-compliance",
-        "_parameters_section",
-        "_clusters_section",
-        "_profiles_section",
-        "_delivery_destinations_section",
+        "configuration-details-parameters-section_using-openshift-compliance",
+        "configuration-details-clusters-section_using-openshift-compliance",
+        "configuration-details-profiles-section_using-openshift-compliance",
+        "configuration-details-delivery-destinations-section_using-openshift-compliance",
         "all-report-jobs-tab_using-openshift-compliance",
         "assessing-the-profile-compliance-across-clusters_using-openshift-compliance",
         "coverage-page-overview_using-openshift-compliance",
@@ -3279,12 +3365,13 @@
       "code_sha256": "21f2dc832ceb2240038987752d8249942a226d7b4da46be4aab42a4663ef64d2",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "4bdc8971a795ef0ed0fe4515621446ff4321dac38aeaabdfa00a14df154e047f",
+      "table_text_sha256": "d648bb1ce8334bce656465072ba0e0efba250345fa2cd413098c009f29b5abab",
       "tables": 2
     },
     "operating/manage-network-policies.md": {
       "anchors": [
-        "network-graph-20-docs",
+        "manage-network-policies-overview_manage-network-policies",
+        "network-graph-20-docs_manage-network-policies",
         "network-graph-20-view_manage-network-policies",
         "navigation-user-interface_manage-network-policies",
         "external-entities-connections_manage-network-policies",
@@ -3293,7 +3380,7 @@
         "view-deployment-info_manage-network-policies",
         "view-network-policies-ng20_manage-network-policies",
         "configure-cidr-blocks-ng20_manage-network-policies",
-        "network-graph-simulate-generate",
+        "network-graph-simulate-generate_manage-network-policies",
         "policy-generation-strategy-ng20_manage-network-policies",
         "generate-network-policies-ng20_manage-network-policies",
         "save-generated-policies-ng20_manage-network-policies",
@@ -3316,6 +3403,7 @@
     },
     "operating/manage-user-access/configure-short-lived-access.md": {
       "anchors": [
+        "configure-short-lived-access-overview_configure-short-lived-access",
         "configure-short-lived-access_configure-short-lived-access",
         "exchanging-identity-token_configure-short-lived-access"
       ],
@@ -3341,11 +3429,12 @@
     },
     "operating/manage-user-access/configuring-identity-providers/configure-ocp-oauth.md": {
       "anchors": [
+        "configure-ocp-oauth-requirements-notes_configure-ocp-oauth",
         "configure-ocp-oauth-identity-provider_configure-ocp-oauth",
         "create-additional-routes-ocp-oauth_configure-ocp-oauth"
       ],
       "code_blocks": 5,
-      "code_sha256": "dd1c26e04efdd477e48f4aaa9eeebadd676adf0b62f00e50108235e735c30d74",
+      "code_sha256": "3d86bdcf03688cf00a94f981048d0cb6c37ac94c64eebffde281b03b62e47fa8",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -3376,6 +3465,7 @@
     },
     "operating/manage-user-access/enable-pki-authentication.md": {
       "anchors": [
+        "enable-pki-authentication-overview_enable-pki-authentication",
         "configure-pki-authentication-portal_enable-pki-authentication",
         "configure-pki-authentication-roxctl_enable-pki-authentication",
         "update-authentication-keys-and-certificates_enable-pki-authentication",
@@ -3390,6 +3480,7 @@
     },
     "operating/manage-user-access/manage-role-based-access-control-3630.md": {
       "anchors": [
+        "rbac-concepts-overview_manage-role-based-access-control",
         "rbac-system-roles-3630_manage-role-based-access-control",
         "view-system-roles-permission-scope_manage-role-based-access-control",
         "create-a-custom-role-3630_manage-role-based-access-control",
@@ -3408,7 +3499,7 @@
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "01c9273828fa7bb769ed0b2d8a1d0200e48f282ade1bd91cf090e9421a6839c3",
+      "table_text_sha256": "2fdec8672cb95e702166e6aeb0fd9bf59796493a871bffcf0ad39cb560f7694b",
       "tables": 4
     },
     "operating/manage-user-access/remove-admin-user.md": {
@@ -3424,16 +3515,17 @@
     },
     "operating/manage-user-access/understanding-authentication-providers.md": {
       "anchors": [
-        "auth-provider-claim-mappings",
-        "auth-provider-oidc-default-claim-mappings",
-        "auth-provider-auth0-default-claim-mappings",
-        "auth-provider-saml20-default-claim-mappings",
-        "auth-provider-google-iap-default-claim-mappings",
-        "auth-provider-userpki-default-claim-mappings",
-        "auth-provider-openshift-auth-default-claim-mappings",
-        "auth-provider-rules",
-        "auth-provider-minimum-access-role",
-        "auth-provider-required-attributes"
+        "authentication-providers-overview_authentication-provider-structure",
+        "auth-provider-claim-mappings_authentication-provider-structure",
+        "auth-provider-oidc-default-claim-mappings_authentication-provider-structure",
+        "auth-provider-auth0-default-claim-mappings_authentication-provider-structure",
+        "auth-provider-saml20-default-claim-mappings_authentication-provider-structure",
+        "auth-provider-google-iap-default-claim-mappings_authentication-provider-structure",
+        "auth-provider-userpki-default-claim-mappings_authentication-provider-structure",
+        "auth-provider-openshift-auth-default-claim-mappings_authentication-provider-structure",
+        "auth-provider-rules_authentication-provider-structure",
+        "auth-provider-minimum-access-role_authentication-provider-structure",
+        "auth-provider-required-attributes_authentication-provider-structure"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -3444,9 +3536,10 @@
     },
     "operating/manage-user-access/understanding-multi-tenancy.md": {
       "anchors": [
-        "understanding-resource-scoping",
-        "multi-tenancy-per-namespace-config-example",
-        "mutli-tenancy-limitations"
+        "understanding-resource-scoping_understanding-multi-tenancy",
+        "multi-tenancy-per-namespace-config-example_understanding-multi-tenancy",
+        "multi-tenancy-per-namespace-config-example-procedure_understanding-multi-tenancy",
+        "mutli-tenancy-limitations_understanding-multi-tenancy"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -3457,6 +3550,7 @@
     },
     "operating/manage-vulnerabilities/common-vuln-management-tasks.md": {
       "anchors": [
+        "vulnerability-management-overview_common-vuln-management-tasks",
         "vuln-management-components-portal_common-vuln-management-tasks",
         "vulnerability-management20-view-workload-cve_common-vuln-management-tasks",
         "vulnerability-management20-view-platform-cve_vulns-platforms",
@@ -3493,11 +3587,12 @@
       "code_sha256": "fec2c7b743c1421dda62d88972d587df0acf32a5cbcc539ea2dd6a3a3ceb24cb",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "4245fb8a7aa2b8b516f7a28519179d3c48b8a6fa4e31abe11ee6e183c0f10d61",
+      "table_text_sha256": "923c2ba461a236ef02c3baafdeefbe061dc5e511bb124e35b04bf9de2fc8a9f5",
       "tables": 6
     },
     "operating/manage-vulnerabilities/scan-rhcos-node-host.md": {
       "anchors": [
+        "rhcos-node-scanning-overview_scan-rhcos-node-host",
         "rhcos-enable-node-scan_scan-rhcos-node-host",
         "rhcos-enable-node-scan-scannerv4_scan-rhcos-node-host",
         "rhcos-analyse-detect_scan-rhcos-node-host",
@@ -3506,14 +3601,14 @@
         "identify-vulnerabilities-in-nodes_scan-rhcos-node-host",
         "viewing-node-cves_scan-rhcos-node-host",
         "understanding-node-cves-scanner-v4_scan-rhcos-node-host",
-        "_example_of_discrepancies_in_reported_vulnerabilities",
-        "_cves_reported_only_by_the_stackrox_scanner",
-        "_cves_reported_only_by_scanner_v4",
-        "_cves_reported_by_both_scanners",
-        "_verifying_the_status_of_vulnerabilities"
+        "example-of-discrepancies-in-reported-vulnerabilities_scan-rhcos-node-host",
+        "cves-reported-only-by-the-stackrox-scanner_scan-rhcos-node-host",
+        "cves-reported-only-by-scanner-v4_scan-rhcos-node-host",
+        "cves-reported-by-both-scanners_scan-rhcos-node-host",
+        "verifying-the-status-of-vulnerabilities_scan-rhcos-node-host"
       ],
       "code_blocks": 9,
-      "code_sha256": "0090161cc4926f35e34c7ba97cc9bde6f6b77e7b69594d5dd4a4b9a2441958c4",
+      "code_sha256": "a9ffb2530759b77990c3008ad5c3de23b456905f46cd017aabd3898b4020776c",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "9361fa4aad6414156a31a5afbed69ab0b170ff268b92031a8f85307a97b0bc35",
@@ -3521,6 +3616,7 @@
     },
     "operating/manage-vulnerabilities/scanner-generate-sbom.md": {
       "anchors": [
+        "sbom-generation-overview_scanner-generate-sbom",
         "sbom-about_scanner-generate-sbom",
         "sbom-generate_scanner-generate-sbom",
         "generating-sboms-by-using-the-rhacs-portal_scanner-generate-sbom",
@@ -3577,6 +3673,7 @@
     },
     "operating/manage-vulnerabilities/vulnerability-reporting.md": {
       "anchors": [
+        "vulnerability-reporting-overview_vulnerability-reporting",
         "vulnerability-management-reporting_vulnerability-reporting",
         "vulnerability-management20-creating-report_vulnerability-reporting",
         "vulnerability-management20-configure-report-delivery-destinations-schedule_vulnerability-reporting",
@@ -3599,11 +3696,12 @@
       "code_sha256": "9d54a8f6303fbcd9e2e7015b4682890b1c93c9ea446580fdbc53fd0e28e78eda",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "f6724ebf2f8223dfc41252dd6703a6ef13c2718deff727cf9d37d30933234067",
+      "table_text_sha256": "a0f3c3a46519ca770c6742e788552c855c4927ff2c912f6f303c6ef6cbd3dce0",
       "tables": 1
     },
     "operating/manage_security_policies/about-security-policies.md": {
       "anchors": [
+        "about-security-policies-overview_about-security-policies",
         "policy-evaluation-engine_about-security-policies",
         "policy-enforcement-about_about-security-policies",
         "build-stage-policies_about-security-policies",
@@ -3720,8 +3818,10 @@
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
-      "source_warnings": [],
-      "table_text_sha256": "42d0b366e1056521f5f7d495d29707dd8ad5b435d7f1ddfaa1189e56b2214acd",
+      "source_warnings": [
+        "asciidoctor: ERROR: modules/medium-sev-security-policies.adoc: line 47: dropping cells from incomplete row detected end of table"
+      ],
+      "table_text_sha256": "506dc25b70ae9d3e090def243260439b279bf0eb556c64fbee401be988feb3bb",
       "tables": 18
     },
     "operating/manage_security_policies/use-admission-controller-enforcement.md": {
@@ -3735,7 +3835,7 @@
         "admission-controller-failure-policy-changing_use-admission-controller-enforcement"
       ],
       "code_blocks": 4,
-      "code_sha256": "6192a2f57f9579be0ae15a1b6046b9f59e23800f947a3c8b4c4aba1b70a0ce1c",
+      "code_sha256": "56f2992261e9d2d56340d019d784cb66689d2e2c690f8c02da419e30f31709c0",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -3743,21 +3843,22 @@
     },
     "operating/respond-to-violations.md": {
       "anchors": [
+        "policy-violations-and-security-findings_respond-to-violations",
         "namespace-conditions-for-platform-components_respond-to-violations",
         "analyzing-all-violations_respond-to-violations",
         "violations-page-overview_respond-to-violations",
-        "view-violation-details",
+        "view-violation-details_respond-to-violations",
         "violation-view-violation-tab_respond-to-violations",
         "violations-view-deployment-tab_respond-to-violations",
-        "_overview_section",
-        "_container_configuration_section",
-        "_port_configuration_section",
-        "_security_context_section",
-        "_network_policy_section",
+        "violations-deployment-overview-section_respond-to-violations",
+        "violations-deployment-container-config_respond-to-violations",
+        "violations-deployment-port-config_respond-to-violations",
+        "violations-deployment-security-context_respond-to-violations",
+        "violations-deployment-network-policy-section_respond-to-violations",
         "violation-view-policy-tab_respond-to-violations",
-        "_policy_overview_section",
-        "_policy_behavior",
-        "_policy_criteria_section",
+        "violation-policy-overview-section_respond-to-violations",
+        "violation-policy-behavior_respond-to-violations",
+        "violation-policy-criteria_respond-to-violations",
         "policy-enforcement-deploy_respond-to-violations",
         "network-policies-tab_respond-to-violations"
       ],
@@ -3770,6 +3871,7 @@
     },
     "operating/review-cluster-configuration.md": {
       "anchors": [
+        "configuration-management-overview_review-cluster-configuration",
         "using-the-configuration-management-view_review-cluster-configuration",
         "misconfigurations-kubernetes-rbac",
         "kubernetes-role-assignment_review-cluster-configuration",
@@ -3793,24 +3895,24 @@
         "use-global-search_search-filter",
         "use-local-page-filtering_search-filter",
         "common-search-queries_search-filter",
-        "_finding_deployments_that_are_affected_by_a_specific_cve",
-        "_finding_privileged_running_deployments",
-        "_finding_deployments_that_have_external_network_exposure",
-        "_finding_deployments_that_are_running_specific_processes",
-        "_finding_deployments_that_have_serious_but_fixable_vulnerabilities",
-        "_finding_deployments_that_use_passwords_exposed_through_environment_variables",
-        "_finding_running_deployments_that_have_particular_software_components_in_them",
-        "_finding_users_or_groups",
-        "_finding_who_owns_a_particular_deployment",
-        "_finding_who_is_deploying_images_from_public_registries",
-        "_finding_who_is_deploying_into_the_default_namespace",
+        "finding-deployments-that-are-affected-by-a-specific-cve_search-filter",
+        "finding-privileged-running-deployments_search-filter",
+        "finding-deployments-that-have-external-network-exposure_search-filter",
+        "finding-deployments-that-are-running-specific-processes_search-filter",
+        "finding-deployments-that-have-serious-but-fixable-vulnerabilities_search-filter",
+        "finding-deployments-that-use-passwords-exposed-through-environment-variables_search-filter",
+        "finding-running-deployments-that-have-particular-software-components-in-them_search-filter",
+        "finding-users-or-groups_search-filter",
+        "finding-who-owns-a-particular-deployment_search-filter",
+        "finding-who-is-deploying-images-from-public-registries_search-filter",
+        "finding-who-is-deploying-into-the-default-namespace_search-filter",
         "search-attributes_search-filter"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "41774bdf2518e6586cae9aeaadda71676db470339ccc616871973bf49854cb99",
+      "table_text_sha256": "fd8acecc5cd359cc770eec6265cecf0f0de89f2e8a397688b54d6758170b776b",
       "tables": 11
     },
     "operating/use-system-health-dashboard.md": {
@@ -3828,7 +3930,10 @@
       "tables": 0
     },
     "operating/using-collector-runtime-configuration.md": {
-      "anchors": [],
+      "anchors": [
+        "collector-runtime-configuration-overview_{context}",
+        "collector-runtime-configuration-example_{context}"
+      ],
       "code_blocks": 1,
       "code_sha256": "e795dc06a215059ddbf4e93f20de658323a0c02022979995a558c4ddca5d9e02",
       "redacted_webhook_examples": 0,
@@ -3869,10 +3974,10 @@
     },
     "operating/view-dashboard.md": {
       "anchors": [
-        "status-bar-links",
-        "dashboard-filter",
-        "widget-options",
-        "new-widgets"
+        "status-bar-links_view-dashboard",
+        "dashboard-filter_view-dashboard",
+        "new-widgets_view-dashboard",
+        "widget-options_view-dashboard"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -3883,6 +3988,7 @@
     },
     "operating/visualizing-external-entities.md": {
       "anchors": [
+        "visualizing-external-entities-overview_visualizing-external-entities",
         "enabling-external-ip-collection-secured-clusters_visualizing-external-entities",
         "querying-external-entities-using-api_visualizing-external-entities",
         "visualizing-external-entities-known-limitations_visualizing-external-entities",
@@ -3899,7 +4005,7 @@
       "anchors": [
         "release-dates-411_release-notes-411",
         "about-this-release-411_release-notes-411",
-        "new-features-411_release-notes-411",
+        "new-features_release-notes-411",
         "enhanced-vulnerability-management-reporting_release-notes-411",
         "red-hat-hardened-image-scanning_release-notes-411",
         "known-issue-hummingbird-scan_release-notes-411",
@@ -3932,13 +4038,17 @@
         "bug-fixes-in-version-4112_release-notes-411",
         "about-this-release-4113_release-notes-411",
         "bug-fixes-in-version-4113_release-notes-411",
+        "about-this-release-4114_release-notes-411",
+        "bug-fixes-in-version-4114_release-notes-411",
+        "about-this-release-4115_release-notes-411",
+        "bug-fixes-in-version-4115_release-notes-411",
         "image-versions_release-notes-411"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "7ff1128bf0ffe3252874998cab57dc8a3b463353f055b02ccdea0958c49baec8",
+      "table_text_sha256": "cb2ca3019695227fa4ca4efe8fba90f64760a3faf7e2fa7dd54224bb8ee343b0",
       "tables": 3
     },
     "rest_api/APITokenService/APITokenService.md": {
@@ -8626,11 +8736,12 @@
     },
     "troubleshooting/commonly-occurring-error-conditions.md": {
       "anchors": [
+        "collector-startup-diagnostics-overview_error-conditions",
         "unable-to-connect-to-the-sensor_error-conditions",
         "failing-to-load-the-ebpf-probe_error-conditions"
       ],
-      "code_blocks": 4,
-      "code_sha256": "66b22f1739f1c1be9e5c8eaac5b6e8728c9d2ef25008430d366f16521da4ce46",
+      "code_blocks": 7,
+      "code_sha256": "38a638392a15747c3da5074c6e18a246898932c3bc652bdc58180d1ddce5947a",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -8644,7 +8755,7 @@
         "analyzing-the-collector-pod-status_logs-and-pod-status"
       ],
       "code_blocks": 7,
-      "code_sha256": "3dd426fff1b223b6a43dd3285a75490a0da0b4177fb1061791d863909c34000e",
+      "code_sha256": "d0c77ef258cb548cda593d612b9fb2c29d78261846776afb72f6c59a41363acb",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -8652,11 +8763,12 @@
     },
     "troubleshooting_central/backing-up-central-database-by-using-the-roxctl-cli.md": {
       "anchors": [
+        "backing-up-central-db-overview_backing-up-central-database-by-using-the-roxctl-cli",
         "on-demand-backups-roxctl-api_backing-up-central-database-by-using-the-roxctl-cli",
         "on-demand-backups-roxctl-admin-pass_backing-up-central-database-by-using-the-roxctl-cli"
       ],
-      "code_blocks": 5,
-      "code_sha256": "76e4e283d8d27f580a706d8197024005751f8c4bf0569060dbd3ea314b2f96c4",
+      "code_blocks": 7,
+      "code_sha256": "8f8fc5757136db331fdc4f7c0046249acbfce948347ed7b4955399c221f35520",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -8747,7 +8859,7 @@
         "getting-upgrader-logs_upgrade-roxctl"
       ],
       "code_blocks": 59,
-      "code_sha256": "47584cd8347e2a7907b731309125c29d691cb4b042d803964b09afceb2f2d895",
+      "code_sha256": "ddb3902539128d6245fc68a6547aec51c6c39037a206efb6a7768fd035210847",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "e50bfb29446ee0bfa4dd454896cd71a126002bf08829a2ee9ed1551ee329e36d",

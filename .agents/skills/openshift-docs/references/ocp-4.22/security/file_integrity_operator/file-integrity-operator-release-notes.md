@@ -4,6 +4,24 @@ The File Integrity Operator for OpenShift Container Platform continually runs fi
 
 These release notes track the development of the File Integrity Operator in the OpenShift Container Platform.
 
+# Release notes for OpenShift File Integrity Operator 1.5.0
+
+OpenShift File Integrity Operator 1.5.0 is now available. The `stable` update channel tracks and receives updates for the File Integrity Operator. For more information, see [Updating the File Integrity Operator](file-integrity-operator-updating.md#file-integrity-operator-updating). The following Red Hat Security Advisory (RHSA) is available:
+
+- [RHSA-2026:74025 - OpenShift File Integrity Operator 1.5.0 bug fix and enhancement update](https://access.redhat.com/errata/RHSA-2026:74025)
+
+## New features and enhancements
+
+- With this release, the File Integrity Operator uses the `ubi9/ubi-minimal-pqc` as a base image. This change enables Post-Quantum Cryptography (PQC) support through OpenSSL and helps TLS endpoints offer ML-KEM during key exchange. ([CMP-4573](https://issues.redhat.com/browse/CMP-4573), [CMP-4504](https://issues.redhat.com/browse/CMP-4504))
+
+- With this release, you can set labels and annotations in the `FileIntegrity` custom resource (CR) so the Operator applies them to the DaemonSet pod template. As a result, you can customize how file integrity pods are identified and selected in your environment. ([CMP-4728](https://issues.redhat.com/browse/CMP-4728))
+
+- With this release, the File Integrity Operator uses the OpenShift Container Platform API server as the source of truth for TLS configuration. As a result, the Operator applies the same TLS settings as the cluster API. ([CMP-4638](https://issues.redhat.com/browse/CMP-4638))
+
+- With this release, the File Integrity Operator creates label-scoped `NetworkPolicy` resources for AIDE scanner and re-init operand pods during `FileIntegrity` CR reconciliation. As a result, those operand pods meet required network policy controls. ([CMP-4714](https://issues.redhat.com/browse/CMP-4714))
+
+- This update includes upgraded dependencies in the underlying base images.
+
 # Release notes for OpenShift File Integrity Operator 1.4.1
 
 OpenShift File Integrity Operator 1.4.1 is now available. The `stable` update channel tracks and receives updates for the File Integrity Operator. For more information, see [Updating the File Integrity Operator](file-integrity-operator-updating.md#file-integrity-operator-updating). The following Red Hat Security Advisory (RHSA) is available:

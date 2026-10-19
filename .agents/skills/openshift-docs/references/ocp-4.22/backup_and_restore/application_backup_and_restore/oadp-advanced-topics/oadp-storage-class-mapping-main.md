@@ -10,7 +10,7 @@ Storage class mapping allows you to define rules or policies specifying which st
 
 You can use the `change-storage-class-config` field to change the storage class of your data objects, which lets you optimize costs and performance by moving data between different storage tiers, such as from standard to archival storage, based on your needs and access patterns.
 
-## Mapping storage classes with OADP
+## Map storage classes with OADP
 
 Change the storage class of a persistent volume (PV) during a restore by configuring a storage class mapping in the Velero namespace. This helps you customize storage destinations when recovering applications with OADP.
 

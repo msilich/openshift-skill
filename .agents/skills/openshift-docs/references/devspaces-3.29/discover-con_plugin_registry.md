@@ -11,7 +11,7 @@ The online instance linked in Additional resources provides the latest community
 
 <figure>
 <br />
-<img src="assets/aacda9d3235f18d36e25.png" alt="Plugin registries interactions with other components" /><br />
+<img src="assets/633cb98c41f0dcae7795.png" alt="Plugin registries interactions with other components" /><br />
 
 <figcaption>Figure 1. Plugin registries interactions with other components</figcaption>
 </figure>

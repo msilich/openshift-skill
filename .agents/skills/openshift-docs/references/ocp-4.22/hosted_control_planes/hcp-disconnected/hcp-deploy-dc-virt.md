@@ -386,7 +386,9 @@ Procedure
 
 # Creating a hosted cluster on OpenShift Virtualization in a disconnected environment
 
-As part of the process to deploy hosted control planes on OpenShift Virtualization in a disconnected environment, you need to create a hosted cluster. A hosted cluster is an OpenShift Container Platform cluster with its control plane and API endpoint hosted on a management cluster. The hosted cluster includes the control plane and its corresponding data plane.
+As part of the process to deploy hosted control planes on OpenShift Virtualization in a disconnected environment, you need to create a hosted cluster. A hosted cluster is an OpenShift Container Platform cluster with its control plane and API endpoint hosted on a management cluster.
+
+The hosted cluster includes the control plane and its corresponding data plane.
 
 ## Prerequisites to deploy hosted control planes on OpenShift Virtualization
 
@@ -733,6 +735,8 @@ Verification
 # Setting up the load balancer
 
 Set up the load balancer service that routes ingress traffic to the KubeVirt VMs and assigns a wildcard DNS entry to the load balancer IP address.
+
+When you create a `LoadBalancer` service on an OpenShift Virtualization hosted cluster, a mirror `LoadBalancer` service is automatically created and configured on the management cluster to expose the service. As a result, the hosted cluster `LoadBalancer` services are exposed through the same technology that the management cluster has configured for its own `LoadBalancer` services, such as MetalLB.
 
 <div>
 

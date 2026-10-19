@@ -171,15 +171,11 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To install the FlexVolume driver:
 
 </div>
 
@@ -188,6 +184,8 @@ To install the FlexVolume driver:
 2.  Place the executable file at the volume plugin path: `/etc/kubernetes/kubelet-plugins/volume/exec/<vendor>~<driver>/<driver>`.
 
     For example, to install the FlexVolume driver for the storage `foo`, place the executable file at: `/etc/kubernetes/kubelet-plugins/volume/exec/openshift.com~foo/foo`.
+
+</div>
 
 # Consuming storage using FlexVolume drivers
 
@@ -260,7 +258,7 @@ Procedure
 
   "fsType":"\<FS type\>", "readwrite":"\<rw\>", "secret/key1":"\<secret1\>" "secret/keyN":"\<secretN\>"
 
-</div>
+  > [!NOTE]
+  > Secrets are passed only to mount or unmount call-outs.
 
-> [!NOTE]
-> Secrets are passed only to mount or unmount call-outs.
+</div>

@@ -8,7 +8,7 @@ The kubelet CA certificate is located in the `kube-apiserver-to-kubelet-signer` 
 
 These certificates are managed by the system and not the user and are automatically rotated after 30 days.
 
-# Renewing node certificates
+# Renew node certificates
 
 Although the kubelet CA certificate automatically renews at 292 days, you can manually trigger renewal earlier by annotating the `kube-apiserver-to-kubelet-signer` secret.
 

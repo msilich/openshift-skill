@@ -4,7 +4,7 @@ Configure multiple backup storage locations (BSLs) in the Data Protection Applic
 
 OADP supports multiple credentials for configuring more than one BSL, so that you can specify the credentials to use with any BSL.
 
-# Configuring the DPA with more than one BSL
+# Configure the DPA with more than one BSL
 
 Configure the `DataProtectionApplication` (DPA) custom resource (CR) with multiple `BackupStorageLocation` (BSL) resources to store backups across different locations using provider-specific credentials. This provides backup distribution and location-specific restore capabilities.
 
@@ -149,7 +149,7 @@ Procedure
 
 </div>
 
-# Changing the default backup storage location in a DPA
+# Change the default backup storage location in a DPA
 
 Understand why the `default` field of the `backupLocations` object in a `DataProtectionApplication` (DPA) does not change the default `BackupStorageLocation` (BSL) when you configure multiple backup locations. This helps you to identify the root cause and apply the correct workaround.
 
@@ -191,7 +191,7 @@ Procedure
 
 </div>
 
-# Configuring two backup BSLs with different cloud credentials
+# Configure two backup BSLs with different cloud credentials
 
 Configure two backup storage locations with different cloud credentials to back up applications to multiple storage targets. With this setup, you can distribute backups across different storage providers for redundancy.
 

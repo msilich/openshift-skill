@@ -4,7 +4,9 @@ Ethernet Virtual Private Network (EVPN) extends OVN-Kubernetes Border Gateway Pr
 
 # Overview of BGP EVPN with OVN-Kubernetes
 
-Border Gateway Protocol Ethernet Virtual Private Networking (BGP EVPN) is a standards-based control plane that exchanges layer 2 and layer 3 overlay network reachability within the data center. Enabling this feature on OpenShift Container Platform allows a `ClusterUserDefinedNetwork` (CUDN) overlay network to use the EVPN control plane for deeper integration with the data center network.
+Border Gateway Protocol Ethernet Virtual Private Networking (BGP EVPN) is a standards-based control plane that exchanges layer 2 and layer 3 overlay network reachability within the data center.
+
+Enabling this feature on OpenShift Container Platform allows a `ClusterUserDefinedNetwork` (CUDN) overlay network to use the EVPN control plane for deeper integration with the data center network.
 
 Before EVPN support for primary cluster user-defined networks (CUDNs), VRF-lite was the only way to advertise CUDNs into one or more Virtual Routing and Forwarding (VRF) tables while keeping them isolated on the network. However, that approach required a VLAN interface per VRF and a separate BGP session for each VRF.
 
@@ -81,7 +83,9 @@ The following limitations apply to BGP EVPN with primary CUDNs:
 
 # Enabling BGP EVPN on a primary ClusterUserDefinedNetwork CR
 
-To connect primary `ClusterUserDefinedNetwork` (CUDN) custom resource (CR) traffic to an external BGP EVPN fabric in OpenShift Container Platform, you create `FRRConfiguration`, `VTEP`, `RouteAdvertisements`, and `ClusterUserDefinedNetwork` resources. Use these resources to establish BGP EVPN toward peers on your provider network and to advertise labeled CUDNs that use EVPN transport.
+To connect primary `ClusterUserDefinedNetwork` (CUDN) custom resource (CR) traffic to an external BGP EVPN fabric in OpenShift Container Platform, you create `FRRConfiguration`, `VTEP`, `RouteAdvertisements`, and `ClusterUserDefinedNetwork` resources.
+
+Use these resources to establish BGP EVPN toward peers on your provider network and to advertise labeled CUDNs that use EVPN transport.
 
 <div>
 

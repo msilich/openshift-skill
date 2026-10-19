@@ -2,7 +2,7 @@
 
 You can secure your software supply chain by using trusted base images, integrating security testing, and building once to deploy everywhere. Managing this build process ensures production deployments match verified builds and protects the software stack where code and libraries integrate.
 
-# Building once, deploying everywhere
+# Build once, deploy everywhere
 
 You can build container images once in a secure environment and deploy them unchanged across all stages. Using OpenShift Container Platform as your build standard guarantees this security, ensuring production deployments match verified builds and preventing runtime vulnerabilities.
 
@@ -42,7 +42,7 @@ Additional resources
 
 </div>
 
-# Managing builds
+# Manage builds
 
 You can use Source-to-Image (S2I) builder images that enable development and operations teams to collaborate on reproducible builds, using Red Hat Universal Base Images that you can freely redistribute with your applications.
 
@@ -64,7 +64,7 @@ You can use the integrated OpenShift Container Registry to manage access to fina
 
 In addition to the included Jenkins for CI, you can also integrate your own build and CI environment with OpenShift Container Platform using RESTful APIs, and use any API-compliant image registry.
 
-# Securing inputs during builds
+# Secure inputs during builds
 
 You can protect sensitive credentials required during builds by defining input secrets that give access to dependent resources without exposing those credentials in the final application image.
 
@@ -112,7 +112,7 @@ Procedure
 
 </div>
 
-# Designing your build process
+# Design your build process
 
 You can design your container image management to separate control across teams by using layered images, integrate automated security testing into your CI process, and sign custom containers to ensure integrity between build and deployment.
 
@@ -134,7 +134,7 @@ Your CI process should include policies that flag builds with issues discovered 
 
 Using GitOps methodology, you can use the same CI/CD mechanisms to manage not only your application configurations, but also your OpenShift Container Platform infrastructure.
 
-# Building Knative serverless applications
+# Build Knative serverless applications
 
 You can build, deploy, and manage serverless applications by using OpenShift Serverless in OpenShift Container Platform, relying on Kubernetes and Kourier, leveraging S2I builder images and Knative services for scalable, event-driven workloads.
 

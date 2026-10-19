@@ -171,72 +171,56 @@ Procedure
     $ oc apply -f clusterrolebinding.yaml
     ```
 
-9.  Create a `Secret` CR to enable the Redfish API to manage specific VMs:
+9.  Create the `Secret` CR containing the configuration by creating a YAML file with content such as the following example. Edit the `config.yaml` section to match your environment:
 
-    1.  Generate a `bcrypt` hashed password for the Redfish API by running the following command in a Linux terminal:
+    ``` yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: kubevirt-redfish-secret
+      namespace: kubevirt-redfish
+      labels:
+        app.kubernetes.io/name: kubevirt-redfish
+        app.kubernetes.io/component: config
+    type: Opaque
+    stringData:
+      config.yaml: |
+        server:
+          host: "0.0.0.0"
+          port: 8443
+          tls:
+            enabled: false
+        system_id_convention: "enhanced"
+        chassis:
+          - name: "<chassis_name>"
+            namespace: "<vm_namespace>"
+            service_account: "kubevirt-redfish"
+            vm_selector:
+              labels:
+                redfish-enabled: "true"
+        authentication:
+          users:
+            - username: "admin"
+              password: "<password>"
+              chassis: ["<chassis_name>"]
+        datavolume:
+          storage_class: "<storage_class>"
+          storage_size: "3Gi"
+    ```
 
-        ``` terminal
-        $ htpasswd -nbB "" '<password>' | cut -d: -f2
-        ```
+    where:
 
-        - `<password>` is the password you want to use for the Redfish API.
+    `system_id_convention`
+    Specifies the format for Redfish system IDs. The recommended setting is `enhanced` to use `<namespace>.<vm-name>` format. The `legacy` setting uses `<vm-name>` only.
 
-          The output is a `bcrypt` hashed password beginning with `$2a$`, `$2b$`, or `$2y$`.
+    `chassis`
+    Specifies the namespaces where VMs are deployed. Replace `<chassis_name>` with a name for this chassis configuration and `<vm_namespace>` with the namespace containing your VMs. The `vm_selector` labels identify which VMs in the namespace are exposed through Redfish. Only VMs with matching labels are visible. You can configure multiple chassis entries to expose different subsets of VMs in the same namespace, each with different authentication users.
 
-          > [!NOTE]
-          > In earlier Technology Preview releases, plain text passwords were used. Use `bcrypt` hashed passwords for improved security.
+    `authentication`
+    Specifies the username and password required to access the Redfish API. These credentials enable full management control over exposed VMs, independently of any OpenShift Container Platform privileges. Replace `<password>` with a secure password.
 
-    2.  Create the `Secret` CR containing the configuration with content such as the following example. Edit the `config.yaml` section to match your environment:
-
-        ``` yaml
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          name: kubevirt-redfish-secret
-          namespace: kubevirt-redfish
-          labels:
-            app.kubernetes.io/name: kubevirt-redfish
-            app.kubernetes.io/component: config
-        type: Opaque
-        stringData:
-          config.yaml: |
-            server:
-              host: "0.0.0.0"
-              port: 8443
-              tls:
-                enabled: false
-            system_id_convention: "enhanced"
-            chassis:
-              - name: "<chassis_name>"
-                namespace: "<vm_namespace>"
-                service_account: "kubevirt-redfish"
-                vm_selector:
-                  labels:
-                    redfish-enabled: "true"
-            authentication:
-              users:
-                - username: "admin"
-                  password:
-                    hash: "<bcrypt_password>"
-                  chassis: ["<chassis_name>"]
-            datavolume:
-              storage_class: "<storage_class>"
-              storage_size: "3Gi"
-        ```
-
-        where:
-
-        `system_id_convention`
-        Specifies the format for Redfish system IDs. The recommended setting is `enhanced` to use `<namespace>.<vm-name>` format. The `legacy` setting uses `<vm-name>` only.
-
-        `chassis`
-        Specifies the namespaces where VMs are deployed. Replace `<chassis_name>` with a name for this chassis configuration and `<vm_namespace>` with the namespace containing your VMs. The `vm_selector` labels identify which VMs in the namespace are exposed through Redfish. Only VMs with matching labels are visible. You can configure multiple chassis entries to expose different subsets of VMs in the same namespace, each with different authentication users.
-
-        `authentication`
-        Specifies the username and password required to validate requests to the Redfish API. Replace `<bcrypt_password>` with the `bcrypt` hashed password that you generated.
-
-        `datavolume`
-        Specifies storage for VirtualMedia operations. Replace `<storage_class>` with a storage class available on your cluster, such as `lvms-vg1` or `ocs-storagecluster-ceph-rbd-virtualization`. For more information about storage options, see *Storage requirements* in "Prerequisites for virtualized control planes".
+    `datavolume`
+    Specifies storage for VirtualMedia operations. Replace `<storage_class>` with a storage class available on your cluster, such as `lvms-vg1` or `ocs-storagecluster-ceph-rbd-virtualization`. For more information about storage options, see *Storage requirements* in "Prerequisites for virtualized control planes".
 
 10. Apply the resource by running the following command:
 

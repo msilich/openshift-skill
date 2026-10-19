@@ -10,7 +10,7 @@ To configure the SR-IOV network and attach the VM to that network, perform the f
 
 3.  Attach the VM to the SR-IOV network.
 
-# Configuring SR-IOV network devices
+# Configure SR-IOV network devices
 
 The SR-IOV Network Operator adds the `SriovNetworkNodePolicy.sriovnetwork.openshift.io` custom resource definition (CRD) to OpenShift Container Platform. You can configure an SR-IOV network device by creating a `SriovNetworkNodePolicy` custom resource (CR).
 

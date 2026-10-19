@@ -313,8 +313,9 @@ spec:
 
 </div>
 
-Admin access
-A cluster administrator can gain privileged access to a device that is in use by other users. This enables administrators to perform tasks such as monitoring the health and status of devices while ensuring that users can continue to use these devices with their workloads.
+## About DRA admin access
+
+When working with Dynamic Resource Allocation (DRA), as a cluster administrator you can gain privileged access to a device that is in use by other users, so that you can perform tasks such as monitoring the health and status of the device while ensuring that users can continue to use the device.
 
 To gain admin access, an administrator must create a resource claim or resource claim template with the `adminAccess: true` parameter in a namespace that includes the `resource.kubernetes.io/admin-access: "true"` label. Non-administrator users cannot access namespaces with this label.
 
@@ -372,7 +373,19 @@ where:
 `spec.devices.requests.exactly.adminAccess.true` or `spec.devices.requests.firstAvailable.adminAccess.true`
 Specifies that the admin access mode is enabled for the specified device.
 
-For information on adding resource claims to pods, see "Adding resource claims to pods".
+For information on adding a resource claim to a pod, see "Adding resource claims to pods".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Adding resource claims to pods](nodes-pods-allocate-dra.md#nodes-pods-allocate-dra-configure_nodes-pods-allocate-dra)
+
+</div>
 
 # Adding resource claims to pods
 

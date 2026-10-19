@@ -6,13 +6,13 @@ The decision to opt out of telemetry should be based on your specific needs and 
 
 # Consequences of disabling Telemetry
 
-In Red Hat Advanced Cluster Security for Kubernetes (RHACS) version 4.0, you can opt out of Telemetry. However, telemetry is embedded as a core component, so opting out is strongly discouraged. Opting out of telemetry limits the ability of Red Hat to understand how everyone uses the product and which areas to prioritize for improvements.
+In Red Hat Advanced Cluster Security for Kubernetes (RHACS) version 4.0, you can opt out of Telemetry. However, the product embeds telemetry as a core component, so opting out is strongly discouraged. Opting out of telemetry limits the ability of Red Hat to understand how everyone uses the product and to prioritize areas for improvement.
 
 <a id="disabling-telemetry_opting-out-telemetry"></a>
 
 # Disabling Telemetry
 
-If you have configured Telemetry by setting the key in your environment, you can disable Telemetry data collection from the Red Hat Advanced Cluster Security for Kubernetes (RHACS) user interface (UI).
+You can stop Red Hat Advanced Cluster Security for Kubernetes (RHACS) from collecting Telemetry data by turning off online telemetry data collection in the RHACS portal.
 
 <div>
 
@@ -26,6 +26,18 @@ Procedure
 
 2.  In the **System Configuration** header, click **Edit**.
 
-3.  Scroll down and ensure that **Online Telemetry Data Collection** is set to **Disabled**.
+3.  Scroll down and set **Online Telemetry Data Collection** to **Disabled**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [About Telemetry](about-telemetry.md)
 
 </div>

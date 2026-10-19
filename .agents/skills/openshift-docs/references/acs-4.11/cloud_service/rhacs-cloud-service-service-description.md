@@ -1,28 +1,58 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+This service description provides detailed information about RHACS Cloud Service, including its architecture, security and compliance features, access control mechanisms, data protection measures, and service level agreements.
+
 <a id="introduction-to-rhacs_access-policy-service-description"></a>
 
 # Introduction to RHACS
 
-Red Hat Advanced Cluster Security for Kubernetes (RHACS) is an enterprise-ready, Kubernetes-native container security solution that helps you build, deploy, and run cloud-native applications more securely.
+Red Hat Advanced Cluster Security for Kubernetes (RHACS) is an enterprise-ready, Kubernetes-native container security solution, and Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) provides this security as a managed service where Red Hat maintains, upgrades, and manages your Central services.
 
 Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) provides Kubernetes-native security as a service. With RHACS Cloud Service, Red Hat maintains, upgrades, and manages your Central services.
 
-Central services include the user interface (UI), data storage, RHACS application programming interface (API), and image scanning capabilities. You deploy your Central service through the [Red Hat Hybrid Cloud Console.](https://console.redhat.com/) When you create a new ACS instance, Red Hat creates your individual control plane for RHACS.
+Central services include the user interface (UI), data storage, RHACS application programming interface (API), and image scanning capabilities. You deploy your Central service through the Red Hat Hybrid Cloud Console. When you create a new ACS instance, Red Hat creates your individual control plane for RHACS.
 
 RHACS Cloud Service allows you to secure self-managed clusters that communicate with a Central instance. The clusters you secure, called Secured Clusters, are managed by you, and not by Red Hat. Secured Cluster services include optional vulnerability scanning services, admission control services, and data collection services used for runtime monitoring and compliance. You install Secured Cluster services on any OpenShift or Kubernetes cluster you want to secure.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Hybrid Cloud Console](https://console.redhat.com/)
+
+</div>
 
 <a id="architecture_access-policy-service-description"></a>
 
 # Architecture
 
-RHACS Cloud Service is hosted on Amazon Web Services (AWS) over two regions, eu-west-1 and us-east-1, and uses the network access points provided by the cloud provider. Each tenant from RHACS Cloud Service uses highly-available egress proxies and is spread over 3 availability zones. For more information about RHACS Cloud Service system architecture and components, see [Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) architecture](acscs-architecture.md#acscs-architecture-overview_acscs-architecture).
+RHACS Cloud Service is hosted on Amazon Web Services (AWS) over two regions, eu-west-1 and us-east-1, and uses the network access points provided by the cloud provider.
+
+Each tenant from RHACS Cloud Service uses highly-available egress proxies and is spread over 3 availability zones. For more information about RHACS Cloud Service system architecture and components, see "Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) architecture".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) architecture](acscs-architecture.md#acscs-architecture-overview_acscs-architecture)
+
+</div>
 
 <a id="billing_access-policy-service-description"></a>
 
 # Billing
 
-Customers can purchase a RHACS Cloud Service subscription on the Amazon Web Services (AWS) marketplace. The service cost is charged hourly per secured core, or vCPU of a node belonging to a secured cluster.
+RHACS Cloud Service subscriptions are available on the Amazon Web Services (AWS) marketplace, with hourly charges per secured core (vCPU) of nodes in secured clusters.
+
+Customers can buy a RHACS Cloud Service subscription on the Amazon Web Services (AWS) marketplace. The service cost is charged hourly per secured core, or vCPU of a node belonging to a secured cluster.
 
 <div class="example">
 
@@ -40,17 +70,21 @@ If you have established a connection to two secured clusters, each with 5 identi
 
 # Security and compliance
 
-All RHACS Cloud Service data in the Central instance is encrypted in transit and at rest. The data is stored in secure storage with full replication and high availability together with regularly-scheduled backups. RHACS Cloud Service is available through cloud data centers that ensure optimal performance and the ability to meet data residency requirements.
+RHACS Cloud Service provides comprehensive data encryption, secure storage with high availability, and compliance with industry standards through cloud data centers.
+
+All RHACS Cloud Service data in the Central instance is encrypted in transit and at rest.
+
+The data is stored in secure storage with full replication and high availability together with regularly-scheduled backups.
+
+RHACS Cloud Service is available through cloud data centers that ensure optimal performance and the ability to meet data residency requirements.
 
 <a id="cloud-info-security_access-policy-service-description"></a>
 
 ## Information security guidelines, roles, and responsibilities
 
-Red Hat’s information security guidelines, aligned with the [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework), are approved by executive management. Red Hat maintains a dedicated team of globally-distributed certified information security professionals. See the following resources:
+Red Hat maintains comprehensive information security practices aligned with industry standards, including ISO 27001 certification and many compliance frameworks, with a dedicated global team of certified security professionals.
 
-- [FIRST: RH-ISIRT team](https://www.first.org/members/teams/rh-isirt)
-
-- [TF-CSIRT: RH-ISIRT team](https://www.trusted-introducer.org/directory/teams/rh-isirt.html)
+Red Hat’s information security guidelines, aligned with the "NIST Cybersecurity Framework", are approved by executive management. Red Hat maintains a dedicated team of globally-distributed certified information security professionals. For more information, see the "FIRST: RH-ISIRT team" and "TF-CSIRT: RH-ISIRT team" resources.
 
 Red Hat has strict internal policies and practices to protect our customers and their businesses. These policies and practices are confidential. In addition, we comply with all applicable laws and regulations, including those related to data privacy.
 
@@ -76,49 +110,117 @@ You are responsible for use of the product, including implementation of policies
 
 All Red Hat SREs and developers go through rigorous Secure Development Lifecycle training.
 
-For more information, see the following resources:
+For more information, see the "Red Hat Site Reliability Engineering (SRE) services", "Red Hat OpenShift Dedicated", and "An Overview of Red Hat’s Secure Development Lifecycle (SDL) practices" resources.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
+
+- [FIRST: RH-ISIRT team](https://www.first.org/members/teams/rh-isirt)
+
+- [TF-CSIRT: RH-ISIRT team](https://www.trusted-introducer.org/directory/teams/rh-isirt.html)
 
 - [Red Hat Site Reliability Engineering (SRE) services](https://www.redhat.com/en/resources/site-reliability-engineering-services-datasheet)
 
 - [Red Hat OpenShift Dedicated](https://www.redhat.com/en/resources/openshift-dedicated-datasheet)
 
-- [An Overview of Red Hat’s Secure Development Lifecycle (SDL) practices](https://access.redhat.com/articles/red_hat_sdl)
+- [An Overview of Red Hat’s Secure Development Lifecycle (SDL) practices (Red Hat Knowledgebase)](https://access.redhat.com/articles/red_hat_sdl)
+
+</div>
 
 <a id="sdlc-security_access-policy-service-description"></a>
 
 ## Systems development lifecycle security
 
+Red Hat follows secure development lifecycle practices aligned with OWASP and ISO12207:2017, including automated scanning, security testing, and threat modeling.
+
 Red Hat follows secure development lifecycle practices. Red Hat Product Security practices are aligned with the Open Web Application Security Project (OWASP) and ISO12207:2017 wherever it is feasible. Red Hat covers OWASP project recommendations along with other secure software development practices to increase the general security posture of our products. OWASP project analysis is included in Red Hat’s automated scanning, security testing, and threat models, as the OWASP project is built based on selected CWE weaknesses. Red Hat monitors weaknesses in our products to address issues before they are exploited and become vulnerabilities.
 
-For more information, see the following resources:
-
-- [Red Hat Software Development Life Cycle practices](https://access.redhat.com/security_testing_sdl_practice)
-
-- [Security by design: Security principles and threat modeling](https://www.redhat.com/en/blog/security-design-security-principles-and-threat-modeling)
+For more information, see the "Red Hat Software Development Life Cycle practices" and "Security by design: Security principles and threat modeling" resources.
 
 Applications are scanned regularly and the container scan results of the product are available publicly. For example, on the Red Hat Ecosystem Catalog site, you can select a component image such as `rhacs-main` and click the **Security** tab to see the health index and the status of security updates.
 
 As part of Red Hat’s policy, a support policy and maintenance plan is issued for any third-party components we depend on that go to end-of-life.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Software Development Life Cycle practices](https://access.redhat.com/security_testing_sdl_practice)
+
+- [Security by design: Security principles and threat modeling](https://www.redhat.com/en/blog/security-design-security-principles-and-threat-modeling)
+
+</div>
+
 <a id="access-control_access-policy-service-description"></a>
 
 # Access control
 
-User accounts are managed with role-based access control (RBAC). See [Managing RBAC in Red Hat Advanced Cluster Security for Kubernetes](../operating/manage-user-access/manage-role-based-access-control-3630.md) for more information. Red Hat site reliability engineers (SREs) have access to Central instances. Access is controlled with OpenShift RBAC. Credentials are instantly revoked upon termination.
+User accounts are managed with role-based access control (RBAC), and Red Hat site reliability engineers (SREs) have controlled access to Central instances through OpenShift RBAC.
+
+User accounts are managed with role-based access control (RBAC). See "Managing RBAC in Red Hat Advanced Cluster Security for Kubernetes" for more information. Red Hat site reliability engineers (SREs) have access to Central instances. Access is controlled with OpenShift RBAC. Credentials are instantly revoked upon termination.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Managing RBAC in Red Hat Advanced Cluster Security for Kubernetes](../operating/manage-user-access/manage-role-based-access-control-3630.md)
+
+</div>
 
 <a id="authentication-provider_access-policy-service-description"></a>
 
 ## Authentication provider
 
-When you create a Central instance using [Red Hat Hybrid Cloud Console](https://console.redhat.com/), authentication for the cluster administrator is configured as part of the process. Customers must manage all access to the Central instance as part of their integrated solution. For more information about the available authentication methods, see [Understanding authentication providers](../operating/manage-user-access/understanding-authentication-providers.md).
+RHACS Cloud Service uses Red Hat Single Sign-On (SSO) as the default identity provider, with authentication configured during Central instance creation through the Red Hat Hybrid Cloud Console.
 
-The default identity provider in RHACS Cloud Service is Red Hat Single Sign-On (SSO). Authorization rules are set up to provide administrator access to the user who created the RHACS Cloud Service and to users who are marked as organization administrators in Red Hat SSO. The `admin` login is disabled for RHACS Cloud Service by default and can only be enabled temporarily by SREs. For more information about authentication using Red Hat SSO, see [Default access to the ACS Console](getting-started-rhacs-cloud-ocp.md#default-access-acs-console_getting-started-rhacs-cloud-ocp).
+When you create a Central instance by using the Red Hat Hybrid Cloud Console, authentication for the cluster administrator is configured as part of the process.
+
+Customers must manage all access to the Central instance as part of their integrated solution.
+
+For more information about the available authentication methods, see "Understanding authentication providers".
+
+The default identity provider in RHACS Cloud Service is Red Hat Single Sign-On (SSO). Authorization rules are set up to give administrator access to the user who created the RHACS Cloud Service and to users who are marked as organization administrators in Red Hat SSO. The `admin` login is disabled for RHACS Cloud Service by default and can only be enabled temporarily by SREs. For more information about authentication by using Red Hat SSO, see "Default access to the ACS Console".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Hybrid Cloud Console](https://console.redhat.com/)
+
+- [Understanding authentication providers](../operating/manage-user-access/understanding-authentication-providers.md)
+
+- [Default access to the ACS Console](getting-started-rhacs-cloud-ocp.md#default-access-acs-console_getting-started-rhacs-cloud-ocp)
+
+</div>
 
 <a id="passwords_access-policy-service-description"></a>
 
 ## Password management
 
-Red Hat’s password policy requires the use of a complex password. Passwords must contain at least 14 characters and at least three of the following character classes:
+Red Hat’s password policy requires complex passwords with at least 14 characters and three character classes, following NIST guidelines.
+
+Red Hat’s password policy requires the use of a complex password.
+
+Passwords must contain at least 14 characters and at least three of the following character classes:
 
 - Base 10 digits (0 to 9)
 
@@ -130,19 +232,33 @@ Red Hat’s password policy requires the use of a complex password. Passwords m
 
 Most systems require two-factor authentication.
 
-Red Hat follows best password practices according to [NIST guidelines](https://pages.nist.gov/800-63-3/sp800-63b.html).
+Red Hat follows best password practices from NIST. For more information, see "NIST guidelines".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [NIST guidelines](https://pages.nist.gov/800-63-3/sp800-63b.html)
+
+</div>
 
 <a id="remote-access_access-policy-service-description"></a>
 
 ## Remote access
 
-Access for remote support and troubleshooting is strictly controlled through implementation of the following guidelines:
+Access for remote support and troubleshooting is strictly controlled through two-factor authentication, segregated networks, and encrypted sessions, with optional Bomgar support.
+
+Red Hat strictly controls this access through implementation of the following guidelines:
 
 - Strong two-factor authentication for VPN access
 
-- A segregated network with management and administrative networks requiring additional authentication through a bastion host
+- A segregated network with management and administrative networks that require additional authentication through a bastion host
 
-- All access and management is performed over encrypted sessions
+- All access and management performed over encrypted sessions
 
 Our customer support team offers Bomgar as a remote access solution for troubleshooting. Bomgar sessions are optional, must be initiated by the customer, and can be monitored and controlled.
 
@@ -152,9 +268,39 @@ To prevent information leakage, logs are shipped to SRE through our security inf
 
 ## Central access restriction by IP addresses and CIDR ranges
 
+You can request restricted access to Central to ensure that only traffic from trusted IP addresses can reach the security policy enforcement point.
+
 Restricting access to Central ensures that only traffic from trusted IP addresses can reach the security policy enforcement point, thereby strengthening the overall security posture.
 
-To request restricted access to Central, go to the [Red Hat Customer Portal](https://access.redhat.com/support) page. From the Customer Portal, submit a support case requesting the restriction of access to Central. Be sure to provide the list of trusted IP addresses and CIDR ranges. The maximum number of IP addresses and CIDR ranges is 55.
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Go to the "Red Hat Customer Portal" page.
+
+2.  From the Customer Portal, submit a support case requesting the restriction of access to Central.
+
+3.  Provide the list of trusted IP addresses and CIDR ranges.
+
+    The maximum number of IP addresses and CIDR ranges is 55.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Customer Portal](https://access.redhat.com/support)
+
+</div>
 
 <a id="cloud-svc-compliance_access-policy-service-description"></a>
 
@@ -185,6 +331,8 @@ Red Hat provides data protection by using various methods, such as logging, acc
 
 ## Data storage media protection
 
+Red Hat employs access logging, automated account termination, and the principle of least privilege to protect data from theft or destruction, with encryption at rest and in transit.
+
 To protect our data and client data from risk of theft or destruction, Red Hat employs the following methods:
 
 - access logging
@@ -199,27 +347,49 @@ RHACS Cloud Service encrypts data at rest within the Amazon Relational Database 
 
 <a id="data-retention-destruction_access-policy-service-description"></a>
 
-### Data retention and destruction
+## Data retention and destruction
+
+Records are retained as required by law, with secure removal and military-grade destruction tools for records no longer needed.
 
 Records, including those containing personal data, are retained as required by law. Records not required by law or a reasonable business need are securely removed. Secure data destruction requirements are included in operating procedures, using military grade tools. In addition, staff have access to secure document destruction facilities.
 
 <a id="encryption_access-policy-service-description"></a>
 
-### Encryption
+## Encryption
 
-Red Hat uses [AWS managed keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk) which are rotated by AWS each year. For information on the use of keys, see [AWS KMS key management](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.Keys.html). For more information about RDS, see [Amazon RDS Security](https://aws.amazon.com/rds/features/security).
+Red Hat uses AWS managed keys that are rotated annually for encryption.
+
+Red Hat uses "AWS managed keys" that are rotated by AWS each year. For information on the use of keys, see "AWS KMS key management". For more information about RDS, see "Amazon RDS Security".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [AWS managed keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk)
+
+- [AWS KMS key management](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.Keys.html)
+
+- [Amazon RDS Security](https://aws.amazon.com/rds/features/security)
+
+</div>
 
 <a id="multi-tenancy_access-policy-service-description"></a>
 
-### Multi-tenancy
+## Multi-tenancy
 
 RHACS Cloud Service isolates tenants by namespace on OpenShift Container Platform. SELinux provides additional isolation. Each customer has a unique RDS instance.
 
 <a id="data-ownership_access-policy-service-description"></a>
 
-### Data ownership
+## Data ownership
 
-Customer data is stored in an encrypted RDS database not available on the public internet. Only Site Reliability Engineers (SREs) have access to it, and the access is audited.
+Customer data is stored in an encrypted RDS database with restricted SRE access, and customers can take immediate action to secure data in case of a breach.
+
+The encrypted RDS database is not available on the public internet. Only Site Reliability Engineers (SREs) have access to it, and the access is audited.
 
 Every RHACS Cloud Service system comes integrated with Red Hat external SSO. Authorization rules are set up to provide administrator access to the user created the Cloud Service and to users who are marked as organization administrators in Red Hat SSO. The admin login is disabled for RHACS Cloud Service by default and can only be temporarily enabled by SREs.
 
@@ -229,7 +399,7 @@ Upon contract termination, Red Hat can perform a secure disk wipe upon request.
 
 To secure data in case of a breach, you can perform the following actions:
 
-- Disconnect all secured clusters from RHACS Cloud Service immediately using the cluster management page.
+- Immediately disconnect all secured clusters from RHACS Cloud Service by using the cluster management page.
 
 - Immediately disable access to the RHACS Cloud Service by using the Access Control page.
 
@@ -241,55 +411,117 @@ Any AWS RDS (data store) specific access modifications would be implemented by t
 
 # Metrics and Logging
 
+RHACS Cloud Service provides service metrics and logging capabilities, with customer-facing metrics available through the subscriptions service in the Red Hat Hybrid Cloud Console.
+
 <a id="service-metrics_access-policy-service-description"></a>
 
 ## Service metrics
 
-Service metrics are internal only. Red Hat provides and maintains the service at the agreed upon level. Service metrics are accessible only to authorized Red Hat personnel. For more information, see [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix_4_Red_Hat_Online_Services_20221213.pdf).
+Service metrics are internal only and accessible only to authorized Red Hat personnel.
+
+Red Hat provides and maintains the service at the agreed upon level. For more information, see "PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix-4-Red-Hat-Online-Services-English-20250805.pdf)
+
+</div>
 
 <a id="customer-metrics_access-policy-service-description"></a>
 
 ## Customer metrics
 
-Core usage capacity metrics are available either through [Subscription Watch](https://access.redhat.com/articles/subscription-watch) or the [Subscriptions page](https://console.redhat.com/beta/application-services/subscriptions/acs).
+Usage metrics are available through the "subscriptions service" in the Red Hat Hybrid Cloud Console.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [subscriptions service](https://console.redhat.com/subscriptions/usage/openshift)
+
+</div>
 
 <a id="service-logging_access-policy-service-description"></a>
 
 ## Service logging
 
-System logs for all components of the Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) are internal and available only to Red Hat personnel. Red Hat does not provide user access to component logs. For more information, see [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix_4_Red_Hat_Online_Services_20221213.pdf).
+System logs for all components of the Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) are internal and available only to Red Hat personnel.
+
+Red Hat does not provide user access to component logs. For more information, see "PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix-4-Red-Hat-Online-Services-English-20250805.pdf)
+
+</div>
 
 <a id="updates-and-upgrades_access-policy-service-description"></a>
 
 # Updates and Upgrades
 
-Red Hat makes a commercially reasonable effort to notify customers prior to updates and upgrades that impact service. The decision regarding the need for a Service update to the Central instance and its timing is the sole responsibility of Red Hat.
+Red Hat manages Central service updates and upgrades, although customers are responsible for maintaining Secured Cluster services compatibility.
 
-Customers have no control over when a Central service update occurs. For more information, see [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix_4_Red_Hat_Online_Services_20221213.pdf). Upgrades to the version of Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) are considered part of the service update. Upgrades are transparent to the customer and no connection to any update site is required.
+Red Hat makes a commercially reasonable effort to notify customers before updates and upgrades that impact service. The decision regarding the need for a Service update to the Central instance and its timing is the sole responsibility of Red Hat.
 
-Customers are responsible for timely RHACS Secured Cluster services upgrades that are required to maintain compatibility with RHACS Cloud Service.
+Customers have no control over when a Central service update occurs. For more information, see "PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES".
 
-Red Hat recommends enabling automatic upgrades for Secured Clusters that are connected to RHACS Cloud Service.
+Upgrades to the version of Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) are considered part of the service update. Upgrades are transparent to the customer and no connection to any update site is required.
 
-See the [Red Hat Advanced Cluster Security for Kubernetes Support Matrix](https://access.redhat.com/articles/7045053) for more information about upgrade versions.
+Customers are responsible for timely RHACS Secured Cluster services upgrades that are required to maintain compatibility with RHACS Cloud Service. Red Hat recommends enabling automatic upgrades for Secured Clusters that are connected to RHACS Cloud Service.
+
+See the "Red Hat Advanced Cluster Security for Kubernetes Support Matrix" for more information about upgrade versions.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix-4-Red-Hat-Online-Services-English-20250805.pdf)
+
+- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053)
+
+</div>
 
 <a id="availability_access-policy-service-description"></a>
 
 # Availability
 
-Availability and disaster avoidance are extremely important aspects of any security platform. Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) provides numerous protections against failures at multiple levels. To account for possible cloud provider failures, Red Hat established multiple availability zones.
+Availability and disaster avoidance are extremely important aspects of any security platform. Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) provides numerous protections against failures at multiple levels.
+
+To account for possible cloud provider failures, Red Hat established multiple availability zones.
 
 <a id="backup-disaster-recovery_access-policy-service-description"></a>
 
 ## Backup and disaster recovery
 
-The RHACS Cloud Service Disaster Recovery strategy includes backups of database and any customization. This also applies to customer data stored in the Central database. Recovery time varies based on the number of appliances and database sizes; however, because the appliances can be clustered and distributed, the RTO can be reduced upfront with proper architecture planning.
+The RHACS Cloud Service disaster recovery strategy includes encrypted backups of database data and customizations, with annual testing of disaster recovery plans.
 
-All snapshots are created using the appropriate cloud provider snapshot APIs, encrypted and then uploaded to secure object storage, which for Amazon Web Services (AWS) is an S3 bucket.
+This disaster recovery strategy includes backups of database data and any database customization, and also includes backups of customer data that is stored in the Central database. Recovery time varies based on the number of appliances and database sizes; however, because the appliances can be clustered and distributed, the RTO can be reduced upfront with proper architecture planning.
 
-- Red Hat does not commit to a Recovery Point Objective (RPO) or Recovery Time Objective (RTO). For more information, see [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix_4_Red_Hat_Online_Services_20221213.pdf).
+All snapshots are created by using the appropriate cloud provider snapshot APIs, are encrypted, and are then uploaded to secure object storage, which for Amazon Web Services (AWS) is an S3 bucket.
 
-- Site Reliability Engineering performs backups only as a precautionary measure. They are stored in the same region as the cluster.
+- Red Hat does not commit to a Recovery Point Objective (RPO) or Recovery Time Objective (RTO). For more information, see "PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES".
+
+- Site Reliability Engineering performs backups only as a precautionary measure. The backups are stored in the same region as the cluster.
 
 - Customers should deploy multiple availability zone Secured Clusters with workloads that follow Kubernetes best practices to ensure high availability within a region.
 
@@ -297,11 +529,25 @@ Disaster recovery plans are exercised annually at a minimum. A Business Continui
 
 Red Hat has generator backup systems. Our IT production systems are hosted in a Tier 3 data center facility that has recurring testing to ensure redundancy is operational. They are audited yearly to validate compliance.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix-4-Red-Hat-Online-Services-English-20250805.pdf)
+
+</div>
+
 <a id="cloud-getting-support_access-policy-service-description"></a>
 
 # Getting support for RHACS Cloud Service
 
-If you experience difficulty with a procedure described in this documentation, or with RHACS Cloud Service in general, visit the [Red Hat Customer Portal](https://access.redhat.com/support).
+You can get support for RHACS Cloud Service through the Red Hat Customer Portal, which provides access to the Knowledgebase, support cases, and product documentation.
+
+If you experience difficulty with a procedure described in this documentation, or with RHACS Cloud Service in general, visit the "Red Hat Customer Portal".
 
 From the Customer Portal, you can perform the following actions:
 
@@ -313,20 +559,74 @@ From the Customer Portal, you can perform the following actions:
 
 To identify issues with your cluster, you can use Insights in RHACS Cloud Service. Insights provides details about issues and, if available, information on how to solve a problem.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Customer Portal](https://access.redhat.com/support)
+
+</div>
+
 <a id="cloud-service-removal_access-policy-service-description"></a>
 
 # Service removal
 
-You can delete RHACS Cloud Service using the default delete operations from the [Red Hat Hybrid Cloud Console](https://console.redhat.com/). Deleting the RHACS Cloud Service Central instance automatically removes all RHACS components. Deleting is not reversible.
+You can delete RHACS Cloud Service by using the default delete operations from the Red Hat Hybrid Cloud Console.
+
+Deleting the RHACS Cloud Service Central instance automatically removes all RHACS components. Deleting is not reversible.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Hybrid Cloud Console](https://console.redhat.com/)
+
+</div>
 
 <a id="pricing_access-policy-service-description"></a>
 
 # Pricing
 
-For information about subscription fees, see [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix_4_Red_Hat_Online_Services_20221213.pdf).
+Subscription fee information is available in the PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES document.
+
+For information about subscription fees, see "PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix-4-Red-Hat-Online-Services-English-20250805.pdf)
+
+</div>
 
 <a id="service-level-agreement_access-policy-service-description"></a>
 
 # Service Level Agreement
 
-For more information about the Service Level Agreements (SLAs) offered for Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service), see [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix_4_Red_Hat_Online_Services_20221213.pdf).
+Service Level Agreement (SLA) information for Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service) is available in the PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES document.
+
+For more information about the Service Level Agreements (SLAs) offered for Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service), see "PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [PRODUCT APPENDIX 4 RED HAT ONLINE SERVICES](https://www.redhat.com/licenses/Appendix-4-Red-Hat-Online-Services-English-20250805.pdf)
+
+</div>

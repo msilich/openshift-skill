@@ -6,7 +6,7 @@ The scope of the OpenShift Container Platform installation program is intentiona
 
 After you read the information in the Installation and update section, you can select a cluster installation method and preparing the cluster for users.
 
-# The OpenShift Container Platform installation
+# OpenShift Container Platform installation options
 
 The OpenShift Container Platform installation program offers four methods for deploying a cluster. Each method has unique characteristics so that you can choose a method that meets your needs.
 

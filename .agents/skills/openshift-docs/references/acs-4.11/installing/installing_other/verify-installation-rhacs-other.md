@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can validate the build and deploy-time assessment features of Red Hat Advanced Cluster Security for Kubernetes (RHACS) by running sample applications with known vulnerabilities. You can then access the RHACS portal to view the resulting security assessments and confirm that policy violations are detected.
+You can validate the build and deploy-time assessment features of Red Hat Advanced Cluster Security for Kubernetes (RHACS) by running sample applications with known vulnerabilities. You can then access the RHACS portal to view the resulting security assessments and confirm that RHACS detects policy violations.
 
 <a id="verify-acs-installation_verify-installation-rhacs"></a>
 
@@ -11,7 +11,13 @@ After you complete the installation, run a few vulnerable applications and go to
 > [!NOTE]
 > The sample applications listed in the following section contain critical vulnerabilities and they are specifically designed to verify the build and deploy-time assessment features of Red Hat Advanced Cluster Security for Kubernetes.
 
-To verify installation:
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Find the address of the RHACS portal based on your exposure method:
 
@@ -47,3 +53,5 @@ To verify installation:
     ```
 
     Red Hat Advanced Cluster Security for Kubernetes automatically scans these deployments for security risks and policy violations as soon as they are submitted to the cluster. Go to the RHACS portal to view the violations. You can log in to the RHACS portal by using the default username **admin** and the generated password.
+
+</div>

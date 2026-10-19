@@ -19,7 +19,7 @@ The **Observe** view in the **Developer** perspective enables you to monitor pro
 >
 > See also, "Enabling the **Developer** perspective in the web console".
 
-# Enabling the **Developer** perspective in the web console
+# Enable the **Developer** perspective in the web console
 
 Enable the **Developer** perspective in the web console to give your developers tools to manage applications, visualize topology, and monitor projects as they develop and build them.
 
@@ -141,7 +141,7 @@ Procedure
 
 </div>
 
-# Monitoring your application metrics
+# Monitor your application metrics
 
 Inspect alerts, metric charts, and health check status for individual application workloads to troubleshoot performance issues and monitor health directly from the topology view.
 

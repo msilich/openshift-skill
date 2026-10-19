@@ -1,10 +1,16 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Learn how to use the **Configuration Management** view and understand the correlation between various entities in your cluster to manage your cluster configuration efficiently.
+Use the **Configuration Management** view to understand the correlation between various entities in your cluster and manage your cluster configuration efficiently.
+
+<a id="configuration-management-overview_review-cluster-configuration"></a>
+
+# Configuration management overview
+
+Red Hat Advanced Cluster Security for Kubernetes (RHACS) provides efficient configuration management that combines all distributed entities on a single page, helping you visualize different entities and the connections between them.
 
 Every OpenShift Container Platform cluster includes many different entities distributed throughout the cluster, which makes it more challenging to understand and act on the available information.
 
-Red Hat Advanced Cluster Security for Kubernetes (RHACS) provides efficient configuration management that combines all these distributed entities on a single page. It brings together information about all your clusters, namespaces, nodes, deployments, images, secrets, users, groups, service accounts, and roles in a single **Configuration Management** view, helping you visualize different entities and the connections between them.
+The **Configuration Management** view brings together information about all your clusters, namespaces, nodes, deployments, images, secrets, users, groups, service accounts, and roles.
 
 <a id="using-the-configuration-management-view_review-cluster-configuration"></a>
 
@@ -25,9 +31,9 @@ These widgets are interactive and show the following information:
 The header in the **Configuration Management** view shows you the number of policies and CIS controls in your cluster.
 
 > [!NOTE]
-> Only policies in the Deploy lifecycle phase are included in the policy count and policy list view.
+> The policy count and policy list view include only policies in the Deploy lifecycle phase.
 
-The header includes drop-down menus that allow you to switch between entities. For example, you can:
+You can use the drop-down menus in the header to switch between entities. For example, you can:
 
 - Click **Policies** to view all policies and their severity, or select **CIS Controls** to view detailed information about all controls.
 
@@ -45,7 +51,7 @@ You can use the **Configuration Management** view to identify potential misconfi
 
 ## Finding Kubernetes roles and their assignment
 
-Use the **Configuration Management** view to get information about the Kubernetes roles that are assigned to specific users and groups.
+Use the **Configuration Management** view to get information about the Kubernetes roles assigned to specific users and groups.
 
 <div>
 
@@ -57,7 +63,7 @@ Procedure
 
 1.  Go to the RHACS portal and click **Configuration Management**.
 
-2.  Select **Role-Based Access Control** → **Users and Groups** from the header in the **Configuration Management** view. The **Users and Groups** view displays a list of Kubernetes users and groups, their assigned roles, and whether the `cluster-admin` role is enabled for each of them.
+2.  Select **Role-Based Access Control** → **Users and Groups** from the header in the **Configuration Management** view. The **Users and Groups** view displays a list of Kubernetes users and groups, their assigned roles, and whether each has the `cluster-admin` role.
 
 3.  Select a user or group to view more details about the associated cluster and namespace permissions.
 
@@ -79,9 +85,9 @@ Procedure
 
 1.  In the RHACS portal, go to **Configuration Management**.
 
-2.  Select **RBAC Visibility and Configuration** → **Service Accounts** from the header in the **Configuration Management** view. The **Service Accounts** view displays a list of Kubernetes service accounts across your clusters, their assigned roles, whether the `cluster-admin` role is enabled, and which deployments use them.
+2.  Select **RBAC Visibility and Configuration** → **Service Accounts** from the header in the **Configuration Management** view. The **Service Accounts** view displays a list of Kubernetes service accounts across your clusters, their assigned roles, whether they have the `cluster-admin` role, and which deployments use them.
 
-3.  Select a row or an underlined link to view more details, including which cluster and namespace permissions are granted to the selected service account.
+3.  Select a row or an underlined link to view more details, including the cluster and namespace permissions for the selected service account.
 
 </div>
 
@@ -101,7 +107,7 @@ Procedure
 
 1.  In the RHACS portal, go to **Configuration Management**.
 
-2.  Select **RBAC Visibility and Configuration** → **Roles** from the header in the **Configuration Management** view. The **Roles** view displays a list of Kubernetes roles across your clusters, the permissions they grant, and where they are used.
+2.  Select **RBAC Visibility and Configuration** → **Roles** from the header in the **Configuration Management** view. The **Roles** view displays a list of Kubernetes roles across your clusters, the permissions they grant, and the entities that use them.
 
 3.  Select a row or an underlined link to view more details about the role.
 
@@ -113,7 +119,7 @@ Procedure
 
 # Viewing Kubernetes secrets
 
-View Kubernetes secrets in use in your environment and identify deployments using those secrets.
+View Kubernetes secrets in use in your environment and identify deployments by using those secrets.
 
 <div>
 
@@ -129,15 +135,15 @@ Procedure
 
 3.  Select a row to view more details.
 
-</div>
+    Use the available information to identify if the secrets are in use in deployments where they are not needed.
 
-Use the available information to identify if the secrets are in use in deployments where they are not needed.
+</div>
 
 <a id="find-policy-violations_review-cluster-configuration"></a>
 
 # Finding policy violations
 
-The **Policy Violations by Severity** widget in the **Configuration Management** view displays policy violations in a sunburst chart. Each level of the chart is represented by one ring or circle.
+The **Policy Violations by Severity** widget in the **Configuration Management** view displays policy violations in a sunburst chart. One ring or circle represents each level of the chart.
 
 - The innermost circle represents the total number of violations.
 
@@ -157,7 +163,7 @@ Procedure
 
 1.  In the RHACS portal, go to **Configuration Management**.
 
-2.  On the **Policy Violations by Severity** widget, move your mouse over the sunburst chart to view details about policy violations.
+2.  On the **Policy Violations by Severity** widget, point to the sunburst chart to view details about policy violations.
 
 3.  Select ***n* rated as high**, where *n* is a number, to view detailed information about high-priority policy violations. The **Policies** view displays a list of policy violations filtered on the selected category.
 
@@ -167,9 +173,9 @@ Procedure
 
 6.  Select a deployment under the **Policy Findings** section to view related details including Kubernetes labels, annotations, and service account.
 
-</div>
+    You can use the detailed information to plan a remediation for violations.
 
-You can use the detailed information to plan a remediation for violations.
+</div>
 
 <a id="find-failing-cis-controls_review-cluster-configuration"></a>
 
@@ -177,7 +183,7 @@ You can use the detailed information to plan a remediation for violations.
 
 Similar to the **Policy Violations** sunburst chart in the **Configuration Management** view, the **CIS Kubernetes v1.5** widget provides information about failing Center for Information Security (CIS) controls.
 
-Each level of the chart is represented by one ring or circle.
+One ring or circle represents each level of the chart.
 
 - The innermost circle represents the percentage of failing controls.
 
@@ -201,6 +207,6 @@ Procedure
 
 4.  The **Control Findings** section in the information panel lists nodes where the controls are failing. Select a row to view more details, including Kubernetes labels, annotations, and other metadata.
 
-</div>
+    You can use the detailed information to focus on a subset of nodes, industry standards, or failing controls. You can also assess, check, and report on the compliance status of your containerized infrastructure.
 
-You can use the detailed information to focus on a subset of nodes, industry standards, or failing controls. You can also assess, check, and report on the compliance status of your containerized infrastructure.
+</div>

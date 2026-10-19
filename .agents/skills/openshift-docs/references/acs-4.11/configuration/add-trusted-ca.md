@@ -2,6 +2,10 @@
 
 Learn how to add custom trusted certificate authorities to Red Hat Advanced Cluster Security for Kubernetes.
 
+<a id="add-trusted-ca-overview_add-trusted-ca"></a>
+
+# Overview of adding trusted CAs
+
 If you are using an enterprise certificate authority (CA) on your network, or self-signed certificates, you must add the CA’s root certificate to Red Hat Advanced Cluster Security for Kubernetes as a trusted root CA.
 
 Adding trusted root CAs allows:
@@ -19,7 +23,7 @@ You can add additional CAs during the installation or on an existing deployment.
 
 # Configuring additional CAs
 
-To add custom CAs:
+You can add custom certificate authorities (CAs) to Red Hat Advanced Cluster Security for Kubernetes by using the `ca-setup.sh` script to configure single or multiple CA certificates.
 
 <div>
 
@@ -29,7 +33,7 @@ Procedure
 
 </div>
 
-1.  Download the [`ca-setup.sh`](https://raw.githubusercontent.com/openshift/openshift-docs/rhacs-docs-main/files/ca-setup.sh) script.
+1.  Download the `ca-setup.sh` script.
 
     <div class="note">
 
@@ -49,48 +53,63 @@ Procedure
     $ chmod +x ca-setup.sh
     ```
 
-3.  To add:
+3.  Add the certificates by using one of the following options:
 
-    1.  A single certificate, use the `-f` (file) option:
+    1.  To add a single certificate, use the `-f` option to specify the certificate file:
 
         ``` terminal
         $ ./ca-setup.sh -f <certificate>
-        +
         ```
 
+        <div class="note">
+
+        <div class="title">
+
+        </div>
+
+        - You must use a PEM-encoded certificate file. The file can have any extension.
+
+        - To update a certificate that you added before, use the `-u` option along with the `-f` option.
+
+        </div>
+
+    2.  To add many certificates at once, move all the certificates into a directory, and then use the `-d` option to specify that directory:
+
+        ``` terminal
+        $ ./ca-setup.sh -d <directory_name>
+        ```
+
+        <div class="note">
+
+        <div class="title">
+
+        </div>
+
+        - You must use PEM-encoded certificate files with a `.crt` or `.pem` extension.
+
+        - Each file must contain only a single certificate.
+
+        - To update certificates that you added before, use the `-u` option along with the `-d` option.
+
+        </div>
+
 </div>
 
-<div class="informalexample">
+<div>
 
-- You must use a PEM-encoded certificate file (with any extension).
+<div class="title">
 
-- You can also use the `-u` (update) option along with the `-f` option to update any previously added certificate.
+Additional resources
 
 </div>
 
-1.  Multiple certificates at once, move all certificates in a directory, and then use the `-d` (directory) option:
+- [ca-setup.sh script](https://raw.githubusercontent.com/openshift/openshift-docs/rhacs-docs-main/files/ca-setup.sh)
 
-    ``` terminal
-    $ ./ca-setup.sh -d <directory_name>
-    ```
+</div>
 
-    <div class="note">
+<a id="propagating-changes-overview_add-trusted-ca"></a>
 
-    <div class="title">
-
-    </div>
-
-    - You must use PEM-encoded certificate files with a `.crt` or `.pem` extension.
-
-    - Each file must only contain a single certificate.
-
-    - You can also use the `-u` (update) option along with the `-d` option to update any previously added certificates.
-
-    </div>
-
-<a id="_propagating_changes"></a>
-
-# Propagating changes
+# Propagating changes to services
 
 After you configure trusted CAs, you must make Red Hat Advanced Cluster Security for Kubernetes services trust them.
 
@@ -153,8 +172,14 @@ Procedure
 
 </div>
 
+<a id="post-configuration-notes_add-trusted-ca"></a>
+
+## Post-configuration notes for Sensor deployments
+
+New Sensor deployment bundles automatically include the trusted CAs that you added, but an existing Sensor or a Sensor that you deploy by using the `sensor.sh` script requires additional action.
+
 > [!IMPORTANT]
-> After you have added trusted CAs and configured Central, the CAs are included in any new Sensor deployment bundles that you create.
+> After you have added trusted CAs and configured Central, any new Sensor deployment bundles that you create include the CAs.
 >
 > - If an existing Sensor reports problems while connecting to Central, you must generate a Sensor deployment YAML file and update existing clusters.
 >

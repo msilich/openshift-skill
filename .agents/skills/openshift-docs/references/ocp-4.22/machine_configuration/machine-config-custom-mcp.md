@@ -11,7 +11,7 @@ For example, you could use a custom machine config pool to create an *infrastruc
 
 After you create the custom machine config pool, you can boot new nodes directly to the pool by creating a new machine set. Or, you can add existing nodes to the custom pool by using labels.
 
-# Creating a custom machine config pool with a new node
+# Create a custom machine config pool with a new node
 
 You can create a custom machine config pool (MCP) and launch a new node directly into that pool. By launching the node directly into the new pool, you save a node reboot cycle that would be required when moving the nodes from the worker machine config pool to the custom pool.
 
@@ -227,7 +227,7 @@ Verification
 
 </div>
 
-# Creating a custom machine config pool for an existing node
+# Create a custom machine config pool for an existing node
 
 You can create custom machine config pools (MCP) and manually add an existing node into that pool. With custom machine config pools, you can deploy changes targeted at the nodes in the custom pool.
 

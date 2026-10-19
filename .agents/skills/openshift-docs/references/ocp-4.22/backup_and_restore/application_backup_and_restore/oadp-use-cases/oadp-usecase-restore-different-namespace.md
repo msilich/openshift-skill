@@ -2,7 +2,7 @@
 
 Following is a use case for using OADP to restore a backup to a different namespace.
 
-# Restoring an application to a different namespace using OADP
+# Restore an application to a different namespace using OADP
 
 Restore a backup of an application by using OADP to a new target namespace, `test-restore-application`. To restore a backup, you create a restore custom resource (CR) as shown in the following example. In the restore CR, the source namespace refers to the application namespace that you included in the backup. You then verify the restore by changing your project to the new restored namespace and verifying the resources.
 

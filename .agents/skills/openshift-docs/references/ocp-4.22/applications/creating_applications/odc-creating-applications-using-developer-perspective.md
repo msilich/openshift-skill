@@ -71,7 +71,7 @@ To create serverless applications, in addition to the preceding prerequisites, e
 
 - You have created a `KnativeServing` resource in the `knative-serving` namespace.
 
-# Creating sample applications
+# Create sample applications
 
 You can use the sample applications in the **+Add** flow of the **Developer** perspective to create, build, and deploy applications quickly.
 
@@ -145,7 +145,7 @@ Procedure
 
 </div>
 
-# Importing a codebase from Git to create an application
+# Import a codebase from Git to create an application
 
 You can use the **Developer** perspective to create, build, and deploy an application on OpenShift Container Platform using an existing codebase in GitHub.
 
@@ -316,7 +316,7 @@ Procedure
 
 </div>
 
-# Creating applications by deploying container image
+# Create applications by deploying container image
 
 You can use an external image registry or an image stream tag from an internal registry to deploy an application on your cluster.
 
@@ -445,9 +445,11 @@ Procedure
 
 </div>
 
-# Using the Developer Catalog to add services or components to your application
+# Use the Developer Catalog to add services or components to your application
 
-You use the Developer Catalog to deploy applications and services based on Operator backed services such as Databases, Builder Images, and Helm Charts. The Developer Catalog contains a collection of application components, services, event sources, or source-to-image builders that you can add to your project. Cluster administrators can customize the content made available in the catalog.
+You use the Developer Catalog to deploy applications and services based on Operator-backed services such as databases, builder images, and Helm charts that you can add to your project.
+
+The Developer Catalog contains a collection of application components, services, event sources, and source-to-image builders. Cluster administrators can customize the content made available in the catalog.
 
 <div>
 

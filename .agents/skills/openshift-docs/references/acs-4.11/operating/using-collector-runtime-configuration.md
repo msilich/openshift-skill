@@ -1,14 +1,36 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can use the Collector runtime configuration to modify some collector behaviors without restarting Collector. Set the Collector runtime configuration by using a `ConfigMap` object called `collector-config`. When you create or update the `ConfigMap` object, Collector refreshes the runtime configuration. When you delete the `ConfigMap` object, the settings revert to the default runtime configuration values.
+You can use the Collector runtime configuration to change some collector behaviors without restarting Collector by using a `ConfigMap` object called `collector-config`.
 
-You can control the following settings using the Collector runtime configuration:
+<a id="collector-runtime-configuration-overview_{context}"></a>
 
-- `networking.externalIps.enabled` controls if the visualizing external entities feature is enabled or disabled. The default is `DISABLED`. In release 4.6, this setting was `networking.externalIps.enable` and was a boolean. For more information, see [Visualizing external entities](visualizing-external-entities.md).
+# Collector runtime configuration settings
 
-- `networking.externalIps.direction` specifies the direction for collecting external IPs. The values are `INGRESS`, `EGRESS`, or `BOTH` (default). For example, when you select `EGRESS` it provides details for all outgoing connections while aggregating the incoming ones.
+Set the Collector runtime configuration by using a `ConfigMap` object called `collector-config`. When you create or update the `ConfigMap` object, Collector refreshes the runtime configuration. When you delete the `ConfigMap` object, the settings revert to the default runtime configuration values.
+
+You can control the following settings by using the Collector runtime configuration:
+
+- `networking.externalIps.enabled` controls whether to enable or disable the visualizing external entities feature. The default is `DISABLED`. In release 4.6, this setting was `networking.externalIps.enable` and was a boolean. For more information, see "Visualizing external entities".
+
+- `networking.externalIps.direction` specifies the direction for collecting external IPs. The values are `INGRESS`, `EGRESS`, or `BOTH` (default). For example, when you select `EGRESS`, it provides details for all outgoing connections while aggregating the incoming ones.
 
 - `networking.maxConnectionsPerMinute` is the maximum number of open networking connections reported by Collector per container per minute. The default value is 2048.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Visualizing external entities](visualizing-external-entities.md)
+
+</div>
+
+<a id="collector-runtime-configuration-example_{context}"></a>
+
+## Collector runtime configuration example
 
 The following example enables the visualizing external entities for outgoing connections only and sets `maxConnectionsPerMinute` to 2048.
 

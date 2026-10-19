@@ -587,7 +587,7 @@ Utilization gauges turn red (above 90%), PSI values exceed 0.5, system reservati
 
 - [KubeVirt components metrics](https://github.com/kubevirt/monitoring/blob/main/docs/metrics.md)
 
-- [Adding kernel arguments to nodes](../../machine_configuration/machine-configs-configure.md#nodes-nodes-kernel-arguments_machine-configs-configure)
+- [Add kernel arguments to nodes](../../machine_configuration/machine-configs-configure.md#nodes-nodes-kernel-arguments_machine-configs-configure)
 
 - [About OpenShift Container Platform monitoring](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/about_monitoring/about-ocp-monitoring)
 

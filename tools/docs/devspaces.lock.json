@@ -17,9 +17,9 @@
     "pandoc": "3.7.0.2"
   },
   "archive": "snapshots/devspaces-3.29.zip",
-  "archive_sha256": "995e09d2a2796f05c9285d54c79be3bc373552efb2536468f3df2dcb3d2621a2",
+  "archive_sha256": "da68e2b921704944a7497bb77947c0427053d209d39d5a1d1f8efe78d595020e",
   "expected_output": {
     "topics": 302,
-    "content_manifest_sha256": "1177aa97b5cd575689ec644df2f20ed7d2bba4d0b05e1478c89af5859de66d7f"
+    "content_manifest_sha256": "5d99c1d23dc0ec01d5f0a03365cce2a6b1231bddf8c814407304c78654f81ce7"
   }
 }

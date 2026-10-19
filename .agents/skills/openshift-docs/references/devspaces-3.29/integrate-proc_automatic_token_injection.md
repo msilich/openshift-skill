@@ -30,7 +30,7 @@ Automatic token injection works only on the OpenShift infrastructure.
     ```
 
       
-    ![Token Injection in IDE](assets/d881d51a1d48c11b6795.png)  
+    ![Token Injection in IDE](assets/b68f76957cf6ff09b048.png)  
 
 **Related concepts**  
 

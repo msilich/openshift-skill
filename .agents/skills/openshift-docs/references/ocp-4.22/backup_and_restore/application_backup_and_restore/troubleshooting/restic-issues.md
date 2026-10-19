@@ -2,7 +2,7 @@
 
 Troubleshoot common Restic issues during application backups and restores to maintain reliable data protection. Common Restic issues include NFS permission errors, backup custom resource re-creation failures, and restore failures caused by pod security admission policy changes.
 
-# Troubleshooting Restic permission errors for NFS data volumes
+# Troubleshoot Restic permission errors for NFS data volumes
 
 Create a supplemental group and add its group ID to the `DataProtectionApplication` customer resource CR to resolve `Restic` permission errors on NFS data volumes with `root_squash` enabled. This helps you to restore backup functionality for NFS volumes without disabling root squash.
 
@@ -49,7 +49,7 @@ Procedure
 
 </div>
 
-# Troubleshooting Restic Backup CR issue that cannot be re-created after bucket is emptied
+# Troubleshoot Restic Backup CR issue that cannot be re-created after bucket is emptied
 
 Resolve the `Backup` custom resource (CR) re-creation failure that occurs after you empty the object storage bucket. This failure occurs because Velero does not automatically re-create the Restic repository from the `ResticRepository` manifest.
 
@@ -96,7 +96,7 @@ Procedure
 
 </div>
 
-# Troubleshooting restic restore partially failed issue on OpenShift Container Platform 4.14 onward due to changed PSA policy
+# Troubleshoot restic restore partially failed issue on OpenShift Container Platform 4.14 onward due to changed PSA policy
 
 Resolve a partial failure of Restic restore on OpenShift Container Platform 4.14 onward caused by Pod Security Admission (PSA) policy enforcement by adjusting the `restore-resource-priorities` field in your `DataProtectionApplication` (DPA) custom resource (CR). By doing so, you ensure that `SecurityContextConstraints` (SCC) resources are restored before pods. This helps you to complete restore operations successfully when PSA policies deny pod admission due to Velero resource restore order.
 

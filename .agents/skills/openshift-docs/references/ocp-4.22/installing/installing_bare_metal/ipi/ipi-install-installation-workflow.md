@@ -518,6 +518,9 @@ Additional resources
 
 By default, OpenShift Container Platform automatically configures the Open vSwitch (OVS) `br-ex` bridge on bare-metal nodes. For advanced networking requirements, you can override this default behavior on bare-metal platforms. To do this, create a `MachineConfig` object that includes an NMState configuration file.
 
+> [!NOTE]
+> You can use Butane to create machine configs. For more information, see "Creating a MachineConfig object by using Butane".
+
 Consider using the customized `br-ex` bridge configuration for any of the following tasks:
 
 - You need to modify the `br-ex` bridge after you installed the cluster.
@@ -757,6 +760,8 @@ Next steps
 Additional resources
 
 </div>
+
+- [Creating a MachineConfig object by using Butane](../../install_config/installing-customizing.md#installation-special-config-butane-create_installing-customizing)
 
 - [Converting to a dual-stack cluster network](../../../networking/ovn_kubernetes_network_provider/converting-to-dual-stack.md#nw-dual-stack-convert_converting-to-dual-stack)
 
@@ -2929,7 +2934,9 @@ platform:
 
 ## Root device hints
 
-The `rootDeviceHints` parameter enables the installer to provision the Red Hat Enterprise Linux CoreOS (RHCOS) image to a particular device. The installer examines the devices in the order it discovers them, and compares the discovered values with the hint values. The installer uses the first discovered device that matches the hint value. The configuration can combine multiple hints, but a device must match all hints for the installer to select it.
+The `rootDeviceHints` parameter enables the installer to provision the Red Hat Enterprise Linux CoreOS (RHCOS) image to a particular device.
+
+The installer examines the devices in the order it discovers them, and compares the discovered values with the hint values. The installer uses the first discovered device that matches the hint value. The configuration can combine multiple hints, but a device must match all hints for the installer to select it.
 
 <table>
 <caption>Subfields</caption>
@@ -3339,7 +3346,9 @@ Procedure
 
 ## Configuring address generation modes for SLAAC in dual-stack networks
 
-For dual-stack clusters that use Stateless Address AutoConfiguration (SLAAC), you must specify a global value for the `ipv6.addr-gen-mode` network setting. You can set this value using NMState to configure the RAM disk and the cluster configuration files. If you do not configure a consistent `ipv6.addr-gen-mode` in these locations, IPv6 address mismatches can occur between CSR resources and `BareMetalHost` resources in the cluster.
+For dual-stack clusters that use Stateless Address AutoConfiguration (SLAAC), you must specify a global value for the `ipv6.addr-gen-mode` network setting.
+
+You can set this value using NMState to configure the RAM disk and the cluster configuration files. If you do not configure a consistent `ipv6.addr-gen-mode` in these locations, IPv6 address mismatches can occur between CSR resources and `BareMetalHost` resources in the cluster.
 
 <div>
 
@@ -3605,7 +3614,9 @@ Additional resources
 
 ## Configuring multiple cluster nodes
 
-You can simultaneously configure OpenShift Container Platform cluster nodes with identical settings. Configuring multiple cluster nodes avoids adding redundant information for each node to the `install-config.yaml` file. This file contains specific parameters to apply an identical configuration to multiple nodes in the cluster.
+You can simultaneously configure OpenShift Container Platform cluster nodes with identical settings.
+
+Configuring multiple cluster nodes avoids adding redundant information for each node to the `install-config.yaml` file. This file contains specific parameters to apply an identical configuration to multiple nodes in the cluster.
 
 Compute nodes are configured separately from the controller node. However, configurations for both node types use the highlighted parameters in the `install-config.yaml` file to enable multi-node configuration. Set the `networkConfig` parameters to `BOND`, as shown in the following example:
 
@@ -3871,7 +3882,9 @@ Procedure
 
 ## Configuring network components to run on the control plane
 
-You can configure networking components to run exclusively on the control plane nodes. By default, OpenShift Container Platform allows any node in the machine config pool to host the `ingressVIP` virtual IP address. However, some environments deploy compute nodes in separate subnets from the control plane nodes, which requires configuring the `ingressVIP` virtual IP address to run on the control plane nodes.
+You can configure networking components to run exclusively on the control plane nodes.
+
+By default, OpenShift Container Platform allows any node in the machine config pool to host the `ingressVIP` virtual IP address. However, some environments deploy compute nodes in separate subnets from the control plane nodes, which requires configuring the `ingressVIP` virtual IP address to run on the control plane nodes.
 
 > [!IMPORTANT]
 > When deploying remote nodes in separate subnets, you must place the `ingressVIP` virtual IP address exclusively with the control plane nodes.
@@ -3963,7 +3976,9 @@ Procedure
 
 ## Deploying routers on compute nodes
 
-During installation, the installation program deploys router pods on compute nodes. By default, the installation program installs two router pods. If a deployed cluster requires additional routers to handle external traffic loads destined for services within the OpenShift Container Platform cluster, you can create a `yaml` file to set an appropriate number of router replicas.
+To handle external traffic loads for services in your OpenShift Container Platform cluster, create a `yaml` file that sets an appropriate number of router replicas.
+
+During installation, the installation program deploys router pods on compute nodes. By default, the installation program installs two router pods.
 
 > [!IMPORTANT]
 > Deploying a cluster with only one compute node is not supported. While modifying the router replicas will address issues with the `degraded` state when deploying with one compute node, the cluster loses high availability for the ingress API, which is not suitable for production environments.

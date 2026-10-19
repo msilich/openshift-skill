@@ -1,12 +1,18 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Red Hat Advanced Cluster Security for Kubernetes (RHACS) comes with role-based access control (RBAC) that you can use to configure roles and grant various levels of access to Red Hat Advanced Cluster Security for Kubernetes for different users.
+Red Hat Advanced Cluster Security for Kubernetes (RHACS) includes role-based access control (RBAC) that you can use to configure roles and grant various levels of access to Red Hat Advanced Cluster Security for Kubernetes for different users.
 
-Beginning with version 3.63, RHACS includes a scoped access control feature that enables you to configure fine-grained and specific sets of permissions that define how a given RHACS user or a group of users can interact with RHACS, which resources they can access, and which actions they can perform.
+Beginning with version 3.63, RHACS includes a scoped access control feature. You can configure fine-grained and specific sets of permissions that define how a given RHACS user or a group of users can interact with RHACS, the resources they can access, and the actions they can perform.
+
+<a id="rbac-concepts-overview_manage-role-based-access-control"></a>
+
+# RBAC concepts overview
+
+The role-based access control (RBAC) system in RHACS uses roles, permission sets, and access scopes to define user permissions and resource access.
 
 - *Roles* are a collection of permission sets and access scopes. You can assign roles to users and groups by specifying rules. You can configure these rules when you configure an authentication provider. There are two types of roles in Red Hat Advanced Cluster Security for Kubernetes:
 
-  - System roles that are created by Red Hat and cannot be changed.
+  - System roles that Red Hat creates and that you cannot change.
 
   - Custom roles, which Red Hat Advanced Cluster Security for Kubernetes administrators can create and change at any time.
 
@@ -16,21 +22,21 @@ Beginning with version 3.63, RHACS includes a scoped access control feature that
 
     </div>
 
-    - If you assign multiple roles for a user, they get access to the combined permissions of the assigned roles.
+    - If you assign many roles for a user, they get access to the combined permissions of the assigned roles.
 
     - If you have users assigned to a custom role, and you delete that role, all associated users transfer to the minimum access role that you have configured.
 
     </div>
 
-- *Permission sets* are a set of permissions that define what actions a role can perform on a given resource. *Resources* are the functionalities of Red Hat Advanced Cluster Security for Kubernetes for which you can set view (`read`) and modify (`write`) permissions. There are two types of permission sets in Red Hat Advanced Cluster Security for Kubernetes:
+- *Permission sets* are a set of permissions that define what actions a role can perform on a given resource. *Resources* are the functionalities of Red Hat Advanced Cluster Security for Kubernetes for which you can set view (`read`) and change (`write`) permissions. There are two types of permission sets in Red Hat Advanced Cluster Security for Kubernetes:
 
-  - System permission sets, which are created by Red Hat and cannot be changed.
+  - System permission sets, which Red Hat creates and that you cannot change.
 
   - Custom permission sets, which Red Hat Advanced Cluster Security for Kubernetes administrators can create and change at any time.
 
-- *Access scopes* are a set of Kubernetes and OpenShift Container Platform resources that users can access. For example, you can define an access scope that only allows users to access information about pods in a given project. There are two types of access scopes in Red Hat Advanced Cluster Security for Kubernetes:
+- *Access scopes* are a set of Kubernetes and OpenShift Container Platform resources that users can access. For example, you can define an access scope that grants access only to information about pods in a given project. There are two types of access scopes in Red Hat Advanced Cluster Security for Kubernetes:
 
-  - System access scopes, which are created by Red Hat and cannot be changed.
+  - System access scopes, which Red Hat creates and that you cannot change.
 
   - Custom access scopes, which Red Hat Advanced Cluster Security for Kubernetes administrators can create and change at any time.
 
@@ -42,15 +48,15 @@ Red Hat Advanced Cluster Security for Kubernetes (RHACS) includes some default 
 
 | System role | Description |
 |----|----|
-| **Admin** | This role is targeted for administrators. Use it to provide read and write access to all resources. |
-| **Analyst** | This role is targeted for a user who cannot make any changes, but can view everything. Use it to provide read-only access for all resources. |
-| **Continuous Integration** | This role is targeted for CI (continuous integration) systems and includes the permission set required to enforce deployment policies. |
-| **Network Graph Viewer** | This role is targeted for users who need to view the network graph. |
+| **Admin** | Use this role for administrators. It grants read and write access to all resources. |
+| **Analyst** | Use this role for a user who cannot make any changes, but can view everything. It grants read-only access for all resources. |
+| **Continuous Integration** | Use this role for CI (continuous integration) systems. It includes the permission set required to enforce deployment policies. |
+| **Network Graph Viewer** | Use this role for users who need to view the network graph. |
 | **None** | This role has no read and write access to any resource. You can set this role as the minimum access role for all users. |
 | **Sensor Creator** | RHACS uses this role to automate new cluster setups. It includes the permission set to create Sensors in secured clusters. |
-| **Vulnerability Management Approver** | This role allows you to provide access to approve vulnerability deferrals or false positive requests. |
-| **Vulnerability Management Requester** | This role allows you to provide access to request vulnerability deferrals or false positives. |
-| **Vulnerability Report Creator** | This role allows you to create and manage vulnerability reporting configurations for scheduled vulnerability reports. |
+| **Vulnerability Management Approver** | Use this role to give access to approve vulnerability deferrals or false positive requests. |
+| **Vulnerability Management Requester** | Use this role to give access to request vulnerability deferrals or false positives. |
+| **Vulnerability Report Creator** | Use this role to create and manage vulnerability reporting configurations for scheduled vulnerability reports. |
 
 <a id="view-system-roles-permission-scope_manage-role-based-access-control"></a>
 
@@ -70,12 +76,12 @@ Procedure
 
 2.  Select **Roles**.
 
-3.  Click on one of the roles to view its details. The details page shows the permission set and access scope for the slected role.
+3.  Click one of the roles to view its details. The details page shows the permission set and access scope for the selected role.
+
+    > [!NOTE]
+    > You cannot change permission set and access scope for the default system roles.
 
 </div>
-
-> [!NOTE]
-> You cannot modify permission set and access scope for the default system roles.
 
 <a id="create-a-custom-role-3630_manage-role-based-access-control"></a>
 
@@ -91,9 +97,9 @@ Prerequisites
 
 </div>
 
-- You must have the **Admin** role, or read and write permissions for the `Access` resource to create, modify, and delete custom roles.
+- You must have the **Admin** role, or read and write permissions for the `Access` resource to create, change, and delete custom roles.
 
-- You must create a permissions set and an access scope for the custom role before creating the role.
+- You must create a permissions set and an access scope for the custom role before you create the role.
 
 </div>
 
@@ -165,9 +171,9 @@ Procedure
 
 8.  Click **Save**.
 
-</div>
+    You can repeat these instructions for each user or group and assign different roles. For role aggregation, you can use the same key/value pair with many roles. For example, you can create a rule that assigns the `Analyst` role to the user `jsmith@example.com`, and then add another rule to assign the `Vulnerability Report Creator` role to the same user. For more information about roles, see "System roles".
 
-You can repeat these instructions for each user or group and assign different roles. For role aggregation, you can use the same key/value pair with multiple roles. For example, you can create a rule that assigns the `Analyst` role to the user `jsmith@example.com`, and then add another rule to assign the `Vulnerability Report Creator` role to the same user. For more information about roles, see "System roles".
+</div>
 
 <a id="rbac-permission-sets_manage-role-based-access-control"></a>
 
@@ -177,12 +183,12 @@ Red Hat Advanced Cluster Security for Kubernetes includes some default system pe
 
 | Permission set | Description |
 |----|----|
-| **Admin** | Provides read and write access to all resources. |
-| **Analyst** | Provides read-only access for all resources. |
-| **Continuous Integration** | This permission set is targeted for CI (continuous integration) systems and includes the permissions required to enforce deployment policies. |
-| **Network Graph Viewer** | Provides the minimum permissions to view network graphs. |
-| **None** | No read and write permissions are allowed for any resource. |
-| **Sensor Creator** | Provides permissions for resources that are required to create Sensors in secured clusters. |
+| **Admin** | Grants read and write access to all resources. |
+| **Analyst** | Grants read-only access for all resources. |
+| **Continuous Integration** | Use this permission set for CI (continuous integration) systems. It includes the permissions required to enforce deployment policies. |
+| **Network Graph Viewer** | Grants the minimum permissions to view network graphs. |
+| **None** | Grants no read and write permissions for any resource. |
+| **Sensor Creator** | Grants permissions for resources that you need to create Sensors in secured clusters. |
 
 <a id="view-system-permission-set_manage-role-based-access-control"></a>
 
@@ -202,12 +208,12 @@ Procedure
 
 2.  Select **Permission sets**.
 
-3.  Click on one of the permission sets to view its details. The details page shows a list of resources and their permissions for the selected permission set.
+3.  Click one of the permission sets to view its details. The details page shows a list of resources and their permissions for the selected permission set.
+
+    > [!NOTE]
+    > You cannot change permissions for a system permission set.
 
 </div>
-
-> [!NOTE]
-> You cannot modify permissions for a system permission set.
 
 <a id="create-a-custom-permission-set_manage-role-based-access-control"></a>
 
@@ -223,7 +229,7 @@ Prerequisites
 
 </div>
 
-- You must have the **Admin** role, or read and write permissions for the `Access` resource to create, modify, and delete permission sets.
+- You must have the **Admin** role, or read and write permissions for the `Access` resource to create, change, and delete permission sets.
 
 </div>
 
@@ -269,7 +275,7 @@ Procedure
 
       - `Secret`
 
-    - These permissions are preselected when you create a new permission set.
+    - The system preselects these permissions when you create a new permission set.
 
     - If you do not grant these permissions, users will experience issues with viewing pages in the RHACS portal.
 
@@ -308,12 +314,12 @@ Procedure
 
 2.  Select **Access scopes**.
 
-3.  Click on one of the access scopes to view its details. The details page shows a list of clusters and namespaces, and which ones are allowed for the selected access scope.
+3.  Click one of the access scopes to view its details. The details page shows a list of clusters and namespaces, and which ones are allowed for the selected access scope.
+
+    > [!NOTE]
+    > You cannot change allowed resources for a system access scope.
 
 </div>
-
-> [!NOTE]
-> You cannot modify allowed resources for a system access scope.
 
 <a id="create-a-custom-access-scope_manage-role-based-access-control"></a>
 
@@ -329,7 +335,7 @@ Prerequisites
 
 </div>
 
-- You must have the **Admin** role, or a role with the permission set with read and write permissions for the `Access` resource to create, modify, and delete permission sets.
+- You must have the **Admin** role, or a role with the permission set with read and write permissions for the `Access` resource to create, change, and delete permission sets.
 
 </div>
 
@@ -349,61 +355,61 @@ Procedure
 
 4.  Enter a **Name** and **Description** for the new access scope.
 
-5.  Under the **Allowed resources** section:
+5.  Under the **Allowed resources** section, use the **Cluster filter** and **Namespace filter** fields to filter the list of clusters and namespaces visible in the list.
 
-    - Use the **Cluster filter** and **Namespace filter** fields to filter the list of clusters and namespaces visible in the list.
+6.  Expand the **Cluster name** to see the list of namespaces in that cluster.
 
-    - Expand the **Cluster name** to see the list of namespaces in that cluster.
+7.  To allow access to all namespaces in a cluster, toggle the switch in the **Manual selection** column.
 
-    - To allow access to all namespaces in a cluster, toggle the switch in the **Manual selection** column.
+    > [!NOTE]
+    > Access to a specific cluster grants users access to the following resources within the scope of the cluster:
+    >
+    > - OpenShift Container Platform or Kubernetes cluster metadata and security information
+    >
+    > - Compliance information for authorized clusters
+    >
+    > - Node metadata and security information
+    >
+    > - Access to all namespaces in that cluster and their associated security information
 
-      > [!NOTE]
-      > Access to a specific cluster provides users with access to the following resources within the scope of the cluster:
-      >
-      > - OpenShift Container Platform or Kubernetes cluster metadata and security information
-      >
-      > - Compliance information for authorized clusters
-      >
-      > - Node metadata and security information
-      >
-      > - Access to all namespaces in that cluster and their associated security information
+8.  To allow access to a namespace, toggle the switch in the **Manual selection** column for a namespace.
 
-    - To allow access to a namespace, toggle the switch in the **Manual selection** column for a namespace.
+    > [!NOTE]
+    > Access to a specific namespace grants access to the following information within the scope of the namespace:
+    >
+    > - Alerts and violations for deployments
+    >
+    > - Vulnerability data for images
+    >
+    > - Deployment metadata and security information
+    >
+    > - Role and user information
+    >
+    > - Network graph, policy, and baseline information for deployments
+    >
+    > - Process information and process baseline configuration
+    >
+    > - Prioritized risk information for each deployment
 
-      > [!NOTE]
-      > Access to a specific namespace gives access to the following information within the scope of the namespace:
-      >
-      > - Alerts and violations for deployments
-      >
-      > - Vulnerability data for images
-      >
-      > - Deployment metadata and security information
-      >
-      > - Role and user information
-      >
-      > - Network graph, policy, and baseline information for deployments
-      >
-      > - Process information and process baseline configuration
-      >
-      > - Prioritized risk information for each deployment
+9.  If you want to allow access to clusters and namespaces based on labels, click **Add label selector** under the **Label selection rules** section. Then click **Add rule** to specify **Key** and **Value** pairs for the label selector. You can specify labels for clusters and namespaces.
 
-6.  If you want to allow access to clusters and namespaces based on labels, click **Add label selector** under the **Label selection rules** section. Then click **Add rule** to specify **Key** and **Value** pairs for the label selector. You can specify labels for clusters and namespaces.
-
-7.  Click **Save**.
+10. Click **Save**.
 
 </div>
 
 <a id="scale-considerations_manage-role-based-access-control"></a>
 
-### Scale considerations
+## Scale considerations
+
+In large environments with thousands of namespaces, user scopes covering large numbers of namespaces can cause performance issues such as slow page rendering or timeouts.
 
 In large environments, for example, with thousands of namespaces, the application of user scopes that cover large numbers of namespaces can cause some pages to render slowly or time out. For example, you might experience timeouts when opening the main **Dashboard** page.
 
-Performance was tested in a single-cluster context on an environment with 20,000 deployments across 5,000 namespaces and 80,000 alerts in one test cluster. In that testing, the load time of the main **Dashboard** page for scopes including up to 2,000 namespaces on that cluster was under a few seconds.
+Red Hat tested performance in a single-cluster context on an environment with 20,000 deployments across 5,000 namespaces and 80,000 alerts in one test cluster. In that testing, the load time of the main **Dashboard** page for scopes including up to 2,000 namespaces on that cluster was under a few seconds.
 
-Performance was tested in a multi-cluster context on an environment with 200,000 deployments across 50,000 namespaces and 800,000 alerts across 10 test clusters. In that testing, the load time of the main **Dashboard** page was under a few seconds for scopes including up to 500 namespaces across the 10 clusters, as well as for scopes including up to 2,000 namespaces on a single cluster.
+Red Hat tested performance in a multi-cluster context on an environment with 200,000 deployments across 50,000 namespaces and 800,000 alerts across 10 test clusters. In that testing, the load time of the main **Dashboard** page was under a few seconds for scopes including up to 500 namespaces across the 10 clusters and for scopes including up to 2,000 namespaces on a single cluster.
 
-The load time of RHACS portal pages for user scopes with more namespaces than the numbers tested cannot be guaranteed to stay under the timeout limit.
+Red Hat cannot guarantee that the load time of RHACS portal pages for user scopes with more namespaces than the tested numbers will stay under the timeout limit.
 
 <a id="resource-definitions_manage-role-based-access-control"></a>
 
@@ -446,7 +452,7 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 <tr>
 <td style="text-align: left;"><p>Access</p></td>
 <td style="text-align: left;"><p>View configurations for single sign-on (SSO) and role-based access control (RBAC) rules that match user metadata to Red Hat Advanced Cluster Security for Kubernetes roles and users that have accessed your Red Hat Advanced Cluster Security for Kubernetes instance, including the metadata that the authentication providers give about them.</p></td>
-<td style="text-align: left;"><p>Create, modify, or delete SSO configurations and configured RBAC rules.</p></td>
+<td style="text-align: left;"><p>Create, change, or delete SSO configurations and configured RBAC rules.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Administration</p></td>
@@ -465,7 +471,7 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 <li><p>Data retention, security notices, and related configurations</p></li>
 <li><p>The logging level</p></li>
 <li><p>Support packages in Central (upload)</p></li>
-<li><p>Image scanner integrations (create/modify/delete)</p></li>
+<li><p>Image scanner integrations (create/change/delete)</p></li>
 <li><p>Automatic upgrades for secured clusters (enable/disable)</p></li>
 <li><p>Service-to-service authentication credentials (revoke/re-issue)</p></li>
 </ul></td>
@@ -483,7 +489,7 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 <tr>
 <td style="text-align: left;"><p>Cluster</p></td>
 <td style="text-align: left;"><p>View existing secured clusters.</p></td>
-<td style="text-align: left;"><p>Add new secured clusters and modify or delete existing clusters.</p></td>
+<td style="text-align: left;"><p>Add new secured clusters and change or delete existing clusters.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Compliance</p></td>
@@ -503,7 +509,7 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 <li><p>Process activity in deployments</p></li>
 <li><p>Risk results</p></li>
 </ul></td>
-<td style="text-align: left;"><p>Modify the following items:</p>
+<td style="text-align: left;"><p>Change the following items:</p>
 <ul>
 <li><p>Process baselines (add or remove processes)</p></li>
 </ul></td>
@@ -521,7 +527,7 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 <tr>
 <td style="text-align: left;"><p>Integration</p></td>
 <td style="text-align: left;"><p>View integrations and their configuration, including backup, registry, image signature, notification systems, and API tokens.</p></td>
-<td style="text-align: left;"><p>Add, modify, and delete integrations and their configurations, and API tokens.</p></td>
+<td style="text-align: left;"><p>Add, change, and delete integrations and their configurations, and API tokens.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>K8sRole</p></td>
@@ -561,12 +567,12 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 <tr>
 <td style="text-align: left;"><p>WorkflowAdministration</p></td>
 <td style="text-align: left;"><p>View all resource collections.</p></td>
-<td style="text-align: left;"><p>Add, modify, or delete resource collections.</p></td>
+<td style="text-align: left;"><p>Add, change, or delete resource collections.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Role</p></td>
 <td style="text-align: left;"><p>View existing Red Hat Advanced Cluster Security for Kubernetes RBAC roles and their permissions.</p></td>
-<td style="text-align: left;"><p>Add, modify, or delete roles and their permissions.</p></td>
+<td style="text-align: left;"><p>Add, change, or delete roles and their permissions.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Secret</p></td>
@@ -581,12 +587,12 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 <tr>
 <td style="text-align: left;"><p>VulnerabilityManagementApprovals</p></td>
 <td style="text-align: left;"><p>View all pending deferral or false positive requests for vulnerabilities.</p></td>
-<td style="text-align: left;"><p>Approve or deny any pending deferral or false positive requests and move any previously approved requests back to observed.</p></td>
+<td style="text-align: left;"><p>Approve or deny any pending deferral or false positive requests and move any before approved requests back to observed.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>VulnerabilityManagementRequests</p></td>
 <td style="text-align: left;"><p>View all pending deferral or false positive requests for vulnerabilities.</p></td>
-<td style="text-align: left;"><p>Request a deferral on a vulnerability, mark it as a false positive, or move a pending or previously approved request made by the same user back to observed.</p></td>
+<td style="text-align: left;"><p>Request a deferral on a vulnerability, mark it as a false positive, or move a pending or before approved request made by the same user back to observed.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>WatchedImage</p></td>
@@ -596,7 +602,7 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 <tr>
 <td style="text-align: left;"><p>WorkflowAdministration</p></td>
 <td style="text-align: left;"><p>View all resource collections.</p></td>
-<td style="text-align: left;"><p>Create, modify, or delete resource collections.</p></td>
+<td style="text-align: left;"><p>Create, change, or delete resource collections.</p></td>
 </tr>
 </tbody>
 </table>
@@ -605,7 +611,7 @@ Red Hat Advanced Cluster Security for Kubernetes includes many resources. The fo
 
 # Declarative configuration for authentication and authorization resources
 
-You can use declarative configuration for authentication and authorization resources such as authentication providers, roles, permission sets, and access scopes. For instructions on how to use declarative configuration, see "Using declarative configuration" in the "Additional resources" section.
+You can use declarative configuration for authentication and authorization resources such as authentication providers, roles, permission sets, and access scopes. For instructions on how to use declarative configuration, see "Using declarative configuration".
 
 <div>
 

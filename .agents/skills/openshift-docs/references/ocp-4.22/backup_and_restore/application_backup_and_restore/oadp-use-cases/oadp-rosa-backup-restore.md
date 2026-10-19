@@ -155,7 +155,7 @@ Procedure
 
 </div>
 
-# Cleaning up a cluster after a backup with OADP and ROSA STS
+# Clean up a cluster after a backup with OADP and ROSA STS
 
 Uninstall the OpenShift API for Data Protection (OADP) Operator together with the backups and the S3 bucket from the hello-world example.
 

@@ -30,7 +30,7 @@ Additional resources
 
 </div>
 
-# Creating a secondary network attachment with the CNI VRF plugin
+# Create a secondary network attachment with the CNI VRF plugin
 
 The Cluster Network Operator (CNO) manages secondary network definitions. When you specify a secondary network in the cluster-scoped `Network` custom resource (CR), the CNO automatically creates the `NetworkAttachmentDefinition` CR.
 

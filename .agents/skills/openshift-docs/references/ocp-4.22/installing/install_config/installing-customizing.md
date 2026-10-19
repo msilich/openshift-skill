@@ -14,7 +14,7 @@ Additionally, modifying the reference config, such as the Ignition config that i
 
 The following sections describe features that you might want to configure on your nodes.
 
-# Creating machine configs with Butane
+# Create machine configs with Butane
 
 Machine configs are used to configure control plane and compute machines by instructing machines how to create users and file systems, set up the network, install systemd units, and more.
 
@@ -740,7 +740,9 @@ Note the following points about the boot disk encryption and mirroring feature:
 
 ## Configuring an encryption threshold
 
-In OpenShift Container Platform, you can specify a requirement for more than one Tang server. You can also configure the TPM v2 and Tang encryption modes simultaneously. Configuring both modes enables boot disk data decryption only if the TPM secure cryptoprocessor is present and the Tang servers are accessible over a secure network.
+In OpenShift Container Platform, define an encryption threshold to require more than one Tang server for boot disk decryption.
+
+You can also configure the TPM v2 and Tang encryption modes simultaneously. Configuring both modes enables boot disk data decryption only if the TPM secure cryptoprocessor is present and the Tang servers are accessible over a secure network.
 
 You can use the `threshold` attribute in your Butane configuration to define the minimum number of TPM v2 and Tang encryption conditions required for decryption to occur.
 
@@ -1527,7 +1529,7 @@ Procedure
 
 </div>
 
-# Configuring chrony time service
+# Configure chrony time service
 
 You can set the time server and related settings used by the chrony time service (`chronyd`) by modifying the contents of the `chrony.conf` file and passing those contents to your nodes as a machine config.
 

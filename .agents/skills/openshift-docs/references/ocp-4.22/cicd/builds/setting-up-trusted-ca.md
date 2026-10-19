@@ -12,7 +12,7 @@ The procedure requires a cluster administrator to create a `ConfigMap` and add a
 
 - The `ConfigMap` name must be set in the `image.config.openshift.io/cluster` cluster scoped configuration resource’s `spec.additionalTrustedCA` field.
 
-# Adding certificate authorities to the cluster
+# Add certificate authorities to the cluster
 
 You can add certificate authorities (CA) to the cluster for use when pushing and pulling images with the following procedure.
 

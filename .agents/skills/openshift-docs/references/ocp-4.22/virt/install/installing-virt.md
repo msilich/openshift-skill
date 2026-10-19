@@ -169,7 +169,7 @@ Procedure
       source: redhat-operators
       sourceNamespace: openshift-marketplace
       name: kubevirt-hyperconverged
-      startingCSV: kubevirt-hyperconverged-operator.v4.22.6
+      startingCSV: kubevirt-hyperconverged-operator.v4.22.9
       channel: "stable"
     ```
 
@@ -207,7 +207,7 @@ You must verify that the subscription creation was successful before you can pro
 
     ``` terminal
     NAME                                       DISPLAY                    VERSION   REPLACES                                   PHASE
-    kubevirt-hyperconverged-operator.v4.22.6   OpenShift Virtualization   4.22.6    kubevirt-hyperconverged-operator.v4.21.0   Succeeded
+    kubevirt-hyperconverged-operator.v4.22.9   OpenShift Virtualization   4.22.9    kubevirt-hyperconverged-operator.v4.21.0   Succeeded
     ```
 
 2.  Check that the `HyperConverged` custom resource (CR) has the correct version. Run the following command and verify the output:
@@ -221,7 +221,7 @@ You must verify that the subscription creation was successful before you can pro
     ``` terminal
     {
     "name": "operator",
-    "version": "4.22.6"
+    "version": "4.22.9"
     }
     ```
 
@@ -321,7 +321,7 @@ Verification
 
   ``` terminal
   NAME                                      DISPLAY                    VERSION   REPLACES   PHASE
-  kubevirt-hyperconverged-operator.v4.22.6   OpenShift Virtualization   4.22.6                Succeeded
+  kubevirt-hyperconverged-operator.v4.22.9   OpenShift Virtualization   4.22.9                Succeeded
   ```
 
 </div>

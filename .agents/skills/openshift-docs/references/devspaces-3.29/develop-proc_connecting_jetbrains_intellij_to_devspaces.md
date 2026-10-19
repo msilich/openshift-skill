@@ -23,16 +23,16 @@ Integration with the [JetBrains Gateway](https://www.jetbrains.com/remote-develo
 ## Procedure
 
 1.  Create a workspace on the OpenShift Dev Spaces Dashboard and choose `IntelliJ IDEA Ultimate (desktop)` editor:  
-    ![IntelliJ IDEA Ultimate on Dashboard](assets/abfd28a3ac28d003fcc9.png)  
+    ![IntelliJ IDEA Ultimate on Dashboard](assets/34888df2b8d1d4473f85.png)  
 2.  Wait for the prompt to open your local JetBrains Gateway application, then click `Open Gateway` to connect to your OpenShift Dev Spaces workspace:  
-    ![Open Gateway prompt](assets/7d2486103a35e1936738.png)  
+    ![Open Gateway prompt](assets/67ae8d5b5384a17adf13.png)  
 3.  Provide or select the OpenShift Application Programming Interface (API) server URL, choose an authentication method, provide the required authentication details, and click `OK`:  
-    ![Connecting to OpenShift API server](assets/453bb616cc076ae8a9f9.png)  
+    ![Connecting to OpenShift API server](assets/320988e0b6af8cbb07f7.png)  
 
 ## Results
 
 - Your local Gateway application is running the JetBrains Client and connects to the workspace.  
-  ![Connecting to remote host](assets/40222294a8433ff487cd.png)  
+  ![Connecting to remote host](assets/e47ee058cf53332023ee.png)  
 
 **Related concepts**  
 

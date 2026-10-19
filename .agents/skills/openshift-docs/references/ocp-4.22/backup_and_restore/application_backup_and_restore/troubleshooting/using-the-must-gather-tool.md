@@ -4,7 +4,7 @@ Collect logs and information about OADP custom resources by using the `must-gath
 
 The `must-gather` tool is a container and does not run all the time. The tool runs for a few minutes only after you start the tool by running the `must-gather` command.
 
-# Using the must-gather tool
+# Use the must-gather tool
 
 Run the `must-gather` tool with the default configuration, timeout, and insecure TLS options. To use an option, add a flag corresponding to that option in the `must-gather` command.
 
