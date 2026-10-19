@@ -815,6 +815,13 @@ not cause an update PR. Removed chapters still referenced by a skill fail the te
 suite and require maintainer intervention. Source gaps and external references
 remain visible in provenance and the PR report.
 
+Dev Spaces downloads use three parallel requests per branch job. A transient
+timeout, interrupted response or HTTP 408/429/500/502/503/504 response is retried
+up to three times (four attempts total), with 2, 4 and 8 second waits. Each attempt
+keeps its 45 second socket timeout. Persistent failures stop the batch before
+publication and report the affected URL. Certificate failures, other HTTP errors,
+cross-host redirects, oversized responses and corrupt caches are not retried.
+
 After the offline test suite passes, the workflow creates or refreshes one PR per
 base branch using the reserved `automation/docs-main` and `automation/docs-v4.22`
 branches. Do not edit those branches manually: each run replaces their generated
