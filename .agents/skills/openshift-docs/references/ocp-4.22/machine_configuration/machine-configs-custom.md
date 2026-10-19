@@ -4,12 +4,22 @@ In addition to `MachineConfig` objects, you can use `KubeletConfig` or `Containe
 
 The kubelet configuration is currently serialized as an Ignition configuration, so it can be directly edited. However, there is also a new `kubelet-config-controller` added to the Machine Config Controller (MCC). This lets you use a `KubeletConfig` custom resource (CR) to edit the kubelet parameters.
 
-# Creating a KubeletConfig CR to edit kubelet parameters
+# Create a KubeletConfig CR to edit kubelet parameters
 
 You can use a `KubeletConfig` custom resource (CR) to edit a kubelet parameters without modifing the kubelet configuration directly.
 
 > [!NOTE]
 > As the fields in the `kubeletConfig` object are passed directly to the kubelet from upstream Kubernetes, the kubelet validates those values directly. Invalid values in the `kubeletConfig` object might cause cluster nodes to become unavailable. For valid values, see the [Kubernetes documentation](https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/).
+
+You can set most kubelet configuration options. You cannot overwrite the following options:
+
+- `CgroupDriver`
+
+- `ClusterDNS`
+
+- `ClusterDomain`
+
+- `StaticPodPath`
 
 Consider the following guidance:
 
@@ -18,6 +28,11 @@ Consider the following guidance:
 - Create one `KubeletConfig` CR for each machine config pool with all the config changes you want for that pool.
 
 - As needed, create multiple `KubeletConfig` CRs with a limit of 10 per cluster. For the first `KubeletConfig` CR, the Machine Config Operator (MCO) creates a machine config appended with `kubelet`. With each subsequent CR, the controller creates another `kubelet` machine config with a numeric suffix. For example, if you have a `kubelet` machine config with a `-2` suffix, the next `kubelet` machine config is appended with `-3`.
+
+  > [!IMPORTANT]
+  > The Machine Config Operator does not merge multiple `KubeletConfig` CRs that target the same machine config pool. Each CR generates a separate machine config that writes the kubelet configuration. The most recently created `KubeletConfig` CR takes precedence and overrides the kubelet settings from earlier CRs for that pool.
+  >
+  > To apply multiple kubelet settings to the same pool, include all of the settings in a single `KubeletConfig` CR.
 
 > [!NOTE]
 > If you are applying a kubelet or container runtime config to a custom machine config pool, the custom role in the `machineConfigSelector` must match the name of the custom machine config pool.
@@ -204,6 +219,8 @@ Procedure
 
         - Use `maxPods` to set the maximum pods per node.
 
+        - Use `nodeStatusMaxImages` to set how many images the node reports. If a node contains more than 50 images, pod scheduling might be imbalanced because the image list is shortened to 50 by default. Set `nodeStatusMaxImages` to `-1` to disable that limit.
+
           > [!NOTE]
           > The rate at which the kubelet talks to the API server depends on queries per second (QPS) and burst values. The default values, `50` for `kubeAPIQPS` and `100` for `kubeAPIBurst`, are sufficient if there are limited pods running on each node. It is recommended to update the kubelet QPS and burst rates if there are enough CPU and memory resources on the node.
           >
@@ -319,7 +336,7 @@ Verification
 
 </div>
 
-# Creating a ContainerRuntimeConfig CR to edit CRI-O parameters
+# Create a ContainerRuntimeConfig CR to edit CRI-O parameters
 
 You can change some of the settings associated with the OpenShift Container Platform CRI-O runtime for the nodes associated with a specific machine config pool (MCP) by using a `ContainerRuntimeConfig` custom resource (CR).
 

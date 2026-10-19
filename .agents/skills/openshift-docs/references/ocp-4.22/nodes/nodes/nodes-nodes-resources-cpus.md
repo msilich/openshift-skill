@@ -4,7 +4,7 @@ When using the static CPU Manager policy, you can explicitly define a list of CP
 
 For example, on a system with 24 CPUs, you could reserve CPUs numbered 0 - 3 for the control plane allowing the compute nodes to use CPUs 4 - 23.
 
-# Reserving CPUs for nodes
+# Reserve CPUs for nodes
 
 You can explicitly define a list of CPUs that are reserved for critical system processes on specific nodes by creating a `KubeletConfig` custom resource (CR) to define the `reservedSystemCPUs` parameter. Reserving CPUs for critical system processes can help ensure cluster stability.
 

@@ -161,7 +161,9 @@ In the preceding scenarios, PVCs remain in the pending state indefinitely. To re
 
 # Changing the default storage class
 
-Change the default storage class to ensure new persistent volume claims (PVCs) automatically use your preferred storage backend. This helps you optimize costs, align with infrastructure changes, or ensure consistent storage types across new deployments without requiring users to specify a storage class for each claim.
+Change the default storage class to ensure new persistent volume claims (PVCs) automatically use your preferred storage backend.
+
+This helps you optimize costs, align with infrastructure changes, or ensure consistent storage types across new deployments without requiring users to specify a storage class for each claim.
 
 In this example, you have two defined storage classes, `gp3` and `standard`, and you want to change the default storage class from `gp3` to `standard`.
 

@@ -34,7 +34,7 @@ Connect your local JetBrains IDE to a running OpenShift Dev Spaces workspace by 
 ## Procedure
 
 1.  Create a workspace on the OpenShift Dev Spaces Dashboard and choose `JetBrains Toolbox App (desktop)` as the editor:  
-    ![JetBrains Toolbox App on Dashboard](assets/0629c9000610cd2048e3.png)  
+    ![JetBrains Toolbox App on Dashboard](assets/6b5a790e2e9a37a7138c.png)  
 
     **For OpenShift Dev Spaces Toolbox plugin version 0.0.1:**
 
@@ -45,25 +45,25 @@ Connect your local JetBrains IDE to a running OpenShift Dev Spaces workspace by 
     The plugin handles port forwarding automatically.
 
 2.  On the workspace page, click the `Open the workspace over Toolbox` link to run the local Toolbox App and initiate the SSH connection to your OpenShift Dev Spaces workspace:  
-    ![Connecting to remote environment](assets/66621e2ba71f31a980bc.png)  
+    ![Connecting to remote environment](assets/ac480514bb84936e8907.png)  
 
     **For OpenShift Dev Spaces Toolbox plugin version 0.0.2 and later:**
 
     To connect directly from the Toolbox App without using the Dashboard, open the `Environment actions` menu and click the **Connect** button:
 
       
-    ![Connecting to workspace from Toolbox App](assets/02b9b62e39b15eed1c4b.png)  
+    ![Connecting to workspace from Toolbox App](assets/736b580d4d5957891fea.png)  
 
 3.  After the connection is established, click the workspace name. On the Tools tab, choose an IDE to install in your workspace:  
-    ![Installing IDE to remote environment](assets/39e2c2429938672c85b0.png)  
+    ![Installing IDE to remote environment](assets/e822786295b70a32f351.png)  
 
 4.  After the IDE is installed, on the Projects tab, click the project name to connect the local Thin Client to the workspace:  
-    ![Opening a workspace](assets/827a641a06873d79abd1.png)  
+    ![Opening a workspace](assets/d3e2e90015b870b8ba21.png)  
 
 ## Results
 
 - Your local Toolbox application is running the JetBrains Thin Client and connects to the workspace:  
-  ![JetBrains Thin Client connected to workspace](assets/8e239e42fa957195a5ea.png)  
+  ![JetBrains Thin Client connected to workspace](assets/23d8702023e2848981e4.png)  
 
 **Related concepts**  
 

@@ -104,7 +104,7 @@ When preempting a pod, the scheduler waits for the pod graceful termination peri
 
 To minimize this gap, configure a small graceful termination period for lower-priority pods.
 
-# Configuring priority and preemption
+# Configure priority and preemption
 
 Configure pod priority and preemption by creating priority class objects with assigned values and referencing them in pod specifications through the `priorityClassName` field.
 

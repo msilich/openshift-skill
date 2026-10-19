@@ -5,7 +5,7 @@ To add labels, change the instance type, change block storage, or make other cha
 > [!NOTE]
 > If you need to scale a compute machine set without making other changes, see "Manually scaling a compute machine set".
 
-# Modifying a compute machine set by using the CLI
+# Modify a compute machine set by using the CLI
 
 To enable features or change the properties of machines, you can modify the configuration of a compute machine set using the CLI. You can then propagate the changes to the machines in your cluster.
 

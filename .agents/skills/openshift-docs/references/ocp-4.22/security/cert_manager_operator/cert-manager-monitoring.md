@@ -2,7 +2,7 @@
 
 By default, the cert-manager Operator for Red Hat OpenShift exposes metrics for the three core components: controller, cainjector, and webhook. You can configure OpenShift Monitoring to collect these metrics by using the Prometheus Operator format.
 
-# Enabling user workload monitoring
+# Enable user workload monitoring
 
 To collect metrics from your specific applications, enable monitoring for user-defined projects. You can enable monitoring for user-defined projects by configuring user workload monitoring in the cluster. For more information, see "Setting up metrics collection for user-defined projects".
 
@@ -96,7 +96,7 @@ Additional resources
 
 </div>
 
-# Configuring metrics collection for cert-manager Operator for Red Hat OpenShift operands by using a ServiceMonitor
+# Configure metrics collection for cert-manager Operator for Red Hat OpenShift operands by using a ServiceMonitor
 
 You can configure metrics collection for the cert-manager Operator for Red Hat OpenShift operands by creating a `ServiceMonitor` custom resource (CR).
 
@@ -227,7 +227,7 @@ Additional resources
 
 </div>
 
-# Querying metrics for the cert-manager Operator for Red Hat OpenShift operands
+# Query metrics for the cert-manager Operator for Red Hat OpenShift operands
 
 As a cluster administrator, or as a user with view access to all namespaces, you can query cert-manager Operator for Red Hat OpenShift operands metrics by using the OpenShift Container Platform web console or the command-line interface (CLI). For more information, see "Accessing metrics".
 
@@ -285,9 +285,11 @@ Additional resources
 
 </div>
 
-# Configuring metrics collection for the istio-csr operand
+# Configure metrics collection for the istio-csr operand
 
-The `istio-csr` operand exposes metrics by default on port `9402` at the `/metrics` service endpoint. You can configure metrics collection for the operand by creating a `ServiceMonitor` custom resource (CR), which enables the Prometheus Operator to collect custom metrics. For more information, see "Configuring user workload monitoring".
+The `istio-csr` operand exposes metrics by default on port `9402` at the `/metrics` service endpoint. You can configure metrics collection for the operand by creating a `ServiceMonitor` custom resource (CR), which enables the Prometheus Operator to collect custom metrics.
+
+For more information, see "Configuring user workload monitoring".
 
 <div>
 
@@ -394,7 +396,7 @@ Additional resources
 
 </div>
 
-# Querying metrics for the istio-csr operand
+# Query metrics for the istio-csr operand
 
 Cluster administrators, or users with view access to all namespaces, can query metrics for the istio-csr operand by using the OpenShift Container Platform web console. For more information, see "Accessing metrics".
 

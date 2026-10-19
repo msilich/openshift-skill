@@ -53,7 +53,9 @@ Additional resources
 
 # Pausing a MachineHealthCheck resource
 
-During the update process, nodes in the cluster might become temporarily unavailable. For worker nodes, the `MachineHealthCheck` resources might identify such nodes as unhealthy and reboot them. To avoid rebooting worker nodes, you must pause all the `MachineHealthCheck` resources before updating the cluster.
+During the update process, nodes in the cluster might become temporarily unavailable.
+
+For worker nodes, the `MachineHealthCheck` resources might identify such nodes as unhealthy and reboot them. To avoid rebooting worker nodes, you must pause all the `MachineHealthCheck` resources before updating the cluster.
 
 > [!NOTE]
 > Some `MachineHealthCheck` resources might not need to be paused. If your `MachineHealthCheck` resource relies on unrecoverable conditions, pausing that MHC is unnecessary.
@@ -166,7 +168,7 @@ Procedure
 
 </div>
 
-# Updating the disconnected cluster
+# Update the disconnected cluster
 
 Update the disconnected cluster to the OpenShift Container Platform version that you downloaded the release images for.
 
@@ -341,7 +343,7 @@ If you upgraded a cluster, any existing ICSP objects remain stable, and both IDM
 >
 > However, you can configure a cluster-wide `CRIOCredentialProviderConfig` object to enable project-scoped image pull secrets that you can use with mirrored repositories. For more information, see "Configuring project-scoped image pull secrets for mirrored registries".
 
-## Configuring image registry repository mirroring
+## Configure image registry repository mirroring
 
 You can create postinstallation mirror configuration custom resources (CR) to redirect image pull requests from a source image registry to a mirrored image registry.
 
@@ -637,7 +639,7 @@ If the repository mirroring procedure does not work as described, use the follow
 
 - The format of the `/etc/containers/registries.conf` file has changed recently. It is now version 2 and in TOML format.
 
-## Converting ImageContentSourcePolicy (ICSP) files for image registry repository mirroring
+## Convert ImageContentSourcePolicy (ICSP) files for image registry repository mirroring
 
 You can convert existing `ImageContentSourcePolicy` (ICSP) files to `ImageDigestMirrorSet` files to configure image registry repository mirroring.
 

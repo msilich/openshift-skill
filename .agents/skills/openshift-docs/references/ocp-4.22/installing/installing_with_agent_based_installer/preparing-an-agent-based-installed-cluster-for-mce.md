@@ -48,7 +48,7 @@ Additional resources
 
 </div>
 
-# Preparing an Agent-based cluster deployment for the multicluster engine for Kubernetes Operator while disconnected
+# Prepare an Agent-based cluster deployment for the multicluster engine for Kubernetes Operator while disconnected
 
 You can mirror the required OpenShift Container Platform container images, the multicluster engine Operator, and the Local Storage Operator (LSO) into your local mirror registry in a disconnected environment. Ensure that you note the local DNS hostname and port of your mirror registry.
 

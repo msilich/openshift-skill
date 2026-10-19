@@ -1,6 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-[Syslog](https://tools.ietf.org/html/rfc5424) is an event logging protocol that applications use to send messages to a central location, such as a SIEM or a syslog collector, for data retention and security investigations. With Red Hat Advanced Cluster Security for Kubernetes, you can send alerts and audit events using the syslog protocol.
+Syslog is an event logging protocol that applications use to send messages to a central location, such as a SIEM or a syslog collector, for data retention and security investigations. With Red Hat Advanced Cluster Security for Kubernetes, you can send alerts and audit events by using the syslog protocol.
+
+<a id="syslog-integration-overview_integrate-using-syslog-protocol"></a>
+
+# Syslog integration overview
+
+You can integrate Red Hat Advanced Cluster Security for Kubernetes with syslog events receivers to forward alerts and audit events by using the syslog protocol.
 
 <div class="note">
 
@@ -24,6 +30,18 @@ The following steps represent a high-level workflow for integrating Red Hat Adva
 
 After the configuration, Red Hat Advanced Cluster Security for Kubernetes automatically sends all violations and audit events to the configured syslog receiver.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Syslog RFC 5424](https://tools.ietf.org/html/rfc5424)
+
+</div>
+
 <a id="syslog-configuring-acs_integrate-using-syslog-protocol"></a>
 
 # Configuring syslog integration with Red Hat Advanced Cluster Security for Kubernetes
@@ -44,7 +62,7 @@ Procedure
 
 3.  Click **New integration**.
 
-4.  In the **Create integration** page, provide the following information:
+4.  In the **Create integration** page, give the following information:
 
     1.  Enter a name for your integration.
 
@@ -72,7 +90,7 @@ Procedure
 
     7.  To add extra fields, click **Add new extra field**.
 
-        For example, if your syslog receiver accepts objects from multiple sources, type `source` and `rhacs` in the **Key** and **Value** fields.
+        For example, if your syslog receiver accepts objects from many sources, type `source` and `rhacs` in the **Key** and **Value** fields.
 
         You can filter by using the custom values in your syslog receiver to identify all alerts from RHACS.
 

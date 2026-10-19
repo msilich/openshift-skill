@@ -2,7 +2,7 @@
 
 As an administrator, you can create a network policy for the `netobserv` namespace. This policy secures inbound and outbound access to the Network Observability Operator.
 
-# Configuring network policy by using the FlowCollector custom resource
+# Configure network policy by using the FlowCollector custom resource
 
 You can set up ingress and egress network policies to control pod traffic. This enhances security and collects only the network flow data you need. This reduces noise, supports compliance, and improves visibility into network communication.
 

@@ -48,9 +48,9 @@ You can view existing categories and create your own policy categories in the RH
 
 You can set up rules in RHACS and configure the data on which you want to trigger a policy. This data is also referred to as *policy criteria* or *policy fields*.
 
-You can configure the policy based on the attributes listed in the following table.
+You can configure policies based on image criteria, workload configuration criteria, workload activity criteria, audit log criteria for Kubernetes resource operations, and node activity criteria.
 
-In this table:
+The following information applies to policy criteria tables:
 
 - The **Regular expressions**, **AND, OR**, and **NOT** columns indicate whether you can use regular expressions and other logical operators along with the specific attribute.
 
@@ -78,7 +78,7 @@ In this table:
 
   - Numeric values that already use comparison, such as the `<`, `>`, `<=`, `>=` operators.
 
-  - Compound criteria that can have multiple values, for example:
+  - Compound criteria that can have many values, for example:
 
     - **Dockerfile line**, which includes both instructions and arguments.
 
@@ -89,6 +89,8 @@ In this table:
 <a id="reference-image-criteria_security-policy-reference"></a>
 
 ## Image criteria
+
+Image criteria allow you to create policies based on image registry information, image contents, and image scanning results.
 
 Image registry  
 
@@ -117,24 +119,36 @@ Image registry
 <td style="text-align: left;"><p>The name of the image registry.</p></td>
 <td style="text-align: left;"><p>Image Registry</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Build</strong>, <strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+NOT,<br />
+AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Build</strong>,<br />
+<strong>Deploy</strong>,<br />
+<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Image name</p></td>
 <td style="text-align: left;"><p>The full name of the image in registry, for example <code>library/nginx</code>.</p></td>
 <td style="text-align: left;"><p>Image Remote</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Build</strong>, <strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+NOT,<br />
+AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Build</strong>,<br />
+<strong>Deploy</strong>,<br />
+<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Image tag</p></td>
 <td style="text-align: left;"><p>Identifier for an image.</p></td>
 <td style="text-align: left;"><p>Image Tag</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Build</strong>, <strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+NOT,<br />
+AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Build</strong>,<br />
+<strong>Deploy</strong>,<br />
+<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Require image signature</p></td>
@@ -186,8 +200,12 @@ Image contents
 <td style="text-align: left;"><p>Matches the USER directive in the Dockerfile. See <a href="https://docs.docker.com/engine/reference/builder/#user">https://docs.docker.com/engine/reference/builder/#user</a> for details .</p></td>
 <td style="text-align: left;"><p>Image User</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Build</strong>, <strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+NOT,<br />
+AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Build</strong>,<br />
+<strong>Deploy</strong>,<br />
+<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Dockerfile line</p></td>
@@ -204,10 +222,13 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Image component</p></td>
 <td style="text-align: left;"><p>Name and version number of a specific software component present in an image.</p></td>
 <td style="text-align: left;"><p>Image Component</p></td>
-<td style="text-align: left;"><p>key=value</p>
-<p>Value is optional.</p>
+<td style="text-align: left;"><p>key=value<br />
+</p>
+<p>Value is optional.<br />
+</p>
 <p>If value is missing, it must be in format "key=".</p></td>
-<td style="text-align: center;"><p>Regex, AND, OR</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+AND, OR</p></td>
 <td style="text-align: left;"><p><strong>Build</strong>,<br />
 <strong>Deploy</strong>,<br />
 <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
@@ -217,17 +238,24 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Name and version number of the base operating system of the image. For example, <code>alpine:3.17.3</code></p></td>
 <td style="text-align: left;"><p>Image OS</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Build</strong>, <strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+NOT,<br />
+AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Build</strong>,<br />
+<strong>Deploy</strong>,<br />
+<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Require image label</p></td>
 <td style="text-align: left;"><p>Ensure the presence of a Docker image label. The policy triggers if any image in the deployment does not have the specified label. You can use regular expressions for both key and value fields to match labels. The <code>Require Image Label</code> policy criteria only works when you integrate with a Docker registry. For details about Docker labels see Docker documentation, <a href="https://docs.docker.com/config/labels-custom-metadata/">https://docs.docker.com/config/labels-custom-metadata/</a>.</p></td>
 <td style="text-align: left;"><p>Required Image Label</p></td>
-<td style="text-align: left;"><p>key=value</p>
-<p>Value is optional.</p>
+<td style="text-align: left;"><p>key=value<br />
+</p>
+<p>Value is optional.<br />
+</p>
 <p>If value is missing, it must be in format "key=".</p></td>
-<td style="text-align: center;"><p>Regex, AND, OR</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+AND, OR</p></td>
 <td style="text-align: left;"><p><strong>Build</strong>,<br />
 <strong>Deploy</strong>,<br />
 <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
@@ -236,10 +264,13 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Disallow image label</p></td>
 <td style="text-align: left;"><p>Ensure that a particular Docker image label is NOT used. The policy triggers if any image in the deployment has the specified label. You can use regular expressions for both key and value fields to match labels. The 'Disallow Image Label policy' criteria only works when you integrate with a Docker registry. For details about Docker labels see Docker documentation, <a href="https://docs.docker.com/config/labels-custom-metadata/">https://docs.docker.com/config/labels-custom-metadata/</a>.</p></td>
 <td style="text-align: left;"><p>Disallowed Image Label</p></td>
-<td style="text-align: left;"><p>key=value</p>
-<p>Value is optional.</p>
+<td style="text-align: left;"><p>key=value<br />
+</p>
+<p>Value is optional.<br />
+</p>
 <p>If value is missing, it must be in format "key=".</p></td>
-<td style="text-align: center;"><p>Regex, AND, OR</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+AND, OR</p></td>
 <td style="text-align: left;"><p><strong>Build</strong>,<br />
 <strong>Deploy</strong>,<br />
 <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
@@ -293,8 +324,13 @@ Image scanning
 <td style="text-align: left;"><p>Common Vulnerability Scoring System (CVSS)</p></td>
 <td style="text-align: left;"><p>CVSS: Use it to match images with vulnerabilities whose scores are greater than <code>&gt;</code>, less than <code>&lt;</code>, or equal to <code>=</code> the specified CVSS.</p></td>
 <td style="text-align: left;"><p>CVSS</p></td>
-<td style="text-align: left;"><p>&lt;, &gt;, &lt;=, &gt;= or nothing (which implies equal to)  — and —  a decimal (a number with an optional fractional value).</p>
-<p>Examples: &gt;=5, or 9.5</p></td>
+<td style="text-align: left;"><p>&lt;, &gt;, &lt;=, &gt;= or nothing (which implies equal to)<br />
+ — and — <br />
+a decimal (a number with an optional fractional value).<br />
+</p>
+<p>Examples:<br />
+&gt;=5, or<br />
+9.5</p></td>
 <td style="text-align: center;"><p>AND, OR</p></td>
 <td style="text-align: left;"><p><strong>Build</strong>,<br />
 <strong>Deploy</strong>,<br />
@@ -304,8 +340,13 @@ Image scanning
 <td style="text-align: left;"><p>National Vulnerability Database (NVD) CVSS</p></td>
 <td style="text-align: left;"><p>Requires Scanner V4. NVD CVSS: Use it to match images with vulnerabilities reported by NVD whose scores are greater than <code>&gt;</code>, less than <code>&lt;</code>, or equal to <code>=</code> the specified CVSS.</p></td>
 <td style="text-align: left;"><p>CVSS</p></td>
-<td style="text-align: left;"><p>&lt;, &gt;, &lt;=, &gt;= or nothing (which implies equal to)  — and —  a decimal (a number with an optional fractional value).</p>
-<p>Examples: &gt;=5, or 9.5</p></td>
+<td style="text-align: left;"><p>&lt;, &gt;, &lt;=, &gt;= or nothing (which implies equal to)<br />
+ — and — <br />
+a decimal (a number with an optional fractional value).<br />
+</p>
+<p>Examples:<br />
+&gt;=5, or<br />
+9.5</p></td>
 <td style="text-align: center;"><p>AND, OR</p></td>
 <td style="text-align: left;"><p><strong>Build</strong>,<br />
 <strong>Deploy</strong>,<br />
@@ -315,8 +356,18 @@ Image scanning
 <td style="text-align: left;"><p>Severity</p></td>
 <td style="text-align: left;"><p>The severity of the vulnerability based on the CVSS or the vendor. Can be one of Low, Moderate, Important or Critical.</p></td>
 <td style="text-align: left;"><p>Severity</p></td>
-<td style="text-align: left;"><p>&lt;, &gt;, ⇐, &gt;= or nothing (which implies equal to)  — and —  One of: UNKNOWN LOW MODERATE IMPORTANT CRITICAL</p>
-<p>Examples: &gt;=IMPORTANT, or CRITICAL</p></td>
+<td style="text-align: left;"><p>&lt;, &gt;, ⇐, &gt;= or nothing (which implies equal to)<br />
+ — and — <br />
+One of:<br />
+UNKNOWN<br />
+LOW<br />
+MODERATE<br />
+IMPORTANT<br />
+CRITICAL<br />
+</p>
+<p>Examples:<br />
+&gt;=IMPORTANT, or<br />
+CRITICAL</p></td>
 <td style="text-align: center;"><p>AND, OR</p></td>
 <td style="text-align: left;"><p><strong>Build</strong>,<br />
 <strong>Deploy</strong>,<br />
@@ -337,16 +388,24 @@ Image scanning
 <td style="text-align: left;"><p>The version string of a package that fixes a flagged vulnerability in an image. This criterion may be used in addition to other criteria that identify a vulnerability, for example using the CVE criterion.</p></td>
 <td style="text-align: left;"><p>Fixed By</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Build</strong>, <strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+NOT,<br />
+AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Build</strong>,<br />
+<strong>Deploy</strong>,<br />
+<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>CVE</p></td>
 <td style="text-align: left;"><p>Common Vulnerabilities and Exposures, use it with specific CVE numbers.</p></td>
 <td style="text-align: left;"><p>CVE</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Build</strong>, <strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex,<br />
+NOT,<br />
+AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Build</strong>,<br />
+<strong>Deploy</strong>,<br />
+<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Days since CVE was published</p></td>
@@ -388,7 +447,9 @@ Image scanning
 <td style="text-align: left;"><p>Days Since CVE Fix Was Available</p></td>
 <td style="text-align: left;"><p>Integer</p></td>
 <td style="text-align: center;"><p>X</p></td>
-<td style="text-align: left;"><p><strong>Build</strong>, <strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Build</strong>,<br />
+<strong>Deploy</strong>,<br />
+<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 </tbody>
 </table>
@@ -396,6 +457,8 @@ Image scanning
 <a id="workload-config-criteria_security-policy-reference"></a>
 
 ## Workload configuration criteria
+
+Workload configuration criteria allow you to create policies based on container configuration, deployment metadata, storage settings, and access control.
 
 Container configuration  
 
@@ -423,8 +486,7 @@ Container configuration
 <td style="text-align: left;"><p>Environment variable</p></td>
 <td style="text-align: left;"><p>Check environment variables by name or value. When you create a policy that includes the environment variable attribute, you can choose which types of environment variables the policy should match. For example, you can specify raw values, which are provided directly in the deployment YAML, or you can specify references to values from config maps, secrets, fields, or resource requests or limits. For any type other than a raw value specified directly in the deployment YAML, the corresponding <code>value</code> attribute of the policy rule is ignored. In this case, the policy match is evaluated on the existence of the specified environment variable type. Additionally, this criteria disallows the creation of policies with a non-empty <code>value</code> attribute for types other than raw values.</p></td>
 <td style="text-align: left;"><p>Environment Variable</p></td>
-<td style="text-align: left;"><p>RAW=key=value to match an environment variable as directly specified in the deployment YAML with a specific key and value. You can omit the <code>value</code> attribute to match on only the key.</p>
-<p>If the environment variable is not defined in the configuration YAML, then you can use the format <code>SOURCE=KEY</code>, where <code>SOURCE</code> is one of the following objects:</p>
+<td style="text-align: left;"><p>raw=key=value to match an environment variable as directly specified in the deployment YAML with a specific key and value. You can omit the <code>value</code> attribute to match on only the key. If the environment variable is not defined in the configuration YAML, then you can use the format <code>SOURCE=KEY</code>, where <code>SOURCE</code> is one of the following objects:</p>
 <ul>
 <li><p>SECRET_KEY (SecretKeyRef)</p></li>
 <li><p>CONFIG_MAP_KEY (ConfigMapRef)</p></li>
@@ -432,20 +494,16 @@ Container configuration
 <li><p>RESOURCE_FIELD (ResourceFieldRef)</p></li>
 </ul>
 <p>The preceding list provides the API object label first, and then provides the user interface label in parentheses.</p></td>
-<td style="text-align: center;"><p>! Regex only for key and value (if using RAW)<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>! Regex only for key and value (if using raw), AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Container CPU request</p></td>
 <td style="text-align: left;"><p>Check for the number of cores reserved for a given resource.</p></td>
 <td style="text-align: left;"><p>Container CPU Request</p></td>
-<td style="text-align: left;"><p>&lt;, &gt;, ⇐, &gt;= or nothing (which implies equal to)  — and —  A decimal (a number with an optional fractional value)</p>
-<p>Examples: &gt;=5, or 9.5</p></td>
+<td style="text-align: left;"><p>&lt;, &gt;, ⇐, &gt;= or nothing (which implies equal to) — and — , A decimal (a number with an optional fractional value) Examples:, &gt;=5, or, 9.5</p></td>
 <td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Container CPU limit</p></td>
@@ -453,8 +511,7 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Container CPU Limit</p></td>
 <td style="text-align: left;"><p>(Same as Container CPU Request)</p></td>
 <td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Container memory request</p></td>
@@ -462,8 +519,7 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Container Memory Request</p></td>
 <td style="text-align: left;"><p>(Same as Container CPU Request)</p></td>
 <td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Container memory limit</p></td>
@@ -471,36 +527,31 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Container Memory Limit</p></td>
 <td style="text-align: left;"><p>(Same as Container CPU Request)</p></td>
 <td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Privileged container</p></td>
-<td style="text-align: left;"><p>Check if a deployment is configured in privileged mode. This criterion only checks the value of the <code>privileged</code> field in the respective <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#securitycontext-v1-core">Pod Security Context</a>.</p></td>
+<td style="text-align: left;"><p>Check if a deployment is configured in privileged mode. This criterion only checks the value of the <code>privileged</code> field in the corresponding <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#securitycontext-v1-core">Pod Security Context</a>.</p></td>
 <td style="text-align: left;"><p>Privileged Container</p></td>
-<td style="text-align: left;"><p>Boolean: <code>true</code> when the value of the <code>privileged</code> field in the respective <code>PodSecurityContext</code> is set to <code>true</code></p></td>
+<td style="text-align: left;"><p>Boolean: <code>true</code> when the value of the <code>privileged</code> field in the corresponding <code>PodSecurityContext</code> is set to <code>true</code></p></td>
 <td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Root filesystem writeability</p></td>
 <td style="text-align: left;"><p>Check if a deployment is configured in the <code>readOnlyFilesystem</code> mode.</p></td>
 <td style="text-align: left;"><p>Read-Only Root Filesystem</p></td>
-<td style="text-align: left;"><p>Boolean: <code>true</code> when the value of the <code>readOnlyRootFilesystem</code> field in the respective <code>PodSecurityContext</code> is set to <code>true</code></p></td>
+<td style="text-align: left;"><p>Boolean: <code>true</code> when the value of the <code>readOnlyRootFilesystem</code> field in the corresponding <code>PodSecurityContext</code> is set to <code>true</code></p></td>
 <td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Seccomp profile type</p></td>
 <td style="text-align: left;"><p>The type of <code>seccomp</code> profile defined for the deployment. If <code>seccomp</code> options are provided at both the pod and container level, the container options override the pod options. See <a href="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1">Security Context</a>.</p></td>
 <td style="text-align: left;"><p>Seccomp Profile Type</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>UNCONFINED RUNTIME_DEFAULT LOCALHOST</p></td>
+<td style="text-align: left;"><p>One of: UNCONFINED, RUNTIME_DEFAULT, LOCALHOST</p></td>
 <td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Privilege escalation</p></td>
@@ -508,86 +559,39 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Allow Privilege Escalation</p></td>
 <td style="text-align: left;"><p>Boolean</p></td>
 <td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Drop capabilities</p></td>
 <td style="text-align: left;"><p>Linux capabilities that must be dropped from the container. Provides alerts when the specified capabilities are not dropped. For example, if configured with <code>SYS_ADMIN</code> AND <code>SYS_BOOT</code>, and the deployment drops only <em>one</em> or <em>neither</em> of these two capabilities, the alert occurs.</p></td>
 <td style="text-align: left;"><p>Drop Capabilities</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>ALL AUDIT_CONTROL AUDIT_READ AUDIT_WRITE BLOCK_SUSPEND CHOWN DAC_OVERRIDE DAC_READ_SEARCH FOWNER FSETID IPC_LOCK IPC_OWNER KILL LEASE LINUX_IMMUTABLE MAC_ADMIN MAC_OVERRIDE MKNOD NET_ADMIN NET_BIND_SERVICE NET_BROADCAST NET_RAW SETGID SETFCAP SETPCAP SETUID SYS_ADMIN SYS_BOOT SYS_CHROOT SYS_MODULE SYS_NICE SYS_PACCT SYS_PTRACE SYS_RAWIO SYS_RESOURCE SYS_TIME SYS_TTY_CONFIG SYSLOG WAKE_ALARM</p></td>
+<td style="text-align: left;"><p>One of: ALL, AUDIT_CONTROL, AUDIT_READ, AUDIT_WRITE, BLOCK_SUSPEND, CHOWN, DAC_OVERRIDE, DAC_READ_SEARCH, FOWNER, FSETID, IPC_LOCK, IPC_OWNER, KILL, LEASE, LINUX_IMMUTABLE, MAC_ADMIN, MAC_OVERRIDE, MKNOD, NET_ADMIN, NET_BIND_SERVICE, NET_BROADCAST, NET_RAW, SETGID, SETFCAP, SETPCAP, SETUID, SYS_ADMIN, SYS_BOOT, SYS_CHROOT, SYS_MODULE, SYS_NICE, SYS_PACCT, SYS_PTRACE, SYS_RAWIO, SYS_RESOURCE, SYS_TIME, SYS_TTY_CONFIG, SYSLOG, WAKE_ALARM,</p></td>
 <td style="text-align: center;"><p>AND</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Add capabilities</p></td>
 <td style="text-align: left;"><p>Linux capabilities that must not be added to the container, such as the ability to send raw packets or override file permissions. Provides alerts when the specified capabilities are added. For example, if configured with <code>NET_ADMIN</code> or <code>NET_RAW</code>, and the deployment manifest YAML file includes at least one of these two capabilities, the alert occurs.</p></td>
 <td style="text-align: left;"><p>Add Capabilities</p></td>
-<td style="text-align: left;"><p>AUDIT_CONTROL<br />
-AUDIT_READ<br />
-AUDIT_WRITE<br />
-BLOCK_SUSPEND<br />
-CHOWN<br />
-DAC_OVERRIDE<br />
-DAC_READ_SEARCH<br />
-FOWNER<br />
-FSETID<br />
-IPC_LOCK<br />
-IPC_OWNER<br />
-KILL<br />
-LEASE<br />
-LINUX_IMMUTABLE<br />
-MAC_ADMIN<br />
-MAC_OVERRIDE<br />
-MKNOD<br />
-NET_ADMIN<br />
-NET_BIND_SERVICE<br />
-NET_BROADCAST<br />
-NET_RAW<br />
-SETGID<br />
-SETFCAP<br />
-SETPCAP<br />
-SETUID<br />
-SYS_ADMIN<br />
-SYS_BOOT<br />
-SYS_CHROOT<br />
-SYS_MODULE<br />
-SYS_PACCT<br />
-SYS_PTRACE<br />
-SYS_RAWIO<br />
-SYS_RESOURCE<br />
-SYS_TIME<br />
-SYS_TTY_CONFIG<br />
-SYSLOG<br />
-WAKE_ALARM<br />
-</p></td>
+<td style="text-align: left;"><p>AUDIT_CONTROL, AUDIT_READ, AUDIT_WRITE, BLOCK_SUSPEND, CHOWN, DAC_OVERRIDE, DAC_READ_SEARCH, FOWNER, FSETID, IPC_LOCK, IPC_OWNER, KILL, LEASE, LINUX_IMMUTABLE, MAC_ADMIN, MAC_OVERRIDE, MKNOD, NET_ADMIN, NET_BIND_SERVICE, NET_BROADCAST, NET_RAW, SETGID, SETFCAP, SETPCAP, SETUID, SYS_ADMIN, SYS_BOOT, SYS_CHROOT, SYS_MODULE, SYS_PACCT, SYS_PTRACE, SYS_RAWIO, SYS_RESOURCE, SYS_TIME, SYS_TTY_CONFIG, SYSLOG, WAKE_ALARM,</p></td>
 <td style="text-align: center;"><p>OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Container name</p></td>
 <td style="text-align: left;"><p>The name of the container.</p></td>
 <td style="text-align: left;"><p>Container Name</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>AppArmor profile</p></td>
 <td style="text-align: left;"><p>The Application Armor ("AppArmor") profile used in the container.</p></td>
 <td style="text-align: left;"><p>AppArmor Profile</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Liveness probe</p></td>
@@ -595,8 +599,7 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Liveness Probe</p></td>
 <td style="text-align: left;"><p>Boolean</p></td>
 <td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Readiness probe</p></td>
@@ -604,128 +607,24 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Readiness Probe</p></td>
 <td style="text-align: left;"><p>Boolean</p></td>
 <td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 </tbody>
 </table>
 
 Deployment metadata  
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>Attribute</strong></th>
-<th style="text-align: left;"><strong>Description</strong></th>
-<th style="text-align: left;"><strong>JSON Attribute</strong></th>
-<th style="text-align: left;"><strong>Allowed Values</strong></th>
-<th style="text-align: center;"><strong>Regex</strong>, <strong>NOT</strong>, <strong>AND, OR</strong></th>
-<th style="text-align: left;"><strong>Phase</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Disallowed annotation</p></td>
-<td style="text-align: left;"><p>An annotation which is not allowed to be present on Kubernetes resources in a specified environment.</p></td>
-<td style="text-align: left;"><p>Disallowed Annotation</p></td>
-<td style="text-align: left;"><p>key=value</p>
-<p>Value is optional.</p>
-<p>If value is missing, it must be in format "key=".</p></td>
-<td style="text-align: center;"><p>Regex, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Required label</p></td>
-<td style="text-align: left;"><p>Check for the presence of a required label in Kubernetes.</p></td>
-<td style="text-align: left;"><p>Required Label</p></td>
-<td style="text-align: left;"><p>key=value</p>
-<p>Value is optional.</p>
-<p>If value is missing, it must be in format "key=".</p></td>
-<td style="text-align: center;"><p>Regex, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Required annotation</p></td>
-<td style="text-align: left;"><p>Check for the presence of a required annotation in Kubernetes.</p></td>
-<td style="text-align: left;"><p>Required Annotation</p></td>
-<td style="text-align: left;"><p>key=value</p>
-<p>Value is optional.</p>
-<p>If value is missing, it must be in format "key=".</p></td>
-<td style="text-align: center;"><p>Regex, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Runtime class</p></td>
-<td style="text-align: left;"><p>The <code>RuntimeClass</code> of the deployment.</p></td>
-<td style="text-align: left;"><p>Runtime Class</p></td>
-<td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Host network</p></td>
-<td style="text-align: left;"><p>Check if <code>HostNetwork</code> is enabled which means that the container is not placed inside a separate network stack (for example, the container’s networking is not containerized). This implies that the container has full access to the host’s network interfaces.</p></td>
-<td style="text-align: left;"><p>Host Network</p></td>
-<td style="text-align: left;"><p>Boolean</p></td>
-<td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Host PID</p></td>
-<td style="text-align: left;"><p>Check if the Process ID (PID) namespace is isolated between the containers and the host. This allows for processes in different PID namespaces to have the same PID.</p></td>
-<td style="text-align: left;"><p>Host PID</p></td>
-<td style="text-align: left;"><p>Boolean</p></td>
-<td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Host IPC</p></td>
-<td style="text-align: left;"><p>Check if the IPC (POSIX/SysV IPC) namespace (which provides separation of named shared memory segments, semaphores and message queues) on the host is shared with containers.</p></td>
-<td style="text-align: left;"><p>Host IPC</p></td>
-<td style="text-align: left;"><p>Boolean</p></td>
-<td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Namespace</p></td>
-<td style="text-align: left;"><p>The name of the namespace the deployment belongs to.</p></td>
-<td style="text-align: left;"><p>Namespace</p></td>
-<td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Replicas</p></td>
-<td style="text-align: left;"><p>The number of deployment replicas. If you use <code>oc scale</code> to scale the deployment replicas from 0 to a number, then the admission controller blocks this action if the deployment violates a policy.</p></td>
-<td style="text-align: left;"><p>Replicas</p></td>
-<td style="text-align: left;"><p>&lt;, &gt;, ⇐, &gt;= or nothing (which implies equal to)  — and —  a decimal (a number with an optional fractional value).</p>
-<p>Examples: &gt;=5, or 9.5</p></td>
-<td style="text-align: center;"><p>NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-</tbody>
-</table>
+| **Attribute** | **Description** | **JSON Attribute** | **Allowed Values** | **Regex**, **NOT**, **AND, OR** | **Phase** |
+|----|----|----|----|----|----|
+| Disallowed annotation | An annotation which is not allowed to be present on Kubernetes resources in a specified environment. | Disallowed Annotation | key=value Value is optional. If value is missing, it must be in format "key=". | Regex, AND, OR | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Required label | Check for the presence of a required label in Kubernetes. | Required Label | key=value Value is optional. If value is missing, it must be in format "key=". | Regex, AND, OR | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Required annotation | Check for the presence of a required annotation in Kubernetes. | Required Annotation | key=value Value is optional. If value is missing, it must be in format "key=". | Regex, AND, OR | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Runtime class | The `RuntimeClass` of the deployment. | Runtime Class | String | Regex, NOT, AND, OR | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Host network | Check if `HostNetwork` is enabled which means that the container is not placed inside a separate network stack (for example, the container’s networking is not containerized). This implies that the container has full access to the host’s network interfaces. | Host Network | Boolean | ✕ | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Host process ID | Check if the process ID (process ID) namespace is isolated between the containers and the host. This allows for processes in different process ID namespaces to have the same process ID. | Host process ID | Boolean | ✕ | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Host IPC | Check if the IPC (POSIX/SysV IPC) namespace (which provides separation of named shared memory segments, semaphores and message queues) on the host is shared with containers. | Host IPC | Boolean | ✕ | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Namespace | The name of the namespace the deployment belongs to. | Namespace | String | Regex, NOT, AND, OR | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Replicas | The number of deployment replicas. If you use `oc scale` to scale the deployment replicas from 0 to a number, then the admission controller blocks this action if the deployment violates a policy. | Replicas | \<, \>, ⇐, \>= or nothing (which implies equal to) — and — , a decimal (a number with an optional fractional value). Examples:, \>=5, or, 9.5 | NOT, AND, OR | **Deploy**, **Runtime** (when used with a Runtime criterion) |
 
 Storage  
 
@@ -754,44 +653,32 @@ Storage
 <td style="text-align: left;"><p>Name of the storage.</p></td>
 <td style="text-align: left;"><p>Volume Name</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Volume source path</p></td>
 <td style="text-align: left;"><p>The volume’s path on the host.</p></td>
 <td style="text-align: left;"><p>Volume Source</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Volume destination path</p></td>
 <td style="text-align: left;"><p>The path where the volume is mounted.</p></td>
 <td style="text-align: left;"><p>Volume Destination</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Volume type</p></td>
 <td style="text-align: left;"><p>Indicates the form in which the volume is provisioned. For example, <code>persistentVolumeClaim</code> or <code>hostPath</code>.</p></td>
 <td style="text-align: left;"><p>Volume Type</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Mounted volume writability</p></td>
@@ -799,18 +686,15 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Writable Mounted Volume</p></td>
 <td style="text-align: left;"><p>Boolean</p></td>
 <td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Mount propagation</p></td>
 <td style="text-align: left;"><p>Check if container is mounting volumes in <code>Bidirectional</code>, <code>Host to Container</code>, or <code>None</code> modes.</p></td>
 <td style="text-align: left;"><p>Mount Propagation</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>NONE HOSTTOCONTAINER BIDIRECTIONAL</p></td>
+<td style="text-align: left;"><p>One of: NONE, HOSTTOCONTAINER, BIDIRECTIONAL,</p></td>
 <td style="text-align: center;"><p>NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Host mount writability</p></td>
@@ -818,8 +702,7 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Writable Host Mount</p></td>
 <td style="text-align: left;"><p>Boolean</p></td>
 <td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td colspan="6" style="text-align: left;"><p><strong>Section: Networking</strong></p></td>
@@ -829,11 +712,8 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Protocol, such as TCP or UDP, that is used by the exposed port.</p></td>
 <td style="text-align: left;"><p>Exposed Port Protocol</p></td>
 <td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: center;"><p>Regex, NOT, AND, OR</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Exposed node port</p></td>
@@ -841,28 +721,23 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Exposed Node Port</p></td>
 <td style="text-align: left;"><p>(Same as Exposed Port)</p></td>
 <td style="text-align: center;"><p>NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Exposed port</p></td>
 <td style="text-align: left;"><p>Port numbers exposed by a deployment.</p></td>
 <td style="text-align: left;"><p>Exposed Port</p></td>
-<td style="text-align: left;"><p>&lt;, &gt;, ⇐, &gt;= or nothing (which implies equal to)  — and —  an integer.</p>
-<p>Examples: &gt;=1024, or 22</p></td>
+<td style="text-align: left;"><p>&lt;, &gt;, ⇐, &gt;= or nothing (which implies equal to) — and — , an integer. Examples:, &gt;=1024, or, 22</p></td>
 <td style="text-align: center;"><p>NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Port exposure method</p></td>
 <td style="text-align: left;"><p>Exposure method of the service, for example, load balancer or node port.</p></td>
 <td style="text-align: left;"><p>Port Exposure Method</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>Route LoadBalancer NodePort HostPort Exposure type is not set</p></td>
+<td style="text-align: left;"><p>One of: Route, LoadBalancer, NodePort, HostPort, Exposure type is not set,</p></td>
 <td style="text-align: center;"><p>NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Ingress network policy</p></td>
@@ -870,8 +745,7 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Has Ingress Network Policy</p></td>
 <td style="text-align: left;"><p>Boolean</p></td>
 <td style="text-align: center;"><p>Regex, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Egress network policy</p></td>
@@ -879,133 +753,33 @@ AND, OR</p></td>
 <td style="text-align: left;"><p>Has Egress Network Policy</p></td>
 <td style="text-align: left;"><p>Boolean</p></td>
 <td style="text-align: center;"><p>Regex, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
+<td style="text-align: left;"><p><strong>Deploy</strong>, <strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
 </tr>
 </tbody>
 </table>
 
 Access control  
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>Attribute</strong></th>
-<th style="text-align: left;"><strong>Description</strong></th>
-<th style="text-align: left;"><strong>JSON Attribute</strong></th>
-<th style="text-align: left;"><strong>Allowed Values</strong></th>
-<th style="text-align: center;"><strong>Regex</strong>, <strong>NOT</strong>, <strong>AND, OR</strong></th>
-<th style="text-align: left;"><strong>Phase</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Service account</p></td>
-<td style="text-align: left;"><p>The name of the service account.</p></td>
-<td style="text-align: left;"><p>Service Account</p></td>
-<td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Automount service account token</p></td>
-<td style="text-align: left;"><p>Check if the deployment configuration automatically mounts the service account token.</p></td>
-<td style="text-align: left;"><p>Automount Service Account Token</p></td>
-<td style="text-align: left;"><p>Boolean</p></td>
-<td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Minimum RBAC permissions</p></td>
-<td style="text-align: left;"><p>Match if the deployment’s Kubernetes service account has Kubernetes RBAC permission level equal to <code>=</code> or greater than <code>&gt;</code> the specified level.</p></td>
-<td style="text-align: left;"><p>Minimum RBAC Permissions</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>DEFAULT ELEVATED_IN_NAMESPACE ELEVATED_CLUSTER_WIDE CLUSTER_ADMIN</p></td>
-<td style="text-align: center;"><p>NOT</p></td>
-<td style="text-align: left;"><p><strong>Deploy</strong>,<br />
-<strong>Runtime</strong> (when used with a Runtime criterion)</p></td>
-</tr>
-</tbody>
-</table>
+| **Attribute** | **Description** | **JSON Attribute** | **Allowed Values** | **Regex**, **NOT**, **AND, OR** | **Phase** |
+|----|----|----|----|----|----|
+| Service account | The name of the service account. | Service Account | String | Regex, NOT, AND, OR | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Automount service account token | Check if the deployment configuration automatically mounts the service account token. | Automount Service Account Token | Boolean | ✕ | **Deploy**, **Runtime** (when used with a Runtime criterion) |
+| Minimum RBAC permissions | Match if the deployment’s Kubernetes service account has Kubernetes RBAC permission level equal to `=` or greater than `>` the specified level. | Minimum RBAC Permissions | One of: DEFAULT, ELEVATED_IN_NAMESPACE, ELEVATED_CLUSTER_WIDE, CLUSTER_ADMIN | NOT | **Deploy**, **Runtime** (when used with a Runtime criterion) |
 
 <a id="reference-workload-activity-criteria_security-policy-reference"></a>
 
 ## Workload activity criteria
 
+Workload activity criteria allow you to create policies based on process activity, baseline deviations, user-issued container commands, and file activity.
+
 Process activity  
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>Attribute</strong></th>
-<th style="text-align: left;"><strong>Description</strong></th>
-<th style="text-align: left;"><strong>JSON Attribute</strong></th>
-<th style="text-align: left;"><strong>Allowed Values</strong></th>
-<th style="text-align: center;"><strong>Regex</strong>, <strong>NOT</strong>, <strong>AND, OR</strong></th>
-<th style="text-align: left;"><strong>Phase</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Process name</p></td>
-<td style="text-align: left;"><p>Name of the process executed in a deployment.</p></td>
-<td style="text-align: left;"><p>Process Name</p></td>
-<td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Process</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Process ancestor</p></td>
-<td style="text-align: left;"><p>Name of any parent process for a process executed in a deployment.</p></td>
-<td style="text-align: left;"><p>Process Ancestor</p></td>
-<td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Process</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Process arguments</p></td>
-<td style="text-align: left;"><p>Command arguments for a process executed in a deployment.</p></td>
-<td style="text-align: left;"><p>Process Arguments</p></td>
-<td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Process</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Process UID</p></td>
-<td style="text-align: left;"><p>Unix user ID for a process executed in a deployment.</p></td>
-<td style="text-align: left;"><p>Process UID</p></td>
-<td style="text-align: left;"><p>Integer</p></td>
-<td style="text-align: center;"><p>NOT, AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Process</p></td>
-</tr>
-</tbody>
-</table>
+| **Attribute** | **Description** | **JSON Attribute** | **Allowed Values** | **Regex**, **NOT**, **AND, OR** | **Phase** |
+|----|----|----|----|----|----|
+| Process name | Name of the process executed in a deployment. | Process Name | String | Regex, NOT, AND, OR | **Runtime** ONLY - Process |
+| Process ancestor | Name of any parent process for a process executed in a deployment. | Process Ancestor | String | Regex, NOT, AND, OR | **Runtime** ONLY - Process |
+| Process arguments | Command arguments for a process executed in a deployment. | Process Arguments | String | Regex, NOT, AND, OR | **Runtime** ONLY - Process |
+| Process user identifier | UNIX user identifier for a process executed in a deployment. | Process user identifier | Integer | NOT, AND, OR | **Runtime** ONLY - Process |
 
 Baseline deviation  
 
@@ -1016,296 +790,70 @@ Baseline deviation
 
 User issued container commands  
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>Attribute</strong></th>
-<th style="text-align: left;"><strong>Description</strong></th>
-<th style="text-align: left;"><strong>JSON Attribute</strong></th>
-<th style="text-align: left;"><strong>Allowed Values</strong></th>
-<th style="text-align: center;"><strong>Regex</strong>, <strong>NOT</strong>, <strong>AND, OR</strong></th>
-<th style="text-align: left;"><strong>Phase</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Kubernetes action</p></td>
-<td style="text-align: left;"><p>The name of the Kubernetes action, such as <code>Pod Exec</code>.</p></td>
-<td style="text-align: left;"><p>Kubernetes Resource</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>PODS_ATTACH PODS_EXEC PODS_PORTFORWARD</p></td>
-<td style="text-align: center;"><p>! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Kubernetes Events</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Kubernetes API verb</p></td>
-<td style="text-align: left;"><p>Do not use; not valid for runtime policies.</p></td>
-<td style="text-align: left;"><p>Kubernetes API Verb</p></td>
-<td style="text-align: left;"><p>N/A</p></td>
-<td style="text-align: center;"><p>N/A</p></td>
-<td style="text-align: left;"><p>N/A</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Kubernetes user name</p></td>
-<td style="text-align: left;"><p>The name of the user who accessed the resource.</p></td>
-<td style="text-align: left;"><p>Kubernetes User Name</p></td>
-<td style="text-align: left;"><p>Alphanumeric with hyphens (-) and colon (:) only</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Kubernetes Events</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Kubernetes user group</p></td>
-<td style="text-align: left;"><p>The name of the group to which the user who accessed the resource belongs to.</p></td>
-<td style="text-align: left;"><p>Kubernetes User Groups</p></td>
-<td style="text-align: left;"><p>Alphanumeric with hyphens (-) and colon (:) only</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Kubernetes Events</p></td>
-</tr>
-</tbody>
-</table>
+| **Attribute** | **Description** | **JSON Attribute** | **Allowed Values** | **Regex**, **NOT**, **AND, OR** | **Phase** |
+|----|----|----|----|----|----|
+| Kubernetes action | The name of the Kubernetes action, such as `Pod Exec`. | Kubernetes Resource | One of: PODS_ATTACH, PODS_EXEC, PODS_PORTFORWARD, | ! `OR` only | **Runtime** ONLY - Kubernetes Events |
+| Kubernetes API verb | Do not use; not valid for runtime policies. | Kubernetes API Verb | N/A | N/A | N/A |
+| Kubernetes user name | The name of the user who accessed the resource. | Kubernetes User Name | Alphanumeric with hyphens (-) and colon (:) only | Regex, NOT, ! `OR` only | **Runtime** ONLY - Kubernetes Events |
+| Kubernetes user group | The name of the group to which the user who accessed the resource belongs to. | Kubernetes User Groups | Alphanumeric with hyphens (-) and colon (:) only | Regex, NOT, ! `OR` only | **Runtime** ONLY - Kubernetes Events |
 
 File activity  
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>Attribute</strong></th>
-<th style="text-align: left;"><strong>Description</strong></th>
-<th style="text-align: left;"><strong>JSON Attribute</strong></th>
-<th style="text-align: left;"><strong>Allowed Values</strong></th>
-<th style="text-align: center;"><strong>Regex</strong>, <strong>NOT</strong>, <strong>AND, OR</strong></th>
-<th style="text-align: left;"><strong>Phase</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Effective path</p></td>
-<td style="text-align: left;"><p>The file path as it appears to the process inside the container.</p></td>
-<td style="text-align: left;"><p>Effective Path</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>/etc/passwd /etc/ssh/sshd_config /etc/shadow /etc/sudoers</p></td>
-<td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong></p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Actual path</p></td>
-<td style="text-align: left;"><p>The physical location of the file on the file system of the node.</p></td>
-<td style="text-align: left;"><p>Actual Path</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>/etc/passwd /etc/ssh/sshd_config /etc/shadow /etc/sudoers</p></td>
-<td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong></p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>File operation</p></td>
-<td style="text-align: left;"><p>The specific action performed on the file, such as creating, deleting, or modifying permissions and ownership. When using the File operation criteria, you must specify at least one value for either Effective path or Actual path.</p></td>
-<td style="text-align: left;"><p>File Operation</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>Open (Writable) Create Delete Permission change Ownership change</p></td>
-<td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong></p></td>
-</tr>
-</tbody>
-</table>
+| **Attribute** | **Description** | **JSON Attribute** | **Allowed Values** | **Regex**, **NOT**, **AND, OR** | **Phase** |
+|----|----|----|----|----|----|
+| Effective path | The file path as it appears to the process inside the container. | Effective Path | One of: /etc/passwd, /etc/ssh/sshd_config, /etc/shadow, /etc/sudoers, | AND, OR | **Runtime** |
+| Actual path | The physical location of the file on the file system of the node. | Actual Path | One of: /etc/passwd, /etc/ssh/sshd_config, /etc/shadow, /etc/sudoers, | AND, OR | **Runtime** |
+| File operation | The specific action performed on the file, such as creating, deleting, or modifying permissions and ownership. When using the File operation criteria, you must specify at least one value for either Effective path or Actual path. | File Operation | One of: Open (Writable), Create, Delete, Permission change, Ownership change, | AND, OR | **Runtime** |
 
 <a id="kube-resource-operations_security-policy-reference"></a>
 
 ## Audit log: Kubernetes resource operations
 
-You can also use cluster and namespace label scoping; see "Configuring policy resources" for more information.
+Audit log criteria allow you to create policies based on Kubernetes resource operations tracked in the audit log.
 
 Resource operation (Required)  
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>Attribute</strong></th>
-<th style="text-align: left;"><strong>Description</strong></th>
-<th style="text-align: left;"><strong>JSON Attribute</strong></th>
-<th style="text-align: left;"><strong>Allowed Values</strong></th>
-<th style="text-align: center;"><strong>Regex</strong>, <strong>NOT</strong>, <strong>AND, OR</strong></th>
-<th style="text-align: left;"><strong>Phase</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Kubernetes API verb</p></td>
-<td style="text-align: left;"><p>The Kubernetes API verb that is used to access the resource, such as <code>GET</code> or <code>POST</code>.</p></td>
-<td style="text-align: left;"><p>Kubernetes API Verb</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>CREATE DELETE GET PATCH UPDATE</p></td>
-<td style="text-align: center;"><p>! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Audit Log</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Kubernetes resource type</p></td>
-<td style="text-align: left;"><p>Type of the accessed Kubernetes resource.</p></td>
-<td style="text-align: left;"><p>Kubernetes Resource</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>CONFIGMAPS SECRETS CLUSTERROLES CLUSTERROLEBINDINGS NETWORKPOLICIES SECURITYCONTEXTCONSTRAINTS EGRESSFIREWALLS</p></td>
-<td style="text-align: center;"><p>! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Audit Log</p></td>
-</tr>
-</tbody>
-</table>
+| **Attribute** | **Description** | **JSON Attribute** | **Allowed Values** | **Regex**, **NOT**, **AND, OR** | **Phase** |
+|----|----|----|----|----|----|
+| Kubernetes API verb | The Kubernetes API verb that is used to access the resource, such as `GET` or `POST`. | Kubernetes API Verb | One of: CREATE, DELETE, GET, PATCH, UPDATE, | ! `OR` only | **Runtime** ONLY - Audit Log |
+| Kubernetes resource type | Type of the accessed Kubernetes resource. | Kubernetes Resource | One of: CONFIGMAPS, SECRETS, CLUSTERROLES, CLUSTERROLEBINDINGS, NETWORKPOLICIES, SECURITYCONTEXTCONSTRAINTS, EGRESSFIREWALLS | ! `OR` only | **Runtime** ONLY - Audit Log |
 
 Resource attributes  
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>Attribute</strong></th>
-<th style="text-align: left;"><strong>Description</strong></th>
-<th style="text-align: left;"><strong>JSON Attribute</strong></th>
-<th style="text-align: left;"><strong>Allowed Values</strong></th>
-<th style="text-align: center;"><strong>Regex</strong>, <strong>NOT</strong>, <strong>AND, OR</strong></th>
-<th style="text-align: left;"><strong>Phase</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Kubernetes resource name</p></td>
-<td style="text-align: left;"><p>The name of the accessed Kubernetes resource.</p></td>
-<td style="text-align: left;"><p>Kubernetes Resource Name</p></td>
-<td style="text-align: left;"><p>Alphanumeric with hyphens (-) and colon (:) only</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Audit Log</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Kubernetes user name</p></td>
-<td style="text-align: left;"><p>The name of the user who accessed the resource.</p></td>
-<td style="text-align: left;"><p>Kubernetes User Name</p></td>
-<td style="text-align: left;"><p>Alphanumeric with hyphens (-) and colon (:) only</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Kubernetes Events</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Kubernetes user groups</p></td>
-<td style="text-align: left;"><p>The name of the group to which the user who accessed the resource belongs to.</p></td>
-<td style="text-align: left;"><p>Kubernetes User Groups</p></td>
-<td style="text-align: left;"><p>Alphanumeric with hyphens (-) and colon (:) only</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Kubernetes Events</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>User agent</p></td>
-<td style="text-align: left;"><p>The user agent that the user used to access the resource. For example <code>oc</code>, or <code>kubectl</code>.</p></td>
-<td style="text-align: left;"><p>User Agent</p></td>
-<td style="text-align: left;"><p>String</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Audit Log</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Source IP address</p></td>
-<td style="text-align: left;"><p>The IP address from which the user accessed the resource.</p></td>
-<td style="text-align: left;"><p>Source IP Address</p></td>
-<td style="text-align: left;"><p>IPV4 or IPV6 address</p></td>
-<td style="text-align: center;"><p>Regex,<br />
-NOT,<br />
-! <code>OR</code> only</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Audit Log</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Is impersonated user</p></td>
-<td style="text-align: left;"><p>Check if the request was made by a user that is impersonated by a service account or some other account.</p></td>
-<td style="text-align: left;"><p>Is Impersonated User</p></td>
-<td style="text-align: left;"><p>Boolean</p></td>
-<td style="text-align: center;"><p>✕</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong> ONLY - Audit Log</p></td>
-</tr>
-</tbody>
-</table>
+| **Attribute** | **Description** | **JSON Attribute** | **Allowed Values** | **Regex**, **NOT**, **AND, OR** | **Phase** |
+|----|----|----|----|----|----|
+| Kubernetes resource name | The name of the accessed Kubernetes resource. | Kubernetes Resource Name | Alphanumeric with hyphens (-) and colon (:) only | Regex, NOT, ! `OR` only | **Runtime** ONLY - Audit Log |
+| Kubernetes user name | The name of the user who accessed the resource. | Kubernetes User Name | Alphanumeric with hyphens (-) and colon (:) only | Regex, NOT, ! `OR` only | **Runtime** ONLY - Kubernetes Events |
+| Kubernetes user groups | The name of the group to which the user who accessed the resource belongs to. | Kubernetes User Groups | Alphanumeric with hyphens (-) and colon (:) only | Regex, NOT, ! `OR` only | **Runtime** ONLY - Kubernetes Events |
+| User agent | The user agent that the user used to access the resource. For example `oc`, or `kubectl`. | User Agent | String | Regex, NOT, ! `OR` only | **Runtime** ONLY - Audit Log |
+| Source IP address | The IP address from which the user accessed the resource. | Source IP Address | IPv4 or IPv6 address | Regex, NOT, ! `OR` only | **Runtime** ONLY - Audit Log |
+| Is impersonated user | Check if the request was made by a user that is impersonated by a service account or some other account. | Is Impersonated User | Boolean | ✕ | **Runtime** ONLY - Audit Log |
 
 <a id="node-activity-criteria_security-policy-reference"></a>
 
 ## Node activity criteria
 
+Node activity criteria allow you to create policies based on file activity on the node.
+
 File activity  
 
-<table style="width:100%;">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;"><strong>Attribute</strong></th>
-<th style="text-align: left;"><strong>Description</strong></th>
-<th style="text-align: left;"><strong>JSON Attribute</strong></th>
-<th style="text-align: left;"><strong>Allowed Values</strong></th>
-<th style="text-align: center;"><strong>Regex</strong>, <strong>NOT</strong>, <strong>AND, OR</strong></th>
-<th style="text-align: left;"><strong>Phase</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Actual path</p></td>
-<td style="text-align: left;"><p>The physical location of the file on the file system of the node or the underlying mount.</p></td>
-<td style="text-align: left;"><p>Actual Path</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>/etc/passwd /etc/ssh/sshd_config /etc/shadow /etc/sudoers</p></td>
-<td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong></p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>File operation</p></td>
-<td style="text-align: left;"><p>The specific action performed on the file, such as creating, deleting, or modifying permissions and ownership. When using the File operation criteria, you must specify at least one value for the Actual path.</p></td>
-<td style="text-align: left;"><p>File Operation</p></td>
-<td style="text-align: left;"><p>One of:</p>
-<p>Open (Writable) Create Delete Permission change Ownership change</p></td>
-<td style="text-align: center;"><p>AND, OR</p></td>
-<td style="text-align: left;"><p><strong>Runtime</strong></p></td>
-</tr>
-</tbody>
-</table>
+| **Attribute** | **Description** | **JSON Attribute** | **Allowed Values** | **Regex**, **NOT**, **AND, OR** | **Phase** |
+|----|----|----|----|----|----|
+| Actual path | The physical location of the file on the file system of the node or the underlying mount. | Actual Path | One of: /etc/passwd, /etc/ssh/sshd_config, /etc/shadow, /etc/sudoers, | AND, OR | **Runtime** |
+| File operation | The specific action performed on the file, such as creating, deleting, or modifying permissions and ownership. When using the File operation criteria, you must specify at least one value for the Actual path. | File Operation | One of: Open (Writable), Create, Delete, Permission change, Ownership change, | AND, OR | **Runtime** |
+
+<a id="default-security-policies_security-policy-reference"></a>
+
+# Default security policies
+
+The default security policies in Red Hat Advanced Cluster Security for Kubernetes provide broad coverage to identify security issues and ensure best practices for security in your environment. When you configure those policies, you can automatically prevent high-risk service deployments in your environment and respond to runtime security incidents.
+
+> [!NOTE]
+> The severity levels for policies in Red Hat Advanced Cluster Security for Kubernetes are different from the severity levels that Red Hat Product Security assigns.
+>
+> The Red Hat Advanced Cluster Security for Kubernetes policy severity levels are Critical, High, Medium, and Low. Red Hat Product Security rates vulnerability severity levels as Critical, Important, Moderate, and Low.
+>
+> While a policy’s severity level and the Red Hat Product Security severity levels can interact, it is important to distinguish between them. For more information about the Red Hat Product Security severity levels, see "Severity Ratings".
 
 <div>
 
@@ -1315,22 +863,9 @@ Additional resources
 
 </div>
 
-- [Configuring policy rules](custom-security-policies.md#configure-policy-rules_custom-security-policies)
+- [Severity Ratings](https://access.redhat.com/security/updates/classification)
 
 </div>
-
-<a id="default-security-policies_security-policy-reference"></a>
-
-# Default security policies
-
-The default security policies in Red Hat Advanced Cluster Security for Kubernetes provide broad coverage to identify security issues and ensure best practices for security in your environment. By configuring those policies, you can automatically prevent high-risk service deployments in your environment and respond to runtime security incidents.
-
-> [!NOTE]
-> The severity levels for policies in Red Hat Advanced Cluster Security for Kubernetes are different from the severity levels that Red Hat Product Security assigns.
->
-> The Red Hat Advanced Cluster Security for Kubernetes policy severity levels are Critical, High, Medium, and Low. Red Hat Product Security rates vulnerability severity levels as Critical, Important, Moderate, and Low.
->
-> While a policy’s severity level and the Red Hat Product Security severity levels can interact, it is important to distinguish between them. For more information about the Red Hat Product Security severity levels, see [Severity Ratings](https://access.redhat.com/security/updates/classification).
 
 <a id="critical-sev-security-policies_security-policy-reference"></a>
 
@@ -1390,14 +925,14 @@ The following table lists the default security policies in Red Hat Advanced Clus
 </tr>
 <tr>
 <td style="text-align: left;"><p>Build or Deploy</p></td>
-<td style="text-align: left;"><p>Secure Shell (ssh) Port Exposed in Image</p></td>
+<td style="text-align: left;"><p>Secure Shell (SSH) Port Exposed in Image</p></td>
 <td style="text-align: left;"><p>Alerts when deployments expose port 22, which is commonly reserved for SSH access.</p></td>
 <td style="text-align: left;"><p>Enabled</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Build or Deploy</p></td>
 <td style="text-align: left;"><p>Red Hat Images must be signed by the Red Hat Release Key</p></td>
-<td style="text-align: left;"><p>Alerts when a Red Hat image is not signed by the official <a href="https://access.redhat.com/security/team/key">Red Hat product signing key, "Release Key 3"</a>. These alerts apply to images from the following registries and remotes:</p>
+<td style="text-align: left;"><p>Alerts when a Red Hat image is not signed by the official Red Hat product signing key, "Release Key 3". These alerts apply to images from the following registries and remotes:</p>
 <ul>
 <li><p><code>registry.redhat.io</code></p></li>
 <li><p><code>registry.access.redhat.com</code></p></li>
@@ -1438,7 +973,7 @@ The following table lists the default security policies in Red Hat Advanced Clus
 </tr>
 <tr>
 <td style="text-align: left;"><p>Deploy</p></td>
-<td style="text-align: left;"><p>Secure Shell (ssh) Port Exposed</p></td>
+<td style="text-align: left;"><p>Secure Shell (SSH) Port Exposed</p></td>
 <td style="text-align: left;"><p>Alerts when deployments expose port 22, which is commonly reserved for SSH access.</p></td>
 <td style="text-align: left;"><p>Enabled</p></td>
 </tr>
@@ -1571,6 +1106,18 @@ The following table lists the default security policies in Red Hat Advanced Clus
 </tbody>
 </table>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat product signing key](https://access.redhat.com/security/team/key)
+
+</div>
+
 <a id="medium-sev-security-policies_security-policy-reference"></a>
 
 ## Medium severity security policies
@@ -1582,29 +1129,28 @@ The following table lists the default security policies in Red Hat Advanced Clus
 | Build | Docker CIS 4.4: Ensure images are scanned and rebuilt to include security patches | Alerts when images are not scanned and rebuilt to include security patches. It is important to scan images often to find vulnerabilities, rebuild the images to include security patches, and then instantiate containers for the images. | Disabled |
 | Deploy | 30-Day Scan Age | Alerts when a deployment has not been scanned in 30 days. | Enabled |
 | Deploy | CAP_SYS_ADMIN capability added | Alerts when a deployment includes containers that are escalating with CAP_SYS_ADMIN. | Enabled |
-| Deploy | Container using read-write root filesystem | Alerts when a deployment includes containers that have read-write root file systems. | Disabled |
+| Deploy | Container using read/write root filesystem | Alerts when a deployment includes containers that have read/write root file systems. | Disabled |
 | Deploy | Container with privilege escalation allowed | Alerts when a container might be running with unintended privileges, creating a security risk. This situation can happen when a container process that has more privileges than its parent process allows the container to run with unintended privileges. | Enabled |
-| Deploy | Deployments should have at least one Ingress Network Policy | Alerts if deployments are missing an Ingress Network Policy. | Disabled |
-| Deploy | Deployments with externally exposed endpoints | Detects if a deployment has any service that is externally exposed through any methods. Deployments with services exposed outside of the cluster are at a higher risk of attempted intrusions because they are reachable outside of the cluster. This policy provides an alert so that you can verify that service exposure outside of the cluster is required. If the service is only needed for intra-cluster communication, use service type ClusterIP. | Disabled |
-| Deploy | Docker CIS 5.1: Ensure that, if applicable, an AppArmor profile is enabled | Uses AppArmor to protect the Linux operating system and applications by enforcing a security policy that is known as an AppArmor profile. AppArmor is a Linux application security system that is available on some Linux distributions by default, such as Debian and Ubuntu. | Enabled |
-| Deploy | Docker CIS 5.15: Ensure that the host’s process namespace is not shared | Creates process-level isolation between the containers and the host. The Process ID (PID) namespace isolates the process ID space, which means that processes in different PID namespaces can have the same PID. | Enabled |
-| Deploy | Docker CIS 5.16: Ensure that the host’s IPC namespace is not shared | Alerts when the IPC namespace on the host is shared with containers. The IPC (POSIX/SysV IPC) namespace separates named shared memory segments, semaphores, and message queues. | Enabled |
-| Deploy | Docker CIS 5.19: Ensure mount propagation mode is not enabled | Alerts when mount propagation mode is enabled. When mount propagation mode is enabled, you can mount container volumes in Bidirectional, Host to Container, and None modes. Do not use Bidirectional mount propagation mode unless it is explicitly needed. | Enabled |
-| Deploy | Docker CIS 5.21: Ensure the default seccomp profile is not disabled | Alerts when the seccomp profile is disabled. The seccomp profile uses an allowlist to permit common system calls and blocks all others. | Disabled |
-| Deploy | Docker CIS 5.7: Ensure privileged ports are not mapped within containers | Alerts when privileged ports are mapped within containers. The TCP/IP port numbers that are lower than 1024 are privileged ports. Normal users and processes can not use them for security reasons, but containers might map their ports to privileged ports. | Enabled |
-| Deploy | Docker CIS 5.9 and 5.20: Ensure that the host’s network namespace is not shared | Alerts when the host’s network namespace is shared. When HostNetwork is enabled, the container is not placed inside a separate network stack, and the container’s networking is not containerized. As a result, the container has full access to the host’s network interfaces, and a shared UTS namespace is enabled. The UTS namespace provides isolation between the hostname and the NIS domain name, and it sets the hostname and the domain, which are visible to running processes in that namespace. Processes that run within containers do not typically require to know the hostname or the domain name, so the UTS namespace should not be shared with the host. | Enabled |
-| Deploy | Images with no scans | Alerts when a deployment includes images that were not scanned. | Disabled |
-| Runtime | Kubernetes Actions: Port Forward to Pod | Alerts when the Kubernetes API receives a port forward request. | Enabled |
-| Deploy | Mount Container Runtime Socket | Alerts when a deployment has a volume mount on the container runtime socket. | Enabled |
-| Deploy | Mounting Sensitive Host Directories | Alerts when a deployment mounts sensitive host directories. | Enabled |
-| Deploy | No resource requests or limits specified | Alerts when a deployment includes containers that do not have resource requests and limits. | Enabled |
-| Deploy | Pod Service Account Token Automatically Mounted | Protects pod default service account tokens from being compromised by minimizing the mounting of the default service account token to only those pods whose applications require interaction with the Kubernetes API. | Enabled |
-| Deploy | Privileged Container | Alerts when a deployment includes containers that run in privileged mode. | Enabled |
-| Runtime | crontab Execution | Detects the usage of the crontab scheduled jobs editor. | Enabled |
-| Runtime | Netcat Execution Detected | Detects when netcat runs in a container. | Enabled |
-| Runtime | OpenShift: Advanced Cluster Security Central Admin Secret Accessed | Alerts when someone accesses the Red Hat Advanced Cluster Security Central secret. | Enabled |
-| Runtime | OpenShift: Kubernetes Secret Accessed by an Impersonated User | Alerts when someone impersonates a user to access a secret in the cluster. | Enabled |
-| Runtime | Remote File Copy Binary Execution | Alerts when a deployment runs a remote file copy tool. | Enabled |
+| Deploy | Deployments should have at least one Ingress Network Policy | Alerts if deployments lack an Ingress Network Policy. | Disabled |
+| Deploy | Deployments with externally exposed endpoints | Detects if a deployment has any service that is externally exposed through any methods. Deployments with services exposed outside of the cluster are at a higher risk of attempted intrusions because they are reachable outside of the cluster. This policy provides an alert so that you can verify that service exposure outside of the cluster is required. If the service is only needed for intra-cluster communication, use service type ClusterIP. | Disabled Deploy |
+| Docker CIS 5.1: Ensure that, if applicable, an AppArmor profile is enabled | Uses AppArmor to protect the Linux operating system and applications by enforcing a security policy that is known as an AppArmor profile. AppArmor is a Linux application security system that is available on some Linux distributions by default, such as Debian and Ubuntu. | Enabled | Deploy |
+| Docker CIS 5.15: Ensure that the host’s process namespace is not shared | Creates process-level isolation between the containers and the host. The Process ID (PID) namespace isolates the process ID space, which means that processes in different PID namespaces can have the same PID. | Enabled | Deploy |
+| Docker CIS 5.16: Ensure that the host’s IPC namespace is not shared | Alerts when the IPC namespace on the host is shared with containers. The IPC (POSIX/SysV IPC) namespace separates named shared memory segments, semaphores, and message queues. | Enabled | Deploy |
+| Docker CIS 5.19: Ensure mount propagation mode is not enabled | Alerts when mount propagation mode is enabled. When mount propagation mode is enabled, you can mount container volumes in Bidirectional, Host to Container, and None modes. Do not use Bidirectional mount propagation mode unless it is explicitly needed. | Enabled | Deploy |
+| Docker CIS 5.21: Ensure the default seccomp profile is not disabled | Alerts when the seccomp profile is disabled. The seccomp profile uses an allowlist to permit common system calls and blocks all others. | Disabled | Deploy |
+| Docker CIS 5.7: Ensure privileged ports are not mapped within containers | Alerts when privileged ports are mapped within containers. The TCP/IP port numbers that are lower than 1024 are privileged ports. Normal users and processes can not use them for security reasons, but containers might map their ports to privileged ports. | Enabled | Deploy |
+| Docker CIS 5.9 and 5.20: Ensure that the host’s network namespace is not shared | Alerts when the host’s network namespace is shared. When HostNetwork is enabled, the container is not placed inside a separate network stack, and the container’s networking is not containerized. As a result, the container has full access to the host’s network interfaces, and a shared UTS namespace is enabled. The UTS namespace provides isolation between the hostname and the NIS domain name, and it sets the hostname and the domain, which are visible to running processes in that namespace. Processes that run within containers do not typically require to know the hostname or the domain name, so the UTS namespace should not be shared with the host. | Enabled | Deploy |
+| Images with no scans | Alerts when a deployment includes images that were not scanned. | Disabled | Runtime |
+| Kubernetes Actions: Port Forward to Pod | Alerts when the Kubernetes API receives a port forward request. | Enabled | Deploy |
+| Mount Container Runtime Socket | Alerts when a deployment has a volume mount on the container runtime socket. | Enabled | Deploy |
+| Mounting Sensitive Host Directories | Alerts when a deployment mounts sensitive host directories. | Enabled | Deploy |
+| No resource requests or limits specified | Alerts when a deployment includes containers that do not have resource requests and limits. | Enabled | Deploy |
+| Pod Service Account Token Automatically Mounted | Protects pod default service account tokens from being compromised by minimizing the mounting of the default service account token to only those pods whose applications require interaction with the Kubernetes API. | Enabled | Deploy |
+| Privileged Container | Alerts when a deployment includes containers that run in privileged mode. | Enabled | Runtime |
+| crontab Execution | Detects the usage of the crontab scheduled jobs editor. | Enabled | Runtime |
+| Netcat Execution Detected | Detects when netcat runs in a container. | Enabled | Runtime |
+| OpenShift: Advanced Cluster Security Central Admin Secret Accessed | Alerts when someone accesses the Red Hat Advanced Cluster Security Central secret. | Enabled | Runtime |
+| OpenShift: Kubernetes Secret Accessed by an Impersonated User | Alerts when someone impersonates a user to access a secret in the cluster. | Enabled | Runtime |
 
 Medium severity security policies
 
@@ -1625,7 +1171,7 @@ The following table lists the default security policies in Red Hat Advanced Clus
 | Build or Deploy | Insecure specified in CMD | Alerts when a deployment uses 'insecure' in the command. | Enabled |
 | Build or Deploy | Latest tag | Alerts when a deployment includes images that use the 'latest' tag. | Enabled |
 | Build or Deploy | Red Hat Package Manager in Image | Alerts when a deployment includes components of the Red Hat, Fedora, or CentOS package management system. | Enabled |
-| Build or Deploy | Required Image Label | Alerts when a deployment includes images that are missing the specified label. | Disabled |
+| Build or Deploy | Required Image Label | Alerts when a deployment includes images that lack the specified label. | Disabled |
 | Build or Deploy | Ubuntu Package Manager Execution | Detects the usage of the Ubuntu package management system. | Enabled |
 | Build or Deploy | Ubuntu Package Manager in Image | Alerts when a deployment includes components of the Debian or Ubuntu package management system in the image. | Enabled |
 | Build or Deploy | Wget in Image | Alerts when a deployment includes wget. | Disabled |

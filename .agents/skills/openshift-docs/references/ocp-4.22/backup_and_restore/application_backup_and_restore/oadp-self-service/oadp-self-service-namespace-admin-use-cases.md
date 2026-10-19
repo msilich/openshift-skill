@@ -2,7 +2,7 @@
 
 Use OADP Self-Service as a namespace administrator to create backup storage locations, perform backup and restore operations, and review operation logs for your authorized namespaces. This helps you to manage data protection independently without cluster admin access.
 
-# Creating a NonAdminBackupStorageLocation CR
+# Create a NonAdminBackupStorageLocation CR
 
 Create a `NonAdminBackupStorageLocation` (NABSL) custom resource (CR) to define backup storage locations in your authorized namespace. With this feature, you can store backups in a cloud storage that meets your application requirements.
 
@@ -241,7 +241,7 @@ Verification
 
 </div>
 
-# Creating a NonAdminBackup CR
+# Create a NonAdminBackup CR
 
 Create a `NonAdminBackup` (NAB) custom resource (CR) to back up application resources in your authorized namespace. This helps you to protect your application data and configuration without requiring cluster administrator privileges.
 
@@ -470,7 +470,7 @@ Verification
 
 </div>
 
-# Deleting a NonAdminBackup CR
+# Delete a NonAdminBackup CR
 
 As a namespace admin user, you can delete a `NonAdminBackup` (NAB) custom resource (CR).
 
@@ -567,7 +567,7 @@ Verification
 
 </div>
 
-# Creating a NonAdminRestore CR
+# Create a NonAdminRestore CR
 
 Create a `NonAdminRestore` (NAR) custom resource (CR) to restore application resources from a backup to your authorized namespace. This provides an ability to recover your application data and configuration without requiring cluster administrator privileges.
 
@@ -762,7 +762,7 @@ You can download the following NADR resources:
 
 NADR resources
 
-# Reviewing NAB and NAR logs
+# Review NAB and NAR logs
 
 Create a `NonAdminDownloadRequest` (NADR) custom resource (CR) to access and review detailed logs for `NonAdminBackup` (NAB) and `NonAdminRestore` (NAR) operations. This helps you troubleshoot backup and restore issues independently.
 

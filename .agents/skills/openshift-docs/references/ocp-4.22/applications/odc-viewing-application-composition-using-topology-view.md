@@ -12,9 +12,11 @@ To view your applications in the **Topology** view and interact with them, ensur
 
 - You are in [the **Developer** perspective](../web_console/web-console-overview.md#about-developer-perspective_web-console-overview).
 
-# Viewing the topology of your application
+# View the topology of your application
 
-You can navigate to the **Topology** view using the left navigation panel in the **Developer** perspective. After you deploy an application, you are directed automatically to the **Graph view** where you can see the status of the application pods, quickly access the application on a public URL, access the source code to modify it, and see the status of your last build. You can zoom in and out to see more details for a particular application.
+You can navigate to the **Topology** view in the **Developer** perspective to see the status of application pods, access the application on a public URL, access the source code, and see the status of your last build.
+
+After you deploy an application, the **Graph view** opens automatically. You can zoom in and out to see more details for a particular application.
 
 The **Topology** view provides you the option to monitor your applications using the **List** view. Use the **List view** icon (![odc list view icon](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAcCAYAAACZOmSXAAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAAAtdEVYdENyZWF0aW9uIFRpbWUAVGh1IDIxIEphbiAyMDIxIDAxOjQ4OjQ4IEFNIElTVAE9eqAAAAE5SURBVEiJ7ZUxS8NAFIC/ikNu7LklcWq7iU6Ki4j/xEFwVxApgoPgICK4+AcEQRAEQREXEYda8w/aZrPdvG6NWxw0wdgEc6U2Q/JNl3fDl3v33r2S7/s+GTGVlbiQ51M+HRfc3t3D8z4AmJGSg/06AIOBR7fX05YYhsGsbaWTB2KAd6XC9ePTM7f3D9pygLPT46GYVtqFMEYSJxF7cinLKNUHwLbMML68tIhtDafvL5J+upTbFy427Y2mg+p/p900WZifm5z8/OIy8h1UaqvtcjdCtQsh2NxYTydPot1xaXVcbXkSWvJatUKtWtGWaFV7o+lEWu2/7rxotQiHRye8db8GiG2Z1He2gAkNlkD8e/3y6nB1faMthzEMlp/TbhzEnlwIIxRJWQ7ja6srkb20JLVnfqu9kGfCJ8S+bfeio8mRAAAAAElFTkSuQmCC)) to see a list of all your applications and use the **Graph view** icon (![odc topology view icon](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAiCAYAAAA+stv/AAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAAAtdEVYdENyZWF0aW9uIFRpbWUAVGh1IDIxIEphbiAyMDIxIDAxOjQ5OjAzIEFNIElTVMA16DoAAALmSURBVFiF7ZZNSBRhGMd/Rod95+bMbXc97a4XXb2kKfRlBzGEoigSQTEKTPBghw4VRGBU9KWQoAdBUBJFYTEyzMCyoLbVi2mXHdeLO3ub8TbjbTrETNjujrulePF/2tn3efb9Pc88//fdEtu2bQ5QRw5y80OAQ4BDAICjhQQl1RRC+CgLBnaNNU0LLZMBIBIO/T/A0PAIP1Z/AtBw+iRXLl3IG6vrBv0DQ+iGAUAw4KenuwtJEnlzPF+Brhvu5gAfF794wk7FZhDCx/PHvfTev4tpWczOzXvmeHZAUWSE8GFZ2wDIcqnnj1nWNtXRSiRJIEmC6mglaS3jmbPrELa3thAM+ImEQ3Re7/CMVeRS4ollNtMaSTVFPLFM+S5zUFLMZTQ0PIIkJBpOn0BNbaDIpQT9fhRFxjQt+gcGd1TsQHvNQFEAC58+Mx17k/V9XW0NaU1DNwx6uruwrO2CXVOQDeG3vWbnPuRciyeWALhz+1ZBm/4TwHRsBsuyAGhuaqSu9pg75Y5T0lqmaICCT8KV1TUAqqIVNJ9rRFFkyoIBbt645rrDidkXAMeKZYHsChVZ3hGzLwCO/va1aVoYxhYAQvj2BkDXDaZjMywsfsE0LYaGR9y1ldU1Zufm0XWDzbTG2Pike/Sq6xsk1VRRADlt+OjpS7fS5qZGIuEQQvjoHxjM2+ZgwI8QAnU95bphM60hCYGiyHkBcrrAqcj53BxpBKCnu4vp2BvU9Z1VVkUraG9tQZIESTWFIsuMvp4gnlgG4PLF85w9c6rwDnz7vsTY+CSyXErn9Y4saznrba1XKQ+HsircTGs8ftbnPgshePGkt/AO1B+vof54Tc4EAEkIN85r/Q9A/uEs2gVJNcVUbIaqaAV9rwZzxiiKTFvrVYTwuV3MK7tIvX333v4aT9i2bdv3HjwsNj1LBR/FjiLhEKPjE2iZTFar/0VF3YaOdN1AN7YIBvyeV+2+AeylDvxv+SHAgQP8AkRGmvLp8ZIbAAAAAElFTkSuQmCC)) to switch back to the graph view.
 
@@ -44,7 +46,7 @@ You can customize the views as required using the following:
 
 The **Topology** view also provides you the **Export application** option to download your application in the ZIP file format. You can then import the downloaded application to another project or cluster. For more details, see *Exporting an application to another project or cluster* in the *Additional resources* section.
 
-# Interacting with applications and components
+# Interact with applications and components
 
 In the **Topology** view in the **Developer** perspective of the web console, the **Graph view** provides the following options to interact with applications and components:
 
@@ -103,7 +105,7 @@ In the **Topology** view in the **Developer** perspective of the web console, th
     > [!NOTE]
     > Serverless applications take some time to load and display on the **Graph view**. When you deploy a serverless application, it first creates a service resource and then a revision. After that, it is deployed and displayed on the **Graph view**. If it is the only workload, you might be redirected to the **Add** page. After the revision is deployed, the serverless application is displayed on the **Graph view**.
 
-# Scaling application pods and checking builds and routes
+# Scale application pods and check builds and routes
 
 The **Topology** view provides the details of the deployed components in the **Overview** panel. You can use the **Overview** and **Details** tabs to scale the application pods, check build status, services, and routes as follows:
 

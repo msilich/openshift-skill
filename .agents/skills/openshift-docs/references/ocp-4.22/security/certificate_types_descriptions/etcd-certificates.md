@@ -22,7 +22,7 @@ etcd certificates are used for encrypted communication between etcd member peers
 
 - Metric certificates: All metric consumers connect to the proxy with metric-client certificates.
 
-# Rotating the etcd certificate
+# Rotate the etcd certificate
 
 You can manually rotate the etcd certificate before its automatic, scheduled rotation by backing up and deleting the current signer certificate.
 
@@ -64,7 +64,7 @@ Verification
 
 </div>
 
-# Removing an unused certificate authority from the bundle
+# Remove an unused certificate authority from the bundle
 
 After a manual etcd or metrics signer rotation, delete the `etcd-ca-bundle` or `etcd-metrics-ca-bundl` as appropriate. When the cluster reconciles, unused certificate authority (CA) keys are removed. This ensures that components only trust the current signer.
 

@@ -2,7 +2,7 @@
 
 Before you install OpenShift Container Platform, decide what kind of installation process to follow and verify that you have all of the required resources to prepare the cluster for users.
 
-# Selecting a cluster installation type
+# Select a cluster installation type
 
 Decide what kind of installation process to follow based on your infrastructure, experience, and security requirements.
 
@@ -89,7 +89,7 @@ You can also configure the cluster machines to use the RHEL cryptographic librar
 > [!IMPORTANT]
 > When running Red Hat Enterprise Linux (RHEL) or Red Hat Enterprise Linux CoreOS (RHCOS) booted in FIPS mode, OpenShift Container Platform core components use the RHEL cryptographic libraries that have been submitted to NIST for FIPS 140-2/140-3 Validation on only the x86_64, ppc64le, and s390x architectures.
 
-# Preparing your cluster for users after installation
+# Prepare your cluster for users after installation
 
 Configure a production cluster for users before they access it.
 
@@ -103,7 +103,7 @@ For a production cluster, you must configure the following integrations:
 
 - [Monitoring core OpenShift Container Platform components](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/getting_started/core-platform-monitoring-first-steps)
 
-# Preparing your cluster for workloads
+# Prepare your cluster for workloads
 
 Take extra steps to prepare your cluster before deploying applications, depending on your workload needs.
 

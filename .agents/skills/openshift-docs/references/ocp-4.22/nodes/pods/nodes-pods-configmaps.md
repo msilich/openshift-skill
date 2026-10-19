@@ -2,7 +2,7 @@
 
 You can review the following sections to learn how to create and use config maps. By using a config map, you can decouple environment-specific configuration from your container images, so that your applications are easily portable.
 
-# Understanding config maps
+# Understand config maps
 
 You can review the following sections to learn how to use config maps to make configuration values available to your pods separately from application code.
 
@@ -111,7 +111,7 @@ Procedure
 
 </div>
 
-# Creating a config map by using the CLI
+# Create a config map by using the CLI
 
 To provide configuration data to your pods, you can use the OpenShift CLI (`oc`) to create a config map from directories, specific files, or literal values.
 
@@ -546,7 +546,7 @@ Verification
 
 </div>
 
-## Populating environment variables in containers by using config maps
+## Populate environment variables in containers by using config maps
 
 You can use config maps to populate individual environment variables in containers or to populate environment variables in containers from all keys that form valid environment variable names.
 
@@ -683,7 +683,7 @@ Procedure
 
 </div>
 
-## Setting command-line arguments for container commands with config maps
+## Set command-line arguments for container commands with config maps
 
 You can use config maps to set the value of the commands or arguments in a container by using the Kubernetes substitution syntax `$(VAR_NAME)`.
 
@@ -763,7 +763,7 @@ Procedure
 
 </div>
 
-## Injecting content into a volume by using config maps
+## Inject content into a volume by using config maps
 
 You can use config maps to inject content into a volume.
 

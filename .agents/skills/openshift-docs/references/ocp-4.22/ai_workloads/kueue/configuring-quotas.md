@@ -14,7 +14,9 @@ Users can then submit their workloads to the local queue.
 
 # Configuring a cluster queue
 
-A cluster queue is a cluster-scoped resource, represented by a `ClusterQueue` object, that governs a pool of resources such as CPU, memory, and pods. Cluster queues can be used to define usage limits, quotas for resource flavors, order of consumption, and fair sharing rules.
+A cluster queue is a cluster-scoped resource, represented by a `ClusterQueue` object, that governs a pool of resources such as CPU, memory, and pods.
+
+Cluster queues can be used to define usage limits, quotas for resource flavors, order of consumption, and fair sharing rules.
 
 > [!NOTE]
 > The cluster queue is not ready for use until a `ResourceFlavor` object has also been configured.

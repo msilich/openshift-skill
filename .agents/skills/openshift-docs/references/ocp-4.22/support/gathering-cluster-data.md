@@ -20,7 +20,7 @@ Alternatively, you can collect specific information by running the command with 
 
   ``` terminal
   $ oc adm must-gather \
-    --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.22.6
+    --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.22.9
   ```
 
 - To collect the audit logs, use the `-- /usr/bin/gather_audit_logs` argument, as described in a following section.
@@ -61,7 +61,7 @@ For example:
 
 ``` terminal
 $ oc adm must-gather --run-namespace <namespace> \
-  --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.22.6
+  --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.22.9
 ```
 
 ## Gathering data about your cluster for Red Hat Support
@@ -221,7 +221,7 @@ You can gather debugging information about specific features by using the `oc ad
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><p><code>registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.22.6</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.22.9</code></p></td>
 <td style="text-align: left;"><p>Data collection for OpenShift Virtualization.</p></td>
 </tr>
 <tr>
@@ -341,7 +341,7 @@ Procedure
     ``` terminal
     $ oc adm must-gather \
       --image-stream=openshift/must-gather \
-      --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.22.6
+      --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.22.9
     ```
 
     You can use the `must-gather` tool with additional arguments to gather data that is specifically related to OpenShift Logging and the Red Hat OpenShift Logging Operator in your cluster. For OpenShift Logging, run the following command:
@@ -1430,7 +1430,9 @@ Procedure
 
 # About sosreport
 
-`sosreport` is a tool that collects configuration details, system information, and diagnostic data from Red Hat Enterprise Linux (RHEL) and Red Hat Enterprise Linux CoreOS (RHCOS) systems. `sosreport` provides a standardized way to collect diagnostic information relating to a node, which can then be provided to Red Hat Support for issue diagnosis.
+`sosreport` is a tool that collects configuration details, system information, and diagnostic data from Red Hat Enterprise Linux (RHEL) and Red Hat Enterprise Linux CoreOS (RHCOS) systems.
+
+`sosreport` provides a standardized way to collect diagnostic information relating to a node, which can then be provided to Red Hat Support for issue diagnosis.
 
 In some support interactions, Red Hat Support may ask you to collect a `sosreport` archive for a specific OpenShift Container Platform node. For example, it might sometimes be necessary to review system logs or other node-specific data that is not included within the output of `oc adm must-gather`.
 

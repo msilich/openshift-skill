@@ -4,7 +4,7 @@ Restore Red Hat 3scale API Management components by restoring the backed up 3sc
 
 After the data has been restored, you can scale up the 3scale operator and deployment.
 
-# Restoring the 3scale API Management operator, secrets, and APIManager
+# Restore the 3scale API Management operator, secrets, and APIManager
 
 Restore the Red Hat 3scale API Management operator resources, including the `Secret` and APIManager custom resources (CRs). This helps you to recover your 3scale operator configuration on the same or a different cluster.
 
@@ -226,7 +226,7 @@ Procedure
 
 </div>
 
-# Restoring a MySQL database
+# Restore a MySQL database
 
 Restore a MySQL database by scaling down Red Hat 3scale API Management components and creating a Velero `Restore` custom resource (CR). This helps you to recover your 3scale MySQL data, persistent volumes, and associated resources.
 
@@ -479,7 +479,7 @@ Verification
 
 </div>
 
-# Restoring the back-end Redis database
+# Restore the back-end Redis database
 
 Restore the back-end Redis database by creating a `Restore` custom resource (CR) that excludes non-essential cluster resources. This helps you to recover the Redis data store as part of the Red Hat 3scale API Management restoration process.
 
@@ -589,7 +589,7 @@ Verification
 
 </div>
 
-# Scaling up the 3scale API Management operator and deployment
+# Scale up the 3scale API Management operator and deployment
 
 Scale up the Red Hat 3scale API Management operator and any deployment that was manually scaled down during the restore process. This helps you to bring your 3scale installation back to a fully functional state matching the backed-up configuration.
 

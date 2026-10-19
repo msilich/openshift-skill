@@ -49,7 +49,7 @@ For example, by default OpenShift Dev Spaces creates and manages a non-global DW
 
 <figure>
 <br />
-<img src="assets/1538d0aade64b782c5a6.png" alt="DevWorkspace config attribute example" /><br />
+<img src="assets/9fb56acab3f17665fe62.png" alt="DevWorkspace config attribute example" /><br />
 
 <figcaption>Figure 1. Example of Dev Workspace configuration attribute</figcaption>
 </figure>

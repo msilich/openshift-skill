@@ -2,7 +2,7 @@
 
 Perform diagnostic actions to troubleshoot common issues related to the Network Observability Operator and its components.
 
-# Using the must-gather tool
+# Use the must-gather tool
 
 Use the must-gather tool to collect diagnostic information about Network Observability Operator resources, including pod logs and configuration details, to assist in troubleshooting cluster issues.
 
@@ -26,7 +26,7 @@ Procedure
 
 </div>
 
-# Configuring network traffic menu entry in the OpenShift Container Platform console
+# Configure network traffic menu entry in the OpenShift Container Platform console
 
 Restore a missing network traffic menu entry in the **Observe** menu of the OpenShift Container Platform console by manually registering the console plugin in the `FlowCollector` resource and the console operator configuration.
 
@@ -240,7 +240,10 @@ Procedure
 
     </div>
 
-    - Specifies the network interfaces.
+    where:
+
+    `spec.agent.ebpf.interfaces`
+    Specifies the network interfaces.
 
 </div>
 
@@ -294,13 +297,17 @@ Procedure
       startingCSV: <network_observability_operator_latest_version>
     ```
 
-    - For example, you can increase the memory limit to `800Mi`.
+    where:
 
-    - This value should not be edited, but note that it changes depending on the most current release of the Operator.
+    `spec.config.resources.limits.memory`
+    Specifies the memory limit. For example, you can increase the memory limit to `800Mi`.
+
+    `spec.startingCSV`
+    Specifies the starting CSV. This value should not be edited, but note that it changes depending on the most current release of the Operator.
 
 </div>
 
-# Running custom queries to Loki
+# Run custom queries to Loki
 
 Troubleshoot network flow data by running custom Loki queries to retrieve available labels or filter logs by specific criteria, such as source namespaces, using the command-line interface.
 
@@ -355,7 +362,7 @@ Additional resources
 
 </div>
 
-# Troubleshooting Loki ResourceExhausted error
+# Troubleshoot Loki ResourceExhausted error
 
 Resolve Loki `ResourceExhausted` errors by adjusting the `batchSize` in the `FlowCollector` resource or the maximum message size settings in your Loki configuration to ensure flow data stays within memory limits.
 
@@ -438,9 +445,13 @@ Procedure
       managementState: Managed
     ```
 
-    - The default value for `perStreamRateLimit` is `3`.
+    where:
 
-    - The default value for `perStreamRateLimitBurst` is `15`.
+    `spec.limits.global.ingestion.perStreamRateLimit`
+    Specifies the ingestion rate limit. The default value is `3`.
+
+    `spec.limits.global.ingestion.perStreamRateLimitBurst`
+    Specifies the ingestion rate limit burst. The default value is `15`.
 
 4.  Click **Save**.
 
@@ -476,9 +487,15 @@ If the data that you need isn’t available as a Prometheus metric, you can use 
 Configure Loki to improve the query performance
 If the problem persists, you can consider configuring Loki to improve the query performance. Some options depend on the installation mode you used for Loki, such as using the Operator and `LokiStack`, or `Monolithic` mode, or `Microservices` mode.
 
-- In `LokiStack` or `Microservices` modes, try [increasing the number of querier replicas](https://loki-operator.dev/docs/api.md/#loki-grafana-com-v1-LokiComponentSpec).
+- In `LokiStack` or `Microservices` modes, try increasing the number of querier replicas. For more information, see "LokiComponentSpec".
 
-- Increase the [query timeout](https://loki-operator.dev/docs/api.md/#loki-grafana-com-v1-QueryLimitSpec). You must also increase the Network Observability read timeout to Loki in the `FlowCollector` `spec.loki.readTimeout`.
+- Increase the query timeout. You must also increase the Network Observability read timeout to Loki in the `FlowCollector` `spec.loki.readTimeout`. For more information, see "QueryLimitSpec".
+
+## Additional resources
+
+- [LokiComponentSpec](https://loki-operator.dev/docs/api.md/#loki-grafana-com-v1-LokiComponentSpec)
+
+- [QueryLimitSpec](https://loki-operator.dev/docs/api.md/#loki-grafana-com-v1-QueryLimitSpec)
 
 <div>
 

@@ -6,7 +6,7 @@ A *node selector* specifies a map of key-value pairs. The rules are defined usin
 
 If you are using node affinity and node selectors in the same pod configuration, see the important considerations below.
 
-# Using node selectors to control pod placement
+# Use node selectors to control pod placement
 
 You can use node selectors on pods and labels on nodes to control where the pod is scheduled. With node selectors, OpenShift Container Platform schedules the pods on nodes that contain matching labels.
 

@@ -165,7 +165,7 @@ The scheduler uses the value of `node.Status.Allocatable` instead of `node.Statu
 
 By default, the node will report its machine capacity as fully schedulable by the cluster.
 
-# Understanding process ID limits
+# Process ID limits
 
 You can review the following information to learn how to limit the number of processes running on your nodes. Configuring an appropriate number of processes can help keep the nodes in your cluster running efficiently.
 
@@ -377,6 +377,6 @@ Verification
 
 # Additional resources
 
-- [Creating a KubeletConfig CR to edit kubelet parameters](../../machine_configuration/machine-configs-custom.md#create-a-kubeletconfig-crd-to-edit-kubelet-parameters_machine-configs-custom)
+- [Create a KubeletConfig CR to edit kubelet parameters](../../machine_configuration/machine-configs-custom.md#create-a-kubeletconfig-crd-to-edit-kubelet-parameters_machine-configs-custom)
 
 - [Node metrics data (Kubernetes documentation)](https://kubernetes.io/docs/reference/instrumentation/node-metrics/)

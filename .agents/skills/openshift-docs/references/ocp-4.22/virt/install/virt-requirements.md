@@ -42,6 +42,22 @@ Storage requirements for OpenShift Virtualization
 
 - If the storage provisioner supports snapshots, you must associate a `VolumeSnapshotClass` object with the default storage class.
 
+## Storage I/O latency requirements for Windows virtual machines
+
+Windows guest operating systems require consistently low storage I/O latency to remain stable. If the latency of the underlying storage exceeds the following thresholds, Windows VMs can become unstable or crash.
+
+| Storage I/O latency | Impact |
+|----|----|
+| Less than 15 ms | Healthy. Storage performance is within the expected range for stable VM operation. |
+| 15 ms to less than 100 ms | Unhealthy. Exceeding this threshold can eventually lead to workload instability and crashes. |
+| 100 ms to less than 1,000 ms | Windows crashes are highly likely to occur. |
+| 1,000 ms or more | Windows crashes are almost certain to occur. |
+
+Storage I/O latency thresholds for Windows VMs
+
+> [!NOTE]
+> If storage I/O latency exceeds 100 ms multiple times a day, prioritize identifying the root cause of the latency. Troubleshooting the affected workload is a secondary concern until you resolve the underlying latency issue.
+
 ## About volume and access modes for virtual machine disks
 
 If you use the storage API with known storage providers, the volume and access modes are selected automatically. However, if you use a storage class that does not have a storage profile, you must configure the volume and access mode.

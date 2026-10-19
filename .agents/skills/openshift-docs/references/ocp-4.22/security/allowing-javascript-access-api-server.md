@@ -2,7 +2,7 @@
 
 By default, the cluster restricts API server requests to the web console for security. Because the default configuration only permits the web console, you must update the API Server configuration of the cluster to approve additional hostnames for API and OAuth access.
 
-# Allowing JavaScript-based access to the API server from additional hosts
+# Allow JavaScript-based access to the API server from additional hosts
 
 If you need to access the API server or OAuth server from a JavaScript application by using a different hostname, you can configure additional hostnames to allow.
 

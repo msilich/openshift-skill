@@ -54,7 +54,7 @@ Any node that runs any other container, pod, or component is a worker node that 
 
 For information about infrastructure nodes and which components can run on infrastructure nodes, see the "Red Hat OpenShift control plane and infrastructure nodes" section in the OpenShift sizing and subscription guide for enterprise Kubernetes document.
 
-## Creating an infrastructure node
+## Create an infrastructure node
 
 To reduce subscription costs, you can use labels to configure compute nodes as infrastructure nodes, where you can move infrastructure resources.
 

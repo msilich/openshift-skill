@@ -49,7 +49,3 @@ Procedure
   ```
 
 </div>
-
-# Additional resources
-
-- [Improve east-west performance by routing pods on the underlay with BGP](no-overlay-mode-bgp-routing.md#no-overlay-mode-bgp-routing)

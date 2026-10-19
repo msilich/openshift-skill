@@ -4,6 +4,9 @@ You can use the Cloud-native Network Functions (CNF) tests image to run latency 
 
 The `cnf-tests` container image is available at `registry.redhat.io/openshift4/cnf-tests-rhel9:v4.22`.
 
+> [!NOTE]
+> The `cnf-tests-rhel9` image is a multi-architecture image that supports both `x86_64` (amd64) and `aarch64` (arm64) nodes. The image pull path is the same for all architectures because the container runtime automatically resolves the correct architecture manifest.
+
 # Prerequisites for running latency tests
 
 Your cluster must meet the following requirements before you can run the latency tests:
@@ -38,6 +41,9 @@ Verifies the real-time kernel scheduler latency after `hwlatdetect` passes valid
 
 oslat
 Behaves similarly to a CPU-intensive DPDK application and measures all the interruptions and disruptions to the busy loop that simulates CPU heavy data processing.
+
+> [!NOTE]
+> The `cnf-tests` image supports both `x86_64` and `aarch64` architectures. On `aarch64` nodes, RAN distributed unit (DU) systems run the non-real-time (non-RT) 64k page-size kernel because the real-time (`PREEMPT_RT`) kernel is available only on `x86_64`. Because `cyclictest` targets the real-time kernel scheduler, latency measurements from `cyclictest` on `aarch64` nodes that run the non-RT kernel are non-deterministic. On these nodes, use `hwlatdetect` and `oslat` for platform verification, and adjust the latency threshold parameters, such as `MAXIMUM_LATENCY`, to account for the expected variance.
 
 The tests introduce the following environment variables:
 
@@ -97,7 +103,7 @@ The tests introduce the following environment variables:
 > [!NOTE]
 > Variables that are specific to a latency tool take precedence over unified variables. For example, if `OSLAT_MAXIMUM_LATENCY` is set to 30 microseconds and `MAXIMUM_LATENCY` is set to 10 microseconds, the `oslat` test will run with maximum acceptable latency of 30 microseconds.
 
-# Running the latency tests
+# Run the latency tests
 
 Run the cluster latency tests to validate node tuning for your Cloud-native Network Functions (CNF) workload.
 
@@ -158,7 +164,7 @@ Procedure
 
 </div>
 
-## Running hwlatdetect
+## Run hwlatdetect
 
 To measure hardware latency, run the `hwlatdetect` tool. This diagnostic utility is available in the `rt-kernel` package through your Red Hat Enterprise Linux (RHEL) 9.x subscription.
 
@@ -372,9 +378,12 @@ Additional resources
 
 </div>
 
-## Running cyclictest
+## Run cyclictest
 
 To measure real-time kernel scheduler latency on specified CPUs, run the `cyclictest` tool. Evaluating these metrics helps you identify execution delays and optimize your system for high-performance operations.
+
+> [!NOTE]
+> The `cyclictest` tool targets the real-time (`PREEMPT_RT`) kernel, which is available only on `x86_64` nodes. On `aarch64` nodes that run the non-real-time (non-RT) 64k page-size kernel, `cyclictest` latency measurements are non-deterministic. On these nodes, use `hwlatdetect` and `oslat` for platform verification, and adjust the latency threshold parameters, such as `MAXIMUM_LATENCY` or `CYCLICTEST_MAXIMUM_LATENCY`, to account for the expected variance.
 
 > [!NOTE]
 > When executing `podman` commands as a non-root or non-privileged user, mounting paths can fail with `permission denied` errors. Depending on your local operating system and SELinux configuration, you might also experience issues running these commands from your home directory. To make the `podman` commands work, run the commands from a folder that is not your home/\<username\> directory, and append `:Z` to the volumes creation. For example, `-v $(pwd)/:/kubeconfig:Z`. This allows `podman` to do the proper SELinux relabeling.
@@ -538,7 +547,7 @@ More histogram entries ...
 
 </div>
 
-## Running oslat
+## Run oslat
 
 To evaluate how your cluster handles CPU-heavy data processing, run the `oslat` test. This diagnostic tool simulates a CPU-intensive DPDK application to measure system interruptions and performance disruptions.
 
@@ -624,7 +633,7 @@ Procedure
 
 </div>
 
-# Generating a latency test failure report
+# Generate a latency test failure report
 
 To analyze test failures and troubleshoot performance issues, generate a JUnit latency test output and test failure report. Reviewing this diagnostic data helps you pinpoint exactly where your system is experiencing delays.
 
@@ -662,7 +671,7 @@ Procedure
 
 </div>
 
-# Generating a JUnit latency test report
+# Generate a JUnit latency test report
 
 To analyze system performance and track execution delays, generate a JUnit latency test report. Reviewing this diagnostic output helps you identify configuration issues and performance bottlenecks within your cluster.
 
@@ -706,7 +715,7 @@ Procedure
 
 </div>
 
-# Running latency tests on a single-node OpenShift cluster
+# Run latency tests on a single-node OpenShift cluster
 
 To validate node tuning and identify performance delays, run latency tests on your single-node OpenShift clusters. Evaluating these metrics ensures your environment is optimized for high-performance workloads.
 
@@ -956,7 +965,7 @@ Procedure
 
 </div>
 
-# Troubleshooting errors with the cnf-tests container
+# Troubleshoot errors with the cnf-tests container
 
 To troubleshoot errors when running latency tests, verify that your cluster is accessible from within the `cnf-tests` container. Ensuring this connectivity resolves common test execution failures.
 

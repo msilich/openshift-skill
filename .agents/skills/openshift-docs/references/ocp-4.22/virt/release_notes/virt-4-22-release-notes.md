@@ -140,6 +140,11 @@ The `HotplugVolume` feature gate, which allows you to add storage without restar
 
 [CNV-73301](https://issues.redhat.com/browse/CNV-73301)
 
+The Fusion Access for SAN Operator is deprecated
+The Fusion Access for SAN Operator is deprecated and will be removed in a future release. For new deployments, configure IBM Fusion Access for SAN in Fusion Data Foundation as an external system.
+
+For more information, see [Deploying IBM Fusion Access for SAN](https://www.ibm.com/docs/en/fusion-software/2.13.x?topic=san-deploying-fusion-access).
+
 # Removed features
 
 Removed features are no longer supported in OpenShift Virtualization.
@@ -218,6 +223,15 @@ Before this update, migrating a virtual machine (VM) invalidated any service acc
 
 Some linked Jira tickets are accessible only with Red Hat credentials.
 
+Detaching a disk from a virtual machine does not remove the owner reference from the data volume
+When you detach a disk from a virtual machine (VM), the `DataVolume` object retains a stale owner reference to the original VM. If you then delete the original VM, garbage collection deletes the `DataVolume` object and its underlying persistent volume claim (PVC), even if the disk is attached to a different VM. As a consequence, data loss can occur.
+
+To work around this problem, after detaching a disk from a VM, manually remove the `ownerReference` entry from the `DataVolume` object before deleting the original VM. As a result, the disk is not deleted when the original VM is removed.
+
+[CNV-71659](https://redhat.atlassian.net/browse/CNV-71659)
+
+<!-- -->
+
 Non-versioned HyperConverged commands default to v1 API
 In this release, the v1 API for the `HyperConverged` custom resource (CR) is introduced, in preparation for a future migration from v1beta1 to v1. Due to the way Kubernetes selects default API versions, non-versioned commands such as `oc get hco`, `oc edit hyperconverged`, and `oc patch hyperconverged` now default to the v1 API. As a consequence, these commands can behave unexpectedly or fail because the v1 API is not yet ready for production use.
 
@@ -289,3 +303,14 @@ Self-service Technical Supportability Review
 You can use the self-service Technical Supportability Review (TSR) on the Red Hat Customer Portal to validate your cluster configuration against Red Hat common practices. The self-service TSR uses AI to evaluate your cluster’s `must-gather` data and provides a prioritized executive summary that identifies your cluster’s top risks and recommends corrective actions. The TSR performs hundreds of checks across the OpenShift Container Platform platform, including OpenShift Virtualization, and coverage is continually expanding.
 
 For more information, see [Technical Supportability Review with AI tool](https://access.redhat.com/support/cases/#/analyze) and [Red Hat Technical Supportability Review with AI: Proactive AI-Driven Cluster Assessments for OpenShift Container Platform](https://access.redhat.com/solutions/7141255).
+
+## OpenShift Virtualization 4.22.9 updates
+
+OpenShift Virtualization 4.22.9 is now available with updates to packages and images that fix several bugs and add enhancements.
+
+### New features and enhancements
+
+Boot source image support for heterogeneous clusters is generally available
+Boot source image support for heterogeneous clusters is now generally available. After you enable the `enableMultiArchBootImageImport` feature gate, OpenShift Virtualization creates architecture-specific boot sources for each supported architecture, such as `rhel9-amd64` and `rhel9-arm64`. You can also specify the architecture for standalone data volumes and virtual machines. For more information, see [Heterogeneous cluster support](../storage/virt-boot-source-image-heterogeneous-clusters.md#virt-boot-source-image-heterogeneous-clusters).
+
+[CNV-68646](https://redhat.atlassian.net/browse/CNV-68646)

@@ -36,7 +36,7 @@ To configure this authentication method, complete the following tasks:
 
 - Deploy customer workloads that authenticate with GCP Workload Identity.
 
-## Creating a federated Google Cloud service account
+## Create a federated Google Cloud service account
 
 You can use the Google Cloud console to create a workload identity pool and provider and allow an OpenShift Container Platform service account to impersonate a Google Cloud service account.
 
@@ -72,7 +72,7 @@ Procedure
 
 </div>
 
-## Creating an OpenShift Container Platform service account for Google Cloud
+## Create an OpenShift Container Platform service account for Google Cloud
 
 You create an OpenShift Container Platform service account and annotate it to impersonate a Google Cloud service account.
 
@@ -205,7 +205,7 @@ Verification
 
 </div>
 
-## Deploying customer workloads that authenticate with GCP Workload Identity
+## Deploy customer workloads that authenticate with GCP Workload Identity
 
 To use short-term authentication in your application, you must configure its related pods to use the OpenShift Container Platform service account. Use of the OpenShift Container Platform service account triggers the webhook to mutate the pods so they can impersonate the Google Cloud service account.
 

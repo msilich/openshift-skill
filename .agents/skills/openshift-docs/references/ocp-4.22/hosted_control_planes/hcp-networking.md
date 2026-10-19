@@ -273,7 +273,7 @@ If you use `NodePort` or `LoadBalancer` service publishing instead of `Route` se
 
 # Ingress and egress requirements for hosted control planes
 
-Specific network ports must be open for communication between the management cluster, the hosted control planes components, and the compute nodes. The ports are categorized into ingress ports, which involve incoming traffic to hosted control planes and egress ports, which involve outgoing traffic from hosted control planes.
+Open network ports to enable communication between the management cluster, hosted control planes components, and compute nodes. Categorize them into ingress ports for incoming traffic to hosted control planes and egress ports for outgoing traffic from hosted control planes.
 
 ## Ingress requirements for hosted control planes
 
@@ -936,7 +936,7 @@ The stub resembles the following example:
 
 ## Compute nodes that need to access the API server
 
-For communication with the control plane, hosted control planes uses a local proxy in every compute node that listens on IP address 172.20.0.1 and forwards traffic to the API server. If an external proxy is required to access the API server, that local proxy needs to use the external proxy to send traffic out.
+For control plane communications, hosted control planes uses a local proxy on each compute node that listens on 172.20.0.1 and forwards traffic to the API server. If accessing the API server requires an external proxy, the local proxy forwards traffic through it.
 
 When a proxy is not needed, hosted control planes uses `haproxy` for the local proxy, which only forwards packets via TCP. When a proxy is needed, hosted control planes uses a custom proxy, `control-plane-operator-kubernetes-default-proxy`, to send traffic through the external proxy.
 

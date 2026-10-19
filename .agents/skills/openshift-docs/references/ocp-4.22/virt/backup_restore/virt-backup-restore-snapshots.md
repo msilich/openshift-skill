@@ -66,6 +66,9 @@ On a Linux VM, freeze and thaw processes trigger automatically when a snapshot i
 
 The same cycle of freezing and thawing is available on a Windows VM. Applications register with the Volume Shadow Copy Service (VSS) to receive notifications that they should flush out their data because a backup or snapshot is imminent. Thawing of the applications after the backup or snapshot is complete returns them to an active state. For more details, see the Windows Server documentation about the Volume Shadow Copy Service.
 
+> [!IMPORTANT]
+> Immediately after a Windows VM starts, the QEMU GA and VSS might not yet be fully responsive, and CPU usage might not yet have stabilized. Starting a backup or snapshot before CPU usage is idle and the guest agent reports as ready can cause the freeze or thaw hook to exceed its timeout and fail.
+
 # Creating a snapshot by using the web console
 
 You can create a snapshot of a virtual machine (VM) by using the OpenShift Container Platform web console.
@@ -131,7 +134,7 @@ Prerequisites
 - Ensure the `Snapshot` feature gate is enabled for the `kubevirt` CR by using the following command:
 
   ``` terminal
-  $ oc get kubevirt kubevirt-hyperconverged -n openshift-cnv -o yaml
+  $ oc get kubevirt kubevirt-kubevirt-hyperconverged -n openshift-cnv -o yaml
   ```
 
   Truncated output:

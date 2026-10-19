@@ -18,7 +18,7 @@ The following requirements apply to hosted control planes:
 
 # Support matrix for hosted control planes
 
-Because multicluster engine for Kubernetes Operator includes the HyperShift Operator, releases of hosted control planes align with releases of multicluster engine Operator. The support matrix includes details about supported clusters, platforms, and architectures, as well as information about updates and technology preview features.
+ecause multicluster engine for Kubernetes Operator includes the HyperShift Operator, hosted control planes releases align with multicluster engine Operator. The support matrix covers supported clusters, platforms, architectures, updates, and technology preview features.
 
 For more information, see "OpenShift Operator Life Cycles".
 
@@ -152,9 +152,9 @@ For a list of features in this release that have a Technology Preview status, se
 
 # FIPS-enabled hosted clusters
 
-The binaries for hosted control planes are FIPs-compliant, with the exception of the hosted control planes command-line interface, `hcp`.
+The binaries for hosted control planes are FIPS-compliant, with the exception of the hosted control planes command-line interface, `hcp`.
 
-If you want to deploy a FIPS-enabled hosted cluster, you must use a FIPS-enabled management cluster. To enable FIPS mode for your management cluster, you must run the installation program from a Red Hat Enterprise Linux (RHEL) computer configured to operate in FIPS mode. For more information about configuring FIPS mode on RHEL, see [Switching RHEL to FIPS mode](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/security_hardening/switching-rhel-to-fips-mode_security-hardening).
+If you want to deploy a FIPS-enabled hosted cluster, you must use a FIPS-enabled management cluster. To enable FIPS mode for your management cluster, you must run the installation program from a Red Hat Enterprise Linux (RHEL) computer configured to operate in FIPS mode. For more information, see "Switching RHEL to FIPS mode."
 
 When running RHEL or Red Hat Enterprise Linux CoreOS (RHCOS) booted in FIPS mode, OpenShift Container Platform core components use the RHEL cryptographic libraries that have been submitted to NIST for FIPS 140-2/140-3 Validation on only the x86_64, ppc64le, and s390x architectures.
 
@@ -167,6 +167,8 @@ After you set up your management cluster in FIPS mode, the hosted cluster creati
 Additional resources
 
 </div>
+
+- [Switching RHEL to FIPS mode](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/security_hardening/switching-rhel-to-fips-mode_security-hardening)
 
 - [The multicluster engine for Kubernetes operator 2.17 Support Matrix](https://access.redhat.com/articles/7142379)
 

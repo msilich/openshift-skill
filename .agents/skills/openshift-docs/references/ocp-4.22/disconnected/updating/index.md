@@ -42,7 +42,7 @@ Additional resources
 
 </div>
 
-# Uninstalling the OpenShift Update Service from a cluster
+# Uninstall the OpenShift Update Service from a cluster
 
 You can uninstall a local copy of the OpenShift Update Service (OSUS) from your OpenShift Container Platform cluster when you no longer need to manage updates locally:
 

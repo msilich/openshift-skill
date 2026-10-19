@@ -306,7 +306,7 @@ spec:
 
 </div>
 
-# Using node selectors to control pod placement
+# Use node selectors to control pod placement
 
 You can use node selectors on pods and labels on nodes to control where the pod is scheduled. With node selectors, OpenShift Container Platform schedules the pods on nodes that contain matching labels.
 
@@ -557,7 +557,7 @@ Procedure
 
 </div>
 
-# Creating default cluster-wide node selectors
+# Create default cluster-wide node selectors
 
 You can use default cluster-wide node selectors on pods together with labels on nodes to constrain all pods created in a cluster to specific nodes.
 
@@ -778,7 +778,7 @@ Procedure
 
 </div>
 
-# Creating project-wide node selectors
+# Create project-wide node selectors
 
 You can use node selectors in a project together with labels on nodes to constrain all pods created in that project to the labeled nodes.
 

@@ -319,7 +319,7 @@ metadata:
 
 </div>
 
-# Creating a horizontal pod autoscaler by using the web console
+# Create a horizontal pod autoscaler by using the web console
 
 You can use the web console to create a horizontal pod autoscaler (HPA) that specifies the minimum and maximum number of pods you want to run on a `Deployment` or `DeploymentConfig` object. You can also define the amount of CPU or memory usage that your pods should target.
 
@@ -352,7 +352,7 @@ Procedure
 
 </div>
 
-## Editing a horizontal pod autoscaler by using the web console
+## Edit a horizontal pod autoscaler by using the web console
 
 You can use the web console to modify a horizontal pod autoscaler (HPA) that specifies the minimum and maximum number of pods you want to run on a `Deployment` or `DeploymentConfig` object. You can also define the amount of CPU or memory usage that your pods should target.
 
@@ -375,7 +375,7 @@ Procedure
 
 </div>
 
-## Removing a horizontal pod autoscaler by using the web console
+## Remove a horizontal pod autoscaler by using the web console
 
 You can use the web console to remove a horizontal pod autoscaler (HPA).
 
@@ -397,13 +397,13 @@ Procedure
 
 # Creating a horizontal pod autoscaler by using the CLI
 
-By using the OpenShift Container Platform CLI, you can create a horizontal pod autoscaler (HPA) to automatically scale an existing `Deployment`, `DeploymentConfig`, `ReplicaSet`, `ReplicationController`, or `StatefulSet` object. The HPA scales the pods associated with that object to maintain the CPU or memory resources that you specify.
+You can create a horizontal pod autoscaler (HPA) to automatically scale an existing `Deployment`, `DeploymentConfig`, `ReplicaSet`, `ReplicationController`, or `StatefulSet` object to maintain specified CPU or memory usage.
 
 You can autoscale based on CPU or memory use by specifying a percentage of resource usage or a specific value, as described in the following sections.
 
 The HPA increases and decreases the number of replicas between the minimum and maximum numbers to maintain the specified resource use across all pods.
 
-## Creating a horizontal pod autoscaler for a percent of CPU use
+## Create a horizontal pod autoscaler for a percent of CPU use
 
 You can use the OpenShift Container Platform CLI to create a horizontal pod autoscaler (HPA) that automatically scales an existing object based on percent of CPU use. The HPA scales the pods associated with that object to maintain the CPU use that you specify.
 
@@ -537,9 +537,9 @@ Verification
 
 </div>
 
-## Creating a horizontal pod autoscaler for a specific CPU value
+## Create a horizontal pod autoscaler for a specific CPU value
 
-You can use the OpenShift Container Platform CLI to create a horizontal pod autoscaler (HPA) that automatically scales an existing object based on a specific CPU value by creating a `HorizontalPodAutoscaler` object with the target CPU and pod limits. The HPA scales the pods associated with that object to maintain the CPU use that you specify.
+You can create a `HorizontalPodAutoscaler` object with a target CPU value and pod limits to automatically scale an existing object. The HPA scales the pods associated with that object to maintain the CPU usage that you specify.
 
 > [!NOTE]
 > Use a `Deployment` object or `ReplicaSet` object unless you need a specific feature or behavior provided by other objects.
@@ -705,7 +705,7 @@ Verification
 
 </div>
 
-## Creating a horizontal pod autoscaler object for a percent of memory use
+## Create a horizontal pod autoscaler object for a percent of memory use
 
 You can use the OpenShift Container Platform CLI to create a horizontal pod autoscaler (HPA) that automatically scales an existing object based on a percent of memory use. The HPA scales the pods associated with that object to maintain the memory use that you specify.
 
@@ -949,7 +949,7 @@ Verification
 
 </div>
 
-## Creating a horizontal pod autoscaler object for specific memory use
+## Create a horizontal pod autoscaler object for specific memory use
 
 You can use the OpenShift Container Platform CLI to create a horizontal pod autoscaler (HPA) that automatically scales an existing object. The HPA scales the pods associated with that object to maintain the average memory use that you specify.
 
@@ -1320,7 +1320,7 @@ Conditions:
 
 </div>
 
-## Viewing horizontal pod autoscaler status conditions by using the CLI
+## View horizontal pod autoscaler status conditions by using the CLI
 
 You can view the status conditions set on a pod by the horizontal pod autoscaler (HPA).
 

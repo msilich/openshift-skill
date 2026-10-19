@@ -390,7 +390,7 @@ Verification
 
 </div>
 
-# Configuring the FlowCollector resource with Kafka
+# Configure the FlowCollector resource with Kafka
 
 Configure the `FlowCollector` resource to use Kafka for high-throughput and low-latency data feeds.
 
@@ -580,7 +580,7 @@ Additional resources
 
 </div>
 
-# Updating the FlowCollector resource
+# Update the FlowCollector resource
 
 As an alternative to using the web console, use the `oc patch` command with the `flowcollector` custom resource to quickly update specific specifications, such as eBPF sampling
 
@@ -628,39 +628,14 @@ Flowlogs-pipeline filters use a simple query language to filter network flow, as
 
 The query language uses the following syntax:
 
-<table>
-<caption>Query language syntax</caption>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 75%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Category</th>
-<th style="text-align: left;">Operators</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Logical boolean operators (not case-sensitive)</p></td>
-<td style="text-align: left;"><p><code>and</code>, <code>or</code></p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Comparison operators</p></td>
-<td style="text-align: left;"><p><code>=</code> (equals),</p>
-<p><code>!=</code> (not equals),</p>
-<p><code>=~</code> (matches regexp),</p>
-<p><code>!~</code> (not matches regexp),</p>
-<p><code>&lt;</code> / <code>&lt;=</code> (less than or equal to),</p>
-<p><code>&gt;</code> / <code>&gt;=</code> (greater than or equal to)</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Unary operations</p></td>
-<td style="text-align: left;"><p><code>with(field)</code> (field is present),</p>
-<p><code>without(field)</code> (field is absent)</p></td>
-</tr>
-</tbody>
-</table>
+| Category | Operators |
+|----|----|
+| Logical boolean operators (not case-sensitive) | `and`, `or` |
+| Comparison operators | `=` (equals), `!=` (not equals), `=~` (matches regexp), `!~` (not matches regexp), `<` / `<=` (less than or equal to), `>` / `>=` (greater than or equal to) |
+| Unary operations | `with(field)` (field is present), `without(field)` (field is absent) |
+| Parenthesis-based priority | N/A |
+
+Query language syntax
 
 You can configure flowlogs-pipeline filters in the `spec.processor.filters` section of the `FlowCollector` resource. For example:
 
@@ -710,7 +685,7 @@ Additional resources
 
 </div>
 
-# Configuring quick filters
+# Configure quick filters
 
 Use the list of available source, destination, and universal filter keys to modify quick filters within the `FlowCollector` resource.
 

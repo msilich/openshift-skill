@@ -1,35 +1,53 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-If you are using [Splunk](https://www.splunk.com/), you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to Splunk and view the violations, vulnerability detection, and compliance related data from within Splunk.
+If you are using Splunk, you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to Splunk and view the violations, vulnerability detection, and compliance related data from within Splunk.
 
 > [!IMPORTANT]
 > Currently, Splunk integration is not supported on IBM Power(`ppc64le`) and IBM Z(`s390x`).
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Splunk](https://www.splunk.com/)
+
+</div>
+
+<a id="integrate-splunk-overview_integrate-with-splunk"></a>
+
+# Integration methods
+
+You can integrate Red Hat Advanced Cluster Security for Kubernetes with Splunk by using an HTTP event collector or the Red Hat Advanced Cluster Security for Kubernetes add-on.
+
 Depending on your use case, you can integrate Red Hat Advanced Cluster Security for Kubernetes with Splunk by using the following ways:
 
-- By [using an HTTP event collector](integrate-with-splunk.md#integrate-splunk-http-event-collector) in Splunk:
+- By using an HTTP event collector in Splunk:
 
   - Use the event collector option to forward alerts and audit log data.
 
-- By [using the Red Hat Advanced Cluster Security for Kubernetes add-on](integrate-with-splunk.md#integrate-splunk-add-on):
+- By using the Red Hat Advanced Cluster Security for Kubernetes add-on:
 
   - Use the add-on to pull the violations, vulnerability detection, and compliance data into Splunk.
 
 You can use one or both of these integration options to integrate the Red Hat Advanced Cluster Security for Kubernetes with Splunk.
 
-<a id="integrate-splunk-http-event-collector"></a>
+<a id="integrate-splunk-http-event-collector_integrate-with-splunk"></a>
 
 # Using the HTTP event collector
 
 You can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to Splunk by using an HTTP event collector.
 
-To integrate Red Hat Advanced Cluster Security for Kubernetes with Splunk by using the HTTP event collector, follow these steps:
+Integrating Red Hat Advanced Cluster Security for Kubernetes with Splunk by using the HTTP event collector involves the following tasks:
 
 1.  Add a new HTTP event collector in Splunk and get the token value.
 
 2.  Use the token value to set up notifications in Red Hat Advanced Cluster Security for Kubernetes.
 
-3.  Identify policies for which you want to send notifications, and update the notification settings for those policies.
+3.  Identify the policies that you want to send notifications for, and update the notification settings for those policies.
 
 <a id="add-http-event-collector-splunk_integrate-with-splunk"></a>
 
@@ -107,7 +125,7 @@ Procedure
 
 4.  Enter a name for **Integration Name**.
 
-5.  Enter your Splunk URL in the **HTTP Event Collector URL** field. You must specify the port number if it is not `443` for HTTPS or `80` for HTTP. You must also add the URL path `/services/collector/event` at the end of the URL. For example, `https://<splunk-server-path>:8088/services/collector/event`.
+5.  Enter your Splunk URL in the **HTTP Event Collector URL** field. You must specify the port number if it is not `443` for HTTPS or `80` for HTTP. You must also add the URL path `/services/collector/event` at the end of the URL. For example, `https://<splunk_server_path>:8088/services/collector/event`.
 
 6.  Enter your token in the **HTTP Event Collector Token** field.
 
@@ -143,7 +161,7 @@ Procedure
 4.  In the **Enable notification** window, select the **Splunk** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 
@@ -167,7 +185,7 @@ Procedure
 
 </div>
 
-<a id="integrate-splunk-add-on"></a>
+<a id="integrate-splunk-add-on_integrate-with-splunk"></a>
 
 # Using the Red Hat Advanced Cluster Security for Kubernetes add-on
 
@@ -182,7 +200,7 @@ Generate an API token with `read` permission for all resources in Red Hat Advanc
 You can install the Red Hat Advanced Cluster Security for Kubernetes add-on from your Splunk instance.
 
 > [!NOTE]
-> To maintain backward compatibility with the StackRox Kubernetes Security Platform add-on, the `source_type` and `input_type` parameters for configured inputs are still called `stackrox_compliance`, `stackrox_violations`, and `stackrox_vulnerability_management`.
+> To keep backward compatibility with the StackRox Kubernetes Security Platform add-on, the `source_type` and `input_type` parameters for configured inputs are still called `stackrox_compliance`, `stackrox_violations`, and `stackrox_vulnerability_management`.
 
 <div>
 
@@ -204,7 +222,7 @@ Procedure
 
 </div>
 
-1.  Download the Red Hat Advanced Cluster Security for Kubernetes add-on from [Splunkbase](https://splunkbase.splunk.com/app/5315/).
+1.  Download the Red Hat Advanced Cluster Security for Kubernetes add-on from Splunkbase.
 
 2.  Go to the Splunk home page on your Splunk instance.
 
@@ -260,7 +278,7 @@ Verification
 
 </div>
 
-- To verify the the Red Hat Advanced Cluster Security for Kubernetes add-on installation, query the received data.
+- To verify the Red Hat Advanced Cluster Security for Kubernetes add-on installation, query the received data.
 
   1.  In your Splunk instance, go to **Search** and type `index=* sourcetype="stackrox-*"` as the query.
 
@@ -269,6 +287,18 @@ Verification
 </div>
 
 Verify that your configured sources are displayed in the search results.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Advanced Cluster Security for Kubernetes add-on on Splunkbase](https://splunkbase.splunk.com/app/5315/)
+
+</div>
 
 <a id="update-the-splunk-add-on_integrate-with-splunk"></a>
 

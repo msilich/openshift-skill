@@ -2,7 +2,7 @@
 
 To customise route configuration for specific traffic behaviors, apply annotations, headers, and cookies. By using these mechanisms, you can define granular routing rules, extending standard capabilities to meet complex application requirements.
 
-# Configuring route timeouts
+# Configure route timeouts
 
 You can configure the default timeouts for an existing route when you have services in need of a low timeout, which is required for Service Level Availability (SLA) purposes, or a high timeout, for cases with a slow back end.
 
@@ -390,28 +390,23 @@ The Ingress Controller can set the default options for all the routes it exposes
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>haproxy.router.openshift.io/pod-concurrent-connections</code></p></td>
-<td style="text-align: left;"><p>Sets the maximum number of connections that are allowed to a backing pod from a router.<br />
-Note: If there are multiple pods, each can have this many connections. If you have multiple routers, there is no coordination among them, each may connect this many times. If not set, or set to 0, there is no limit.</p></td>
+<td style="text-align: left;"><p>Sets the maximum number of connections that are allowed to a backing pod from a router. Note: If there are multiple pods, each can have this many connections. If you have multiple routers, there is no coordination among them, each may connect this many times. If not set, or set to 0, there is no limit.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>haproxy.router.openshift.io/rate-limit-connections</code></p></td>
-<td style="text-align: left;"><p>Setting <code>'true'</code> or <code>'TRUE'</code> enables rate limiting functionality which is implemented through stick-tables on the specific backend per route.<br />
-Note: Using this annotation provides basic protection against denial-of-service attacks.</p></td>
+<td style="text-align: left;"><p>Setting <code>'true'</code> or <code>'TRUE'</code> enables rate limiting functionality which is implemented through stick-tables on the specific backend per route. Note: Using this annotation provides basic protection against denial-of-service attacks.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>haproxy.router.openshift.io/rate-limit-connections.concurrent-tcp</code></p></td>
-<td style="text-align: left;"><p>Limits the number of concurrent TCP connections made through the same source IP address. It accepts a numeric value.<br />
-Note: Using this annotation provides basic protection against denial-of-service attacks.</p></td>
+<td style="text-align: left;"><p>Limits the number of concurrent TCP connections made through the same source IP address. It accepts a numeric value. Note: Using this annotation provides basic protection against denial-of-service attacks.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>haproxy.router.openshift.io/rate-limit-connections.rate-http</code></p></td>
-<td style="text-align: left;"><p>Limits the rate at which a client with the same source IP address can make HTTP requests. It accepts a numeric value.<br />
-Note: Using this annotation provides basic protection against denial-of-service attacks.</p></td>
+<td style="text-align: left;"><p>Limits the rate at which a client with the same source IP address can make HTTP requests. It accepts a numeric value. Note: Using this annotation provides basic protection against denial-of-service attacks.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>haproxy.router.openshift.io/rate-limit-connections.rate-tcp</code></p></td>
-<td style="text-align: left;"><p>Limits the rate at which a client with the same source IP address can make TCP connections. It accepts a numeric value.<br />
-</p></td>
+<td style="text-align: left;"><p>Limits the rate at which a client with the same source IP address can make TCP connections. It accepts a numeric value.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>router.openshift.io/haproxy.health.check.interval</code></p></td>
@@ -436,7 +431,7 @@ Note: Using this annotation provides basic protection against denial-of-service 
 <p><code>Lax</code>: the browser does not send cookies on cross-site requests, but does send cookies when users navigate to the origin site from an external site. This is the default browser behavior when the <code>SameSite</code> value is not specified.</p>
 <p><code>Strict</code>: the browser sends cookies only for same-site requests.</p>
 <p><code>None</code>: the browser sends cookies for both cross-site and same-site requests.</p>
-<p>This value is applicable to re-encrypt and edge routes only. For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite">SameSite cookies documentation</a>.</p></td>
+<p>This value is applicable to re-encrypt and edge routes only.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>haproxy.router.openshift.io/set-forwarded-headers</code></p></td>
@@ -557,7 +552,7 @@ metadata:
 
 </div>
 
-- Sets `/` as rewrite path of the request on the backend.
+In this example, `/` is set as the rewrite path of the request on the backend.
 
 Setting the `haproxy.router.openshift.io/rewrite-target` annotation on a route specifies that the Ingress Controller should rewrite paths in HTTP requests using this route before forwarding the requests to the backend application. The part of the request path that matches the path specified in `spec.path` is replaced with the rewrite target specified in the annotation.
 
@@ -590,6 +585,18 @@ Certain special characters in `haproxy.router.openshift.io/rewrite-target` requi
 Special character handling
 
 All other valid URL characters can be used without escaping.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Attributes (mdn documentation)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
+
+</div>
 
 # Throughput issue troubleshooting methods
 
@@ -642,7 +649,7 @@ Additional resources
 
 </div>
 
-# Configuring the route admission policy
+# Configure the route admission policy
 
 Administrators and application developers can run applications in multiple namespaces with the same domain name. This is for organizations where multiple teams develop microservices that are exposed on the same hostname.
 
@@ -708,7 +715,7 @@ Procedure
 
 </div>
 
-# Configuring the OpenShift Container Platform Ingress Controller for dual-stack networking
+# Configure the OpenShift Container Platform Ingress Controller for dual-stack networking
 
 If your OpenShift Container Platform cluster is configured for IPv4 and IPv6 dual-stack networking, your cluster is externally reachable by OpenShift Container Platform routes.
 
@@ -784,13 +791,18 @@ Procedure
 
     </div>
 
-    - In a dual-stack instance, there are two different `clusterIPs` provided.
+    where:
 
-    - For a single-stack instance, enter `IPv4` or `IPv6`. For a dual-stack instance, enter both `IPv4` and `IPv6`.
+    `spec.clusterIPs`
+    Specifies the cluster IP addresses assigned to the service. In a dual-stack instance, there are two different `clusterIPs` provided.
 
-    - For a single-stack instance, enter `SingleStack`. For a dual-stack instance, enter `RequireDualStack`.
+    `spec.ipFamilies`
+    Specifies the IP family. For a single-stack instance, enter `IPv4` or `IPv6`. For a dual-stack instance, enter both `IPv4` and `IPv6`.
 
-      These resources generate corresponding `endpoints`. The Ingress Controller now watches `endpointslices`.
+    `spec.ipFamilyPolicy`
+    Specifies the IP family policy. For a single-stack instance, enter `SingleStack`. For a dual-stack instance, enter `RequireDualStack`.
+
+    These resources generate corresponding `endpoints`. The Ingress Controller now watches `endpointslices`.
 
 2.  To view `endpoints`, enter the following command:
 

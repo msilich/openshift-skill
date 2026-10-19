@@ -394,7 +394,9 @@ Procedure
 
 # Completing the remaining Assisted Installer steps
 
-After you provision Oracle® Distributed Cloud resources and upload OpenShift Container Platform custom manifest configuration files to Oracle Distributed Cloud, you must complete the remaining cluster installation steps on the Assisted Installer before you can create an Oracle Distributed Cloud instance. These steps include assigning node roles and adding custom manifests.
+After provisioning Oracle® Distributed Cloud resources and uploading OpenShift Container Platform custom manifests to Oracle Distributed Cloud, complete the remaining cluster installation steps on the Assisted Installer before you can create an Oracle Distributed Cloud instance.
+
+These steps include assigning node roles and adding custom manifests.
 
 ## Assigning node roles
 

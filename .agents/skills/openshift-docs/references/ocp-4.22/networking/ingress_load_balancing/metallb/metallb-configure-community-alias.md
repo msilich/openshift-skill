@@ -26,7 +26,7 @@ MetalLB community custom resource
 
 CommunityAlias
 
-# Configuring MetalLB with a BGP advertisement and community alias
+# Configure MetalLB with a BGP advertisement and community alias
 
 To advertise an `IPAddressPool` by using the BGP protocol, configure MetalLB with a community alias. This configuration sets the alias to the numeric value of the `NO_ADVERTISE` community.
 

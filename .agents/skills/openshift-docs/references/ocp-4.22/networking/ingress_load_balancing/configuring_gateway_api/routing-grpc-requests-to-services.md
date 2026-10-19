@@ -14,15 +14,15 @@ While standard `GRPCRoute` configurations share many similarities with `HTTPRout
 
 To successfully configure your gRPC routing behavior, complete the following tasks:
 
-- Configure gRPC request matching conditions
+- Configuring gRPC request matching conditions
 
-- Apply processing filters to gRPC requests
+- Applying processing filters to gRPC requests
 
-- Configure routing destinations and traffic weights for gRPC
+- Configuring routing destinations and traffic weights for gRPC
 
 - Understand `GRPCRoute` implementation details
 
-# Configure gRPC request matching conditions
+# Configuring gRPC request matching conditions
 
 When multiple gRPC services share a gateway, you can define request matching conditions based on gRPC methods and headers. This ensures that traffic is successfully routed to the correct backend application.
 
@@ -100,7 +100,7 @@ Procedure
 
 </div>
 
-# Apply processing filters to gRPC requests
+# Applying processing filters to gRPC requests
 
 When a gRPC request hits your route, you can apply processing filters to modify the request or response before the traffic reaches your backend.
 
@@ -176,7 +176,7 @@ Procedure
 
 </div>
 
-# Configure routing destinations and traffic weights for gRPC
+# Configuring routing destinations and traffic weights for gRPC
 
 When you route gRPC traffic, you must define backend service destinations and traffic weights to distribute requests across your APIs. `BackendRefs` designate the backend services where matching and filtered gRPC requests are delivered.
 

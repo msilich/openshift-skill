@@ -101,6 +101,8 @@ The following table describes the configuration fields for audit logging.
 
 # Audit logging
 
+By default, the Cluster Network Operator (CNO) sets and manages the default network policy audit log settings cluster-wide through the `Network.operator.openshift.io` custom resource (CR).
+
 You can enable network policy audit logging in OpenShift Container Platform by annotating namespaces with the `k8s.ovn.org/acl-logging` key and configuring log destinations for the OVN-Kubernetes plugin.
 
 You can also configure the destination for audit logs, such as a syslog server or a UNIX domain socket. Regardless of any additional configuration, an audit log is always saved to `/var/log/ovn/acl-audit-log.log` on each OVN-Kubernetes pod in the cluster.
@@ -618,7 +620,7 @@ The following table describes BANP annotation:
 </tbody>
 </table>
 
-# Configuring egress firewall and network policy auditing for a cluster
+# Configure egress firewall and network policy auditing for a cluster
 
 To customize egress firewall and network policy audit logging in OpenShift Container Platform, you can configure the `policyAuditConfig` section in the cluster `Network` custom resource. Adjust log destination, file size, and rate limits to control how ACL events are recorded.
 
@@ -847,7 +849,7 @@ Verification
 
     ``` terminal
     $ for pod in $(oc get pods -n openshift-ovn-kubernetes -l app=ovnkube-node --no-headers=true | awk '{ print $1 }') ; do
-        oc exec -it $pod -n openshift-ovn-kubernetes -- tail -4 /var/log/ovn/acl-audit-log.log
+        oc exec -it $pod -c ovn-acl-logging -n openshift-ovn-kubernetes -- tail -4 /var/log/ovn/acl-audit-log.log
       done
     ```
 
@@ -873,7 +875,7 @@ Verification
 
 </div>
 
-# Enabling egress firewall and network policy audit logging for a namespace
+# Enable egress firewall and network policy audit logging for a namespace
 
 To enable egress firewall and network policy audit logging for a namespace in OpenShift Container Platform, you can add the `k8s.ovn.org/acl-logging` annotation with the `oc annotate` command. You can also apply a namespace YAML file that sets `Allow` and `Deny` log severity levels.
 
@@ -943,7 +945,7 @@ Verification
 
   ``` terminal
   $ for pod in $(oc get pods -n openshift-ovn-kubernetes -l app=ovnkube-node --no-headers=true | awk '{ print $1 }') ; do
-      oc exec -it $pod -n openshift-ovn-kubernetes -- tail -4 /var/log/ovn/acl-audit-log.log
+      oc exec -it $pod -c ovn-acl-logging -n openshift-ovn-kubernetes -- tail -4 /var/log/ovn/acl-audit-log.log
     done
   ```
 
@@ -966,7 +968,7 @@ Verification
 
 </div>
 
-# Disabling egress firewall and network policy audit logging for a namespace
+# Disable egress firewall and network policy audit logging for a namespace
 
 To disable egress firewall and network policy audit logging for a namespace in OpenShift Container Platform, you can remove the `k8s.ovn.org/acl-logging` annotation with the `oc annotate` command. You can also apply a namespace YAML file that sets the annotation to `null`.
 

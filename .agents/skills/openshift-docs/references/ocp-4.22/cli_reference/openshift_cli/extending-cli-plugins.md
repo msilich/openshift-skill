@@ -2,7 +2,7 @@
 
 You can write and install plugins to build on the default `oc` commands, allowing you to perform new and more complex tasks with the OpenShift CLI (`oc`).
 
-# Writing CLI plugins
+# Write a CLI plugin
 
 You can write a plugin for the OpenShift CLI (`oc`) in any programming language or script that allows you to write command-line commands. Note that you cannot use a plugin to overwrite an existing `oc` command.
 
@@ -64,7 +64,7 @@ Additional resources
 
 </div>
 
-# Installing and using CLI plugins
+# Install and use a CLI plugin
 
 After you write a custom plugin for the OpenShift CLI (`oc`), you must install the plugin before you can use it.
 

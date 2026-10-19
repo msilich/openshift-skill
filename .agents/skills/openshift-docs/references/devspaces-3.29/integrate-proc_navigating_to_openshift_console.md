@@ -18,7 +18,7 @@ Open the OpenShift web console from the OpenShift Dev Spaces dashboard to manage
     The drop-down menu displays the available applications.
 
       
-    ![OpenShift web console in the drop-down menu](assets/20c3e354af97485f6806.png)  
+    ![OpenShift web console in the drop-down menu](assets/2d27f8420232e9e7836f.png)  
 
 2.  Click the **OpenShift console** link to open the OpenShift web console.
 

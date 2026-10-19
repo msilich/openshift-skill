@@ -91,7 +91,7 @@ Procedure
     spec:
       kubeMacPoolConfiguration:
         rangeStart: "AA:00:00:00:00:00"
-        rangeEnd: "FD:FF:FF:FF:FF:FF"
+        rangeEnd: "FE:A8:11:22:33:44"
     # ...
     ```
 
@@ -118,7 +118,7 @@ Verification
     ``` terminal
     {
       "rangeStart": "AA:00:00:00:00:00",
-      "rangeEnd": "FD:FF:FF:FF:FF:FF"
+      "rangeEnd": "FE:A8:11:22:33:44"
     }
     ```
 

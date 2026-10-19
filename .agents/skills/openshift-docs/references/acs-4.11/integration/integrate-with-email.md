@@ -100,7 +100,7 @@ Additional resources
 
 </div>
 
-- [Configuring delivery destinations and scheduling](../operating/manage-vulnerabilities/vulnerability-management.md) :!context:
+- [Configuring delivery destinations and scheduling](../operating/manage-vulnerabilities/vulnerability-reporting.md#vulnerability-management20-configure-report-delivery-destinations-schedule_vulnerability-reporting) :!context:
 
 </div>
 
@@ -127,7 +127,7 @@ Procedure
 4.  In the **Enable notification** window, select the **Email** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 
@@ -245,7 +245,7 @@ Additional resources
 
 </div>
 
-- [Configuring delivery destinations and scheduling](../operating/manage-vulnerabilities/vulnerability-management.md) :!context:
+- [Configuring delivery destinations and scheduling](../operating/manage-vulnerabilities/vulnerability-reporting.md#vulnerability-management20-configure-report-delivery-destinations-schedule_vulnerability-reporting) :!context:
 
 </div>
 
@@ -272,7 +272,7 @@ Procedure
 4.  In the **Enable notification** window, select the **RHACS Cloud Service Email** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 

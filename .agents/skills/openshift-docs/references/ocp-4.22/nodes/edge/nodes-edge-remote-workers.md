@@ -166,7 +166,7 @@ Daemon sets are the best approach to managing pods on remote worker nodes for th
 <!-- -->
 
 Static pods
-If you want pods to restart if a node reboots, such as after a power loss, you might use [static pods](https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/). The kubelet on a node automatically restarts static pods as the node restarts.
+If you want pods to restart if a node reboots, such as after a power loss, you might use "static pods". The kubelet on a node automatically restarts static pods as the node restarts.
 
 > [!NOTE]
 > Static pods cannot use secrets and config maps.
@@ -174,7 +174,7 @@ If you want pods to restart if a node reboots, such as after a power loss, you m
 <!-- -->
 
 Kubernetes zones
-[Kubernetes zones](https://kubernetes.io/docs/setup/best-practices/multiple-zones/) can slow down the rate or, in some cases, completely stop pod evictions.
+"Kubernetes zones" can slow down the rate or, in some cases, completely stop pod evictions.
 
 When the control plane cannot reach a node, the node controller, by default, applies `node.kubernetes.io/unreachable` taints and evicts pods at a rate of 0.1 nodes per second. However, in a cluster that uses Kubernetes zones, pod eviction behavior is altered.
 
@@ -308,9 +308,25 @@ You can use replica sets, deployments, and replication controllers. The schedule
 > [!NOTE]
 > When working with remote worker nodes, rescheduling pods on different nodes might not be acceptable if remote worker nodes are intended to be reserved for specific functions.
 
-[stateful sets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) do not get restarted when there is an outage. The pods remain in the `terminating` state until the control plane can acknowledge that the pods are terminated.
+"Stateful sets" do not get restarted when there is an outage. The pods remain in the `terminating` state until the control plane can acknowledge that the pods are terminated.
 
 To avoid scheduling a to a node that does not have access to the same type of persistent storage, OpenShift Container Platform cannot migrate pods that require persistent volumes to other zones in the case of network separation.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Static pods](https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/)
+
+- [Kubernetes zones](https://kubernetes.io/docs/setup/best-practices/multiple-zones/)
+
+- [Stateful sets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
+
+</div>
 
 # Additional resources
 

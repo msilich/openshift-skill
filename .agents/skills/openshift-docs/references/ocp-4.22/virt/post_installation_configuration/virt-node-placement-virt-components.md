@@ -93,7 +93,7 @@ spec:
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   name: kubevirt-hyperconverged
-  startingCSV: kubevirt-hyperconverged-operator.v4.22.6
+  startingCSV: kubevirt-hyperconverged-operator.v4.22.9
   channel: "stable"
   config:
     nodeSelector:
@@ -101,6 +101,28 @@ spec:
 ```
 
 OLM deploys the OpenShift Virtualization Operators on nodes labeled `example.io/example-infra-key = example-infra-value`.
+
+The following pods are affected by the `Subscription` object node placement rules. These pods are created when the OpenShift Virtualization Operator is first installed, even without an HyperConverged custom resource (CR):
+
+- `aaq-operator`
+
+- `cdi-operator`
+
+- `cluster-network-addons-operator`
+
+- `hco-operator`
+
+- `hco-webhook`
+
+- `hostpath-provisioner-operator`
+
+- `hyperconverged-cluster-cli-download`
+
+- `kubevirt-migration-operator`
+
+- `ssp-operator`
+
+- `virt-operator`
 
 Example `Subscription` object with `tolerations` rule:
 
@@ -114,7 +136,7 @@ spec:
   source:  redhat-operators
   sourceNamespace: openshift-marketplace
   name: kubevirt-hyperconverged
-  startingCSV: kubevirt-hyperconverged-operator.v4.22.6
+  startingCSV: kubevirt-hyperconverged-operator.v4.22.9
   channel: "stable"
   config:
     tolerations:
@@ -219,6 +241,34 @@ spec:
 ```
 
 Nodes reserved for OpenShift Virtualization components are labeled with the `key = virtualization:NoSchedule` taint. Only pods with matching tolerations are scheduled on reserved nodes.
+
+The following pods are affected by the `HyperConverged` object node placement rules. These pods are created when an HyperConverged CR is deployed:
+
+- `cdi-apiserver`
+
+- `cdi-deployment`
+
+- `cdi-uploadproxy`
+
+- `kubemacpool-cert-manager`
+
+- `kubemacpool-mac-controller-manager`
+
+- `kubevirt-apiserver-proxy`
+
+- `kubevirt-console-plugin`
+
+- `kubevirt-ipam-controller-manager`
+
+- `kubevirt-migration-controller`
+
+- `virt-api`
+
+- `virt-controller`
+
+- `virt-exportproxy`
+
+- `virt-template-validator`
 
 ## HostPathProvisioner object node placement rule example
 

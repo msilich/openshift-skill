@@ -46,7 +46,7 @@ The `oc-mirror` plugin offers the following advantages over the `oc adm release 
 
 - Automates mirroring the release payload from Quay and builds the latest graph data image for the OpenShift Update Service in disconnected environments.
 
-# Mirroring resources using the oc-mirror plugin
+# Mirror resources using the oc-mirror plugin
 
 You can use the oc-mirror OpenShift CLI (`oc`) plugin to mirror images to a mirror registry in your fully or partially disconnected environments. You must run oc-mirror from a system with internet connectivity to download the required images from the official Red Hat registries.
 
@@ -64,7 +64,7 @@ Additional resources
 
 </div>
 
-# Mirroring images using the oc adm release mirror command
+# Mirror images using the oc adm release mirror command
 
 You can use the `oc adm release mirror` command to mirror images to your mirror registry.
 
@@ -98,11 +98,11 @@ Additional resources
 
 </div>
 
-## Preparing your mirror host
+## Prepare your mirror host
 
 Before you perform the mirror procedure, you must prepare the host to retrieve content and push it to the remote location.
 
-### Installing the OpenShift CLI on Linux
+### Install the OpenShift CLI on Linux
 
 To manage your cluster and deploy applications from the command line on Linux, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -159,7 +159,7 @@ Verification
 
 </div>
 
-### Installing the OpenShift CLI on Windows
+### Install the OpenShift CLI on Windows
 
 To manage your cluster and deploy applications from the command line on Windows, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -210,7 +210,7 @@ Verification
 
 </div>
 
-### Installing the OpenShift CLI on macOS
+### Install the OpenShift CLI on macOS
 
 To manage your cluster and deploy applications from the command line on macOS, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -278,7 +278,7 @@ Additional resources
 
 </div>
 
-### Configuring credentials that allow images to be mirrored
+### Configure credentials that allow images to be mirrored
 
 Create a container image registry credentials file so that you can mirror images from Red Hat to your mirror. Complete the following steps on the installation host.
 
@@ -448,7 +448,7 @@ Procedure
 
 </div>
 
-## Mirroring images to a mirror registry
+## Mirror images to a mirror registry
 
 Before you can update a cluster in a disconnected environment, you must mirror the required OpenShift Container Platform release images onto a local registry mirror.
 

@@ -4,9 +4,11 @@ The Kernel Module Management (KMM) Operator deploys out-of-tree kernel modules a
 
 # About the Kernel Module Management Operator
 
-The Kernel Module Management (KMM) Operator on OpenShift Container Platform manages the full lifecycle of out-of-tree kernel modules and device plugins, from build and signing through deployment. You can use `Module` custom resources (CRs)to define module loaders, device plugins, and version-specific build instructions across kernel upgrades.
+The Kernel Module Management (KMM) Operator on OpenShift Container Platform manages the full lifecycle of out-of-tree kernel modules and device plugins, from build and signing through deployment.
 
-# Installing the Kernel Module Management Operator
+You can use `Module` custom resources (CRs)to define module loaders, device plugins, and version-specific build instructions across kernel upgrades.
+
+# Install the Kernel Module Management Operator
 
 As a cluster administrator, you can install the Kernel Module Management (KMM) Operator on OpenShift Container Platform by using the OpenShift CLI or web console.
 
@@ -171,7 +173,7 @@ Verification
 
 </div>
 
-## Installing the Kernel Module Management Operator on earlier versions of OpenShift Container Platform
+## Install the Kernel Module Management Operator on earlier versions of OpenShift Container Platform
 
 As a cluster administrator, you can install the Kernel Module Management (KMM) Operator by using the OpenShift CLI.
 
@@ -1136,7 +1138,7 @@ Additional resources
 
 </div>
 
-# Using signing with Kernel Module Management (KMM)
+# Use signing with Kernel Module Management (KMM)
 
 On Secure Boot-enabled OpenShift Container Platform systems, out-of-tree kernel modules must be signed with keys enrolled in the Machine Owner’s Key (MOK) database. For kernel modules built out of tree, KMM supports signing kmods through the `sign` section of the kernel mapping in a `Module` custom resource.
 
@@ -1162,7 +1164,7 @@ Additional resources
 
 </div>
 
-# Adding the keys for secureboot
+# Add the keys for secureboot
 
 To sign kernel modules with Kernel Module Management (KMM) on OpenShift Container Platform, you can add Secure Boot certificate and private key files as Kubernetes secrets.
 
@@ -1239,7 +1241,7 @@ Procedure
 
 </div>
 
-## Checking the keys
+## Check the keys
 
 To verify that your secure boot signing keys are configured correctly in OpenShift Container Platform, you can inspect the public certificate and private key secrets with the OpenShift CLI.
 
@@ -1269,7 +1271,7 @@ Procedure
 
 </div>
 
-# Signing kmods in a pre-built image
+# Sign kmods in a pre-built image
 
 To sign kernel modules in a vendor-supplied or externally built image on OpenShift Container Platform, you can configure a `Module` custom resource with unsigned and signed container image references and key secrets.
 
@@ -1345,7 +1347,7 @@ Procedure
 
 </div>
 
-# Specifying files to sign
+# Specify files to sign
 
 You can specify full paths or wildcard and glob patterns to sign kernel module (`.ko`) files in specific directories.
 
@@ -1427,7 +1429,7 @@ You can use wildcard and any glob expression supported by the Ash shell in the `
       - /opt/lib/modules/${KERNEL_FULL_VERSION}/mod-[0-9].ko
   ```
 
-# Building and signing a kmod image
+# Build and sign a kmod image
 
 To build and sign a kmod image from source code on OpenShift Container Platform, you can apply a `Module` custom resource that builds an unsigned image and then signs it with your key and certificate secrets.
 
@@ -1918,7 +1920,7 @@ Procedure
 
 </div>
 
-# Customizing upgrades for kernel modules
+# Customize upgrades for kernel modules
 
 The Kernel Module Management (KMM) Operator periodically upgrades `Module` resources in the cluster, typically during a cluster upgrade.
 
@@ -2008,7 +2010,9 @@ Procedure
 
 # Day 1 kernel module loading
 
-Day 1 kernel module loading lets you insert kernel modules during Linux `systemd` initialization on OpenShift Container Platform, before the standard KMM Day 2 loading and a complete initialization of a Linux (RHCOS) server. You can use the Machine Config Operator (MCO) when a module must load earlier than full node initialization.
+Day 1 kernel module loading lets you insert kernel modules during Linux `systemd` initialization on OpenShift Container Platform, before the standard KMM Day 2 loading and a complete initialization of a Linux (RHCOS) server.
+
+You can use the Machine Config Operator (MCO) when a module must load earlier than full node initialization.
 
 <div>
 

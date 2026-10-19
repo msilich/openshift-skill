@@ -8,7 +8,7 @@ There are public container registries, such as Quay.io and Docker Hub where many
 
 From a security standpoint, some registries provide special features to check and improve the health of your containers. For example, Red Hat Quay offers container vulnerability scanning with Clair security scanner, build triggers to automatically rebuild images when source code changes in GitHub and other locations, and the ability to use role-based access control (RBAC) to secure access to images.
 
-# Knowing where containers come from
+# Know where containers come from
 
 You can use tools to scan and track the contents of your downloaded and deployed container images. However, there are many public sources of container images. When using public container registries, you can add a layer of protection by using trusted sources.
 
@@ -28,7 +28,7 @@ Red Hat certified images are:
 
 The list of known vulnerabilities is constantly evolving, so you must track the contents of your deployed container images, and newly downloaded images, over time. You can use Red Hat Security Advisories (RHSAs) to alert you to any newly discovered issues in Red Hat certified container images, and direct you to the updated image. Alternatively, you can go to the Red Hat Ecosystem Catalog to look up that and other security-related issues for each Red Hat image.
 
-# Getting containers from Red Hat Registry and Ecosystem Catalog
+# Get containers from Red Hat Registry and Ecosystem Catalog
 
 Red Hat lists certified container images for Red Hat products and partner offerings from the Container Images section of the Red Hat Ecosystem Catalog. From that catalog, you can see details of each image, including CVE, software packages listings, and health scores.
 
@@ -74,7 +74,7 @@ Additional resources
 
 </div>
 
-# Storing containers using Red Hat Quay
+# Store containers using Red Hat Quay
 
 Red Hat Quay is an enterprise-quality container registry product from Red Hat. Development for Red Hat Quay is done through the upstream Project Quay. Red Hat Quay is available to deploy on-premise or through the hosted version of Red Hat Quay at Quay.io.
 

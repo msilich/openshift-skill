@@ -48,7 +48,7 @@ You can run the PPC by using one of the following methods:
 > [!NOTE]
 > Using the wrapper script abstracts some of the more granular Podman tasks into an executable script. For example, the wrapper script handles tasks such as pulling and running the required container image, mounting directories into the container, and providing parameters directly to the container through Podman. Both methods achieve the same result.
 
-## Creating a machine config pool to target nodes for performance tuning
+## Create a machine config pool to target nodes for performance tuning
 
 For multi-node clusters, you can define a machine config pool (MCP) to identify the target nodes that you want to configure with a performance profile.
 
@@ -185,7 +185,7 @@ Verification
 
 </div>
 
-## Gathering data about your cluster for the PPC
+## Gather data about your cluster for the PPC
 
 The Performance Profile Creator (PPC) tool requires `must-gather` data. As a cluster administrator, run the `must-gather` command to capture information about your cluster.
 
@@ -248,7 +248,7 @@ Additional resources
 
 </div>
 
-## Running the Performance Profile Creator using Podman
+## Run the Performance Profile Creator using Podman
 
 As a cluster administrator, you can use Podman with the Performance Profile Creator (PPC) to create a performance profile.
 
@@ -475,9 +475,11 @@ Procedure
 
 </div>
 
-## Running the Performance Profile Creator wrapper script
+## Run the Performance Profile Creator wrapper script
 
-The wrapper script simplifies the process of creating a performance profile with the Performance Profile Creator (PPC) tool. The script handles tasks such as pulling and running the required container image, mounting directories into the container, and providing parameters directly to the container through Podman.
+The wrapper script simplifies the process of creating a performance profile with the Performance Profile Creator (PPC) tool.
+
+The script handles tasks such as pulling and running the required container image, mounting directories into the container, and providing parameters directly to the container through Podman.
 
 For more information about the Performance Profile Creator arguments, see the section "Performance Profile Creator arguments".
 
@@ -1189,7 +1191,7 @@ Additional resources
 
 </div>
 
-# Configuring power saving for nodes that run colocated high and low priority workloads
+# Configure power saving for nodes that run colocated high and low priority workloads
 
 You can enable power savings for a node that has low priority workloads that are colocated with high priority workloads without impacting the latency or throughput of the high priority workloads. Power saving is possible without modifications to the workloads themselves.
 
@@ -1289,6 +1291,419 @@ Procedure
 
 </div>
 
+# Protecting low latency workloads from exec operations
+
+## How ExecCPUAffinity prevents latency spikes from exec operations
+
+When you run exec operations such as `oc exec` or shell access on a container with isolated CPUs, those processes can interrupt your time-sensitive workloads. The `ExecCPUAffinity` feature automatically pins these secondary processes to a specific CPU within the container’s isolated set.
+
+This ensures that your primary low-latency applications, such as Telco RAN DU or 5G Core, maintain deterministic performance without resource contention.
+
+`ExecCPUAffinity` is enabled by default whenever you apply a `PerformanceProfile` to a node. The feature operates at the container level and requires the following conditions:
+
+- **Runtime Class**: The pod must use the `PerformanceProfile` runtime class, for example `<PP-name>-performance`.
+
+- **QoS Class**: The pod must belong to the Guaranteed QoS class and request whole integer CPUs.
+
+- **CPU Selection Logic**: The system automatically selects the first available CPU to host the executed process. It prioritizes a shared CPU if one is configured; otherwise, it uses the first exclusive CPU in the container’s set.
+
+  > [!NOTE]
+  > If a Pod contains multiple containers, only the container requesting an integer number of CPUs uses `ExecCPUAffinity`. Any container with fractional CPU requests will follow the default behavior, allowing processes to run on any CPU within the container’s cgroup set.
+
+If you need the previous behavior where executed processes can run on any allocated core, you can disable the feature for all workloads by using that performance runtime class.
+
+To disable `ExecCPUAffinity`, add the following annotation to your `PerformanceProfile`:
+
+``` yaml
+metadata:
+  annotations:
+    performance.openshift.io/exec-cpu-affinity: "disable"
+```
+
+> [!NOTE]
+> Use this annotation only as a temporary fallback and is expected to be removed in future releases.
+
+## Isolate exec processes from latency-sensitive workloads
+
+You can prevent `oc exec` and shell processes from interrupting latency-sensitive workloads by applying a `PerformanceProfile` to a node.
+
+The Node Tuning Operator (NTO) automatically enables the `ExecCPUAffinity` feature, which pins exec processes to a designated CPU so that your primary workload CPUs remain undisturbed.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to an OpenShift Container Platform cluster using an account with `cluster-admin` permissions.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Apply a `PerformanceProfile` tailored to your workload tuning requirements, such as reserved CPU counts or real-time kernel settings. For detailed instructions on generating a profile, see *Creating a performance profile*.
+
+2.  Create a namespace for testing the performance configuration by running the following command:
+
+    ``` terminal
+    $ oc create namespace performance-profile-testing
+    ```
+
+    > [!NOTE]
+    > You can create the workload in any namespace. This `performance-profile-testing` is used for testing purposes in this example.
+
+3.  Deploy a `Guaranteed` QoS pod that requests whole integer CPUs and uses the generated `RuntimeClass`.
+
+    1.  Retrieve the `RuntimeClass` created by the PerformanceProfile by running the following command:
+
+        ``` terminal
+        $ oc get performanceprofile performance -o=jsonpath='{.status.runtimeClass}{"\n"}'
+        ```
+
+        The following example shows the expected output:
+
+        ``` terminal
+        performance-performance
+        ```
+
+    2.  Create a YAML file for the pod, for example `my-pod.yaml`. Ensure it requests whole integer CPUs and references the `runtimeClassName` generated by your `PerformanceProfile`:
+
+        ``` yaml
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: test
+          namespace: performance-profile-testing
+        spec:
+          runtimeClassName: performance-performance
+          containers:
+          - name: test
+            image: "quay.io/openshift-kni/cnf-tests:4.22"
+            command: ["sleep", "10h"]
+            resources:
+              requests:
+                cpu: "2"
+                memory: "256Mi"
+              limits:
+                cpu: "2"
+                memory: "256Mi"
+        ```
+
+        > [!NOTE]
+        > The following requirements apply for CPU pinning:
+        >
+        > - **Guaranteed QoS Class**: To trigger CPU pinning, the Pod must belong to the Guaranteed Quality of Service class. This requires that every container in the pod has both CPU and memory limits defined, and those limits must exactly equal their corresponding requests.
+        >
+        > - **Integer CPUs**: The CPU request must be a whole integer.
+        >
+        >   - **SMT/Hyperthreading**: On systems where Simultaneous Multithreading (SMT) is enabled, the request should typically be a multiple of the threads per core, which is usually 2, to ensure exclusive core allocation.
+        >
+        >   - **Fractional Requests**: Pods with fractional CPU requests do not trigger the `ExecCPUAffinity` logic and follow the previous scheduling behavior.
+        >
+        > - **Capacity**: Ensure your cluster has sufficient isolated CPU capacity available in the node’s allocated pool to satisfy the request.
+
+    3.  Apply the pod definition by running the following command:
+
+        ``` terminal
+        $ oc apply -f my-pod.yaml
+        ```
+
+4.  Verify that the pod is running by running the following command:
+
+    ``` terminal
+    $ oc get pod -n performance-profile-testing test
+    ```
+
+    Wait until the pod status shows `Running` before proceeding to the verification steps.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Verify `exec` process pinning as follows:
+
+    1.  Run the following command to see the specific cores exclusively assigned to this container by the CPU Manager:
+
+        ``` terminal
+        $ oc exec -n performance-profile-testing test -- cat /sys/fs/cgroup/cpuset.cpus
+        ```
+
+        > [!NOTE]
+        > In a single-container pod, the command defaults to that container. In a multi-container pod, you must specify the container name using the `-c <container_name>` flag to ensure you are checking the correct context.
+
+        The following example shows the expected output:
+
+        ``` terminal
+        4-5
+        ```
+
+        The output shows exactly 2 CPUs, such as indexes 4 and 5, because the container requested `cpu: "2"`. The output represents the baseline exclusive CPUs for comparison.
+
+    2.  Start an exec process in the pod by running the following command:
+
+        ``` terminal
+        $ oc exec -n performance-profile-testing test -- sleep 3600 &
+        ```
+
+2.  Identify the node where the test pod is running:
+
+    ``` terminal
+    $ oc get pod test -n performance-profile-testing -o=jsonpath='{.spec.nodeName}{"\n"}'
+    ```
+
+3.  Start a debug session on the node and set the root directory:
+
+    ``` terminal
+    $ oc debug node/<node_name>
+    ```
+
+    ``` terminal
+    # chroot /host
+    ```
+
+    1.  Find the PID of the sleep 3600 process by running the following command:
+
+        ``` terminal
+        $ ps -ef | grep "sleep 3600"
+        ```
+
+        The following example shows the expected output:
+
+        ``` terminal
+        1001     12345 12340  0 12:00 ? 00:00:00 sleep 3600
+        ```
+
+    2.  Identify the dedicated CPU set for the container by running the following command:
+
+        ``` terminal
+        $ oc exec -n performance-profile-testing test -- cat /sys/fs/cgroup/cpuset.cpus
+        ```
+
+        > [!NOTE]
+        > In a multi-container pod, you must specify the container name using the `-c <container_name>` flag.
+
+        The following example shows the expected output for example the specific cores exclusively assigned to this container by the CPU Manager:
+
+        ``` terminal
+        4-5
+        ```
+
+    3.  Check the CPU affinity of the exec process by running the following command, replacing `<PID>` with the PID identified in the previous step:
+
+        ``` terminal
+        $ taskset -pc <PID>
+        ```
+
+        Compare the taskset output against the container’s dedicated CPU set from Step 1.
+
+        In this example, while the container has access to CPUs 4-5, the `ExecCPUAffinity` logic has pinned the exec process specifically to CPU 4. This confirms the pinning logic is active and that your primary workload’s exclusive CPUs remain undisturbed.
+
+</div>
+
+## Disable CPU isolation for executed processes
+
+If you have a high-performance workload that requires executed processes to use any available core rather than being pinned to the first core, you can opt out of the default behavior by following this procedure.
+
+> [!NOTE]
+> Adding or removing the `performance.openshift.io/exec-cpu-affinity` annotation triggers a MachineConfig rollout that reboots the affected nodes.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You have logged in as a user with `cluster-admin` privileges.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  List existing profiles by running the following command:
+
+    ``` terminal
+    $ oc get performanceprofile
+    ```
+
+    Identify the PerformanceProfile applied to the nodes running your high-performance workload.
+
+2.  Edit the identified PerformanceProfile to add the annotation that disables CPU isolation for executed processes by running the following command, replacing `<profile-name>` with the name of your PerformanceProfile:
+
+    ``` terminal
+    $ oc edit performanceprofile <profile-name>
+    ```
+
+3.  In the editor that opens, add the following annotation under the `metadata` section:
+
+    ``` yaml
+    metadata:
+      name: <profile-name>
+      annotations:
+        performance.openshift.io/exec-cpu-affinity: "disable"
+    ```
+
+4.  Save and close the editor to apply the changes.
+
+5.  Wait for the MachineConfigPool (MCP) to finish updating:
+
+    ``` terminal
+    $ oc get mcp
+    ```
+
+    All pools should show `UPDATED=True` and `UPDATING=False` before proceeding.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Verify that the annotation has been added by running the following command, replacing `<profile-name>` with the name of your PerformanceProfile:
+
+    ``` terminal
+    $ oc get performanceprofile <profile_name> -o yaml | grep "exec-cpu-affinity: disable"
+    ```
+
+    Expected output:
+
+    ``` terminal
+        performance.openshift.io/exec-cpu-affinity: "disable"
+    ```
+
+</div>
+
+## Troubleshoot ExecCPUAffinity configuration
+
+If a process initiated by using `oc exec` is not being pinned correctly despite the pod meeting the Guaranteed QoS and integer CPU requirements, use the following procedure to verify the configuration at the node level.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to the cluster as a user with `cluster-admin` permissions.
+
+- You have the OpenShift CLI (`oc`) installed.
+
+- You have identified the node where the pod is running.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Start a debug session for the targeted node:
+
+    ``` terminal
+    $ oc debug node/<node_name>
+    ```
+
+2.  Set `/host` as the root directory for the debug shell:
+
+    ``` terminal
+    # chroot /host
+    ```
+
+3.  Inspect the performance runtime configuration file:
+
+    ``` terminal
+    # cat /etc/crio/crio.conf.d/99-runtimes.conf
+    ```
+
+    The following example shows the expected output:
+
+    ``` toml
+    [crio.runtime.runtimes.high-performance]
+    inherit_default_runtime = true
+    exec_cpu_affinity = "first"
+    ```
+
+    > [!NOTE]
+    > If `exec_cpu_affinity = "first"` is missing, ensure the `PerformanceProfile` does not contain the `performance.openshift.io/exec-cpu-affinity: "disable"` annotation. If you recently changed the annotation, verify that the MachineConfigPool (MCP) has finished updating.
+
+4.  Verify the live CRI-O configuration to ensure the setting is loaded into memory:
+
+    ``` terminal
+    # crio config | grep exec_cpu_affinity
+    ```
+
+    The following example shows the expected output:
+
+    ``` terminal
+    exec_cpu_affinity = "first"
+    ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- If both the runtime configuration file and live CRI-O configuration show `exec_cpu_affinity = "first"`, the ExecCPUAffinity feature is correctly configured. Processes initiated by `oc exec` on Guaranteed QoS pods with integer CPU requests are pinned to the first available core.
+
+- If `exec_cpu_affinity = "first"` is missing from either output, check that the `PerformanceProfile` does not contain the `performance.openshift.io/exec-cpu-affinity: "disable"` annotation and verify that the MachineConfigPool (MCP) has finished updating by running:
+
+  ``` terminal
+  $ oc get mcp
+  ```
+
+  All pools should show `UPDATED=True` and `UPDATING=False`.
+
+</div>
+
+## Troubleshooting ExecCPUAffinity configuration common issues and resolutions
+
+Troubleshoot `ExecCPUAffinity` configuration issues by identifying common symptoms and their resolutions. Use this information to ensure processes are correctly pinned to the intended CPUs and that the MachineConfigPool updates successfully.
+
+The following table describes common issues and resolutions for `ExecCPUAffinity` configuration:
+
+| Symptom | Potential Cause | Resolution |
+|----|----|----|
+| Process runs on all CPUs in the container set. | The pod does not belong to the Guaranteed QoS class. For more information see [Pod Quality of Service Classes](https://kubernetes.io/docs/concepts/workloads/pods/pod-qos/#criteria). | Ensure the container has `limits` and `requests` defined for both CPU and memory, and that they are equal. |
+| Process runs on all CPUs in the container set. | The container uses fractional CPU requests for example `500m`. | Update the pod specification to request a whole integer number of CPUs. |
+| The `99-runtimes.conf` file does not exist or is not updated. | The MachineConfigPool (MCP) is still updating or has failed. | Check the MCP status using `oc get mcp`. Changing the `ExecCPUAffinity` status triggers a node reboot; ensure the update has completed. |
+| The `exec` process is pinned to an exclusive CPU instead of a shared CPU. | Shared CPUs are not defined in the `PerformanceProfile`. | When the `MixedCPUsAllocation` Technology Preview feature is enabled through the `TechPreviewNoUpgrade` feature set, the system’s CPU pinning logic for exec processes changes. If shared CPUs are defined in the PerformanceProfile under `spec.cpu.shared` and `workloadHints.mixedCpus` is set to `true`, the system prioritizes the first shared CPU. If no shared CPUs are defined, it defaults to the first exclusive (isolated) CPU. Enabling this feature set cannot be undone and is not recommended for production clusters. Additionally, the container must request shared CPUs by including `workload.openshift.io/enable-shared-cpus: "1"` in the resource limits. |
+
 <div>
 
 <div class="title">
@@ -1338,16 +1753,19 @@ The exact partitioning pattern to use depends on many factors like hardware, wor
 
 The decision regarding which specific CPUs should be used for reserved and isolated partitions requires detailed analysis and measurements. Factors like NUMA affinity of devices and memory play a role. The selection also depends on the workload architecture and the specific use case.
 
+To ensure that housekeeping tasks and workloads do not interfere with each other, specify two groups of CPUs in the `spec` section of the performance profile.
+
 > [!IMPORTANT]
 > The reserved and isolated CPU pools must not overlap and together must span all available cores in the worker node.
 
-To ensure that housekeeping tasks and workloads do not interfere with each other, specify two groups of CPUs in the `spec` section of the performance profile.
+| Partition type | Description |
+|----|----|
+| `reserved` | Specifies the CPUs for cluster and operating system housekeeping duties. Kernel processes and operating system services are pinned to these CPUs. When workload partitioning is enabled, platform pods are also pinned to these CPUs. Threads in the `reserved` group are often busy. The kubelet does not place `Guaranteed` pods that request exclusive CPUs on these CPUs. Do not run latency-sensitive applications in the `reserved` group. |
+| `isolated` | Specifies the CPUs for application container workloads. These CPUs have the lowest latency. Device interrupts can still be processed on this set unless you disable IRQ load balancing. The kubelet places `Guaranteed` pods that request exclusive CPUs on this set. |
 
-- `isolated` - Specifies the CPUs for the application container workloads. These CPUs have the lowest latency. Processes in this group have no interruptions and can, for example, reach much higher DPDK zero packet loss bandwidth.
+CPU partition types
 
-- `reserved` - Specifies the CPUs for the cluster and operating system housekeeping duties. Threads in the `reserved` group are often busy. Do not run latency-sensitive applications in the `reserved` group. Latency-sensitive applications run in the `isolated` group.
-
-# Partitioning CPUs for infra and application containers
+# Partition CPUs for infra and application containers
 
 By partitioning CPUs, you can prevent noisy processes from interfering with latency-sensitive processes by separating the processes from each other.
 
@@ -1388,7 +1806,7 @@ Procedure
 
 </div>
 
-# Configuring Hyper-Threading for a cluster
+# Configure Hyper-Threading for a cluster
 
 To configure Hyper-Threading for an OpenShift Container Platform cluster, set the CPU threads in the performance profile to the same cores that are configured for the reserved or isolated CPU pools.
 
@@ -1490,7 +1908,7 @@ Procedure
 
 </div>
 
-# Disabling Hyper-Threading for low latency applications
+# Disable Hyper-Threading for low latency applications
 
 When configuring clusters for low latency processing, consider whether you want to disable Hyper-Threading before you deploy the cluster.
 
@@ -1552,7 +1970,9 @@ Procedure
 
 # Managing device interrupt processing for guaranteed pod isolated CPUs
 
-The Node Tuning Operator can manage host CPUs by dividing them into reserved CPUs for cluster and operating system housekeeping duties, including pod infra containers, and isolated CPUs for application containers to run the workloads. By completing these tasks, you can set CPUs for low-latency workloads as isolated workloads.
+The Node Tuning Operator can manage host CPUs by dividing them into reserved CPUs for cluster and operating system housekeeping duties, including pod infra containers, and isolated CPUs for application containers to run the workloads.
+
+By completing these tasks, you can set CPUs for low-latency workloads as isolated workloads.
 
 Device interrupts are load balanced between all isolated and reserved CPUs to avoid CPUs being overloaded, with the exception of CPUs where there is a guaranteed pod running. Guaranteed pod CPUs are prevented from processing device interrupts when the relevant annotations are set for the pod.
 
@@ -1635,7 +2055,7 @@ Additional resources
 
 </div>
 
-## Configuring node interrupt affinity
+## Configure node interrupt affinity
 
 Configure a cluster node for IRQ dynamic load balancing to control which cores can receive device interrupt requests (IRQ).
 
@@ -1688,7 +2108,7 @@ Procedure
 
 By configuring memory page sizes, system administrators can implement more efficient memory management on a specific node to suit workload requirements. The Node Tuning Operator provides a method for configuring huge pages and kernel page sizes by using a performance profile.
 
-## Configuring kernel page sizes
+## Configure kernel page sizes
 
 Use the `kernelPageSize` specification in a performance profile to configure the kernel page size on a specific node. Specify larger kernel page sizes for memory-intensive, high-performance workloads.
 
@@ -1810,7 +2230,7 @@ Verification
 
 </div>
 
-## Configuring huge pages
+## Configure huge pages
 
 Because nodes must pre-allocate huge pages used in an OpenShift Container Platform cluster, use the Node Tuning Operator to allocate huge pages on a specific node.
 
@@ -1921,7 +2341,7 @@ Verification
 
 </div>
 
-## Allocating multiple huge page sizes
+## Allocate multiple huge page sizes
 
 You can request huge pages with different sizes under the same container. By doing this task, you can define more complicated pods consisting of containers with different huge page size needs.
 
@@ -1962,7 +2382,7 @@ Procedure
 
 The Node Tuning Operator facilitates reducing NIC queues for enhanced performance. Adjustments are made using the performance profile, allowing customization of queues for different network devices.
 
-## Adjusting the NIC queues with the performance profile
+## Adjust the NIC queues with the performance profile
 
 You can use a performance profile to adjust the queue count for each network device. By using the Node Tuning Operator, you can reduce NIC queues for enhanced performance.
 

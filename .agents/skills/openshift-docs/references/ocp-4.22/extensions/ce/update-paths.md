@@ -42,7 +42,7 @@ Additional resources
 
 # Support for version ranges
 
-In Operator Lifecycle Manager (OLM) v1, you can specify a version range by using a comparison string in an Operator or extension’s custom resource (CR). If you specify a version range in the CR, OLM v1 installs or updates to the latest version of the Operator that can be resolved within the version range.
+In Operator Lifecycle Manager (OLM) v1, you can specify a version range in an Operator or extension’s custom resource (CR). OLM v1 installs or updates to the latest version that can be resolved within the specified range.
 
 The resolved version workflow includes the following steps:
 

@@ -2,11 +2,27 @@
 
 The **Vulnerability Management** functions provide methods to view and manage vulnerabilities discovered by RHACS. Common vulnerability management tasks involve identifying and prioritizing vulnerabilities, remedying them, and monitoring for new threats.
 
-For information about the sources used for identifying vulnerabilities, see [Vulnerability data sources](../../architecture/acs-architecture.md#con-vuln-sources_acs-architecture).
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Vulnerability data sources](../../architecture/acs-architecture.md#con-vuln-sources_acs-architecture)
+
+- [Using the vulnerability management dashboard](vulnerability-management-dashboard.md)
+
+</div>
+
+<a id="vulnerability-management-overview_common-vuln-management-tasks"></a>
+
+# Vulnerability management overview
+
+RHACS provides multiple methods to view vulnerability information, including the current Results page and the deprecated vulnerability management dashboard.
 
 Historically, RHACS provided a view of vulnerabilities discovered in your system in the vulnerability management dashboard. The dashboard is deprecated in RHACS 4.5 and will be removed in a future release.
-
-For more information about the dashboard, see [Using the vulnerability management dashboard](vulnerability-management-dashboard.md).
 
 Currently, vulnerability information is provided in pages that are accessed by selecting **Vulnerability Management** → **Results**. You can select different views based on whether you want to view vulnerabilities discovered in your workloads, vulnerabilities discovered in platform components, such as OpenShift, or node vulnerabilities. Depending on the view, you can filter results based on specific criteria: for example, you can display vulnerabilities of different severity, vulnerabilities in deployments with specific annotations, or vulnerabilities in images that are based on a specific operating system.
 
@@ -133,7 +149,7 @@ Procedure
     <li><p><strong>is less than or equal to</strong></p></li>
     <li><p><strong>is less than</strong></p></li>
     </ul></li>
-    <li><p><strong>EPSS probability</strong>: The likelihood that the vulnerability could be exploited according to the <a href="https://www.first.org/epss/">Exploit Prediction Scoring System (EPSS)</a>. This EPSS data provides a percentage estimate of the probability that exploitation of this vulnerability will be observed in the next 30 days. The EPSS collects data of observed exploitation activity from partners, and exploitation activity does not mean that an attempted exploitation was successful. The EPSS score should be used as a single data point <em>along with other information</em>, such as the age of the CVE, to help you prioritize the vulnerabilities to address. For more information, see <a href="https://access.redhat.com/articles/7106599">RHACS and EPSS</a>.</p></li>
+    <li><p><strong>EPSS probability</strong>: The likelihood that the vulnerability could be exploited according to the Exploit Prediction Scoring System (EPSS). This EPSS data provides a percentage estimate of the probability that exploitation of this vulnerability will be observed in the next 30 days. The EPSS collects data of observed exploitation activity from partners, and exploitation activity does not mean that an attempted exploitation was successful. The EPSS score should be used as a single data point <em>along with other information</em>, such as the age of the CVE, to help you prioritize the vulnerabilities to address.</p></li>
     </ul></td>
     </tr>
     <tr>
@@ -270,6 +286,20 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Exploit Prediction Scoring System (EPSS)](https://www.first.org/epss/)
+
+- [RHACS and EPSS (Red Hat Knowledgebase)](https://access.redhat.com/articles/7106599)
+
+</div>
+
 <a id="vulnerability-management20-view-platform-cve_vulns-platforms"></a>
 
 ## Viewing platform vulnerabilities
@@ -348,7 +378,7 @@ Procedure
     <li><p><strong>is less than or equal to</strong></p></li>
     <li><p><strong>is less than</strong></p></li>
     </ul></li>
-    <li><p><strong>EPSS probability</strong>: The likelihood that the vulnerability could be exploited according to the <a href="https://www.first.org/epss/">Exploit Prediction Scoring System (EPSS)</a>. This EPSS data provides a percentage estimate of the probability that exploitation of this vulnerability will be observed in the next 30 days. The EPSS collects data of observed exploitation activity from partners, and exploitation activity does not mean that an attempted exploitation was successful. The EPSS score should be used as a single data point <em>along with other information</em>, such as the age of the CVE, to help you prioritize the vulnerabilities to address. For more information, see <a href="https://access.redhat.com/articles/7106599">RHACS and EPSS</a>.</p></li>
+    <li><p><strong>EPSS probability</strong>: The likelihood that the vulnerability could be exploited according to the Exploit Prediction Scoring System (EPSS). This EPSS data provides a percentage estimate of the probability that exploitation of this vulnerability will be observed in the next 30 days. The EPSS collects data of observed exploitation activity from partners, and exploitation activity does not mean that an attempted exploitation was successful. The EPSS score should be used as a single data point <em>along with other information</em>, such as the age of the CVE, to help you prioritize the vulnerabilities to address.</p></li>
     </ul></td>
     </tr>
     <tr>
@@ -487,6 +517,8 @@ Procedure
 <a id="viewing-node-cves_vulns-nodes"></a>
 
 ## Viewing vulnerabilities in nodes
+
+You can view and filter vulnerabilities in nodes by using the RHACS portal, including vulnerabilities in core Kubernetes components and container runtimes.
 
 You can identify vulnerabilities in your nodes by using RHACS. The vulnerabilities that are identified include the following:
 
@@ -830,7 +862,7 @@ Procedure
     <li><p><strong>is less than or equal to</strong></p></li>
     <li><p><strong>is less than</strong></p></li>
     </ul></li>
-    <li><p><strong>EPSS probability</strong>: The likelihood that the vulnerability could be exploited according to the <a href="https://www.first.org/epss/">Exploit Prediction Scoring System (EPSS)</a>. This EPSS data provides a percentage estimate of the probability that exploitation of this vulnerability will be observed in the next 30 days. The EPSS collects data of observed exploitation activity from partners, and exploitation activity does not mean that an attempted exploitation was successful. The EPSS score should be used as a single data point <em>along with other information</em>, such as the age of the CVE, to help you prioritize the vulnerabilities to address. For more information, see <a href="https://access.redhat.com/articles/7106599">RHACS and EPSS</a>.</p></li>
+    <li><p><strong>EPSS probability</strong>: The likelihood that the vulnerability could be exploited according to the Exploit Prediction Scoring System (EPSS). This EPSS data provides a percentage estimate of the probability that exploitation of this vulnerability will be observed in the next 30 days. The EPSS collects data of observed exploitation activity from partners, and exploitation activity does not mean that an attempted exploitation was successful. The EPSS score should be used as a single data point <em>along with other information</em>, such as the age of the CVE, to help you prioritize the vulnerabilities to address.</p></li>
     </ul></td>
     </tr>
     <tr>
@@ -976,7 +1008,7 @@ Procedure
     > [!IMPORTANT]
     > In the RHACS portal, click **Platform Configuration** → **System Configuration** to view the data retention configuration.
     >
-    > All the data related to the image removed from the watched image list continues to appear in the RHACS portal for the number of days mentioned on the **System Configuration** page and is only removed after that period is over.
+    > Data related to an image that you remove from the watched image list continues to appear in the RHACS portal for the number of days shown on the **System Configuration** page. RHACS removes the data only after that period ends.
 
 8.  Click **Close** to return to the **Inactive images** page.
 
@@ -1227,7 +1259,7 @@ The information available includes the following components:
 
 - **Top NVD CVSS**: Shows the highest severity scores from the National Vulnerability Database (NVD) to enable standardized impact assessments. This information is only visible when using Scanner V4.
 
-- **EPSS probability**: The likelihood that the vulnerability could be exploited according to the [Exploit Prediction Scoring System (EPSS)](https://www.first.org/epss/). This EPSS data provides a percentage estimate of the probability that exploitation of this vulnerability will be observed in the next 30 days. The EPSS collects data of observed exploitation activity from partners, and exploitation activity does not mean that an attempted exploitation was successful. The EPSS score should be used as a single data point *along with other information*, such as the age of the CVE, to help you prioritize the vulnerabilities to address. For more information, see [RHACS and EPSS](https://access.redhat.com/articles/7106599). This information is visible only when using Scanner V4.
+- **EPSS probability**: The likelihood that the vulnerability could be exploited according to the Exploit Prediction Scoring System (EPSS). This EPSS data provides a percentage estimate of the probability that exploitation of this vulnerability will be observed in the next 30 days. The EPSS collects data of observed exploitation activity from partners, and exploitation activity does not mean that an attempted exploitation was successful. The EPSS score should be used as a single data point *along with other information*, such as the age of the CVE, to help you prioritize the vulnerabilities to address. This information is visible only when using Scanner V4.
 
 - **Affected images**: Displays the number of container images affected by specific CVEs to assess the scope of vulnerabilities.
 
@@ -1284,6 +1316,8 @@ A window opens with information about the vulnerabilities associated with the de
 <a id="excluding-CVEs_excluding-cves"></a>
 
 # Excluding CVEs
+
+You can exclude or ignore CVEs in RHACS by snoozing node and platform CVEs and deferring or marking node, platform, and image CVEs as false positives.
 
 You can exclude or ignore CVEs in RHACS by snoozing node and platform CVEs and deferring or marking node, platform, and image CVEs as false positives. You might want to exclude CVEs if you know that the CVE is a false positive or you have already taken steps to mitigate the CVE. Snoozed CVEs do not appear in vulnerability reports or trigger policy violations.
 

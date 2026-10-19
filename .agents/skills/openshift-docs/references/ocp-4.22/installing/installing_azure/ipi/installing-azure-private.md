@@ -25,7 +25,7 @@ To deploy a private cluster, you must:
 
 ## Private clusters in Azure
 
-To create a private cluster on Microsoft Azure, you must provide an existing private VNet and subnets to host the cluster. The installation program must also be able to resolve the DNS records that the cluster requires. The installation program configures the Ingress Operator and API server for only internal traffic.
+To create a private cluster on Microsoft Azure, you must provide an existing private VNet and subnets to host the cluster. The installation program resolves required DNS records and configures the Ingress Operator and API server for internal traffic only.
 
 Depending how your network connects to the private VNET, you might need to use a DNS forwarder to resolve the cluster’s private DNS records. The cluster’s machines use `168.63.129.16` internally for DNS resolution. For more information, see "What is Azure Private DNS?" and "What is IP address 168.63.129.16?".
 
@@ -123,7 +123,9 @@ By deploying OpenShift Container Platform into an existing Azure VNet, you might
 
 ## Requirements for using your VNet
 
-When you deploy a cluster by using an existing VNet, you must perform additional network configuration before you install the cluster. In installer-provisioned infrastructure clusters, the installation program usually creates the following components, but it does not create them when you install into an existing VNet:
+When you deploy a cluster by using an existing VNet, you must perform additional network configuration before you install the cluster.
+
+In installer-provisioned infrastructure clusters, the installation program usually creates the following components, but it does not create them when you install into an existing VNet:
 
 - Subnets
 
@@ -211,7 +213,9 @@ Ports used for control plane machine to control plane machine communications
 
 ## Division of permissions
 
-Starting with OpenShift Container Platform 4.3, you do not need all of the permissions that are required for an installation program-provisioned infrastructure cluster to deploy a cluster. This change mimics the division of permissions that you might have at your company: some individuals can create different resources in your clouds than others. For example, you might be able to create application-specific items, like instances, storage, and load balancers, but not networking-related components such as VNets, subnet, or ingress rules.
+You do not need all of the permissions that are required for an installer-provisioned infrastructure cluster to deploy a cluster. This change mimics the division of permissions that you might have at your company: some individuals can create different resources in your clouds than others.
+
+For example, you might be able to create application-specific items, like instances, storage, and load balancers, but not networking-related components such as VNets, subnet, or ingress rules.
 
 The Azure credentials that you use when you create your cluster do not need the networking permissions that are required to make VNets and core networking components within the VNet, such as subnets, routing tables, internet gateways, NAT, and VPN. You still need permission to make the application resources that the machines within the cluster require, such as load balancers, security groups, storage accounts, and nodes.
 
@@ -440,7 +444,7 @@ Procedure
 
 </div>
 
-## Enabling confidential VMs
+## Enable confidential VMs
 
 To enable confidential VMs on Azure for your OpenShift Container Platform cluster, you can configure the `install-config.yaml` file before deployment. Apply the settings to control plane nodes, compute nodes, or all nodes as needed.
 
@@ -544,7 +548,9 @@ Procedure
 
 ## Enabling a user-managed DNS
 
-You can install a cluster with a domain name server (DNS) solution that you manage instead of the default cluster-provisioned DNS solution. As a result, you can manage the API and Ingress DNS records in your own system rather than adding the records to the DNS of the cloud. For example, your organization’s security policies might not allow the use of public DNS services such as Microsoft Azure. In such scenarios, you can use your own DNS service to bypass the public DNS service and manage your own DNS for the IP addresses of the API and Ingress services.
+To manage API and Ingress DNS records in your own system, install your cluster with a DNS solution that you manage.
+
+This solution replaces the default cluster-provisioned DNS solution. For example, your organization’s security policies might not allow the use of public DNS services such as Microsoft Azure. In such scenarios, you can use your own DNS service to bypass the public DNS service and manage your own DNS for the IP addresses of the API and Ingress services.
 
 If you enable user-managed DNS during installation, the installation program provisions DNS records for the API and Ingress services only within the cluster. To ensure access from outside the cluster, you must provision the DNS records in an external DNS service of your choice for the API and Ingress services after installation.
 
@@ -1359,7 +1365,9 @@ Procedure
 
 # Optional: Preparing a private Microsoft Azure cluster for a private image registry
 
-By installing a private image registry on a private Microsoft Azure cluster, you can create private storage endpoints. Private storage endpoints disable public facing endpoints to the registry’s storage account, adding an extra layer of security to your OpenShift Container Platform deployment.
+By installing a private image registry on a private Microsoft Azure cluster, you can create private storage endpoints.
+
+Private storage endpoints disable public facing endpoints to the registry’s storage account, adding an extra layer of security to your OpenShift Container Platform deployment.
 
 > [!IMPORTANT]
 > Do not install a private image registry on Microsoft Azure Red Hat OpenShift (ARO), because the endpoint can put your Microsoft Azure Red Hat OpenShift cluster in an unrecoverable state.
@@ -1442,14 +1450,19 @@ Procedure
             type: Internal
     ```
 
-    - Optional. If you have an existing VNet and subnet setup, replace `<vnet_resource_group>` with the resource group name that contains the existing virtual network (VNet).
+    where:
 
-    - Optional. If you have an existing VNet and subnet setup, replace `<subnet_name>` with the name of the existing compute subnet within the specified resource group.
+    `spec.storage.azure.networkAccess.internal.networkResourceGroupName`
+    Specifies the resource group name that contains the existing virtual network (VNet), if you have an existing VNet and subnet setup. This field is optional.
 
-    - Optional. If you have an existing VNet and subnet setup, replace `<vnet_name>` with the name of the existing virtual network (VNet) in the specified resource group.
+    `spec.storage.azure.networkAccess.internal.subnetName`
+    Specifies the name of the existing compute subnet within the specified resource group, if you have an existing VNet and subnet setup. This field is optional.
 
-      > [!NOTE]
-      > The `imageregistry-config.yaml` file is consumed during the installation process. If desired, you must back it up before installation.
+    `spec.storage.azure.networkAccess.internal.vnetName`
+    Specifies the name of the existing virtual network (VNet) in the specified resource group, if you have an existing VNet and subnet setup. This field is optional.
+
+    > [!NOTE]
+    > The `imageregistry-config.yaml` file is consumed during the installation process. If desired, you must back it up before installation.
 
 3.  Move the `imageregistry-config.yaml` file to the `<installation_directory/manifests>` folder by running the following command:
 
@@ -1614,7 +1627,9 @@ When the cluster deployment completes successfully:
 
 # Provisioning your own DNS records
 
-Use the IP address of the API server to provision your own DNS record with the `api.<cluster_name>.<base_domain>.` hostname by using your cluster name and base cluster domain. Use the IP address of the Ingress service to provision your own DNS record with the `*.apps.<cluster_name>.<base_domain>.` hostname by using your cluster name and base cluster domain.
+Use the IP address of the API server to provision your own DNS record with the `api.<cluster_name>.<base_domain>.` hostname by using your cluster name and base cluster domain.
+
+Use the IP address of the Ingress service to provision your own DNS record with the `*.apps.<cluster_name>.<base_domain>.` hostname by using your cluster name and base cluster domain.
 
 <div>
 

@@ -2,7 +2,7 @@
 
 As an administrator, you can use `Secret` objects to provide sensitive information, such as passwords and user names, to applications without exposing that information in plain text that developers could see.
 
-# Understanding secrets
+# Understand secrets
 
 You can mount secrets into containers by using a volume plugin or the system can use secrets to perform actions on behalf of a pod.
 
@@ -111,7 +111,7 @@ However, if you do not enable the `ImageRegistry` capability or if you disable t
 
 When the integrated OpenShift image registry is disabled on a cluster that previously had it enabled, the previously generated image pull secrets are deleted automatically.
 
-# Understanding how to create secrets
+# Understand how to create secrets
 
 As an administrator you must create a secret before developers can create the pods that depend on that secret.
 
@@ -334,7 +334,7 @@ Procedure
 
 </div>
 
-## Creating an opaque secret
+## Create an opaque secret
 
 As an administrator, you can create an opaque secret, which allows you to store unstructured `key:value` pairs that can contain arbitrary values.
 
@@ -380,7 +380,7 @@ Procedure
 
 </div>
 
-## Creating a legacy service account token secret
+## Create a legacy service account token secret
 
 As an administrator, you can create a legacy service account token secret, which allows you to distribute a service account token to applications that must authenticate to the API.
 
@@ -451,7 +451,7 @@ Procedure
 
 </div>
 
-## Creating a basic authentication secret
+## Create a basic authentication secret
 
 As an administrator, you can create a basic authentication secret, which you can use to store the credentials needed for basic authentication.
 
@@ -518,7 +518,7 @@ Procedure
 
 </div>
 
-## Creating an SSH authentication secret
+## Create an SSH authentication secret
 
 As an administrator, you can create an SSH authentication secret, which you can use to store data used for SSH authentication.
 
@@ -577,7 +577,7 @@ Procedure
 
 </div>
 
-## Creating a Docker configuration secret
+## Create a Docker configuration secret
 
 As an administrator, you can create a Docker configuration secret, which allows you to store the credentials for accessing a container image registry.
 
@@ -667,7 +667,7 @@ Procedure
 
 </div>
 
-## Creating a secret using the web console
+## Create a secret using the web console
 
 You can secure sensitive information, such as passwords or tokens, in a secret and add the information to a workload by using the web console. By using secrets, you can manage application credentials and configuration files without including them in your container images.
 
@@ -717,7 +717,7 @@ Procedure
 
 </div>
 
-# Understanding how to update secrets
+# Understand how to update secrets
 
 To update the values in a secret, you must re-create the pods that use that secret. Because running pods do not automatically detect changes to secret data, restarting the pods ensures they consume the updated configuration.
 
@@ -728,7 +728,7 @@ The `resourceVersion` value in a secret is not specified when it is referenced. 
 > [!NOTE]
 > Currently, it is not possible to check the resource version of a secret object that was used when a pod was created. It is planned that pods will report this information, so that a controller could restart ones using an old `resourceVersion`. In the interim, do not update the data of existing secrets, but create new ones with distinct names.
 
-# Creating and using secrets
+# Create and use secrets
 
 As an administrator, you can create a service account token secret, which you can distribute to applications that must authenticate to the API.
 
@@ -839,7 +839,7 @@ Other pods can trust cluster-created certificates (which are only signed for int
 
 The signature algorithm for this feature is `x509.SHA256WithRSA`. To manually rotate, delete the generated secret. A new certificate is created.
 
-## Generating signed certificates for use with secrets
+## Generate signed certificates for use with secrets
 
 You can use a signed serving certificate/key pair with a pod by adding the `service.beta.openshift.io/serving-cert-secret-name` annotation to the service, then add the secret to the pod.
 
@@ -978,7 +978,7 @@ Procedure
 
 </div>
 
-# Troubleshooting secrets
+# Troubleshoot secrets
 
 Review the following information for troubleshooting tips for working with secrets.
 

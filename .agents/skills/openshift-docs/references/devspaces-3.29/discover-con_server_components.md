@@ -9,7 +9,7 @@ Your cluster runs four OpenShift Dev Spaces server deployments that manage multi
 
 <figure>
 <br />
-<img src="assets/bc8c202d5c4b073ebbc5.png" alt="Diagram showing OpenShift Dev Spaces server component deployments interacting with the Dev Workspace operator" /><br />
+<img src="assets/67cd34e3cb35de787308.png" alt="Diagram showing OpenShift Dev Spaces server component deployments interacting with the Dev Workspace operator" /><br />
 
 <figcaption>Figure 1. OpenShift Dev Spaces server components interacting with the Dev Workspace operator</figcaption>
 </figure>

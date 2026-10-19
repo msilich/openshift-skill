@@ -138,7 +138,7 @@ By default, all namespaces that have an `openshift-` prefix have pod security ad
 
 If an Operator is installed in a user-created `openshift-*` namespace, synchronization is enabled automatically after a cluster service version (CSV) is created in the namespace. The synchronized label is derived from the permissions of the service accounts in the namespace.
 
-# Controlling pod security admission synchronization
+# Control pod security admission synchronization
 
 To customize which namespaces have their pod security admission labels automatically updated, you can enable or disable synchronization for most namespaces.
 
@@ -188,7 +188,7 @@ Additional resources
 
 </div>
 
-# Configuring pod security admission for a namespace
+# Configure pod security admission for a namespace
 
 You can configure pod security admission modes and profiles at the namespace level to control the security standards that pods must meet in a specific namespace.
 
@@ -229,7 +229,7 @@ You can view the Kubernetes API server audit logs to investigate alerts that wer
 
 To identify pod security admission violation audit events, see "Audit annotations" in the Kubernetes documentation.
 
-## Identifying pod security violations
+## Identify pod security violations
 
 To identify which workloads are causing pod security violations, you can review the Kubernetes API server audit logs by using the `must-gather` tool.
 

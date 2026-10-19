@@ -4,7 +4,7 @@ To deploy a cluster on Amazon Web Services (AWS) with multi-architecture compute
 
 You can also migrate your current cluster with single-architecture compute machines to a cluster with multi-architecture compute machines. After creating a multi-architecture cluster, you can add nodes with different architectures to the cluster.
 
-# Adding a multi-architecture compute machine set to your AWS cluster
+# Add a multi-architecture compute machine set to your AWS cluster
 
 After creating a multi-architecture cluster, you can add nodes with different architectures.
 

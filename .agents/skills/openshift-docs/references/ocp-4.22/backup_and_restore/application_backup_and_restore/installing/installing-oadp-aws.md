@@ -34,13 +34,21 @@ AWS GovCloud (US) is an Amazon storage solution developed to meet the stringent 
 
 - To find other AWS-imposed restrictions, see the AWS documentation.
 
-## Additional resources
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Amazon Simple Storage Service endpoints and quotas (AWS documentation)](https://docs.aws.amazon.com/general/latest/gr/s3.html)
 
 - [How Amazon Simple Storage Service Differs for AWS GovCloud (US) (AWS documentation)](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-s3.html#govcloud-S3-diffs)
 
-# Configuring Amazon Web Services
+</div>
+
+# Configure Amazon Web Services
 
 Configure Amazon Web Services (AWS) S3 storage and Identity and Access Management (IAM) credentials for backup storage with OADP. This provides the necessary permissions and storage infrastructure for data protection operations.
 
@@ -233,7 +241,7 @@ If the backup and snapshot locations use different credentials, you create two s
 >
 > If you do not want to specify backup or snapshot locations during the installation, you can create a default `Secret` with an empty `credentials-velero` file.
 
-## Creating a default Secret
+## Create a default Secret
 
 You create a default `Secret` if your backup and snapshot locations use the same credentials or if you do not require a snapshot location.
 
@@ -286,7 +294,7 @@ Procedure
 
 </div>
 
-## Creating profiles for different credentials
+## Create profiles for different credentials
 
 If your backup and snapshot locations use different credentials, you create separate profiles in the `credentials-velero` file.
 
@@ -352,7 +360,7 @@ Procedure
 
 </div>
 
-## Creating an OADP SSE-C encryption key for additional data security
+## Create an OADP SSE-C encryption key for additional data security
 
 Configure server-side encryption with customer-provided keys (SSE-C) to add an additional layer of encryption for backup data stored in Amazon Web Services (AWS) S3. This protects backup data if AWS credentials become exposed.
 
@@ -512,7 +520,7 @@ To verify that you cannot download the encrypted files without the inclusion of 
     encrypt me please
     ```
 
-### Downloading a file with an SSE-C encryption key for files backed up by Velero
+### Download a file with an SSE-C encryption key for files backed up by Velero
 
 When you are verifying an SSE-C encryption key, you can also download the file with the additional encryption key for files that were backed up with Velero.
 
@@ -538,7 +546,7 @@ Procedure
 
 </div>
 
-# Installing the Data Protection Application
+# Install the Data Protection Application
 
 You install the Data Protection Application (DPA) by creating an instance of the `DataProtectionApplication` API.
 
@@ -737,7 +745,7 @@ Verification
 
 </div>
 
-# Changing the default backup storage location in a DPA
+# Change the default backup storage location in a DPA
 
 Understand why the `default` field of the `backupLocations` object in a `DataProtectionApplication` (DPA) does not change the default `BackupStorageLocation` (BSL) when you configure multiple backup locations. This helps you to identify the root cause and apply the correct workaround.
 
@@ -779,7 +787,7 @@ Procedure
 
 </div>
 
-## Setting Velero CPU and memory resource allocations
+## Set Velero CPU and memory resource allocations
 
 You set the CPU and memory resource allocations for the `Velero` pod by editing the `DataProtectionApplication` custom resource (CR) manifest.
 
@@ -842,7 +850,7 @@ Procedure
 
 Use the `nodeSelector` field to select which nodes can run the node agent. The `nodeSelector` field is the simplest recommended form of node selection constraint. Any label specified must match the labels on each node.
 
-## Enabling self-signed CA certificates
+## Enable self-signed CA certificates
 
 You must enable a self-signed CA certificate for object storage by editing the `DataProtectionApplication` custom resource (CR) manifest to prevent a `certificate signed by unknown authority` error.
 
@@ -899,7 +907,7 @@ Procedure
 
 </div>
 
-## Using CA certificates with the velero command aliased for Velero deployment
+## Use CA certificates with the velero command aliased for Velero deployment
 
 You might want to use the Velero CLI without installing it locally on your system by creating an alias for it.
 
@@ -980,7 +988,7 @@ Procedure
 
 </div>
 
-## Configuring node agents and node labels
+## Configure node agents and node labels
 
 The Data Protection Application (DPA) uses the `nodeSelector` field to select which nodes can run the node agent. The `nodeSelector` field is the recommended form of node selection constraint.
 
@@ -1026,7 +1034,7 @@ Procedure
 
 </div>
 
-# Configuring the backup storage location with a MD5 checksum algorithm
+# Configure the backup storage location with a MD5 checksum algorithm
 
 You can configure the Backup Storage Location (BSL) in the Data Protection Application (DPA) to use a MD5 checksum algorithm for both Amazon Simple Storage Service (Amazon S3) and S3-compatible storage providers. The checksum algorithm calculates the checksum for uploading and downloading objects to Amazon S3. You can use one of the following options to set the `checksumAlgorithm` field in the `spec.backupLocations.velero.config.checksumAlgorithm` section of the DPA.
 
@@ -1119,7 +1127,7 @@ Procedure
 
 </div>
 
-# Configuring the DPA with client burst and QPS settings
+# Configure the DPA with client burst and QPS settings
 
 The burst setting determines how many requests can be sent to the `velero` server before the limit is applied. After the burst limit is reached, the queries per second (QPS) setting determines how many additional requests can be sent per second.
 
@@ -1204,7 +1212,7 @@ Procedure
 
 </div>
 
-# Configuring node agent load affinity
+# Configure node agent load affinity
 
 You can schedule the node agent pods on specific nodes by using the `spec.podConfig.nodeSelector` object of the `DataProtectionApplication` (DPA) custom resource (CR).
 
@@ -1314,7 +1322,7 @@ Use the following guidelines to configure the node agent `loadAffinity` object i
             label.io/gpu: 'no'
   ```
 
-# Configuring node agent load concurrency
+# Configure node agent load concurrency
 
 You can control the maximum number of node agent operations that can run simultaneously on each node within your cluster.
 
@@ -1379,7 +1387,7 @@ Procedure
 
 </div>
 
-# Configuring the node agent as a non-root and non-privileged user
+# Configure the node agent as a non-root and non-privileged user
 
 To enhance the node agent security, you can configure the OADP Operator node agent daemonset to run as a non-root and non-privileged user by using the `spec.configuration.velero.disableFsBackup` setting in the `DataProtectionApplication` (DPA) custom resource (CR).
 
@@ -1522,7 +1530,7 @@ Verification
 
 </div>
 
-# Configuring repository maintenance
+# Configure repository maintenance
 
 OADP repository maintenance is a background job, you can configure it independently of the node agent pods. This means that you can schedule the repository maintenance pod on a node where the node agent is or is not running.
 
@@ -1610,7 +1618,7 @@ Procedure
 
 </div>
 
-# Configuring Velero load affinity
+# Configure Velero load affinity
 
 With each OADP deployment, there is one Velero pod and its main purpose is to schedule Velero workloads. To schedule the Velero pod, you can use the `velero.podConfig.nodeSelector` and the `velero.loadAffinity` objects in the `DataProtectionApplication` (DPA) custom resource (CR) spec.
 
@@ -1677,7 +1685,7 @@ Procedure
 
 </div>
 
-# Configuring a priority class for node agent and Velero pods
+# Configure a priority class for node agent and Velero pods
 
 Configure a `priorityClassName` field for the node agent and Velero pods by editing the `DataProtectionApplication` (DPA) custom resource (CR). This helps you ensure that the Kubernetes scheduler prioritizes OADP pods during resource contention.
 
@@ -1769,7 +1777,7 @@ Verification
 
 </div>
 
-# Overriding the imagePullPolicy setting in the DPA
+# Override the imagePullPolicy setting in the DPA
 
 In OADP 1.4.0 or earlier, the Operator sets the `imagePullPolicy` field of the Velero and node agent pods to `Always` for all images.
 
@@ -1857,7 +1865,7 @@ Procedure
 
 </div>
 
-# Enabling CSI in the DataProtectionApplication CR
+# Enable CSI in the DataProtectionApplication CR
 
 You enable the Container Storage Interface (CSI) in the `DataProtectionApplication` custom resource (CR) in order to back up persistent volumes with CSI snapshots.
 
@@ -1902,7 +1910,7 @@ Procedure
 
 </div>
 
-# Disabling the node agent in DataProtectionApplication
+# Disable the node agent in DataProtectionApplication
 
 If you are not using `Restic`, `Kopia`, or `DataMover` for your backups, you can disable the `nodeAgent` field in the `DataProtectionApplication` custom resource (CR). Before you disable `nodeAgent`, ensure the OADP Operator is idle and not running any backups.
 

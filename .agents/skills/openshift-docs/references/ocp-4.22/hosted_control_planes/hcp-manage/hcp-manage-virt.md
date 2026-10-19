@@ -447,7 +447,7 @@ Additional resources
 
 </div>
 
-- [Cloning a data volume using smart-cloning](../../virt/creating_vm/virt-creating-vms-by-cloning-pvcs.md#smart-cloning_virt-creating-vms-by-cloning-pvcs)
+- [Cloning a data volume using smart-cloning](../../virt/creating_vm/virt-creating-vms-from-cli.md#smart-cloning_virt-creating-vms-cli)
 
 </div>
 

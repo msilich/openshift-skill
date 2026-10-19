@@ -2,7 +2,7 @@
 
 If you are using an AWS S3-compatible backup storage location, you might get a `SignatureDoesNotMatch` error while backing up your application. This error occurs because some backup storage locations still use the older versions of the S3 APIs, which are incompatible with the newer AWS SDK for Go V2. To resolve this issue, you can use the `legacy-aws` Velero plugin in the `DataProtectionApplication` custom resource (CR). The `legacy-aws` Velero plugin uses the older AWS SDK for Go V1, which is compatible with the legacy S3 APIs, ensuring successful backups.
 
-# Using the legacy-aws Velero plugin in the DataProtectionApplication CR
+# Use the legacy-aws Velero plugin in the DataProtectionApplication CR
 
 In the following use case, you configure the `DataProtectionApplication` CR with the `legacy-aws` Velero plugin and then back up an application.
 

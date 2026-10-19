@@ -54,7 +54,7 @@ Verification
 
 </div>
 
-# Configuring Confidential VM by using machine sets
+# Configure Confidential VM by using machine sets
 
 You create machine sets to scale clusters on Google Cloud. By editing the machine set YAML file, you can configure the Confidential VM options that a machine set uses for machines that it deploys.
 
@@ -218,7 +218,7 @@ Additional resources
 
 </div>
 
-# Enabling customer-managed encryption keys for a machine set
+# Enable customer-managed encryption keys for a machine set
 
 Use Google Cloud Compute Engine to supply an encryption key to encrypt data on disks at rest. The key is used to encrypt the data encryption key, not to encrypt the customer’s data. By default, Compute Engine encrypts this data by using Compute Engine keys.
 

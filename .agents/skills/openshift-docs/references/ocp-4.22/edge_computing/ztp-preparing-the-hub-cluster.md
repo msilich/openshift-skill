@@ -9,7 +9,7 @@ The Red Hat telco RAN DU 4.22 solution has been validated using the following Re
 | Component                                | Software version |
 |------------------------------------------|------------------|
 | OpenShift Container Platform             | 4.22             |
-| Cluster Logging Operator                 | 6.5              |
+| Cluster Logging Operator                 | 6.6              |
 | Local Storage Operator                   | 4.22             |
 | OpenShift API for Data Protection (OADP) | 1.6              |
 | PTP Operator                             | 4.22             |
@@ -19,11 +19,11 @@ The Red Hat telco RAN DU 4.22 solution has been validated using the following Re
 
 Telco RAN DU managed cluster validated software components
 
-- Cluster Logging Operator will be updated to 6.6 when the aligned Cluster Logging Operator version is released.
-
 # Recommended hub cluster specifications and managed cluster limits for GitOps ZTP
 
-With GitOps Zero Touch Provisioning (ZTP), you can manage thousands of clusters in geographically dispersed regions and networks. The Red Hat Performance and Scale lab successfully created and managed 3500 virtual single-node OpenShift clusters with a reduced DU profile from a single Red Hat Advanced Cluster Management (RHACM) hub cluster in a lab environment.
+With GitOps Zero Touch Provisioning (ZTP), you can manage thousands of clusters in geographically dispersed regions and networks.
+
+The Red Hat Performance and Scale lab successfully created and managed 3500 virtual single-node OpenShift clusters with a reduced DU profile from a single Red Hat Advanced Cluster Management (RHACM) hub cluster in a lab environment.
 
 In real-world situations, the scaling limits for the number of clusters that you can manage will vary depending on various factors affecting the hub cluster. For example:
 
@@ -114,7 +114,7 @@ Additional resources
 
 </div>
 
-# Installing GitOps ZTP in a disconnected environment
+# Install GitOps ZTP in a disconnected environment
 
 Use Red Hat Advanced Cluster Management (RHACM), Red Hat OpenShift GitOps, and Topology Aware Lifecycle Manager (TALM) on the hub cluster in the disconnected environment to manage the deployment of multiple managed clusters.
 
@@ -167,7 +167,7 @@ Additional resources
 
 </div>
 
-# Adding RHCOS ISO and RootFS images to the disconnected mirror host
+# Add RHCOS ISO and RootFS images to the disconnected mirror host
 
 Before you begin installing clusters in the disconnected environment with Red Hat Advanced Cluster Management (RHACM), you must first host Red Hat Enterprise Linux CoreOS (RHCOS) images for it to use. Use a disconnected mirror to host the RHCOS images.
 
@@ -272,9 +272,11 @@ Additional resources
 
 </div>
 
-# Enabling the assisted service
+# Enable the assisted service
 
-Red Hat Advanced Cluster Management (RHACM) uses the assisted service to deploy OpenShift Container Platform clusters. The assisted service is deployed automatically when you enable the MultiClusterHub Operator on Red Hat Advanced Cluster Management (RHACM). After that, you need to configure the `Provisioning` resource to watch all namespaces and to update the `AgentServiceConfig` custom resource (CR) with references to the ISO and RootFS images that are hosted on the mirror registry HTTP server.
+Red Hat Advanced Cluster Management (RHACM) uses the assisted service to deploy OpenShift Container Platform clusters. The assisted service is deployed automatically when you enable the MultiClusterHub Operator on RHACM.
+
+After enabling the MultiClusterHub Operator, configure the `Provisioning` resource to watch all namespaces and update the `AgentServiceConfig` CR with references to the ISO and RootFS images hosted on the mirror registry HTTP server.
 
 <div>
 
@@ -336,7 +338,7 @@ Procedure
 
 </div>
 
-# Configuring the hub cluster to use a disconnected mirror registry
+# Configure the hub cluster to use a disconnected mirror registry
 
 You can configure the hub cluster to use a disconnected mirror registry for a disconnected environment.
 
@@ -471,7 +473,7 @@ Additional resources
 
 </div>
 
-# Configuring the hub cluster to use unauthenticated registries
+# Configure the hub cluster to use unauthenticated registries
 
 You can configure the hub cluster to use unauthenticated registries. Unauthenticated registries does not require authentication to access and download images.
 
@@ -571,7 +573,7 @@ Verify that you can access the newly added registry from the hub cluster by runn
 
     </div>
 
-# Configuring the hub cluster with ArgoCD
+# Configure the hub cluster with ArgoCD
 
 You can configure the hub cluster with a set of ArgoCD applications that generate the required installation and policy custom resources (CRs) for each site with GitOps Zero Touch Provisioning (ZTP).
 
@@ -618,9 +620,7 @@ Procedure
 
         - `path` specifies the path to the `ClusterInstance` and `PolicyGenerator` or `PolicyGentemplate` CRs, respectively.
 
-</div>
-
-1.  To install the GitOps ZTP plugin, patch the ArgoCD instance in the hub cluster with the relevant multicluster engine (MCE) subscription image. Customize the patch file that you previously extracted into the `out/argocd/deployment/` directory for your environment.
+2.  To install the GitOps ZTP plugin, patch the ArgoCD instance in the hub cluster with the relevant multicluster engine (MCE) subscription image. Customize the patch file that you previously extracted into the `out/argocd/deployment/` directory for your environment.
 
     1.  Select the `multicluster-operators-subscription` image that matches your RHACM version.
 
@@ -668,19 +668,19 @@ Procedure
         --patch-file out/argocd/deployment/argocd-openshift-gitops-patch.json
         ```
 
-2.  In RHACM 2.7 and later, the multicluster engine enables the `cluster-proxy-addon` feature by default. Apply the following patch to disable the `cluster-proxy-addon` feature and remove the relevant hub cluster and managed pods that are responsible for this add-on. Run the following command:
+3.  In RHACM 2.7 and later, the multicluster engine enables the `cluster-proxy-addon` feature by default. Apply the following patch to disable the `cluster-proxy-addon` feature and remove the relevant hub cluster and managed pods that are responsible for this add-on. Run the following command:
 
     ``` terminal
     $ oc patch multiclusterengines.multicluster.openshift.io multiclusterengine --type=merge --patch-file out/argocd/deployment/disable-cluster-proxy-addon.json
     ```
 
-3.  Apply the pipeline configuration to your hub cluster by running the following command:
+4.  Apply the pipeline configuration to your hub cluster by running the following command:
 
     ``` terminal
     $ oc apply -k out/argocd/deployment
     ```
 
-4.  Optional: If you have existing ArgoCD applications, verify that the `PrunePropagationPolicy=background` policy is set in the `Application` resource by running the following command:
+5.  Optional: If you have existing ArgoCD applications, verify that the `PrunePropagationPolicy=background` policy is set in the `Application` resource by running the following command:
 
     ``` terminal
     $ oc -n openshift-gitops get applications.argoproj.io  \
@@ -709,7 +709,9 @@ Procedure
 
     Setting the `background` deletion policy ensures that the `ManagedCluster` CR and all its associated resources are deleted.
 
-# Preparing the GitOps ZTP site configuration repository
+</div>
+
+# Prepare the GitOps ZTP site configuration repository
 
 Before you can use the GitOps Zero Touch Provisioning (ZTP) pipeline, you need to prepare the Git repository to host the site configuration data.
 
@@ -843,7 +845,7 @@ Additional resources
 
 </div>
 
-# Preparing the GitOps ZTP site configuration repository for version independence
+# Prepare the GitOps ZTP site configuration repository for version independence
 
 You can use GitOps ZTP to manage source custom resources (CRs) for managed clusters that are running different versions of OpenShift Container Platform. This means that the version of OpenShift Container Platform running on the hub cluster can be independent of the version running on the managed clusters.
 
@@ -1017,7 +1019,7 @@ Procedure
 
 </div>
 
-# Configuring the hub cluster for backup and restore
+# Configure the hub cluster for backup and restore
 
 You can use GitOps ZTP to configure a set of policies to back up `BareMetalHost` resources. This allows you to recover data from a failed hub cluster and deploy a replacement cluster using Red Hat Advanced Cluster Management (RHACM).
 

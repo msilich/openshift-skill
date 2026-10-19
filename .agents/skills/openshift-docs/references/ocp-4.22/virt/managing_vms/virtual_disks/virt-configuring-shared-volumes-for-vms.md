@@ -173,6 +173,8 @@ Procedure
 
     - `spec.template.spec.domain.devices.disks.lun.reservation` defines whether the persistent reservation is enabled.
 
+    - `spec.template.spec.domain.devices.disks.serial` specifies an alphanumeric serial number for the disk. The serial number is visible to the guest operating system and can be used to identify the disk inside the VM.
+
 2.  Save the `VirtualMachine` manifest file to apply your changes.
 
 </div>
@@ -271,6 +273,8 @@ Procedure
     - `spec.template.spec.domain.devices.disks.lun` defines a volume exposed as a LUN device.
 
     - `spec.template.spec.domain.devices.disks.lun.reservation` defines whether the persistent reservation is enabled.
+
+    - `spec.template.spec.domain.devices.disks.serial` specifies an alphanumeric serial number for the disk. The serial number is visible to the guest operating system and can be used to identify the disk inside the VM.
 
 2.  Save the `VirtualMachine` manifest file to apply your changes.
 

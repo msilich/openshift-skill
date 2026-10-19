@@ -2,7 +2,7 @@
 
 You can install the NBDE Tang Operator either by using the web console or through the `oc` command from CLI.
 
-# Installing the NBDE Tang Server Operator using the web console
+# Install the NBDE Tang Server Operator using the web console
 
 You can install the NBDE Tang Server Operator from the software catalog using the web console.
 
@@ -64,7 +64,7 @@ Verification
 
 </div>
 
-# Installing the NBDE Tang Server Operator using CLI
+# Install the NBDE Tang Server Operator using CLI
 
 You can install the NBDE Tang Server Operator from the software catalog using the CLI.
 
@@ -138,13 +138,19 @@ Procedure
 
     </div>
 
-    - Specify the channel name from where you want to subscribe the Operator.
+    where:
 
-    - Specify the name of the Operator to subscribe to.
+    `spec.channel`
+    Specifies the channel name from where you want to subscribe the Operator.
 
-    - Specify the name of the CatalogSource that provides the Operator.
+    `spec.name`
+    Specifies the name of the Operator to subscribe to.
 
-    - The namespace of the CatalogSource. Use `openshift-marketplace` for the default software catalog sources.
+    `spec.source`
+    Specifies the name of the CatalogSource that provides the Operator.
+
+    `spec.sourceNamespace`
+    Specifies the namespace of the CatalogSource. Use `openshift-marketplace` for the default software catalog sources.
 
 3.  Apply the `Subscription` to the cluster:
 

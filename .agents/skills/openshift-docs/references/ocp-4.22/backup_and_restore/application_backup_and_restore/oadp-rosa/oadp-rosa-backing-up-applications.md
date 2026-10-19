@@ -20,7 +20,7 @@ This process is performed in the following two stages:
 
 2.  Install the OADP Operator and give it an IAM role
 
-# Preparing AWS credentials for OADP
+# Prepare AWS credentials for OADP
 
 Prepare and configure an Amazon Web Services account to install OpenShift API for Data Protection (OADP).
 
@@ -205,7 +205,7 @@ Procedure
 
 </div>
 
-# Installing the OADP Operator and providing the IAM role
+# Install the OADP Operator and provide the IAM role
 
 Install OpenShift API for Data Protection (OADP) on clusters with AWS STS. AWS Security Token Service (AWS STS) is a global web service that provides short-term credentials for IAM or federated users. OpenShift Container Platform with STS is the recommended credential mode.
 
@@ -468,7 +468,7 @@ Procedure
 
 </div>
 
-# Updating the IAM role ARN in the OADP Operator subscription
+# Update the IAM role ARN in the OADP Operator subscription
 
 Update the OADP Operator subscription to fix an installation error due to incorrect IAM role Amazon Resource Name (ARN).
 
@@ -838,7 +838,7 @@ Procedure
 
 </div>
 
-# Cleaning up a cluster after a backup with OADP and ROSA STS
+# Clean up a cluster after a backup with OADP and ROSA STS
 
 Uninstall the OpenShift API for Data Protection (OADP) Operator together with the backups and the S3 bucket from the hello-world example.
 

@@ -15,7 +15,7 @@ A well-designed Gateway API deployment helps you achieve a portable, role-orient
 
 # Gateway API benefits and limitations
 
-To determine if Gateway API is the right routing solution for your cluster, review its benefits and limitations. The project is an effort to provide a standardized ecosystem by using a portable API with broad community support. Understanding these factors ensures your networking infrastructure aligns with your organizational needs and technical capabilities.
+Review the benefits and limitations of Gateway API to determine if it suits your cluster. The portable API and standardized ecosystem offer broad community support, ensuring that your networking aligns with your technical and organizational needs.
 
 ## Benefits
 
@@ -31,7 +31,7 @@ Gateway API provides the following benefits:
 
 Gateway API has the following limitations:
 
-- Version incompatibilities: The Gateway API ecosystem changes rapidly, and some implementations do not work with others because their featureset is based on differing versions of Gateway API.
+- Version incompatibilities: Gateway API ecosystem changes rapidly, and some implementations do not work with others because their featureset is based on differing versions of Gateway API.
 
 - Resource overhead: While more flexible, Gateway API uses multiple resource types to achieve an outcome. For smaller applications, the simplicity of traditional Ingress might be a better fit.
 
@@ -39,7 +39,9 @@ Gateway API has the following limitations:
 
 # Gateway API implementation specifics
 
-To ensure interoperability between external vendor implementations and your networking infrastructure in OpenShift Container Platform, the Ingress Operator manages the lifecycle of Gateway API custom resource definitions (CRDs). Understanding how these CRDs are managed helps you prevent disrupted workloads and security issues caused by incompatible vendor fields.
+To ensure interoperability between external vendor implementations and your networking infrastructure in OpenShift Container Platform, the Ingress Operator manages the lifecycle of Gateway API custom resource definitions (CRDs).
+
+Understanding how these CRDs are managed helps you prevent disrupted workloads and security issues caused by incompatible vendor fields.
 
 In some situations, Gateway API provides one or more fields that a vendor implementation does not support, but that implementation is otherwise compatible in schema with the rest of the fields. These "dead fields" can result in disrupted Ingress workloads, improperly provisioned applications and services, and security-related issues. Because OpenShift Container Platform uses a specific version of Gateway API CRDs, any use of third-party implementations of Gateway API must conform to the OpenShift Container Platform implementation to ensure that all fields work as expected.
 
@@ -50,7 +52,7 @@ Any CRDs created within an OpenShift Container Platform 4.22 cluster are compati
 
 ## Gateway API CRDs for `gateway.networking.x-k8s.io`
 
-In previous versions of OpenShift Container Platform, cluster security policies blocked the deployment of the Gateway API CRD for `gateway.networking.x-k8s.io`. Starting in OpenShift Container Platform 4.22, this restriction is removed, and you can deploy that CRD.
+In previous versions of OpenShift Container Platform, cluster security policies blocked the deployment of the `gateway.networking.x-k8s.io` Gateway API CRD. Starting in OpenShift Container Platform 4.22, this restriction is removed, and you can deploy that CRD.
 
 > [!NOTE]
 > Experimental Gateway API CRDs in the `gateway.networking.k8s.io` group remain restricted.
@@ -59,7 +61,7 @@ In previous versions of OpenShift Container Platform, cluster security policies 
 
 # Gateway API deployment topologies
 
-To effectively organize and secure your routing infrastructure, you must choose an appropriate deployment topology for your cluster. Gateway API is designed to accommodate two topologies: shared gateways or dedicated gateways. You can choose a topology based on its own advantages and different security implications.
+Select an appropriate cluster deployment topology to organize and secure your routing infrastructure. Gateway API accommodates shared gateways or dedicated gateways. Choose a topology based on its distinct advantages and security implications.
 
 ## Dedicated gateway
 

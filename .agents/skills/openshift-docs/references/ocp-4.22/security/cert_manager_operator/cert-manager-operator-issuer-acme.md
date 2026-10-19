@@ -29,7 +29,9 @@ spec:
 
 # About ACME issuers
 
-The ACME issuer type for the cert-manager Operator for Red Hat OpenShift represents an Automated Certificate Management Environment (ACME) certificate authority (CA) server. ACME CA servers rely on a *challenge* to verify that a client owns the domain names that the certificate is being requested for. If the challenge is successful, the cert-manager Operator for Red Hat OpenShift can issue the certificate. If the challenge fails, the cert-manager Operator for Red Hat OpenShift does not issue the certificate.
+The ACME issuer type for the cert-manager Operator for Red Hat OpenShift represents an Automated Certificate Management Environment (ACME) certificate authority (CA) server. ACME CA servers rely on a *challenge* to verify that a client owns the domain names that the certificate is being requested for.
+
+If the challenge is successful, the cert-manager Operator for Red Hat OpenShift can issue the certificate. If the challenge fails, the cert-manager Operator for Red Hat OpenShift does not issue the certificate.
 
 > [!NOTE]
 > Private DNS zones are not supported with *Let’s Encrypt* and internet ACME servers.
@@ -68,14 +70,24 @@ The cert-manager Operator for Red Hat OpenShift supports the following DNS-01 pr
 
 - Webhook
 
-  Red Hat tests and supports DNS providers using an external webhook with cert-manager on OpenShift Container Platform. The following DNS providers are tested and supported with OpenShift Container Platform:
-
-  - [cert-manager-webhook-ibmcis](https://github.com/jb-dk/cert-manager-webhook-ibmcis)
+  Red Hat tests and supports DNS providers using an external webhook with cert-manager on OpenShift Container Platform. See "cert-manager-webhook-ibmcis" for the list of DNS providers that are tested and supported with OpenShift Container Platform.
 
   > [!NOTE]
   > Using a DNS provider that is not listed might work with OpenShift Container Platform, but the provider was not tested by Red Hat and therefore is not supported by Red Hat.
 
-# Configuring an ACME issuer to solve HTTP-01 challenges
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [cert-manager-webhook-ibmcis](https://github.com/jb-dk/cert-manager-webhook-ibmcis)
+
+</div>
+
+# Configure an ACME issuer to solve HTTP-01 challenges
 
 You can use cert-manager Operator for Red Hat OpenShift to set up an ACME issuer to solve HTTP-01 challenges. This procedure uses *Let’s Encrypt* as the ACME CA server.
 
@@ -230,9 +242,11 @@ Procedure
 
 </div>
 
-# Configuring an ACME issuer by using explicit credentials for AWS Route53
+# Configure an ACME issuer by using explicit credentials for AWS Route53
 
-You can use cert-manager Operator for Red Hat OpenShift to set up an Automated Certificate Management Environment (ACME) issuer to solve DNS-01 challenges by using explicit credentials on AWS. This procedure uses *Let’s Encrypt* as the ACME certificate authority (CA) server and shows how to solve DNS-01 challenges with Amazon Route 53.
+You can use cert-manager Operator for Red Hat OpenShift to set up an Automated Certificate Management Environment (ACME) issuer to solve DNS-01 challenges by using explicit credentials on AWS.
+
+This procedure uses *Let’s Encrypt* as the ACME certificate authority (CA) server and shows how to solve DNS-01 challenges with Amazon Route 53.
 
 <div>
 
@@ -385,7 +399,7 @@ Procedure
 
 </div>
 
-# Configuring an ACME issuer by using ambient credentials on AWS
+# Configure an ACME issuer by using ambient credentials on AWS
 
 You can use cert-manager Operator for Red Hat OpenShift to set up an ACME issuer to solve DNS-01 challenges by using ambient credentials on AWS. This procedure uses *Let’s Encrypt* as the ACME CA server and shows how to solve DNS-01 challenges with Amazon Route 53.
 
@@ -522,7 +536,7 @@ Procedure
 
 </div>
 
-# Configuring an ACME issuer by using explicit credentials for Google Cloud DNS
+# Configure an ACME issuer by using explicit credentials for Google Cloud DNS
 
 You can use the cert-manager Operator for Red Hat OpenShift to set up an ACME issuer to solve DNS-01 challenges by using explicit credentials on Google Cloud. This procedure uses *Let’s Encrypt* as the ACME CA server and shows how to solve DNS-01 challenges with Google Cloud DNS.
 
@@ -653,7 +667,7 @@ Procedure
 
 </div>
 
-# Configuring an ACME issuer by using ambient credentials on Google Cloud
+# Configure an ACME issuer by using ambient credentials on Google Cloud
 
 You can use the cert-manager Operator for Red Hat OpenShift to set up an ACME issuer to solve DNS-01 challenges by using ambient credentials on Google Cloud. This procedure uses *Let’s Encrypt* as the ACME CA server and shows how to solve DNS-01 challenges with Google Cloud DNS.
 
@@ -786,7 +800,7 @@ Procedure
 
 </div>
 
-# Configuring an ACME issuer by using explicit credentials for Microsoft Azure DNS
+# Configure an ACME issuer by using explicit credentials for Microsoft Azure DNS
 
 You can use cert-manager Operator for Red Hat OpenShift to set up an ACME issuer to solve DNS-01 challenges by using explicit credentials on Microsoft Azure. This procedure uses *Let’s Encrypt* as the ACME CA server and shows how to solve DNS-01 challenges with Azure DNS.
 

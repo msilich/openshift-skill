@@ -2,33 +2,87 @@
 
 To ensure your gateway infrastructure is properly configured and functioning, review the `status` conditions of your `GatewayClass` and `Gateway` custom resources (CRs). Checking these conditions confirms that the controller has successfully programmed your underlying data plane without routing conflicts.
 
-To verify that your gateway infrastructure is functioning correctly, complete the following tasks:
-
-- Understand `GatewayClass` status conditions to verify that the controller has claimed the class and that your installed API version is compatible.
-
-- Review `Gateway` CR and listener `status` conditions to pinpoint data plane failures, configuration errors, or negative polarity conflicts.
-
-- Query gateway infrastructure status using the CLI to quickly validate your deployment and retrieve assigned IP addresses.
-
 # GatewayClass status conditions reference
 
 To verify that your `GatewayClass` custom resource (CR) is valid and ready to provision gateways, review its `status` conditions. A healthy `GatewayClass` CR reports a status of `True` for core conditions like `Accepted` and `SupportedVersion`.
 
-| Condition | Status | Description and common reasons |
-|----|----|----|
-| `Accepted` | `True` | The `GatewayClass` CR is valid and the controller has claimed it. |
-| `Accepted` | `False` | The configuration has errors or was rejected. Common reasons include `InvalidParameters` (referenced parameters are invalid or not found), `Pending` (the controller has not processed the resource yet), or `Unknown` (an unsupported `controllerName` was provided). |
-| `Accepted` | `Unknown` | The `GatewayClass` CR is waiting for the controller to process it. |
-| `SupportedVersion` | `True` | The installed Gateway API version is compatible with the controller. |
-| `SupportedVersion` | `False` | There is a version mismatch. A common reason is `UnsupportedVersion`, which indicates that the custom resource definition (CRD) version does not match the controller requirements. |
-| `ControllerInstalled` | `True` | The Cluster Ingress Operator successfully installed the Gateway API controller. |
-| `ControllerInstalled` | `False` | The installation failed. |
-| `ControllerInstalled` | `Unknown` | The controller has not started the installation yet. |
-| `CRDsReady` | `True` | The Istio CRDs are installed and actively managed by either the Cluster Ingress Operator or OLM. |
-| `CRDsReady` | `False` | The CRDs were installed by a third party or have mixed ownership, preventing the controller from managing them. |
-| `CRDsReady` | `Unknown` | The CRDs are not installed yet. |
-
-`GatewayClass` CR status conditions
+<table>
+<caption><code>GatewayClass</code> CR status conditions</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Condition</th>
+<th style="text-align: left;">Status</th>
+<th style="text-align: left;">Description and common reasons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>Accepted</code></p></td>
+<td style="text-align: left;"><p><code>True</code></p></td>
+<td style="text-align: left;"><p>The <code>GatewayClass</code> CR is valid and the controller has claimed it.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>Accepted</code></p></td>
+<td style="text-align: left;"><p><code>False</code></p></td>
+<td style="text-align: left;"><p>The configuration has errors or was rejected. Common reasons include:</p>
+<ul>
+<li><p><code>InvalidParameters</code>: Referenced parameters are invalid or not found.</p></li>
+<li><p><code>Pending</code>: The controller has not processed the resource yet.</p></li>
+<li><p><code>Unknown</code>: An unsupported <code>controllerName</code> was provided.</p></li>
+</ul></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>Accepted</code></p></td>
+<td style="text-align: left;"><p><code>Unknown</code></p></td>
+<td style="text-align: left;"><p>The <code>GatewayClass</code> CR is waiting for the controller to process it.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>SupportedVersion</code></p></td>
+<td style="text-align: left;"><p><code>True</code></p></td>
+<td style="text-align: left;"><p>The installed Gateway API version is compatible with the controller.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>SupportedVersion</code></p></td>
+<td style="text-align: left;"><p><code>False</code></p></td>
+<td style="text-align: left;"><p>There is a version mismatch. A common reason is <code>UnsupportedVersion</code>, which indicates that the custom resource definition (CRD) version does not match the controller requirements.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ControllerInstalled</code></p></td>
+<td style="text-align: left;"><p><code>True</code></p></td>
+<td style="text-align: left;"><p>The Cluster Ingress Operator successfully installed the controller for Gateway API.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ControllerInstalled</code></p></td>
+<td style="text-align: left;"><p><code>False</code></p></td>
+<td style="text-align: left;"><p>The installation failed.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>ControllerInstalled</code></p></td>
+<td style="text-align: left;"><p><code>Unknown</code></p></td>
+<td style="text-align: left;"><p>The controller has not started the installation yet.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>CRDsReady</code></p></td>
+<td style="text-align: left;"><p><code>True</code></p></td>
+<td style="text-align: left;"><p>The Istio CRDs are installed and actively managed by either the Cluster Ingress Operator or OLM.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>CRDsReady</code></p></td>
+<td style="text-align: left;"><p><code>False</code></p></td>
+<td style="text-align: left;"><p>The CRDs were installed by a third party or have mixed ownership, preventing the controller from managing them.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>CRDsReady</code></p></td>
+<td style="text-align: left;"><p><code>Unknown</code></p></td>
+<td style="text-align: left;"><p>The CRDs are not installed yet.</p></td>
+</tr>
+</tbody>
+</table>
 
 # Gateway and listener status conditions reference
 
@@ -37,20 +91,82 @@ To verify that your gateway is configured in the data plane and ready to route t
 > [!IMPORTANT]
 > The `Conflicted` listener condition uses negative polarity. This means that a status of `False` indicates a healthy state, while a status of `True` indicates an error.
 
-| Condition | Status | Description and common reasons |
-|----|----|----|
-| `Accepted` | `True` | The gateway configuration is valid and working properly. |
-| `Accepted` | `False` | The configuration has errors. Common reasons include `ListenersNotValid` (one or more listeners have issues) or `InvalidParameters` (the configuration is invalid). |
-| `Accepted` | `Unknown` | The controller has not evaluated the gateway yet. |
-| `Programmed` | `True` | The infrastructure is provisioned and the gateway is configured in the data plane, such as a load balancer or proxy. |
-| `Programmed` | `False` | Programming failed or the data plane is not ready. Common reasons include `NoResources` (insufficient resources or pods unavailable), `Invalid` (cannot apply to the data plane), or `Pending`. |
-| `Programmed` | `Unknown` | Programming is currently in progress. |
-| `LoadBalancerReady` | `True` | The cloud load balancer service for the gateway is successfully provisioned. |
-| `LoadBalancerReady` | `False` | The load balancer service failed to provision or is pending. Common reasons include `ServiceNotFound`, `LoadBalancerPending`, or `SyncLoadBalancerFailed`. |
-| `DNSReady` | `True` | DNS records for all listeners are functioning correctly. |
-| `DNSReady` | `False` | One or more listeners have DNS provisioning issues. |
-
-Gateway-level status conditions
+<table>
+<caption>Gateway-level status conditions</caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Condition</th>
+<th style="text-align: left;">Status</th>
+<th style="text-align: left;">Description and common reasons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><p><code>Accepted</code></p></td>
+<td style="text-align: left;"><p><code>True</code></p></td>
+<td style="text-align: left;"><p>The gateway configuration is valid and working properly.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>Accepted</code></p></td>
+<td style="text-align: left;"><p><code>False</code></p></td>
+<td style="text-align: left;"><p>The configuration has errors. Common reasons include:</p>
+<ul>
+<li><p><code>ListenersNotValid</code>: One or more listeners have issues.</p></li>
+<li><p><code>InvalidParameters</code>: The configuration is invalid.</p></li>
+</ul></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>Accepted</code></p></td>
+<td style="text-align: left;"><p><code>Unknown</code></p></td>
+<td style="text-align: left;"><p>The controller has not evaluated the gateway yet.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>Programmed</code></p></td>
+<td style="text-align: left;"><p><code>True</code></p></td>
+<td style="text-align: left;"><p>The infrastructure is provisioned and the gateway is configured in the data plane, such as a load balancer or proxy.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>Programmed</code></p></td>
+<td style="text-align: left;"><p><code>False</code></p></td>
+<td style="text-align: left;"><p>Programming failed or the data plane is not ready. Common reasons include:</p>
+<ul>
+<li><p><code>NoResources</code>: Insufficient resources or pods unavailable.</p></li>
+<li><p><code>Invalid</code>: Cannot apply to the data plane.</p></li>
+<li><p><code>Pending</code></p></li>
+</ul></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>Programmed</code></p></td>
+<td style="text-align: left;"><p><code>Unknown</code></p></td>
+<td style="text-align: left;"><p>Programming is currently in progress.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>LoadBalancerReady</code></p></td>
+<td style="text-align: left;"><p><code>True</code></p></td>
+<td style="text-align: left;"><p>The cloud load balancer service for the gateway is successfully provisioned.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>LoadBalancerReady</code></p></td>
+<td style="text-align: left;"><p><code>False</code></p></td>
+<td style="text-align: left;"><p>The load balancer service failed to provision or is pending. Common reasons include <code>ServiceNotFound</code>, <code>LoadBalancerPending</code>, or <code>SyncLoadBalancerFailed</code>.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>DNSReady</code></p></td>
+<td style="text-align: left;"><p><code>True</code></p></td>
+<td style="text-align: left;"><p>DNS records for all listeners are functioning correctly.</p></td>
+</tr>
+<tr>
+<td style="text-align: left;"><p><code>DNSReady</code></p></td>
+<td style="text-align: left;"><p><code>False</code></p></td>
+<td style="text-align: left;"><p>One or more listeners have DNS provisioning issues.</p></td>
+</tr>
+</tbody>
+</table>
 
 <table>
 <caption>Listener-level status conditions</caption>
@@ -95,7 +211,11 @@ Gateway-level status conditions
 <tr>
 <td style="text-align: left;"><p><code>ResolvedRefs</code></p></td>
 <td style="text-align: left;"><p><code>False</code></p></td>
-<td style="text-align: left;"><p>At least one reference is invalid. Common reasons include <code>InvalidCertificateRef</code> (a TLS certificate was not found or is invalid) or <code>RefNotPermitted</code> (a cross-namespace reference is not allowed).</p></td>
+<td style="text-align: left;"><p>At least one reference is invalid. Common reasons include:</p>
+<ul>
+<li><p><code>InvalidCertificateRef</code>: A TLS certificate was not found or is invalid.</p></li>
+<li><p><code>RefNotPermitted</code>: A cross-namespace reference is not allowed.</p></li>
+</ul></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>Conflicted</code> (Negative polarity)</p></td>
@@ -105,7 +225,11 @@ Gateway-level status conditions
 <tr>
 <td style="text-align: left;"><p><code>Conflicted</code> (Negative polarity)</p></td>
 <td style="text-align: left;"><p><code>True</code></p></td>
-<td style="text-align: left;"><p>The listener conflicts with another listener. Common reasons include <code>ProtocolConflict</code> (multiple listeners on the same port with incompatible protocols) or <code>HostnameConflict</code> (overlapping hostnames).</p></td>
+<td style="text-align: left;"><p>The listener conflicts with another listener. Common reasons include:</p>
+<ul>
+<li><p><code>ProtocolConflict</code>: Multiple listeners on the same port with incompatible protocols.</p></li>
+<li><p><code>HostnameConflict</code>: Overlapping hostnames.</p></li>
+</ul></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>DNSReady</code></p></td>
@@ -141,39 +265,39 @@ Example `Gateway` CR status output showing a DNS failure on one listener
 ``` yaml
 # ...
 status:
-  # Gateway-level conditions (LoadBalancer and aggregate DNS status)
-  conditions:
-  - type: LoadBalancerReady
-    status: "True"
-    reason: LoadBalancerProvisioned
-    message: "The LoadBalancer service is provisioned"
-    observedGeneration: 1
-    lastTransitionTime: "2025-01-12T10:00:00Z"
-  - type: DNSReady
-    status: "False"
-    reason: SomeListenersNotReady
-    message: "One or more listeners have DNS provisioning issues"
-    observedGeneration: 1
-    lastTransitionTime: "2025-01-12T10:00:00Z"
+  # Gateway-level conditions (LoadBalancer and aggregate DNS status)
+  conditions:
+  - type: LoadBalancerReady
+    status: "True"
+    reason: LoadBalancerProvisioned
+    message: "The LoadBalancer service is provisioned"
+    observedGeneration: 1
+    lastTransitionTime: "2025-01-12T10:00:00Z"
+  - type: DNSReady
+    status: "False"
+    reason: SomeListenersNotReady
+    message: "One or more listeners have DNS provisioning issues"
+    observedGeneration: 1
+    lastTransitionTime: "2025-01-12T10:00:00Z"
 
-  # Listener-level conditions (DNS status per listener)
-  listeners:
-  - name: <stage_http>
-    conditions:
-    - type: DNSReady
-      status: "True"
-      reason: NoFailedZones
-      message: "The record is provisioned in all reported zones."
-      observedGeneration: 1
-      lastTransitionTime: "2025-01-12T10:00:00Z"
-  - name: <prod_https>
-    conditions:
-    - type: DNSReady
-      status: "False"
-      reason: FailedZones
-      message: "The record failed to provision in some zones: [<prod.example.com>]"
-      observedGeneration: 1
-      lastTransitionTime: "2025-01-12T10:00:00Z"
+  # Listener-level conditions (DNS status per listener)
+  listeners:
+  - name: <stage_http>
+    conditions:
+    - type: DNSReady
+      status: "True"
+      reason: NoFailedZones
+      message: "The record is provisioned in all reported zones."
+      observedGeneration: 1
+      lastTransitionTime: "2025-01-12T10:00:00Z"
+  - name: <prod_https>
+    conditions:
+    - type: DNSReady
+      status: "False"
+      reason: FailedZones
+      message: "The record failed to provision in some zones: [<prod.example.com>]"
+      observedGeneration: 1
+      lastTransitionTime: "2025-01-12T10:00:00Z"
 ```
 
 </div>
@@ -181,7 +305,7 @@ status:
 > [!NOTE]
 > For Google Cloud installations, you can use a custom DNS solution. You must manually create a DNS record for any gateways in Gateway API. For more information, see "Installing a cluster on Google Cloud with customizations".
 
-# Query Gateway infrastructure status using the CLI
+# Querying Gateway infrastructure status using the CLI
 
 To quickly check the health of your gateway infrastructure, query specific `status` fields using the OpenShift Container Platform CLI. You can validate your deployment, check route attachments, and retrieve IP addresses without parsing lengthy YAML manifests.
 

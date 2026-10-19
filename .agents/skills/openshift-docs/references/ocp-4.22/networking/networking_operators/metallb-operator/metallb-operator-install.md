@@ -4,7 +4,7 @@ As a cluster administrator, you can add the MetalLB Operator so that the Operato
 
 MetalLB and IP failover are incompatible. If you configured IP failover for your cluster, perform the steps to [remove IP failover](../../configuring_network_settings/configuring-ipfailover.md#nw-ipfailover-remove_configuring-ipfailover) before you install the Operator.
 
-# Installing the MetalLB Operator from the software catalog by using the web console
+# Install the MetalLB Operator from the software catalog by using the web console
 
 As a cluster administrator, you can install the MetalLB Operator by using the OpenShift Container Platform web console.
 
@@ -66,7 +66,7 @@ Verification
 
 </div>
 
-# Installing from the software catalog using the CLI
+# Install from the software catalog using the CLI
 
 To install the MetalLB Operator from the software catalog in OpenShift Container Platform without using the web console, you can use the OpenShift CLI (`oc`).
 
@@ -207,7 +207,7 @@ The verification steps assume the MetalLB Operator is installed in the `metallb-
     install-wzg94   metallb-operator.4.22.0-nnnnnnnnnnnn   Automatic   true
     ```
 
-# Starting MetalLB on your cluster
+# Start MetalLB on your cluster
 
 To start MetalLB on your cluster after installing the MetalLB Operator in OpenShift Container Platform, you create a single MetalLB custom resource.
 

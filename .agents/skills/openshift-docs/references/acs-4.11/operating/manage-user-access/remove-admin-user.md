@@ -1,18 +1,16 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Red Hat Advanced Cluster Security for Kubernetes (RHACS) creates an administrator account, `admin`, during the installation process that can be used to log in with a user name and password. The password is dynamically generated unless specifically overridden and is unique to your RHACS instance.
+Red Hat Advanced Cluster Security for Kubernetes (RHACS) creates an administrator account, `admin`, during the installation process that you can use to log in with a user name and password. The password is dynamically generated unless you specifically override it and is unique to your RHACS instance.
 
-In production environments, it is highly recommended to create an authentication provider and remove the `admin` user.
+In production environments, create an authentication provider and remove the `admin` user.
 
 <a id="remove_admin-user_remove-admin-user"></a>
 
 # Removing the admin user after installation
 
-After an authentication provider has been successfully created, it is strongly recommended to remove the `admin` user.
+After you successfully create an authentication provider, remove the `admin` user. The removal method depends on how you installed RHACS.
 
-Removing the `admin` user is dependent on the installation method of the RHACS portal.
-
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -20,23 +18,38 @@ Procedure
 
 </div>
 
-Perform one of the following procedures:
+- Choose the appropriate method to remove the admin user:
+
+  - For Operator installations, set `central.adminPasswordGenerationDisabled` to `true` in your `Central` custom resource.
+
+  - For Helm installations, complete the following steps:
+
+    1.  In your `Central` Helm configuration, set `central.adminPassword.generate` to `false`.
+
+    2.  Follow the steps to change the configuration. See "Changing configuration options after deployment" for more information.
+
+  - For `roxctl` installations, complete the following steps:
+
+    1.  When generating the manifest, set `Disable password generation` to `false`.
+
+    2.  Follow the steps to install Central by using `roxctl` to apply the changes. See "Install Central using the roxctl CLI" for more information.
 
 </div>
 
-- For Operator installations, set `central.adminPasswordGenerationDisabled` to `true` in your `Central` custom resource.
+<div class="formalpara">
 
-- For Helm installations:
+<div class="title">
 
-  1.  In your `Central` Helm configuration, set `central.adminPassword.generate` to `false`.
+Results
 
-  2.  Follow the steps to change the configuration. See "Changing configuration options after deployment" for more information.
+</div>
 
-- For `roxctl` installations:
+After applying the configuration changes, you cannot log in as an `admin` user.
 
-  1.  When generating the manifest, set `Disable password generation` to `false`.
+</div>
 
-  2.  Follow the steps to install Central by using `roxctl` to apply the changes. See "Install Central using the roxctl CLI" for more information.
+> [!NOTE]
+> You can add the `admin` user again as a fallback by reverting the configuration changes. When you enable the `admin` user again, the system generates a new password.
 
 <div>
 
@@ -53,8 +66,3 @@ Additional resources
 - [Install Central using the roxctl CLI](../../installing/installing_ocp/install-central-ocp.md)
 
 </div>
-
-After applying the configuration changes, you cannot log in as an `admin` user.
-
-> [!NOTE]
-> You can add the `admin` user again as a fallback by reverting the configuration changes. When enabling the `admin` user again, a new password is generated.

@@ -743,7 +743,7 @@ Verification
 
 </div>
 
-# About adding registries that allow image short names
+# Configure short-name search registries
 
 With an image short name, you can search for images without including the fully qualified domain name in the pull `spec` parameter.
 
@@ -755,7 +755,7 @@ When pulling or pushing images, the container runtime searches the registries li
 
 ## When not to use image short names
 
-To avoid deployment failures and security risks when using public registries in OpenShift Container Platform, use fully-qualified image names instead of short names. Short names work with Red Hat internal or private registries, but public registries that require authentication might not deploy images with short names.
+To avoid deployment failures and security risks in OpenShift Container Platform, use fully-qualified image names instead of short names. Short names work with Red Hat internal registries, but public registries that require authentication might fail to deploy them.
 
 You cannot list multiple public registries under the `containerRuntimeSearchRegistries` parameter if each public registry requires different credentials and a cluster does not list the public registry in the global pull secret.
 
@@ -880,7 +880,7 @@ Verification
 
 </div>
 
-## Configuring additional trust stores for image registry access
+## Configure additional trust stores for image registry access
 
 You can add references to a config map that has additional certificate authorities (CAs) to be trusted during image registry access to the `image.config.openshift.io/cluster` custom resource (CR).
 
@@ -1054,7 +1054,9 @@ If you upgraded a cluster, any existing ICSP objects remain stable, and both IDM
 
 ## Configuring project-scoped image pull secrets for mirrored registries
 
-As a cluster administrator, you can edit the cluster-wide `CRIOCredentialProviderConfig` object, named `cluster`, to enable project-scoped image pull secrets that you can use with mirrored repositories. By using project-scoped secrets, you can maintain security isolation between projects without exposing credentials in a global pull secret.
+As a cluster administrator, you can edit the cluster-wide `CRIOCredentialProviderConfig` object, named `cluster`, to enable project-scoped image pull secrets that you can use with mirrored repositories.
+
+By using project-scoped secrets, you can maintain security isolation between projects without exposing credentials in a global pull secret.
 
 By default, if your cluster uses an `ImageDigestMirrorSet`, `ImageTagMirrorSet`, or `ImageContentSourcePolicy` object to configure repository mirroring, you must use a global pull secret for mirrored registries. You cannot add an image pull secret to a project. However, you can use the cluster-wide `CRIOCredentialProviderConfig` object to configure the kubelet to trigger the CRI-O credential provider, which enables project-scoped image pull secrets.
 
@@ -1319,7 +1321,7 @@ Verification
 
 </div>
 
-## Configuring image registry repository mirroring
+## Configure image registry repository mirroring
 
 You can create postinstallation mirror configuration custom resources (CR) to redirect image pull requests from a source image registry to a mirrored image registry.
 
@@ -1634,7 +1636,7 @@ You can use the following table for information about parameters when configurin
 | `source: registry.example.com/example` | Pulls the image `registry.example.com/example/image@sha256:…​` in the source registry namespace from the mirror `mirror.example.net/image@sha256:…​`. |
 | `source: registry.example.com` | Pulls the image `registry.example.com/myimage@sha256` from the mirror registry `example.net/registry-example-com/myimage@sha256:…​`. |
 
-## Converting ImageContentSourcePolicy (ICSP) files for image registry repository mirroring
+## Convert ImageContentSourcePolicy (ICSP) files for image registry repository mirroring
 
 You can convert existing `ImageContentSourcePolicy` (ICSP) files to `ImageDigestMirrorSet` files to configure image registry repository mirroring.
 

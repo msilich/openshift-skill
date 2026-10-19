@@ -4,7 +4,7 @@ You can run your cluster in a disconnected environment if you install the cluste
 
 You can use oc-mirror plugin v2 to mirror images to a mirror registry in your fully or partially disconnected environments. To download the required images from the official Red Hat registries, you must run oc-mirror plugin v2 from a system with internet connectivity.
 
-# About oc-mirror plugin v2
+# oc-mirror plugin v2
 
 The oc-mirror OpenShift CLI (`oc`) plugin is a single tool that mirrors all required OpenShift Container Platform content and other images to your mirror registry.
 
@@ -53,7 +53,7 @@ The oc-mirror plugin v2 is supported for OpenShift Container Platform.
 
 Use the latest available version of the oc-mirror plugin v2 regardless of which versions of OpenShift Container Platform you need to mirror.
 
-# Prerequisites
+# Prerequisites for mirroring images with oc-mirror plugin v2
 
 Before you can mirror images with the oc-mirror plugin v2, you must meet several prerequisites.
 
@@ -75,11 +75,11 @@ The following prerequisites must be met:
 
 - Every machine in the provisioned clusters must have access to the mirror registry. If the registry is unreachable, tasks like installation, updating, or routine operations such as workload relocation, might fail. Mirror registries must be operated in a highly available manner, ensuring their availability aligns with the production availability of your OpenShift Container Platform clusters.
 
-# Preparing your mirror hosts
+# Prepare your mirror hosts
 
 To use the oc-mirror plugin v2 for image mirroring, you must install the plugin and create a file with credentials for container images, enabling you to mirror from Red Hat to your mirror.
 
-## Installing the oc-mirror OpenShift CLI plugin
+## Install the oc-mirror OpenShift CLI plugin
 
 You can install the oc-mirror OpenShift CLI plugin to manage image sets in disconnected environments.
 
@@ -158,7 +158,7 @@ Verification
 
 </div>
 
-## Configuring credentials that allow images to be mirrored
+## Configure credentials that allow images to be mirrored
 
 Create a container image registry credentials file so that you can mirror images from Red Hat to your mirror. Complete the following steps on the installation host.
 
@@ -318,11 +318,11 @@ Procedure
 
 </div>
 
-# Mirroring an image set to a mirror registry
+# Mirror an image set to a mirror registry
 
 Mirroring an image set to a mirror registry ensures that the required images are available in a secure and controlled environment, facilitating smoother deployments, updates, and maintenance tasks.
 
-## Creating the image set configuration
+## Create the image set configuration
 
 Before you can use the oc-mirror plugin v2 to mirror images, you must create an image set configuration file. This image set configuration file defines which OpenShift Container Platform releases, Operators, and other images to mirror, along with other configuration settings for the oc-mirror plugin v2.
 
@@ -429,7 +429,7 @@ Use the following table to compare the supported use cases for the mirror-to-dis
 | The workflow uses an internal cache to resume after failures but requires additional disk space. | ✓ |  |
 | The workflow does not use a cache, restarts from the beginning after a failure, and requires no additional disk space. |  | ✓ |
 
-## Mirroring an image set in a partially disconnected environment
+## Mirror an image set in a partially disconnected environment
 
 You can mirror image sets to a registry using the oc-mirror plugin v2 in environments with restricted internet access.
 
@@ -500,7 +500,7 @@ Next steps
 
 </div>
 
-## Mirroring an image set in a fully disconnected environment
+## Mirror an image set in a fully disconnected environment
 
 You can mirror image sets in a fully disconnected environment where the OpenShift Container Platform cluster cannot access the public internet.
 
@@ -514,7 +514,9 @@ The following high-level workflow describes the mirroring process:
 
 ### Mirroring from mirror to disk
 
-You can use the oc-mirror plugin v2 to generate an image set and save the content to disk. Afterwards, you can transfer the generated image set to the disconnected environment and mirror it to the target registry. The plugin retrieves the container images from the source specified in the image set configuration file and packs them into a tar archive in a local directory.
+You can use the oc-mirror plugin v2 to generate an image set and save the content to disk. The plugin retrieves images from the source specified in the image set configuration and packs them into a tar archive.
+
+Transfer the generated image set to the disconnected environment and mirror it to the target registry.
 
 Additionally, the plugin automatically generates the `ImageSetConfiguration` and `DeleteImageSetConfiguration` files that are pinned by digest in your working directory and tar archive. Pinning by digest maintains consistency across your disconnected environments ensuring that you always deploy the same image, regardless of any later changes to the upstream tags.
 
@@ -629,7 +631,7 @@ Next steps
 
 </div>
 
-# About custom resources generated by oc-mirror plugin v2
+# Custom resources generated by oc-mirror plugin v2
 
 The oc-mirror plugin v2 automatically generates several resources during mirroring operations.
 
@@ -687,7 +689,7 @@ Fields that must not be modified in the resources generated by oc-mirror
 
 For more information about these resources, see the OpenShift API documentation for `CatalogSource`, `ImageDigestMirrorSet`, and `ImageTagMirrorSet`.
 
-## Configuring your cluster to use the resources generated by oc-mirror plugin v2
+## Configure your cluster to use the resources generated by oc-mirror plugin v2
 
 After you have mirrored your image set to the mirror registry, you must apply the generated `ImageDigestMirrorSet` (IDMS), `ImageTagMirrorSet` (ITMS), `CatalogSource`, and `UpdateService` resources to the cluster.
 
@@ -1479,7 +1481,7 @@ Additional resources
 
 ## Disabling signature mirroring for oc-mirror plugin v2
 
-You can disable signature mirroring for all images by providing the `--remove-signatures` flag for the `oc mirror` command. You can disable signature mirroring when your destination registry does not support signature storage or when you need to bypass failures caused by invalid or expired signatures at the source.
+You can disable signature mirroring for all images by providing the `--remove-signatures` flag for the `oc mirror` command when the destination registry does not support signature storage or when you need to bypass invalid or expired source signatures.
 
 <div>
 

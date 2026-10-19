@@ -1,32 +1,48 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-With Red Hat Advanced Cluster Security for Kubernetes, you can analyze images for vulnerabilities by using the RHACS Scanner V4, or you can [configure an integration](../integration/integrate-with-image-vulnerability-scanners.md) to use another supported scanner.
+As a security administrator or cluster operator, you can analyze images for vulnerabilities with Red Hat Advanced Cluster Security for Kubernetes (RHACS) to find and remediate vulnerable components before they reach production.
+
+Use the RHACS Scanner V4 to scan images, or configure an integration to use another supported scanner.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Integrating with image vulnerability scanners](../integration/integrate-with-image-vulnerability-scanners.md)
+
+</div>
 
 <a id="scanning-about_examine-images-for-vulnerabilities"></a>
 
 # Scanning in RHACS
 
-RHACS scanners analyze each image layer to find packages and match them against known vulnerabilities by comparing them with a vulnerability database populated from different sources. These sources include Red Hat Vulnerability Exchange (VEX), the National Vulnerability Database (NVD), the Open Source Vulnerabilities (OSV) database, and operating system vulnerability feeds.
+RHACS scanners analyze each image layer to find packages and match them against known vulnerabilities in a vulnerability database.
+
+RHACS populates that database from several sources: Red Hat Vulnerability Exchange (VEX), the National Vulnerability Database (NVD), the Open Source Vulnerabilities (OSV) database, and operating system vulnerability feeds.
 
 > [!NOTE]
-> RHACS uses the OSV database available at [OSV.dev](https://osv.dev/) under [Apache License 2.0](https://github.com/google/osv.dev/blob/master/LICENSE).
+> RHACS uses the OSV database available at OSV.dev under the Apache License 2.0.
 
-RHACS contains two scanners: Scanner V4 and the StackRox Scanner.
+RHACS has two scanners: Scanner V4 and the StackRox Scanner.
 
-Scanner V4, built on Claircore, is the default scanner as of release 4.8. The StackRox Scanner, which originates from a fork of the Clair v2 open source scanner, is deprecated. Although the StackRox Scanner is deprecated, it still must be enabled on the cluster where Central is installed due to software dependencies.
+Scanner V4, built on Claircore, is the default scanner as of release 4.8. The StackRox Scanner, which originates from a fork of the Clair v2 open source scanner, is deprecated. Although the StackRox Scanner is deprecated, you must still enable it on the cluster where you installed Central due to software dependencies.
 
 > [!NOTE]
 > When this documentation uses the term "RHACS scanner" or "Scanner", it refers to Scanner V4.
 
 When the RHACS scanner finds any vulnerabilities, it performs the following actions:
 
-- Shows them in the [**Vulnerability Management**](manage-vulnerabilities/common-vuln-management-tasks.md) view for detailed analysis
+- Shows them in the **Vulnerability Management** view for detailed analysis
 
 - Ranks vulnerabilities according to risk and highlights them in the RHACS portal for risk assessment
 
-- Checks them against enabled [security policies](manage_security_policies/about-security-policies.md)
+- Checks them against enabled security policies
 
-The RHACS scanner inspects the images and identifies the installed components based on the files in the images. It might fail to identify installed components or vulnerabilities if the final images are modified to remove the following files:
+The RHACS scanner inspects the images and identifies the installed components based on the files in the images. It might fail to identify installed components or vulnerabilities if you change the final images to remove the following files:
 
 <table>
 <colgroup>
@@ -68,22 +84,52 @@ The RHACS scanner inspects the images and identifies the installed components ba
 </tbody>
 </table>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [OSV.dev](https://osv.dev/)
+
+- [Apache License 2.0](https://github.com/google/osv.dev/blob/master/LICENSE)
+
+- [Vulnerability Management](manage-vulnerabilities/common-vuln-management-tasks.md)
+
+- [Security policies](manage_security_policies/about-security-policies.md)
+
+</div>
+
 <a id="about-scanner-v4_examine-images-for-vulnerabilities"></a>
 
 # About Scanner V4
 
 RHACS provides its own scanner, Scanner V4, or you can configure an integration to use RHACS with another vulnerability scanner.
 
-Built on [Claircore](https://github.com/quay/claircore), Scanner V4 provides scanning for language and operating system-specific image components and scanning Red Hat Enterprise Linux CoreOS (RHCOS).
+Built on Claircore, Scanner V4 provides scanning for language and operating system-specific image components and scanning Red Hat Enterprise Linux CoreOS (RHCOS).
 
 > [!NOTE]
-> Beginning with release 4.6, due to changes in vulnerability sources used, Scanner V4 only considers vulnerabilities affecting Red Hat products dated back to 2014. Previously, when reading Red Hat’s OVAL data, the vulnerabilities dated back to before 2000.
+> Beginning with release 4.6, due to changes in vulnerability sources used, Scanner V4 only considers vulnerabilities affecting Red Hat products dated back to 2014. Before this change, when reading Red Hat’s OVAL data, the vulnerabilities dated back to before 2000.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Claircore](https://github.com/quay/claircore)
+
+</div>
 
 <a id="scannerv4-enabling_examine-images-for-vulnerabilities"></a>
 
 # Enabling Scanner V4
 
-Scanner V4 is enabled by default when RHACS is newly installed. However, if you have not previously enabled Scanner V4 and are upgrading from version 4.7 or earlier, you must enable it explicitly during the upgrade to use it.
+RHACS enables Scanner V4 by default during a new installation. However, if you did not enable Scanner V4 before upgrading from version 4.7 or earlier, you must enable it explicitly during the upgrade to use it.
 
 You can enable Scanner V4 after installation by using the Operator or Helm.
 
@@ -101,11 +147,11 @@ Procedure
 
 </div>
 
-1.  In the cluster where Central is installed, in the console, click **Ecosystem** → **Installed Operators** and select the RHACS Operator.
+1.  In the cluster where you installed Central, in the console, click **Ecosystem** → **Installed Operators** and select the RHACS Operator.
 
 2.  Click **Central** in the menu bar.
 
-3.  Click the name of the cluster where Central was installed. The default value is **stackrox-central-services**.
+3.  Click the name of the cluster where you installed Central. The default value is **stackrox-central-services**.
 
 4.  Click the **YAML** tab.
 
@@ -118,11 +164,29 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- In the cluster where you installed Central, run the following command to confirm that the Scanner V4 pods are running:
+
+  ``` terminal
+  $ oc -n stackrox get pods -l 'app in (scanner-v4-indexer,scanner-v4-matcher,scanner-v4-db)'
+  ```
+
+  Each Scanner V4 pod shows a `Running` status when Scanner V4 is enabled.
+
+</div>
+
 <a id="enabling-scanner-v4-after-operator-installation-secured-cluster_examine-images-for-vulnerabilities"></a>
 
 ## Enabling RHACS Scanner V4 on the secured cluster after Operator installation
 
-You can enable Scanner V4 after installation.
+If you did not enable Scanner V4 when you installed the secured cluster, you can enable it afterwards by editing the `SecuredCluster` custom resource in the Operator.
 
 <div>
 
@@ -132,7 +196,7 @@ Prerequisite
 
 </div>
 
-- You set up Central and the secured cluster by using a CRS or an init bundle so that they can communicate with each other.
+- You configured Central and the secured cluster by using a CRS or an init bundle so that they can communicate with each other.
 
 </div>
 
@@ -161,6 +225,24 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- On the secured cluster, run the following command to confirm that the Scanner V4 Indexer pods are running:
+
+  ``` terminal
+  $ oc -n stackrox get pods -l 'app in (scanner-v4-indexer,scanner-v4-db)'
+  ```
+
+  Each Scanner V4 pod shows a `Running` status when Scanner V4 is enabled.
+
+</div>
+
 <a id="enabling-scanner-v4-after-helm-installation-central_examine-images-for-vulnerabilities"></a>
 
 ## Enabling RHACS Scanner V4 for Central when upgrading by using Helm
@@ -175,7 +257,7 @@ Procedure
 
 </div>
 
-1.  On the cluster where Central is installed, run the following command, using the instructions in "Changing configuration options after deploying the central-services Helm chart" if you need more information:
+1.  On the cluster where you installed Central, run the following command, using the instructions in "Changing configuration options after deploying the central-services Helm chart" if you need more information:
 
     ``` terminal
     $ helm upgrade -n stackrox \
@@ -189,7 +271,25 @@ Procedure
     where:
 
     \<path_to_generated-values.yaml\>  
-    Specifies the path to the generated values YAML file. When updating the system and installing a new component, you must provide the internal CA. See "Retrieving the automatically generated certificate authority".
+    Specifies the path to the generated values YAML file. When updating the system and installing a new component, you must include the internal CA. See "Retrieving the automatically generated certificate authority".
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- On the cluster where you installed Central, run the following command to confirm that the Scanner V4 pods are running:
+
+  ``` terminal
+  $ oc -n stackrox get pods -l 'app in (scanner-v4-indexer,scanner-v4-matcher,scanner-v4-db)'
+  ```
+
+  Each Scanner V4 pod shows a `Running` status when Scanner V4 is enabled.
 
 </div>
 
@@ -233,7 +333,25 @@ Procedure
     where:
 
     \<path_to_generated-values.yaml\>  
-    Specifies the path to the generated values YAML file. When updating the system and installing a new component, you must provide the internal CA. See "Retrieving the automatically generated certificate authority".
+    Specifies the path to the generated values YAML file. When updating the system and installing a new component, you must include the internal CA. See "Retrieving the automatically generated certificate authority".
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- On the secured cluster, run the following command to confirm that the Scanner V4 Indexer pods are running:
+
+  ``` terminal
+  $ oc -n stackrox get pods -l 'app in (scanner-v4-indexer,scanner-v4-db)'
+  ```
+
+  Each Scanner V4 pod shows a `Running` status when Scanner V4 is enabled.
 
 </div>
 
@@ -261,23 +379,25 @@ Scanner V4 is the default scanner for RHACS. When scanning, it performs the foll
 
 - Central requests the Scanner V4 Indexer to download and index (analyze) given images.
 
-- Scanner V4 Indexer pulls image metadata from registries to determine the layers of the image, and downloads each previously unindexed layer.
+- Scanner V4 Indexer pulls image metadata from registries to find the layers of the image, and downloads each unindexed layer.
 
 - Scanner V4 Indexer requests mapping files from Central that assist the indexing process. Scanner V4 Indexer produces in an index report.
 
 - Central requests that Scanner V4 Matcher match given images to known vulnerabilities. This process results in the final scan result: a vulnerability report. Scanner V4 Matcher requests the latest vulnerabilities from Central.
 
-- Scanner V4 Matcher requests the results of the image indexing, the index report, from Scanner V4 Indexer. It then uses the report to determine relevant vulnerabilities. This interaction occurs only when the image is indexed in the Central cluster. This interaction does not occur when Scanner V4 is matching vulnerabilities for images indexed in secured clusters.
+- Scanner V4 Matcher requests the results of the image indexing, the index report, from Scanner V4 Indexer. It then uses the report to find relevant vulnerabilities. This interaction occurs only when Scanner V4 indexes the image in the Central cluster. This interaction does not occur when Scanner V4 is matching vulnerabilities for images indexed in secured clusters.
 
-- The Indexer stores data in the Scanner V4 DB that is related to the indexing results to ensure that image layers are only downloaded and indexed once. This prevents unnecessary network traffic and other resource utilization.
+- The Indexer stores data in the Scanner V4 DB related to the indexing results to ensure that image layers are only downloaded and indexed once. This prevents unnecessary network traffic and other resource use.
 
-- When secured cluster scanning is enabled, Sensor requests Scanner V4 to index images. Scanner V4 Indexer requests mapping files from Sensor that assist the indexing process unless Central exists in the same namespace. In that case, Central is contacted instead.
+- When you enable secured cluster scanning, Sensor requests Scanner V4 to index images. Scanner V4 Indexer requests mapping files from Sensor that assist the indexing process unless Central exists in the same namespace. In that case, Scanner V4 Indexer contacts Central instead.
 
 <a id="common-scanner-warning-messages_examine-images-for-vulnerabilities"></a>
 
-## Understanding and addressing common Scanner warning messages
+## Common Scanner warning messages
 
-When scanning images with Red Hat Advanced Cluster Security for Kubernetes (RHACS), you might see the `CVE DATA MAY BE INACCURATE` warning message. Scanner displays this message when it cannot retrieve complete information about the operating system or other packages in the image.
+When scanning images with Red Hat Advanced Cluster Security for Kubernetes (RHACS), you might see the `CVE DATA MAY BE INACCURATE` warning message.
+
+Scanner displays this message when it cannot retrieve complete Common Vulnerabilities and Exposures (CVE) information about the operating system or other packages in the image.
 
 The following table shows some common Scanner warning messages:
 
@@ -300,39 +420,58 @@ The following table shows some common Scanner warning messages:
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>Stale OS CVE data</code></p></td>
-<td style="text-align: left;"><p>Indicates that the base operating system of the image has reached end-of-life, which means the vulnerability data is outdated. For example, Debian 8 and 9.</p>
-<p>For more information about the files needed to identify the components in the images, see <a href="examine-images-for-vulnerabilities.md">Examining images for vulnerabilities</a>.</p></td>
+<td style="text-align: left;"><p>Indicates that the base operating system of the image has reached end-of-life, which means the vendor no longer updates the vulnerability data. For example, Debian 8 and 9.</p>
+<p>For more information about the files needed to identify the components in the images, see "Examining images for vulnerabilities".</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>Failed to get the base OS information</code></p></td>
-<td style="text-align: left;"><p>Indicates that Scanner scanned the image, but was unable to determine the base operating system used for the image.</p></td>
+<td style="text-align: left;"><p>Indicates that Scanner scanned the image, but could not find the base operating system used for the image.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>Failed to retrieve metadata from the registry</code></p></td>
 <td style="text-align: left;"><p>Indicates that the target registry is unreachable on the network. The cause could be a firewall blocking <code>docker.io</code>, or an authentication issue preventing access.</p>
-<p>To analyze the root cause, create a special registry integration for private registries or repositories to get the pod logs for RHACS Central. For instructions on how to do this, see <a href="../integration/integrate-with-image-registries.md">Integrating with image registries</a>.</p></td>
+<p>To analyze the root cause, create a special registry integration for private registries or repositories to get the pod logs for RHACS Central. For instructions on how to do this, see "Integrating with image registries".</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>Image out of scope for Red Hat Vulnerability Scanner Certification</code></p></td>
-<td style="text-align: left;"><p>Indicates that Scanner scanned the image, but the image is old and does not fall within the scope of Red Hat Scanner Certification. For more information, see <a href="https://redhat-connect.gitbook.io/partner-guide-red-hat-vulnerability-scanner-cert/">Partner Guide for Red Hat Vulnerability Scanner Certification</a>.</p>
+<td style="text-align: left;"><p>Indicates that Scanner scanned the image, but the image is old and does not fall within the scope of Red Hat Scanner Certification. For more information, see the "Partner Guide for Red Hat Vulnerability Scanner Certification".</p>
 <div class="important">
 <div class="title">
 &#10;</div>
-<p>If you are using a Red Hat <a href="https://catalog.redhat.com/software/containers/explore">container image</a>, consider using a base image newer than June 2020.</p>
+<p>If you are using a Red Hat container image, consider using a base image newer than June 2020.</p>
 </div></td>
 </tr>
 </tbody>
 </table>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Examining images for vulnerabilities](examine-images-for-vulnerabilities.md)
+
+- [Integrating with image registries](../integration/integrate-with-image-registries.md)
+
+- [Partner Guide for Red Hat Vulnerability Scanner Certification](https://redhat-connect.gitbook.io/partner-guide-red-hat-vulnerability-scanner-cert/)
+
+- [Red Hat container images](https://catalog.redhat.com/software/containers/explore)
+
+</div>
+
 <a id="supported-operating-systems_examine-images-for-vulnerabilities"></a>
 
 ## Supported operating systems
 
-The supported platforms listed in this section are the distributions in which Scanner identifies vulnerabilities, and it is different from the supported platforms on which you can install Red Hat Advanced Cluster Security for Kubernetes.
+The following supported platforms are the distributions in which Scanner identifies vulnerabilities, and it is different from the supported platforms on which you can install Red Hat Advanced Cluster Security for Kubernetes.
 
 Scanner identifies vulnerabilities in images that contain the following Linux distributions. For more information about the vulnerability databases used, see "Vulnerability sources" in "RHACS Architecture".
 
 <table>
+<caption>Linux distributions in which Scanner identifies vulnerabilities</caption>
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 75%" />
@@ -345,11 +484,11 @@ Scanner identifies vulnerabilities in images that contain the following Linux di
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><p><a href="https://www.alpinelinux.org/">Alpine Linux</a></p></td>
-<td style="text-align: left;"><p><code>alpine:3.2</code><sup>[1]</sup>,<code>alpine:3.3</code>, <code>alpine:3.4</code>, <code>alpine:3.5</code>, <code>alpine:3.6</code>, <code>alpine:3.7</code>, <code>alpine:3.8</code>, <code>alpine:3.9</code>, <code>alpine:3.10</code>, <code>alpine:3.11</code>, <code>alpine:3.12</code>, <code>alpine:3.13</code>, <code>alpine:3.14</code>, <code>alpine:3.15</code>, <code>alpine:3.16</code>, <code>alpine:3.17</code>, <code>alpine:3.18</code>, <code>alpine:3.19</code>, <code>alpine:3.20</code>, <code>alpine:3.21</code><sup>[2]</sup>, <code>alpine:3.22</code><sup>[2]</sup>, <code>alpine:edge</code></p></td>
+<td style="text-align: left;"><p>Alpine Linux</p></td>
+<td style="text-align: left;"><p><code>alpine:3.2</code><sup>[1]</sup>, <code>alpine:3.3</code>,<code>alpine:3.4</code>, <code>alpine:3.5</code>, <code>alpine:3.6</code>, <code>alpine:3.7</code>, <code>alpine:3.8</code>, <code>alpine:3.9</code>, <code>alpine:3.10</code>, <code>alpine:3.11</code>, <code>alpine:3.12</code>, <code>alpine:3.13</code>, <code>alpine:3.14</code>, <code>alpine:3.15</code>, <code>alpine:3.16</code>, <code>alpine:3.17</code>, <code>alpine:3.18</code>, <code>alpine:3.19</code>, <code>alpine:3.20</code>, <code>alpine:3.21</code><sup>[2]</sup>, <code>alpine:3.22</code><sup>[2]</sup>, <code>alpine:edge</code></p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p><a href="https://aws.amazon.com/amazon-linux-ami">Amazon Linux</a></p></td>
+<td style="text-align: left;"><p>Amazon Linux</p></td>
 <td style="text-align: left;"><p><code>amzn:2018.03</code>, <code>amzn:2</code>, <code>amzn:2023</code><sup>[2]</sup></p></td>
 </tr>
 <tr>
@@ -357,30 +496,30 @@ Scanner identifies vulnerabilities in images that contain the following Linux di
 <td style="text-align: left;"><p><code>centos:6</code><sup>[1]</sup>, <code>centos:7</code><sup>[1]</sup>, <code>centos:8</code><sup>[1]</sup></p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p><a href="https://www.debian.org/releases/">Debian</a></p></td>
-<td style="text-align: left;"><p><code>debian:11</code>, <code>debian:12</code>, <code>debian:13</code><sup>[2]</sup>, <code>debian:unstable</code><sup>[1]</sup>, <a href="https://github.com/GoogleContainerTools/distroless"><code>Distroless</code></a></p>
+<td style="text-align: left;"><p>Debian</p></td>
+<td style="text-align: left;"><p><code>debian:11</code>, <code>debian:12</code>, <code>debian:13</code><sup>[2]</sup>, <code>debian:unstable</code><sup>[1]</sup>, <code>Distroless</code></p>
 <p>The following vulnerability sources are not updated by the vendor: <code>debian:8</code><sup>[1]</sup>, <code>debian:9</code><sup>[1]</sup>, <code>debian:10</code><sup>[1]</sup></p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p><a href="https://www.oracle.com/linux/">Oracle Linux</a></p></td>
+<td style="text-align: left;"><p>Oracle Linux</p></td>
 <td style="text-align: left;"><p><code>ol:5</code><sup>[2]</sup>, <code>ol:6</code><sup>[2]</sup>, <code>ol:7</code><sup>[2]</sup>, <code>ol:8</code><sup>[2]</sup>, <code>ol:9</code><sup>[2]</sup></p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p><a href="https://vmware.github.io/photon/assets/files/html/3.0/Introduction.html">Photon OS</a></p></td>
+<td style="text-align: left;"><p>Photon OS</p></td>
 <td style="text-align: left;"><p><code>photon:1.0</code><sup>[2]</sup>, <code>photon:2.0</code><sup>[2]</sup>, <code>photon:3.0</code><sup>[2]</sup></p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p><a href="https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux">Red Hat Enterprise Linux (RHEL)</a></p></td>
+<td style="text-align: left;"><p>Red Hat Enterprise Linux (RHEL)</p></td>
 <td style="text-align: left;"><p><code>rhel:6</code><sup>[3]</sup>, <code>rhel:7</code><sup>[3]</sup>, <code>rhel:8</code><sup>[3]</sup>, <code>rhel:9</code>, <code>rhel:10</code><sup>[2]</sup></p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p><a href="https://www.suse.com/">SUSE</a></p></td>
+<td style="text-align: left;"><p>SUSE</p></td>
 <td style="text-align: left;"><p><code>sles:11</code><sup>[2]</sup>, <code>sles:12</code><sup>[2]</sup>, <code>sles:15</code><sup>[2]</sup>, <code>opensuse-leap:15.5</code><sup>[2]</sup>, <code>opensuse-leap:15.6</code><sup>[2]</sup></p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p><a href="http://releases.ubuntu.com/">Ubuntu</a></p></td>
-<td style="text-align: left;"><p><code>ubuntu:14.04</code>, <code>ubuntu:16.04</code>, <code>ubuntu:18.04</code>, <code>ubuntu:20.04</code>, <code>ubuntu:22.04</code>, <code>ubuntu:24.04</code>, ubuntu:25.04`<sup>[2]</sup></p>
-<p>The following vulnerability sources are not updated by the vendor: <code>ubuntu:12.04</code><sup>[1]</sup>, <code>ubuntu:12.10</code><sup>[1]</sup>, <code>ubuntu:13.04</code><sup>[1]</sup>, <code>ubuntu:14.10</code><sup>[1]</sup>, <code>ubuntu:15.04</code><sup>[1]</sup>, <code>ubuntu::15.10</code><sup>[1]</sup>, <code>ubuntu::16.10</code><sup>[1]</sup>, <code>ubuntu:17.04</code><sup>[1]</sup>, <code>ubuntu:17.10</code><sup>[1]</sup>, <code>ubuntu:18.10</code><sup>[1]</sup>, <code>ubuntu:19.04</code><sup>[1]</sup>, <code>ubuntu:19.10</code><sup>[1]</sup>, <code>ubuntu:20.10</code><sup>[1]</sup>, <code>ubuntu:21.04</code><sup>[1]</sup>, <code>ubuntu:21.10</code><sup>[1]</sup>, <code>ubuntu:22.10</code><sup>[1]</sup>, <code>ubuntu:23.04</code><sup>[1]</sup>, <code>ubuntu:23.10</code><sup>[1]</sup>, <code>ubuntu:24.10</code><sup>[1]</sup></p></td>
+<td style="text-align: left;"><p>Ubuntu</p></td>
+<td style="text-align: left;"><p><code>ubuntu:14.04</code>, <code>ubuntu:16.04</code>, <code>ubuntu:18.04</code>, <code>ubuntu:20.04</code>, <code>ubuntu:22.04</code>, <code>ubuntu:24.04</code>, <code>ubuntu:25.04</code><sup>[2]</sup></p>
+<p>The following vulnerability sources are not updated by the vendor: <code>ubuntu:12.04</code><sup>[1]</sup>, <code>ubuntu:12.10</code><sup>[1]</sup>, <code>ubuntu:13.04</code><sup>[1]</sup>, <code>ubuntu:14.10</code><sup>[1]</sup>, <code>ubuntu:15.04</code><sup>[1]</sup>, <code>ubuntu:15.10</code><sup>[1]</sup>, <code>ubuntu:16.10</code><sup>[1]</sup>, <code>ubuntu:17.04</code><sup>[1]</sup>, <code>ubuntu:17.10</code><sup>[1]</sup>, <code>ubuntu:18.10</code><sup>[1]</sup>, <code>ubuntu:19.04</code><sup>[1]</sup>, <code>ubuntu:19.10</code><sup>[1]</sup>, <code>ubuntu:20.10</code><sup>[1]</sup>, <code>ubuntu:21.04</code><sup>[1]</sup>, <code>ubuntu:21.10</code><sup>[1]</sup>, <code>ubuntu:22.10</code><sup>[1]</sup>, <code>ubuntu:23.04</code><sup>[1]</sup>, <code>ubuntu:23.10</code><sup>[1]</sup>, <code>ubuntu:24.10</code><sup>[1]</sup></p></td>
 </tr>
 </tbody>
 </table>
@@ -392,7 +531,35 @@ Scanner identifies vulnerabilities in images that contain the following Linux di
 3.  Images older than June 2020 are not supported in Scanner V4.
 
 > [!NOTE]
-> Scanner does not support the Fedora operating system because Fedora does not maintain a vulnerability database. However, Scanner still detects language-specific vulnerabilities in Fedora-based images.
+> Scanner does not support the Fedora operating system because Fedora does not keep a vulnerability database. However, Scanner still detects language-specific vulnerabilities in Fedora-based images.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Alpine Linux](https://www.alpinelinux.org/)
+
+- [Amazon Linux](https://aws.amazon.com/amazon-linux-ami)
+
+- [Debian releases](https://www.debian.org/releases/)
+
+- [Distroless](https://github.com/GoogleContainerTools/distroless)
+
+- [Oracle Linux](https://www.oracle.com/linux/)
+
+- [Photon OS](https://vmware.github.io/photon/assets/files/html/3.0/Introduction.html)
+
+- [Red Hat Enterprise Linux](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux)
+
+- [SUSE](https://www.suse.com/)
+
+- [Ubuntu](http://releases.ubuntu.com/)
+
+</div>
 
 <a id="supported-package-formats_examine-images-for-vulnerabilities"></a>
 
@@ -406,6 +573,8 @@ Scanner can check for vulnerabilities in images that use the following package f
 | dpkg           | apt, dpkg               |
 | rpm            | dnf, microdnf, rpm, yum |
 
+Package formats and package managers that Scanner supports
+
 <a id="supported-programming-languages_examine-images-for-vulnerabilities"></a>
 
 ## Supported programming languages
@@ -414,11 +583,13 @@ Scanner can check for vulnerabilities in dependencies for the following programm
 
 | Programming language | Package format |
 |----|----|
-| Go<sup>\[1\]</sup> | Binaries: The standard library version used to build the binary is analyzed. If the binaries are built with module support (go.mod), then the dependencies are also analyzed. |
+| Go<sup>\[1\]</sup> | Binaries: Scanner V4 analyzes the standard library version used to build the binary. If the build uses module support (go.mod), Scanner V4 also analyzes the dependencies. |
 | Java | JAR, WAR, EAR, JPI, HPI |
 | JavaScript | package.json |
 | Python | egg, wheel |
 | Ruby | gem |
+
+Programming languages and package formats that Scanner supports
 
 1.  Only supported in Scanner V4.
 
@@ -426,7 +597,7 @@ Scanner can check for vulnerabilities in dependencies for the following programm
 
 ## Supported layer compression formats
 
-Container image layers are `.tar` file archives that might be compressed or uncompressed. StackRox Scanner and Scanner V4 support different formats as shown in the following table:
+Container image layers are `.tar` file archives in compressed or uncompressed format. StackRox Scanner and Scanner V4 support different formats as shown in the following table:
 
 | Format         | StackRox Scanner Support | Scanner V4 Support |
 |----------------|--------------------------|--------------------|
@@ -435,6 +606,8 @@ Container image layers are `.tar` file archives that might be compressed or unco
 | gzip           | Yes                      | Yes                |
 | xz             | Yes                      | No                 |
 | zstd           | No                       | Yes                |
+
+Layer compression format support in StackRox Scanner and Scanner V4
 
 <a id="supported-runtimes-frameworks_examine-images-for-vulnerabilities"></a>
 
@@ -466,7 +639,9 @@ Additional resources
 
 # Scanning virtual machines
 
-You can use Red Hat Advanced Cluster Security for Kubernetes (RHACS) to scan virtual machine (VM) workloads running on Red Hat OpenShift Virtualization (RHOCPV) to identify security vulnerabilities in packages installed on VMs. RHACS creates index reports of installed packages and matches them against known vulnerabilities to provide comprehensive security assessment of VM workloads.
+You can use Red Hat Advanced Cluster Security for Kubernetes (RHACS) to scan virtual machine (VM) workloads running on Red Hat OpenShift Virtualization (RHOCPV) and identify security vulnerabilities in the packages installed on those VMs.
+
+RHACS creates index reports of installed packages and matches them against known vulnerabilities to offer a comprehensive security assessment of VM workloads.
 
 > [!IMPORTANT]
 > Vulnerability management in RHACS for virtual machines running on OpenShift Virtualization is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
@@ -525,23 +700,23 @@ To use Red Hat Advanced Cluster Security for Kubernetes (RHACS) to scan virtual 
 
 Red Hat OpenShift Virtualization (RHOCPV) must meet the following requirements:
 
-- The RHOCPV Operator is installed in the cluster you want to scan.
+- You installed the RHOCPV Operator in the cluster you want to scan.
 
-- The HyperConverged resource is patched to enable virtual socket (vsock) support.
+- You patched the HyperConverged resource to enable virtual socket (vsock) support.
 
 VMs must meet the following requirements:
 
 - VM resources include vsock support with the setting `spec.domain.devices.autoattachVSOCK: true`.
 
-- VMs are running Red Hat Enterprise Linux (RHEL). You must register any host where the scan agent is installed with Red Hat Subscription Manager and have an active RHEL subscription.
+- VMs are running Red Hat Enterprise Linux (RHEL). You must register any host where you installed the scan agent with Red Hat Subscription Manager and have an active RHEL subscription.
 
 - VMs have internet access to download repository-to-Common Platform Enumeration (CPE) mappings.
 
-- DNF is installed.
+- You installed DNF.
 
 RHACS must meet the following requirements:
 
-- Scanner V4 is deployed and available.
+- You deployed Scanner V4 and it is available.
 
 For resource requirements, such as CPU and memory resource allocation, see "Resource requirements for virtual machine scanning".
 
@@ -567,15 +742,15 @@ Scanning VMs has the following limitations:
 
 - Currently, RHACS can only scan VMs that are running RHEL.
 
-- RHEL must be activated with a valid subscription.
+- You must activate RHEL with a valid subscription.
 
-- Only RHEL packages indexed by DNF with valid repository links can be scanned.
+- You can only scan RHEL packages indexed by DNF with valid repository links.
 
 - Scanning requires sudo privileges for `roxagent` to scan package databases and communicate over vsock.
 
-- Only packages managed by Red Hat Package Manager (RPM) and DNF are detected.
+- RHACS detects only packages managed by Red Hat Package Manager (RPM) and DNF.
 
-- Internet connectivity is required for repository-to-CPE mapping downloads unless a local mapping file is configured.
+- You must have internet connectivity for repository-to-CPE mapping downloads unless you configure a local mapping file.
 
 <a id="configuring-vm-scanning_examine-images-for-vulnerabilities"></a>
 
@@ -644,14 +819,6 @@ Procedure
 
 Depending on your system needs, you might need to set some advanced configuration parameters to scan virtual machines.
 
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
 - In the Collector pod in the Compliance container, you can configure the following environment variables:
 
   - ROX_VIRTUAL_MACHINES_VSOCK_PORT: Port for virtual socket (vsock) connections. The default value is `818`.
@@ -662,27 +829,25 @@ Procedure
 
   - ROX_VIRTUAL_MACHINES_VSOCK_CONCURRENCY_TIMEOUT: Timeout for acquiring a vsock connection semaphore slot. Increase this value if VMs are timing out while waiting for a connection slot. The default value is `5s`.
 
-  - ROX_VIRTUAL_MACHINES_INDEX_REPORTS_BUFFER_SIZE: Buffer size for index reports awaiting processing in Sensor. Increase this value in high-latency environments where reports queue up in Sensor before being forwarded to Central. The default value is `100`.
+  - ROX_VIRTUAL_MACHINES_INDEX_REPORTS_BUFFER_SIZE: Buffer size for index reports awaiting processing in Sensor. Increase this value in high-latency environments where reports queue up in Sensor before Sensor forwards them to Central. The default value is `100`.
 
-  - ROX_VIRTUAL_MACHINES_RELAY_ENABLED_ON_MASTER_NODES: Allow the relay to run on control-plane nodes. Enable this in small clusters where master nodes also host VMs. The default value is `false`.
+  - ROX_VIRTUAL_MACHINES_RELAY_ENABLED_ON_MASTER_NODES: Allow the relay to run on control-plane nodes. Enable this in small clusters where control-plane nodes also host VMs. The default value is `false`.
 
   - ROX_VM_RELAY_MAX_REPORTS_PER_MINUTE: Maximum number of VM index reports per minute that the relay forwards to Sensor for each VM connection. This setting supports fractional values. Set the value to `0` to disable relay-side rate limiting. The default value is `1.0`. This setting helps prevent a single VM from sending bursts of reports that can consume relay capacity and interfere with report processing for other VMs.
 
-  - ROX_VM_RELAY_STALE_ACK_THRESHOLD: Maximum time that the relay waits for an acknowledgment (ACK) confirming successful processing of a previously forwarded VM index report. If the last ACK is older than this threshold or no ACK was received, a stale-ACK event is recorded in logs and metrics. Set a non-positive value to disable this behavior. The default value is `4h`.
+  - ROX_VM_RELAY_STALE_ACK_THRESHOLD: Maximum time that the relay waits for an acknowledgment (ACK) confirming successful processing of a forwarded VM index report. If the last ACK is older than this threshold or the relay did not receive an ACK, the system records a stale-ACK event in logs and metrics. Set a non-positive value to disable this behavior. The default value is `4h`.
 
 - In the Central pod, you can configure the following environment variables:
 
   - ROX_VM_INDEX_REPORT_RATE_LIMIT: Maximum number of index reports per second that Central accepts. Each secured cluster gets an equal share (1/N) of this global capacity. The default value is `0.3`.
 
-  - ROX_VM_INDEX_REPORT_BUCKET_CAPACITY: Maximum number of requests that can be accepted in a burst before rate limiting happens. The default value is `200`.
-
-</div>
+  - ROX_VM_INDEX_REPORT_BUCKET_CAPACITY: Maximum number of requests that the system accepts in a burst before rate limiting happens. The default value is `200`.
 
 <a id="deploy-roxagent_examine-images-for-vulnerabilities"></a>
 
 ## Deploying roxagent
 
-To use Red Hat Advanced Cluster Security for Kubernetes (RHACS) to scan virtual machines (VMs), you must run `roxagent`, a binary executable. It runs inside VMs, scans for installed packages, and creates index reports.
+To use Red Hat Advanced Cluster Security for Kubernetes (RHACS) to scan virtual machines (VMs), you must run `roxagent`, an executable program. It runs inside VMs, scans for installed packages, and creates index reports.
 
 Deploy `roxagent` as a systemd-managed container service by using Podman Quadlet. This deployment method uses container images from a validated build pipeline, runs `roxagent` periodically by using a systemd timer, and manages the container lifecycle automatically.
 
@@ -786,7 +951,7 @@ Procedure
 
     [Container]
     # Replace with your StackRox main image tag
-    Image=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:<rhacs-version>
+    Image=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:<rhacs_version>
     Exec=--host-path /host
     Network=host
 
@@ -818,10 +983,10 @@ Procedure
 
     Where:
 
-    \<rhacs-version\>  
-    The version of your RHACS deployment, for example, 4.11.3.
+    \<rhacs_version\>  
+    The version of your RHACS deployment, for example, 4.11.5.
 
-7.  If SELinux is enabled, restore the SELinux contexts by entering the following commands:
+7.  If you have SELinux enabled, restore the SELinux contexts by entering the following commands:
 
     ``` terminal
     $ sudo restorecon -Rv /etc/containers/systemd/
@@ -875,25 +1040,19 @@ Verification
 
 ## Troubleshooting virtual machine scanning
 
-If you have problems when viewing vulnerability results for VMs, you can try some common troubleshooting steps. You can try different steps depending on the type of issue you are having, for example, connectivity or performance issues. You can also make sure your system meets the recommended requirements. See "Resource requirements for virtual machine scanning".
+If you have problems when viewing vulnerability results for VMs, you can try some common troubleshooting steps, which differ depending on the type of issue.
 
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
+The steps differ by issue type, for example, connectivity or performance issues. You can also ensure that your system meets the recommended requirements. For more information, see "Resource requirements for virtual machine scanning".
 
 - If `roxagent` cannot connect to the host, try these steps:
 
-  - Verify that virtual socket (vsock) is enabled in the VM configuration.
+  - Verify that you enabled virtual socket (vsock) in the VM configuration.
 
   - Check that the relay is running on the host node. The relay runs inside the Compliance container in the Collector pod, not as a standalone process.
 
-  - Verify that the relay is expected to run on the node hosting the VM. The relay does not start on master or control-plane nodes unless `ROX_VIRTUAL_MACHINES_RELAY_ENABLED_ON_MASTER_NODES` is explicitly set to `true`.
+  - Confirm that the relay should run on the node hosting the VM. The relay does not start on control-plane nodes unless `ROX_VIRTUAL_MACHINES_RELAY_ENABLED_ON_MASTER_NODES` is explicitly set to `true`.
 
-  - Ensure that the vsock kernel modules are loaded.
+  - Ensure that the system loaded the vsock kernel modules.
 
   - Verify that port configuration matches between the `roxagent` and relay.
 
@@ -909,7 +1068,7 @@ Procedure
 
 - If vulnerability data does not appear in RHACS, try these steps:
 
-  - Verify that the feature flag is enabled on all components.
+  - Verify that you enabled the feature flag on all components.
 
   - Check Central logs for enrichment processing.
 
@@ -933,7 +1092,7 @@ Procedure
 
 - If you notice slow scan times, try these steps:
 
-  - Verify that metal nodes are used for VM hosting.
+  - Verify that your environment uses metal nodes for VM hosting.
 
   - Check network latency for repository downloads.
 
@@ -952,8 +1111,6 @@ Procedure
   - Check the logs of the Compliance container in the Collector pod for instances of the "Could not acquire semaphore, too many concurrent connections" message. If you see this message, you can increase the number of connections in `ROX_VIRTUAL_MACHINES_MAX_CONCURRENT_VSOCK_CONNECTIONS` to allow RHACS to process more VMs in parallel. You might also need to increase the Compliance container memory limit.
 
   - Check the logs of the Compliance container in the Collector pod for instances of the "data size exceeds the limit" message. If you see this message, you can increase the maximum vsock connection size in `ROX_VIRTUAL_MACHINES_VSOCK_CONN_MAX_SIZE_KB` to allow processing of larger index reports. You might also need to increase the Compliance container memory limit.
-
-</div>
 
 <div>
 
@@ -1014,11 +1171,13 @@ If you have isolated container image registries that are accessible from your se
 
 ## Enhancing image scanning by accessing delegated image scanning
 
-Currently, by default, Central Services Scanner performs both indexing (identification of components) and vulnerability matching (enrichment of components with vulnerability data) for images observed in your secured clusters, with the exception of images from the OpenShift Container Platform integrated registry.
+By default, Central Services Scanner performs both indexing and vulnerability matching for the images observed in your secured clusters, except for images from the OpenShift Container Platform integrated registry.
+
+Indexing identifies the components in an image, and vulnerability matching enriches those components with vulnerability data.
 
 For images from the OpenShift Container Platform integrated registry, Scanner-slim installed in your secured cluster performs the indexing, and the Central Services Scanner performs the vulnerability matching.
 
-The delegated image scanning feature extends scanning functionality by allowing Scanner-slim to index images from any registry and then send them to Central for vulnerability matching. To use this feature, ensure that Scanner-slim is installed in your secured clusters. If Scanner-slim is not present, scan requests are sent directly to Central.
+The delegated image scanning feature extends scanning functionality. It allows Scanner-slim to index images from any registry and then send them to Central for vulnerability matching. To use this feature, ensure that you install Scanner-slim in your secured clusters. If Scanner-slim is not present, the system sends scan requests directly to Central.
 
 <a id="scanning-images-by-using-secured-clusters_examine-images-for-vulnerabilities"></a>
 
@@ -1057,7 +1216,7 @@ Procedure
 
 2.  In the **Clusters** view header, click **Delegated scanning**.
 
-3.  In the **Delegated Image Scanning** page, provide the following information:
+3.  In the **Delegated Image Scanning** page, enter the following information:
 
     - **Delegate scanning for**: To choose the scope of the image delegation, select one of the following options:
 
@@ -1078,9 +1237,9 @@ Procedure
 
 4.  Click **Save**.
 
-</div>
+    Image integrations are now synchronized between Central and Sensor, and Sensor captures pull secrets from each namespace. Sensor then uses these credentials to authenticate to the image registries.
 
-Image integrations are now synchronized between Central and Sensor, and Sensor captures pull secrets from each namespace. Sensor then uses these credentials to authenticate to the image registries.
+</div>
 
 <div>
 
@@ -1098,7 +1257,7 @@ Additional resources
 
 ## Installing and configuring Scanner-slim on secured clusters
 
-If you are using the StackRox scanner, Scanner-slim is the lightweight version of that scanner that runs on your secured clusters instead of the cluster where Central is installed. You can install Scanner-slim by using the Operator or by using Helm. Scanner V4 does not use Scanner-slim.
+If you are using the StackRox scanner, Scanner-slim is the lightweight version of that scanner that runs on your secured clusters instead of the cluster where you installed Central. You can install Scanner-slim by using the Operator or by using Helm. Scanner V4 does not use Scanner-slim.
 
 <a id="installing-scanner-slim-operator_examine-images-for-vulnerabilities"></a>
 
@@ -1106,23 +1265,51 @@ If you are using the StackRox scanner, Scanner-slim is the lightweight version o
 
 The RHACS Operator installs a Scanner-slim version on each secured cluster to scan images in the OpenShift Container Platform integrated registry and optionally other registries.
 
-For more information, see [Installing RHACS on secured clusters by using the Operator](../installing/installing_ocp/install-secured-cluster-ocp.md).
+For more information, see "Installing RHACS on secured clusters by using the Operator".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installing RHACS on secured clusters by using the Operator](../installing/installing_ocp/install-secured-cluster-ocp.md)
+
+</div>
 
 <a id="installing-scanner-slim-helm_examine-images-for-vulnerabilities"></a>
 
 ## Using Helm
 
-The secured cluster services Helm chart (`secured-cluster-services`) installs a Scanner-slim version on each secured cluster. In Kubernetes, the secured cluster services include Scanner-slim. On OpenShift Container Platform, however, RHACS installs a Scanner-slim version on each secured cluster to scan images in the OpenShift Container Platform integrated registry and optionally other registries.
+The secured cluster services Helm chart (`secured-cluster-services`) installs a Scanner-slim version on each secured cluster.
 
-- For OpenShift Container Platform installations, see [Installing the secured-cluster-services Helm chart without customization](../installing/installing_ocp/install-secured-cluster-ocp.md#installing-secured-cluster-services-quickly_install-secured-cluster-ocp).
+In Kubernetes, the secured cluster services include Scanner-slim. On OpenShift Container Platform, however, RHACS installs a Scanner-slim version on each secured cluster to scan images in the OpenShift Container Platform integrated registry and optionally other registries.
 
-- For non-OpenShift Container Platform installations, such as Amazon Elastic Kubernetes Service (Amazon EKS), Google Kubernetes Engine (Google GKE), and Microsoft Azure Kubernetes Service (Microsoft AKS), see [Installing the secured-cluster-services Helm chart without customization](../installing/installing_other/install-secured-cluster-other.md#installing-secured-cluster-services-quickly_install-secured-cluster-other).
+- For OpenShift Container Platform installations, see "Installing the secured-cluster-services Helm chart without customization" in the OpenShift Container Platform installation guide.
+
+- For non-OpenShift Container Platform installations, see "Installing the secured-cluster-services Helm chart without customization" in the non-OpenShift Container Platform installation guide. Non-OpenShift Container Platform platforms include Amazon Elastic Kubernetes Service (Amazon EKS), Google Kubernetes Engine (Google GKE), and Microsoft Azure Kubernetes Service (Microsoft AKS).
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Installing the secured-cluster-services Helm chart without customization (OpenShift Container Platform)](../installing/installing_ocp/install-secured-cluster-ocp.md#installing-secured-cluster-services-quickly_install-secured-cluster-ocp)
+
+- [Installing the secured-cluster-services Helm chart without customization (non-OpenShift Container Platform)](../installing/installing_other/install-secured-cluster-other.md#installing-secured-cluster-services-quickly_install-secured-cluster-other)
+
+</div>
 
 <a id="verifying-scanner-installation_examine-images-for-vulnerabilities"></a>
 
 # Verifying scanner installation
 
-After installation, use the portal to make sure that the scanner is installed and working.
+After installation, use the portal to verify that the scanner works correctly.
 
 <div>
 
@@ -1132,13 +1319,11 @@ Procedure
 
 </div>
 
-- Verify that the status of the secured cluster indicates that scanner is present and healthy:
+1.  In the RHACS portal, go to **Platform Configuration → Clusters**.
 
-  1.  In the RHACS portal, go to **Platform Configuration → Clusters**.
+2.  In the **Clusters** view, select a cluster to view its details.
 
-  2.  In the **Clusters** view, select a cluster to view its details.
-
-  3.  In the **Health Status** card, ensure that **Scanner** is present and is marked as **Healthy.**
+3.  In the **Health Status** card, verify that **Scanner** appears and shows **Healthy**.
 
 </div>
 
@@ -1148,7 +1333,19 @@ Procedure
 
 You can scan images stored in a cluster specific OpenShift Container Platform integrated image registry by using `roxctl` CLI, Jenkins, and API. You can specify the appropriate cluster in the delegated scanning configuration or use the cluster parameter available in `roxctl` CLI, Jenkins, and API.
 
-For more information about how to scan images by using the `roxctl` CLI, see [Image scanning by using the roxctl CLI](../cli/image-scanning-by-using-the-roxctl-cli.md).
+For more information about how to scan images by using the `roxctl` CLI, see "Image scanning by using the roxctl CLI".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Image scanning by using the roxctl CLI](../cli/image-scanning-by-using-the-roxctl-cli.md)
+
+</div>
 
 <a id="setting-up-scanning_examine-images-for-vulnerabilities"></a>
 
@@ -1167,7 +1364,7 @@ Red Hat Advanced Cluster Security for Kubernetes periodically scans all active i
 
 Central fetches the image scan results for all active images from Scanner or other integrated image scanners that you use and updates the results every 4 hours.
 
-You can also use the `roxctl` CLI to check the image scan results on demand.
+You can also use the `roxctl` CLI to check the image scan results on-demand.
 
 <a id="scan-inactive-images_examine-images-for-vulnerabilities"></a>
 
@@ -1244,7 +1441,7 @@ Procedure
     > [!IMPORTANT]
     > In the RHACS portal, click **Platform Configuration** → **System Configuration** to view the data retention configuration.
     >
-    > All the data related to the image removed from the watched image list continues to appear in the RHACS portal for the number of days mentioned on the **System Configuration** page and is only removed after that period is over.
+    > Data related to an image that you remove from the watched image list continues to appear in the RHACS portal for the number of days shown on the **System Configuration** page. RHACS removes the data only after that period ends.
 
 8.  Click **Close** to return to the **Inactive images** page.
 
@@ -1285,7 +1482,7 @@ $ oc -n stackrox set env deploy/central ROX_SCANNER_VULN_UPDATE_INTERVAL=<value>
 > [!NOTE]
 > If you use Kubernetes, enter `kubectl` instead of `oc`.
 
-This variable applies to the connection between Central and the `definitions.stackrox.io` feed. Both the StackRox Scanner and Scanner V4 use vulnerability data from Central that is obtained from this feed. The StackRox Scanner’s config map still has an `updater.interval` parameter for configuring the scanner’s updating frequency, but it no longer includes the `fetchFromCentral` parameter.
+This variable applies to the connection between Central and the `definitions.stackrox.io` feed. Both the StackRox Scanner and Scanner V4 use vulnerability data that Central obtains from this feed. The StackRox Scanner’s config map still has an `updater.interval` parameter for configuring the scanner’s updating frequency, but it no longer includes the `fetchFromCentral` parameter.
 
 For more information about the vulnerability sources that RHACS uses, see "Vulnerability sources" in "Red Hat Advanced Cluster Security for Kubernetes architecture".
 
@@ -1348,18 +1545,22 @@ Procedure
 
 # Defining base images used in application development
 
-Red Hat Advanced Cluster Security for Kubernetes (RHACS) lets DevSecOps engineers in your organization to identify base images that are used in the container applications that your developers build. RHACS can then provide information about vulnerabilities that exist in base image layers so that application developers can address these vulnerabilities and use trusted, secure images when building applications. Developers can also focus on fixing vulnerabilities in application layers instead of vulnerabilities in the base layers.
+Red Hat Advanced Cluster Security for Kubernetes (RHACS) lets DevSecOps engineers identify the base images used in the container applications that your developers build.
+
+RHACS then offers information about vulnerabilities that exist in base image layers, so that application developers can address those vulnerabilities and use trusted, secure images when building applications. Developers can also focus on fixing vulnerabilities in application layers instead of vulnerabilities in the base layers.
 
 When you configure a list of base images, RHACS pulls information about those images from the repositories and stores it in a database. When you scan images, RHACS tries to match the container images against the images in that database. RHACS then provides information about the base image layer in the RHACS portal.
 
 > [!NOTE]
-> You can configure RHACS to pull multiple tags for an image by using a wildcard. However, to prevent undue system resource use, RHACS only tracks information for the most recent 100 tags.
+> You can configure RHACS to pull many tags for an image by using a wildcard. However, to prevent undue system resource use, RHACS only tracks information for the most recent 100 tags.
 
 <a id="define-base-images_examine-images-for-vulnerabilities"></a>
 
 ## Defining base images by using the RHACS portal
 
-You can set up a list of base images in Red Hat Advanced Cluster Security for Kubernetes (RHACS) that are used in the applications that your DevOps users build. RHACS then uses this list to identify those base images in the images that it scans. Using this information, you can separate vulnerabilities contained in the base image layer from vulnerabilities contained in the application layers.
+In Red Hat Advanced Cluster Security for Kubernetes (RHACS), you can configure a list of the base images used in the applications that your DevOps users build.
+
+RHACS then uses this list to identify those base images in the images that it scans. Using this information, you can separate vulnerabilities contained in the base image layer from vulnerabilities contained in the application layers.
 
 <div>
 
@@ -1369,7 +1570,7 @@ Prerequisites
 
 </div>
 
-- To define base images, you must be logged in as a user with the `ImageAdministration` permission; for example, as the `Admin` or `Analyst` user.
+- To define base images, you must log in as a user with the `ImageAdministration` permission; for example, as the `Admin` or `Analyst` user.
 
 </div>
 
@@ -1383,12 +1584,18 @@ Procedure
 
 1.  Select **Platform Configuration** → **Base Images** and click **Add base image**.
 
-2.  Enter the path to the base image repository, including the repository address and the image tag, in the format `<hostname>/<project-id>/<repository-name>:<tag>.` You can include a pattern to filter the tag, including using `*` to match any sequence of nonseparator characters or `?` to match any single nonseparator character. For more filtering syntax information, see the [Go filepath match](https://pkg.go.dev/path/filepath#Match) documentation. For example, `registry.redhat.io/ubi9:9.*` would add Red Hat Universal Base Image 9 images with tags starting with `9`.
+2.  Enter the path to the base image repository, including the repository address and the image tag, in the format `<hostname>/<project_id>/<repository_name>:<tag>`.
+
+    You can include a pattern to filter the tag. Use `\*` to match any sequence of nonseparator characters, or `?` to match any single nonseparator character. For more filtering syntax information, see the "Go filepath match" documentation.
+
+    For example, `registry.redhat.io/ubi9:9.*` adds Red Hat Universal Base Image 9 images with tags starting with `9`.
 
     > [!NOTE]
     > To prevent undue system resource use, RHACS only tracks information for the most recent 100 tags.
 
-3.  Click **Save**. The list of base images is compared against the repository and tags are updated every 4 hours.
+3.  Click **Save**.
+
+    RHACS compares the list of base images against the repository and updates tags every 4 hours.
 
 </div>
 
@@ -1404,13 +1611,15 @@ Additional resources
 
 - [Viewing vulnerabilities in base images](manage-vulnerabilities/common-vuln-management-tasks.md#base-image-vulnerabilities_other)
 
+- [Go filepath match](https://pkg.go.dev/path/filepath#Match)
+
 </div>
 
 <a id="base-images-api_examine-images-for-vulnerabilities"></a>
 
 ### Configuring base images by using the API
 
-You can use the API to set up a list of base images, add new base images, delete base images, and modify the tag pattern for a base image.
+You can use the API to configure a list of base images, add new base images, delete base images, and change the tag pattern for a base image.
 
 <div>
 
@@ -1420,7 +1629,7 @@ Prerequisites
 
 </div>
 
-- You must be logged in as a user whose role has a permission set that includes the `ImageAdministration` permission; for example, the `Admin` and `Analyst` permission sets have this permission.
+- You must log in as a user whose role has a permission set that includes the `ImageAdministration` permission; for example, the `Admin` and `Analyst` permission sets have this permission.
 
 </div>
 

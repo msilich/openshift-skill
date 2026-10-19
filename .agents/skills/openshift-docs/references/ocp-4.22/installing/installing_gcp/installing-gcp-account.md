@@ -276,7 +276,9 @@ Google Cloud service account roles
 
 ## Required Google Cloud permissions for installer-provisioned infrastructure
 
-When you attach the `Owner` role to the service account that you create, you grant that service account all permissions, including those that are required to install OpenShift Container Platform. If your organization’s security policies require a more restrictive set of permissions, you can create [custom roles](https://cloud.google.com/iam/docs/creating-custom-roles) with the necessary permissions.
+When you attach the `Owner` role to the service account that you create, you grant that service account all permissions, including those that are required to install OpenShift Container Platform.
+
+If your organization’s security policies require a more restrictive set of permissions, you can create [custom roles](https://cloud.google.com/iam/docs/creating-custom-roles) with the necessary permissions.
 
 The following permissions are required for the installer-provisioned infrastructure for creating and deleting the OpenShift Container Platform cluster.
 

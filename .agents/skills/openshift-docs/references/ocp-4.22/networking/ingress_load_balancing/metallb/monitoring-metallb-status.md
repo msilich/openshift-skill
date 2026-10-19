@@ -2,7 +2,7 @@
 
 As an OpenShift Container Platform system administrator, you can monitor the operational status of your MetalLB deployment by examining its custom resources (CRs). These status fields provide information about IP address allocations, BGP peer announcements, and session states, which are important for effective monitoring and troubleshooting.
 
-# Understanding MetalLB status custom resources
+# Understand MetalLB status custom resources
 
 MetalLB provides a scalable framework for monitoring the health of network traffic and IP addresses. Use status fields in MetalLB custom resources to track session status and troubleshoot configuration.
 
@@ -19,7 +19,7 @@ MetalLB status resources
 
 The MetalLB controller, typically deployed as `metallb-system/controller`, is responsible for managing IP address assignments and updating the `IPAddressPool` status. When a service requests a `LoadBalancer` IP, the controller allocates an IP from an appropriate `IPAddressPool` and updates the status fields to reflect the current number of assigned and available IP addresses.
 
-# Viewing the `IPAddressPool` status
+# View the `IPAddressPool` status
 
 Check IP address allocation from your MetalLB pools by viewing the `IPAddressPool` status. This status shows the number of addresses assigned to services and the number remaining available for assignment.
 
@@ -230,7 +230,7 @@ Procedure
 
 </div>
 
-# Viewing the ServiceBGPStatus custom resource
+# View the ServiceBGPStatus custom resource
 
 You can verify border gateway protocol (BGP) advertisement status for your services by viewing the `ServiceBGPStatus` custom resource, which shows which BGP peers receive advertisements from each node. This is essential for debugging connectivity in telco environments.
 
@@ -457,9 +457,9 @@ Procedure
 
 </div>
 
-# Verifying BGP session state
+# Verify BGP session state
 
-Once you configure MetalLB for border gateway protocol (BGP) mode, you can verify that the system has established BGP sessions and is advertising routes. You can examine the `BGPSessionState` custom resource (CR) and the `FRRNodeState` CR to troubleshoot BGP connectivity and confirm proper route advertisement.
+After you configure MetalLB for BGP mode, you can examine the `BGPSessionState` and `FRRNodeState` custom resources (CRs) to verify that BGP sessions are established and routes are advertised.
 
 > [!NOTE]
 > The `BGPSessionState` CR is updated at a regular poll interval of 2 minutes. It can take up to 2 minutes for the CR to reflect the actual BGP state.
@@ -548,9 +548,11 @@ Procedure
 
 </div>
 
-# Checking MetalLB configuration status
+# Check MetalLB configuration status
 
-You can verify that the MetalLB controller and speakers have successfully applied the current configuration by viewing the `ConfigurationState` custom resource (CR). MetalLB creates a `ConfigurationState` resource for the controller and one for each speaker node. These resources report whether the configuration is valid and surface error details when validation fails, such as incompatible custom resources.
+You can verify that the MetalLB controller and speakers have successfully applied the current configuration by viewing the `ConfigurationState` custom resource (CR). MetalLB creates a `ConfigurationState` resource for the controller and one for each speaker node.
+
+These resources report whether the configuration is valid and surface error details when validation fails, such as incompatible custom resources.
 
 <div>
 

@@ -2,7 +2,7 @@
 
 You can gather metrics for hosted control planes by configuring metrics sets. Monitoring dashboards are created in the management cluster for each hosted cluster that it manages.
 
-# Configuring metrics sets for hosted control planes
+# Configure metrics sets for hosted control planes
 
 Hosted control planes creates `ServiceMonitor` resources in each control plane namespace that allow a Prometheus stack to gather metrics from the control planes.
 
@@ -43,6 +43,8 @@ You can specify the following components:
 - `kubeAPIServer`
 
 - `kubeControllerManager`
+
+- `kubeScheduler`
 
 - `openshiftAPIServer`
 
@@ -110,6 +112,10 @@ kubeControllerManager:
     sourceLabels: ["__name__"]
   - action:       "drop"
     regex:        "root_ca_cert_publisher_sync_duration_seconds_(bucket|count|sum)"
+    sourceLabels: ["__name__"]
+kubeScheduler:
+  - action:       "drop"
+    regex:        "scheduler_(e2e_scheduling_latency_microseconds|scheduling_algorithm_predicate_evaluation|scheduling_algorithm_priority_evaluation|scheduling_algorithm_preemption_evaluation|scheduling_algorithm_latency_microseconds|binding_latency_microseconds|scheduling_latency_seconds)"
     sourceLabels: ["__name__"]
 openshiftAPIServer:
   - action:       "drop"
@@ -229,7 +235,7 @@ Additional resources
 
 </div>
 
-# Enabling monitoring dashboards in a hosted cluster
+# Enable monitoring dashboards in a hosted cluster
 
 You can enable monitoring dashboards in a hosted cluster by creating a config map.
 
@@ -300,19 +306,91 @@ When a dashboard is generated, the following strings are replaced with values th
 
 To set a custom cluster identifier when you create the hosted cluster, see "Customized hosted cluster identifiers".
 
+# Connectivity monitoring for hosted control planes
+
+Cluster service providers can monitor connectivity metrics to ensure proper function during an update. They can also use the metrics to find connectivity issues between the control plane and the data plane, or vice versa.
+
+Studying these metrics over time can inform decisions about capacity planning and scaling.
+
+## Connectivity monitoring from the control plane to the data plane
+
+Cluster administrators can monitor network activity between a hosted control plane and the compute nodes in a data plane by using the `DataPlaneConnectionAvailable` condition. This condition is useful for identifying and troubleshooting network connectivity issues in hosted clusters.
+
+The `DataPlaneConnectionAvailable` condition is available by default starting with version 4.21.
+
+The `DataPlaneConnectionAvailable` condition monitors the connectivity from the control plane to the data plane by taking the following steps:
+
+1.  Counts available compute nodes in the hosted cluster.
+
+2.  Lists the `konnectivity-agent` pods that are running in the `kube-system` namespace on the data plane.
+
+3.  Reads the logs from the running `konnectivity-agent` pod to verify that it can communicate with the data plane.
+
+The `hosted-cluster-config-operator` component that runs in the control plane namespace evaluates the condition and provides status and reason information.
+
+The following table details the status and reason values that can be displayed for the condition:
+
+| Status | Reason value | Description |
+|----|----|----|
+| `True` | `AsExpected` | The control plane can reach the data plane nodes through the `konnectivity-agent` pods. |
+| `False` | `KonnectivityAgentPodsNotFound` | No `konnectivity-agent` pods are running, or none are found. |
+| `False` | `ReconciliationError` | An error occurred while listing the `konnectivity-agent` pods. |
+| `Unknown` | `NoWorkerNodesAvailable` | No compute nodes are available in the cluster. No errors occurred, but no compute nodes were found. |
+| `Unknown` | `ReconcileError` | Unable to count compute nodes because an error occurred. |
+
+For information about how to troubleshoot connectivity issues, see "Troubleshooting connectivity for hosted control planes".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Troubleshooting connectivity for hosted control planes](hcp-troubleshooting.md#hcp-ts-connectivity_hcp-troubleshooting)
+
+</div>
+
+## Connectivity monitoring from the data plane to the control plane
+
+Cluster administrators can monitor network activity between the compute nodes in a data plane and a hosted control plane by using the `ControlPlaneConnectionAvailable` condition. This condition is useful for identifying and troubleshooting network connectivity issues in hosted clusters.
+
+The `ControlPlaneConnectionAvailable` condition detects whether data plane nodes can reach control plane components. The `hosted-cluster-config-operator` component evaluates the condition, and a deployment with 3 replicas checks connectivity.
+
+The condition monitors the connectivity between the data plane and the control plane by taking the following steps:
+
+1.  Deploys a `kas-connection-checker` deployment to the `kube-system` namespace on the data plane.
+
+2.  Each pod runs a shell script in an infinite loop that transfers data to and from the Kubernetes API server endpoint every 60 seconds. On success, the script patches the `control-plane-connectivity-check` config map with a `lastSucceeded` timestamp.
+
+3.  The `hosted-cluster-config-operator` component checks whether the `control-plane-connectivity-check` config map exists and whether the `lastSucceeded` timestamp is within the last 5 minutes. It does not check pod readiness counts.
+
+The following table details the status and reason values that can be displayed for the condition:
+
+| Status | Reason value | Description |
+|----|----|----|
+| `True` | `AsExpected` | All data plane nodes can reach the control plane (`NumberReady = DesiredNumberScheduled`). |
+| `False` | `KASAccessFailed` | At least one data plane node cannot reach the control plane. The message shows the ratio of pods that are ready; for example, `1/3 pods ready`. |
+| `Unknown` | `NoWorkerNodesAvailable` | No compute nodes are available to check connectivity (`DesiredNumberScheduled = 0`). |
+| `Unknown` | `StatusUnknown` | The Kubernetes API server connection checker DaemonSet was not found. |
+| `Unknown` | `ReconcileError` | An API error blocked the retrieval of the DaemonSet status. |
+
+> [!IMPORTANT]
+> This condition has a known limitation with HTTPS proxy environments. In HTTPS proxy environments, the condition might incorrectly report `False` because of probe limitations.
+
 # Control plane metrics for hosted control planes
 
 You can observe hosted control plane health from the hosted cluster monitoring stack when metrics forwarding is enabled.
 
-With propagated metrics, you can diagnose API server, etcd, Operator, and scheduling issues from the hosted cluster web console and CLI without management cluster credentials.
-
-This capability is available in OpenShift Container Platform 4.22 and later.
-
-Before OpenShift Container Platform 4.22, control plane components for hosted control planes ran on the management cluster and were invisible to the Cluster Monitoring Operator stack in the hosted cluster. Hosted cluster administrators could not query metrics such as `apiserver_request_total`, `etcd_mvcc_db_total_size_in_bytes`, or `csv_succeeded` from the hosted cluster Prometheus.
-
-With metrics forwarding, selected control plane metrics are propagated from the management cluster into the hosted cluster platform Prometheus.
+With propagated metrics, you can diagnose API server, etcd, Operator, and scheduling issues from the hosted cluster web console and CLI without management cluster credentials. Selected control plane metrics are propagated from the management cluster into the hosted cluster platform Prometheus.
 
 After you enable forwarding on the `HostedCluster` resource, you can use familiar PromQL queries, alerts, and dashboards.
+
+> [!IMPORTANT]
+> For OpenShift Container Platform 4.22.7 and earlier, the `hypershift.openshift.io/enable-metrics-forwarding` annotation was the mechanism for enabling metrics forwarding. As of OpenShift Container Platform 4.22.8, this annotation is deprecated. When the `spec.monitoring.metricsForwarding` field is set on a `HostedCluster` object, the spec field takes precedence over the annotation. The annotation continues to be honored for clusters that have not yet set the `spec.monitoring` field.
+>
+> For information about migrating from the annotation to the new API, see "Migrating from annotation-based to API-based metrics forwarding".
 
 ## Metrics forwarding architecture
 
@@ -338,11 +416,11 @@ The data path is as follows:
 
 3.  The metrics-proxy scrapes control plane pods through the endpoint-resolver and returns filtered, relabeled metrics.
 
-## Enabling metrics forwarding
+## Enable metrics forwarding
 
-Enable metrics forwarding so that you can observe hosted control plane health from the hosted cluster monitoring stack.
+You can enable control plane metrics forwarding independently for each hosted cluster by setting the `spec.monitoring.metricsForwarding` field on the `HostedCluster` object.
 
-If you are a hosted cluster administrator without management cluster access, ask a platform administrator enable metrics forwarding on your `HostedCluster` resource.
+As a result, you can select different metrics sets for different hosted clusters on the same management cluster without changing the global HyperShift Operator configuration.
 
 <div>
 
@@ -352,11 +430,13 @@ Prerequisites
 
 </div>
 
-- You have a hosted cluster that is version 4.22 or later.
+- You are running OpenShift Container Platform 4.22.8 or later.
 
-- You have the multicluster engine for Kubernetes Operator version 2.17 or later.
+- You have a hosted cluster already provisioned.
 
-- You are logged in to the management cluster. Alternatively, you can use a `kubeconfig` file with access to the namespace that contains the `HostedCluster` resource. The `HostedCluster` object exists on the management cluster; annotating it from a hosted cluster `kubeconfig` file fails or targets the wrong resource.
+- You have cluster administrator access to the management cluster or a `kubeconfig` file with access to the namespace that contains the `HostedCluster` resource. The `HostedCluster` object exists on the management cluster.
+
+- A remote write endpoint and certificates are already configured at the management cluster level for metrics ingestion.
 
 </div>
 
@@ -368,25 +448,198 @@ Procedure
 
 </div>
 
-- Add the `hypershift.openshift.io/enable-metrics-forwarding=true` annotation to the `HostedCluster` resource on the management cluster by entering the following command:
+1.  Enable metrics forwarding on the hosted cluster by entering the following command:
 
-  ``` terminal
-  $ oc annotate hostedcluster -n <hosted_cluster_namespace> <hosted_cluster_name> \
-    hypershift.openshift.io/enable-metrics-forwarding=true
-  ```
+    ``` terminal
+    $ oc patch hostedcluster -n <hosted_cluster_namespace> <hosted_cluster_name> \
+      --type merge \
+      -p '{"spec":{"monitoring":{"metricsForwarding":{"mode":"Forward"}}}}'
+    ```
 
-  Replace `<hosted_cluster_namespace>` with the namespace of the hosted cluster and `<hosted_cluster_name>` with the name of the hosted cluster.
+    Replace `<hosted_cluster_namespace>` with the namespace of the hosted cluster and `<hosted_cluster_name>` with the name of the hosted cluster.
 
-- To disable metrics forwarding, remove the annotation by entering the following command:
+2.  Optional: Specify the metrics set for this hosted cluster.
 
-  ``` terminal
-  $ oc annotate hostedcluster -n <hosted_cluster_namespace> <hosted_cluster_name> \
-    hypershift.openshift.io/enable-metrics-forwarding-
-  ```
+    If you omit this step, the cluster inherits the global `METRICS_SET` environment variable from the HyperShift Operator deployment, which defaults to `Telemetry`.
+
+    Set `spec.monitoring.metricsSet` to a cluster-level default by entering the following command:
+
+    ``` terminal
+    $ oc patch hostedcluster -n <hosted_cluster_namespace> <hosted_cluster_name> \
+      --type merge \
+      -p '{"spec":{"monitoring":{"metricsSet":"<metrics_set>"}}}'
+    ```
+
+    Replace `<metrics_set>` with one of the following values:
+
+    `Telemetry`
+    The default. Forwards only the minimal set of metrics required for OpenShift Telemetry.
+
+    `SRE`
+    Forwards the Telemetry set plus additional metrics defined in the `sre-metric-set` `ConfigMap`. Required for SRE dashboards and alerts.
+
+    `All`
+    Forwards all metrics without filtering. Use for debugging. Produces significantly higher metrics volume.
+
+3.  Optional: Set a forwarding-path override for the metrics set.
+
+    Use `spec.monitoring.metricsForwarding.metricsSet` when you need the forwarding path to use a different metrics set than the cluster default. This field takes precedence over `spec.monitoring.metricsSet` and the global `METRICS_SET` variable.
+
+    ``` terminal
+    $ oc patch hostedcluster -n <hosted_cluster_namespace> <hosted_cluster_name> \
+      --type merge \
+      -p '{"spec":{"monitoring":{"metricsForwarding":{"mode":"Forward","metricsSet":"<metrics_set>"}}}}'
+    ```
+
+    > [!NOTE]
+    > The patch includes `"mode":"Forward"` alongside `metricsSet` because `metricsForwarding` is a nested object in a JSON merge patch. If you set `spec.monitoring.metricsForwarding` for the first time without having already set `mode`, omitting `mode` from the patch leaves it as an empty string, which disables forwarding.
 
 </div>
 
-## Querying control plane metrics in hosted clusters by using the CLI
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Confirm the `metrics-proxy` deployment is running in the hosted control plane namespace on the management cluster by entering the following command:
+
+    ``` terminal
+    $ oc get deployment metrics-proxy -n <hcp_namespace>
+    ```
+
+    Replace `<hcp_namespace>` with the hosted control plane namespace, which follows the format `<hosted_cluster_namespace>-<hosted_cluster_name>`, with any dots in the cluster name replaced by dashes. For example, if the `HostedCluster` is in the `clusters` namespace and named `my-cluster`, the hosted control plane namespace is `clusters-my-cluster`.
+
+    The output shows `2/2` ready replicas.
+
+2.  Confirm the `control-plane-metrics-forwarder` deployment is running in the `openshift-monitoring` namespace on the hosted cluster by entering the following command:
+
+    ``` terminal
+    $ oc get deployment -n openshift-monitoring control-plane-metrics-forwarder \
+      --kubeconfig <hosted_cluster_kubeconfig>
+    ```
+
+    The output shows `1/1` ready replicas.
+
+3.  Verify that platform Prometheus in the hosted cluster is scraping control plane metrics by querying a forwarded metric, such as `apiserver_request_total`, from the hosted cluster Prometheus endpoint.
+
+    > [!NOTE]
+    > If the deprecated `hypershift.openshift.io/enable-metrics-forwarding` annotation is also set on the `HostedCluster` object, the `spec.monitoring.metricsForwarding` field takes precedence.
+
+</div>
+
+## Migrate from annotation-based to API-based metrics forwarding
+
+To preserve metrics forwarding continuity, you can migrate hosted clusters from the deprecated `hypershift.openshift.io/enable-metrics-forwarding` annotation to the `spec.monitoring.metricsForwarding` field on the `HostedCluster` API.
+
+The spec field takes precedence as soon as it is set, and the annotation remains in place until you remove it.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- One or more hosted clusters use the `hypershift.openshift.io/enable-metrics-forwarding: "true"` annotation.
+
+- You have cluster administrator access to the management cluster.
+
+- You are running OpenShift Container Platform 4.22.8 or later.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Identify which hosted clusters have the annotation set by entering the following command:
+
+    ``` terminal
+    $ oc get hostedclusters -A -o jsonpath='{range .items[*]}{.metadata.namespace}{"\t"}{.metadata.name}{"\t"}{.metadata.annotations.hypershift\.openshift\.io/enable-metrics-forwarding}{"\n"}{end}'
+    ```
+
+    The output lists namespace, name, and annotation value for each hosted cluster. Clusters that show `true` in the third column require migration.
+
+2.  Determine the metrics set value to use for each cluster.
+
+    The annotation enables forwarding but does not specify a metrics set. The HyperShift Operator uses the global `METRICS_SET` environment variable as the source.
+
+    Check the global `METRICS_SET` value by entering the following command:
+
+    ``` terminal
+    $ oc get deployment -n hypershift operator \
+      -o jsonpath='{.spec.template.spec.containers[?(@.name=="operator")].env[?(@.name=="METRICS_SET")].value}'
+    ```
+
+    In the command, `hypershift` is the namespace where the HyperShift Operator is typically installed, and `operator` is the standard deployment name. These values might differ in non-standard installations.
+
+    Note the returned value. This value is the metrics set that the annotated clusters currently use. Map the value to the `MetricsSet` enum: `Telemetry`, `SRE`, or `All`.
+
+3.  For each cluster that requires migration, set `spec.monitoring.metricsForwarding` by entering the following command:
+
+    ``` terminal
+    $ oc patch hostedcluster -n <hosted_cluster_namespace> <hosted_cluster_name> \
+      --type merge \
+      -p '{"spec":{"monitoring":{"metricsForwarding":{"mode":"Forward","metricsSet":"<metrics_set>"}}}}'
+    ```
+
+    Replace `<hosted_cluster_namespace>` with the namespace of the hosted cluster, `<hosted_cluster_name>` with the name of the hosted cluster, and `<metrics_set>` with the value you identified in the previous step.
+
+    As soon as the spec field is set, it takes precedence over the annotation. Metrics forwarding continues without interruption.
+
+4.  Verify that metrics forwarding remains active after the patch.
+
+    1.  Confirm the `metrics-proxy` deployment in the hosted control plane namespace is healthy by entering the following command:
+
+        ``` terminal
+        $ oc get deployment metrics-proxy -n <hcp_namespace>
+        ```
+
+        Replace `<hcp_namespace>` with the hosted control plane namespace, which follows the format `<hosted_cluster_namespace>-<hosted_cluster_name>`, with any dots in the cluster name replaced by dashes.
+
+        The `READY` column shows `2/2`.
+
+    2.  Confirm the `control-plane-metrics-forwarder` deployment in the hosted cluster is healthy by entering the following command:
+
+        ``` terminal
+        $ oc get deployment -n openshift-monitoring control-plane-metrics-forwarder \
+          --kubeconfig <hosted_cluster_kubeconfig>
+        ```
+
+        The `READY` column shows `1/1`.
+
+5.  Optional: After confirming that forwarding is active through the spec field, remove the now-redundant annotation by entering the following command:
+
+    ``` terminal
+    $ oc annotate hostedcluster -n <hosted_cluster_namespace> <hosted_cluster_name> \
+      hypershift.openshift.io/enable-metrics-forwarding-
+    ```
+
+    This step is safe because the spec field is now authoritative. Removing the annotation has no effect on metrics forwarding behavior.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- After you migrate all clusters, verify that no remaining clusters use the deprecated annotation by re-running the identification command in step 1 and confirming that the output is empty.
+
+</div>
+
+## Query control plane metrics in hosted clusters by using the CLI
 
 After you enable metrics forwarding, you can verify that control plane metrics are ingested and query them from the CLI.
 
@@ -481,7 +734,7 @@ Additional resources
 
 </div>
 
-## Querying control plane metrics in hosted clusters by using the web console
+## Query control plane metrics in hosted clusters by using the web console
 
 After you enable metrics forwarding, you can verify that control plane metrics are ingested and query them from the web console.
 
@@ -639,7 +892,7 @@ Additional resources
 
 </div>
 
-## Importing control plane health dashboards
+## Import control plane health dashboards
 
 You can import a sample Grafana dashboard that visualizes propagated control plane metrics in the hosted cluster web console. The dashboard covers API server, etcd, cluster Operators, scheduler, controller manager, and OLM health panels.
 
@@ -769,76 +1022,3 @@ Verification
 - The etcd database size panels show current use relative to the 8 GB limit.
 
 </div>
-
-# Connectivity monitoring for hosted control planes
-
-Cluster service providers can monitor connectivity metrics to ensure proper function during an update. They can also use the metrics to find connectivity issues between the control plane and the data plane, or vice versa.
-
-Studying these metrics over time can inform decisions about capacity planning and scaling.
-
-## Connectivity monitoring from the control plane to the data plane
-
-Cluster administrators can monitor network activity between a hosted control plane and the compute nodes in a data plane by using the `DataPlaneConnectionAvailable` condition. This condition is useful for identifying and troubleshooting network connectivity issues in hosted clusters.
-
-The `DataPlaneConnectionAvailable` condition is available by default starting with version 4.21.
-
-The `DataPlaneConnectionAvailable` condition monitors the connectivity from the control plane to the data plane by taking the following steps:
-
-1.  Counts available compute nodes in the hosted cluster.
-
-2.  Lists the `konnectivity-agent` pods that are running in the `kube-system` namespace on the data plane.
-
-3.  Reads the logs from the running `konnectivity-agent` pod to verify that it can communicate with the data plane.
-
-The `hosted-cluster-config-operator` component that runs in the control plane namespace evaluates the condition and provides status and reason information.
-
-The following table details the status and reason values that can be displayed for the condition:
-
-| Status | Reason value | Description |
-|----|----|----|
-| `True` | `AsExpected` | The control plane can reach the data plane nodes through the `konnectivity-agent` pods. |
-| `False` | `KonnectivityAgentPodsNotFound` | No `konnectivity-agent` pods are running, or none are found. |
-| `False` | `ReconciliationError` | An error occurred while listing the `konnectivity-agent` pods. |
-| `Unknown` | `NoWorkerNodesAvailable` | No compute nodes are available in the cluster. No errors occurred, but no compute nodes were found. |
-| `Unknown` | `ReconcileError` | Unable to count compute nodes because an error occurred. |
-
-For information about how to troubleshoot connectivity issues, see "Troubleshooting connectivity for hosted control planes".
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Troubleshooting connectivity for hosted control planes](hcp-troubleshooting.md#hcp-ts-connectivity_hcp-troubleshooting)
-
-</div>
-
-## Connectivity monitoring from the data plane to the control plane
-
-Cluster administrators can monitor network activity between the compute nodes in a data plane and a hosted control plane by using the `ControlPlaneConnectionAvailable` condition. This condition is useful for identifying and troubleshooting network connectivity issues in hosted clusters.
-
-The `ControlPlaneConnectionAvailable` condition detects whether data plane nodes can reach control plane components. The `hosted-cluster-config-operator` component evaluates the condition, and a deployment with 3 replicas checks connectivity.
-
-The condition monitors the connectivity between the data plane and the control plane by taking the following steps:
-
-1.  Deploys a `kas-connection-checker` deployment to the `kube-system` namespace on the data plane.
-
-2.  Each pod runs a shell script in an infinite loop that transfers data to and from the Kubernetes API server endpoint every 60 seconds. On success, the script patches the `control-plane-connectivity-check` config map with a `lastSucceeded` timestamp.
-
-3.  The `hosted-cluster-config-operator` component checks whether the `control-plane-connectivity-check` config map exists and whether the `lastSucceeded` timestamp is within the last 5 minutes. It does not check pod readiness counts.
-
-The following table details the status and reason values that can be displayed for the condition:
-
-| Status | Reason value | Description |
-|----|----|----|
-| `True` | `AsExpected` | All data plane nodes can reach the control plane (`NumberReady = DesiredNumberScheduled`). |
-| `False` | `KASAccessFailed` | At least one data plane node cannot reach the control plane. The message shows the ratio of pods that are ready; for example, `1/3 pods ready`. |
-| `Unknown` | `NoWorkerNodesAvailable` | No compute nodes are available to check connectivity (`DesiredNumberScheduled = 0`). |
-| `Unknown` | `StatusUnknown` | The Kubernetes API server connection checker DaemonSet was not found. |
-| `Unknown` | `ReconcileError` | An API error blocked the retrieval of the DaemonSet status. |
-
-> [!IMPORTANT]
-> This condition has a known limitation with HTTPS proxy environments. In HTTPS proxy environments, the condition might incorrectly report `False` because of probe limitations.

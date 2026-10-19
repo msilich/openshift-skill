@@ -18,7 +18,7 @@ Google authentication uses OpenID Connect through the cluster OAuth server.
 > [!NOTE]
 > Using Google as an identity provider requires users to get a token using `<namespace_route>/oauth/token/request` to use with command-line tools.
 
-# Creating the secret
+# Create the secret
 
 Create a `Secret` object in the `openshift-config` namespace to store the client secret for your identity provider. The identity provider custom resource (CR) references this secret during configuration.
 
@@ -107,7 +107,7 @@ Additional resources
 
 </div>
 
-# Adding an identity provider to your cluster
+# Add an identity provider to your cluster
 
 Apply the identity provider custom resource (CR) to your cluster after you define it. With this configuration, you can authenticate with the configured identity provider.
 
@@ -156,15 +156,16 @@ Procedure
     $ oc login --token=<token>
     ```
 
-</div>
+    > [!NOTE]
+    > This identity provider does not support logging in with a username and password.
 
-This identity provider does not support logging in with a username and password.
-
-1.  Confirm that the user logged in successfully and that the username displays by running the following command:
+4.  Confirm that the user logged in successfully and that the username displays by running the following command:
 
     ``` terminal
     $ oc whoami
     ```
+
+</div>
 
 # Additional resources
 

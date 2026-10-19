@@ -15,7 +15,7 @@ When running a pod in an isolated user namespace, the UID/GID inside a pod conta
 
 To check user namespaces support for storage options, see [CSI drivers supported by OpenShift Container Platform](../../storage/container_storage_interface/persistent-storage-csi.md#csi-drivers-supported_persistent-storage-csi).
 
-# Configuring Linux user namespace support
+# Configure Linux user namespace support
 
 You can configure Linux user namespace by setting the `hostUsers` parameter to `false` in the pod spec, and a few other configurations. When you run workloads in user namespaces, the containers run with administrative privileges inside the namespace, but remain unprivileged on the host system.
 
@@ -330,7 +330,7 @@ Additional resources
 
 </div>
 
-- [Managing security context constraints](../../authentication/managing-security-context-constraints.md#configuring-internal-oauth)
+- [Managing security context constraints](../../authentication/managing-security-context-constraints.md#managing-pod-security-policies)
 
 - [OpenShift CLI administrator command reference](../../cli_reference/openshift_cli/administrator-cli-commands.md#cli-administrator-commands)
 

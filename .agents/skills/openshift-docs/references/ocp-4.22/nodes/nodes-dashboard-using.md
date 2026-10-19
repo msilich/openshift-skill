@@ -22,7 +22,7 @@ Helps you track change in the time that system components take to process operat
 Number of operations
 Displays visualizations that that you can use to identify changes in the number of operations being run, which in turn helps you determine the load balance and efficiency of your system
 
-# Accessing the node metrics dashboard
+# Access the node metrics dashboard
 
 You can access the node metrics dashboard from the **Administrator** perspective of the OpenShift Container Platform web console.
 

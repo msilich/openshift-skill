@@ -4,6 +4,56 @@ The Zero Trust Workload Identity Manager leverages Secure Production Identity Fr
 
 These release notes track the development of Zero Trust Workload Identity Manager.
 
+# Zero Trust Workload Identity Manager 1.1.2
+
+Issued: 14 October 2026
+
+This release has no Common Vulnerabilities and Exposures (CVEs). The following advisory is available for the Zero Trust Workload Identity Manager 1.1.2:
+
+- [RHBA-2026:80937](https://access.redhat.com/errata/RHBA-2026:80937)
+
+## CVEs
+
+The following CVEs are available for this release:
+
+- [CVE-2026-25680](https://access.redhat.com/security/cve/CVE-2026-25680)
+
+- [CVE-2026-25681](https://access.redhat.com/security/cve/CVE-2026-25681)
+
+- [CVE-2026-27136](https://access.redhat.com/security/cve/CVE-2026-27136)
+
+- [CVE-2026-39821](https://access.redhat.com/security/cve/CVE-2026-39821)
+
+- [CVE-2026-42502](https://access.redhat.com/security/cve/CVE-2026-42502)
+
+- [CVE-2026-42506](https://access.redhat.com/security/cve/CVE-2026-42506)
+
+- [CVE-2026-39827](https://access.redhat.com/security/cve/CVE-2026-39827)
+
+- [CVE-2026-39828](https://access.redhat.com/security/cve/CVE-2026-39828)
+
+- [CVE-2026-39829](https://access.redhat.com/security/cve/CVE-2026-39829)
+
+- [CVE-2026-39830](https://access.redhat.com/security/cve/CVE-2026-39830)
+
+- [CVE-2026-39831](https://access.redhat.com/security/cve/CVE-2026-39831)
+
+- [CVE-2026-39832](https://access.redhat.com/security/cve/CVE-2026-39832)
+
+- [CVE-2026-39833](https://access.redhat.com/security/cve/CVE-2026-39833)
+
+- [CVE-2026-39834](https://access.redhat.com/security/cve/CVE-2026-39834)
+
+- [CVE-2026-39835](https://access.redhat.com/security/cve/CVE-2026-39835)
+
+- [CVE-2026-42508](https://access.redhat.com/security/cve/CVE-2026-42508)
+
+- [CVE-2026-46595](https://access.redhat.com/security/cve/CVE-2026-46595)
+
+- [CVE-2026-46597](https://access.redhat.com/security/cve/CVE-2026-46597)
+
+- [CVE-2026-46598](https://access.redhat.com/security/cve/CVE-2026-46598)
+
 # Zero Trust Workload Identity Manager 1.1.1
 
 Issued: 26 August 2026

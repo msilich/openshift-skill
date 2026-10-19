@@ -319,7 +319,7 @@ Additional resources
 
 </div>
 
-# Using trigger authentications
+# Use trigger authentications
 
 You use trigger authentications and cluster trigger authentications by using a custom resource to create the authentication, then add a reference to a scaled object or scaled job.
 
@@ -368,11 +368,13 @@ Prerequisites
     namespace: openshift-keda
   ```
 
-  - Specifies the namespace of the service account.
+  where:
 
-  - Specifies the name of the service account.
+  `metadata.namespace`
+  Specifies the namespace of the service account.
 
-  - Specifies the namespace of the service account.
+  `rules[].resourceNames[]`
+  Specifies the name of the service account.
 
 - If you are using a secret, the `Secret` object must exist.
 
@@ -412,11 +414,16 @@ Procedure
 
         </div>
 
-        - Specifies the namespace of the object you want to scale.
+        where:
 
-        - Specifies that this trigger authentication uses a bound service account token for authorization when connecting to the metrics endpoint.
+        `metadata.namespace`
+        Specifies the namespace of the object you want to scale.
 
-        - Specifies the name of the service account to use.
+        `spec.boundServiceAccountToken`
+        Specifies that this trigger authentication uses a bound service account token for authorization when connecting to the metrics endpoint.
+
+        `spec.boundServiceAccountToken[].serviceAccountName`
+        Specifies the name of the service account to use.
 
     2.  Create the `TriggerAuthentication` object:
 
@@ -464,49 +471,57 @@ Procedure
 
         </div>
 
-        - Specify the name of your trigger authentication object.
+        where:
 
-        - Specify `TriggerAuthentication`. `TriggerAuthentication` is the default.
+        `spec.triggers[].authenticationRef.name`
+        Specifies the name of your trigger authentication object.
 
-          <div class="formalpara">
+        `spec.triggers[].authenticationRef.kind`
+        Specifies `TriggerAuthentication`. `TriggerAuthentication` is the default.
 
-          <div class="title">
+        <div class="formalpara">
 
-          Example scaled object with a cluster trigger authentication
+        <div class="title">
 
-          </div>
+        Example scaled object with a cluster trigger authentication
 
-          ``` yaml
-          apiVersion: keda.sh/v1alpha1
-          kind: ScaledObject
-          metadata:
-            name: scaledobject
-            namespace: my-namespace
-          spec:
-            scaleTargetRef:
-              name: example-deployment
-            maxReplicaCount: 100
-            minReplicaCount: 0
-            pollingInterval: 30
-            triggers:
-            - type: prometheus
-              metadata:
-                serverAddress: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
-                namespace: kedatest # replace <NAMESPACE>
-                metricName: http_requests_total
-                threshold: '5'
-                query: sum(rate(http_requests_total{job="test-app"}[1m]))
-                authModes: "basic"
-              authenticationRef:
-                name: prom-cluster-triggerauthentication
-                kind: ClusterTriggerAuthentication
-          ```
+        </div>
 
-          </div>
+        ``` yaml
+        apiVersion: keda.sh/v1alpha1
+        kind: ScaledObject
+        metadata:
+          name: scaledobject
+          namespace: my-namespace
+        spec:
+          scaleTargetRef:
+            name: example-deployment
+          maxReplicaCount: 100
+          minReplicaCount: 0
+          pollingInterval: 30
+          triggers:
+          - type: prometheus
+            metadata:
+              serverAddress: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
+              namespace: kedatest # replace <NAMESPACE>
+              metricName: http_requests_total
+              threshold: '5'
+              query: sum(rate(http_requests_total{job="test-app"}[1m]))
+              authModes: "basic"
+            authenticationRef:
+              name: prom-cluster-triggerauthentication
+              kind: ClusterTriggerAuthentication
+        ```
 
-        - Specify the name of your trigger authentication object.
+        </div>
 
-        - Specify `ClusterTriggerAuthentication`.
+        where:
+
+        `spec.triggers[].authenticationRef.name`
+        Specifies the name of your trigger authentication object.
+
+        `spec.triggers[].authenticationRef.kind`
+        Specifies `ClusterTriggerAuthentication`.
 
     2.  Create the scaled object by running the following command:
 

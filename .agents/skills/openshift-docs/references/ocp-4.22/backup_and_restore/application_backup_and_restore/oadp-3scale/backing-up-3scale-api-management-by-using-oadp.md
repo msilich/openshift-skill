@@ -4,7 +4,7 @@ Back up Red Hat 3scale API Management components, including the 3scale Operator
 
 For more information about installing and configuring Red Hat 3scale API Management, see *Installing 3scale API Management on OpenShift* and *Red Hat 3scale API Management*.
 
-# Creating the Data Protection Application
+# Create the Data Protection Application
 
 Create a Data Protection Application (DPA) custom resource (CR) to configure backup storage and Velero settings for Red Hat 3scale API Management. This helps you set up the backup infrastructure required for protecting your 3scale components.
 
@@ -75,7 +75,7 @@ Procedure
 
 </div>
 
-# Backing up the 3scale API Management operator, secret, and APIManager
+# Back up the 3scale API Management operator, secret, and APIManager
 
 Back up the Red Hat 3scale API Management operator resources, including the `Secret` and APIManager custom resources (CRs), by creating backup CRs. This helps you preserve your 3scale operator configuration for recovery scenarios.
 
@@ -248,7 +248,7 @@ Procedure
 
 </div>
 
-# Backing up a MySQL database
+# Back up a MySQL database
 
 Back up a MySQL database by creating a persistent volume claim (PVC) to store the database dump. This helps you preserve your 3scale system database data for recovery scenarios.
 
@@ -437,7 +437,7 @@ Verification
 
 </div>
 
-# Backing up the back-end Redis database
+# Back up the back-end Redis database
 
 Back up the back-end Redis database by configuring Velero annotations and creating a backup CR with the required resources. This helps you preserve your 3scale back-end Redis data for recovery scenarios.
 

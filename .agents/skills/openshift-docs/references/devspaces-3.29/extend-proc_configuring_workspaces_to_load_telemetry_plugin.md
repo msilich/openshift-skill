@@ -49,7 +49,7 @@ Configure Dev Workspaces to load the telemetry plugin so that workspace activity
 ## Results
 
 1.  Verify that the telemetry plugin container is running in the Dev Workspace pod by checking the Workspace view within the editor.  
-    ![Dev Workspace telemetry plugin](assets/fe5634d45e66a0398e9d.png)  
+    ![Dev Workspace telemetry plugin](assets/45ee7fde4503125a9669.png)  
 2.  Edit files within the editor and observe their events in the example telemetry server’s logs.
 
 **Related concepts**  

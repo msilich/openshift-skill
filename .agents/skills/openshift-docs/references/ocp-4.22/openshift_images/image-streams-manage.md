@@ -2,7 +2,7 @@
 
 To create and update container images and track version changes in OpenShift Container Platform, you can use image streams and tags. Add, update, remove, and import image stream tags to manage your container images.
 
-# Using image streams
+# Use image streams
 
 Image streams provide an abstraction for referencing container images from within OpenShift Container Platform. You can use image streams to manage image versions and automate builds and deployments in your cluster.
 
@@ -327,9 +327,9 @@ To organize and manage container images in OpenShift Container Platform, you can
 >
 > The following default projects are considered highly privileged: `default`, `kube-public`, `kube-system`, `openshift`, `openshift-infra`, `openshift-node`, and other system-created projects that have the `openshift.io/run-level` label set to `0` or `1`. Functionality that relies on admission plugins, such as pod security admission, security context constraints, cluster resource quotas, and image reference resolution, does not work in highly privileged projects.
 
-## Getting information about image streams
+## Get information about image streams
 
-To efficiently manage and monitor your image streams in OpenShift Container Platform, retrieve information about their versions. You can get general information about the image stream and detailed information about all the tags it is pointing to, ensuring your deployed applications rely on the correct image versions.
+To efficiently manage and monitor your image streams in OpenShift Container Platform, you can get general information about the image stream and detailed information about all the tags it is pointing to, ensuring your deployed applications rely on the correct image versions.
 
 <div>
 
@@ -456,7 +456,7 @@ Procedure
 
 </div>
 
-## Adding tags to an image stream
+## Add tags to an image stream
 
 To accurately manage and track specific versions of your container images, add tags to your image streams within OpenShift Container Platform, This ensures reliable referencing and deployment throughout your environment.
 
@@ -536,7 +536,7 @@ Procedure
 
 </div>
 
-## Adding tags for an external image
+## Add tags for an external image
 
 To enable OpenShift Container Platform resources to track and consume container images sourced from external registries, add tags to the corresponding image streams. This action integrates external image content securely into your cluster’s local image management system.
 
@@ -578,7 +578,7 @@ Procedure
 
 </div>
 
-## Updating image stream tags
+## Update image stream tags
 
 To maintain flexibility and consistency in deployment definitions, update an image stream tag to reflect a different tag in OpenShift Container Platform. Specifically, you can update a tag to reflect another tag in an image stream, which is essential for managing image versions effectively.
 
@@ -618,7 +618,7 @@ Procedure
 
 </div>
 
-## Removing image stream tags
+## Remove image stream tags
 
 To maintain control over your image history and simplify management within OpenShift Container Platform, you can remove old tags from an image stream. This action helps ensure that your resources track only the current and necessary image references.
 
@@ -666,11 +666,11 @@ Additional resources
 
 </div>
 
-- [Removing deprecated image stream tags from the Cluster Samples Operator](configuring-samples-operator.md#images-samples-operator-deprecated-image-stream_configuring-samples-operator)
+- [Remove deprecated image stream tags from the Cluster Samples Operator](configuring-samples-operator.md#images-samples-operator-deprecated-image-stream_configuring-samples-operator)
 
 </div>
 
-## Configuring periodic importing of image stream tags
+## Configure periodic importing of image stream tags
 
 To maintain up-to-date image definitions from an external container image registry, configure periodic importing of image stream tags. This process allows you to quickly re-import images for critical security updates by using the `--scheduled` flag.
 
@@ -718,15 +718,17 @@ Procedure
 
 </div>
 
-# Importing and working with images and image streams
+# Import and work with images and image streams
 
 To bring container images into your OpenShift Container Platform cluster and manage their references, you can import images from external registries and organize them by using image streams. By using this process, you can maintain a centralized registry of container images for your applications.
 
 The following sections describe how to import, and work with, image streams.
 
-## Importing images and image streams from private registries
+## Import images and image streams from private registries
 
-To securely manage content from external sources, configure your image streams to import tag and image metadata from private registries requiring authentication. This procedure is essential if you change the registry that the Cluster Samples Operator uses for pulling content to something other than the default [registry.redhat.io](https://registry.redhat.io).
+To securely manage content from external sources, configure your image streams to import tag and image metadata from private registries requiring authentication.
+
+This procedure is essential if you change the registry that the Cluster Samples Operator uses for pulling content to something other than the default [registry.redhat.io](https://registry.redhat.io).
 
 > [!NOTE]
 > When importing from insecure or secure registries, the registry URL defined in the secret must include the `:80` port suffix or the secret is not used when attempting to import from the registry.
@@ -757,7 +759,7 @@ Procedure
 
 ## Working with manifest lists
 
-To precisely manage multi-architecture or variant images contained within a manifest list, use the `--import-mode` flag with `oc import-image` or `oc tag` CLI commands. This functionality allows you to import a single sub-manifest, or all manifests, of a manifest list, providing fine-grained control over your image stream content.
+To manage multi-architecture images in a manifest list, use the `--import-mode` flag with `oc import-image` or `oc tag`. Importing a single sub-manifest or all manifests provides fine-grained control over your image stream content.
 
 In some cases, users might want to use sub-manifests directly. When `oc adm prune images` is run, or the `CronJob` pruner runs, they cannot detect when a sub-manifest list is used. As a result, an administrator using `oc adm prune images`, or the `CronJob` pruner, might delete entire manifest lists, including sub-manifests.
 
@@ -809,7 +811,7 @@ Procedure
 
 </div>
 
-### Configuring periodic importing of manifest lists
+### Configure periodic importing of manifest lists
 
 To maintain up-to-date image references for complex, multi-architecture images, configure periodic importing of manifest lists. To periodically re-import a manifest list, you can use the `--scheduled` flag, ensuring your image stream tracks the latest versions from external registries.
 
@@ -830,9 +832,11 @@ Procedure
 
 </div>
 
-### Configuring SSL/TLS when importing manifest lists
+### Configure SSL/TLS when importing manifest lists
 
-To control connection security and access policies for manifest lists sourced from external repositories, configure SSL/TLS settings during image importing. To configure SSL/TLS when importing a manifest list, you can use the `--insecure` flag to bypass standard certificate validation requirements if necessary.
+To control connection security and access policies for manifest lists sourced from external repositories, configure SSL/TLS settings during image importing.
+
+To configure SSL/TLS when importing a manifest list, you can use the `--insecure` flag to bypass standard certificate validation requirements if necessary.
 
 <div>
 
@@ -851,7 +855,7 @@ Procedure
 
 </div>
 
-## Specifying architecture for --import-mode
+## Specify architecture for --import-mode
 
 To control the architecture of your imported images and ensure proper deployment, use the `--import-mode=` flag. You can swap your imported image stream between multi-architecture and single architecture by excluding or including the `--import-mode=` flag as needed.
 

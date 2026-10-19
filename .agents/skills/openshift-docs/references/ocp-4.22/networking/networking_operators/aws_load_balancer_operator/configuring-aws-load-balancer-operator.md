@@ -2,7 +2,7 @@
 
 To automate the provisioning of AWS Load Balancers for your applications, configure the AWS Load Balancer Operator. This setup ensures that the Operator correctly manages ingress resources and external access to your cluster.
 
-# Trusting the certificate authority of the cluster-wide proxy
+# Trust the certificate authority of the cluster-wide proxy
 
 You can configure the cluster-wide proxy in the AWS Load Balancer Operator. After configuring the cluster-wide proxy, Operator Lifecycle Manager (OLM) automatically updates all the deployments of the Operators with the environment variables.
 
@@ -75,7 +75,7 @@ Additional resources
 
 </div>
 
-# Adding TLS termination on the AWS Load Balancer
+# Add TLS termination on the AWS Load Balancer
 
 You can route the traffic for the domain to pods of a service and add TLS termination on the AWS Load Balancer.
 
@@ -185,7 +185,7 @@ Procedure
 
 </div>
 
-# Creating multiple ingress resources through a single AWS Load Balancer
+# Create multiple ingress resources through a single AWS Load Balancer
 
 To route traffic to different services within a single domain, configure multiple ingress resources on a single AWS Load Balancer. This setup allows each resource to provide different endpoints while sharing the same load balancing infrastructure.
 

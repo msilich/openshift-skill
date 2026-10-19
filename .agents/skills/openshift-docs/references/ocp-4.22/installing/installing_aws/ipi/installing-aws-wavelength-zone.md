@@ -102,7 +102,9 @@ If you want the installation program to automatically create Wavelength Zone sub
 
 # About edge compute pools
 
-The edge compute pool configuration is common between Amazon Web Services (AWS) Wavelength Zones locations. You can use the edge compute pool to create new labels to deploy applications onto Amazon Web Services (AWS) Wavelength Zones nodes. Edge compute nodes are tainted compute nodes that run in AWS Wavelength Zones locations.
+The edge compute pool configuration is common between Amazon Web Services (AWS) Wavelength Zones locations.
+
+You can use the edge compute pool to create new labels to deploy applications onto Amazon Web Services (AWS) Wavelength Zones nodes. Edge compute nodes are tainted compute nodes that run in AWS Wavelength Zones locations.
 
 When deploying a cluster that uses Wavelength Zones, consider the following points:
 
@@ -1205,7 +1207,9 @@ Additional resources
 
 ## CloudFormation template for the VPC Carrier Gateway
 
-Use the CloudFormation template to deploy the Carrier Gateway on Amazon Web Services (AWS) Wavelength infrastructure. The template automates the creation of an AWS Carrier Gateway for OpenShift Container Platform. The template provisions an `AWS::EC2::CarrierGateway` and associates it with the cluster VPC to enable traffic routing to provide direct internet connectivity for resources in Wavelength Zones that use carrier networks.
+Use the CloudFormation template to deploy the Carrier Gateway on Amazon Web Services (AWS) Wavelength infrastructure. The template automates the creation of an AWS Carrier Gateway for OpenShift Container Platform.
+
+The template provisions an `AWS::EC2::CarrierGateway` and associates it with the cluster VPC to enable traffic routing to provide direct internet connectivity for resources in Wavelength Zones that use carrier networks.
 
 <div class="formalpara">
 

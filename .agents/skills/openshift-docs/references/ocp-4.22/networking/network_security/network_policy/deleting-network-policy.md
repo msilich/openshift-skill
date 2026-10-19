@@ -4,7 +4,7 @@ As a cluster administrator, you can delete a network policy from a namespace.
 
 # Delete a network policy using the CLI
 
-You can delete a network policy in a namespace.
+You can delete a network policy in a namespace by using the CLI.
 
 > [!NOTE]
 > If you log in with `cluster-admin` privileges, you can delete network policies in any namespace in the cluster.

@@ -19,7 +19,7 @@ By using the `oc adm` command, you can mirror release and catalog images in Open
 > [!NOTE]
 > When using the `oc adm release mirror` command, release image signatures are not automatically mirrored to the disconnected registry. Missing release signatures prevent cluster upgrades, as `ClusterImagePolicy` requires all release images to be verified. To ensure image signatures are correctly mirrored, it is recommended to use the oc-mirror v2 plugin.
 
-# Prerequisites
+# Prerequisites for mirroring images with the oc adm command
 
 You must meet several prerequisites before you can mirror images using the `oc adm release mirror` command.
 
@@ -39,7 +39,7 @@ You must meet the following prerequisites:
 
 - If you do not already have an existing solution for a container image registry, subscribers of OpenShift Container Platform are provided a [mirror registry for Red Hat OpenShift](installing-mirroring-creating-registry.md#installing-mirroring-creating-registry). The *mirror registry for Red Hat OpenShift* is included with your subscription and is a small-scale container registry that can be used to mirror the required container images of OpenShift Container Platform in disconnected installations.
 
-# About the mirror registry
+# Mirror registry
 
 You must have access to the internet to obtain the necessary container images. Using an alternative registry means that you place the mirror registry on a mirror host that has access to both your network and the internet.
 
@@ -75,7 +75,7 @@ Additional resources
 
 Before you begin mirroring images, you must prepare the host to retrieve content and push it to the remote location.
 
-## Installing the OpenShift CLI on Linux
+## Install the OpenShift CLI on Linux
 
 To manage your cluster and deploy applications from the command line on Linux, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -132,7 +132,7 @@ Verification
 
 </div>
 
-## Installing the OpenShift CLI on Windows
+## Install the OpenShift CLI on Windows
 
 To manage your cluster and deploy applications from the command line on Windows, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -183,7 +183,7 @@ Verification
 
 </div>
 
-## Installing the OpenShift CLI on macOS
+## Install the OpenShift CLI on macOS
 
 To manage your cluster and deploy applications from the command line on macOS, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -239,7 +239,7 @@ Verification
 
 </div>
 
-# Configuring credentials that allow images to be mirrored
+# Configure credentials that allow images to be mirrored
 
 Create a container image registry credentials file so that you can mirror images from Red Hat to your mirror. Complete the following steps on the installation host.
 
@@ -391,7 +391,7 @@ Procedure
 
 </div>
 
-# Mirroring the OpenShift Container Platform image repository
+# Mirror the OpenShift Container Platform image repository
 
 Mirror the OpenShift Container Platform image repository to your registry to use during cluster installation or upgrade. Complete the following steps on the mirror host.
 
@@ -607,9 +607,11 @@ Use the following principles to determine which images you need to mirror for yo
 
 - Then set the Cluster Samples Operator to `Managed` to install the image streams you have mirrored.
 
-# Mirroring Operator catalogs for use with disconnected clusters
+# Mirror Operator catalogs for use with disconnected clusters
 
-You can mirror the Operator contents of a Red Hat-provided catalog, or a custom catalog, into a container image registry using the `oc adm catalog mirror` command. The target registry must support Docker v2-2. For a cluster on a restricted network, this registry can be one that the cluster has network access to, such as a mirror registry created during a restricted network cluster installation.
+You can mirror the Operator contents of a Red Hat-provided catalog, or a custom catalog, into a container image registry using the `oc adm catalog mirror` command.
+
+The target registry must support Docker v2-2. For a cluster on a restricted network, this registry can be one that the cluster has network access to, such as a mirror registry created during a restricted network cluster installation.
 
 <div class="important">
 
@@ -679,7 +681,7 @@ The following prerequisites must be met:
 
 ## Extracting and mirroring catalog contents
 
-The `oc adm catalog mirror` command extracts the contents of an index image to generate the manifests required for mirroring. The default behavior of the command generates manifests, then automatically mirrors all of the image content from the index image, as well as the index image itself, to your mirror registry.
+The `oc adm catalog mirror` command extracts the contents of an index image to generate mirroring manifests, then automatically mirrors all image content and the index image itself to your mirror registry.
 
 Alternatively, if your mirror registry is on a completely disconnected, or *airgapped*, host, you can first mirror the content to removable media, move the media to the disconnected environment, then mirror the content from the media to the registry.
 
@@ -735,14 +737,6 @@ Procedure
     `--manifests-only`
     Specifies the `--manifests-only` flag. This flag is optional. Generates only the manifests required for mirroring without actually mirroring the image content to a registry. This option can be useful for reviewing what will be mirrored, and lets you make any changes to the mapping list, if you require only a subset of packages. You can then use the `mapping.txt` file with the `oc image mirror` command to mirror the modified list of images in a later step. This flag is intended for only advanced selective mirroring of content from the catalog.
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example output
-
-    </div>
-
     ``` terminal
     src image has index label for database path: /database/index.db
     using database path mapping: /database/index.db:/tmp/153048078
@@ -750,8 +744,6 @@ Procedure
     ...
     wrote mirroring manifests to manifests-redhat-operator-index-1614211642
     ```
-
-    </div>
 
     where:
 
@@ -808,14 +800,6 @@ Procedure
     `<platform>/<arch>`
     Specifies which platform and architecture of the index image to select when multiple variants are available. This is optional. Images are specified as `'<platform>/<arch>[/<variant>]'`. This does not apply to images referenced by the index. Valid values are `linux/amd64`, `linux/ppc64le`, `linux/s390x`, `linux/arm64`, and `.*`
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example output
-
-    </div>
-
     ``` terminal
     ...
     info: Mirroring completed in 5.93s (5.915MB/s)
@@ -825,8 +809,6 @@ Procedure
 
         oc adm catalog mirror file://local/index/myrepo/my-index:v1 REGISTRY/REPOSITORY
     ```
-
-    </div>
 
     - Record the manifests directory name that is generated. This directory is referenced in subsequent procedures.
 
@@ -945,7 +927,7 @@ The manifests directory contains the following files, some of which might requir
 
 ## Postinstallation requirements
 
-After you mirror the catalog, you can continue with the remainder of your cluster installation. After your cluster installation has finished successfully, you must specify the manifests directory from this procedure to create the `ImageContentSourcePolicy` and `CatalogSource` objects. These objects are required to populate and enable installation of Operators from the software catalog.
+After mirroring the catalog and completing the cluster installation, you must create `ImageContentSourcePolicy` and `CatalogSource` objects from the manifests directory to enable installation of Operators from the software catalog.
 
 <div>
 

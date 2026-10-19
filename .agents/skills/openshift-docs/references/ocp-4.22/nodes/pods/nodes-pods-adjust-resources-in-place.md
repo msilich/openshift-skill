@@ -168,7 +168,7 @@ Note the following limitations:
 
 - Pods utilizing swap memory must use the `RestartContainer` policy for memory requests with in-place pod resizing.
 
-# Configuring in-place pod resizing
+# Configure in-place pod resizing
 
 You can use in-place pod resizing to scale pod resources up or down without application disruption by adding a resize policy to a pod specification.
 

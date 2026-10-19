@@ -2,7 +2,7 @@
 
 As a cluster administrator, you can list the names of any existing egress firewalls and view the traffic rules for a specific egress firewall.
 
-# Viewing an EgressFirewall custom resource (CR)
+# View an EgressFirewall custom resource (CR)
 
 You can view an `EgressFirewall` CR in your cluster.
 

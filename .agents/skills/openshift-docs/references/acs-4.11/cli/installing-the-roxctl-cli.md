@@ -34,7 +34,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Linux/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Linux/roxctl${arch}"
     ```
 
 3.  Make the `roxctl` binary executable:
@@ -95,7 +95,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Darwin/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Darwin/roxctl${arch}"
     ```
 
 3.  Remove all extended attributes from the binary:
@@ -156,7 +156,7 @@ Procedure
 - Download the `roxctl` CLI:
 
   ``` terminal
-  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Windows/roxctl.exe
+  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Windows/roxctl.exe
   ```
 
 </div>
@@ -181,7 +181,7 @@ Verification
 
 # Running the roxctl CLI from a container
 
-The `roxctl` client is the default entry point in the RHACS `roxctl` image. To run the `roxctl` client in a container image:
+The `roxctl` client is the default entry point in the RHACS `roxctl` image. You can run the `roxctl` client in a container image.
 
 <div>
 
@@ -212,14 +212,14 @@ Procedure
 2.  Pull the latest container image for the `roxctl` CLI.
 
     ``` terminal
-    $ docker pull registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.3
+    $ docker pull registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.5
     ```
 
     After you install the CLI, you can run it by using the following command:
 
     ``` terminal
     $ docker run -e ROX_API_TOKEN=$ROX_API_TOKEN \
-      -it registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.3 \
+      -it registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.5 \
       -e $ROX_CENTRAL_ADDRESS <command>
     ```
 
@@ -242,7 +242,7 @@ Verification
 - Verify the `roxctl` version you have installed.
 
   ``` terminal
-  $ docker run -it registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.3 version
+  $ docker run -it registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.5 version
   ```
 
 </div>

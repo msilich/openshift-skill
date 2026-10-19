@@ -23,7 +23,9 @@ Additional resources
 
 # GitOps ZTP and Topology Aware Lifecycle Manager
 
-GitOps Zero Touch Provisioning (ZTP) generates installation and configuration CRs from manifests stored in Git. These artifacts are applied to a centralized hub cluster where Red Hat Advanced Cluster Management (RHACM), the assisted service, and the Topology Aware Lifecycle Manager (TALM) use the CRs to install and configure the managed cluster. The configuration phase of the GitOps ZTP pipeline uses the TALM to orchestrate the application of the configuration CRs to the cluster. There are several key integration points between GitOps ZTP and the TALM.
+GitOps Zero Touch Provisioning (ZTP) generates installation and configuration CRs from Git manifests and applies them to a hub cluster where Red Hat Advanced Cluster Management (RHACM), the assisted service, and the Topology Aware Lifecycle Manager (TALM) manage the cluster lifecycle.
+
+The configuration phase of the GitOps ZTP pipeline uses the TALM to orchestrate the application of configuration CRs to the cluster.
 
 Inform policies
 By default, GitOps ZTP creates all policies with a remediation action of `inform`. These policies cause RHACM to report on compliance status of clusters relevant to the policies but does not apply the desired configuration. During the GitOps ZTP process, after OpenShift installation, the TALM steps through the created `inform` policies and enforces them on the target managed cluster(s). This applies the configuration to the managed cluster. Outside of the GitOps ZTP phase of the cluster lifecycle, this allows you to change policies without the risk of immediately rolling those changes out to affected managed clusters. You can control the timing and the set of remediated clusters by using TALM.
@@ -74,7 +76,9 @@ The automatically created `ClusterGroupUpgrade` CR has the owner reference set a
 
 # Overview of deploying managed clusters with GitOps ZTP
 
-Red Hat Advanced Cluster Management (RHACM) uses GitOps Zero Touch Provisioning (ZTP) to deploy single-node OpenShift Container Platform clusters, three-node clusters, and standard clusters. You manage site configuration data as OpenShift Container Platform custom resources (CRs) in a Git repository. GitOps ZTP uses a declarative GitOps approach for a develop once, deploy anywhere model to deploy the managed clusters.
+Red Hat Advanced Cluster Management (RHACM) uses GitOps Zero Touch Provisioning (ZTP) to deploy single-node OpenShift Container Platform clusters, three-node clusters, and standard clusters. You manage site configuration data as OpenShift Container Platform CRs in a Git repository.
+
+GitOps ZTP uses a declarative GitOps approach for a develop-once, deploy-anywhere model to deploy the managed clusters.
 
 The deployment of the clusters includes:
 
@@ -122,9 +126,9 @@ The Discovery image ISO process is complete when the `Agent` CR for the managed 
 > [!IMPORTANT]
 > The target bare-metal host must meet the networking, firmware. For more information, see "Recommended single-node OpenShift cluster configuration for vDU application workloads".
 
-# Creating the managed bare-metal host secrets
+# Create the managed bare-metal host secrets
 
-Add the required `Secret` custom resources (CRs) for the managed bare-metal host to the hub cluster. You need a secret for the GitOps Zero Touch Provisioning (ZTP) pipeline to access the Baseboard Management Controller (BMC) and a secret for the assisted installer service to pull cluster installation images from the registry.
+Add the required `Secret` custom resources (CRs) for the managed bare-metal host to the hub cluster. You need a secret for the GitOps Zero Touch Provisioning (ZTP) pipeline to access the Baseboard Management Controller (BMC) and a pull secret for the Assisted Installer service.
 
 > [!NOTE]
 > The secrets are referenced from the `ClusterInstance` CR by name. The namespace must match the `ClusterInstance` namespace.
@@ -177,9 +181,9 @@ Procedure
 
 </div>
 
-# Configuring Discovery ISO kernel arguments for installations using GitOps ZTP
+# Configure Discovery ISO kernel arguments for installations using GitOps ZTP
 
-The GitOps Zero Touch Provisioning (ZTP) workflow uses the Discovery ISO as part of the OpenShift Container Platform installation process on managed bare-metal hosts. You can edit the `InfraEnv` resource to specify kernel arguments for the Discovery ISO. This is useful for cluster installations with specific environmental requirements.
+You can edit the `InfraEnv` resource to specify kernel arguments for the Discovery ISO that the GitOps Zero Touch Provisioning (ZTP) workflow uses during OpenShift Container Platform installation on managed bare-metal hosts.
 
 For example, configure the `rd.net.timeout.carrier` kernel argument for the Discovery ISO to facilitate static networking for the cluster or to receive a DHCP address before downloading the root file system during installation.
 
@@ -327,7 +331,7 @@ To verify that the kernel arguments are applied, after the Discovery image verif
     $ cat /proc/cmdline
     ```
 
-# Deploying a managed cluster with ClusterInstance and GitOps ZTP
+# Deploy a managed cluster with ClusterInstance and GitOps ZTP
 
 Use the following procedure to create a `ClusterInstance` custom resource (CR) and related files and initiate the GitOps Zero Touch Provisioning (ZTP) cluster deployment.
 
@@ -413,8 +417,6 @@ Procedure
         </div>
 
         ``` yaml
-        # example-node1-bmh-secret & assisted-deployment-pull-secret need to be created under same namespace example-ai-sno
-        ---
         apiVersion: siteconfig.open-cluster-management.io/v1alpha1
         kind: ClusterInstance
         metadata:
@@ -1605,9 +1607,9 @@ Verification
 
 </div>
 
-# Monitoring managed cluster installation progress
+# Monitor managed cluster installation progress
 
-The Argo CD pipeline syncs the `ClusterInstance` CR from the Git repository to the hub cluster. The SiteConfig Operator then processes the `ClusterInstance` CR and generates the required cluster configuration CRs. You can monitor the progress of the cluster installation from the RHACM dashboard or from the command line.
+You can monitor managed cluster installation progress from the RHACM dashboard or from the command line after the Argo CD pipeline syncs the `ClusterInstance` CR to the hub cluster.
 
 <div>
 
@@ -1653,7 +1655,7 @@ Procedure
 
 </div>
 
-# Troubleshooting GitOps ZTP by validating the installation CRs
+# Troubleshoot GitOps ZTP by validating the installation CRs
 
 The ArgoCD pipeline uses the `ClusterInstance` and `PolicyGenerator` or `PolicyGentemplate` custom resources (CRs) to generate the cluster configuration CRs and Red Hat Advanced Cluster Management (RHACM) policies. Use the following steps to troubleshoot issues that might occur during this process.
 
@@ -1737,7 +1739,7 @@ Procedure
 
 </div>
 
-# Removing a managed cluster site from the GitOps ZTP pipeline
+# Remove a managed cluster site from the GitOps ZTP pipeline
 
 You can remove a managed site and the associated installation and configuration policy CRs from the GitOps Zero Touch Provisioning (ZTP) pipeline.
 

@@ -2,17 +2,11 @@
 
 To control network traffic flow, you can configure Gateway API listeners to define the designated port, protocol, and hostname for your gateway. By configuring listeners, you can specify secure TLS connections, dictate how traffic is terminated, and restrict which application routes are permitted to attach to the gateway.
 
-To successfully manage your incoming traffic with gateway listeners, complete the following tasks:
+# Configuring listener routing and security settings
 
-- Configure listener routing and security settings to define the ports, protocols, hostnames, and TLS certificates for your incoming traffic.
+To ensure that your applications receive only authenticated and authorized traffic, you must specify the allowed protocols and ports for your gateway.
 
-- Understand listener routing conflicts by applying conflict management rules to ensure overlapping hostnames or ports are routed correctly.
-
-- Troubleshoot listener connections by monitoring listener status conditions to identify and resolve configuration errors.
-
-# Configure listener routing and security settings
-
-To ensure that your applications receive only authenticated and authorized traffic, you must specify the allowed protocols and ports for your gateway. If you are routing secure traffic, you must also configure TLS settings. You can define these parameters by configuring the `spec.listeners` field in your `Gateway` custom resource (CR).
+If you are routing secure traffic, you must also configure TLS settings. You can define these parameters by configuring the `spec.listeners` field in your `Gateway` custom resource (CR).
 
 > [!IMPORTANT]
 > If your gateway is accessible from other namespaces, always configure the `spec.listeners[].allowedRoutes[].namespaces.selector` field with a selector for the permitted namespaces. By specifying a namespace selector, you prevent possible misuse or hijacking of the gateway from other namespaces.
@@ -67,7 +61,7 @@ Procedure
                 env: "dev"
     ```
 
-    \+ With this configuration, only `HTTPRoute` resources in namespaces that have the `env: "dev"` label can attach to these listeners.
+    With this configuration, only `HTTPRoute` resources in namespaces that have the `env: "dev"` label can attach to these listeners.
 
 2.  Apply the `Gateway` CR by running the following command:
 
@@ -98,9 +92,9 @@ Specifies the TLS settings for secure communication, including the mode (current
 `listeners.allowedRoutes`
 Controls which route resources can attach to this listener. If you omit this field, or set `namespaces.from: Same`, only routes in the same namespace as the `Gateway` can attach. To allow routes from other namespaces, set `namespaces.from: Selector` and a label selector for trusted namespaces. For example, an HTTP listener might allow `HTTPRoute` resources only from namespaces that have the `env: "dev"` label. Do not set `namespaces.from: All`; that setting allows routes from every namespace and can enable hostname or domain hijacking.
 
-# Understand listener routing conflicts
+# Understanding listener routing conflicts
 
-When you configure a `Gateway` custom resource (CR) with multiple listeners, you must establish clear rules for overlapping hostnames and ports to ensure your traffic does not get misrouted. To avoid ambiguity, the Gateway API uses specific conflict management rules.
+When you configure a `Gateway` custom resource (CR) with multiple listeners, you must establish clear rules for overlapping hostnames and ports to ensure your traffic does not get misrouted. To avoid ambiguity, Gateway API uses specific conflict management rules.
 
 If your listener configurations violate these rules, the affected listener receives a `Conflicted` status condition and cannot route traffic correctly.
 
@@ -115,9 +109,9 @@ To resolve or prevent routing conflicts, ensure that your listeners adhere to th
   This specificity rule also applies to multiple wildcard domains. For example, `*.<example_domain.tld>` takes precedence over `*.<tld>`. This ensures that traffic intended for a specific subdomain is accurately routed to its dedicated listener, even if a broader wildcard listener exists.
 
   > [!NOTE]
-  > In the Gateway API, wildcards match one or more complete DNS labels. For example, `*.<example.com>` matches `<www.example.com>` and `<sub.domain.example.com>`, but does not match the root domain `<example.com>`.
+  > In Gateway API, wildcards match one or more complete DNS labels. For example, `*.<example.com>` matches `<www.example.com>` and `<sub.domain.example.com>`, but does not match the root domain `<example.com>`.
 
-# Troubleshoot listener connections using status conditions
+# Troubleshooting listener connections using status conditions
 
 When a listener is not routing traffic as expected, you can review its `status` conditions to quickly diagnose and fix the configuration error. The listener `status` condition gives insight into its current state and any underlying issues preventing it from accepting traffic.
 

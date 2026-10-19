@@ -66,7 +66,7 @@ A successful response can optionally provide additional data, such as:
   {"sub":"014fbff9a07c", "preferred_username":"bob", ...}
   ```
 
-# Creating the secret
+# Create the secret
 
 You can create a TLS `Secret` object in the `openshift-config` namespace by using the `oc` CLI or by applying a YAML file to store client certificates and keys that identity providers require for secure communication.
 
@@ -100,7 +100,7 @@ Procedure
 
 </div>
 
-# Creating a ConfigMap
+# Create a ConfigMap
 
 Create a `ConfigMap` object in the `openshift-config` namespace that contains the certificate authority bundle for the identity provider. OpenShift Container Platform uses this bundle to validate Transport Layer Security (TLS) connections to the identity provider.
 
@@ -191,7 +191,7 @@ Additional resources
 
 </div>
 
-# Adding an identity provider to your cluster
+# Add an identity provider to your cluster
 
 Apply the identity provider custom resource (CR) to your cluster after you define it. With this configuration, you can authenticate with the configured identity provider.
 
@@ -309,7 +309,7 @@ These are the requirements for the files you create on an Apache HTTPD web serve
 
 - The `fail.cgi` CGI script file runs when the user fails to log in and returns an `HTTP 401` HTTP status code.
 
-# Troubleshooting basic authentication
+# Troubleshoot basic authentication
 
 Troubleshoot basic authentication by testing backend connectivity and verifying JSON login responses when users cannot authenticate in OpenShift Container Platform.
 

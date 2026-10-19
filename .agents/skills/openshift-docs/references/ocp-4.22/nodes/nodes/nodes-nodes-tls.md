@@ -7,7 +7,7 @@ A TLS security profile defines the TLS ciphers that the Kubernetes API server mu
 > [!NOTE]
 > By default, when the kubelet acts as a client with the Kubernetes API server, it automatically negotiates the TLS parameters with the API server.
 
-# Understanding TLS security profiles
+# Understand TLS security profiles
 
 You can use a TLS (Transport Layer Security) security profile, as described in this section, to define which TLS ciphers are required by various OpenShift Container Platform components.
 
@@ -68,17 +68,11 @@ You can specify one of the following TLS security profiles for each component:
 > [!NOTE]
 > When using one of the predefined profile types, the effective profile configuration is subject to change between releases. For example, given a specification to use the Intermediate profile deployed on release X.Y.Z, an upgrade to release X.Y.Z+1 might cause a new profile configuration to be applied, resulting in a rollout.
 
-# Configuring the TLS security profile for the kubelet
+# Configure the TLS security profile for the kubelet
 
 To configure TLS ciphers and minimum versions for the kubelet HTTP server in OpenShift Container Platform, apply a predefined or custom TLS security profile through a `KubeletConfig` custom resource (CR). Without a custom profile, the kubelet defaults to the `Intermediate` profile.
 
-<div class="formalpara">
-
-<div class="title">
-
-Sample `KubeletConfig` CR that configures the `Old` TLS security profile on worker nodes
-
-</div>
+The following example is a `KubeletConfig` CR that configures the `Old` TLS security profile on worker nodes:
 
 ``` yaml
 apiVersion: machineconfiguration.openshift.io/v1
@@ -93,8 +87,6 @@ spec:
       pools.operator.machineconfiguration.openshift.io/worker: ""
 # ...
 ```
-
-</div>
 
 You can see the ciphers and the minimum TLS version of the configured TLS security profile in the `kubelet.conf` file on a configured node.
 

@@ -71,7 +71,9 @@ Allocate pod subnets and node subnets so they do not overlap with existing netwo
 
 # Enable underlay routing for the default cluster network
 
-To steer default network’s east-west traffic over the underlay network instead of Geneve, configure the Cluster Network Operator (CNO) for `NoOverlay` transport and set the source network address translation (SNAT) and routing. If you use unmanaged routing, apply `FRRConfiguration` and `RouteAdvertisements` custom resources (CRs) so your routers exchange pod routes.
+To steer east-west traffic over the underlay network instead of Geneve, configure the Cluster Network Operator (CNO) for `NoOverlay` transport and set SNAT and routing.
+
+If you use unmanaged routing, apply `FRRConfiguration` and `RouteAdvertisements` CRs so your routers exchange pod routes.
 
 <div>
 

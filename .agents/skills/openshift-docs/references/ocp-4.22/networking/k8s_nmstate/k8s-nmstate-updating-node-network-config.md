@@ -9,7 +9,7 @@ For more information about how to install the NMState Operator, see [Kubernetes 
 >
 > For more information, see "Creating a manifest object that includes a customized br-ex bridge" in the *Deploying installer-provisioned clusters on bare metal* document or the *Installing a user-provisioned cluster on bare metal* document.
 
-# Viewing the network state of a node by using the CLI
+# View the network state of a node by using the CLI
 
 Node network state is the network configuration for all nodes in the cluster. A `NodeNetworkState` object exists on every node in the cluster. This object is periodically updated and captures the state of the network for that node.
 
@@ -76,7 +76,7 @@ Procedure
 
 </div>
 
-# Viewing a graphical representation of the network state of a node (NNS) topology from the web console
+# View a graphical representation of the network state of a node (NNS) topology from the web console
 
 To make the configuration of the node network in the cluster easier to understand, you can view it in the form of a diagram.
 
@@ -102,7 +102,7 @@ Procedure
 
 </div>
 
-# Viewing the list of NodeNetworkState resources
+# View the list of NodeNetworkState resources
 
 As an administrator, you can use the OpenShift Container Platform web console to view the list of `NodeNetworkState` resources and network interfaces, and access network details.
 
@@ -209,13 +209,13 @@ Additional resources
 
 </div>
 
-# Managing policy from the web console
+# Manage policy from the web console
 
 You can update the node network configuration, such as adding or removing interfaces from nodes, by applying `NodeNetworkConfigurationPolicy` manifests to the cluster.
 
 Manage the policy from the web console by accessing the list of created policies in the **NodeNetworkConfigurationPolicy** page under the **Networking** menu. This page enables you to create, update, monitor, and delete the policies.
 
-## Monitoring the policy status
+## Monitor the policy status
 
 You can monitor the policy status from the **NodeNetworkConfigurationPolicy** page. This page displays all the policies created in the cluster in a tabular format, with the following columns:
 
@@ -230,9 +230,9 @@ The enactment state of the matched nodes. You can click on the enactment state a
 
 To find the desired policy, you can filter the list either based on enactment state by using the **Filter** option, or by using the search option.
 
-## Creating a policy
+## Create a policy
 
-You can create a policy by using either a form or YAML in the web console. When creating a policy using a form, you can see how the new policy changes the topology of the nodes in your cluster in real time.
+You can create a policy by using either a form or YAML in the web console. When creating a policy by using a form, you can see how the new policy changes the topology of the nodes in your cluster in real time.
 
 <div>
 
@@ -242,22 +242,20 @@ Procedure
 
 </div>
 
-1.  Navigate to **Networking** → **Node Network Configuration**.
+1.  Go to **Networking** → **Node Network Configuration**.
 
 2.  On the **Node Network Configuration** page, click **Create** and select the **From Form** option.
 
     > [!NOTE]
-    > To create a policy using YAML, click **Create** → **With YAML** option. However, the following steps apply only to the form method.
+    > To create a policy by using YAML, click **Create** → **With YAML** option. However, the following steps apply only to the form method.
 
-3.  Optional: Check the **Apply this NodeNetworkConfigurationPolicy only to specific subsets of nodes using the node selector** checkbox to specify the nodes where the policy must be applied.
+3.  Optional: To apply this `NodeNetworkConfigurationPolicy` object only to specific subsets of nodes by using the node selector, select the corresponding checkbox.
 
 4.  Enter the policy name in the **Policy name** field.
 
-5.  Optional: Enter the description of the policy in the **Description** field.
+5.  Click **Next** to move to the **Policy Interfaces** section.
 
-6.  Click **Next** to move to the **Policy Interfaces** section.
-
-7.  In the **Bridging** part of the **Policy Interfaces** section, a bridge interface named `br0` is added by default with preset values in editable fields. If required, edit the values by performing the following steps:
+6.  In the **Bridging** part of the **Policy Interfaces** section, the form adds a bridge interface named `br0` by default with preset values in editable fields. If required, edit the values by performing the following steps:
 
     1.  Enter the name of the interface in **Interface name** field.
 
@@ -272,32 +270,32 @@ Procedure
 
         1.  Click **IP address** to configure the interface with a static IP address, or **DHCP** to auto-assign an IP address.
 
-        2.  If you have selected **IP address** option, enter the IPv4 address in **IPV4 address** field, and enter the prefix length in **Prefix length** field.
+        2.  If you have selected **IP address** option, enter the IPv4 address in the **IPv4 address** field, and enter the prefix length in **Prefix length** field.
 
-            If you have selected **DHCP** option, uncheck the options that you want to disable. The available options are **Auto-DNS**, **Auto-routes**, and **Auto-gateway**. All the options are selected by default.
+            If you have selected **DHCP** option, clear the options that you want to disable. The available options are **Auto-DNS**, **Auto-routes**, and **Auto-gateway**. By default, the form selects all options.
 
     5.  Optional: Enter the port number in **Port** field.
 
-    6.  Optional: Check the checkbox **Enable STP** to enable STP.
+    6.  Optional: Select the **Enable STP** checkbox to enable Spanning Tree Protocol (STP).
 
     7.  Optional: To add an interface to the policy, click **Add another interface to the policy**.
 
     8.  Optional: To remove an interface from the policy, click ![minus](data:image/svg+xml;base64,77u/PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8c3ZnIHN0eWxlPSJ2ZXJ0aWNhbC1hbGlnbjotMC4xMjVlbSIgZmlsbD0iY3VycmVudENvbG9yIiBoZWlnaHQ9IjE1IiB3aWR0aD0iMTUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBhcmlhLWhpZGRlbj0idHJ1ZSIgcm9sZT0iaW1nIiBhcmlhLWRlc2NyaWJlZGJ5PSJwZi10b29sdGlwLTM4MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjU2IDhDMTE5IDggOCAxMTkgOCAyNTZzMTExIDI0OCAyNDggMjQ4IDI0OC0xMTEgMjQ4LTI0OFMzOTMgOCAyNTYgOHpNMTI0IDI5NmMtNi42IDAtMTItNS40LTEyLTEydi01NmMwLTYuNiA1LjQtMTIgMTItMTJoMjY0YzYuNiAwIDEyIDUuNCAxMiAxMnY1NmMwIDYuNi01LjQgMTItMTIgMTJIMTI0eiI+PC9wYXRoPjwvc3ZnPg==) icon next to the interface.
 
     > [!NOTE]
-    > Alternatively, you can click **Edit YAML** on the top of the page to continue editing the form using YAML.
+    > You can also click **Edit YAML** at the top of the page to continue editing the form by using YAML.
 
-8.  Click **Next** to go to the **Review** section of the form.
+7.  Click **Next** to go to the **Review** section of the form.
 
-9.  Verify the settings and click **Create** to create the policy.
+8.  Verify the settings and click **Create** to create the policy.
 
 </div>
 
-# Updating the NodeNetworkConfigurationPolicy manifest file
+# Update the NodeNetworkConfigurationPolicy manifest file
 
 To modify the network configuration for nodes in your OpenShift Container Platform cluster, you can update the `NodeNetworkConfigurationPolicy` manifest file.
 
-## Updating the policy by using form
+## Update the policy by using form
 
 You can update a `NodeNetworkConfigurationPolicy` object by using the form view in the web console.
 
@@ -322,7 +320,7 @@ Procedure
 
 </div>
 
-## Updating the policy by using YAML
+## Update the policy by using YAML
 
 You can update a `NodeNetworkConfigurationPolicy` object by editing the YAML in the web console.
 
@@ -344,7 +342,7 @@ Procedure
 
 </div>
 
-## Deleting the policy
+## Delete the policy
 
 You can delete a `NodeNetworkConfigurationPolicy` object when it is no longer needed.
 
@@ -364,11 +362,11 @@ Procedure
 
 </div>
 
-# Managing the NodeNetworkConfigurationPolicy manifest file
+# Manage the NodeNetworkConfigurationPolicy manifest file
 
 To configure network interfaces on nodes in your OpenShift Container Platform cluster, you can manage the `NodeNetworkConfigurationPolicy` manifest file by using the CLI.
 
-## Creating an interface on nodes
+## Create an interface on nodes
 
 You can create an interface on nodes in the cluster by applying a `NodeNetworkConfigurationPolicy` (NNCP) manifest to the cluster. The manifest details the requested configuration for the interface.
 
@@ -474,7 +472,7 @@ Additional resources
 
 </div>
 
-## Confirming node network policy updates on nodes
+## Confirm node network policy updates on nodes
 
 When you apply a node network policy, a `NodeNetworkConfigurationEnactment` object is created for every node in the cluster. The node network configuration enactment is a read-only object that represents the status of execution of the policy on that node.
 
@@ -526,7 +524,7 @@ Procedure
 
 </div>
 
-## Removing an interface from nodes
+## Remove an interface from nodes
 
 You can remove an interface from one or more nodes in the cluster by editing the `NodeNetworkConfigurationPolicy` object and setting the `state` of the interface to `absent`.
 
@@ -1689,9 +1687,9 @@ Additional resources
 
 </div>
 
-# Creating an IP over InfiniBand interface on nodes
+# Create an IP over InfiniBand interface on nodes
 
-On the OpenShift Container Platform web console, you can install a Red Hat certified third-party Operator, such as the NVIDIA Network Operator, that supports IP over InfiniBand (IPoIB) mode. Typically, you would use the third-party Operator with other vendor infrastructure to manage resources in an OpenShift Container Platform cluster.
+You can install a Red Hat certified third-party Operator, such as the NVIDIA Network Operator, that supports IP over InfiniBand (IPoIB) mode to manage InfiniBand resources in your OpenShift Container Platform cluster.
 
 To create an IPoIB interface on nodes in your cluster, you must define an InfiniBand (IPoIB) interface in a `NodeNetworkConfigurationPolicy` (NNCP) manifest file.
 

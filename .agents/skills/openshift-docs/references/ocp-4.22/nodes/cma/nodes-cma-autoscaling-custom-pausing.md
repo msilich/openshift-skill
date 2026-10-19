@@ -4,9 +4,11 @@ You can pause and restart the autoscaling of a workload, as needed.
 
 For example, you might want to pause autoscaling before performing cluster maintenance or to avoid resource starvation by removing non-mission-critical workloads.
 
-# Pausing a custom metrics autoscaler
+# Pause a custom metrics autoscaler
 
-You can pause the autoscaling of a scaled object by adding the `autoscaling.keda.sh/paused-replicas` annotation to the custom metrics autoscaler for that scaled object. The custom metrics autoscaler scales the replicas for that workload to the specified value and pauses autoscaling until the annotation is removed.
+You can pause the autoscaling of a scaled object by adding the `autoscaling.keda.sh/paused-replicas` annotation to the custom metrics autoscaler for that scaled object.
+
+The custom metrics autoscaler scales the replicas for that workload to the specified value and pauses autoscaling until the annotation is removed.
 
 ``` yaml
 apiVersion: keda.sh/v1alpha1
@@ -47,11 +49,14 @@ Procedure
       uid: f5aec682-acdf-4232-a783-58b5b82f5dd0
     ```
 
-    - Specifies that the Custom Metrics Autoscaler Operator is to scale the replicas to the specified value and stop autoscaling.
+    where:
+
+    `metadata.annotations.autoscaling.keda.sh/paused-replicas`
+    Specifies that the Custom Metrics Autoscaler Operator is to scale the replicas to the specified value and stop autoscaling.
 
 </div>
 
-# Restarting the custom metrics autoscaler for a scaled object
+# Restart the custom metrics autoscaler for a scaled object
 
 You can restart a paused custom metrics autoscaler by removing the `autoscaling.keda.sh/paused-replicas` annotation for that `ScaledObject`.
 
@@ -78,7 +83,7 @@ Procedure
     $ oc edit ScaledObject scaledobject
     ```
 
-2.  Remove the `autoscaling.keda.sh/paused-replicas` annotation.
+2.  Remove the `autoscaling.keda.sh/paused-replicas` annotation to restart a paused custom metrics autoscaler:
 
     ``` yaml
     apiVersion: keda.sh/v1alpha1
@@ -93,7 +98,5 @@ Procedure
       resourceVersion: '65729'
       uid: f5aec682-acdf-4232-a783-58b5b82f5dd0
     ```
-
-    - Remove this annotation to restart a paused custom metrics autoscaler.
 
 </div>

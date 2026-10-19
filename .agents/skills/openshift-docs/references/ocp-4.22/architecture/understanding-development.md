@@ -79,7 +79,9 @@ Additional resources
 
 ## Container build tool options
 
-Building and managing containers with `buildah`, `podman`, and `skopeo` results in industry-standard container images that include features specifically tuned for deploying containers in OpenShift Container Platform or other Kubernetes environments. These daemonless, rootless tools reduce overhead while tuning your containers for Kubernetes.
+Building and managing containers with `buildah`, `podman`, and `skopeo` results in industry-standard container images that include features specifically tuned for deploying containers in OpenShift Container Platform or other Kubernetes environments.
+
+These daemonless, rootless tools reduce overhead while tuning your containers for Kubernetes.
 
 > [!IMPORTANT]
 > Support for Docker Container Engine as a container runtime is deprecated in Kubernetes 1.20 and will be removed in a future release. However, Docker-produced images continue to work in your cluster with all runtimes, including CRI-O. For more information, see the "Kubernetes blog announcement".

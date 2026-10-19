@@ -2,7 +2,7 @@
 
 This document describes advanced tasks for the Custom File Integrity Operator.
 
-# Reinitializing the database
+# Reinitialize the database
 
 If the File Integrity Operator detects a change that was planned, it might be required to reinitialize the database.
 
@@ -54,9 +54,11 @@ To suppress changes to files caused by `MachineConfig` object updates, the File 
 
 This pause and resume logic only applies to updates through the `MachineConfig` API, as they are reflected in the node object annotations.
 
-# Exploring the daemon sets
+# Explore the daemon sets
 
-Each `FileIntegrity` object represents a scan on several nodes. The scan itself is performed by pods managed by a daemon set. The config maps created by the AIDE daemon are not retained and are deleted after the File Integrity Operator processes them. However, on failure and error, the contents of these config maps are copied to the config map that the `FileIntegrityNodeStatus` object points to.
+Each `FileIntegrity` object represents a scan on several nodes. The scan itself is performed by pods managed by a daemon set. The config maps created by the AIDE daemon are not retained and are deleted after the File Integrity Operator processes them.
+
+However, on failure and error, the contents of these config maps are copied to the config map that the `FileIntegrityNodeStatus` object points to.
 
 <div>
 

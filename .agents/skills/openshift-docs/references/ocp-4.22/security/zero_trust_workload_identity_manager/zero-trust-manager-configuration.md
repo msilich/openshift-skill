@@ -45,7 +45,7 @@ Specifies the name that identifies this cluster within the trust domain. Must be
 `spec.bundleConfigMap`
 Specifies the name of the ConfigMap that stores the SPIRE trust bundle. This ConfigMap contains the root certificates for the trust domain and is created and maintained by the Operator. Must be a valid Kubernetes name with a maximum length of 253 characters. This field is optional (defaults to `spire-bundle`) and once set, is immutable.
 
-# Deploying the SPIRE Server
+# Deploy the SPIRE Server
 
 Deploy the SPIRE Server by configuring the `SpireServer` custom resource (CR). This establishes a central authority that manages and issues identities to the workloads in your cluster.
 
@@ -254,7 +254,7 @@ Verification
 
 </div>
 
-# Deploying the SPIRE Agent
+# Deploy the SPIRE Agent
 
 Use the `SpireAgent` custom resource to configure the SPIRE Agent `DaemonSet` on your nodes. This defines how the agent verifies workloads and manages identity attestation across your OpenShift Container Platform cluster.
 
@@ -404,7 +404,7 @@ Verification
 
 </div>
 
-# Deploying the SPIFFE Container Storage Interface driver
+# Deploy the SPIFFE Container Storage Interface driver
 
 Configure the Container Storage Interface (CSI) driver using the `SpiffeCSIDriver` CR. This configuration mounts SPIFFE sockets directly into workload pods, which allows your applications to access the SPIFFE Workload API securely.
 
@@ -527,7 +527,7 @@ Verification
 
 </div>
 
-# Deploying the SPIRE OpenID Connect Discovery Provider
+# Deploy the SPIRE OpenID Connect Discovery Provider
 
 Deploy the SPIRE OpenID Connect (OIDC) Discovery Provider by configuring the `SpireOIDCDiscoveryProvider` CR. This allows you to define the trust domain and JSON web token (JWT) issuer for your cluster.
 

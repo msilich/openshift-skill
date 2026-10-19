@@ -59,7 +59,7 @@ The following custom resources are used to configure BGP routing:
 `FRRConfiguration`
 This custom resource defines the FRR configuration for the BGP routing. This CR is namespaced.
 
-# Configuring the FRRConfiguration CR
+# Configure the FRRConfiguration CR
 
 To customize routing behavior beyond standard MetalLB capabilities, configure the `FRRConfiguration` custom resource (CR).
 
@@ -455,7 +455,9 @@ Supported gateway modes
 
 # Additional resources
 
-- [FRRouting User Guide: BGP](https://docs.frrouting.org/en/latest/bgp.html)
+- [About user-defined networks](../../multiple_networks/primary_networks/about-user-defined-networks.md#about-user-defined-networks)
+
+- [`FRRouting` User Guide: BGP](https://docs.frrouting.org/en/latest/bgp.html)
 
 - [Migrating FRR-K8s resources](migrating-frr-k8s-resources.md#migrating-frr-k8s-resources)
 

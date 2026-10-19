@@ -236,9 +236,11 @@ Procedure
 
 3.  Click **CREATE** to create your application.
 
-4.  Open the **Administrator** perspective of the web console and expand **Administration** → **Namespaces**.
+4.  Add a label to the namespace your application is deployed in so that the Argo CD instance in the `openshift-gitops` namespace can manage it:
 
-5.  Search for and select the `spring-petclinic` namespace, then enter `argocd.argoproj.io/managed-by=openshift-gitops` in the **Label** field so that the Argo CD instance in the `openshift-gitops` namespace can manage your namespace.
+    ``` terminal
+    $ oc label namespace spring-petclinic argocd.argoproj.io/managed-by=openshift-gitops
+    ```
 
 </div>
 
@@ -276,25 +278,53 @@ Procedure
     $ git clone git@github.com:redhat-developer/openshift-gitops-getting-started.git
     ```
 
-2.  Create the application:
+2.  Create and configure the destination namespace:
 
     ``` terminal
-    $ oc create -f openshift-gitops-getting-started/argo/cluster.yaml
+    $ oc create namespace spring-petclinic
     ```
-
-3.  Run the `oc get` command to review the created application:
-
-    ``` terminal
-    $ oc get application -n openshift-gitops
-    ```
-
-4.  Add a label to the namespace your application is deployed in so that the Argo CD instance in the `openshift-gitops` namespace can manage it:
 
     ``` terminal
     $ oc label namespace spring-petclinic argocd.argoproj.io/managed-by=openshift-gitops
     ```
 
+3.  Create the application:
+
+    ``` terminal
+    $ oc create -f openshift-gitops-getting-started/argo/cluster.yaml
+    ```
+
+4.  Run the `oc get` command to review the created application:
+
+    ``` terminal
+    $ oc get application -n openshift-gitops
+    ```
+
 </div>
+
+<div class="formalpara">
+
+<div class="title">
+
+Cleanup (optional)
+
+</div>
+
+To delete the application and namespace after you are done:
+
+</div>
+
+1.  Delete the application:
+
+    ``` terminal
+    $ oc delete -n openshift-gitops -f openshift-gitops-getting-started/argo/cluster.yaml
+    ```
+
+2.  Delete the namespace:
+
+    ``` terminal
+    $ oc delete namespace spring-petclinic
+    ```
 
 # Creating an application in the default mode by using the GitOps CLI
 

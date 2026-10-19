@@ -1,6 +1,18 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can use [Google Workspace](https://workspace.google.com/) as a single sign-on (SSO) provider for Red Hat Advanced Cluster Security for Kubernetes.
+You can use Google Workspace as a single sign-on (SSO) provider for Red Hat Advanced Cluster Security for Kubernetes.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Google Workspace](https://workspace.google.com/)
+
+</div>
 
 <a id="set-up-oauth-20-credentials-for-your-gcp-project_configure-google-workspace-identity"></a>
 
@@ -28,9 +40,9 @@ Procedure
 
 </div>
 
-1.  Create a new Google Cloud project, see the Google documentation topic [creating and managing projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects).
+1.  Create a new Google Cloud project. See the Google documentation topic "Creating and managing projects".
 
-2.  After you have created the project, open the [**Credentials**](https://console.developers.google.com/apis/credentials) page in the Google API Console.
+2.  After you have created the project, open the **Credentials** page in the Google API Console.
 
 3.  Verify the project name listed in the upper left corner near the logo to make sure that you are using the correct project.
 
@@ -55,15 +67,29 @@ Procedure
 11. Select **OAuth consent screen** from the navigation menu on the left.
 
     > [!NOTE]
-    > The OAuth consent screen configuration is valid for the entire GCP project, and not only to the application you created in the previous steps. If you already have an OAuth consent screen configured in this project and want to apply different settings for Red Hat Advanced Cluster Security for Kubernetes login, create a new GCP project.
+    > The OAuth consent screen configuration is valid for the entire GCP project, and not only to the application you created in the earlier steps. If you already have an OAuth consent screen configured in this project and want to apply different settings for Red Hat Advanced Cluster Security for Kubernetes login, create a new GCP project.
 
 12. On the OAuth consent screen page:
 
     1.  Choose the **Application type** as **Internal**. If you select **Public**, anyone with a Google account can sign in.
 
-    2.  Enter a descriptive **Application name**. This name is shown to users on the consent screen when they sign in. For example, use **RHACS** or **\<organization_name\> SSO for Red Hat Advanced Cluster Security for Kubernetes**.
+    2.  Enter a descriptive **Application name**. This name is displayed to users on the consent screen when they sign in. For example, use **RHACS** or **\<organization_name\> SSO for Red Hat Advanced Cluster Security for Kubernetes**.
 
-    3.  Verify that the **Scopes for Google APIs** only lists **email**, **profile**, and **openid** scopes. Only these scopes are required for single sign-on. If you grant additional scopes it increases the risk of exposing sensitive data.
+    3.  Verify that the **Scopes for Google APIs** only lists **email**, **profile**, and **openid** scopes. Single sign-on requires only these scopes. If you grant additional scopes it increases the risk of exposing sensitive data.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Creating and managing projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects)
+
+- [Credentials page in the Google API Console](https://console.developers.google.com/apis/credentials)
 
 </div>
 
@@ -71,7 +97,7 @@ Procedure
 
 # Specifying a client secret
 
-Red Hat Advanced Cluster Security for Kubernetes version 3.0.39 and newer supports the [OAuth 2.0 Authorization Code Grant](https://oauth.net/2/grant-types/authorization-code/) authentication flow when you specify a client secret. When you use this authentication flow, Red Hat Advanced Cluster Security for Kubernetes uses a refresh token to keep users logged in beyond the token expiration time configured in your OIDC identity provider.
+Red Hat Advanced Cluster Security for Kubernetes supports OAuth 2.0 Authorization Code Grant authentication when you specify a client secret. With this flow, a refresh token keeps users logged in beyond the expiration time configured in your OIDC identity provider.
 
 When users log out, Red Hat Advanced Cluster Security for Kubernetes deletes the refresh token from the client-side. Additionally, if your identity provider API supports refresh token revocation, Red Hat Advanced Cluster Security for Kubernetes also sends a request to your identity provider to revoke the refresh token.
 
@@ -92,6 +118,18 @@ You can specify a client secret when you configure Red Hat Advanced Cluster Secu
 </div>
 
 Red Hat recommends using a client secret when connecting Red Hat Advanced Cluster Security for Kubernetes with an OIDC identity provider. If you do not want to use a **Client Secret**, you must select the **Do not use Client Secret (not recommended)** option.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [OAuth 2.0 Authorization Code Grant](https://oauth.net/2/grant-types/authorization-code/)
+
+</div>
 
 <a id="configure-oidc-identity-provider_configure-google-workspace-identity"></a>
 
@@ -127,12 +165,12 @@ Procedure
 
 3.  Enter information in the following fields:
 
-    - **Name**: A name to identify your authentication provider; for example, **Google Workspace**. The integration name is shown on the login page to help users select the correct sign-in option.
+    - **Name**: A name to identify your authentication provider; for example, **Google Workspace**. The integration name is displayed on the login page to help users select the correct sign-in option.
 
     - **Callback mode**: Select **Auto-select (recommended)**, which is the default value, unless the identity provider requires another mode.
 
       > [!NOTE]
-      > `Fragment` mode is designed around the limitations of Single Page Applications (SPAs). Red Hat only supports the `Fragment` mode for early integrations and does not recommended using it for later integrations.
+      > `Fragment` mode works around the limitations of Single Page Applications (SPAs). Red Hat only supports the `Fragment` mode for early integrations and does not recommended using it for later integrations.
 
     - **Issuer**: The root URL of your identity provider; for example, `https://accounts.google.com` for Google Workspace. See your identity provider documentation for more information.
 
@@ -141,7 +179,7 @@ Procedure
       >
       > - Prefix your root URL with `https+insecure://` to skip TLS validation. This configuration is insecure and Red Hat does not recommended it. Only use it for testing purposes.
       >
-      > - Specify query strings; for example, `?key1=value1&key2=value2` along with the root URL. RHACS appends the value of **Issuer** as you entered it to the authorization endpoint. You can use it to customize your provider’s login screen. For example, you can optimize the Google Workspace login screen to a specific hosted domain by using the [`hd` parameter](https://developers.google.com/identity/protocols/oauth2/openid-connect#hd-param), or preselect an authentication method in `PingFederate` by using the [`pfidpadapterid` parameter](https://docs.pingidentity.com/bundle/pingfederate-93/page/nfr1564003024683.html).
+      > - Specify query strings; for example, `?key1=value1&key2=value2` along with the root URL. RHACS appends the value of **Issuer** as you entered it to the authorization endpoint. You can use it to customize your provider’s login screen. For example, you can optimize the Google Workspace login screen to a specific hosted domain by using the `hd` parameter, or preselect an authentication method in `PingFederate` by using the `pfidpadapterid` parameter.
 
     - **Client ID**: The OIDC Client ID for your configured project.
 
@@ -184,8 +222,22 @@ Verification
 
     - If you logged in successfully, RHACS shows the `User ID` and `User Attributes` that the identity provider sent for the credentials that you used to log in to the system.
 
-    - If your login attempt failed, RHACS shows a message describing why the identity provider’s response could not be processed.
+    - If your login failed, RHACS shows a message describing why it could not process the identity provider’s response.
 
 6.  Close the **Test Login** browser tab.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Google Workspace `hd` parameter](https://developers.google.com/identity/protocols/oauth2/openid-connect#hd-param)
+
+- [PingFederate `pfidpadapterid` parameter](https://docs.pingidentity.com/pingfederate/latest/developers_reference_guide/pf_authorization_endpoint.html)
 
 </div>

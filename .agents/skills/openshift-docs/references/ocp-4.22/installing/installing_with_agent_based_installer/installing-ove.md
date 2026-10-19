@@ -294,9 +294,9 @@ Procedure
 
 - [Installing virtctl](../../virt/getting_started/virt-using-the-cli-tools.md#virt-installing-virtctl-binary_virt-using-the-cli-tools)
 
-- [Creating virtual machines from instance types](../../virt/creating_vm/virt-creating-vms-from-instance-types.md#virt-creating-vms-from-instance-types)
+- [Instance types](../../virt/creating_vm/virt-creating-vms-from-instance-types.md#virt-creating-vms-from-instance-types)
 
-- [Creating virtual machines from templates](../../virt/creating_vm/virt-creating-vms-from-templates.md#virt-creating-vms-from-templates)
+- [Managing VM templates](../../virt/creating_vm/virt-creating-vms-from-templates.md#virt-creating-vms-from-templates)
 
 - [Migrating virtual machines from VMware vSphere (Migration Toolkit for Virtualization documentation)](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.8/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-vmware)
 

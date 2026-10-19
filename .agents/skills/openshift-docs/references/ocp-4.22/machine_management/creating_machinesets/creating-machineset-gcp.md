@@ -15,7 +15,9 @@ You can create a different compute machine set to serve a specific purpose in yo
 
 # Sample YAML for a compute machine set custom resource on Google Cloud
 
-The sample YAML defines a compute machine set for Google Cloud, enabling the automated provisioning of nodes within a specific VPC. When you apply this configuration by using the OpenShift Container Platform CLI, you can ensure consistent scaling, scheduling, and infrastructure ID labeling for compute resources in your cluster.
+The sample YAML defines a compute machine set for Google Cloud, enabling the automated provisioning of nodes within a specific VPC.
+
+When you apply this configuration by using the OpenShift Container Platform CLI, you can ensure consistent scaling, scheduling, and infrastructure ID labeling for compute resources in your cluster.
 
 The sample YAML defines a compute machine set that runs in Google Cloud and creates nodes that are labeled with `node-role.kubernetes.io/<role>: ""`, where `<role>` is the node label to add.
 
@@ -150,7 +152,7 @@ Additional resources
 
 </div>
 
-# Creating a compute machine set
+# Create a compute machine set
 
 To dynamically manage machine compute resources, you can create your own compute machine sets in addition to the compute machine sets created by the installation program. Use the OpenShift Container Platform CLI to automate node provisioning.
 
@@ -290,7 +292,7 @@ Verification
 
 </div>
 
-# Labeling GPU machine sets for the cluster autoscaler
+# Label GPU machine sets for the cluster autoscaler
 
 Label your machine sets to indicate which machines the cluster autoscaler can use for GPU-enabled nodes. Applying the accelerator label helps ensure that the autoscaler deploys the correct resources for your GPU workloads.
 
@@ -401,7 +403,7 @@ Verification
 
 </div>
 
-# Configuring Confidential VM by using machine sets
+# Configure Confidential VM by using machine sets
 
 You create machine sets to scale clusters on Google Cloud. By editing the machine set YAML file, you can configure the Confidential VM options that a machine set uses for machines that it deploys.
 
@@ -659,7 +661,7 @@ Additional resources
 
 </div>
 
-# Enabling customer-managed encryption keys for a machine set
+# Enable customer-managed encryption keys for a machine set
 
 Use Google Cloud Compute Engine to supply an encryption key to encrypt data on disks at rest. The key is used to encrypt the data encryption key, not to encrypt the customer’s data. By default, Compute Engine encrypts this data by using Compute Engine keys.
 
@@ -729,7 +731,7 @@ Procedure
 
 </div>
 
-# Enabling GPU support for a compute machine set
+# Enable GPU support for a compute machine set
 
 Use the Google Cloud Compute Engine to add GPUs to Virtual Machine (VM) instances. Workloads that benefit from access to GPU resources can perform better on compute machines with this feature enabled. OpenShift Container Platform on Google Cloud supports NVIDIA GPU models in the A2 and N1 machine series.
 
@@ -900,7 +902,7 @@ Procedure
 
 </div>
 
-# Adding a GPU node to an existing OpenShift Container Platform cluster
+# Add a GPU node to an existing OpenShift Container Platform cluster
 
 You can copy and modify a default compute machine set configuration to create a GPU-enabled machine set and machines for the Google Cloud provider. This assists compute-intensive workloads that require hardware acceleration.
 
@@ -1264,7 +1266,7 @@ Verification
 > [!NOTE]
 > Note that there is no need to specify a namespace for the node. The node definition is cluster scoped.
 
-# Deploying the Node Feature Discovery Operator
+# Deploy the Node Feature Discovery Operator
 
 After the GPU-enabled node is created, you need to discover the GPU-enabled node so it can be scheduled. To do this, install the Node Feature Discovery (NFD) Operator.
 

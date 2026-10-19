@@ -134,7 +134,9 @@ Ensure that you meet the firewall and port requirements so that ports can commun
 
 # Live migration for compute nodes
 
-While the management cluster for hosted cluster virtual machines (VMs) is undergoing updates or maintenance, the hosted cluster VMs can be automatically live migrated to prevent disrupting hosted cluster workloads. As a result, the management cluster can be updated without affecting the availability and operation of the KubeVirt platform hosted clusters.
+While the management cluster for hosted cluster virtual machines (VMs) is undergoing updates or maintenance, the hosted cluster VMs can be automatically live migrated to prevent disrupting hosted cluster workloads.
+
+As a result, the management cluster can be updated without affecting the availability and operation of the KubeVirt platform hosted clusters.
 
 > [!IMPORTANT]
 > The live migration of KubeVirt VMs is enabled by default provided that the VMs use `ReadWriteMany` (RWX) storage for both the root volume and the storage classes that are mapped to the `kubevirt-csi` CSI provider.
@@ -983,6 +985,8 @@ Verification
 ## Setting up the load balancer
 
 Set up the load balancer service that routes ingress traffic to the KubeVirt VMs and assigns a wildcard DNS entry to the load balancer IP address.
+
+When you create a `LoadBalancer` service on an OpenShift Virtualization hosted cluster, a mirror `LoadBalancer` service is automatically created and configured on the management cluster to expose the service. As a result, the hosted cluster `LoadBalancer` services are exposed through the same technology that the management cluster has configured for its own `LoadBalancer` services, such as MetalLB.
 
 <div>
 

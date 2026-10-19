@@ -2,7 +2,7 @@
 
 The AWS Load Balancer Operator deploys and manages the AWS Load Balancer Controller. You can install the AWS Load Balancer Operator from the software catalog by using OpenShift Container Platform web console or CLI.
 
-# Installing the AWS Load Balancer Operator by using the web console
+# Install the AWS Load Balancer Operator by using the web console
 
 To deploy the AWS Load Balancer Operator, install the Operator by using the web console. You can manage the lifecycle of the Operator by using a graphical interface.
 
@@ -62,7 +62,7 @@ Verification
 
 </div>
 
-# Installing the AWS Load Balancer Operator by using the CLI
+# Install the AWS Load Balancer Operator by using the CLI
 
 To deploy the AWS Load Balancer Controller, install the AWS Load Balancer Operator by using the command-line interface (CLI).
 
@@ -212,7 +212,7 @@ Verification
 
 </div>
 
-# Creating the AWS Load Balancer Controller
+# Create the AWS Load Balancer Controller
 
 You can install only a single instance of the `AWSLoadBalancerController` object in a cluster. You can create the AWS Load Balancer Controller by using CLI. The AWS Load Balancer Operator reconciles only the `cluster` named resource.
 

@@ -22,7 +22,7 @@ Procedure
 
 </div>
 
-1.  From the web console, comlete the following steps:
+1.  From the web console, complete the following steps:
 
     1.  Navigate to **Compute** → **Bare Metal Hosts**.
 
@@ -231,7 +231,7 @@ Procedure
 
 ## Removing bare-metal hosts from the provisioner node
 
-In certain circumstances, you might want to temporarily remove bare-metal hosts from the provisioner node. For example, to prevent the management of the number of `Machine` objects that matches the number of available `BareMetalHost` objects, add a `baremetalhost.metal3.io/detached` annotation to the `MachineSet` object.
+You can temporarily remove bare-metal hosts from the provisioner node by adding a `baremetalhost.metal3.io/detached` annotation to the `MachineSet` object.
 
 Consider an example during provisioning when a bare-metal host reboot is triggered by using the OpenShift Container Platform administration console or as a result of a Machine Config Pool update. In this case, OpenShift Container Platform logs into the integrated Dell Remote Access Controller (iDRAC) and issues a delete of the job queue.
 

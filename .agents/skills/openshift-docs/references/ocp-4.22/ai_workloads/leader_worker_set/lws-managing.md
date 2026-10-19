@@ -2,7 +2,7 @@
 
 You can use the Leader Worker Set Operator to manage distributed inference workloads and process large-scale inference requests efficiently.
 
-# Installing the Leader Worker Set Operator
+# Install the Leader Worker Set Operator
 
 You can install the Leader Worker Set Operator through the OpenShift Container Platform web console to begin managing distributed AI workloads.
 
@@ -68,7 +68,7 @@ Procedure
 
 </div>
 
-# Deploying a leader worker set
+# Deploy a leader worker set
 
 You can use the Leader Worker Set Operator to deploy a leader worker set to assist with managing distributed workloads across nodes.
 

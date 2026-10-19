@@ -2,13 +2,13 @@
 
 You can *opt in*, enable, or *opt out*, disable, reporting health and usage data for your cluster.
 
-# Enabling remote health reporting
+# Enable remote health reporting
 
 If you or your organization have disabled remote health reporting, you can enable this feature again. You can see that remote health reporting is disabled from the message `Insights not available` in the **Status** tile on the OpenShift Container Platform web console **Overview** page.
 
 To enable remote health reporting, you must change the global cluster pull secret with a new authorization token. Enabling remote health reporting enables both Insights Operator and Telemetry.
 
-# Changing your global cluster pull secret to enable remote health reporting
+# Change your global cluster pull secret to enable remote health reporting
 
 You can change your existing global cluster pull secret to enable remote health reporting. If you have disabled remote health monitoring, you must download a new pull secret with your `console.openshift.com` access token from Red Hat OpenShift Cluster Manager.
 
@@ -230,9 +230,11 @@ Additional resources
 
 </div>
 
-# Updating the global cluster pull secret
+# Update the global cluster pull secret
 
-To add new registries or update authentication for your OpenShift Container Platform cluster, you can update the global pull secret by appending new credentials to the *additional-pull-secret*. To do this, you can use the `oc set data secret/additional-pull-secret -n kube-system` command. Hypershift manages the new credential propagation among the HostedCluster nodes.
+To add new registries or update authentication for your OpenShift Container Platform cluster, you can update the global pull secret by appending new credentials to the *additional-pull-secret* by using the `oc set data secret/additional-pull-secret -n kube-system` command.
+
+Hypershift manages the new credential propagation among the HostedCluster nodes.
 
 Use this procedure when you need a separate registry to store images than the registry used during installation.
 

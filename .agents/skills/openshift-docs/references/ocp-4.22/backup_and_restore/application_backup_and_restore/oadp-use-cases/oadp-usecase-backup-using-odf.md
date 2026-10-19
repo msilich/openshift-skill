@@ -2,7 +2,7 @@
 
 Following is a use case for using OADP and ODF to back up an application.
 
-# Backing up an application using OADP and ODF
+# Back up an application using OADP and ODF
 
 In this use case, you back up an application by using OADP and store the backup in an object storage provided by Red Hat OpenShift Data Foundation (ODF).
 

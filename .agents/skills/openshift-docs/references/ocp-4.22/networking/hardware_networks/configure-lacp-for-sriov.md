@@ -9,7 +9,7 @@ The PF Status Relay Operator solves this issue by using Link Aggregation Control
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
-# Installing the PF Status Relay Operator using the CLI
+# Install the PF Status Relay Operator using the CLI
 
 Install the PF Status Relay Operator to enable OpenShift Container Platform to use Link Aggregation Control Protocol (LACP) as an active health check on physical functions.
 
@@ -154,9 +154,11 @@ Verification
 
 </div>
 
-# Configuring the PF Status Relay Operator for LACP state monitoring on SR-IOV networks
+# Configure the PF Status Relay Operator for LACP state monitoring on SR-IOV networks
 
-Use the PF Status Relay Operator to enable Link Aggregation Control Protocol (LACP) state monitoring for workloads by using pod-level bonding with SR-IOV networks. The Operator monitors the LACP state on physical functions (PF) and changes the link state for attached virtual functions (VF) when it detects an upstream failure. With this approach, you can detect failures on VFs attached to a PF to ensure a timely failover to a backup network path, ensuring high availability for your workloads.
+Use the PF Status Relay Operator to enable Link Aggregation Control Protocol (LACP) state monitoring for workloads by using pod-level bonding with SR-IOV networks.
+
+The Operator monitors the LACP state on physical functions (PF) and changes the link state for attached virtual functions (VF) when it detects an upstream failure. With this approach, you can detect failures on VFs attached to a PF to ensure a timely failover to a backup network path, ensuring high availability for your workloads.
 
 The following scenario demonstrates how to configure and verify LACP state monitoring for SR-IOV networks:
 

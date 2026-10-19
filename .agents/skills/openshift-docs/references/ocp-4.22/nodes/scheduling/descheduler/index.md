@@ -2,7 +2,7 @@
 
 The descheduler evicts running pods so that the default scheduler can place them on more suitable nodes.
 
-# About the descheduler
+# Maintain cluster balance by rescheduling pods
 
 You can use the descheduler to evict pods based on specific strategies so that the pods are rescheduled onto more appropriate nodes.
 

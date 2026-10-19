@@ -182,7 +182,9 @@ Procedure
 
 # Creating a hosted cluster on bare metal for IBM Z
 
-On bare-metal infrastructure, you can create or import a hosted cluster. After you enable the Assisted Installer as an add-on to multicluster engine Operator and you create a hosted cluster with the Agent platform, the HyperShift Operator installs the Agent Cluster API provider in the hosted control plane namespace. The Agent Cluster API provider connects a management cluster that hosts the control plane and a hosted cluster that consists of only the compute nodes.
+On bare-metal infrastructure, after you enable the Assisted Installer as an add-on to multicluster engine Operator and create a hosted cluster with the Agent platform, the HyperShift Operator installs the Agent Cluster API provider in the hosted control plane namespace.
+
+The Agent Cluster API provider connects a management cluster that hosts the control plane and a hosted cluster that consists of only the compute nodes.
 
 <div>
 

@@ -213,6 +213,13 @@ For more information, see [About node status during updates](../machine_configur
 
 ## Machine management
 
+Bare-metal nodes on VMware vSphere clusters is generally available
+You can add bare-metal compute machines to an existing OpenShift Container Platform cluster on vSphere. With this capability, you can migrate workloads to physical hardware without reinstalling the cluster.
+
+Bare-metal nodes on vSphere clusters was introduced in OpenShift Container Platform 4.21 with Technology Preview status. Beginning in OpenShift Container Platform 4.22.13, it is now generally available.
+
+For more information, see [Adding bare-metal compute machines to a vSphere cluster](../machine_management/user_infra/adding-bare-metal-compute-vsphere-user-infra.md#adding-bare-metal-compute-vsphere-user-infra).
+
 AWS Dedicated Host support (Technology Preview)
 You can now place compute machines on Amazon Web Services (AWS) Dedicated Hosts. Dedicated Hosts are physical servers that are fully dedicated to your use. With Dedicated Hosts, you can use your existing per-socket, per-core, or per-VM software licenses and comply with corporate policies that require physical CPU assignment.
 
@@ -387,11 +394,11 @@ With this release, the Peripheral Component Interconnect (PCI) address for each 
 
 For more information, see [About the BareMetalHost resource](../installing/installing_bare_metal/bare-metal-postinstallation-configuration.md#bmo-about-the-baremetalhost-resource_bare-metal-postinstallation-configuration) and [The BareMetalHost status](../installing/installing_bare_metal/bare-metal-postinstallation-configuration.md#the-baremetalhost-status).
 
-Red Hat Bare Metal as a Service for OpenShift is generally available
-With this update, Red Hat Bare Metal as a Service for OpenShift, formerly known as Bare Metal as a Service (BMaaS), is generally available. You can provision and manage bare-metal hosts by using the Metal<sup>3</sup> API and the Bare Metal Operator (BMO). These hosts, external to the OpenShift Container Platform cluster, can run workloads that might not be suitable for containerization or virtualization, such as legacy applications or applications that require direct hardware access. For more information, see [Using Red Hat Bare Metal as a Service for OpenShift](../installing/installing_bare_metal/bare-metal-using-bare-metal-as-a-service.md#bare-metal-using-bare-metal-as-a-service).
+Red Hat Bare-Metal-as-a-Service for OpenShift is generally available
+With this update, Red Hat Bare-Metal-as-a-Service for OpenShift, formerly known as Bare Metal as a Service (BMaaS), is generally available. You can provision and manage bare-metal hosts by using the Metal<sup>3</sup> API and the Bare Metal Operator (BMO). These hosts, external to the OpenShift Container Platform cluster, can run workloads that might not be suitable for containerization or virtualization, such as legacy applications or applications that require direct hardware access. For more information, see [Using Red Hat Bare-Metal-as-a-Service for OpenShift](../installing/installing_bare_metal/bare-metal-using-bare-metal-as-a-service.md#bare-metal-using-bare-metal-as-a-service).
 
-Expanding bare-metal clusters using OCI images and Red Hat Bare Metal as a Service for OpenShift (Technology Preview)
-With this update, you can expand your bare-metal cluster using Red Hat Bare Metal as a Service for OpenShift with images from an OCI registry as a Technology Preview feature. You can use images from public OCI registries or from the built-in cluster registry. For more information, see [Using Red Hat Bare Metal as a Service for OpenShift](../installing/installing_bare_metal/bare-metal-using-bare-metal-as-a-service.md).
+Expanding bare-metal clusters using OCI images and Red Hat Bare-Metal-as-a-Service for OpenShift (Technology Preview)
+With this update, you can expand your bare-metal cluster using Red Hat Bare-Metal-as-a-Service for OpenShift with images from an OCI registry as a Technology Preview feature. You can use images from public OCI registries or from the built-in cluster registry. For more information, see [Using Red Hat Bare-Metal-as-a-Service for OpenShift](../installing/installing_bare_metal/bare-metal-using-bare-metal-as-a-service.md).
 
 Adding an ARM node to an x86 bare metal cluster
 With this update, you can add ARM nodes to bare metal clusters with x86 control planes using PXE or virtual media. You can expand your cluster by creating a `BareMetalHost` object with the `aarch64` architecture, and then scaling the machine set to deploy the new machine.
@@ -441,6 +448,15 @@ Custom image configuration for the Support Log Gather
 With this update, you can collect diagnostic data by using custom images in the Support Log Gather. By pointing the `spec.imageStreamRef` field to an approved `ImageStream` tag, you can override the default image. The cluster administrators are responsible for creating and maintaining the list of allowed custom images by managing `ImageStream` resources in the Operator namespace. Each custom image requires its own `MustGather` custom resource and a service account with permissions to access the `ImageStream`. For more information, see [Configuring a Support Log Gather instance](../support/gathering-cluster-data.md#support-log-gather-config-cli_gathering-cluster-data).
 
 ## Storage
+
+Adding bare-metals nodes on VMware vSphere is generally available
+OpenShift Container Platform 4.21 added the ability to add bare-metal nodes to an OpenShift Container Platform cluster on vSphere as a Technology Preview feature. Beginning in OpenShift Container Platform 4.22.13, this feature is generally available.
+
+However, if you add bare-metal nodes, you must remove the vSphere Container Storage Interface (CSI) Driver, otherwise the cluster is marked as degraded.
+
+For information about how to add bare-metal nodes, see [Adding bare-metal nodes](../storage/container_storage_interface/persistent-storage-csi-vsphere.md#persistent-storage-csi-vsphere-adding-bm-nodes_persistent-storage-csi-vsphere).
+
+For information about how to remove the vSphere CSI Driver, see [Disabling and enabling storage on vSphere](../storage/container_storage_interface/persistent-storage-csi-vsphere.md#persistent-storage-csi-vsphere-disable-storage-overview_persistent-storage-csi-vsphere).
 
 New VolumeSnapshotClass csi-gce-pd-vsc-images is generally available
 By default, you cannot restore more than six volumes per snapshot per hour. So in Kubevirt environments, you normally cannot create more than six VMs per hour from a "golden image" (templates saved as snapshots).
@@ -1006,7 +1022,7 @@ You can review the list of issues resolved for OpenShift Container Platform 4.22
 
 # Technology Preview features status
 
-You can determine if a new feature in OpenShift Container Platform4.22 is currently in Technology Preview before deciding to install the feature. These experimental features are not intended for production use.
+You can determine if a new feature in OpenShift Container Platform 4.22 is currently in Technology Preview before deciding to install the feature. These experimental features are not intended for production use.
 
 Note the following scope of support on the Red Hat Customer Portal for these features:
 
@@ -1079,7 +1095,7 @@ Extensions Technology Preview tracker
 | Enabling a user-provisioned DNS on Amazon Web Services (AWS) | Not Available | Technology Preview | Technology Preview |
 | Installing a cluster using Google Cloud private and restricted API endpoints | Not Available | General Availability | General Availability |
 | Installing a cluster on VMware vSphere with multiple network interface controllers | General Availability | General Availability | General Availability |
-| Red Hat Bare Metal as a Service for OpenShift (formerly known as bare-metal as a service) | Technology Preview | Technology Preview | General Availability |
+| Red Hat Bare-Metal-as-a-Service for OpenShift (formerly known as bare-metal as a service) | Technology Preview | Technology Preview | General Availability |
 | Installing a cluster on Amazon Web Services (AWS) European Sovereign Cloud | Not Available | Not Available | Technology Preview |
 | Installing a cluster on Amazon Web Services (AWS) with dual-stack networking | Not Available | Not Available | Technology Preview |
 | Running firmware upgrades for hosts in deployed bare-metal clusters | Technology Preview | General Availability | General Availability |
@@ -1115,7 +1131,7 @@ Machine Config Operator Technology Preview tracker
 | Managing machines with the Cluster API for bare-metal | Technology Preview | Technology Preview | Technology Preview |
 | Cloud controller manager for IBM Power® Virtual Server | Technology Preview | Technology Preview | Technology Preview |
 | Adding multiple subnets to an existing VMware vSphere cluster by using compute machine sets | Technology Preview | Technology Preview | Technology Preview |
-| Bare-metal nodes on VMware vSphere clusters | Not Available | Technology Preview | Technology Preview |
+| Bare-metal nodes on VMware vSphere clusters | Not Available | Technology Preview | General Availability |
 | Amazon Web Services Dedicated Host support | Not Available | Not Available | Technology Preview |
 
 Machine management Technology Preview tracker
@@ -1145,7 +1161,7 @@ Multi-Architecture Technology Preview tracker
 | Dynamic configuration manager | Technology Preview | Technology Preview |  |
 | SR-IOV Network Operator support for Intel C741 Emmitsburg Chipset | Technology Preview | Technology Preview | General Availability |
 | Dual-port NIC for PTP ordinary clock | General Availability | General Availability |  |
-| DPU Operator | Technology Preview | Technology Preview |  |
+| DPU Operator | Technology Preview | Technology Preview | Technology Preview |
 | Fast IPAM for the Whereabouts IPAM CNI plugin | Technology Preview | Technology Preview |  |
 | Unnumbered BGP peering | General Availability | General Availability |  |
 | Load balancing across the aggregated bonded interface with xmitHashPolicy | Technology Preview | Technology Preview |  |
@@ -1191,14 +1207,14 @@ RHOSP Technology Preview tracker
 
 | Feature | 4.20 | 4.21 | 4.22 |
 |----|----|----|----|
-| factory-precaching-cli tool | Technology Preview | Technology Preview |  |
-| Hyperthreading-aware CPU manager policy | Technology Preview | Technology Preview |  |
-| Mount namespace encapsulation | Technology Preview | Technology Preview |  |
-| Node Observability Operator | Technology Preview | Technology Preview |  |
-| Increasing the etcd database size | Technology Preview | Technology Preview |  |
-| Managing etcd size by setting the `eventTTLMinutes` property | Not available | Technology Preview |  |
-| Pinned Image Sets | Technology Preview | Technology Preview |  |
-| Configuring NUMA-aware scheduler replicas and high availability | Technology Preview | Technology Preview |  |
+| factory-precaching-cli tool | Technology Preview | Technology Preview | Technology Preview |
+| Hyperthreading-aware CPU manager policy | Technology Preview | Technology Preview | Technology Preview |
+| Mount namespace encapsulation | Technology Preview | Technology Preview | Technology Preview |
+| Node Observability Operator | Technology Preview | Technology Preview | Technology Preview |
+| Increasing the etcd database size | Technology Preview | Technology Preview | Technology Preview |
+| Managing etcd size by setting the `eventTTLMinutes` property | Not available | Technology Preview | General Availability |
+| Pinned Image Sets | Technology Preview | Technology Preview | General Availability |
+| Configuring NUMA-aware scheduler replicas and high availability | General Availability | General Availability | General Availability |
 
 Scalability and performance Technology Preview tracker
 
@@ -1284,6 +1300,232 @@ This section will continue to be updated over time to provide notes on enhanceme
 > [!IMPORTANT]
 > For any OpenShift Container Platform release, always review the instructions on [updating your cluster](../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console) properly.
 
+## RHSA-2026:74429 - OpenShift Container Platform 4.22.17 bug fix and security update
+
+Issued: 06 October 2026
+
+OpenShift Container Platform release 4.22.17 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:74429](https://access.redhat.com/errata/RHSA-2026:74429) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:74427](https://access.redhat.com/errata/RHSA-2026:74427) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.22.17 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, when you removed failure domains from the infrastructure specification, the VMware vSphere Problem Detector (VPD) logged errors about failure domain labels missing from nodes. As a consequence, VPD logged warnings that were not relevant. With this release, VPD improves processing logic for failure domain changes in the infrastructure specification. As a result, these unnecessary warnings no longer appear. ([OCPBUGS-105280](https://issues.redhat.com/browse/OCPBUGS-105280))
+
+- Before this update, in dual-stack hosted clusters, mismatched IP SAN byte lengths such as 4-byte versus 16-byte IPv4-mapped addresses caused false validation failures. As a consequence, the Control Plane Operator was forced to continuously regenerate `kas-server-crt`, causing generation churn that could stall installations. With this release, IP SANs are normalized using net.IP.To1ptp Operator config6() before comparison. As a result, unnecessary certificate regeneration and continuous `kube-apiserver` rolling updates do not occur. ([OCPBUGS-112731](https://issues.redhat.com/browse/OCPBUGS-112731))
+
+- Before this update, for Microsoft Azure OpenShift Container Platform hosted clusters that used private Azure Key Vaults, unreachable private endpoints caused Kubernetes Key Management Service (KMS) validation to be reported as failed. With this update, the `ValidAzureKMSConfig` parameter is reported as `Unknown`. As a result, false failures are not reported due to network reachability limits. ([OCPBUGS-123727](https://issues.redhat.com/browse/OCPBUGS-123727))
+
+- Before this update, when you removed a `MachineConfig` resource that required a revert to a `MachineOSBuild` in a terminal state, the digested image push configuration was not changed. As a consequence, the associated `MachineConfigPool` resource was stuck in an `Updating` state. With this release, terminal builds update correctly when the digested image push configuration changes, enabling image reuse for a new build. As a result, you can successfully delete `MachineConfig` resources in an image mode cluster. ([OCPBUGS-127018](https://issues.redhat.com/browse/OCPBUGS-127018))
+
+- Before this update, the rendezvous node IP address list was not refreshed after a static IP address was added through the agent TUI networking screen. As a consequence, the newly added IP address was not shown or available in the rendezvous node IP address selection screen. With this release, the host IP address list refreshes whenever the selection screen opens. As a result, newly configured IP addresses appear for selection. ([OCPBUGS-127041](https://issues.redhat.com/browse/OCPBUGS-127041))
+
+- Before this update, sometimes during startup the default Precision Time Protocol (PTP) Operator configuration failed to create because the webhook was not ready. As a consequence, the `linuxptp-daemon` service was not scheduled. With this release, the Operator waits for the webhook to become ready before creating the default PTP Operator configuration. As a result, the default PTP Operator configuration is populated reliably. ([OCPBUGS-128642](https://issues.redhat.com/browse/OCPBUGS-128642))
+
+### Updating
+
+To update an OpenShift Container Platform 4.22 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:71454 - OpenShift Container Platform 4.22.16 bug fix and security update
+
+Issued: 29 September 2026
+
+OpenShift Container Platform release 4.22.16 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:71454](https://access.redhat.com/errata/RHSA-2026:71454) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:71445](https://access.redhat.com/errata/RHSA-2026:71445) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.22.16 --pullspecs
+```
+
+### Enhancements
+
+- In OpenShift Container Platform release 4.22.16 and later, you can install OpenShift Container Platform in Google Cloud Dedicated (GCD) regions by using installer-provisioned infrastructure. GCD is a sovereign cloud platform that provides Google Cloud technology in a fully isolated environment with strict data and operational sovereignty guarantees. If you require strict data residency and operational control, you can deploy to sovereign cloud environments.
+
+### Fixed issues
+
+- Before this update, when you deployed a hosted cluster on OpenShift Virtualization with external infrastructure, the `virt-launcher` network policy was not created on the infrastructure cluster where the KubeVirt `virt-launcher` pods and virtual machines (VM)s run. As a consequence, the KubeVirt VMs had unrestricted network access to all pods and services on the infrastructure cluster, breaking tenant isolation. With this release, the `virt-launcher` network policy is created with CIDR-based egress restrictions. As a result, multitenant isolation is no longer compromised. ([OCPBUGS-100445](https://issues.redhat.com/browse/OCPBUGS-100445))
+
+- Before this update, when upgrading standalone clusters from 4.21.16 to 4.22.8, worker nodes with older Red Hat Enterprise Linux CoreOS (RHCOS) boot images failed during the operating system pivot with an `rpm-ostree rebase` error: `A signature was required, but no signature exists`. As a consequence, the worker MachineConfigPool became degraded, preventing completion of the upgrade, with some workers remaining on 4.21 RHCOS while the control plane was on 4.22.8. With this release, the Machine Config Operator includes a workaround for nodes running older boot images with skopeo versions earlier than 1.22.2, enabling successful rebase to 4.22 RHCOS images that require `Sigstore` signatures. As a result, all workers can complete the operating system pivot during upgrades from 4.21 to 4.22.z releases. ([OCPBUGS-122961](https://issues.redhat.com/browse/OCPBUGS-122961))
+
+### Updating
+
+To update an OpenShift Container Platform 4.22 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:68552 - OpenShift Container Platform 4.22.15 bug fix and security update
+
+Issued: 22 September 2026
+
+OpenShift Container Platform release 4.22.15 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:68552](https://access.redhat.com/errata/RHSA-2026:68552) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:68550](https://access.redhat.com/errata/RHSA-2026:68550) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.22.15 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, in Amazon Web Services (AWS), the installation program created a security group rule that applied to cluster nodes and allowed ports 6441 and 6442. However, these ports are not needed or used anywhere. With this update, this security group rule is removed. ([OCPBUGS-95072](https://issues.redhat.com/browse/OCPBUGS-95072))
+
+- Before this update, the `AWSMachine` controller was requeuing machine instances before confirming the presence of tags. As a consequence, duplicate Amazon Web Services (AWS) EC2 instances were created. With this release, the `AWSMachine` controller verifies tags before requeuing instances. As a result, duplicate EC2 instances are not created. ([OCPBUGS-112305](https://issues.redhat.com/browse/OCPBUGS-112305))
+
+- Before this update, the Machine Config Operator (MCO) boot image controller on VMware vSphere incorrectly concatenated failure domain and compute cluster inventory paths using the `path.Join` parameter. As a consequence, the controller created an invalid path when you used absolute paths, for example, `<datacenter>/network/<portgroup>`. The invalid path caused a `failed to find` network error. With this update, the network name is passed directly to the vSphere finder library, which natively supports all network identifier formats. As a result, the failure domain networks are correctly resolved and MCO degradation is prevented. ([OCPBUGS-121849](https://issues.redhat.com/browse/OCPBUGS-121849))
+
+### Updating
+
+To update an OpenShift Container Platform 4.22 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:66358 - OpenShift Container Platform 4.22.14 bug fix and security update
+
+Issued: 15 September 2026
+
+OpenShift Container Platform release 4.22.14 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:66358](https://access.redhat.com/errata/RHSA-2026:66358) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:66356](https://access.redhat.com/errata/RHSA-2026:66356) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.22.14 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, during `disk-to-mirror` operations, the `oc-mirror` tool reconstructed Helm chart tarball paths by using a fixed format `{name}-{version}.tgz`, for example, `csi-driver-nfs-4.9.0.tgz`, but the Helm downloader could include a "v" prefix in the version, for example, `csi-driver-nfs-v4.9.0.tgz`. As a consequence, `disk-to-mirror` operations failed with the `file not found` errors even though the `mirror-to-disk` download completed successfully. With this update, the `oc-mirror` tool correctly handles both version format variations. As a result, mirror operations complete successfully. [OCPBUGS-90149](https://issues.redhat.com/browse/OCPBUGS-90149)
+
+- Before this update, on Google Cloud Platform (GCP) clusters, the GCP cloud controller manager could not properly adhere to the `node.kubernetes.io/exclude-from-external-load-balancers` label when selecting load balancer backend nodes. As a consequence, master nodes with the exclusion label were still added as backends to external load balancers. With this release, the cloud controller manager correctly checks for the exclusion label. As a result, master nodes labeled with `node.kubernetes.io/exclude-from-external-load-balancers` are no longer included as load balancer backends. [OCPBUGS-99228](https://issues.redhat.com/browse/OCPBUGS-99228)
+
+- Before this update, the `baremetal` cluster Operator did not set its `Progressing` status condition to `True` during cluster upgrades. As a consequence, the Cluster Version Operator (CVO) waited for the Operator without receiving proper progress signals, and upgrade monitoring tests failed. With this release, the baremetal Operator correctly reports `Progressing=True` during version changes. As a result, cluster upgrades proceed with accurate Operator status reporting. [OCPBUGS-99390](https://issues.redhat.com/browse/OCPBUGS-99390)
+
+- Before this update, containers in the `openshift-monitoring` namespace ran with writable root filesystems because `readOnlyRootFilesystem: true` was not enabled in their security contexts. As a consequence, customer compliance scans flagged these containers as security policy violations. With this release, monitoring components enable read-only root filesystems with dedicated `emptyDir` volumes for paths requiring write access. As a result, monitoring containers meet compliance requirements for read-only root filesystems. [OCPBUGS-105469](https://issues.redhat.com/browse/OCPBUGS-105469)
+
+- Before this update, on Google Cloud Platform (GCP) clusters, values specified in `defaultMachinePlatform` were not applied to individual machine pools during cluster installation. As a consequence, settings such as `osDisk.diskType` were ignored, and control plane nodes used default values instead of the specified configuration. With this release, the installation program correctly applies `defaultMachinePlatform` settings to all machine pools. As a result, GCP machine configurations honor the specified platform defaults. [OCPBUGS-114639](https://issues.redhat.com/browse/OCPBUGS-114639)
+
+- Before this update, for pods with multiple containers that each requested SR-IOV virtual functions (VFs) from the same shared resource pool via separate network attachments, the Multus container network interface sorted device IDs alphabetically when assigning VFs to network interfaces. As a consequence, the PCI address that the SR-IOV device plugin granted to a container did not always match the PCI address that Multus container network interface wired into that container network namespace, causing pod startup failures with `No such device` errors. With this release, Multus container network interface correctly aligns VF assignments between the device plugin and network attachment operations. As a result, pods with multiple containers sharing SR-IOV resources start successfully without PCI address mismatches. [OCPBUGS-114732](https://issues.redhat.com/browse/OCPBUGS-114732)
+
+- Before this update, in hosted control planes deployments where the management cluster required a proxy for external access, the CSI driver controller deployments did not receive `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables. As a consequence, CSI driver controller containers could not reach cloud provider APIs through the proxy, causing all volume provisioning operations to fail. With this release, the CSI Operator injects proxy environment variables into hosted control planes CSI driver controller deployments. As a result, volume provisioning operations complete successfully in proxy-enabled hosted control planes environments. [OCPBUGS-119697](https://issues.redhat.com/browse/OCPBUGS-119697)
+
+- Before this update, upstream GitHub workflow files and issue templates that are not used in OpenShift Container Platform CI were present in the `cluster-api-provider-aws` release branches. As a consequence, the `golangci-lint` CI job failed on every pull request. With this release, the unused `.github` directory files are removed from the release branches. As a result, CI lint jobs complete successfully. [OCPBUGS-119954](https://issues.redhat.com/browse/OCPBUGS-119954)
+
+### Updating
+
+To update an OpenShift Container Platform 4.22 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:63096 - OpenShift Container Platform 4.22.13 bug fix and security update
+
+Issued: 08 September 2026
+
+OpenShift Container Platform release 4.22.13 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:63096](https://access.redhat.com/errata/RHSA-2026:63096) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:63091](https://access.redhat.com/errata/RHSA-2026:63091) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.22.13 --pullspecs
+```
+
+### Enhancements
+
+- In OpenShift Container Platform release 4.22.13 and later, you can add bare-metal compute machines to an existing OpenShift Container Platform cluster on vSphere. With this capability, you can migrate workloads to physical hardware without reinstalling the cluster. Previously, that bare-metal compute machines feature was listed as a Technology Preview feature. The feature is now generally available for OpenShift Container Platform release 4.22.13 and later.
+
+### Fixed issues
+
+- Before this update, the `IngressNodeFirewall` custom resource (CR) could not apply rules on sub-interfaces with dotted names because the Berkeley Packet Filter (BPF) file system did not allow dots (".") in the filenames. With this release, the dots in the interface names are replaced by a placeholder before writing to the BPF file system. As a result, the `IngressNodeFirewall` CR can apply rules on the sub-interfaces. ([OCPBUGS-86993](https://redhat.atlassian.net/browse/OCPBUGS-86993))
+
+- Before this update, the Bare Metal Operator (BMO) `getChecksum()` function accepted non-empty checksums for Oracle Cloud Infrastructure (OCI) images. As a consequence, OCI image provisioning failed. With this release, a check in the `getChecksum()` function rejects non-empty user-provided checksums for OCI images. As a result, OCI image provisioning does not fail. ([OCPBUGS-90570](https://redhat.atlassian.net/browse/OCPBUGS-90570))
+
+- Before this update, detaching and re-attaching a bare-metal host (BMH) using the Redfish Virtual Media driver did not set the `bootMACAddress` parameter. As a consequence, host provisioning failed because port records for the network interface controllers (NICs) were not re-created for the host. With this release, port records are recreated on-demand using the information from the inventory, that is, the HardwareData schema resources. As a result, re-attached hosts are successfully provisioned. ([OCPBUGS-99420](https://redhat.atlassian.net/browse/OCPBUGS-99420))
+
+- Before this update, when the bare-metal host (BMH) `spec.online` parameter was set to `False`, the Bare Metal Operator (BMO) forced Ironic to issue a power off command to the node at the end of inspection, after the ramdisk had been ejected. As a consequence, the node OS lost access to the boot media during shutdown, and filesystem corruption errors were visible on the BMH console. With this release, the node is powered off after inspection, while cleaning up the ramdisk, before ejecting Redfish virtual media. As a result, the host does not lose access to the boot media. ([OCPBUGS-112341](https://redhat.atlassian.net/browse/OCPBUGS-112341))
+
+- Before this update, the `GetMarketplaceImage` function for the installation program experienced timeout issues because the function used a deprecated SDK that lacked a retry mechanism. As a consequence, the marketplace image fetch failed, which terminated the installation. With this release, the timeout for retrieving marketplace images is increased from 30 seconds to five minutes because the `GetMarketplaceImage` function now uses the new Azure SDK to retry requests. As a result, timeout issues do not cause installation failure.([OCPBUGS-112471](https://redhat.atlassian.net/browse/OCPBUGS-112471))
+
+- Before this update, the Node Tuning Operator reconciliation used the rate-limited work queue for all event enqueues. As a consequence, node-tuning configuration was delayed for cluster notes greater than 100. With this release, the Node Tuning Operator reconciliation loop uses the rate-limited work queue only for failures instead of all event enqueues. As a result, node-tuning configuration for cluster nodes greater than 100 is not delayed. ([OCPBUG-112554](https://redhat.atlassian.net/browse/OCPBUGS-112554))
+
+- Before this update, the short description for the `info` command in the Performance Profile Creator (PPC) tool was not updated after the cluster inspection was moved. As a consequence, inconsistencies between the parent help and the info help occurred when you ran the PPC tool. With this release, the short description for the `info` command in the PPC tool is updated to match the current CLI. As a result, the help inconsistencies do not occur when you run the tool. ([OCPBUGS-113579](https://redhat.atlassian.net/browse/OCPBUGS-113579))
+
+- Before this update, the Machine Config Controller `EventRecorder` was initialized with the MCO-specific client set scheme, which did not include core Kubernetes types such as `Node`. As a consequence, drain failure events were silently dropped when a node drain failed, for example, due to a blocking `PodDisruptionBudget` parameter. When a node drain failed, the expected warning events, such as the `DrainThresholdExceeded` event, were not emitted. This issue made drain failures more difficult to diagnose and observe. With this release, the `EventRecorder` scheme is updated to include the core Kubernetes types, which ensures that drain failure events are correctly recorded against `Node` objects. As a result, drain failure events are correctly emitted, which improves observability for node drain issues. ([OCPBUG-114392](https://redhat.atlassian.net/browse/OCPBUGS-114392))
+
+### Updating
+
+To update an OpenShift Container Platform 4.22 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:60441 - OpenShift Container Platform 4.22.12 bug fix and security update
+
+Issued: 01 September 2026
+
+OpenShift Container Platform release 4.22.12 is now available. The list of bug fixes and enhancements that are included in the update is documented in the [RHSA-2026:60441](https://access.redhat.com/errata/RHSA-2026:60441) advisory. The RPM packages that are included in the update are provided by the [RHBA-2026:60439](https://access.redhat.com/errata/RHBA-2026:60439) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.22.12 --pullspecs
+```
+
+### Enhancements
+
+- You can now pin the HAProxy version to `2.8` by using the new `haproxyVersion` field from the `IngressResource` API, before upgrading OpenShift Container Platform cluster to 4.23 or 5.0. If you do not pin the HAProxy version, it is upgraded to version `3.2`. ([OCPBUGS-105168](https://issues.redhat.com/browse/OCPBUGS-105168))
+
+### Fixed issues
+
+- Before this update, the machine controller in the Hosted Cluster Config Operator (HCCO) included non-routable ovn-kubernetes routes in the node network configuration. As a consequence, it caused networking conflicts and routing issues. With this release, non-routable routes are filtered out during configuration. As a result, networking conflicts are resolved. ([OCPBUGS-98328](https://issues.redhat.com/browse/OCPBUGS-98328))
+
+- Before this update, by default, the Vertical Pod Autoscaler (VPA) Operator required a control plane node for running workloads. As a consequence, it caused issues in single-node deployments. With this release, the Operator is updated to support deployment without control plane node requirements. As a result, the VPA Operator now functions correctly in single-node configurations. ([OCPBUGS-98604](https://issues.redhat.com/browse/OCPBUGS-98604))
+
+- Before this update, socket connections triggered multiple state synchronization, leading to excessive socket connection reconciliation. As a consequence, it caused unnecessary API calls and reduced performance. With this release, the reconciliation logic is updated to synchronize only on meaningful state changes. As a result, API calls are reduced and performance is improved. ([OCPBUGS-105877](https://issues.redhat.com/browse/OCPBUGS-105877))
+
+- Before this update, the console required cloud credentials during Operator initialization. As a consequence, installation failed when credentials were not immediately available. With this release, the initialization process is updated to defer credential requirements. As a result, installation succeeds without requiring immediate cloud credentials. ([OCPBUGS-111417](https://issues.redhat.com/browse/OCPBUGS-111417))
+
+### Updating
+
+To update an OpenShift Container Platform 4.22 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:57365 - OpenShift Container Platform 4.22.11 bug fix and security update
+
+Issued: 25 August 2026
+
+OpenShift Container Platform release 4.22.11 is now available with updates to packages and images that fix several bugs. The list of bug fixes that are included in the update is documented in the [RHSA-2026:57365](https://access.redhat.com/errata/RHSA-2026:57365) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:57361](https://access.redhat.com/errata/RHSA-2026:57361) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.22.11 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, the OpenShift Container Platform web console used the identity UID as the settings key, and that UID differed across identity providers. As a consequence, the OpenShift Container Platform web console created a duplicate `user-settings` `ConfigMap` object each time you logged in if you had multiple identity providers such as LDAP and OpenID. With this release, the console now uses a stable hash of your user name as the settings key instead of the identity UID and automatically migrates existing settings on upgrade. As a result, the OpenShift Container Platform web console reuses a single `user-settings` `ConfigMap` object per user across all identity providers and login sessions. ([OCPBUGS-87832](https://issues.redhat.com/browse/OCPBUGS-87832))
+
+- Before this update, when you navigated to a **Terminal** tab of a node in the OpenShift Container Platform web console, the component checked for the debug pod even if the pod was still being created. As a consequence, a `Debug pod not found or was deleted.` error appeared before the terminal loaded successfully. With this release, a loading spinner is shown when the debug pod is being created, and the cleanup logic guards against an undefined namespace to prevent errors on early unmount. As a result, the **Terminal** tab of a node loads without displaying a false error message. ([OCPBUGS-100402](https://issues.redhat.com/browse/OCPBUGS-100402))
+
+- Before this update, the Cluster Monitoring Operator did not specify resource limits for some of its managed components. As a consequence, in clusters with limited resources, these components could be evicted due to memory pressure. With this release, the Cluster Monitoring Operator now sets appropriate resource limits for all managed components. As a result, components are less likely to be evicted in resource-constrained environments. ([OCPBUGS-105190](https://issues.redhat.com/browse/OCPBUGS-105190))
+
+- Before this update, the `azure-disk` CSI driver controller attempted to read the `kube-system/azure-cloud-provider` secret. As a consequence, the controller could crash when reading this secret. With this release, the `azure-disk` CSI driver controller no longer attempts to read the `kube-system/azure-cloud-provider` secret and instead falls back to `AZURE_CREDENTIAL_FILE` unconditionally. As a result, the `azure-disk` CSI driver controller no longer crashes. ([OCPBUGS-106152](https://issues.redhat.com/browse/OCPBUGS-106152))
+
+- Before this update, the `kas-connection-checker` deployment created in the `kube-system` namespace of a hosted cluster did not set a security context. Because the `kube-system` is an exempt from both SCC and Pod Security admission, no UID was assigned. As a consequence, the `kas-connection-checker` pods ran as root (UID 0) in the hosted cluster even though the workload does not need elevated privileges. With this release, an explicit non-root security context is set for the `kas-connection-checker` pods. As a result, the pods no longer run as root. ([OCPBUGS-111083](https://issues.redhat.com/browse/OCPBUGS-111083))
+
+- Before this update, the Go OpenSSL FIPS provider could potentially overwhelm the `libcrypto` library with concurrent requests. As a consequence, processes could hit the `maxThreads` limit of 10,000 and crash. With this release, the Go OpenSSL FIPS provider is updated to limit concurrent requests to the `libcrypto` library to four times the number of CPUs, buffering requests as lightweight Go routines. As a result, processes avoid the `maxThreads` limit and do not crash. ([OCPBUGS-112084](https://issues.redhat.com/browse/OCPBUGS-112084))
+
+### Updating
+
+To update an OpenShift Container Platform 4.22 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
 ## RHSA-2026:54770 - OpenShift Container Platform 4.22.10 bug fix and security update
 
 Issued: 18 August 2026
@@ -1316,7 +1558,7 @@ $ oc adm release info 4.22.10 --pullspecs
 
 - Before this update, on a Telecom Boundary Clock (T-BC) PTP configuration, the `ts2phc` system daemon could start before the upstream PTP source was stable enough and before `phc2sys` system clock sync was ready. As a consequence, the T-BC took a long time to converge, and `phc2sys` system clock sync could adjust the system clock too early based on an irrelevant `ts2phc` system daemon offset. With this release, the `ts2phc` system daemon start on T-BC is delayed until the upstream source is qualified and the `phc2sys` system clock is ready; Telecom Grandmaster (T-GM) behavior is unchanged. As a result, T-BC no longer starts the `ts2phc` system daemon against an unqualified upstream source. ([OCPBUGS-104578](https://redhat.atlassian.net/browse/OCPBUGS-104578))
 
-- Before this update, when you viewed **Quick Start** `{{execute}}` code snippets in the OpenShift Container Platform web console, leading whitespace in the code block could render as an empty line before the command text. As a consequence, execute snippets across **Quick Starts** could display an extra blank line above the command, making the content harder to read. With this release, leading whitespace rendering in **Quick Start** execute code snippets is corrected. As a result, execute code blocks display the command text without an empty line above it. ([OCPBUGS-105611](https://redhat.atlassian.net/browse/OCPBUGS-105611))
+- Before this update, when you viewed `execute code` snippets on the **Quick Start** page in the OpenShift Container Platform web console, leading whitespace in the code block could render as an empty line before the command text. As a consequence, `execute code` snippets across the **Quick Start** page could display an extra blank line above the command, making the content harder to read. With this release, leading whitespace rendering in the `execute code` snippet on the **Quick Start** page is corrected. As a result, execute code blocks display the command text without a spurious empty line above it. ([OCPBUGS-105611](https://redhat.atlassian.net/browse/OCPBUGS-105611))
 
 ### Updating
 
@@ -1361,6 +1603,15 @@ You can view the container images in this release by running the following comma
 ``` terminal
 $ oc adm release info 4.22.8 --pullspecs
 ```
+
+### Notable technical changes
+
+Metrics forwarding annotation is deprecated
+As of OpenShift Container Platform 4.22.8, the `hypershift.openshift.io/enable-metrics-forwarding` annotation is deprecated. The `spec.monitoring.metricsForwarding` field on the `HostedCluster` API replaces this annotation and provides per-cluster configuration that the annotation cannot support.
+
+The annotation continues to be honored when `spec.monitoring` is not set on the `HostedCluster` object. If you set `spec.monitoring.metricsForwarding` on a cluster, the spec field takes precedence and the annotation is ignored for that cluster, even if both are present.
+
+Migrate all hosted clusters that use the `hypershift.openshift.io/enable-metrics-forwarding` annotation to use `spec.monitoring.metricsForwarding` before the annotation is removed in a future release. For more information, see [Migrating from annotation-based to API-based metrics forwarding](../hosted_control_planes/hcp-observability.md#hcp-cp-metrics-forwarding-migrate_hcp-observability).
 
 ### Fixed issues
 

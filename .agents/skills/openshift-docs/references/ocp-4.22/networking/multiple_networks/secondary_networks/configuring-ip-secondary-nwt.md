@@ -2,6 +2,11 @@
 
 You can configure IP address assignments for secondary networks so that pods can connect to the secondary networks.
 
+> [!IMPORTANT]
+> When using the Whereabouts IPAM plugin with an IPv6 address, do not configure wide IPv6 CIDR ranges where the intended allocation addresses require an offset larger than 64 bits from the CIDR network base. In particular, avoid IPv6 ranges with prefix length less than or equal to `/64`. Due to the current uint64-based offset calculation in Whereabouts, such ranges can result in incorrect allocation persistence or reconstruction.
+>
+> Use a narrower IPv6 CIDR that directly covers the intended allocation range. For example, instead of using `193:21:4::/24` with a range start of `193:21:4::2` and a range end of `193:21:4::180`, use `193:21:4::/119`.
+
 # Configuration of IP address assignment for a network attachment
 
 For secondary networks, you can assign IP addresses by using an IP Address Management (IPAM) CNI plugin, which supports various assignment methods, including Dynamic Host Configuration Protocol (DHCP) and static assignment.
@@ -233,9 +238,9 @@ where:
 `network_name`
 Optional parameter. If set, must match the `network_name` of `NetworkAttachmentDefinition 1`.
 
-## Creating a whereabouts-reconciler daemon set
+## Create a whereabouts-reconciler daemon set
 
-The Whereabouts reconciler is responsible for managing dynamic IP address assignments for the pods within a cluster by using the Whereabouts IP Address Management (IPAM) solution. The Whereabouts reconciler ensures that each pod gets a unique IP address from the specified IP address range. The Whereabouts reconciler also handles IP address releases when pods are deleted or scaled down.
+The Whereabouts reconciler manages dynamic IP address assignments for pods by using the Whereabouts IP Address Management (IPAM) solution, ensuring unique addresses and handling releases when pods are deleted or scaled down.
 
 > [!NOTE]
 > You can also use a `NetworkAttachmentDefinition` custom resource definition (CRD) for dynamic IP address assignment.
@@ -299,7 +304,7 @@ Procedure
 
 </div>
 
-## Configuring the Whereabouts IP reconciler schedule
+## Configure the Whereabouts IP reconciler schedule
 
 The Whereabouts IPAM CNI plugin runs the IP address reconciler daily. This process cleans up any stranded IP address allocations that might result in exhausting IP addresses and therefore prevent new pods from getting a stranded IP address allocated to them.
 
@@ -595,7 +600,7 @@ Verification
 
 </div>
 
-## Creating a configuration for assignment of dual-stack IP addresses dynamically
+## Create a configuration for assignment of dual-stack IP addresses dynamically
 
 You can dynamically assign dual-stack IP addresses to a secondary network so that pods can communicate over both IPv4 and IPv6 addresses.
 

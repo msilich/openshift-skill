@@ -2,7 +2,7 @@
 
 To create DNS records on Infoblox, use the External DNS Operator. The Operator manages external name resolution for your cluster services.
 
-# Creating DNS records on a public DNS zone on Infoblox
+# Create DNS records on a public DNS zone on Infoblox
 
 To create DNS records on Infoblox, use the External DNS Operator. The Operator manages external name resolution for your cluster services.
 

@@ -38,7 +38,7 @@ Additional resources
 
 </div>
 
-# Installing from the software catalog by using the web console
+# Install from the software catalog by using the web console
 
 To install and subscribe to an Operator from the software catalog, you can use the OpenShift Container Platform web console. The console guides you through selecting an install mode, namespace, and approval strategy.
 
@@ -151,7 +151,7 @@ Additional resources
 
 </div>
 
-# Installing from the software catalog by using the CLI
+# Install from the software catalog by using the CLI
 
 To install an Operator from the software catalog without using the web console, you can create or update a `Subscription` object by using the `oc` command in OpenShift Container Platform.
 
@@ -710,7 +710,7 @@ Additional resources
 
 </div>
 
-# Installing global Operators in custom namespaces
+# Install global Operators in custom namespaces
 
 To avoid installing global Operators in the default `openshift-operators` namespace, you can create a custom global namespace in OpenShift Container Platform and install Operators there instead.
 
@@ -841,7 +841,7 @@ Additional resources
 
 </div>
 
-# Controlling where an Operator is installed
+# Control where an Operator is installed
 
 You can use affinities to schedule an Operator pod on a specific node or set of nodes.
 
