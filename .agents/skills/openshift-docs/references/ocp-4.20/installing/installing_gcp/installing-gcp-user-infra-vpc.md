@@ -834,7 +834,7 @@ Procedure
 
 </div>
 
-## Enabling Confidential VMs
+## Enable Confidential VMs
 
 You can use Confidential VMs when installing your OpenShift Container Platform cluster. Confidential VMs encrypt data during processing.
 
@@ -1387,8 +1387,8 @@ This section provides details about the ports that are required.
 | `500` | IPsec IKE packets |  |
 | `4500` | IPsec NAT-T packets |  |
 | `123` | Network Time Protocol (NTP) on UDP port `123`. If an external NTP time server is configured, you must open UDP port `123`. |  |
-| TCP/UDP | `30000`-`32767` |  |
-| Kubernetes node port | ESP | N/A |
+| TCP/UDP | `30000`-`32767` | Kubernetes node port |
+| ESP | N/A | IPsec Encapsulating Security Payload (ESP) |
 
 Ports used for all-machine to all-machine communications
 
@@ -1650,7 +1650,9 @@ link:https://raw.githubusercontent.com/openshift/installer/release-4.20/upi/gcp/
 
 # Creating firewall rules in Google Cloud
 
-You must create firewall rules in Google Cloud for your OpenShift Container Platform cluster to use. One way to create these components is to modify the provided Deployment Manager template.
+You must create firewall rules and IAM roles in Google Cloud for your OpenShift Container Platform cluster to use. One way to create these components is to modify the provided Infrastructure Manager template.
+
+If you are installing a cluster into a shared VPC and the host project already has the necessary firewall rules and IAM roles, you can skip creating these resources.
 
 > [!NOTE]
 > If you do not use the provided Deployment Manager template to create your Google Cloud infrastructure, you must review the provided information and manually create the infrastructure. If your cluster does not initialize correctly, you might have to contact Red Hat support with your installation logs.
@@ -2363,7 +2365,7 @@ You can use the following `06_worker.py` Deployment Manager template to deploy t
 link:https://raw.githubusercontent.com/openshift/installer/release-4.20/upi/gcp/06_worker.py[role=include]
 ```
 
-# Installing the OpenShift CLI on Linux
+# Install the OpenShift CLI on Linux
 
 To manage your cluster and deploy applications from the command line on Linux, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -2420,7 +2422,7 @@ Verification
 
 </div>
 
-# Installing the OpenShift CLI on Windows
+# Install the OpenShift CLI on Windows
 
 To manage your cluster and deploy applications from the command line on Windows, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -2471,7 +2473,7 @@ Verification
 
 </div>
 
-# Installing the OpenShift CLI on macOS
+# Install the OpenShift CLI on macOS
 
 To manage your cluster and deploy applications from the command line on macOS, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -2602,7 +2604,7 @@ Next steps
 
 </div>
 
-# Approving the certificate signing requests for your machines
+# Approve the certificate signing requests for your machines
 
 To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 

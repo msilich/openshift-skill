@@ -78,7 +78,7 @@ Additional resources
 
 </div>
 
-# Validating the hardware for etcd
+# Validate the hardware for etcd
 
 Validate control plane disk performance with `fio` before or after you create the OpenShift Container Platform cluster so that you can confirm that storage meets etcd latency requirements.
 

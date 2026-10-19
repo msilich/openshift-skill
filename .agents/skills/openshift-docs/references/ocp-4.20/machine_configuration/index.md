@@ -214,7 +214,9 @@ There are ways to mitigate the disruption caused by drain and reboot cycles by u
 
 # Understanding configuration drift detection
 
-The Machine Config Operator (MCO) uses the Machine Config Daemon (MCD) to check nodes for configuration drift on a regular basis. If detected, the MCO sets the node and the machine config pool (MCP) to `Degraded` and reports the error. A degraded node is online and operational, but, it cannot be updated.
+The Machine Config Operator (MCO) uses the Machine Config Daemon (MCD) to check nodes for configuration drift on a regular basis.
+
+If detected, the MCO sets the node and the machine config pool (MCP) to `Degraded` and reports the error. A degraded node is online and operational, but, it cannot be updated.
 
 There might be situations when the on-disk state of a node differs from what is configured in the machine config. This is known as *configuration drift*. For example, a cluster admin might manually modify a file, a systemd unit file, or a file permission that was configured through a machine config. This causes configuration drift. Configuration drift can cause problems between nodes in a Machine Config Pool or when the machine configs are updated.
 
@@ -334,7 +336,7 @@ You can correct configuration drift and return the node to the `Ready` state by 
   > [!NOTE]
   > Generating a force file on a node causes that node to reboot.
 
-# Checking machine config pool status
+# Check machine config pool status
 
 You can see the status of the Machine Config Operator (MCO), its sub-components, and the resources it manages, by using the `oc` commands.
 
@@ -556,7 +558,9 @@ Procedure
 
 # About node status during updates
 
-If you make changes to a machine config pool (MCP) that results in a new machine config, for example by using a `MachineConfig` or `KubeletConfig` object, you can get detailed information about the progress of the node updates by using the machine config nodes custom resource. This information can be helpful if issues arise during the update and you need to troubleshoot a node.
+If you make changes to a machine config pool (MCP) that results in a new machine config, for example by using a `MachineConfig` or `KubeletConfig` object, you can get detailed information about the progress of the node updates by using the machine config nodes custom resource.
+
+This information can be helpful if issues arise during the update and you need to troubleshoot a node.
 
 The `MachineConfigNode` custom resource allows you to monitor the progress of individual node updates as they move through the update phases. This information can be helpful with troubleshooting if one of the nodes has an issue during the update. The custom resource reports where in the update process the node is at the moment, the phases that have completed, and the phases that are remaining.
 
@@ -896,9 +900,11 @@ Specifies the new machine configuration. This field updates after the MCO valida
 `status.configVersion.current`
 Specifies the current machine config on the node.
 
-## Checking node status during updates
+## Check node status during updates
 
-During the update of a machine config pool (MCP), you can monitor the progress of all of the nodes in your cluster by using the `oc get machineconfignodes` and `oc describe machineconfignodes` commands. These commands provide information that can be helpful if issues arise during the update and you need to troubleshoot a node.
+During the update of a machine config pool (MCP), you can monitor the progress of all of the nodes in your cluster by using the `oc get machineconfignodes` and `oc describe machineconfignodes` commands.
+
+These commands provide information that can be helpful if issues arise during the update and you need to troubleshoot a node.
 
 For more information on the meaning of these fields, see "About checking machine config node status."
 
@@ -1067,7 +1073,7 @@ Procedure
 
 </div>
 
-# Viewing and interacting with certificates
+# View and interact with certificates
 
 You can secure connections between Red Hat Enterprise Linux CoreOS (RHCOS) nodes and the Machine Config Server by viewing, interacting with, and extracting detailed information from Machine Config Operator and image registry certificates.
 

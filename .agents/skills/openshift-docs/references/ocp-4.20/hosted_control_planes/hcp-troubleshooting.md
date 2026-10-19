@@ -1,8 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-If you encounter issues with hosted control planes, see the following information to guide you through troubleshooting.
+If you encounter an issue with hosted control planes, you can gather information about the hosted cluster, OpenShift Container Platform, or other components so that you can determine the root cause and take steps to resolve it.
 
-# Gathering information to troubleshoot hosted control planes
+# Gather information to troubleshoot hosted control planes
 
 When you need to troubleshoot an issue with hosted clusters, you can gather information by running the `must-gather` command. The command generates output for the management cluster and the hosted cluster.
 
@@ -83,10 +83,6 @@ Additional resources
 - [Installing the hosted control planes command-line interface](hcp-prepare/hcp-cli.md#hcp-cli)
 
 </div>
-
-# Gathering OpenShift Container Platform data for a hosted cluster
-
-You can gather OpenShift Container Platform debugging information for a hosted cluster by using the multicluster engine Operator web console or by using the CLI.
 
 ## Gathering data for a hosted cluster by using the CLI
 
@@ -228,7 +224,7 @@ Additional resources
 
 </div>
 
-# Troubleshooting hosted clusters on OpenShift Virtualization
+# Troubleshoot hosted clusters on OpenShift Virtualization
 
 When you troubleshoot a hosted cluster on OpenShift Virtualization, start with the top-level `HostedCluster` and `NodePool` resources and then work down the stack until you find the root cause. The following steps can help you discover the root cause of common issues.
 
@@ -557,10 +553,6 @@ Additional resources
 - [Removing a cluster from management](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.15/html/clusters/cluster_mce_overview#remove-managed-cluster)
 
 </div>
-
-# Troubleshooting hosted clusters on bare metal
-
-The following information applies to troubleshooting hosted control planes on bare metal.
 
 ## Determining why nodes are not added to a hosted cluster on bare metal
 

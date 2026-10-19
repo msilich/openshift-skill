@@ -10,7 +10,7 @@ However, in the event of theft, a precautionary rotation of the Tang server’s 
 
 To recover from this situation, either reinstall or replace the node.
 
-# Planning for a loss of client network connectivity
+# Plan for a loss of client network connectivity
 
 The loss of network connectivity to an individual node will cause it to become unable to boot in an unattended fashion.
 
@@ -40,7 +40,9 @@ Procedure
 
 # Unexpected loss of network connectivity
 
-If the network disruption is unexpected and a node reboots, consider the following scenarios:
+If the network disruption is unexpected and a node reboots, there are scenarios to consider.
+
+The scenarios are:
 
 - If any nodes are still online, ensure that they do not reboot until network connectivity is restored. This is not applicable for single-node clusters.
 
@@ -48,7 +50,7 @@ If the network disruption is unexpected and a node reboots, consider the followi
 
 - The lack of network access at the node can reasonably be expected to impact that node’s ability to function as well as its ability to boot. Even if the node were to boot via manual intervention, the lack of network access would make it effectively useless.
 
-# Recovering network connectivity manually
+# Recover network connectivity manually
 
 A somewhat complex and manually intensive process is also available to the onsite technician for network recovery.
 
@@ -92,7 +94,9 @@ If you are unable to recover network connectivity manually, consider the followi
 
 # Loss of a network segment
 
-The loss of a network segment, making a Tang server temporarily unavailable, has the following consequences:
+The loss of a network segment makes a Tang server temporarily unavailable.
+
+This has the following consequences:
 
 - OpenShift Container Platform nodes continue to boot as normal, provided other servers are available.
 
@@ -110,7 +114,7 @@ The temporary failure of all Tang servers associated with the same URL, that is,
 
 You can mitigate the physical loss of a Tang server by either reinstalling the server or restoring the server from backups. Ensure that the backup and restore processes of the key material is adequately protected from unauthorized access.
 
-# Rekeying compromised key material
+# Rekey compromised key material
 
 If key material is potentially exposed to unauthorized third parties, such as through the physical theft of a Tang server or associated data, immediately rotate the keys.
 
@@ -130,7 +134,7 @@ Procedure
 
 4.  Scrutinize any incidents that result in unintended exposure of the master encryption key. If possible, take compromised nodes offline and re-encrypt their disks.
 
-</div>
+    > [!TIP]
+    > Reformatting and reinstalling on the same physical hardware, although slow, is easy to automate and test.
 
-> [!TIP]
-> Reformatting and reinstalling on the same physical hardware, although slow, is easy to automate and test.
+</div>

@@ -4,7 +4,7 @@ Back up persistent volumes with Container Storage Interface (CSI) snapshots by e
 
 For more information, see *CSI volume snapshots* and *Creating a Backup CR*.
 
-# Backing up persistent volumes with CSI snapshots
+# Back up persistent volumes with CSI snapshots
 
 Configure the `VolumeSnapshotClass` custom resource (CR) to back up persistent volumes with Container Storage Interface (CSI) snapshots. This helps you to prepare your cloud storage for CSI-based backup operations.
 

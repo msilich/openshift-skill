@@ -1,32 +1,48 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-RHACS works with [Kubernetes admission controllers](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/) and [OpenShift Container Platform admission plugins](https://docs.openshift.com/container-platform/4.21/architecture/admission-plug-ins.html) to give you the ability to enforce security policies before Kubernetes or OpenShift Container Platform creates workloads, for example, deployments, daemon sets or jobs. The RHACS admission controller prevents users from creating or updating workloads that violate policies that you configure in RHACS.
+You can use RHACS with Kubernetes admission controllers and OpenShift Container Platform admission plugins to enforce security policies before Kubernetes or OpenShift Container Platform creates workloads, for example, deployments, daemon sets or jobs. The RHACS admission controller prevents users from creating or updating workloads that violate policies that you configure in RHACS.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Kubernetes admission controllers](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/)
+
+- [OpenShift Container Platform admission plugins](https://docs.openshift.com/container-platform/4.19/architecture/admission-plug-ins.html)
+
+</div>
 
 <a id="understand-admission-controller-enforcement_use-admission-controller-enforcement"></a>
 
 # Understanding admission controller enforcement
 
-RHACS uses an admission controller to provide enforcement for security policies that you have configured. The admission controller works with validating webhooks to evaluate requests to create, update, and perform workload operations against security policies. It can also evaluate running workloads and detect user-initiated container commands such as `pod exec` and `port forward`. If enforcement is configured for a policy and results in a violation, the request fails, preventing the operation from persisting in the API server and being successfully completed.
+RHACS uses an admission controller to enforce security policies that you configure. The admission controller works with validating webhooks to evaluate requests to create, update, and perform workload operations against security policies.
+
+It can also evaluate running workloads and detect user-initiated container commands such as `pod exec` and `port forward`. If you configure enforcement for a policy and a violation results, the request fails, preventing the operation from persisting in the API server and being successfully completed.
 
 The workflow for evaluating requests and enforcing policies follows these steps:
 
-1.  A user or system submits a request to create, update, or perform workload operations that is received by the Kubernetes or OpenShift Container Platform API server.
+1.  A user or system submits a request to create, update, or perform workload operations that the Kubernetes or OpenShift Container Platform API server receives.
 
 2.  The API server contacts the validating webhooks with an `AdmissionReview` request.
 
-3.  The validating webhooks call the admission controller via the service endpoint to verify that the resource being provisioned or user-issued commands in the containers comply with the specified security policies.
+3.  The validating webhooks call the admission controller via the service endpoint to verify that the resource you provision or user-issued commands in the containers comply with the specified security policies.
 
 4.  The review request is either passed or failed, or can time out in some cases:
 
     - If the review request violates an enforced security policy, the API server rejects the request.
 
-    - If review request is not prevented by a security policy or times out, the API server accepts and persists the resource. In the case of a timeout, this behavior is known as "fail open", which is the default behavior. However, you can configure the default behavior in case of timeout to "fail closed" for stricter enforcement.
+    - If a security policy does not prevent the review request or it times out, the API server accepts and persists the resource. In the case of a timeout, this behavior is known as "fail open", which is the default behavior. However, you can configure the default behavior in case of timeout to "fail closed" for stricter enforcement.
 
 If you use admission controller enforcement, consider the following guidance:
 
 - Using admission controller enforcement increases Kubernetes or OpenShift Container Platform API latency because it involves additional validation like policy evaluation on Kubernetes operations. Many standard Kubernetes libraries, such as fabric8, have short Kubernetes or OpenShift Container Platform API timeouts by default.
 
-  Consider API timeouts in any custom automation you might be using. If a request does time out due to latency issues, you can configure if the admission controller will fail open, allowing the request to reach the API server, or fail closed, blocking the requested operation. This setting is configured during installation and you can verify the setting by selecting **Platform Configuration** → **Clusters** and checking the **Admission controller failure policy**.
+  Consider API timeouts in any custom automation you might be using. If a request does time out due to latency issues, you can configure if the admission controller will fail open, allowing the request to reach the API server, or fail closed, blocking the requested operation. You configure this setting during installation and can verify the setting by selecting **Platform Configuration** → **Clusters** and checking the **Admission controller failure policy**.
 
 - If you are using RHACS in a continuous development (CD) tool, set the admission controller failure policy to fail closed, so that your CD tool handles the enforcement.
 
@@ -40,7 +56,7 @@ If you use admission controller enforcement, consider the following guidance:
 
   - User-initiated container commands such as `pod exec` and `port forward`
 
-- If you have deploy stage enforcement enabled for a policy and you enable the admission controller, RHACS attempts to block deployments that violate the policy. If a noncompliant deployment is not rejected by the admission controller, for example, in case of a timeout, RHACS still applies other deploy stage enforcement mechanisms, such as scaling to zero replicas.
+- If you have deploy stage enforcement enabled for a policy and you enable the admission controller, RHACS attempts to block deployments that violate the policy. If the admission controller does not reject a noncompliant deployment, for example, in case of a timeout, RHACS still applies other deploy stage enforcement mechanisms, such as scaling to zero replicas.
 
 <a id="enable-admission-controller-enforcement_use-admission-controller-enforcement"></a>
 
@@ -48,24 +64,34 @@ If you use admission controller enforcement, consider the following guidance:
 
 You can enable admission controller enforcement when you install a cluster.
 
-1.  When installing a cluster by using the Operator, Helm, or `roxctl` CLI methods, follow the instructions in "Installing Secured Cluster services for RHACS on Red Hat OpenShift" and "Installing Secured Cluster services for RHACS on other platforms" to enable admission controller enforcement during installation.
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  When installing a cluster by using the Operator, Helm, or `roxctl` CLI methods, follow the instructions in "Installing Secured Cluster services for RHACS on Red Hat OpenShift" and "Installing Secured Cluster services for RHACS on other platforms" to enable admission controller enforcement during installation.
 
 2.  When installing a cluster by using the legacy installation method, follow these steps:
 
     1.  In the RHACS portal, select **Platform Configuration** → **Clusters**.
 
-    2.  Click **Secure a cluster** → **Legacy installation method**.
+    2.  Select **Secure a cluster** → **Legacy installation method**.
 
     3.  In the **Static configuration** section, in the **Admission controller enforcement behavior** field, select **Enforce policies**.
 
     4.  Select **Next**.
 
-    5.  Click **Download YAML File and Keys** to download the updated cluster bundle.
+    5.  Select **Download YAML File and Keys** to download the updated cluster bundle.
 
     6.  Extract and run the `sensor` script from the cluster bundle to deploy the configuration to the cluster.
 
         > [!NOTE]
-        > When you enable admission controller policy enforcement, the admission controller memory limit is automatically increased to 1 GiB per replica to support image scan data caching requirements. If you specify a custom memory limit override, the custom value takes priority. For more information, see "Admission controller settings for the Operator" and "Configuration parameters for Helm".
+        > When you enable admission controller policy enforcement, the system automatically increases the admission controller memory limit to 1 GiB per replica to support image scan data caching requirements. If you specify a custom memory limit override, the custom value takes priority. For more information, see "Admission controller settings for the Operator" and "Configuration parameters for Helm".
+
+</div>
 
 <div>
 
@@ -101,7 +127,7 @@ Additional resources
 
 # Viewing and enabling admission controller enforcement on an existing cluster
 
-You can view whether admission controller enforcement was enabled on a cluster or change the enforcement behavior after installation.
+You can view whether you enabled admission controller enforcement on a cluster or change the enforcement behavior after installation.
 
 <div>
 
@@ -111,12 +137,12 @@ Procedure
 
 </div>
 
-1.  For a cluster that was installed by using the Operator, in the `SecuredCluster` custom resource (CR), edit the `spec.admissionControl.enforcement` parameter to `Enabled`.
+1.  For a cluster that you installed by using the Operator, in the `SecuredCluster` custom resource (CR), edit the `spec.admissionControl.enforcement` parameter to `Enabled`.
 
-2.  For a cluster that was installed by using Helm, in the `values-public.yaml` file, set the `admissionControl.enforce` value to `false` and run the following command:
+2.  For a cluster that you installed by using Helm, in the `values-public.yaml` file, set the `admissionControl.enforce` value to `false` and run the following command:
 
     ``` terminal
-    helm upgrade -n stackrox \
+    $ helm upgrade -n stackrox \
       stackrox-secured-cluster-services rhacs/secured-cluster-services \
       --reuse-values \
       -f /config/yaml/values-public.yaml \
@@ -133,12 +159,12 @@ Procedure
 
     4.  Select **Next**.
 
-    5.  Click **Download YAML File and Keys** to download the updated cluster bundle.
+    5.  Select **Download YAML File and Keys** to download the updated cluster bundle.
 
     6.  Extract and run the `sensor` script from the cluster bundle to redeploy the configuration to the cluster.
 
         > [!NOTE]
-        > When you enable admission controller policy enforcement, the admission controller memory limit is automatically increased to 1 GiB per replica to support image scan data caching requirements. If you specify a custom memory limit override, the custom value takes priority. For more information, see "Admission controller settings for the Operator" and "Configuration parameters for Helm".
+        > When you enable admission controller policy enforcement, the system automatically increases the admission controller memory limit to 1 GiB per replica to support image scan data caching requirements. If you specify a custom memory limit override, the custom value takes priority. For more information, see "Admission controller settings for the Operator" and "Configuration parameters for Helm".
 
 </div>
 
@@ -240,12 +266,12 @@ Procedure
 
 </div>
 
-1.  For a cluster that was installed by using the Operator, in the `SecuredCluster` custom resource (CR), edit the `spec.admissionControl.enforcement` parameter to `Disabled`.
+1.  For a cluster that you installed by using the Operator, in the `SecuredCluster` custom resource (CR), edit the `spec.admissionControl.enforcement` parameter to `Disabled`.
 
-2.  For a cluster that was installed by using Helm, in the `values-public.yaml` file, set the `admissionControl.enforce` value to `false` and run the following command:
+2.  For a cluster that you installed by using Helm, in the `values-public.yaml` file, set the `admissionControl.enforce` value to `false` and run the following command:
 
     ``` terminal
-    helm upgrade -n stackrox \
+    $ helm upgrade -n stackrox \
       stackrox-secured-cluster-services rhacs/secured-cluster-services \
       --reuse-values \
       -f /config/yaml/values-public.yaml \
@@ -266,7 +292,7 @@ Procedure
 
     4.  Select **Next**.
 
-    5.  Click **Download YAML File and Keys** to download the updated cluster bundle.
+    5.  Select **Download YAML File and Keys** to download the updated cluster bundle.
 
     6.  Extract and run the `sensor` script from the cluster bundle to redeploy the configuration to the cluster.
 
@@ -276,9 +302,17 @@ Procedure
 
 # Configuring the admission controller failure policy during installation
 
-You can configure the admission controller failure policy when you install a cluster. This setting determines whether the API server request is allowed (fail open) or blocked (fail closed) if an error or timeout happens in the RHACS validating webhook evaluation.
+You can configure the admission controller failure policy when you install a cluster. This setting determines whether the system allows (fail open) or blocks (fail closed) the API server request if an error or timeout happens in the RHACS validating webhook evaluation.
 
-1.  When installing a cluster by using the Operator, Helm, or `roxctl` CLI methods, follow the instructions in "Installing Secured Cluster services for RHACS on Red Hat OpenShift" and "Installing Secured Cluster services for RHACS on other platforms" to configure this parameter during installation.
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  When installing a cluster by using the Operator, Helm, or `roxctl` CLI methods, follow the instructions in "Installing Secured Cluster services for RHACS on Red Hat OpenShift" and "Installing Secured Cluster services for RHACS on other platforms" to configure this parameter during installation.
 
 2.  When installing a cluster by using the legacy installation method, follow these steps:
 
@@ -295,6 +329,8 @@ You can configure the admission controller failure policy when you install a clu
     4.  Select **Next**.
 
     5.  Select **Finish**. Because this is a change to the static configuration, you must redeploy the cluster for your changes to take effect.
+
+</div>
 
 <div>
 
@@ -314,14 +350,22 @@ Additional resources
 
 # Configuring the admission controller failure policy on an existing cluster
 
-You can configure the admission controller failure policy for an existing cluster. This setting determines whether the API server request is allowed (fail open) or blocked (fail closed) if an error or timeout happens in the RHACS validating webhook evaluation.
+You can configure the admission controller failure policy for an existing cluster. This setting determines whether the system allows (fail open) or blocks (fail closed) the API server request if an error or timeout happens in the RHACS validating webhook evaluation.
 
-1.  For a cluster that was installed by using the Operator, in the `SecuredCluster` custom resource (CR), edit the `spec.admissionControl.failurePolicy` parameter to `Ignore` to fail open, or `Fail` to fail closed.
+<div>
 
-2.  For a cluster that was installed by using Helm, in the `values-public.yaml` file, set the `admissionControl.failurePolicy` value to parameter to `Ignore` to fail open, or `Fail` to fail closed. Then then run the following command:
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  For a cluster that you installed by using the Operator, in the `SecuredCluster` custom resource (CR), edit the `spec.admissionControl.failurePolicy` parameter to `Ignore` to fail open, or `Fail` to fail closed.
+
+2.  For a cluster that you installed by using Helm, in the `values-public.yaml` file, set the `admissionControl.failurePolicy` value to `Ignore` to fail open, or `Fail` to fail closed. Then run the following command:
 
     ``` terminal
-    helm upgrade -n stackrox \
+    $ helm upgrade -n stackrox \
       stackrox-secured-cluster-services rhacs/secured-cluster-services \
       --reuse-values \
       -f /config/yaml/values-public.yaml \
@@ -332,14 +376,16 @@ You can configure the admission controller failure policy for an existing cluste
 
     1.  In the RHACS portal, select **Platform Configuration** → **Clusters**.
 
-    2.  Click **Secure a cluster** → **Legacy installation method**.
+    2.  Select **Secure a cluster** → **Legacy installation method**.
 
     3.  In the **Static configuration (requires deployment)** section, in the **Admission controller failure policy** field, select one of the following options:
 
-        - **Fail open**: If an error or timeout occurs when a workload admission or update request is being evaluated by the validating webhook, the request should be allowed to reach the API server.
+        - **Fail open**: If an error or timeout occurs when the validating webhook evaluates a workload admission or update request, the system should allow the request to reach the API server.
 
-        - **Fail closed**: If an error or timeout occurs when a workload admission or update request is being evaluated by the validating webhook, the request should not be allowed to reach the API server, but should be blocked.
+        - **Fail closed**: If an error or timeout occurs when the validating webhook evaluates a workload admission or update request, the system should block the request and not allow it to reach the API server.
 
     4.  Select **Next**.
 
     5.  Select **Finish**. Because this is a change to the static configuration, you must redeploy the cluster for your changes to take effect.
+
+</div>

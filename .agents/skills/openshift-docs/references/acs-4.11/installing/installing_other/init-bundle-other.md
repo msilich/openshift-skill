@@ -1,14 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Red Hat Advanced Cluster Security for Kubernetes (RHACS) uses a special artifact during installation that allows Central to communicate securely with the secured clusters that you are adding. This file is called a cluster registration secret (CRS) or an init bundle. Init bundles are still supported, but using a CRS is the preferred way to set up a secured cluster.
+Red Hat Advanced Cluster Security for Kubernetes (RHACS) uses a special artifact during installation that allows Central to communicate securely with the secured clusters that you are adding. This artifact is a cluster registration secret (CRS) or an init bundle. Init bundles are still supported, but using a CRS is the preferred way to set up a secured cluster.
 
-A cluster registration secret (CRS) is an authentication secret that offers improved security and are easier to use than init bundles. A CRS contain a single token that can be used when installing RHACS by using both Operator and Helm installation methods.
+A cluster registration secret (CRS) is an authentication secret that offers improved security and is easier to use than init bundles. A CRS contains a single token that you can use when installing RHACS by using both Operator and Helm installation methods.
 
-A CRS provides better security because it is only used for registering a new secured cluster. If leaked, the certificates and keys in an init bundle can be used to impersonate services running on a secured cluster. By contrast, the certificate and key in a CRS can only be used for *registering* a new cluster.
+A CRS provides better security because you only use it to register a new secured cluster. If leaked, an attacker can use the certificates and keys in an init bundle to impersonate services running on a secured cluster. By contrast, you can only use the certificate and key in a CRS for *registering* a new cluster.
 
-After the cluster is set up by using the CRS, service-specific certificates are issued by Central and sent to the new secured cluster. These service certificates are used for communication between Central and secured clusters. Therefore, a CRS can be revoked after the cluster is registered without disconnecting secured clusters.
+After you set up the cluster by using the CRS, Central issues service-specific certificates and sends them to the new secured cluster. Central and secured clusters use these service certificates for communication. Therefore, you can revoke a CRS after you register the cluster without disconnecting secured clusters.
 
-Unlike init bundles, which can be re-applied on an existing secured cluster if secrets on the secured cluster need to be manually refreshed, you cannot apply a new CRS to a cluster and re-establish communication between Central and the secured cluster. If there is a problem with the CRS on a secured cluster, for example, if the certificate and keys are deleted, you must revoke the original CRS in Central and remove it from the secured cluster. Then, you create a new CRS in Central, and apply the new CRS to the secured clusters.
+Unlike init bundles, which can be re-applied on an existing secured cluster if secrets on the secured cluster need to be manually refreshed, you cannot apply a new CRS to a cluster and re-establish communication between Central and the secured cluster. If there is a problem with the CRS on a secured cluster, for example, if you delete the certificate and keys, you must revoke the original CRS in Central and remove it from the secured cluster. Then, you create a new CRS in Central, and apply the new CRS to the secured clusters.
 
 <a id="init-bundles-and-cluster-registration-secrets_init-bundle-other"></a>
 
@@ -37,7 +37,7 @@ Security
 The generated file contains sensitive credentials and must be stored securely.
 
 One-time generation  
-You cannot retrieve a previously generated CRS from Central. If you lose the file, you must generate a new one.
+After generating a CRS, you cannot retrieve it later from Central. If you lose the file, you must generate a new one.
 
 Reuse  
 You can use a single CRS to authenticate more than one secured cluster.
@@ -67,11 +67,11 @@ Procedure
 
 1.  Find the address of the RHACS portal as described in "Verifying Central installation using the Operator method".
 
-2.  Log in to the RHACS portal. If you do not have secured clusters or an existing CRS, the **Platform Configuration** → **Clusters** page appears.
+2.  Log in to the RHACS portal. If you do not have secured clusters or an existing CRS, the **Platform Configuration** → **Clusters** page is displayed.
 
 3.  Click **Create cluster registration secret**.
 
-4.  Enter a name for the CRS and click **Download** to generate and download it. The CRS is created in the form of a YAML file and you can use it to secure all of your clusters if you are using the same installation method.
+4.  Enter a name for the CRS and click **Download** to generate and download the file. You can use it to secure all of your clusters if you are using the same installation method.
 
     > [!IMPORTANT]
     > Store this file securely because it contains secrets.
@@ -150,7 +150,7 @@ Procedure
   Specifies a file name. Use `-` for standard output.
 
   > [!IMPORTANT]
-  > Ensure that you store this file securely because it contains secrets. You can use the same file to set up more than one secured cluster. You cannot retrieve a previously generated CRS.
+  > Ensure that you store this file securely because it contains secrets. You can use the same file to set up more than one secured cluster. After generating a CRS, you cannot retrieve it later.
 
   Depending on the output that you select, the command might return some INFO messages about the CRS and the YAML file.
 
@@ -242,7 +242,7 @@ Procedure
 
 # Init bundles for secured cluster authentication
 
-You can establish secure communication between your secured cluster services and Red Hat Advanced Cluster Security for Kubernetes (RHACS) Central by generating and applying an init bundle. You can create an YAML file containing essential TLS secrets by using the RHACS portal or the `roxctl` CLI, and then apply the resources to your cluster to authorize service connections.
+You can establish secure communication between your secured cluster services and Red Hat Advanced Cluster Security for Kubernetes (RHACS) Central by generating and applying an init bundle. You can create an YAML file containing essential TLS secrets by using the RHACS portal or the `roxctl` CLI, and then apply the resources to your cluster to allow service connections.
 
 When you apply the init bundle to a secured cluster, it creates the necessary TLS certificate resources, including:
 
@@ -261,7 +261,7 @@ You can generate init bundles by using either the RHACS portal or the `roxctl` C
 
 ## Generating a cluster registration secret or init bundle by using the RHACS portal
 
-You can generate a cluster registration secret (CRS) or an init bundle that contains secrets by using the RHACS portal.
+You can generate a cluster registration secret (CRS) or an init bundle containing secrets by using the RHACS portal.
 
 > [!NOTE]
 > You must have the `Admin` user role to generate a CRS or an init bundle.
@@ -285,7 +285,7 @@ Procedure
 
     Complete only one of the following actions:
 
-    - If you chose to generate a CRS, enter a name for the CRS and click **Download** to generate and download it. This action creates the CRS as a YAML file and you can use it to secure all of your clusters if you are using the same installation method.
+    - If you chose to generate a CRS, enter a name for the CRS and click **Download** to generate and download the CRS as a YAML file. You can use it to secure all of your clusters if you are using the same installation method.
 
       > [!IMPORTANT]
       > Store this file securely because it contains secrets.
@@ -400,7 +400,7 @@ Prerequisites
 
 - You must have generated an init bundle containing secrets. The preferred way to set up a secured cluster is by using a CRS.
 
-- You must have created the `stackrox` project, or namespace, on the cluster where you will install secured cluster services. Using `stackrox` for the project is not required, but ensures that vulnerabilities for RHACS processes are not reported when scanning your clusters.
+- You must have created the `stackrox` project, or namespace, on the cluster where you will install the secured cluster services. Using `stackrox` for the project is not required, but ensures that vulnerabilities for RHACS processes are not reported when scanning your clusters.
 
 </div>
 
@@ -443,7 +443,7 @@ After you have generated and applied the cluster registration secret (CRS) or th
 
 Install Red Hat Advanced Cluster Security for Kubernetes (RHACS) secured cluster services in all clusters that you want to monitor.
 
-<a id="_additional_resources"></a>
+<a id="additional-resources_init-bundle-other"></a>
 
 # Additional resources
 

@@ -9,7 +9,7 @@ Seccomp profiles are stored as JSON files on the disk.
 > [!IMPORTANT]
 > Seccomp profiles cannot be applied to privileged containers.
 
-# Verifying the default seccomp profile applied to a pod
+# Verify the default seccomp profile applied to a pod
 
 OpenShift Container Platform ships with a default seccomp profile that is referenced as `runtime/default`. In 4.20, newly created pods have the Security Context Constraint (SCC) set to `restricted-v2` and the default seccomp profile applies to the pod.
 
@@ -100,15 +100,19 @@ Procedure
 
         </div>
 
-        - The `restricted-v2` SCC is added by default if your workload does not have access to a different SCC.
+        where:
 
-        - Newly created pods in 4.20 will have the seccomp profile configured to `runtime/default` as mandated by the SCC.
+        `restricted-v2`
+        Specifies the SCC that is added by default if your workload does not have access to a different SCC.
+
+        `runtime/default`
+        Specifies that newly created pods in 4.20 have the seccomp profile configured to `runtime/default` as mandated by the SCC.
 
 </div>
 
 ## Upgraded cluster
 
-In clusters upgraded to 4.20 all authenticated users have access to the `restricted` and `restricted-v2` SCC.
+In clusters upgraded to 4.20, all authenticated users have access to the `restricted` and `restricted-v2` SCC.
 
 A workload admitted by the SCC `restricted` for example, on a OpenShift Container Platform v4.10 cluster when upgraded may get admitted by `restricted-v2`. This is because `restricted-v2` is the more restrictive SCC between `restricted` and `restricted-v2`.
 
@@ -137,7 +141,7 @@ You can configure a custom seccomp profile, which allows you to update the filte
 
 Seccomp security profiles list the system calls (syscalls) a process can make. Permissions are broader than SELinux, which restrict operations, such as `write`, system-wide.
 
-## Creating seccomp profiles
+## Create seccomp profiles
 
 You can use the `MachineConfig` object to create profiles.
 
@@ -189,7 +193,9 @@ Procedure
 
 </div>
 
-## Setting up the custom seccomp profile
+## Set up the custom seccomp profile
+
+You can configure a custom seccomp profile for use with your workloads.
 
 <div>
 
@@ -224,11 +230,16 @@ Procedure
     - localhost/<custom-name>.json
     ```
 
-    - Provide the name of your custom seccomp profile.
+    where:
+
+    `<custom-name>`
+    Specifies the name of your custom seccomp profile.
 
 </div>
 
-## Applying the custom seccomp profile to the workload
+## Apply the custom seccomp profile to the workload
+
+You can apply a custom seccomp profile to your workload to restrict the system calls available to your containers.
 
 <div>
 
@@ -252,13 +263,7 @@ Procedure
 
 - Apply the seccomp profile to the workload by setting the `securityContext.seccompProfile.type` field as following:
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example
-
-  </div>
+  Example:
 
   ``` yaml
   spec:
@@ -268,11 +273,12 @@ Procedure
         localhostProfile: <custom-name>.json
   ```
 
-  </div>
+  where:
 
-  - Provide the name of your custom seccomp profile.
+  `<custom-name>`
+  Specifies the name of your custom seccomp profile.
 
-    Alternatively, you can use the pod annotations `seccomp.security.alpha.kubernetes.io/pod: localhost/<custom-name>.json`. However, this method is deprecated in OpenShift Container Platform 4.20.
+  Alternatively, you can use the pod annotations `seccomp.security.alpha.kubernetes.io/pod: localhost/<custom-name>.json`. However, this method is deprecated in OpenShift Container Platform 4.20.
 
 </div>
 

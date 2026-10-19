@@ -2,7 +2,7 @@
 
 As a cluster administrator, you can modify network traffic rules for an existing egress firewall.
 
-# Editing an EgressFirewall custom resource (CR)
+# Edit an EgressFirewall custom resource (CR)
 
 As a cluster administrator, you can update the egress firewall for a project.
 

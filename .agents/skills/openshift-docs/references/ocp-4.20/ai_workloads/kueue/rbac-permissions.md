@@ -2,9 +2,9 @@
 
 You can configure role-based access control (RBAC) for your Red Hat build of Kueue deployment to control which users can create specific Red Hat build of Kueue objects.
 
-# Cluster roles
+# Red Hat build of Kueue cluster roles
 
-The Red Hat build of Kueue Operator deploys `kueue-batch-admin-role` and `kueue-batch-user-role` cluster roles by default.
+The Red Hat build of Kueue Operator deploys the `kueue-batch-admin-role` and `kueue-batch-user-role` cluster roles by default. Bind these cluster roles to your own users and groups to grant Red Hat build of Kueue permissions.
 
 kueue-batch-admin-role
 This cluster role includes the permissions to manage cluster queues, local queues, workloads, and resource flavors.

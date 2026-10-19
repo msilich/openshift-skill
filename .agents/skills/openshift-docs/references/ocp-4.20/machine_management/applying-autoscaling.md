@@ -224,7 +224,7 @@ spec:
 >
 > The minimum and maximum CPUs, memory, and GPU values are determined by calculating those resources on all nodes in the cluster, even if the cluster autoscaler does not manage the nodes. For example, the control plane nodes are considered in the total memory in the cluster, even though the cluster autoscaler does not manage the control plane nodes.
 
-## Configuring a priority expander for the cluster autoscaler
+## Configure a priority expander for the cluster autoscaler
 
 Configure a priority expander to control which machine set expands when the cluster autoscaler increases the size of the cluster. You can create a priority expander config map by listing priority values and regular expressions that define machine sets.
 
@@ -339,7 +339,7 @@ Next steps
 
 </div>
 
-## Labeling GPU machine sets for the cluster autoscaler
+## Label GPU machine sets for the cluster autoscaler
 
 Label your machine sets to indicate which machines the cluster autoscaler can use for GPU-enabled nodes. Applying the accelerator label helps ensure that the autoscaler deploys the correct resources for your GPU workloads.
 
@@ -388,7 +388,7 @@ Procedure
 
 </div>
 
-## Deploying a cluster autoscaler
+## Deploy a cluster autoscaler
 
 To deploy a cluster autoscaler, you create an instance of the `ClusterAutoscaler` resource.
 
@@ -417,12 +417,14 @@ Procedure
 
 # About the machine autoscaler
 
-The machine autoscaler adjusts the number of Machines in the compute machine sets that you deploy in an OpenShift Container Platform cluster. You can scale both the default `worker` compute machine set and any other compute machine sets that you create. The machine autoscaler makes more Machines when the cluster runs out of resources to support more deployments. Any changes to the values in `MachineAutoscaler` resources, such as the minimum or maximum number of instances, are immediately applied to the compute machine set they target.
+The machine autoscaler adjusts the number of Machines in the compute machine sets that you deploy in an OpenShift Container Platform cluster.
+
+You can scale both the default `worker` compute machine set and any other compute machine sets that you create. The machine autoscaler makes more Machines when the cluster runs out of resources to support more deployments. Any changes to the values in `MachineAutoscaler` resources, such as the minimum or maximum number of instances, are immediately applied to the compute machine set they target.
 
 > [!IMPORTANT]
 > You must deploy a machine autoscaler for the cluster autoscaler to scale your machines. The cluster autoscaler uses the annotations on compute machine sets that the machine autoscaler sets to determine the resources that it can scale. If you define a cluster autoscaler without also defining machine autoscalers, the cluster autoscaler will never scale your cluster.
 
-## Configuring machine autoscalers
+## Configure machine autoscalers
 
 After you deploy the cluster autoscaler, deploy `MachineAutoscaler` resources that reference the compute machine sets that are used to scale the cluster.
 
@@ -476,7 +478,7 @@ The `kind` parameter value is always `MachineSet`.
 \<name\>
 The `name` value must match the name of an existing compute machine set, as shown in the `metadata.name` parameter value.
 
-## Deploying a machine autoscaler
+## Deploy a machine autoscaler
 
 To deploy a machine autoscaler, you create an instance of the `MachineAutoscaler` resource.
 
@@ -503,7 +505,7 @@ Procedure
 
 </div>
 
-# Disabling a machine autoscaler
+# Disable a machine autoscaler
 
 To disable a machine autoscaler, you delete the corresponding `MachineAutoscaler` custom resource (CR).
 
@@ -605,7 +607,7 @@ Next steps
 
 </div>
 
-# Disabling the cluster autoscaler
+# Disable the cluster autoscaler
 
 To disable the cluster autoscaler, you delete the corresponding `ClusterAutoscaler` resource.
 

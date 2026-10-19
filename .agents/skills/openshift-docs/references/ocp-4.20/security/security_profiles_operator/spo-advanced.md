@@ -58,7 +58,7 @@ Procedure
 
 </div>
 
-# Enabling memory optimization in the spod daemon
+# Enable memory optimization in the spod daemon
 
 The controller running inside of `spod` daemon process watches all pods available in the cluster when profile recording is enabled. This can lead to very high memory usage in large clusters, resulting in the `spod` daemon running out of memory or crashing.
 
@@ -95,7 +95,7 @@ Procedure
 
 </div>
 
-# Customizing daemon resource requirements
+# Customize daemon resource requirements
 
 The default resource requirements of the daemon container can be adjusted by using the field `daemonResourceRequirements` from the `spod` configuration.
 
@@ -118,7 +118,7 @@ Procedure
 
 </div>
 
-# Setting a custom priority class name for the spod daemon pod
+# Set a custom priority class name for the spod daemon pod
 
 The default priority class name of the `spod` daemon pod is set to `system-node-critical`. A custom priority class name can be configured in the `spod` configuration by setting a value in the `priorityClassName` field.
 
@@ -152,7 +152,7 @@ Procedure
 
 </div>
 
-# Using metrics
+# Use metrics
 
 The `openshift-security-profiles` namespace provides metrics endpoints, which are secured by the `kube-rbac-proxy` container. All metrics are exposed by the `metrics` service within the `openshift-security-profiles` namespace.
 
@@ -320,7 +320,7 @@ Procedure
 
 </div>
 
-## Using the log enricher to trace an application
+## Use the log enricher to trace an application
 
 You can use the Security Profiles Operator log enricher to trace an application.
 

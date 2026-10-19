@@ -4,7 +4,7 @@ You can configure the registry of a cluster that runs on your own Red Hat OpenS
 
 # Configuring Image Registry Operator redirects
 
-By disabling redirects, you can configure the Image Registry Operator to control whether clients such as OpenShift Container Platform cluster builds or external systems like developer machines are redirected to pull images directly from Red Hat OpenStack Platform (RHOSP) Swift storage. This configuration is optional and depends on whether the clients trust the storage’s SSL/TLS certificates.
+You can disable Image Registry Operator redirects to prevent clients from pulling images directly from Red Hat OpenStack Platform (RHOSP) Swift storage. This optional configuration is useful when clients do not trust the storage SSL/TLS certificates.
 
 > [!NOTE]
 > In situations where clients to not trust the storage certificate, setting the `disableRedirect` option can be set to `true` proxies traffic through the image registry. Consequently, however, the image registry might require more resources, especially network bandwidth, to handle the increased load.

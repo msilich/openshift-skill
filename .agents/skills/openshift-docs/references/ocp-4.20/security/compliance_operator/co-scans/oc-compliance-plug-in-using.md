@@ -2,7 +2,7 @@
 
 Although the Compliance Operator automates many of the checks and remediations for the cluster, an administrator can use the `oc-compliance` plugin to perform the full process of bringing a cluster into compliance by interacting with the Compliance Operator API and other components.
 
-# Installing the oc-compliance plugin
+# Install the oc-compliance plugin
 
 You can install the `oc-compliance` plugin to simplify compliance operations from the command line.
 
@@ -38,7 +38,7 @@ Procedure
 
 </div>
 
-# Fetching raw results
+# Fetch raw results
 
 An administrator or auditor can review the complete detailed results of a scan as created by the OpenSCAP tool. These results contain more details than what is contained in the `ComplianceCheckResult` custom resource (CR).
 
@@ -177,7 +177,7 @@ Procedure
 
 </div>
 
-# Using ScanSettingBinding custom resources
+# Use ScanSettingBinding custom resources
 
 When using the `ScanSetting` and `ScanSettingBinding` custom resources (CRs) that the Compliance Operator provides, it is possible to run scans for multiple profiles while using a common set of scan options, such as `schedule`, `machine roles`, `tolerations`, and so on.
 
@@ -304,7 +304,7 @@ Procedure
 
 </div>
 
-# Printing controls
+# Print controls
 
 You can view a report of the compliance standards and controls that a given profile satisfies.
 
@@ -357,7 +357,7 @@ Procedure
 
 </div>
 
-# Fetching compliance remediation details
+# Fetch compliance remediation details
 
 The Compliance Operator provides remediation objects that are used to automate the changes required to make the cluster compliant. You can use the `fetch-fixes` subcommand to help you understand exactly which configuration remediations are used.
 
@@ -502,7 +502,7 @@ Procedure
 
 </div>
 
-# Viewing ComplianceCheckResult object details
+# View ComplianceCheckResult object details
 
 When scans are finished running, `ComplianceCheckResult` objects are created for the individual scan rules. You can use the `view-result` subcommand to provide a human-readable output of the `ComplianceCheckResult` object details.
 

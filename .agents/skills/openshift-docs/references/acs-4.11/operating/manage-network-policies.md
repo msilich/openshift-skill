@@ -1,10 +1,16 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-A [Kubernetes network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) is a specification of how groups of pods are allowed to communicate with each other and other network endpoints. These network policies are configured as YAML files. By looking at these files alone, it is often hard to identify whether the applied network policies achieve the desired network topology.
+A Kubernetes network policy is a specification of how groups of pods communicate with each other and other network endpoints. You configure these network policies as YAML files. By looking at these files alone, it is often hard to identify whether the applied network policies achieve the required network topology.
 
 Red Hat Advanced Cluster Security for Kubernetes (RHACS) gathers all defined network policies from your orchestrator and provides tools to make these policies easier to use.
 
-To support network policy enforcement, RHACS provides the following tools:
+<a id="manage-network-policies-overview_manage-network-policies"></a>
+
+# Network policy management tools
+
+To support network policy enforcement, RHACS provides several tools for managing and analyzing network policies in your environment.
+
+RHACS provides the following tools:
 
 - Network graph
 
@@ -14,9 +20,11 @@ To support network policy enforcement, RHACS provides the following tools:
 
 - Build-time network policy generator
 
-<a id="network-graph-20-docs"></a>
+<a id="network-graph-20-docs_manage-network-policies"></a>
 
 # Network graph
+
+The network graph provides comprehensive tools for visualizing, analyzing, and managing network policies and traffic flows in your secured clusters.
 
 <a id="network-graph-20-view_manage-network-policies"></a>
 
@@ -27,10 +35,10 @@ The network graph provides high-level and detailed information about deployments
 RHACS processes all network policies in each secured cluster to show you which deployments can contact each other and which can reach external networks. It also monitors running deployments and tracks traffic between them. You can view the following items in the network graph:
 
 Internal entities  
-These represent a connection between a deployment and an IP address that belongs to the private address space as defined in [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918). For more information, see "Connections involving internal entities".
+These represent a connection between a deployment and an IP address that belongs to the private address space as defined in RFC 1918. For more information, see "Connections involving internal entities".
 
 External entities  
-These represent a connection between a deployment and an IP address that does not belong to the private address space as defined in [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918). For more information, see "External entities and connections in the network graph".
+These represent a connection between a deployment and an IP address that does not belong to the private address space as defined in RFC 1918. For more information, see "External entities and connections in the network graph".
 
 Network components  
 From the top menu, you can select namespaces (indicated by the **NS** label) and deployments (indicated by the **D** label) to display on the graph for a chosen cluster (indicated by the **CL** label). You can further filter deployments by using the drop-down list and selecting criteria on which to filter, such as common vulnerabilities and exposures (CVEs), labels, and images.
@@ -39,19 +47,33 @@ Network flows
 You can select one of the following flows for the graph:
 
 Active traffic  
-Selecting this default option shows observed traffic, focused on the namespace or specific deployment that you selected. You can select the time period for which to display information.
+Selecting this default option shows observed traffic, focused on the namespace or specific deployment that you selected. You can select the time period for displaying information.
 
 Inactive flows  
-Selecting this option shows potential flows allowed by your network policies, helping you identify missing network policies needed to achieve tighter isolation. You can select the time period for which to display information.
+Selecting this option shows potential flows that your network policies allow, helping you identify missing network policies required to achieve tighter isolation. You can select the time period for displaying information.
 
 Network policies  
 You can view existing policies for a selected component or view components that have no policies. You can also simulate network policies from the network graph view. See "Simulating network policies from the network graph" for more information.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [RFC 1918](https://datatracker.ietf.org/doc/html/rfc1918)
+
+</div>
 
 <a id="navigation-user-interface_manage-network-policies"></a>
 
 ### Displays, navigation, and the user interface in the network graph
 
-You can use the network graph, shown in the following graphic, to click on items and view additional information about them. You can also perform actions within the graph such as adding a network flow to your baseline.
+The network graph provides an interactive visual interface for exploring deployments, namespaces, and connections in your environment.
+
+You can use the network graph, shown in the following graphic, to click items and view additional information about them. You can also perform actions within the graph such as adding a network flow to your baseline.
 
 <figure>
 <img src="../images/network-graph-20-overview-updated.png" alt="Overview of the Network graph showing deployments" />
@@ -64,9 +86,9 @@ The following tips can help you use the network graph:
 
 - Selecting additional display options from the drop-down list controls whether the graph displays icons such as the network policy status badge, active external traffic badge, and port and protocol labels for edge connections.
 
-- RHACS detects changes in network traffic, such as nodes joining or leaving. If changes are detected, the network graph displays a notification showing the number of updates available. To avoid interrupting your focus, the graph is not updated automatically. Click the notification to update the graph.
+- RHACS detects changes in network traffic, such as nodes joining or leaving. If RHACS detects changes, the network graph displays a notification showing the number of updates available. To avoid interrupting your focus, the graph does not update automatically. Click the notification to update the graph.
 
-When you click an item in the graph, the rearranged side panel with collapsible sections presents information about that item. You can click on the following items:
+When you click an item in the graph, the rearranged side panel with collapsible sections presents information about that item. You can click the following items:
 
 - Deployments
 
@@ -85,7 +107,7 @@ The side panel displays relevant information based on the item in the graph that
 <figcaption>Side panel for a deployment example</figcaption>
 </figure>
 
-When viewing a namespace, the side panel includes a search bar and a list of deployments. You can click on a deployment to view its information. The side panel also includes a **Network policies** tab. From this tab, you can view, copy to the clipboard, or export any network policy defined in that namespace, as shown in the following example.
+When viewing a namespace, the side panel includes a search bar and a list of deployments. You can click a deployment to view its information. The side panel also includes a **Network policies** tab. From this tab, you can view, copy to the clipboard, or export any network policy defined in that namespace, as shown in the following example.
 
 <figure>
 <img src="../images/network-graph-20-namespace-mode.png" alt="Side panel for a namespace showing network policy information" />
@@ -96,9 +118,11 @@ When viewing a namespace, the side panel includes a search bar and a list of dep
 
 ### External entities and connections in the network graph
 
+The network graph displays network connections between managed clusters and external sources, helping you identify unauthorized external connections.
+
 The network graph view shows network connections between managed clusters and external sources. In addition, RHACS automatically discovers and highlights public Classless Inter-Domain Routing (CIDR) address blocks, such as Google Cloud, AWS, Microsoft Azure, Oracle Cloud, and Cloudflare. Using this information, you can identify deployments with active external connections and decide if they are making or receiving unauthorized connections from outside your network.
 
-By default, the external connections point to a common **External Entities** icon and different CIDR address blocks in the network graph. However, you can choose not to show auto-discovered CIDR blocks by clicking **Manage CIDR blocks** and deselecting **Auto-discovered CIDR blocks**.
+By default, the external connections point to a common **External Entities** icon and different CIDR address blocks in the network graph. However, you can select not to show auto-discovered CIDR blocks by clicking **Manage CIDR blocks** and deselecting **Auto-discovered CIDR blocks**.
 
 RHACS includes IP ranges for the following cloud providers:
 
@@ -114,29 +138,31 @@ RHACS includes IP ranges for the following cloud providers:
 
 RHACS fetches and updates the cloud providers' IP ranges every 7 days, and updates CIDR blocks daily. If you are using offline mode, you can update these ranges by installing new support packages.
 
-The following image provides an example of the network graph. In this example, based on the options that the user has chosen, the graph depicts deployments in the selected namespace. Traffic flows are not displayed until you click on an item such as a deployment. The graph uses a red badge to indicate deployments that are missing policies and therefore allowing all network traffic.
+The following image provides an example of the network graph. In this example, based on the options that the user has chosen, the graph depicts deployments in the selected namespace. Traffic flows are not displayed until you click an item such as a deployment. The graph uses a badge to indicate deployments that are missing policies and therefore allowing all network traffic.
 
 <a id="internal-entities-connections_manage-network-policies"></a>
 
 ### Connections involving internal entities
 
-The network graph is useful for identifying deployments with active connections to entities that do not belong to any known deployment or CIDR block. Some of these connections never reach outside of the cluster and are made within the cluster’s private network. The network graph represents those as connections to or from *internal entities*.
+The network graph identifies connections to entities within the cluster’s private network that do not belong to any known deployment or CIDR block.
 
-Connections with internal entities represent a connection between a deployment and an IP address that belongs to the private address space as defined in [RFC 1918](http://datatracker.ietf.org/doc/html/rfc1918). In some cases, Sensor is unable to identify one or both deployments involved in a connection. In that case, the system analyzes the IP address and decides whether the connection is internal or external.
+The network graph is useful for identifying deployments with active connections to entities that do not belong to any known deployment or CIDR block. Some of these connections never reach outside of the cluster and occur within the cluster’s private network. The network graph represents those as connections to or from *internal entities*.
 
-The following scenarios can lead to a connection being categorized as one involving internal entities:
+Connections with internal entities represent a connection between a deployment and an IP address that belongs to the private address space as defined in RFC 1918. In some cases, Sensor is unable to identify one or both deployments involved in a connection. In that case, the system analyzes the IP address and decides whether the connection is internal or external.
+
+The following scenarios can lead to the system categorizing a connection as one involving internal entities:
 
 - A change of IP address or the deletion of a deployment accepting connections (the server) while the party initiating the connection (the client) still attempts to reach it
 
 - A deployment communicating with the orchestrator API
 
-- A deployment communicating using a networking CNI plugin, for example, Calico
+- A deployment communicating using a networking Container Network Interface (CNI) plugin, for example, Calico
 
 - A restart of Sensor, resulting in a reset of the mapping of IP addresses to past deployments, for example, when Sensor does not recognize the IP addresses of past entities or past IP addresses of existing entities
 
-- A connection that involves an entity not managed by the orchestrator (in some cases, that might be seen as *outside of the cluster*) but is using an IP address from the private address space as defined in RFC 1918
+- A connection that involves an entity not managed by the orchestrator (in some cases, you might see this as *outside of the cluster*) but uses an IP address from the private address space as defined in RFC 1918
 
-Internal entities are indicated with an icon as shown in the following graphic. Clicking on **Internal entities** shows the flows for these entities.
+An icon indicates internal entities as shown in the following graphic. Clicking **Internal entities** shows the flows for these entities.
 
 <figure>
 <img src="../images/network-graph-internal-entities.png" alt="Network graph showing internal entities" />
@@ -149,7 +175,7 @@ Internal entities are indicated with an icon as shown in the following graphic. 
 
 To view network graphs, the user must have at least the permissions granted to the **Network Graph Viewer** default permission set.
 
-The following permissions are granted to the **Network Graph Viewer** permission set:
+The **Network Graph Viewer** permission set grants the following permissions:
 
 - Read `Deployment`
 
@@ -189,15 +215,11 @@ The network graph provides a visual map of deployments, namespaces, and connecti
 
 - Network policies
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To view details for deployments in a namespace:
 
 </div>
 
@@ -207,15 +229,17 @@ To view details for deployments in a namespace:
 
 3.  Click the **Deployments** list and use the search field to locate a deployment, or select individual deployments to display in the network graph.
 
-4.  In the network graph, click on a deployment to view the information panel.
+4.  In the network graph, click a deployment to view the information panel.
 
 5.  Click the **Details**, **Flows**, **Baseline**, or **Network policies** tab to view the corresponding information.
+
+</div>
 
 <a id="view-network-policies-ng20_manage-network-policies"></a>
 
 ## Viewing network policies in the network graph
 
-Network policies specify how groups of pods are allowed to communicate with each other and with other network endpoints. Kubernetes `NetworkPolicy` resources use labels to select pods and define rules that specify what traffic is allowed to or from the selected pods. RHACS discovers and displays network policy information for all your Kubernetes clusters, namespaces, deployments, and pods, in the network graph.
+Network policies specify how groups of pods communicate with each other and with other network endpoints. Kubernetes `NetworkPolicy` resources use labels to select pods and define rules that specify what traffic can flow to or from the selected pods. RHACS discovers and displays network policy information for all your Kubernetes clusters, namespaces, deployments, and pods, in the network graph.
 
 <div>
 
@@ -231,7 +255,7 @@ Procedure
 
 3.  Click the **Deployments** list and select individual deployments, or use the search field to locate a deployment.
 
-4.  In the network graph, click on a deployment to view the information panel.
+4.  In the network graph, click a deployment to view the information panel.
 
 5.  In the **Details** tab, in the **Network security** section, you can view summary messages about network policy rules that give the following information:
 
@@ -239,7 +263,7 @@ Procedure
 
     - If your network is missing policies and is therefore allowing all ingress or egress traffic
 
-6.  To view the YAML file for the network policies, you can click on the policy rule, or click the **Network policies** tab.
+6.  To view the YAML file for the network policies, you can click the policy rule, or click the **Network policies** tab.
 
 </div>
 
@@ -262,7 +286,7 @@ Procedure
     - Toggle **Auto-discovered CIDR blocks** to hide auto-discovered CIDR blocks in the network graph.
 
       > [!NOTE]
-      > When you hide the auto-discovered CIDR blocks, the auto-discovered CIDR blocks are hidden for all clusters, and not only for the selected cluster in the network graph.
+      > When you hide the auto-discovered CIDR blocks, the system hides the auto-discovered CIDR blocks for all clusters, and not only for the selected cluster in the network graph.
 
     - Add a custom CIDR block to the graph by performing the following steps:
 
@@ -272,9 +296,11 @@ Procedure
 
 </div>
 
-<a id="network-graph-simulate-generate"></a>
+<a id="network-graph-simulate-generate_manage-network-policies"></a>
 
 # Using the network graph to generate and simulate network policies
+
+You can use the network graph to automatically generate network policies based on observed traffic and simulate policies before applying them to your clusters.
 
 <a id="policy-generation-strategy-ng20_manage-network-policies"></a>
 
@@ -296,11 +322,11 @@ These network policies are YAML configuration files. It is often difficult to ga
 
 - Each policy has the same name as the deployment name, prefixed with `stackrox-generated-`. For example, the policy name for the deployment `depABC` in the generated network policy is `stackrox-generated-depABC`. All generated policies also have an identifying label.
 
-- RHACS generates a single rule allowing traffic from any IP address if one of the following conditions are met:
+- RHACS generates a single rule that allows traffic from any IP address if one of the following conditions is true:
 
   - The deployment has an incoming connection from outside the cluster within the selected time
 
-  - The deployment is exposed through a node port or load balancer service
+  - A node port or load balancer service exposes the deployment
 
 - RHACS generates one `ingress` rule for every deployment from which there is an incoming connection.
 
@@ -315,9 +341,17 @@ These network policies are YAML configuration files. It is often difficult to ga
 
 ## Generating network policies in the network graph
 
-RHACS lets you automatically generate network policies based on the actual observed network communication flows in your environment.
+You can automatically generate network policies based on the actual observed network communication flows in your environment.
 
-You can generate policies based on the cluster, namespaces, and deployments that you have selected in the network graph. Policies are generated for any deployments that are included in the current Network Graph scope. For example, the current scope could include the entire cluster, a cluster and namespaces, or individually selected deployments in the selected namespaces. You can also further reduce the scope by applying one of the filters from the **Filter deployments** field with any combination of the cluster, namespace, and deployment selections. For example, you could narrow the scope to deployments in a specific cluster and namespace that are affected by a specific CVE. Policies are generated from the traffic observed during the baseline discovery period.
+You can generate policies based on the cluster, namespaces, and deployments that you have selected in the network graph. RHACS generates policies for any deployments included in the current Network Graph scope. For example, the current scope could include the entire cluster, a cluster and namespaces, or individually selected deployments in the selected namespaces. You can also further reduce the scope by applying one of the filters from the **Filter deployments** field with any combination of the cluster, namespace, and deployment selections. For example, you could narrow the scope to deployments in a specific cluster and namespace affected by a specific CVE. RHACS generates policies from the traffic observed during the baseline discovery period.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  In the RHACS portal, go to **Network Graph**.
 
@@ -329,27 +363,29 @@ You can generate policies based on the cluster, namespaces, and deployments that
 
 5.  Optional: In the information panel that opens, select **Exclude ports & protocols** to remove the port/protocol restrictions when generating network policies from a baseline.
 
-    As an example, the `nginx3` deployment makes a port 80 connection to `nginx4`, and this is included as part of the baseline for `nginx4`. If policies are generated and this checkbox is not selected (the default behavior), the generated policy will restrict the allowed connections from `nginx3` to `nginx4` to only port 80. If policies are generated with this option selected, the generated policy will allow any port in the connection from `nginx3` to `nginx4`.
+    As an example, the `nginx3` deployment makes a port 80 connection to `nginx4`, and the baseline for `nginx4` includes this connection. If you generate policies and do not select this checkbox (the default behavior), the generated policy restricts the allowed connections from `nginx3` to `nginx4` to only port 80. If you generate policies with this option selected, the generated policy allows any port in the connection from `nginx3` to `nginx4`.
 
-6.  Click **Generate and simulate network policies**. RHACS generates policies for the scope that you have chosen. This scope is displayed at the top of the **Generate network policies** panel.
+6.  Click **Generate and simulate network policies**. RHACS generates policies for the scope that you have chosen. The top of the **Generate network policies** panel displays this scope.
 
     > [!NOTE]
-    > Clicking on the deployment information in the scope displays a list of the deployments that are included.
+    > Clicking the deployment information in the scope displays a list of the included deployments.
 
 7.  Optional: Copy the generated network policy configuration YAML file to the clipboard or download it by clicking the download icon in the panel.
 
-8.  Optional: To compare the generated network policies to the existing network policies, click **Compare**. The YAML files for existing and generated network policies are shown in a side-by-side view.
+8.  Optional: To compare the generated network policies to the existing network policies, click **Compare**. A side-by-side view shows the YAML files for existing and generated network policies.
 
     > [!NOTE]
-    > Some items do not have generated policies, such as namespaces with existing ingress policies or deployments in certain protected namespaces such as as `stackrox` or `acs`.
+    > Some items do not have generated policies, such as namespaces with existing ingress policies or deployments in certain protected namespaces such as `stackrox` or `acs`.
 
 9.  Optional: Click the **Actions** menu to perform the following activities:
 
-    - Share the YAML file with notifiers: Sends the YAML file to one of the system notifiers you have configured, for example, Slack, ServiceNow, or an application that uses generic webhooks. These notifiers are configured by navigating to **Platform Configuration** → **Integrations**. See the documentation in the "Additional resources" section for more information.
+    - Share the YAML file with notifiers: Sends the YAML file to one of the system notifiers you have configured, for example, Slack, `ServiceNow`, or an application that uses generic webhooks. You configure these notifiers by navigating to **Platform Configuration** → **Integrations**. See the documentation in the "Additional resources" section for more information.
 
-    - Rebuild rules from active traffic: Refreshes the generated policies that are displayed.
+    - Rebuild rules from active traffic: Refreshes the displayed generated policies.
 
-    - Revert rules to previously applied YAML: Removes the simulated policy and reverts to the last network policy.
+    - Revert rules to before applied YAML: Removes the simulated policy and reverts to the last network policy.
+
+</div>
 
 <a id="save-generated-policies-ng20_manage-network-policies"></a>
 
@@ -498,7 +534,7 @@ Procedure
 
     - Click the appropriate button to copy or download the displayed YAML file.
 
-    - Use the **Actions** menu to rebuild rules from active traffic or revert rules to a previously applied YAML. For more information, see "Generating network policies in the network graph".
+    - Use the **Actions** menu to rebuild rules from active traffic or revert rules to a before applied YAML. For more information, see "Generating network policies in the network graph".
 
 </div>
 
@@ -552,7 +588,7 @@ Procedure
 
 2.  Click the **Deployments** list and use the search field to locate a deployment, or select individual deployments to display in the network graph.
 
-3.  In the network graph, click on a deployment to view the information panel.
+3.  In the network graph, click a deployment to view the information panel.
 
 4.  Select the **Baseline** tab. Use the **filter by entity name** field to further restrict the flows that are displayed.
 
@@ -560,7 +596,7 @@ Procedure
 
     - Select an individual entity. Click the overflow menu, ![kebab](../images/kebab.png), and then select **Mark as anomalous**.
 
-    - Select multiple entities, and then click **Bulk actions** and select **Mark as anomalous**.
+    - Select many entities, and then click **Bulk actions** and select **Mark as anomalous**.
 
 6.  Optional: Check the box to exclude ports and protocols.
 
@@ -588,7 +624,7 @@ Procedure
 
 3.  Click the **Deployments** list and use the search field to locate a deployment, or select individual deployments to display in the network graph.
 
-4.  In the network graph, click on a deployment to view the information panel.
+4.  In the network graph, click a deployment to view the information panel.
 
 5.  The **Baseline** tab lists the baseline flows. Use the **filter by entity name** field to further restrict the list of flows.
 
@@ -641,7 +677,7 @@ Procedure
 
 ## Enabling alerts on baseline violations in the network graph
 
-You can configure RHACS to detect anomalous network flows and trigger violations for traffic that is not in the baseline. This can help you determine if the network contains unwanted traffic before you block traffic with a network policy.
+You can configure RHACS to detect anomalous network flows and trigger violations for traffic that is not in the baseline. This can help you decide if the network has unwanted traffic before you block traffic with a network policy.
 
 <div>
 
@@ -655,7 +691,7 @@ Procedure
 
 2.  Click the **Deployments** list and use the search field to locate a deployment, or select individual deployments to display in the network graph.
 
-3.  In the network graph, click on a deployment to view the information panel.
+3.  In the network graph, click a deployment to view the information panel.
 
 4.  In the **Baseline** tab, you can view baseline flows. Use the **filter by entity name** field to further restrict the flows that are displayed.
 

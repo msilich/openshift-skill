@@ -21,7 +21,7 @@ Additional resources
 
 </div>
 
-# Scheduling a low latency workload onto a compute node
+# Schedule a low latency workload onto a compute node
 
 You can schedule low latency workloads onto a compute node where a performance profile that configures real-time capabilities is applied.
 
@@ -276,7 +276,7 @@ Additional resources
 
 </div>
 
-# Creating a pod with a guaranteed QoS class
+# Create a pod with a guaranteed QoS class
 
 You can create a pod with a quality of service (QoS) class of `Guaranteed` for high-performance workloads. Configuring a pod with a QoS class of `Guaranteed` ensures that the pod has priority access to the specified CPU and memory resources.
 
@@ -483,7 +483,7 @@ spec:
 > [!NOTE]
 > Only disable CPU load balancing when the CPU manager static policy is enabled and for pods with guaranteed QoS that use whole CPUs. Otherwise, disabling CPU load balancing can affect the performance of other containers in the cluster.
 
-# Disabling power saving mode for high priority pods
+# Disable power saving mode for high priority pods
 
 To protect high priority workloads when using power saving configurations on a node, apply performance settings at the pod level. This ensures that the configuration applies to all cores used by the pod, maintaining performance stability.
 
@@ -586,7 +586,7 @@ Additional resources
 
 </div>
 
-# Disabling CPU CFS quota
+# Disable CPU CFS quota
 
 To eliminate CPU throttling for pinned pods, create a pod with the `cpu-quota.crio.io: "disable"` annotation. This annotation disables the CPU completely fair scheduler (CFS) quota when the pod runs.
 
@@ -638,7 +638,7 @@ Additional resources
 
 </div>
 
-# Disabling interrupt processing for CPUs where pinned containers are running
+# Disable interrupt processing for CPUs where pinned containers are running
 
 To achieve low latency for workloads, some containers require that the CPUs they are pinned to do not process device interrupts. You can use the `irq-load-balancing.crio.io` pod annotation to control whether device interrupts are processed on CPUs where the pinned containers are running.
 

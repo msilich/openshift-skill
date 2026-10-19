@@ -42,7 +42,7 @@ Before you start this tutorial, ensure that you have the following required prer
 
 - You have [logged in to the OpenShift Container Platform web console](../web_console/web-console.md#web-console-overview).
 
-# Creating a project
+# Create a project
 
 Create a new project to contain all required resources and application components for the tutorial.
 
@@ -97,7 +97,7 @@ Additional resources
 
 </div>
 
-# Granting view permissions
+# Grant view permissions
 
 Configure the necessary permissions for the application to access the required cluster resources.
 
@@ -165,7 +165,7 @@ Additional resources
 
 </div>
 
-# Deploying the front-end application
+# Deploy the front-end application
 
 Deploy the front-end application that provides the external-facing web component for the tutorial.
 
@@ -229,7 +229,7 @@ Additional resources
 
 </div>
 
-## Viewing pod details
+## View pod details
 
 Retrieve detailed pod information to confirm the running status and resource configuration of the applications in this tutorial.
 
@@ -294,7 +294,7 @@ Additional resources
 
 </div>
 
-## Scaling up the application
+## Scale up the application
 
 Scale the application deployment up or down to meet workload demands.
 
@@ -352,7 +352,7 @@ Additional resources
 
 </div>
 
-# Deploying the back-end application
+# Deploy the back-end application
 
 Deploy the back-end application that provides the service that queries the database to return the national park data required for your application.
 
@@ -458,7 +458,7 @@ Additional resources
 
 </div>
 
-# Deploying the database application
+# Deploy the database application
 
 Deploy a MongoDB database application to contain the information that your application requires. For this tutorial, you will deploy a database application called `mongodb-nationalparks` that holds the national park location information.
 
@@ -526,7 +526,7 @@ Procedure
 
 </div>
 
-## Providing access to the database by creating a secret
+## Provide access to the database by creating a secret
 
 Create a `Secret` resource to securely provide the back-end application with the sensitive database connection credentials.
 
@@ -605,7 +605,7 @@ Additional resources
 
 </div>
 
-## Loading data into the database
+## Load data into the database
 
 After you have deployed the `mongodb-nationalparks` database application, load the national park location information into the database.
 
@@ -665,7 +665,7 @@ Procedure
 
 </div>
 
-# Viewing the application in a web browser
+# View the application in a web browser
 
 After you have deployed the necessary applications and loaded data into the database, you are now ready view your application through a browser. You can access the application by opening the URL for the front-end application.
 

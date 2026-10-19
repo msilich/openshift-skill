@@ -109,7 +109,9 @@ Consider another example where you set the `clusterNetwork.cidr` parameter to `1
 65536 / 512 = 128
 ```
 
-You can use the [Red Hat OpenShift Network Calculator](https://access.redhat.com/labs/ocpnc/) to calculate the maximum number of nodes for your cluster.
+## Additional resources
+
+- [Red Hat OpenShift Network Calculator: calculate the maximum number of nodes for your cluster](https://access.redhat.com/labs/ocpnc/)
 
 # CIDR ranges for hosted control planes
 

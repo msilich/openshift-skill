@@ -61,7 +61,7 @@ Deviation from the RDS can have some or all of the following consequences:
 
 # Engineering considerations for the RAN DU use model
 
-The RAN DU use model configures an OpenShift Container Platform cluster running on commodity hardware for hosting RAN distributed unit (DU) workloads. Model and system level considerations are described below. Specific limits, requirements and engineering considerations for individual components are detailed in later sections.
+The RAN DU use model configures an OpenShift Container Platform cluster running on commodity hardware for hosting RAN distributed unit (DU) workloads.
 
 > [!NOTE]
 > For details of the telco RAN DU RDS KPI test results, see the [telco RAN DU 4.20 reference design specification KPI test results](https://access.redhat.com/articles/7137863). This information is only available to customers and partners.

@@ -19,19 +19,13 @@ There are several caveats to consider when attempting a Control Plane Only updat
 
 - All the clusters might update using EUS channels for a conventional update without pools paused, but only clusters with non control-plane `MachineConfigPools` objects can do Control Plane Only updates with pools paused.
 
-# Performing a Control Plane Only update
+# Performing Control Plane Only updates
 
 You can perform a Control Plane Only update by pausing all non-`master` machine config pools, performing updates from OpenShift Container Platform \<4.y\> to \<4.y+1\> to \<4.y+2\>, then unpausing the machine config pools.
 
-Following this procedure reduces the total update duration and the number of times worker nodes are restarted.
+Following these procedures reduces the total update duration and the number of times worker nodes are restarted.
 
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
+Before performing a Control Plane Only update, ensure that you meet the following prerequisites:
 
 - You reviewed the release notes for OpenShift Container Platform \<4.y+1\> and \<4.y+2\>.
 
@@ -42,7 +36,17 @@ Prerequisites
 - If your cluster uses in-tree vSphere volumes, you updated vSphere to version 7.0u3L+ or 8.0u2+.
 
   > [!IMPORTANT]
-  > If you do not update vSphere to 7.0u3L+ or 8.0u2+ before initiating an OpenShift Container Platform update, known issues might occur with your cluster after the update. For more information, see [Known Issues with OpenShift 4.12 to 4.13 or 4.13 to 4.14 vSphere CSI Storage Migration](https://access.redhat.com/node/7011683).
+  > If you do not update vSphere to 7.0u3L+ or 8.0u2+ before initiating an OpenShift Container Platform update, known issues might occur with your cluster after the update. For more information, see "Known Issues with OpenShift 4.12 to 4.13 or 4.13 to 4.14 vSphere CSI Storage Migration".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Known Issues with OpenShift 4.12 to 4.13 or 4.13 to 4.14 vSphere CSI Storage Migration](https://access.redhat.com/node/7011683)
 
 </div>
 
@@ -158,7 +162,7 @@ Procedure
 
 </div>
 
-1.  Using the web console, update any Operator Lifecycle Manager (OLM) Operators to the versions that are compatible with your intended updated version. You can find more information on how to perform this action in "Updating installed Operators"; see "Additional resources".
+1.  Using the web console, update any Operator Lifecycle Manager (OLM) Operators to the versions that are compatible with your intended updated version. For more information on how to perform this action, see "Updating installed Operators".
 
 2.  Verify that all machine config pools display a status of `UPDATED` and that no machine config pool displays a status of `UPDATING`. To view the status of all machine config pools, run the following command:
 
@@ -320,13 +324,13 @@ Additional resources
 
 There are additional steps to consider when performing Control Plane Only updates for clusters with either layered products or Operators installed through Operator Lifecycle Manager (OLM).
 
-Layered products refer to products that are made of multiple underlying products that are intended to be used together and cannot be broken into individual subscriptions. For examples of layered OpenShift Container Platform products, see [Layered Offering On OpenShift](https://access.redhat.com/support/policy/updates/openshift/#layered).
+Layered products refer to products that are made of multiple underlying products that are intended to be used together and cannot be broken into individual subscriptions. For examples of layered OpenShift Container Platform products, see "Layered Offering On OpenShift".
 
 As you perform a Control Plane Only update for the clusters of layered products and those of Operators that have been installed through OLM, you must complete the following actions:
 
 1.  You have updated all Operators previously installed through Operator Lifecycle Manager (OLM) to a version that is compatible with your target release. Updating the Operators ensures they have a valid update path when the default software catalogs switch from the current minor version to the next during a cluster update. See "Updating installed Operators" for more information on how to check compatibility and, if necessary, update the installed Operators.
 
-2.  Confirm the cluster version compatibility between the current and intended Operator versions. You can verify which versions your OLM Operators are compatible with by using the [Red Hat OpenShift Container Platform Operator Update Information Checker](https://access.redhat.com/labs/ocpouic/?operator=logging&&ocp_versions=4.10,4.11,4.12).
+2.  Confirm the cluster version compatibility between the current and intended Operator versions. To verify which versions your OLM Operators are compatible with, see "Red Hat OpenShift Container Platform Operator Update Information Checker".
 
 For example, the following high level steps describe how to perform a Control Plane Only update from \<4.y\> to \<4.y+2\> for OpenShift Data Foundation (ODF). This can be done through the CLI or web console. For information about how to update clusters through your desired interface, see "Control Plane Only update using the web console" and "Control Plane Only update using the CLI".
 
@@ -353,7 +357,11 @@ Additional resources
 
 </div>
 
+- [Layered Offering On OpenShift](https://access.redhat.com/support/policy/updates/openshift/#layered)
+
 - [Updating installed Operators](../../operators/admin/olm-upgrading-operators.md#olm-upgrading-operators)
+
+- [Red Hat OpenShift Container Platform Operator Update Information Checker](https://access.redhat.com/labs/ocpouic/?operator=logging&&ocp_versions=4.10,4.11,4.12)
 
 - [Performing a Control Plane Only update using the web console](control-plane-only-update.md#updating-control-plane-only-update-console_control-plane-only-update)
 

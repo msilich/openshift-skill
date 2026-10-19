@@ -1,6 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-As a cluster administrator, when you create an Ingress Controller, the Operator manages the DNS records automatically. This approach has some limitations when the required DNS zone is different from the cluster DNS zone or when the DNS zone is hosted outside the cloud provider.
+As a cluster administrator, when you create an Ingress Controller, the Operator manages the DNS records automatically.
+
+This approach has some limitations when the required DNS zone is different from the cluster DNS zone or when the DNS zone is hosted outside the cloud provider.
 
 The following list details key aspects for a managed DNS management policy:
 
@@ -9,8 +11,6 @@ The following list details key aspects for a managed DNS management policy:
 - When you change an Ingress Controller from `Managed` to `Unmanaged` DNS management policy, the Operator does not clean up the previous wildcard DNS record provisioned on the cloud.
 
 - When you change an Ingress Controller from `Unmanaged` to `Managed` DNS management policy, the Operator attempts to create the DNS record on the cloud provider if it does not exist or updates the DNS record if it already exists.
-
-The following list details key aspects for a unmanaged DNS management policy:
 
 - The Unmanaged DNS management policy for Ingress Controllers ensures that the lifecycle of the wildcard DNS record on the cloud provider is not automatically managed; instead, it becomes the responsibility of the cluster administrator.
 

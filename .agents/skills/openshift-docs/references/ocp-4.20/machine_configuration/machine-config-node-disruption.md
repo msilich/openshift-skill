@@ -261,7 +261,7 @@ spec:
 
 </div>
 
-# Configuring node restart behaviors upon machine config changes
+# Configure node restart behaviors upon machine config changes
 
 You can create a node disruption policy to define the machine configuration changes that cause a disruption to your cluster, and which changes do not.
 

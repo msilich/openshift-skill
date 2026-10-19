@@ -2,7 +2,7 @@
 
 To enable the cert-manager Operator for Red Hat OpenShift to manage components on your cloud provider, authenticate the Operator by configuring cloud credentials. You can grant the Operator access to external services required for certificate issuance, such as DNS providers.
 
-# Authenticating on AWS
+# Authenticate on AWS
 
 To securely access AWS resources from your applications, authenticate your workloads on AWS by using the cert-manager Operator for Red Hat OpenShift.
 
@@ -139,7 +139,7 @@ Verification
 
 </div>
 
-# Authenticating with AWS Security Token Service
+# Authenticate with AWS Security Token Service
 
 To securely access AWS resources from your applications without managing long-lived keys, authenticate your workloads by using the AWS Security Token Service (STS).
 
@@ -313,7 +313,7 @@ Additional resources
 
 </div>
 
-# Authenticating on Google Cloud
+# Authenticate on Google Cloud
 
 To securely access Google Cloud resources, authenticate your workloads on Google Cloud by using the cert-manager Operator for Red Hat OpenShift.
 
@@ -451,7 +451,7 @@ Verification
 
 </div>
 
-# Authenticating with Google Cloud Workload Identity
+# Authenticate with Google Cloud Workload Identity
 
 To securely access Google Cloud resources from your applications without managing long-lived keys, authenticate your workloads by using Google Cloud Workload Identity.
 

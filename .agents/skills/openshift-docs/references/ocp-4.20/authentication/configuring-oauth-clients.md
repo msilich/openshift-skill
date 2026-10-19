@@ -23,7 +23,7 @@ Specifies the namespace route. Find this value by running the following command:
 $ oc get route oauth-openshift -n openshift-authentication -o json | jq .spec.host
 ```
 
-# Registering an additional OAuth client
+# Register an additional OAuth client
 
 Register additional OAuth clients to manage authentication for applications that need to interact with your OpenShift Container Platform cluster.
 
@@ -66,7 +66,7 @@ Procedure
 
 </div>
 
-# Configuring token inactivity timeout for an OAuth client
+# Configure token inactivity timeout for an OAuth client
 
 Configure OAuth clients to expire tokens after a set period of inactivity, improving security by automatically invalidating idle sessions.
 

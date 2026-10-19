@@ -4,6 +4,12 @@
 
 If you are using Slack, you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to Slack.
 
+<a id="slack-integration-overview_integrate-with-slack"></a>
+
+# Slack integration overview
+
+You can integrate Red Hat Advanced Cluster Security for Kubernetes with Slack to forward alerts directly to your Slack workspace by following a high-level workflow.
+
 The following steps represent a high-level workflow for integrating Red Hat Advanced Cluster Security for Kubernetes with Slack:
 
 1.  Create a new Slack app, enable incoming webhooks, and get a webhook URL.
@@ -41,9 +47,9 @@ Procedure
 1.  Create a new Slack app:
 
     > [!NOTE]
-    > If you want to use an existing Slack app, go to <https://api.slack.com/apps> and select an app.
+    > If you want to use an existing Slack app, go to the Slack apps dashboard and select an app.
 
-    1.  Go to <https://api.slack.com/apps/new>.
+    1.  Go to the Slack new app creation page.
 
     2.  Enter the **App Name** and choose a **Development Slack Workspace** to install your app.
 
@@ -55,13 +61,27 @@ Procedure
 
 4.  Select **Add New Webhook to Workspace**.
 
-5.  Choose a **channel** that the app will post to, and then select **Authorize**. The page refreshes and you are sent back to your app settings page.
+5.  Choose a **channel** that the app will post to, and then select **Authorize**. The page refreshes and redirects you to your app settings page.
 
 6.  Copy the webhook URL located in the **Webhook URLs for Your Workspace** section.
 
 </div>
 
-For more information, see the Slack documentation topic, [Getting started with Incoming Webhooks](https://api.slack.com/incoming-webhooks#getting_started_with_incoming_webhooks).
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Slack apps dashboard](https://api.slack.com/apps)
+
+- [Create new Slack app](https://api.slack.com/apps/new)
+
+- [Getting started with Incoming Webhooks](https://api.slack.com/incoming-webhooks#getting_started_with_incoming_webhooks)
+
+</div>
 
 <a id="send-alerts-to-different-slack-channels_integrate-with-slack"></a>
 
@@ -85,9 +105,9 @@ Procedure
 
 2.  Use the annotation key `example.com/slack-webhook` in the **Label/Annotation Key For Slack Webhook** field when you configure Red Hat Advanced Cluster Security for Kubernetes.
 
-</div>
+    After the configuration is complete, if a deployment has the annotation that you configured in the YAML file, Red Hat Advanced Cluster Security for Kubernetes sends the alert to the webhook URL you specified for that annotation. Otherwise, it sends the alert to the default webhook URL.
 
-After the configuration is complete, if a deployment has the annotation that you configured in the YAML file, Red Hat Advanced Cluster Security for Kubernetes sends the alert to the webhook URL you specified for that annotation. Otherwise, it sends the alert to the default webhook URL.
+</div>
 
 <a id="slack-configuring-acs_integrate-with-slack"></a>
 
@@ -142,7 +162,7 @@ Procedure
 4.  In the **Enable notification** window, select the **Slack** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 

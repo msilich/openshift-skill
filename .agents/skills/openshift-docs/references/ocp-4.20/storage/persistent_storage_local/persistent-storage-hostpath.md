@@ -4,7 +4,7 @@ A hostPath volume mounts a file or directory from the host node’s filesystem i
 
 # Overview of hostPath
 
-A hostPath volume mounts files or directories from the host node’s filesystem into pods for development and testing on single-node clusters. Because hostPath requires privileged pods and must be statically provisioned, it is not recommended for production. Use network storage with dynamic provisioning instead.
+A hostPath volume mounts files or directories from the host node’s filesystem into pods. Because hostPath requires privileged pods and static provisioning, it is recommended for development and testing only.
 
 > [!IMPORTANT]
 > The cluster administrator must configure pods to run as privileged. This grants access to pods in the same node.

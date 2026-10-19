@@ -4,7 +4,7 @@ User-defined networks (UDNs) extend OVN-Kubernetes to enable custom layer 2 and 
 
 # Overview of user-defined networks
 
-To secure and improve network segmentation and isolation, cluster administrators can create primary or secondary networks that span namespaces at the cluster level using the `ClusterUserDefinedNetwork` custom resource (CR) while a developer can define secondary networks at the namespace level using the `UserDefinedNetwork` CR.
+Cluster administrators can create primary or secondary networks that span namespaces by using the `ClusterUserDefinedNetwork` CR, while developers can define secondary networks at the namespace level by using the `UserDefinedNetwork` CR.
 
 Before the implementation of user-defined networks (UDN), the OVN-Kubernetes CNI plugin for OpenShift Container Platform only supported a layer 3 topology on the primary or *main* network. Due to Kubernetes design principles: all pods are attached to the main network, all pods communicate with each other by their IP addresses, and inter-pod traffic is restricted according to network policy.
 
@@ -54,7 +54,7 @@ Developers and administrators can create a user-defined network that is namespac
 
 # Limitations of a user-defined network
 
-To deploy a successful user-defined networks (UDN), you must consider their limitations including DNS resolution behavior, restricted access to default network services such as the image registry, network policy constraints between isolated networks, and the requirement to create namespaces and networks before pods.
+User-defined networks (UDNs) have limitations including DNS resolution behavior, restricted access to default network services, network policy constraints between isolated networks, and the requirement to create namespaces and networks before pods.
 
 Consider the following limitations before implementing a UDN.
 
@@ -90,7 +90,7 @@ Consider the following limitations before implementing a UDN.
 
 # Layer 2 and layer 3 topologies
 
-A layer 2 topology creates a distributed virtual switch across cluster nodes, this network topology provides a smooth live migration of virtual machine (VM) within the same subnet. A layer 3 topology creates unique segments per node with routing between them, this network topology effectively manages large broadcast domains.
+A layer 2 topology creates a distributed virtual switch across cluster nodes for live migration of virtual machines (VMs) within the same subnet. A layer 3 topology creates unique segments per node with routing between them.
 
 In a flat layer 2 topology, virtual machines and pods connect to the virtual switch so that all these components can communicate with each other within the same subnet. This topology is useful for the live migration of VMs across nodes in the cluster. The following diagram shows a flat layer 2 topology with two nodes that use the virtual switch for live migration purposes:
 
@@ -165,7 +165,7 @@ The following details provide administrators with a best practice for designing 
 
   - When you configure a Virtual Local Area Network (VLAN), you must ensure that both your underlying physical infrastructure (switches, routers, and so on) and your nodes are properly configured to accept VLAN IDs (VIDs). This means that you configure the physical network interface, for example `eth1`, as an access port for the VLAN, for example `20`, that you are connecting to through the physical switch. In addition, you must verify that an OVS bridge mapping, for example `eth1`, exists on your nodes to ensure that the physical interface is properly connected with OVN-Kubernetes.
 
-## Creating a ClusterUserDefinedNetwork CR by using the CLI
+## Create a ClusterUserDefinedNetwork CR by using the CLI
 
 To implement cluster-wide network segmentation and isolation across multiple namespaces, supporting either layer 2 or layer 3 in OpenShift Container Platform, create a `ClusterUserDefinedNetwork` CR by using the CLI. Defining this resource ensures that network traffic is securely partitioned across the cluster.
 
@@ -389,9 +389,9 @@ Procedure
 
 </div>
 
-## Creating a ClusterUserDefinedNetwork CR for a Localnet topology
+## Create a ClusterUserDefinedNetwork CR for a Localnet topology
 
-You deploy a `Localnet` topology to connect the secondary network to the physical underlay. This enables both east-west cluster traffic and access to services running outside the cluster. This topology type requires the additional configuration of the underlying Open vSwitch (OVS) system on cluster nodes.
+You deploy a `Localnet` topology to connect the secondary network to the physical underlay, enabling both east-west cluster traffic and access to services running outside the cluster.
 
 <div>
 
@@ -551,7 +551,7 @@ Additional resources
 
 </div>
 
-## Creating a ClusterUserDefinedNetwork CR by using the web console
+## Create a ClusterUserDefinedNetwork CR by using the web console
 
 To implement isolated network segments with layer 2 connectivity in OpenShift Container Platform, create a `ClusterUserDefinedNetwork` custom resource (CR) by using the web console. Defining this resource ensures that your cluster workloads can communicate directly at the data link layer.
 
@@ -657,7 +657,7 @@ The following details provide a best practice for designing a UDN CR:
 
 - The cluster subnet and services CIDR for a `UserDefinedNetwork` CR cannot overlap with the default cluster subnet CIDR. OVN-Kubernetes network plugin uses `100.64.0.0/16` as the default join subnet for the network. You must not use that value to configure a `UserDefinedNetwork` CR’s `joinSubnets` field. If the default address values are used anywhere in the network for the cluster you must override the default values by setting the `joinSubnets` field. For more information, see "Additional configuration details for user-defined networks".
 
-## Creating a UserDefinedNetwork CR by using the CLI
+## Create a UserDefinedNetwork CR by using the CLI
 
 Create a `UserDefinedNetwork` CR by using the CLI to enable namespace-scoped network segmentation and isolation, allowing you to define custom Layer 2 or Layer 3 network topologies for pods within specific namespaces.
 
@@ -855,7 +855,7 @@ Additional resources
 
 </div>
 
-## Creating a UserDefinedNetwork CR by using the web console
+## Create a UserDefinedNetwork CR by using the web console
 
 To implement isolated network segments with layer 2 connectivity in OpenShift Container Platform, create a `UserDefinedNetwork` custom resource (CR) by using the web console. Defining this resource ensures that your cluster workloads can communicate directly at the data link layer.
 
@@ -1415,7 +1415,7 @@ To troubleshoot your network deployment in OpenShift Container Platform, evaluat
 </tbody>
 </table>
 
-# Opening default network ports on user-defined network pods
+# Open default network ports on user-defined network pods
 
 To allow default network pods to connect to a user-defined network pod, you can use the `k8s.ovn.org/open-default-ports` annotation. This annotation opens specific ports on the user-defined network pod for access from the default network.
 

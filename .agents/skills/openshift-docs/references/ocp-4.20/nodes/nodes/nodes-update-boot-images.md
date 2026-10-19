@@ -164,7 +164,7 @@ To view the current boot image used in your cluster, use one of the following me
 >
 > 3.  Enable the boot image management feature. For information, see "Enabling boot image management".
 
-# Disabling boot image management
+# Disable boot image management
 
 You can disable the boot image management feature so that the Machine Config Operator (MCO) no longer manages or updates the boot image in the affected machine sets. For example, you could disable this feature for the worker nodes in order to use a custom boot image that you do not want changed.
 
@@ -345,7 +345,7 @@ Verification
 
 </div>
 
-# Enabling boot image management
+# Enable boot image management
 
 For supported platforms, the Machine Config Operator (MCO) can manage and update the boot image on each node to ensure the Red Hat Enterprise Linux CoreOS (RHCOS) version of the boot image matches the Red Hat Enterprise Linux CoreOS (RHCOS) version appropriate for your cluster.
 

@@ -24,16 +24,16 @@ Integration with the [JetBrains Gateway](https://www.jetbrains.com/remote-develo
 ## Procedure
 
 1.  Open the Gateway app and click `Connect to Dev Spaces`:  
-    ![JetBrains Gateway main window](assets/613602cece6372f83749.png)  
+    ![JetBrains Gateway main window](assets/f26d0822a2372c3037d1.png)  
 2.  Provide or select the OpenShift Application Programming Interface (API) server URL, choose an authentication method, then provide the required authentication details and click the `Check connection` button to continue:  
-    ![Connecting to OpenShift API server](assets/f3cbf83b01d264db179d.png)  
+    ![Connecting to OpenShift API server](assets/ba077ee1cd955f3dda06.png)  
 3.  Choose your workspace, ensure that it is running, then click the `Connect` button:  
-    ![Selecting workspace](assets/d22023d8897fa2ae935e.png)  
+    ![Selecting workspace](assets/cde51edbb089bef435d1.png)  
 
 ## Results
 
 - Your local Gateway application is running the JetBrains Client and connects to the workspace:  
-  ![Connecting to remote host](assets/40222294a8433ff487cd.png)  
+  ![Connecting to remote host](assets/e47ee058cf53332023ee.png)  
 
 **Related concepts**  
 

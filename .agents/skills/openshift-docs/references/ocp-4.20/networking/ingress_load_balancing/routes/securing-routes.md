@@ -182,7 +182,7 @@ Verification
 
 </div>
 
-## Enforcing HTTP Strict Transport Security per-domain
+## Enforce HTTP Strict Transport Security per-domain
 
 To enforce HTTP Strict Transport Security (HSTS) per-domain for secure routes, add a `requiredHSTSPolicies` record to the Ingress spec to capture the configuration of the HSTS policy.
 
@@ -264,33 +264,41 @@ Procedure
 
     </div>
 
-    - Required. `requiredHSTSPolicies` are validated in order, and the first matching `domainPatterns` applies.
+    where:
 
-    - Required. You must specify at least one `domainPatterns` hostname. Any number of domains can be listed. You can include multiple sections of enforcing options for different `domainPatterns`.
+    `spec.requiredHSTSPolicies`
+    Required. `spec.requiredHSTSPolicies` entries are validated in order, and the first matching `spec.requiredHSTSPolicies.domainPatterns` applies.
 
-    - Optional. If you include `namespaceSelector`, it must match the labels of the project where the routes reside, to enforce the set HSTS policy on the routes. Routes that only match the `namespaceSelector` and not the `domainPatterns` are not validated.
+    `spec.requiredHSTSPolicies.domainPatterns`
+    Required. You must specify at least one `spec.requiredHSTSPolicies.domainPatterns` hostname. Any number of domains can be listed. You can include multiple sections of enforcing options for different `spec.requiredHSTSPolicies.domainPatterns`.
 
-    - Required. `max-age` measures the length of time, in seconds, that the HSTS policy is in effect. This policy setting allows for a smallest and largest `max-age` to be enforced.
+    `spec.requiredHSTSPolicies.namespaceSelector`
+    Optional. If you include `spec.requiredHSTSPolicies.namespaceSelector`, it must match the labels of the project where the routes reside, to enforce the set HSTS policy on the routes. Routes that only match the `spec.requiredHSTSPolicies.namespaceSelector` and not the `spec.requiredHSTSPolicies.domainPatterns` are not validated.
 
-      - The `largestMaxAge` value must be between `0` and `2147483647`. It can be left unspecified, which means no upper limit is enforced.
+    `spec.requiredHSTSPolicies.maxAge`
+    Required. `max-age` measures the length of time, in seconds, that the HSTS policy is in effect. This policy setting allows for a smallest and largest `max-age` to be enforced.
 
-      - The `smallestMaxAge` value must be between `0` and `2147483647`. Enter `0` to disable HSTS for troubleshooting, otherwise enter `1` if you never want HSTS to be disabled. It can be left unspecified, which means no lower limit is enforced.
+    - The `spec.requiredHSTSPolicies.maxAge.largestMaxAge` value must be between `0` and `2147483647`. It can be left unspecified, which means no upper limit is enforced.
 
-    - Optional. Including `preload` in `haproxy.router.openshift.io/hsts_header` allows external services to include this site in their HSTS preload lists. Browsers can then use these lists to determine which sites they can communicate with over HTTPS, before they have interacted with the site. Without `preload` set, browsers need to interact at least once with the site to get the header. `preload` can be set with one of the following:
+    - The `spec.requiredHSTSPolicies.maxAge.smallestMaxAge` value must be between `0` and `2147483647`. Enter `0` to disable HSTS for troubleshooting, otherwise enter `1` if you never want HSTS to be disabled. It can be left unspecified, which means no lower limit is enforced.
 
-      - `RequirePreload`: `preload` is required by the `RequiredHSTSPolicy`.
+    `spec.requiredHSTSPolicies.preloadPolicy`
+    Optional. Including `preload` in `haproxy.router.openshift.io/hsts_header` allows external services to include this site in their HSTS preload lists. Browsers can then use these lists to determine which sites they can communicate with over HTTPS, before they have interacted with the site. Without `preload` set, browsers need to interact at least once with the site to get the header. `preload` can be set with one of the following:
 
-      - `RequireNoPreload`: `preload` is forbidden by the `RequiredHSTSPolicy`.
+    - `RequirePreload`: `preload` is required by the `RequiredHSTSPolicy`.
 
-      - `NoOpinion`: `preload` does not matter to the `RequiredHSTSPolicy`.
+    - `RequireNoPreload`: `preload` is forbidden by the `RequiredHSTSPolicy`.
 
-    - Optional. `includeSubDomainsPolicy` can be set with one of the following:
+    - `NoOpinion`: `preload` does not matter to the `RequiredHSTSPolicy`.
 
-      - `RequireIncludeSubDomains`: `includeSubDomains` is required by the `RequiredHSTSPolicy`.
+    `spec.requiredHSTSPolicies.includeSubDomainsPolicy`
+    Optional. `spec.requiredHSTSPolicies.includeSubDomainsPolicy` can be set with one of the following:
 
-      - `RequireNoIncludeSubDomains`: `includeSubDomains` is forbidden by the `RequiredHSTSPolicy`.
+    - `RequireIncludeSubDomains`: `includeSubDomains` is required by the `RequiredHSTSPolicy`.
 
-      - `NoOpinion`: `includeSubDomains` does not matter to the `RequiredHSTSPolicy`.
+    - `RequireNoIncludeSubDomains`: `includeSubDomains` is forbidden by the `RequiredHSTSPolicy`.
+
+    - `NoOpinion`: `includeSubDomains` does not matter to the `RequiredHSTSPolicy`.
 
 2.  You can apply HSTS to all routes in the cluster or in a particular namespace by entering the `oc annotate command`.
 

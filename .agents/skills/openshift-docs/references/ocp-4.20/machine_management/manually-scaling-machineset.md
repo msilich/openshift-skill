@@ -20,7 +20,7 @@ You can manually add or remove an instance of a machine in a compute machine set
 > $ oc get infrastructure cluster -o jsonpath='{.status.platform}'
 > ```
 
-# Scaling a compute machine set manually
+# Scale a compute machine set manually
 
 To add or remove an instance of a machine in a compute machine set, you can manually scale the compute machine set.
 

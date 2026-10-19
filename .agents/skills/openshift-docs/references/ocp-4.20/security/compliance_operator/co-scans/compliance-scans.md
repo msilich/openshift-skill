@@ -14,7 +14,7 @@ or
 $ oc explain scansettingbindings
 ```
 
-# Running compliance scans
+# Run compliance scans
 
 You can run a scan using the Center for Internet Security (CIS) profiles to evaluate cluster compliance against CIS benchmarks. For convenience, the Compliance Operator creates a `ScanSetting` object with reasonable defaults on startup. This `ScanSetting` object is named `default`.
 
@@ -235,9 +235,11 @@ Procedure
 
 </div>
 
-# Setting custom storage size for results
+# Set custom storage size for results
 
-Although `ComplianceCheckResult` custom resources summarize one check across all scanned nodes, raw scanner results in ARF format are too large to store in etcd-backed Kubernetes resources. You can store them on a per-scan persistent volume and increase the default 1 GiB size by setting the `rawResultStorage.size` value in a `ScanSetting` or `ComplianceScan` resource.
+Although `ComplianceCheckResult` custom resources summarize one check across all scanned nodes, raw scanner results in ARF format are too large to store in etcd-backed Kubernetes resources.
+
+You can store them on a per-scan persistent volume and increase the default 1 GiB size by setting the `rawResultStorage.size` value in a `ScanSetting` or `ComplianceScan` resource.
 
 A related parameter is `rawResultStorage.rotation` which controls how many scans are retained in the PV before the older scans are rotated. The default value is 3, setting the rotation policy to 0 disables the rotation. Given the default rotation policy and an estimate of 100MB per a raw ARF scan report, you can calculate the right PV size for your environment.
 
@@ -278,7 +280,7 @@ Because OpenShift Container Platform can be deployed in a variety of public clou
 
   </div>
 
-# Scheduling the result server pod on a worker node
+# Schedule the result server pod on a worker node
 
 The result server pod mounts the persistent volume (PV) that stores the raw Asset Reporting Format (ARF) scan results. You can use the `nodeSelector` and `tolerations` attributes to configure the location of the result server pod to meet your organization’s requirements.
 
@@ -398,7 +400,7 @@ The Compliance Operator uses defaults of 500Mi memory and 100m CPU for the scann
 > [!IMPORTANT]
 > Increasing the memory limit for the Compliance Operator or the scanner pods is needed if the default limits are not sufficient and the Operator or scanner pods are ended by the Out Of Memory (OOM) process. For more information, see Increasing Compliance Operator resource limits.
 
-# Configuring the hosted control planes management cluster
+# Configure the hosted control planes management cluster
 
 If you are hosting your own Hosted control planes or Hypershift environment and want to scan a Hosted Cluster from the management cluster, you will need to set the name and prefix namespace for the target Hosted Cluster. You can achieve this by creating a `TailoredProfile`.
 
@@ -499,7 +501,7 @@ Procedure
 
 </div>
 
-# Applying resource requests and limits
+# Apply resource requests and limits
 
 You can configure a container’s requests and limits for memory and CPU to define how much CPU time and memory that the container can use.
 
@@ -516,7 +518,7 @@ The kubelet tracks `tmpfs` `emptyDir` volumes as container memory is used, rathe
 > [!IMPORTANT]
 > A container might not exceed its CPU limit for extended periods. Container run times do not stop Pods or containers for excessive CPU usage. To determine whether a container cannot be scheduled or is being killed due to resource limits, see *Troubleshooting the Compliance Operator*.
 
-# Scheduling Pods with container resource requests
+# Schedule Pods with container resource requests
 
 You can specify CPU and memory resource requests and limits for containers to ensure that pods are placed on nodes with sufficient capacity, preventing resource shortages.
 

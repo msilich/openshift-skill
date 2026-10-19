@@ -112,17 +112,17 @@ Procedure
 
 # Resuming the restore operation
 
-If your connection is interrupted during a restore operation or you need to go offline, you can resume the restore operation.
+If your connection drops during a restore operation or you need to go offline, you can resume the restore operation.
 
 - If you do not have access to the machine running the resume operation, you can use the `roxctl central db restore status` command to check the status of an ongoing restore operation.
 
-- If the connection is interrupted, the `roxctl` CLI automatically attempts to resume a task as soon as the connection is available again. The automatic connection retries depend on the duration specified by the `timeout` option.
+- If the connection drops, the `roxctl` CLI automatically attempts to resume a task as soon as the connection is available again. The automatic connection retries depend on the duration specified by the `timeout` option.
 
 - Use the `--timeout` option to specify the time in seconds, minutes or hours after which the `roxctl` CLI stops trying to resume a restore operation. If the option is not specified, the default timeout is 10 minutes.
 
 - If a restore operation gets stuck or you want to cancel it, use the `roxctl central db restore cancel` command to cancel a running restore operation.
 
-- If a restore operation is stuck, you have canceled it, or the time has expired, you can resume the earlier restore by running the original command again.
+- If a restore operation stalls, you have canceled it, or the time has expired, you can resume the earlier restore by running the original command again.
 
 <div class="important">
 
@@ -136,6 +136,6 @@ If your connection is interrupted during a restore operation or you need to go o
 
 - You cannot resume restores across Central pod restarts.
 
-- If a restore operation is interrupted, you must restart it within 24 hours and before restarting Central, otherwise RHACS cancels the restore operation.
+- If a restore operation stops, you must restart it within 24 hours and before restarting Central, otherwise RHACS cancels the restore operation.
 
 </div>

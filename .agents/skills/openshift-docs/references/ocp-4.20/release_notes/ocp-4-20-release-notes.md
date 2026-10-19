@@ -1587,7 +1587,7 @@ RHOSP Technology Preview tracker
 | Increasing the etcd database size | Technology Preview | Technology Preview | Technology Preview |
 | Using RHACM `PolicyGenerator` resources to manage GitOps ZTP cluster policies | Technology Preview | General Availability | General Availability |
 | Pinned Image Sets | Technology Preview | Technology Preview | Technology Preview |
-| Configuring NUMA-aware scheduler replicas and high availability | Not available | Not available | Technology Preview |
+| Configuring NUMA-aware scheduler replicas and high availability | Not available | Not available | General Availability |
 
 Scalability and performance Technology Preview tracker
 
@@ -1722,6 +1722,134 @@ This section will continue to be updated over time to provide notes on enhanceme
 > [!IMPORTANT]
 > For any OpenShift Container Platform release, always review the instructions on [updating your cluster](../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console) properly.
 
+## RHSA-2026:74380 - OpenShift Container Platform 4.20.41 bug fix and security update
+
+Issued: 06 October 2026
+
+OpenShift Container Platform release 4.20.41 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:74380](https://access.redhat.com/errata/RHSA-2026:74380) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:74376](https://access.redhat.com/errata/RHSA-2026:74376) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.41 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, on disconnected clusters, repetitive API re-discovery disrupted watch-based data fetching. As a consequence, the Operator-backed catalog in the **Developer** perspective showed `No Catalog items found`. With this release, watch-based data fetching is replaced with a plain HTTP request. As a result, the Operator-backed catalog correctly lists Operator-backed services on disconnected clusters. ([OCPBUGS-60136](https://issues.redhat.com/browse/OCPBUGS-60136))
+
+- Before this update, the `kube-apiserver-to-kubelet` client signer certificate was being refreshed every 30 days despite having a 365-day validity period. With this release, the refresh interval is corrected to 292 days, 80% of validity, which is consistent with other signers. As a result, certificate rotations are prevented and the signer behavior is aligned with the intended configuration. ([OCPBUGS-128037](https://issues.redhat.com/browse/OCPBUGS-128037))
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:71450 - OpenShift Container Platform 4.20.40 bug fix and security update
+
+Issued: 29 September 2026
+
+OpenShift Container Platform release 4.20.40 is now available. The list of bug fixes that are included in the update is documented in the [RHSA-2026:71450](https://access.redhat.com/errata/RHSA-2026:71450) advisory. The RPM packages that are included in the update are provided by the [RHBA-2026:71441](https://access.redhat.com/errata/RHBA-2026:71441) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.40 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, Vital Product Data (VPD) would incorrectly think a custom resource pool would require additional privileges instead of being read-only. With this release, this issue is fixed. As a result, custom resource pools are correctly recognized as read-only. ([OCPBUGS-88024](https://issues.redhat.com/browse/OCPBUGS-88024))
+
+- Before this update, a programming error forced load balancers to always use control plane instance groups rather than treating them as optional. As a consequence, load balancers included control plane nodes even when they had the `node.kubernetes.io/exclude-from-external-load-balancers` label. With this release, the logic for reusing the instance groups is corrected. As a result, nodes with the `node.kubernetes.io/exclude-from-external-load-balancers` label are correctly excluded from load balancers. ([OCPBUGS-99227](https://issues.redhat.com/browse/OCPBUGS-99227))
+
+- Before this update, upstream GitHub Actions workflow and issue template files that were not used in the OpenShift Container Platform downstream fork were present in the release branches. These files relied on Prow and the `ci-operator` tool, rather than a GitHub Actions workflow. As a consequence, the `golangci-lint` job failed on every pull request. With this release, these unused files are removed from the release branches. As a result, the lint job does not fail on pull requests. ([OCPBUGS-123527](https://issues.redhat.com/browse/OCPBUGS-123527))
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:68541 - OpenShift Container Platform 4.20.39 bug fix and security update
+
+Issued: 22 September 2026
+
+OpenShift Container Platform release 4.20.39 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:68541](https://access.redhat.com/errata/RHSA-2026:68541) advisory. The RPM packages that are included in the update are provided by the [RHBA-2026:68535](https://access.redhat.com/errata/RHBA-2026:68535) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.39 --pullspecs
+```
+
+### Fixed issues
+
+There are no notable fixed issues in this release.
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:66377 - OpenShift Container Platform 4.20.38 bug fix and security update
+
+Issued: 15 September 2026
+
+OpenShift Container Platform release 4.20.38 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:66377](https://access.redhat.com/errata/RHSA-2026:66377) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:66375](https://access.redhat.com/errata/RHSA-2026:66375) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.38 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, Image-Based Installation (IBI) with a proxy configuration wrote the user-provided `noProxy` value directly into the cluster configuration without adding the cluster, service, and machine network Classless Inter-Domain Routing (CIDR) blocks and internal host names required for in-cluster communication. As a consequence, the `noProxy` value did not match the proxy settings applied by the Machine Config Operator template, causing the Operator to detect a configuration drift and trigger an additional node reboot during installation. With this release, IBI enriches the `noProxy` setting by using the same logic as standard installations, aligning the initial proxy configuration with the Machine Config Operator template and preventing the extra reboot. ([OCPBUGS-112324](https://issues.redhat.com/browse/OCPBUGS-112324))
+
+- Before this update, the web console required cloud credentials during Operator installation on Workload Identity clusters. As a consequence, users could not install certain Operators such as External Secrets Operator or cert-manager through the OperatorHub Console on clusters running in cloud-specific Workload Identity or Federated Identity modes. With this release, cloud provider fields are optional during Operator installation on Workload Identity clusters. As a result, Operators can be installed successfully without requiring cloud credentials. ([OCPBUGS-114054](https://issues.redhat.com/browse/OCPBUGS-114054))
+
+- Before this update, the `EventRecorder` component of the Machine Config Operator was incorrectly initialized and prevented emission of the `drain-failure` events when a drain operation failed. As a consequence, administrators did not receive proper event notifications when node drains were blocked by the `PodDisruptionBudgets` or other policies, making it difficult to troubleshoot drain failures. With this release, the `EventRecorder` component is properly initialized to emit drain events. As a result, `drain-failure` events are successfully emitted and visible in cluster events, improving observability of drain operations. ([OCPBUGS-114390](https://issues.redhat.com/browse/OCPBUGS-114390))
+
+- Before this update, in vSphere installer-provisioned infrastructure clusters using static IPs, the control plane machine set (CPMS) Operator was not copying the name server into the CPMS when the CPMS was deleted. As a consequence, the CPMS Operator would identify current control plane machines as not valid and would identify the control plane machines as needing to be re-created. With this release, the CPMS Operator logic is updated to copy the name server definition into the CPMS when the clusters used static IPs. As a result, the name server information is configured in the CPMS when re-creating the CPMS cluster instance. ([OCPBUGS-114721](https://issues.redhat.com/browse/OCPBUGS-114721))
+
+- Before this update, the Node Tuning Operator reconciliation used the rate-limited work queue for all event enqueues. As a consequence, node-tuning configuration was delayed for cluster nodes greater than 100. With this release, the Node Tuning Operator reconciliation loop uses the rate-limited work queue only for failures instead of all event enqueues. As a result, node-tuning configuration for cluster nodes greater than 100 is not delayed. ([OCPBUGS-114730](https://issues.redhat.com/browse/OCPBUGS-114730))
+
+- Before this update, the short description for the `info` command in the Performance Profile Creator (PPC) tool was not updated after the cluster inspection was moved. As a consequence, inconsistencies between the parent help and the info help occurred when you ran the PPC tool. With this release, the short description for the `info` command in the PPC tool is updated to match the current CLI. As a result, the help inconsistencies do not occur when you run the tool. ([OCPBUGS-115719](https://issues.redhat.com/browse/OCPBUGS-115719))
+
+- Before this update, the collection and emission of SELinux conflict metrics was inefficient and consumed excessive system resources. As a consequence, cluster performance degraded during metric collection cycles, leading to delayed reporting and high CPU overhead. With this release, the collection and emission logic is optimized to streamline data processing. As a result, metric collection is significantly faster, improving overall cluster performance and responsiveness. ([OCPBUGS-117657](https://issues.redhat.com/browse/OCPBUGS-117657))
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:63103 - OpenShift Container Platform 4.20.37 bug fix and security update
+
+Issued: 08 September 2026
+
+OpenShift Container Platform release 4.20.37 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:63103](https://access.redhat.com/errata/RHSA-2026:63103) advisory. The RPM packages that are included in the update are provided by the [RHBA-2026:63099](https://access.redhat.com/errata/RHBA-2026:63099) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.37 --pullspecs
+```
+
+### Fixed issues
+
+There are no notable fixed issues in this release.
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
 ## RHSA-2026:60446 - OpenShift Container Platform 4.20.36 bug fix and security update
 
 Issued: 01 September 2026
@@ -1765,6 +1893,8 @@ $ oc adm release info 4.20.35 --pullspecs
 - Before this update, the `nested-container` Security Context Constraint (SCC) used an incorrect specification for UID ranges, causing the UID ranges to be completely missing. As a consequence, pods using the `nested-container` SCC did not have the expected UID range constraints applied. With this release, the SCC correctly uses `uidRangeMin` and `uidRangeMax` fields to specify the UID range from `0` to `65534` so that the `nested-container` SCC properly enforces UID range constraints. ([OCPBUGS-98555](https://redhat.atlassian.net/browse/OCPBUGS-98555))
 
 - Before this update, when you added a new VMware vSphere failure domain that used a MachineSet with a custom `providerSpec.Template` name, the Machine Config Operator (MCO) boot image controller looked up the VM template only by its own computed name and ignored the `providerSpec.Template` name. As a consequence, reconciliation for that failure domain might have failed. A customer-managed VM with the same computed name outside the MCO workspace folder might be overwritten when mistaken for the MCO template. With this release, the controller checks the `providerSpec.Template` name first. The controller falls back to the computed name only when the template is not found. The template is then created from the Open Virtual Appliance (OVA) when needed. The controller does not modify VMs whose names match but are outside the `providerSpec.Workspace.Folder` parameter. As a result, new VMware vSphere failure domains with custom template names reconcile successfully and customer-managed VMs outside the MCO workspace folder are not at risk of being overwritten. ([OCPBUGS-105436](https://redhat.atlassian.net/browse/OCPBUGS-105436))
+
+- Before this update, when more than 70 primary user-defined networks (UDNs) were created on a cluster, broadcast and Address Resolution Protocol (ARP) packets exceeded the Open vSwitch (OVS) resubmit action limit. As a consequence, broadcast and ARP packet flooding caused resolution failures and pod reachability issues for some UDNs. With this release, the OVS resubmit action limit is increased to accommodate more UDNs. As a result, the ARP resolution failures are resolved, which ensures proper pod reachability. ([OCPBUGS-105557](https://redhat.atlassian.net/browse/OCPBUGS-105557))
 
 ### Updating
 

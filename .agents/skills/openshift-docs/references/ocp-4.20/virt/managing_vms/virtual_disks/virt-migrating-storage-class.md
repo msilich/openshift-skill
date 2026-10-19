@@ -2,6 +2,14 @@
 
 You can migrate one or more virtual disks to a different storage class to optimize storage performance or reduce costs without stopping your virtual machine (VM) or virtual machine instance (VMI).
 
+# About storage class migration
+
+A persistent volume claim (PVC) requests storage with specific attributes, such as size and performance, defined by its storage class. You cannot change a PVC’s storage class after you create it.
+
+The storage backend that provisioned the original PVC holds the VM’s data. The target storage class might use a different backend, which does not have that data until you migrate it there.
+
+To move a VM disk to a new storage class, you create a migration plan. The migration plan creates a new PVC in the target storage class and copies the data from the original PVC to the new PVC.
+
 # Migrating VM disks to a different storage class by using the web console
 
 You can migrate one or more disks attached to a virtual machine (VM) to a different storage class by using the OpenShift Container Platform web console. When performing this action on a running VM, the operation of the VM is not interrupted and the data on the migrated disks remains accessible.

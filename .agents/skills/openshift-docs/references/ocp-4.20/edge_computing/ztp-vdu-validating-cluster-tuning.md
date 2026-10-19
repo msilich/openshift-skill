@@ -227,7 +227,7 @@ Always use the latest supported real-time kernel version in your cluster. Ensure
     # ...
     ```
 
-## Checking the realtime kernel version
+## Check the realtime kernel version
 
 Always use the latest version of the realtime kernel in your OpenShift Container Platform clusters. If you are unsure about the kernel version that is in use in the cluster, you can compare the current realtime kernel version to the release version with the following procedure.
 

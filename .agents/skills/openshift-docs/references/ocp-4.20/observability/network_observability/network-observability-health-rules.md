@@ -5,7 +5,7 @@ The Network Observability Operator provides alerts by using built-in metrics and
 > [!IMPORTANT]
 > Network observability health alerts require OpenShift Container Platform 4.16 or later.
 
-# Identifying network issues with automated health rules
+# Identify network issues with automated health rules
 
 Network observability identifies network issues by using automated health rules to monitor metrics. These rules trigger alerts when anomalies occur, which assists in maintaining connectivity and responding to network degradation.
 
@@ -65,7 +65,7 @@ The `PrometheusRule` resource in the `netobserv` namespace can be viewed by runn
 $ oc get prometheusrules -n netobserv -o yaml
 ```
 
-## Detecting network issues with automated health rules
+## Detect network issues with automated health rules
 
 The Network Observability Operator includes a rule-based system to detect network anomalies and infrastructure failures. By converting configurations into alerting rules, the Operator provides automated monitoring and troubleshooting through the OpenShift Container Platform web console.
 
@@ -131,7 +131,9 @@ For example, packet drop rules are created only if the `PacketDrop` agent featur
 
 # Health rule threshold and grouping customization
 
-Health rules in the Network Observability Operator are defined by using rule templates and variants in the `spec.processor.metrics.healthRules` field of the `FlowCollector` custom resource (CR). Customizing these templates allows for flexible, fine-grained alerting tailored to specific environment needs.
+Health rules in the Network Observability Operator are defined by using rule templates and variants in the `spec.processor.metrics.healthRules` field of the `FlowCollector` custom resource (CR).
+
+Customizing these templates allows for flexible, fine-grained alerting tailored to specific environment needs.
 
 For each template, a list of variants can be defined, each with distinct thresholds and grouping configurations.
 
@@ -277,7 +279,7 @@ Fields for the `netobserv_io_network_health` annotation
 > [!NOTE]
 > The `namespaceLabels` and `nodeLabels` fields are mutually exclusive. If neither is provided, the alert appears under the **Global** tab.
 
-## Configuring custom health rules
+## Configure custom health rules
 
 Create custom health rules by using Prometheus Query Language (PromQL) to define an `AlertingRule` resource. These rules trigger alerts based on specific network metrics, such as traffic surges.
 
@@ -388,7 +390,7 @@ Include the `netobserv.io/network-health` annotation in the `PrometheusRule` met
 
 - `netobserv_io_network_health`: A required JSON string. For recording rules, use the `recordingThresholds` field instead of `threshold`. This field determines the health score and UI coloring, such as `{"info":"10","warning":"25","critical":"50"}`.
 
-## Optimizing dashboard metrics with recording rules
+## Optimize dashboard metrics with recording rules
 
 Create custom recording rules to pre-compute metrics for the **Network Health** dashboard. Recording rules require specific annotations and labels to integrate with the Network Observability Operator.
 
@@ -477,7 +479,7 @@ Verification
 
 </div>
 
-# Disabling default rules
+# Disable default rules
 
 Rule templates can be disabled in the `spec.processor.metrics.disableAlerts` field of the `FlowCollector` custom resource (CR). This setting accepts a list of rule template names. For a list of alert template names, see "List of default rules".
 

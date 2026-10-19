@@ -16,7 +16,7 @@ Before you add more compute machines to a cluster that you installed on bare met
 
 - You have installation media and Red Hat Enterprise Linux CoreOS (RHCOS) images that you used to create your cluster. If you do not have these files, you must obtain them by following the instructions in the installation procedure.
 
-## Creating RHCOS machines by using an ISO image
+## Create RHCOS machines by using an ISO image
 
 To scale your OpenShift Container Platform bare metal cluster, you can create more Red Hat Enterprise Linux CoreOS (RHCOS) compute machines by using an ISO image.
 
@@ -114,7 +114,7 @@ Additional resources
 
 </div>
 
-## Creating RHCOS machines by PXE or iPXE booting
+## Create RHCOS machines by PXE or iPXE booting
 
 To scale your OpenShift Container Platform bare metal cluster, you can create more Red Hat Enterprise Linux CoreOS (RHCOS) compute machines by using PXE or iPXE booting.
 
@@ -255,7 +255,7 @@ Additional resources
 
 </div>
 
-## Approving the certificate signing requests for your machines
+## Approve the certificate signing requests for your machines
 
 To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 
@@ -955,7 +955,7 @@ Procedure
 
 </div>
 
-## Scaling a compute machine set manually
+## Scale a compute machine set manually
 
 To add or remove an instance of a machine in a compute machine set, you can manually scale the compute machine set.
 
@@ -1105,12 +1105,22 @@ The `maxPods` parameter sets the number of pods that the node can run to a fixed
     maxPods: 250
 ```
 
-## Creating a KubeletConfig CR to edit kubelet parameters
+## Create a KubeletConfig CR to edit kubelet parameters
 
 You can use a `KubeletConfig` custom resource (CR) to edit a kubelet parameters without modifing the kubelet configuration directly.
 
 > [!NOTE]
 > As the fields in the `kubeletConfig` object are passed directly to the kubelet from upstream Kubernetes, the kubelet validates those values directly. Invalid values in the `kubeletConfig` object might cause cluster nodes to become unavailable. For valid values, see the [Kubernetes documentation](https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/).
+
+You can set most kubelet configuration options. You cannot overwrite the following options:
+
+- `CgroupDriver`
+
+- `ClusterDNS`
+
+- `ClusterDomain`
+
+- `StaticPodPath`
 
 Consider the following guidance:
 
@@ -1304,6 +1314,8 @@ Procedure
         - Use `containerLogMaxSize` to set the maximum size of the container log file before it is rotated.
 
         - Use `maxPods` to set the maximum pods per node.
+
+        - Use `nodeStatusMaxImages` to set how many images the node reports. If a node contains more than 50 images, pod scheduling might be imbalanced because the image list is shortened to 50 by default. Set `nodeStatusMaxImages` to `-1` to disable that limit.
 
           > [!NOTE]
           > The rate at which the kubelet talks to the API server depends on queries per second (QPS) and burst values. The default values, `50` for `kubeAPIQPS` and `100` for `kubeAPIBurst`, are sufficient if there are limited pods running on each node. It is recommended to update the kubelet QPS and burst rates if there are enough CPU and memory resources on the node.
@@ -1517,7 +1529,7 @@ Operator Lifecycle Manager (OLM) runs on the control plane nodes and its memory 
 > [!NOTE]
 > In OpenShift Container Platform 4.20, half of a CPU core (500 millicore) is now reserved by the system by default compared to OpenShift Container Platform 3.11 and previous versions. The sizes are determined taking that into consideration.
 
-## Setting up CPU Manager
+## Set up CPU Manager
 
 To configure CPU manager, create a `KubeletConfig` custom resource (CR) and apply it to the required set of nodes.
 
@@ -1952,7 +1964,7 @@ Some platforms support multiple huge page sizes. To allocate huge pages of a spe
 
 - Applications that consume huge pages via `shmget()` with `SHM_HUGETLB` must run with a supplemental group that matches ***proc/sys/vm/hugetlb_shm_group***.
 
-## Configuring huge pages at boot time
+## Configure huge pages at boot time
 
 To ensure nodes in your OpenShift Container Platform cluster pre-allocate memory for specific workloads, reserve huge pages at boot time.
 
@@ -2064,7 +2076,7 @@ Verification
 
 </div>
 
-# Understanding device plugins
+# Understand device plugins
 
 A device plugin is a gRPC service running on nodes that manages specific hardware resources through an extension mechanism, enabling containers to consume these devices.
 
@@ -2144,7 +2156,7 @@ Additional resources
 
 </div>
 
-## Understanding the Device Manager
+## Understand the Device Manager
 
 Device Manager advertises specialized node hardware resources through device plugins, enabling pods to consume hardware devices without requiring upstream code changes.
 
@@ -2165,7 +2177,7 @@ While handling a new pod admission request, Kubelet passes requested `Extended R
 
 Additionally, device plugins can also perform several other device-specific operations, such as driver installation, device initialization, and device resets. These functionalities vary from implementation to implementation.
 
-## Enabling Device Manager
+## Enable Device Manager
 
 Enable Device Manager to allow device plugins to advertise specialized node hardware resources and make them available to pods without requiring code changes.
 
@@ -2469,7 +2481,7 @@ The following taints are built into OpenShift Container Platform:
   > [!IMPORTANT]
   > OpenShift Container Platform does not set a default pid.available `evictionHard`.
 
-## Adding taints and tolerations
+## Add taints and tolerations
 
 You can add tolerations to pods and taints to nodes to allow the node to control which pods should or should not be scheduled on that node.
 
@@ -2589,7 +2601,7 @@ Procedure
 
 </div>
 
-## Adding taints and tolerations using a compute machine set
+## Add taints and tolerations using a compute machine set
 
 You can add taints to groups of nodes by using a compute machine set. All nodes associated with the `MachineSet` object are updated with the taint.
 
@@ -2743,7 +2755,7 @@ Procedure
 
 </div>
 
-## Binding a user to a node using taints and tolerations
+## Bind a user to a node using taints and tolerations
 
 You can use taints and tolerations to dedicate a set of nodes for exclusive use by a particular set of users.
 
@@ -2790,7 +2802,7 @@ Procedure
 
 </div>
 
-## Controlling nodes with special hardware using taints and tolerations
+## Control nodes with special hardware using taints and tolerations
 
 In a cluster that has specialized hardware, you can use taints and tolerations to either keep pods that do not need the specialized hardware off of those nodes or require pods that need specialized hardware to use specific nodes.
 
@@ -2857,7 +2869,7 @@ Procedure
 
 </div>
 
-## Removing taints and tolerations
+## Remove taints and tolerations
 
 You can remove taints from nodes and tolerations from pods as needed if you no longer want the scheduling behavior.
 
@@ -2940,7 +2952,7 @@ For each container in a pod with the `restricted` topology management policy, ku
 `single-numa-node` policy
 For each container in a pod with the `single-numa-node` topology management policy, kubelet admits the pod if all the resources required by the pod can be allocated on the same NUMA node. If a single NUMA node affinity is not possible, the Topology Manager rejects the pod from the node. This results in a pod in a `Terminated` state with a pod admission failure.
 
-## Setting up Topology Manager
+## Set up Topology Manager
 
 To use Topology Manager, you must configure an allocation policy in the `KubeletConfig` custom resource (CR) named `cpumanager-enabled`. This file might exist if you have set up CPU Manager. If the file does not exist, you can create the file.
 
@@ -3161,7 +3173,7 @@ Specifies that the CPU limit has been overridden to `1` because the `limitCPUToM
 `spec.containers.resources.memory.cpu`
 Specifies that the CPU request is now `250m` because the `cpuRequestToLimit` is set to `25` in the `ClusterResourceOverride` object. As such, 25% of the 1 CPU core is 250m.
 
-## Installing the Cluster Resource Override Operator using the web console
+## Install the Cluster Resource Override Operator using the web console
 
 You can use the OpenShift Container Platform web console to install the Cluster Resource Override Operator to help you control overcommit in your cluster.
 
@@ -3288,7 +3300,7 @@ Procedure
 
 </div>
 
-## Installing the Cluster Resource Override Operator using the CLI
+## Install the Cluster Resource Override Operator using the CLI
 
 You can use the OpenShift CLI to install the Cluster Resource Override Operator to help you control overcommit in your cluster.
 
@@ -3500,7 +3512,7 @@ Procedure
 
 </div>
 
-## Configuring cluster-level overcommit
+## Configure cluster-level overcommit
 
 You can use the OpenShift CLI to configure the Cluster Resource Override Operator to help control overcommit in your cluster.
 
@@ -3721,7 +3733,7 @@ Additional resources
 
 </div>
 
-## Disabling or enforcing CPU limits using CPU CFS quotas
+## Disable or enforce CPU limits using CPU CFS quotas
 
 You can disable the default enforcement of CPU limits for nodes in a machine config pool.
 
@@ -3822,7 +3834,7 @@ Additional resources
 
 </div>
 
-## Disabling overcommitment for a node
+## Disable overcommitment for a node
 
 When overcommitment is enabled on a node, you can disable overcommitment on that node. Disabling overcommit can help ensure predictability, stability, and high performance in your cluster.
 
@@ -3850,9 +3862,9 @@ For information on project-level resource limits, see the *Additional resources*
 
 Alternatively, you can disable overcommitment for specific projects.
 
-## Disabling overcommitment for a project
+## Disable overcommitment for a project
 
-If overcommitment is enabled on a project, you can disable overcommitment for that projects. This allows infrastructure components to be configured independently of overcommitment.
+If overcommitment is enabled on a project, you can disable overcommitment for that project. This allows infrastructure components to be configured independently of overcommitment.
 
 <div>
 
@@ -3973,7 +3985,7 @@ As new containers are run, new images appear. All images are marked with a time 
 
 Once the collection starts, the oldest images get deleted first until the stopping criterion is met.
 
-## Configuring garbage collection for containers and images
+## Configure garbage collection for containers and images
 
 As an administrator, you can configure how OpenShift Container Platform performs garbage collection by creating a `kubeletConfig` object for each machine config pool. Performing garbage collection helps ensure that your nodes are running efficiently.
 
@@ -4197,9 +4209,13 @@ Understand and use the Node Tuning Operator to manage node-level performance tun
 
 ## Node Tuning Operator
 
-The Node Tuning Operator helps you manage node-level tuning by orchestrating the TuneD daemon and achieves low latency performance by using the Performance Profile controller. The majority of high-performance applications require some level of kernel tuning. The Node Tuning Operator provides a unified management interface to users of node-level sysctls and more flexibility to add custom tuning specified by user needs.
+The Node Tuning Operator helps you manage node-level tuning by orchestrating the TuneD daemon and achieves low latency performance by using the Performance Profile controller.
 
-The Operator manages the containerized TuneD daemon for OpenShift Container Platform as a Kubernetes daemon set. It ensures the custom tuning specification is passed to all containerized TuneD daemons running in the cluster in the format that the daemons understand. The daemons run on all nodes in the cluster, one per node.
+The majority of high-performance applications require some level of kernel tuning. The Node Tuning Operator provides a unified management interface to users of node-level sysctls and more flexibility to add custom tuning specified by user needs.
+
+The Operator manages the containerized TuneD daemon for OpenShift Container Platform as a Kubernetes daemon set. It ensures the custom tuning specification is passed to all containerized TuneD daemons running in the cluster in the format that the daemons understand.
+
+The daemons run on all nodes in the cluster, one per node.
 
 Node-level settings applied by the containerized TuneD daemon are rolled back on an event that triggers a profile change or when the containerized TuneD daemon is terminated gracefully by receiving and handling a termination signal.
 
@@ -4218,7 +4234,7 @@ The Node Tuning Operator is part of a standard OpenShift Container Platform inst
 > [!NOTE]
 > In earlier versions of OpenShift Container Platform, the Performance Addon Operator was used to implement automatic tuning to achieve low latency performance for OpenShift applications. In OpenShift Container Platform 4.11 and later, this functionality is part of the Node Tuning Operator.
 
-## Accessing an example Node Tuning Operator specification
+## Access an example Node Tuning Operator specification
 
 Use this process to access an example Node Tuning Operator specification.
 
@@ -4574,9 +4590,9 @@ Additional resources
 
 </div>
 
-# Configuring the maximum number of pods per node
+# Configure the maximum number of pods per node
 
-You can use the `podsPerCore` and `maxPods` parameters in a kubelet configuration to control the maximum number of pods that can be scheduled to a node. If you use both options, the lower of the two limits the number of pods on a node. Setting an appropriate maximum can help ensure your nodes run efficiently.
+You can use the `podsPerCore` and `maxPods` parameters in a kubelet configuration to control the maximum number of pods scheduled to a node. If you use both options, the lower of the two limits the number of pods on a node.
 
 For example, if `podsPerCore` is set to `10` on a node with 4 processor cores, the maximum number of pods allowed on the node will be 40.
 

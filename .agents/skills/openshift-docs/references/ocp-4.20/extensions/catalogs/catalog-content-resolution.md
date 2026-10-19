@@ -351,7 +351,7 @@ spec:
 
 </div>
 
-# Troubleshooting catalog selection errors
+# Troubleshoot catalog selection errors
 
 If bundle resolution fails because of ambiguity or because no catalog is selected, an error message is printed in the `status.conditions` field of the cluster extension.
 

@@ -15,7 +15,7 @@ The following types of volume sources can be projected:
 
 # Understanding projected volumes
 
-To simplify data management within your pods, you can use projected volumes to map multiple configuration sources, such as secrets and config maps, into a single directory. By using a single directory, you make it easier for your applications to access sensitive information and environment metadata easier.
+You can use projected volumes to map multiple configuration sources, such as secrets and config maps, into a single directory, simplifying how applications access sensitive information and environment metadata.
 
 You can use projected volumes to map any combination of the volume sources into a single directory, allowing the user to perform the following actions:
 
@@ -238,7 +238,7 @@ Consider the following situations related to the volume file paths.
 
 - Collisions when One Path is Explicit and the Other is Automatically Projected. If there is a collision due to a user-specified path matching data that is automatically projected, the latter resource overwrites anything preceding it as before.
 
-# Configuring a projected volume for a Pod
+# Configure a projected volume for a Pod
 
 You can create projected volumes to map multiple configuration sources, such as secrets and config maps, into a single directory. Projected volumes centralize sensitive information and environment metadata for your applications into a single directory.
 
@@ -254,19 +254,11 @@ The following example shows `admin` in base64:
 $ echo -n "admin" | base64
 ```
 
-<div class="formalpara">
-
-<div class="title">
-
-Example output
-
-</div>
+The following is the base64 output:
 
 ``` terminal
 YWRtaW4=
 ```
-
-</div>
 
 The following example shows the password `1f2d1e2e67df` in base64:
 
@@ -274,19 +266,11 @@ The following example shows the password `1f2d1e2e67df` in base64:
 $ echo -n "1f2d1e2e67df" | base64
 ```
 
-<div class="formalpara">
-
-<div class="title">
-
-Example output
-
-</div>
+The following is the base64 output:
 
 ``` terminal
 MWYyZDFlMmU2N2Rm
 ```
-
-</div>
 
 The following procedure uses a projected volume to mount an existing secret volume source.
 

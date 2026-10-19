@@ -19,7 +19,7 @@ The trust-manager operand provides the following benefits:
 
 - Automatic integration with the default trusted CA bundle of the cluster, requiring no manual configuration.
 
-# Installing the trust-manager operand
+# Install the trust-manager operand
 
 You can install the trust-manager operand to enable the automated distribution of trust bundles across your cluster namespaces. The trust-manager operand is not installed by default.
 
@@ -204,7 +204,7 @@ Verification
 
 <div class="title">
 
-Next Step
+Next step
 
 </div>
 
@@ -212,7 +212,7 @@ Next Step
 
 </div>
 
-# Configuring trust bundle
+# Configure trust bundle
 
 After installing the trust-manager operand, you must use the Bundle custom resource (CR) to distribute certificate authority (CA) certificates across your cluster. A trust bundle combines certificate sources and maintains target `ConfigMap` and `Secret` objects across selected namespaces.
 
@@ -367,9 +367,11 @@ Verification
 
 </div>
 
-# Uninstalling the trust-manager operand
+# Uninstall the trust-manager operand
 
-You can uninstall the trust-manager operand by deleting the TrustManager custom resource (CR). Deleting the TrustManager CR stops the operator from reconciling trust-manager resources, but does not automatically remove the trust-manager deployment or its associated resources. You must manually delete these resources after deleting the CR if you need a complete cleanup.
+You can uninstall the trust-manager operand by deleting the TrustManager custom resource (CR). Deleting the TrustManager CR stops the operator from reconciling trust-manager resources, but does not automatically remove the trust-manager deployment or its associated resources.
+
+You must manually delete these resources after deleting the CR if you need a complete cleanup.
 
 <div>
 

@@ -199,7 +199,7 @@ The `MachineConfigPool` object allows users to configure how upgrades are rolled
 
 The `NodeSelector` object can be replaced with a reference to the `MachineSet` object.
 
-## Scaling a compute machine set manually
+## Scale a compute machine set manually
 
 To add or remove an instance of a machine in a compute machine set, you can manually scale the compute machine set.
 
@@ -317,7 +317,7 @@ Specific machines can also be prioritized for deletion by adding the annotation 
 > [!NOTE]
 > Custom compute machine sets can be used for use cases requiring that services run on specific nodes and that those services are ignored by the controller when the worker compute machine sets are scaling down. This prevents service disruption.
 
-## Creating default cluster-wide node selectors
+## Create default cluster-wide node selectors
 
 You can use default cluster-wide node selectors on pods together with labels on nodes to constrain all pods created in a cluster to specific nodes.
 
@@ -640,7 +640,7 @@ The Kubernetes Controller Manager waits for 5 minutes to consider a node unhealt
 > [!NOTE]
 > The latency profiles do not support custom machine config pools, only the default worker machine config pools.
 
-## Using and changing worker latency profiles
+## Use and change worker latency profiles
 
 You can change a worker latency profile to deal with network latency at any time by editing the `node.config` object. With this configuration, you can ensure that your cluster runs properly if network latency between the control plane and the compute nodes fluctuates.
 
@@ -1256,7 +1256,7 @@ Additional resources
 
 </div>
 
-## Creating a compute machine set
+## Create a compute machine set
 
 To dynamically manage machine compute resources, you can create your own compute machine sets in addition to the compute machine sets created by the installation program. Use the OpenShift Container Platform CLI to automate node provisioning.
 
@@ -1396,7 +1396,7 @@ Verification
 
 </div>
 
-## Creating an infrastructure node
+## Create an infrastructure node
 
 To reduce subscription costs, you can use labels to configure compute nodes as infrastructure nodes, where you can move infrastructure resources.
 
@@ -1480,7 +1480,7 @@ Additional resources
 
 </div>
 
-## Creating a machine config pool for infrastructure machines
+## Create a machine config pool for infrastructure machines
 
 You can create a machine configuration pool for infrastructure machines to apply dedicated configuration to infra machines. You might want to apply dedicated configuration to infra machines because they run distinct workloads from other nodes in the cluster.
 
@@ -1659,7 +1659,7 @@ After creating an infrastructure machine set, the `worker` and `infra` roles are
 
 However, when an infra node is assigned the worker role, there is a chance that user workloads can get assigned inadvertently to the infra node. To avoid this, you can apply a taint to the infra node and tolerations for the pods that you want to control.
 
-## Binding infrastructure node workloads using taints and tolerations
+## Bind infrastructure node workloads using taints and tolerations
 
 To avoid user workloads being inadvertently assigned to an infra node, you can apply a taint to the infra node and tolerations for the pods you want to control. After creating an infrastructure machine set, the `worker` and `infra` roles are applied to new infra nodes.
 
@@ -1812,7 +1812,7 @@ Move default infrastructure resources to the infrastructure machine sets that yo
 
 Some of the infrastructure resources are deployed in your cluster by default. You can move them to the infrastructure machine sets that you created.
 
-## Moving the router
+## Move the router
 
 Deploying the router pod on an infrastructure node can reduce your OpenShift Container Platform subscription size. Move the router pod by editing the `IngressController` object in the `openshift-ingress-operator` namespace. By default, the pod is deployed to a worker node.
 
@@ -1981,7 +1981,7 @@ Verification
 
 </div>
 
-## Moving the default registry
+## Move the default registry
 
 Deploying the registry pod on an infrastructure node can reduce your OpenShift Container Platform subscription size. Move the registry pod by editing the `configs.imageregistry.operator.openshift.io/cluster` config object.
 
@@ -2063,9 +2063,11 @@ Verification
 
 </div>
 
-## Moving the monitoring solution
+## Move the monitoring solution
 
-Redeploy the monitoring stack to infrastructure nodes to reduce your subscription requirements. Create and apply a custom config map to move the monitoring stack to infrastructure nodes. The monitoring stack includes Prometheus, Thanos Querier, and Alertmanager, and is managed by the Cluster Monitoring Operator (CMO).
+Redeploy the monitoring stack to infrastructure nodes to reduce your subscription requirements. Create and apply a custom config map to move the monitoring stack to infrastructure nodes.
+
+The monitoring stack includes Prometheus, Thanos Querier, and Alertmanager, and is managed by the Cluster Monitoring Operator (CMO).
 
 <div>
 
@@ -2407,7 +2409,7 @@ spec:
 >
 > The minimum and maximum CPUs, memory, and GPU values are determined by calculating those resources on all nodes in the cluster, even if the cluster autoscaler does not manage the nodes. For example, the control plane nodes are considered in the total memory in the cluster, even though the cluster autoscaler does not manage the control plane nodes.
 
-## Deploying a cluster autoscaler
+## Deploy a cluster autoscaler
 
 To deploy a cluster autoscaler, you create an instance of the `ClusterAutoscaler` resource.
 
@@ -2935,7 +2937,7 @@ Uses AES-GCM with a random nonce and a 32-byte key to perform the encryption.
 
 The etcd encryption keys are rotated every 7 days. Up to 10 historical encryption keys are preserved after rotation to help decrypt older backups and provide an extra layer of data recovery safety.
 
-## Enabling etcd encryption
+## Enable etcd encryption
 
 Enable etcd encryption to protect sensitive cluster resources such as secrets, config maps, routes, and OAuth tokens at rest.
 
@@ -3052,7 +3054,7 @@ Verification
 
 </div>
 
-## Disabling etcd encryption
+## Disable etcd encryption
 
 Disable etcd encryption when you no longer need to encrypt sensitive cluster resources at rest.
 
@@ -3619,7 +3621,7 @@ The following are some example scenarios that produce an out-of-date status:
 
 Understand and configure pod disruption budgets to control voluntary disruptions during cluster operations.
 
-## Understanding how to use pod disruption budgets to specify the number of pods that must be up
+## Understand how to use pod disruption budgets to specify the number of pods that must be up
 
 To ensure pod availability during voluntary disruptions such as node maintenance or cluster updates, you can use pod disruption budgets to define safety constraints for your applications.
 
@@ -3679,7 +3681,7 @@ The `PodDisruptionBudget` is considered healthy when there are at least `minAvai
 > [!NOTE]
 > Depending on your pod priority and preemption settings, lower-priority pods might be removed despite their pod disruption budget requirements.
 
-## Specifying the number of pods that must be up with pod disruption budgets
+## Specify the number of pods that must be up with pod disruption budgets
 
 You can use a `PodDisruptionBudget` object to specify the minimum number or percentage of replicas that must be up at a time. This ensures pod availability during voluntary disruptions such as node maintenance or cluster updates.
 
@@ -3751,7 +3753,7 @@ Procedure
 
 </div>
 
-## Specifying the eviction policy for unhealthy pods
+## Specify the eviction policy for unhealthy pods
 
 When you use pod disruption budgets (PDBs) to specify how many pods must be available simultaneously, you can also define the criteria for how unhealthy pods are considered for eviction. The eviction policy determines which pods the cluster can evict.
 

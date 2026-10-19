@@ -148,7 +148,7 @@ Specifies the value of the key/value pair (label) that must be matched to apply 
 >
 > - If you specify multiple `matchExpressions` associated with `nodeSelectorTerms`, then the pod can be scheduled onto a node only if all `matchExpressions` are satisfied.
 
-# Configuring a required node affinity rule
+# Configure a required node affinity rule
 
 You can use a *required* rule to instruct the scheduler that the rules **must** be met before a pod can be scheduled on a node.
 
@@ -242,7 +242,7 @@ Procedure
 
 </div>
 
-# Configuring a preferred node affinity rule
+# Configure a preferred node affinity rule
 
 You can use a *preferred* rule to instruct the scheduler that if a matching node is not available, schedule the pod on a different node to ensure the workload application runs.
 

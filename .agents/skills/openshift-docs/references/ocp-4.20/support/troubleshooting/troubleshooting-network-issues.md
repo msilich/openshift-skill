@@ -4,9 +4,9 @@ Use the following sections to troubleshoot network issues.
 
 # How the network interface is selected
 
-For installations on bare metal or with virtual machines that have more than one network interface controller (NIC), the NIC that OpenShift Container Platform uses for communication with the Kubernetes API server is determined by the `nodeip-configuration.service` service unit that is run by systemd when the node boots.
+For installations on bare metal or with virtual machines that have more than one network interface controller (NIC), the NIC that OpenShift Container Platform uses for communication with the Kubernetes API server is determined by the `nodeip-configuration.service` service unit.
 
-The `nodeip-configuration.service` selects the IP from the interface associated with the default route.
+The unit is run by systemd when the node boots. The `nodeip-configuration.service` selects the IP from the interface associated with the default route.
 
 After the `nodeip-configuration.service` service determines the correct NIC, the service creates the `/etc/systemd/system/kubelet.service.d/20-nodenet.conf` file. The `20-nodenet.conf` file sets the `KUBELET_NODE_IP` environment variable to the IP address that the service selected.
 
@@ -18,7 +18,9 @@ If network communication is disrupted or misconfigured because a different NIC i
 
 ## Optional: Overriding the default node IP selection logic
 
-To override the default IP selection logic, you can create a hint file that includes the `NODEIP_HINT` variable to override the default IP selection logic. Creating a hint file allows you to select a specific node IP address from the interface in the subnet of the IP address specified in the `NODEIP_HINT` variable.
+To override the default IP selection logic, you can create a hint file that includes the `NODEIP_HINT` variable to override the default IP selection logic.
+
+Creating a hint file allows you to select a specific node IP address from the interface in the subnet of the IP address specified in the `NODEIP_HINT` variable.
 
 For example, if a node has two interfaces, `eth0` with an address of `10.0.0.10/24`, and `eth1` with an address of `192.0.2.5/24`, and the default route points to `eth0` (`10.0.0.10`),the node IP address would normally use the `10.0.0.10` IP address.
 
@@ -147,7 +149,9 @@ Procedure
 
 ## Configuring OVN-Kubernetes to use a secondary OVS bridge
 
-You can create an additional or *secondary* Open vSwitch (OVS) bridge, `br-ex1`, that OVN-Kubernetes manages and the Multiple External Gateways (MEG) implementation uses for defining external gateways for an OpenShift Container Platform node. You can define a MEG in an `AdminPolicyBasedExternalRoute` custom resource (CR). The MEG implementation provides a pod with access to multiple gateways, equal-cost multipath (ECMP) routes, and the Bidirectional Forwarding Detection (BFD) implementation.
+You can create an additional or *secondary* Open vSwitch (OVS) bridge, `br-ex1`, that OVN-Kubernetes manages and the Multiple External Gateways (MEG) implementation uses for defining external gateways for an OpenShift Container Platform node.
+
+You can define a MEG in an `AdminPolicyBasedExternalRoute` custom resource (CR). The MEG implementation provides a pod with access to multiple gateways, equal-cost multipath (ECMP) routes, and the Bidirectional Forwarding Detection (BFD) implementation.
 
 Consider a use case for pods impacted by the Multiple External Gateways (MEG) feature and you want to egress traffic to a different interface, for example `br-ex1`, on a node. Egress traffic for pods not impacted by MEG get routed to the default OVS `br-ex` bridge.
 
@@ -737,7 +741,7 @@ Additional resources
 
 - [Understanding the Machine Config Operator](../../machine_configuration/index.md#machine-config-operator_machine-config-overview)
 
-- [Checking machine config pool status](../../machine_configuration/index.md#checking-mco-status_machine-config-overview)
+- [Check machine config pool status](../../machine_configuration/index.md#checking-mco-status_machine-config-overview)
 
 </div>
 

@@ -15,7 +15,7 @@ The configuration is in the same format as for the installer-provisioned infrast
 
 Agent-based Installer supported architectures
 
-# Understanding Agent-based Installer
+# Understand Agent-based Installer
 
 As an OpenShift Container Platform user, you can leverage the advantages of the Assisted Installer hosted service in disconnected environments.
 
@@ -106,9 +106,6 @@ In the `install-config.yaml` file, specify the platform on which to perform the 
   >
   > - See "Deploying OpenShift 4.x on non-tested platforms using the bare metal install method" before you attempt to install an OpenShift Container Platform cluster in virtualized or cloud environments.
 
-> [!NOTE]
-> For installations on IBM Z® (`s390x`) architecture, the minimum memory requirement is 24 GB RAM per host instead of 16 GB.
-
 <div>
 
 <div class="title">
@@ -142,7 +139,9 @@ Federal Information Processing Standards (FIPS) compliance is one of the most cr
 
 # Configure FIPS through the Agent-based Installer
 
-During a cluster deployment, the Federal Information Processing Standards (FIPS) change is applied when the Red Hat Enterprise Linux CoreOS (RHCOS) machines are deployed in your cluster. For Red Hat Enterprise Linux (RHEL) machines, you must enable FIPS mode when you install the operating system on the machines that you plan to use as worker machines.
+During a cluster deployment, the Federal Information Processing Standards (FIPS) change is applied when the Red Hat Enterprise Linux CoreOS (RHCOS) machines are deployed in your cluster.
+
+For Red Hat Enterprise Linux (RHEL) machines, you must enable FIPS mode when you install the operating system on the machines that you plan to use as worker machines.
 
 > [!IMPORTANT]
 > OpenShift Container Platform requires the use of a FIPS-capable installation binary to install a cluster in FIPS mode.

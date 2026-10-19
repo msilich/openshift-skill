@@ -80,6 +80,103 @@ Procedure
 
 </div>
 
+# Customizing the br-ex bridge at installation time in the GitOps ZTP pipeline
+
+By default, OpenShift Container Platform automatically configures the Open vSwitch (OVS) `br-ex` bridge on bare-metal nodes. For advanced networking requirements, you can override this default behavior by defining a customized `br-ex` bridge in an NMState configuration. When you configure the customized `br-ex` bridge as part of the GitOps Zero Touch Provisioning (ZTP) installation, the configuration is applied during cluster provisioning. This eliminates the need for the Day 2 migration procedure, which requires a node reboot.
+
+To customize the `br-ex` bridge at installation time in the GitOps ZTP pipeline, you create a `MachineConfig` object that includes the customized `br-ex` bridge configuration, package it as a `ConfigMap`, and reference it in your `ClusterInstance` CR.
+
+> [!NOTE]
+> The customized `br-ex` bridge configuration cannot be included directly in the `ClusterInstance` CR. Using a `MachineConfig` object as an extra manifest is currently the only supported method to configure a customized `br-ex` bridge at installation time.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You configured a Git repository where you manage your custom site configuration data. The repository must be accessible from the hub cluster and be defined as a source repository for the Argo CD application.
+
+- You created a `MachineConfig` object that includes your customized `br-ex` bridge NMState configuration. For detailed instructions on creating the NMState configuration and `MachineConfig` object, see "Creating a manifest object that includes a customized br-ex bridge".
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  In your `/clusterinstance` directory, create an `extra-manifest` subdirectory and save the `MachineConfig` object to a file in this directory, for example, `extra-manifest/10-br-ex-master.yaml`.
+
+2.  Create or update the `kustomization.yaml` file to use `configMapGenerator` to package the `MachineConfig` object into a `ConfigMap`:
+
+    ``` yaml
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    resources:
+      - site1-sno-du.yaml
+    configMapGenerator:
+      - name: br-ex-extra-manifest
+        namespace: site1-sno-du
+        files:
+          - extra-manifest/10-br-ex-master.yaml
+    generatorOptions:
+      disableNameSuffixHash: true
+    ```
+
+    - The `configMapGenerator.namespace` value must match the `ClusterInstance` namespace.
+
+    - Setting `generatorOptions.disableNameSuffixHash` to `true` disables the hash suffix so the `ConfigMap` name is predictable.
+
+3.  In your `ClusterInstance` CR, reference the `ConfigMap` in the `extraManifestsRefs` field:
+
+    ``` yaml
+    apiVersion: siteconfig.open-cluster-management.io/v1alpha1
+    kind: ClusterInstance
+    metadata:
+      name: "site1-sno-du"
+      namespace: "site1-sno-du"
+    spec:
+      clusterName: "site1-sno-du"
+      networkType: "OVNKubernetes"
+      extraManifestsRefs:
+        - name: br-ex-extra-manifest
+      # ...
+    ```
+
+4.  Commit the `ClusterInstance` CR, `MachineConfig` object, and `kustomization.yaml` file to your Git repository and push the changes.
+
+    During cluster provisioning, the SiteConfig Operator applies the `MachineConfig` object as an extra manifest, and the customized `br-ex` bridge configuration is applied to each node without requiring a reboot.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- On the hub cluster, verify that the `ConfigMap` that contains the `MachineConfig` object exists by running the following command:
+
+  ``` terminal
+  $ oc get configmap br-ex-extra-manifest -n site1-sno-du
+  ```
+
+- After the cluster installation is complete, verify that the `MachineConfig` object exists on the managed cluster by running the following command:
+
+  ``` terminal
+  $ oc get machineconfig 10-br-ex-master
+  ```
+
+</div>
+
 # Configuring cluster network MTU at installation time
 
 You can explicitly set the cluster network maximum transmission unit (MTU) during installation by including a `Network` custom resource (CR) as an extra manifest in the GitOps Zero Touch Provisioning (ZTP) pipeline.
@@ -264,6 +361,8 @@ Additional resources
 </div>
 
 - [Customizing extra installation manifests in the GitOps ZTP pipeline](ztp-advanced-install-ztp.md#ztp-customizing-the-install-extra-manifests_ztp-advanced-install-ztp)
+
+- [Creating a manifest object that includes a customized br-ex bridge](../installing/installing_bare_metal/ipi/ipi-install-installation-workflow.md#creating-manifest-file-customized-br-ex-bridge_ipi-install-installation-workflow)
 
 </div>
 

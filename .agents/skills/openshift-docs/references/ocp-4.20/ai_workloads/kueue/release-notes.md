@@ -29,6 +29,22 @@ Red Hat build of Kueue version 1.1 and later is supported on the following plat
 > [!IMPORTANT]
 > Currently, Red Hat build of Kueue is not supported on Red Hat build of MicroShift (MicroShift).
 
+# Release notes for Red Hat build of Kueue version 1.4.3
+
+Red Hat build of Kueue version 1.4.3 is a generally available release that is supported on OpenShift Container Platform versions 4.18 and later. Red Hat build of Kueue version 1.4.3 uses [Kueue](https://kueue.sigs.k8s.io/docs/overview/) version 0.18.
+
+## Fixed issues
+
+Updates Operator and Operand images to the latest Red Hat Universal Base Image (UBI) layers to incorporate security fixes.
+
+# Release notes for Red Hat build of Kueue version 1.4.2
+
+Red Hat build of Kueue version 1.4.2 is a generally available release that is supported on OpenShift Container Platform versions 4.18 and later. Red Hat build of Kueue version 1.4.2 uses [Kueue](https://kueue.sigs.k8s.io/docs/overview/) version 0.18.
+
+## Fixed issues
+
+Updates Operator and Operand images to the latest Red Hat Universal Base Image (UBI) layers to incorporate security fixes.
+
 # Release notes for Red Hat build of Kueue version 1.3.2
 
 Red Hat build of Kueue version 1.3.2 is a generally available release that is supported on OpenShift Container Platform versions 4.18 and later. Red Hat build of Kueue version 1.3 uses [Kueue](https://kueue.sigs.k8s.io/docs/overview/) version 0.16.

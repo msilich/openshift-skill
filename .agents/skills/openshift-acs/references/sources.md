@@ -2,8 +2,8 @@
 
 The skill and workflow references are project-authored adaptations under the
 repository's Apache-2.0 license. Documentation source:
-[openshift/openshift-docs](https://github.com/openshift/openshift-docs/tree/e516555e0cb6bcc6ba88c423e88c8dd054532425),
-branch `rhacs-docs-4.11`, commit `e516555e0cb6bcc6ba88c423e88c8dd054532425`,
+[openshift/openshift-docs](https://github.com/openshift/openshift-docs/tree/2a3d16703701f239724204bfcc0ec745c35b065c),
+branch `rhacs-docs-4.11`, commit `2a3d16703701f239724204bfcc0ec745c35b065c`,
 distribution `openshift-acs`, RHACS **4.11**. Retain the bundled
 [source license](../../openshift-docs/references/acs-4.11/LICENSE.openshift-docs),
 [SOURCE.json](../../openshift-docs/references/acs-4.11/SOURCE.json) and

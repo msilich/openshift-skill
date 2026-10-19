@@ -71,7 +71,7 @@ You can apply the following default methods:
 | `auto`       | Auto-approve the grant and retry the request. |
 | `prompt`     | Prompt the user to approve or deny the grant. |
 
-# Configuring the internal OAuth server’s token duration
+# Configure the internal OAuth server’s token duration
 
 Configure the internal OAuth server to extend or reduce access token validity beyond the default 24-hour lifetime.
 
@@ -140,7 +140,7 @@ Procedure
 
 </div>
 
-# Configuring token inactivity timeout for the internal OAuth server
+# Configure token inactivity timeout for the internal OAuth server
 
 Configure the internal OAuth server to automatically expire tokens after a set period of inactivity, improving security by invalidating idle sessions.
 
@@ -282,7 +282,7 @@ Verification
 
 </div>
 
-# Customizing the internal OAuth server URL
+# Customize the internal OAuth server URL
 
 Customize the internal OAuth server URL to use a custom hostname and TLS certificate by configuring the cluster Ingress component routes.
 
@@ -434,7 +434,7 @@ Additional resources
 
 </div>
 
-# Troubleshooting OAuth API events
+# Troubleshoot OAuth API events
 
 Use service account event messages to diagnose OAuth configuration issues when the API server returns `unexpected condition` errors that are otherwise difficult to debug.
 

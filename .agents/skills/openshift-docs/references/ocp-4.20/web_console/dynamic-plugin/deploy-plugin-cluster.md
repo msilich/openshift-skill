@@ -158,7 +158,9 @@ Verification
 
 # Plugin service proxy
 
-If you need to make HTTP requests to an in-cluster service from your plugin, you can declare a service proxy in its `ConsolePlugin` resource by using the `spec.proxy` array field. The console backend exposes the `/api/proxy/plugin/<plugin-name>/<proxy-alias>/<request-path>?<optional-query-parameters>` endpoint to proxy the communication between the plugin and the service. A proxied request uses a *service CA bundle* by default. The service must use HTTPS.
+If you need to make HTTP requests to an in-cluster service from your plugin, you can declare a service proxy in its `ConsolePlugin` resource by using the `spec.proxy` array field.
+
+The console backend exposes the `/api/proxy/plugin/<plugin-name>/<proxy-alias>/<request-path>?<optional-query-parameters>` endpoint to proxy the communication between the plugin and the service. A proxied request uses a *service CA bundle* by default. The service must use HTTPS.
 
 > [!NOTE]
 > The plugin must use the `consolefetch` API to make requests from its JavaScript code or some requests might fail. For more information, see "Dynamic plugin API".
@@ -226,7 +228,7 @@ Additional resources
 
 </div>
 
-# Disabling your plugin in the browser
+# Disable your plugin in the browser
 
 Console users can use the `disable-plugins` query parameter to disable specific or all dynamic plugins that would normally get loaded at run-time.
 

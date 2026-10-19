@@ -18,6 +18,18 @@ Additional resources
 
 </div>
 
+# Run Once Duration Override Operator 1.3.2
+
+Issued: 9 September 2026
+
+The following advisory is available for the Run Once Duration Override Operator 1.3.2:
+
+- [RHBA-2026:65940](https://access.redhat.com/errata/RHBA-2026:65940)
+
+## New features and enhancements
+
+- This release rebuilds the base image for the Run Once Duration Override Operator to improve its image grade.
+
 # Run Once Duration Override Operator 1.3.1
 
 Issued: 29 October 2025

@@ -112,11 +112,19 @@ The following AWS S3 compatible object storage providers are known to work with 
 
 - Swift - It works for use as a backup storage location for backup storage, but is not compatible with Restic for filesystem-based volume backup and restore.
 
-## Additional resources
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Scality ARTESCA S3 object storage (Scality documentation)](https://downloads.scality.com/artesca-ova/doc/general_introduction.html#)
 
-# Configuring Multicloud Object Gateway (MCG) for disaster recovery on OpenShift Data Foundation
+</div>
+
+# Configure Multicloud Object Gateway (MCG) for disaster recovery on OpenShift Data Foundation
 
 If you use cluster storage for your MCG bucket `backupStorageLocation` on OpenShift Data Foundation, configure MCG as an external object store.
 
@@ -327,6 +335,14 @@ Testing shows that increasing `NodeAgent` CPU can significantly improve backup a
 
 In some environments, you might need to adjust Ceph MDS pod resources to avoid pod restarts, which occur when default settings cause resource saturation.
 
-### Additional resources
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Changing the CPU and memory resources on the rook-ceph pods](https://docs.redhat.com/documentation/en-us/red_hat_openshift_data_foundation/latest/html/troubleshooting_openshift_data_foundation/changing-resources-for-the-openshift-data-foundation-components_rhodf#changing_the_cpu_and_memory_resources_on_the_rook_ceph_pods)
+
+</div>

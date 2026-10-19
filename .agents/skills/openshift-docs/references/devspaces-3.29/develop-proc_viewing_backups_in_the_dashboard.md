@@ -20,7 +20,7 @@ View the status of your workspace backups in the OpenShift Dev Spaces dashboard.
 
     <figure>
     <br />
-    <img src="assets/51ba2f50c3a69b6364e4.png" alt="The Backups tab in the Workspace view of the dashboard" /><br />
+    <img src="assets/b624972108f4f186c28c.png" alt="The Backups tab in the Workspace view of the dashboard" /><br />
 
     <figcaption>Figure 1. The Backups tab in the Workspace view</figcaption>
     </figure>

@@ -2,7 +2,7 @@
 
 Before working through the example, verify that the plugin is working by following the steps in [Dynamic plugin development](dynamic-plugins-get-started.md#dynamic-plugin-development_dynamic-plugins-get-started)
 
-# Adding a tab to the pods page
+# Add a tab to the pods page
 
 There are different customizations you can make to the OpenShift Container Platform web console. The following procedure adds a tab to the **Pod details** page as an example extension to your plugin.
 

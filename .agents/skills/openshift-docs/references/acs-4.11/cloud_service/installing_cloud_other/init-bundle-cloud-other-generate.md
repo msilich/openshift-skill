@@ -30,7 +30,7 @@ You can generate a cluster registration secret or init bundle by using the RHACS
 
 ## Generating a cluster registration secret or init bundle by using the RHACS portal
 
-You can generate a cluster registration secret (CRS) or an init bundle that contains secrets by using the RHACS portal, also called the ACS Console.
+You can generate a cluster registration secret (CRS) or an init bundle containing secrets by using the RHACS portal, also called the ACS Console.
 
 > [!NOTE]
 > You must have the `Admin` user role to generate a CRS or an init bundle.
@@ -52,7 +52,7 @@ Procedure
 
     Complete only one of the following actions:
 
-    - If you chose to generate a CRS, enter a name for the CRS and click **Download** to generate and download it. This action creates the CRS as a YAML file and you can use it to secure all of your clusters if you are using the same installation method.
+    - If you chose to generate a CRS, enter a name for the CRS and click **Download** to generate and download the CRS as a YAML file. You can use it to secure all of your clusters if you are using the same installation method.
 
       > [!IMPORTANT]
       > Store this file securely because it contains secrets.
@@ -147,7 +147,7 @@ Procedure
   Specifies a file name. Use `-` for standard output.
 
   > [!IMPORTANT]
-  > Ensure that you store this file securely because it contains secrets. You can use the same file to set up more than one secured cluster. You cannot retrieve a previously generated CRS.
+  > Ensure that you store this file securely because it contains secrets. You can use the same file to set up more than one secured cluster. After generating a CRS, you cannot retrieve it later.
 
   Depending on the output that you select, the command might return some INFO messages about the CRS and the YAML file.
 

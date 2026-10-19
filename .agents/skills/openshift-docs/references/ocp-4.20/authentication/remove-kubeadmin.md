@@ -16,7 +16,7 @@ INFO Access the OpenShift web-console here: https://console-openshift-console.ap
 INFO Login to the console with user: kubeadmin, password: <provided>
 ```
 
-# Removing the kubeadmin user
+# Remove the kubeadmin user
 
 After you define an identity provider and create a new `cluster-admin` user, you can remove the `kubeadmin` to improve cluster security.
 

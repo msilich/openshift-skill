@@ -30,16 +30,10 @@ Additional resources
 
 # Secured cluster services
 
-Secured cluster services contain the following components:
+Secured cluster services contain the Sensor, Admission controller, and Collector components, each with specific resource requirements based on deployment scale.
 
-- Sensor
-
-- Admission controller
-
-- Collector
-
-  > [!NOTE]
-  > Information about the resource requirements for the Collector component is included in the Default resource requirements section.
+> [!NOTE]
+> Information about the resource requirements for the Collector component is included in the Default resource requirements section.
 
 <a id="recommended-requirements-secured-cluster-services-sensor_acscs-recommended-requirements"></a>
 

@@ -70,9 +70,11 @@ Examples of core Kubernetes resources that can contain both a pod template and a
 
 - `Pods`
 
-# Setting the image trigger on Kubernetes resources
+# Set the image trigger on Kubernetes resources
 
-To enable automatic updates for your deployed applications managed by Kubernetes, use the command-line interface (CLI) to set an image stream change trigger on Kubernetes resources. This ensures that resources, like `Deployments` and `StatefulSets`, are automatically invoked when a new version of an upstream image is available.
+To enable automatic updates for your deployed applications managed by Kubernetes, use the command-line interface (CLI) to set an image stream change trigger on Kubernetes resources.
+
+This ensures that resources, like `Deployments` and `StatefulSets`, are automatically invoked when a new version of an upstream image is available.
 
 When adding an image trigger to deployments, you can use the `oc set triggers` command. For example, the sample command in this procedure adds an image change trigger to the deployment named `example` so that when the `example:latest` image stream tag is updated, the `web` container inside the deployment updates with the new image value. This command sets the correct `image.openshift.io/triggers` annotation on the deployment resource.
 

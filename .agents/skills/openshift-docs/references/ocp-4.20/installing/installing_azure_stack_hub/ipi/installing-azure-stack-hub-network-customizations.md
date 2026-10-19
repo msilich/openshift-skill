@@ -570,7 +570,9 @@ Procedure
 
 # Cluster Network Operator configuration
 
-To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity. Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
+To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity.
+
+Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
 
 The CNO configuration inherits the following fields during cluster installation from the `Network` API in the `Network.config.openshift.io` API group:
 
@@ -1031,7 +1033,7 @@ defaultNetwork:
 
 </div>
 
-# Configuring hybrid networking with OVN-Kubernetes
+# Configure hybrid networking with OVN-Kubernetes
 
 To configure hybrid networking with OVN-Kubernetes, you can set `hybridOverlayConfig` during installation or patch the Cluster Network Operator (CNO) after installation.
 

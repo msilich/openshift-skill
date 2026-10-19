@@ -7,9 +7,11 @@ By default, the API server certificate is issued by an internal OpenShift Contai
 > [!NOTE]
 > In hosted control plane clusters, you can add as many custom certificates to your Kubernetes API Server as you need. However, do not add a certificate for the endpoint that worker nodes use to communicate with the control plane. For more information, see [Configuring a custom API server certificate in a hosted cluster](../../hosted_control_planes/hcp-deploy/hcp-deploy-bm.md#hcp-custom-cert_hcp-deploy-bm).
 
-# Adding an API server named certificate for the first time
+# Add an API server named certificate for the first time
 
-The default API server certificate is issued by an internal OpenShift Container Platform cluster Certificate Authority (CA). You can add alternative certificates that the API server will return based on the fully qualified domain name (FQDN) requested by the client, for example when a reverse proxy or load balancer is used.
+The default API server certificate is issued by an internal OpenShift Container Platform cluster Certificate Authority (CA).
+
+You can add alternative certificates that the API server will return based on the fully qualified domain name (FQDN) requested by the client, for example when a reverse proxy or load balancer is used.
 
 > [!NOTE]
 > Adding a custom API server named certificate for the first time triggers the `kube-apiserver-operator` to roll out a new revision of the API server pods. Node reboots are not required.
@@ -116,7 +118,7 @@ Procedure
 
 </div>
 
-# Updating or renewing an existing API server named certificate
+# Update or renew an existing API server named certificate
 
 Update or renew an expired or expiring named certificate that has already been configured in your cluster to avoid API availability issues. The API server pods dynamically detect and reload the updated certificate asset without disruption.
 

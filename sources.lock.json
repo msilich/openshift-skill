@@ -14,7 +14,7 @@
     "openshift_acs_docs": {
       "version": "4.11",
       "branch": "rhacs-docs-4.11",
-      "commit": "e516555e0cb6bcc6ba88c423e88c8dd054532425",
+      "commit": "2a3d16703701f239724204bfcc0ec745c35b065c",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0",
       "build_lock": "tools/docs/acs.lock.json"
@@ -33,7 +33,7 @@
       "url": "https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29",
       "license": "CC-BY-SA-3.0",
       "source_type": "official HTML snapshot; no public Git source revision asserted",
-      "archive_sha256": "995e09d2a2796f05c9285d54c79be3bc373552efb2536468f3df2dcb3d2621a2",
+      "archive_sha256": "32434c757a894ef6f321b8fb6f3a2ce1ae1960105f2a1a43a137382e9e56d169",
       "build_lock": "tools/docs/devspaces.lock.json"
     },
     "opencode": {
@@ -63,13 +63,13 @@
     },
     "openshift_docs": {
       "branch": "enterprise-4.20",
-      "commit": "3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98",
+      "commit": "6ff714db2ffb20cfd17363876e48c27586899e05",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0"
     },
     "openshift_gitops_docs": {
       "branch": "gitops-docs-1.21",
-      "commit": "ca5db8539a097b38e2975980963e0959782d105f",
+      "commit": "034a9d11f8031c9a18b32b67e5854eca0d6124c8",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0",
       "version": "1.21"

@@ -4,7 +4,7 @@ OpenShift Container Platform supports multiple types of storage, both for on-pre
 
 # Glossary of common terms for OpenShift Container Platform storage
 
-This glossary defines common terms that are used in the storage content.
+Review this glossary that defines common terms that are used in the storage content.
 
 Access modes
 Volume access modes describe volume capabilities. You can use access modes to match persistent volume claim (PVC) and persistent volume (PV). The following are the examples of access modes:
@@ -64,7 +64,7 @@ Example pod definition with nested mount points
 
 </div>
 
-``` terminal
+``` yaml
 kind: Pod
 apiVersion: v1
 metadata:
@@ -94,9 +94,10 @@ spec:
 
 </div>
 
-- Nested mount point
+The `spec.containers.volumeMounts.mountPath` value of `/mnt/web/redis` is a nested mount point.
 
-  Do *not* use nested mount points because OpenShift Container Platform does not guarantee the order in which mount points are created. Such usage is prone to race conditions and undefined behavior.
+> [!WARNING]
+> Do *not* use nested mount points because OpenShift Container Platform does not guarantee the order in which mount points are created. Such usage is prone to race conditions and undefined behavior.
 
 NFS
 A Network File System (NFS) that allows remote hosts to mount file systems over a network and interact with those file systems as though they are mounted locally. This enables system administrators to consolidate resources onto centralized servers on the network.
@@ -146,16 +147,54 @@ OpenShift Container Platform storage is broadly classified into two categories, 
 
 ## Ephemeral storage
 
-Pods and containers are ephemeral or transient in nature and designed for stateless applications. Ephemeral storage allows administrators and developers to better manage the local storage for some of their operations. For more information about ephemeral storage overview, types, and management, see [Understanding ephemeral storage](understanding-ephemeral-storage.md#understanding-ephemeral-storage).
+Pods and containers are ephemeral or transient in nature and designed for stateless applications. Ephemeral storage allows administrators and developers to better manage the local storage for some of their operations.
 
 ## Persistent storage
 
-Stateful applications deployed in containers require persistent storage. OpenShift Container Platform uses a pre-provisioned storage framework called persistent volumes (PV) to allow cluster administrators to provision persistent storage. The data inside these volumes can exist beyond the lifecycle of an individual pod. Developers can use persistent volume claims (PVCs) to request storage requirements. For more information about persistent storage overview, configuration, and lifecycle, see [Understanding persistent storage](understanding-persistent-storage.md#understanding-persistent-storage).
+Stateful applications deployed in containers require persistent storage. OpenShift Container Platform uses a pre-provisioned storage framework called persistent volumes (PV) to allow cluster administrators to provision persistent storage. The data inside these volumes can exist beyond the lifecycle of an individual pod. Developers can use persistent volume claims (PVCs) to request storage requirements.
 
-# Container Storage Interface (CSI)
+<div>
 
-CSI is an API specification for the management of container storage across different container orchestration (CO) systems. You can manage the storage volumes within the container native environments, without having specific knowledge of the underlying storage infrastructure. With the CSI, storage works uniformly across different container orchestration systems, regardless of the storage vendors you are using. For more information about CSI, see [Using Container Storage Interface (CSI)](container_storage_interface/persistent-storage-csi.md#persistent-storage-csi).
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Understanding ephemeral storage](understanding-ephemeral-storage.md#understanding-ephemeral-storage)
+
+- [Understanding persistent storage](understanding-persistent-storage.md#understanding-persistent-storage)
+
+</div>
 
 # Dynamic Provisioning
 
-Dynamic Provisioning allows you to create storage volumes on-demand, eliminating the need for cluster administrators to pre-provision storage. For more information about dynamic provisioning, see [Dynamic provisioning](dynamic-provisioning.md#dynamic-provisioning).
+With Dynamic Provisioning, you can create storage volumes on-demand, eliminating the need for cluster administrators to pre-provision storage.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Dynamic provisioning](dynamic-provisioning.md#dynamic-provisioning)
+
+</div>
+
+# Container Storage Interface (CSI)
+
+CSI is an API specification for managing container storage across different orchestration systems. With CSI, you can manage storage volumes without requiring specific knowledge of the underlying infrastructure, providing uniform storage functionality regardless of your storage vendors.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Using Container Storage Interface (CSI)](container_storage_interface/persistent-storage-csi.md#persistent-storage-csi)
+
+</div>

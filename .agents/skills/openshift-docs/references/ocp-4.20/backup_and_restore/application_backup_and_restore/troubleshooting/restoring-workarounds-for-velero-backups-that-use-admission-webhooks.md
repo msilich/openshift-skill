@@ -9,7 +9,7 @@ For example, creating or restoring a top-level object such as `service.serving.k
 > [!NOTE]
 > Velero plugins are started as separate processes. After a Velero operation has completed, either successfully or not, it exits. Receiving a `received EOF, stopping recv loop` message in the debug logs indicates that a plugin operation has completed. It does not mean that an error has occurred.
 
-# Restoring Knative resources
+# Restore Knative resources
 
 Resolve issues with restoring Knative resources that use admission webhooks by restoring the top-level `service.serving.knative.dev` service resource with Velero. This helps you to ensure that Knative resources are restored successfully without admission webhook errors.
 
@@ -31,7 +31,7 @@ Procedure
 
 </div>
 
-# Restoring IBM AppConnect resources
+# Restore IBM AppConnect resources
 
 Troubleshoot Velero restore failures for IBM® AppConnect resources that use admission webhooks. Verify your webhook rules and check that the installed Operator supports the backup’s version to successfully complete the restore.
 
@@ -55,7 +55,7 @@ Procedure
 
 </div>
 
-# Avoiding the Velero plugin panic error
+# Avoid the Velero plugin panic error
 
 Label a custom Backup Storage Location (BSL) to resolve Velero plugin panic errors during `imagestream` backups. This helps you to ensure the OADP controller creates the required registry secret when you manage the BSL outside the `DataProtectionApplication` (DPA) CR.
 

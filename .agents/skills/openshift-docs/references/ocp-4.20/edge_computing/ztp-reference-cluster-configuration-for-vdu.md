@@ -181,10 +181,24 @@ Additional resources
 
 # Recommended cluster install manifests
 
+The ZTP pipeline applies the following custom resources (CRs) during cluster installation. These configuration CRs ensure that the cluster meets the feature and performance requirements necessary for running a vDU application.
+
 > [!NOTE]
 > When using the GitOps ZTP plugin and `SiteConfig` CRs for cluster deployment, the following `MachineConfig` CRs are included by default.
 
-Use the `SiteConfig` `extraManifests` filter to alter the CRs that are included by default. For more information, see [Advanced managed cluster configuration with SiteConfig CRs](ztp-advanced-install-ztp.md#ztp-advanced-install-ztp).
+Use the `SiteConfig` `extraManifests` filter to alter the CRs that are included by default.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Advanced managed cluster configuration with SiteConfig CRs](ztp-advanced-install-ztp.md#ztp-advanced-install-ztp)
+
+</div>
 
 ## Workload partitioning
 
@@ -782,8 +796,22 @@ Additional resources
 
 # Recommended postinstallation cluster configurations
 
+When the cluster installation is complete, the ZTP pipeline applies the following custom resources (CRs) that are required to run DU workloads.
+
 > [!NOTE]
-> In GitOps ZTP v4.10 and earlier, you configure UEFI secure boot with a `MachineConfig` CR. This is no longer required in GitOps ZTP v4.11 and later. In v4.11, you configure UEFI secure boot for single-node OpenShift clusters by updating the `spec.clusters.nodes.bootMode` field in the `SiteConfig` CR that you use to install the cluster. For more information, see [Deploying a managed cluster with SiteConfig and GitOps ZTP](ztp-deploying-far-edge-sites.md#ztp-deploying-a-site_ztp-deploying-far-edge-sites).
+> In GitOps ZTP v4.10 and earlier, you configure UEFI secure boot with a `MachineConfig` CR. This is no longer required in GitOps ZTP v4.11 and later. In v4.11, you configure UEFI secure boot for single-node OpenShift clusters by updating the `spec.clusters.nodes.bootMode` field in the `SiteConfig` CR that you use to install the cluster.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Deploying a managed cluster with SiteConfig and GitOps ZTP](ztp-deploying-far-edge-sites.md#ztp-deploying-a-site_ztp-deploying-far-edge-sites)
+
+</div>
 
 ## Operators
 

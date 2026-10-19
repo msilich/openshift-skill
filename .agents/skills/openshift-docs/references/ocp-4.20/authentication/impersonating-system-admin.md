@@ -6,7 +6,7 @@ You can configure API requests to impersonate users or groups to test permission
 
 You can configure API requests in OpenShift Container Platform to act as another user. Impersonation allows you to perform actions on behalf of another account without switching credentials.
 
-# Impersonating the system:admin user
+# Impersonate the system:admin user
 
 You can grant a user permission to impersonate `system:admin`, which grants them cluster administrator permissions.
 
@@ -44,7 +44,7 @@ Procedure
 
 </div>
 
-# Impersonating the system:admin group
+# Impersonate the system:admin group
 
 To impersonate a user who has cluster administration privileges through group membership, you must specify both the user and the associated groups in the impersonation command.
 
@@ -65,7 +65,7 @@ Procedure
 
 </div>
 
-# Adding unauthenticated groups to cluster roles
+# Add unauthenticated groups to cluster roles
 
 Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 

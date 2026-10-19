@@ -343,7 +343,7 @@ Specify the following parameters:
 
 - `value.workspace.server`. Specifies the vCenter server IP or fully qualified domain name. This parameter is optional.
 
-# Creating a compute machine set
+# Create a compute machine set
 
 To dynamically manage machine compute resources, you can create your own compute machine sets in addition to the compute machine sets created by the installation program. Use the OpenShift Container Platform CLI to automate node provisioning.
 

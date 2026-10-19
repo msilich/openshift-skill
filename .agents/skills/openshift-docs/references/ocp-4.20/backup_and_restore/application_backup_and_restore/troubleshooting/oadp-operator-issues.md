@@ -2,7 +2,7 @@
 
 Resolve issues with the OpenShift API for Data Protection (OADP) Operator, such as silent failures that prevent proper operation. This helps you restore normal Operator functionality and ensure successful backup and restore operations.
 
-# Resolving silent failure of the OADP Operator
+# Resolve silent failure of the OADP Operator
 
 Resolve the silent failure issue where the OADP Operator reports a `Running` status but the AWS S3 buckets remain empty due to incorrect cloud credentials permissions. This helps you identify and fix credential permission problems in your backup storage locations.
 

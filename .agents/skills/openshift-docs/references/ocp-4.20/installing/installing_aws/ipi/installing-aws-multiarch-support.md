@@ -14,7 +14,7 @@ After installing the cluster, you can add multi-architecture compute machines to
 > [!NOTE]
 > Before adding a secondary architecture node to your cluster, it is recommended to install the Multiarch Tuning Operator, and deploy a `ClusterPodPlacementConfig` custom resource. For more information, see "Managing workloads on multi-architecture clusters by using the Multiarch Tuning Operator".
 
-# Installing a cluster with multi-architecture support
+# Install a cluster with multi-architecture support
 
 You can install a cluster with multi-architecture support to use compute machines with different Central Processing Unit (CPU) architectures. Modifying your configuration file helps ensure your control plane and worker nodes deploy with the correct architecture.
 

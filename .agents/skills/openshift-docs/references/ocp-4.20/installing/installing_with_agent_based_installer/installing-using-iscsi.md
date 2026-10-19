@@ -62,7 +62,7 @@ Additional resources
 
 </div>
 
-# Downloading the Agent-based Installer
+# Download the Agent-based Installer
 
 Begin the installation process by downloading the Agent-based Installer and the CLI needed for your installation.
 
@@ -90,7 +90,7 @@ Procedure
 
 </div>
 
-# Creating the preferred configuration inputs
+# Create the preferred configuration inputs
 
 Create the preferred configuration inputs used to create the agent image.
 

@@ -2,7 +2,7 @@
 
 Image tags identify specific versions of container images in image streams. You can use image tags to organize images and control which versions your builds and deployments use.
 
-# Understanding image tags in image streams
+# Understand image tags in image streams
 
 Image tags in OpenShift Container Platform help you organize, identify, and reference specific versions of container images in image streams. Tags are human-readable labels that act as pointers to particular image layers and digests.
 
@@ -47,7 +47,7 @@ Image tag naming conventions
 > [!NOTE]
 > If your team requires the use of unique, date-specific, or highly revisioned tags like `v2.0.1-may-2019`, you must periodically inspect old and unsupported images and `istags` and remove them. Otherwise, you can experience increasing resource usage caused by retaining old images.
 
-# Adding tags to image streams
+# Add tags to image streams
 
 To organize images and create aliases for specific versions or automatically track changes to source tags in OpenShift Container Platform, you can add tags to image streams with the `oc tag` command.
 
@@ -116,7 +116,7 @@ Procedure
 
 </div>
 
-# Removing tags from image streams
+# Remove tags from image streams
 
 To keep your image streams clean and maintain organized image references in OpenShift Container Platform, you can remove unused or outdated image stream tags. Remove tags by using the `oc delete istag` or `oc tag -d` commands.
 
@@ -154,7 +154,7 @@ Procedure
 
 </div>
 
-# Using image stream reference syntax
+# Use image stream reference syntax
 
 To ensure that your builds and deployments use the intended image version in OpenShift Container Platform, you must use the correct reference syntax format.
 

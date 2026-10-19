@@ -2,7 +2,7 @@
 
 In OpenShift Container Platform, the DNS Operator deploys and manages a CoreDNS instance to provide a name resolution service to pods inside the cluster, enables DNS-based Kubernetes Service discovery, and resolves internal `cluster.local` names.
 
-# Checking the status of the DNS Operator
+# Check the status of the DNS Operator
 
 You can check the DNS Operator deployment and Cluster Operator status. The DNS Operator is deployed during installation with a `Deployment` object.
 
@@ -122,7 +122,7 @@ Procedure
 
 </div>
 
-# Using DNS forwarding
+# Use DNS forwarding
 
 Configure DNS forwarding servers and upstream resolvers for the cluster.
 
@@ -249,7 +249,7 @@ Additional resources
 
 </div>
 
-# Checking DNS Operator status
+# Check DNS Operator status
 
 You can inspect the status and view the details of the DNS Operator by using the `oc describe` command.
 
@@ -295,7 +295,7 @@ Procedure
 
 </div>
 
-# Viewing DNS Operator logs
+# View DNS Operator logs
 
 You can view DNS Operator logs to troubleshoot DNS issues, verify configuration changes, and monitor activity by using the by using the `oc logs` command.
 
@@ -468,7 +468,7 @@ Verification
 
 </div>
 
-# Tuning the CoreDNS cache
+# Tune the CoreDNS cache
 
 For CoreDNS, you can configure the maximum duration of both successful or unsuccessful caching, also known respectively as positive or negative caching. Tuning the cache duration of DNS query responses can reduce the load for any upstream DNS resolvers.
 
@@ -595,7 +595,7 @@ Procedure
 
 </div>
 
-## Controlling DNS pod placement
+## Control DNS pod placement
 
 Control where CoreDNS and node-resolver pods run by using taints, tolerations, and selectors.
 
@@ -693,7 +693,7 @@ Procedure
 
 </div>
 
-## Configuring DNS forwarding with TLS
+## Configure DNS forwarding with TLS
 
 Configure DNS forwarding with TLS to secure queries to upstream resolvers.
 

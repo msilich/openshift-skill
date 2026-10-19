@@ -5,7 +5,7 @@ Create and manage SELinux profiles and bind them to workloads.
 > [!IMPORTANT]
 > The Security Profiles Operator supports only Red Hat Enterprise Linux CoreOS (RHCOS) worker nodes. Red Hat Enterprise Linux (RHEL) nodes are not supported.
 
-# Creating SELinux profiles
+# Create SELinux profiles
 
 Use the `SelinuxProfile` object to create SELinux profiles.
 
@@ -245,7 +245,7 @@ Procedure
 
 </div>
 
-## Binding workloads to profiles with ProfileBindings
+## Bind workloads to profiles with ProfileBindings
 
 You can use the `ProfileBinding` resource to bind a security profile to the `SecurityContext` of a container.
 

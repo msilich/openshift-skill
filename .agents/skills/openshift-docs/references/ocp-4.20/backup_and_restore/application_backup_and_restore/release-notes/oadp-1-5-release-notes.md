@@ -5,6 +5,67 @@ The release notes for OpenShift API for Data Protection (OADP) 1.5 describe new 
 > [!NOTE]
 > For additional information about OADP, see *OpenShift API for Data Protection (OADP) FAQ*.
 
+# OADP 1.5.8 release notes
+
+OpenShift API for Data Protection (OADP) 1.5.8 release notes list new features, resolved issues, and known issues.
+
+The following Red Hat Security Advisory (RHSA) is available for OADP 1.5.8:
+
+- [RHSA-2026:66022 - New version of Red Hat OpenShift API for Data Protection](https://access.redhat.com/errata/RHSA-2026:66022)
+
+## New features
+
+OADP CLI plugin
+OADP includes a `kubectl` command-line interface (CLI) plugin that provides a `kubectl` native interface for managing backups and restores. Before this update, you aliased to the Velero CLI to perform backup operations. Non-cluster administrators had no way to independently manage their own backups, creating a dependency on cluster admins for routine data protection tasks. As a result, admins can run `kubectl oadp` or `oc oadp` commands to create, delete, and retrieve logs for backups and restores. Non-cluster admins can run the `oc oadp nonadmin` command to independently create, delete, and inspect non-admin backups within their permitted namespaces.
+
+[OADP-8075](https://redhat.atlassian.net/browse/OADP-8075)
+
+## Resolved issues
+
+Restored pods no longer fail to connect because of retained OVN network annotations
+Before this update, Velero restored pods with the `k8s.ovn.org/pod-networks` annotation preserved from the source cluster. As a consequence, OVN-Kubernetes skipped allocating new network configurations, resulting in stale IP assignments, subnet mismatches, and lost network connectivity for restored pods. With this release, the `k8s.ovn.org/pod-networks` annotation is automatically stripped during restore operations. As a result, OVN-Kubernetes successfully re-allocates fresh logical ports and IP addresses to restored pods, ensuring proper network connectivity.
+
+[OADP-7560](https://redhat.atlassian.net/browse/OADP-7560)
+
+DPA reconciliation no longer fails when credentials are defined only in `CloudStorage`
+Before this update, the `DataProtectionApplication` (DPA) reconciliation required credentials to be explicitly specified in the DPA custom resource (CR) even when the credentials were provided in the `CloudStorage` CR. With this release, the DPA controller inherits credentials, configuration values, and region settings from the referenced `CloudStorage` CR when using `backupLocations.bucket.cloudStorageRef`. If both DPA-level and `CloudStorage`-level values are provided, DPA-level values take precedence. As a result, DPA reconciliation no longer fails due to missing credentials in DPA CR.
+
+[OADP-6669](https://redhat.atlassian.net/browse/OADP-6669)
+
+Backup hooks are no longer skipped on dynamically injected pods when using `labelSelector`
+Before this update, Velero evaluated backup hooks by using the backup’s top-level label selector. As a consequence, pods dynamically added to a backup by plugins by using `AdditionalItems` were skipped during hook execution if they did not directly match `labelSelector`. This resulted in crash-consistent or potentially corrupt backups. With this release, plugin adjustments ensure that dynamic pod items properly call configured pre- and post-backup hooks regardless of whether the pod itself carries the primary backup label. As a result, dynamically included pods run backup hooks as expected.
+
+[OADP-8332](https://redhat.atlassian.net/browse/OADP-8332)
+
+OADP workload pods use dedicated service accounts
+Before this update, the `oadp-cli-server` workload pods in the `openshift-adp` namespace used the default service account instead of dedicated, workload-specific service accounts. As a consequence, access control validation checks failed during deployment verification. With this release, dedicated and valid service accounts are properly assigned to these workload pods. As a result, all OADP workload pods comply with access control verification and adhere to cluster security standards.
+
+[OADP-8454](https://redhat.atlassian.net/browse/OADP-8454)
+
+OADP CLI server pod uses a dedicated service account with no cross-namespace `RoleBindings`
+Before this update, the `oadp-cli-server` pod was deployed with an empty or default `serviceAccountName` without properly scoped role bindings. As a consequence, role bindings used by a pod did not reside within the same workload namespace. With this release, the OADP Operator creates a dedicated `openshift-adp-cli-server` service account with `automountServiceAccountToken: false` and no cross-namespace `RoleBindings`. As a result, the OADP CLI server pod runs with a correctly scoped, least-privilege service account in the `openshift-adp` namespace.
+
+[OADP-8455](https://redhat.atlassian.net/browse/OADP-8455)
+
+`NetworkAttachmentDefinitions` are backed up as part of VM backups
+Before this update, when backing up a virtual machine (VM) with an attached `NetworkAttachmentDefinition` (NAD), the NAD was not included in the backup. With this release, the Velero `kubevirt` plugin includes NADs in the resource graph (`KVGraph`) for VM backups. It also correctly updates the namespace references inside the NAD configuration during alternate-namespace restores. As a result, backing up a VM successfully backs up all attached NADs.
+
+[OADP-8462](https://redhat.atlassian.net/browse/OADP-8462)
+
+OADP containers include liveness, readiness, and startup probes
+Before this update, the OADP command-line interface (CLI) container did not have configured Kubernetes health probes (liveness, readiness, and startup probes). As a consequence, workloads could not automatically recover from common failures, such as pod, host, or network issues. With this release, the OADP Operator adds liveness, readiness, and startup probes to the deployed containers. As a result, workloads can use native Kubernetes health-checking mechanisms to self-recover from failures and ensure reliable application traffic routing.
+
+[OADP-8486](https://redhat.atlassian.net/browse/OADP-8486)
+
+## Known issues
+
+`CloudStorage` bucket creation fails on Google Cloud with WIF authentication
+When you configure `CloudStorage` on OpenShift clusters on Google Cloud by using Workload Identity Federation (WIF) authentication, the `CloudStorage` resource fails to detect that a Google Cloud bucket does not exist. As a consequence, the resource returns a `BucketCheckError` condition and prevents automatic bucket creation.
+
+To work around this problem, use an existing Google Cloud bucket. As a result, the controller skips bucket creation and proceeds with the existing bucket for backup storage.
+
+[OADP-8786](https://redhat.atlassian.net/browse/OADP-8786)
+
 # OADP 1.5.7 release notes
 
 OpenShift API for Data Protection (OADP) 1.5.7 release notes list resolved issues.

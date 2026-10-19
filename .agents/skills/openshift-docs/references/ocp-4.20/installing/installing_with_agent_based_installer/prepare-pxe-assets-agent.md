@@ -24,7 +24,7 @@ Additional resources
 
 </div>
 
-# Downloading the Agent-based Installer
+# Download the Agent-based Installer
 
 Begin the installation process by downloading the Agent-based Installer and the CLI needed for your installation.
 
@@ -52,7 +52,7 @@ Procedure
 
 </div>
 
-# Creating the preferred configuration inputs
+# Create the preferred configuration inputs
 
 Create the preferred configuration inputs used to create the PXE files.
 
@@ -418,14 +418,6 @@ Procedure
   > [!NOTE]
   > The `override` parameter overrides the host’s network configuration settings.
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example `.parm` file
-
-  </div>
-
   ``` terminal
   rd.neednet=1 cio_ignore=all,!condev
   console=ttysclp0
@@ -440,8 +432,6 @@ Procedure
   random.trust_cpu=on
   ```
 
-  </div>
-
   - For the `coreos.live.rootfs_url` artifact, specify the matching `rootfs` artifact for the `kernel` and `initramfs` that you are booting. Only HTTP and HTTPS protocols are supported.
 
   - For installations on direct access storage devices (DASD) type disks, use `rd.` to specify the DASD where Red Hat Enterprise Linux CoreOS (RHCOS) is to be installed. For installations on Fibre Channel Protocol (FCP) disks, use `rd.zfcp=<adapter>,<wwpn>,<lun>` to specify the FCP disk where RHCOS is to be installed.
@@ -452,9 +442,7 @@ Procedure
 
 ## Adding IBM Z agents with z/VM
 
-You can manually add IBM Z® agents with z/VM.
-
-Only use this procedure for IBM Z® clusters with z/VM.
+You can manually add IBM Z® agents with z/VM. Only use this procedure for IBM Z® clusters with z/VM.
 
 <div>
 
@@ -478,14 +466,6 @@ Procedure
 
 1.  Create a parameter file for the z/VM guest:
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example parameter file
-
-    </div>
-
     ``` text
     rd.neednet=1 \
     console=ttysclp0 \
@@ -503,8 +483,6 @@ Procedure
     coreos.inst.persistent-kargs="console=tty1 console=ttyS1,115200n8"
     ```
 
-    </div>
-
     - For the `coreos.live.rootfs_url` artifact, specify the matching `rootfs` artifact for the `kernel` and `initramfs` that you are booting. Only HTTP and HTTPS protocols are supported.
 
     - For the `ip` parameter, assign the IP address automatically using DHCP, or manually assign the IP address, as described in "Installing a cluster with z/VM on IBM Z® and IBM® LinuxONE".
@@ -518,21 +496,11 @@ Procedure
       > [!NOTE]
       > For FCP multipath configurations, provide available multiple paths to the disk instead of a single path, and add `rd.multipath=default` to enable multipath during installation.
 
-      <div class="formalpara">
-
-      <div class="title">
-
-      Example
-
-      </div>
-
       ``` text
       rd.zfcp=<adapter1>,<wwpn1>,<lun1> \
       rd.zfcp=<adapter2>,<wwpn2>,<lun2> \
       rd.multipath=default
       ```
-
-      </div>
 
     - To enable FIPS mode, specify `fips=1`. This entry is required in addition to setting the `fips` parameter to `true` in the `install-config.yaml` file.
 
@@ -540,7 +508,7 @@ Procedure
 
 2.  Punch the `kernel.img`,`generic.parm`, and `initrd.img` files to the virtual reader of the z/VM guest virtual machine.
 
-    For more information, see [PUNCH](https://www.ibm.com/docs/en/zvm/latest?topic=commands-punch) (IBM Documentation).
+    For more information, see "PUNCH" in the IBM documentation.
 
     > [!TIP]
     > You can use the `CP PUNCH` command or, if you use Linux, the `vmur` command, to transfer files between two z/VM guest virtual machines.
@@ -553,7 +521,21 @@ Procedure
     $ ipl c
     ```
 
-    For more information, see [IPL](https://www.ibm.com/docs/en/zvm/latest?topic=commands-ipl) (IBM Documentation).
+    For more information, see "IPL" in the IBM documentation.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [PUNCH](https://www.ibm.com/docs/en/zvm/latest?topic=commands-punch)
+
+- [IPL](https://www.ibm.com/docs/en/zvm/latest?topic=commands-ipl)
 
 </div>
 
@@ -571,9 +553,7 @@ Additional resources
 
 ## Adding IBM Z agents with RHEL KVM
 
-You can manually add IBM Z® agents with RHEL KVM.
-
-Only use this procedure for IBM Z® clusters with RHEL KVM.
+You can manually add IBM Z® agents with RHEL KVM. Only use this procedure for IBM Z® clusters with RHEL KVM.
 
 > [!NOTE]
 > The `nmstateconfig` parameter must be configured for the KVM boot.
@@ -717,14 +697,6 @@ Procedure
 
 1.  Create a boot parameter file for the agents.
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example parameter file
-
-    </div>
-
     ``` terminal
     rd.neednet=1 cio_ignore=all,!condev \
     console=ttysclp0 \
@@ -739,8 +711,6 @@ Procedure
     ai.ip_cfg_override=1 \
     random.trust_cpu=on rd.luks.options=discard
     ```
-
-    </div>
 
     - For the `coreos.live.rootfs_url` artifact, specify the matching `rootfs` artifact for the `kernel` and `initramfs` that you are starting. Only HTTP and HTTPS protocols are supported.
 
@@ -793,11 +763,23 @@ Procedure
 
 2.  Rename the `boot-artifacts` file present in the `generic.ins` parameter file to match the names of the `boot-artifacts` file generated by the installation program.
 
-3.  Transfer the `initrd`, `kernel`, `generic.ins`, and `initrd.img.addrsize` parameter files to the file server. For more information, see [Booting Linux in LPAR mode](https://www.ibm.com/docs/en/linux-on-systems?topic=bl-booting-linux-in-lpar-mode) (IBM documentation).
+3.  Transfer the `initrd`, `kernel`, `generic.ins`, and `initrd.img.addrsize` parameter files to the file server. For more information, see "Booting Linux in LPAR mode" in the IBM documentation.
 
 4.  Start the machine.
 
 5.  Repeat the procedure for all other machines in the cluster.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Booting Linux in LPAR mode](https://www.ibm.com/docs/en/linux-on-systems?topic=bl-booting-linux-in-lpar-mode)
 
 </div>
 

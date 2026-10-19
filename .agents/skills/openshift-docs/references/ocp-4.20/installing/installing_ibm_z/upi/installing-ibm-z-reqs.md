@@ -264,8 +264,8 @@ This section provides details about the ports that are required.
 | `500` | IPsec IKE packets |  |
 | `4500` | IPsec NAT-T packets |  |
 | `123` | Network Time Protocol (NTP) on UDP port `123`. If an external NTP time server is configured, you must open UDP port `123`. |  |
-| TCP/UDP | `30000`-`32767` |  |
-| Kubernetes node port | ESP | N/A |
+| TCP/UDP | `30000`-`32767` | Kubernetes node port |
+| ESP | N/A | IPsec Encapsulating Security Payload (ESP) |
 
 Ports used for all-machine to all-machine communications
 
@@ -483,7 +483,7 @@ Provides reverse DNS resolution for the Kubernetes API. The PTR record refers to
 Provides reverse DNS resolution for the bootstrap machine.
 
 `control-plane0.ocp4.example.com.`
-Provides rebootstrap.ocp4.example.com.verse DNS resolution for the control plane machines.
+Provides reverse DNS resolution for the control plane machines.
 
 `compute0.ocp4.example.com.`
 Provides reverse DNS resolution for the compute machines.

@@ -571,7 +571,7 @@ MTC supports the following storage providers:
 
 - If you use a proxy server with an internally hosted replication repository, you must ensure that the proxy allows access to the replication repository.
 
-## Retrieving Multicloud Object Gateway credentials
+## Retrieve Multicloud Object Gateway credentials
 
 Retrieve the Multicloud Object Gateway (MCG) credentials and S3 endpoint, which you need to configure MCG as a replication repository for the Migration Toolkit for Containers (MTC).
 
@@ -606,7 +606,7 @@ Procedure
 
 </div>
 
-## Configuring Amazon Web Services
+## Configure Amazon Web Services
 
 Configure Amazon Web Services (AWS) S3 storage and Identity and Access Management (IAM) credentials for backup storage with Migration Toolkit for Containers (MTC). This provides the necessary permissions and storage infrastructure for data protection operations.
 
@@ -758,7 +758,7 @@ Procedure
 
 </div>
 
-## Configuring Google Cloud
+## Configure Google Cloud
 
 You configure a Google Cloud storage bucket as a replication repository for the Migration Toolkit for Containers (MTC).
 
@@ -896,7 +896,7 @@ Procedure
 
 </div>
 
-## Configuring Microsoft Azure
+## Configure Microsoft Azure
 
 Configure Microsoft Azure storage and service principal credentials for backup storage with Migration Toolkit for Containers (MTC). This provides the necessary authentication and storage infrastructure for data protection operations.
 

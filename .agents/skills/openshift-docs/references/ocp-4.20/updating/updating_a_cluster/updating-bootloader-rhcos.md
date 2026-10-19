@@ -2,7 +2,7 @@
 
 To update the boot loader on RHCOS nodes using `bootupd`, you must either run the `bootupctl update` command on RHCOS machines manually or provide a machine config with a `systemd` unit.
 
-Unlike `grubby` or other boot loader tools, `bootupd` does not manage kernel space configuration such as passing kernel arguments. To configure kernel arguments, see [Adding kernel arguments to nodes](../../nodes/nodes/nodes-nodes-managing.md#nodes-nodes-kernel-arguments_nodes-nodes-managing).
+Unlike `grubby` or other boot loader tools, `bootupd` does not manage kernel space configuration such as passing kernel arguments. To configure kernel arguments, see [Add kernel arguments to nodes](../../nodes/nodes/nodes-nodes-managing.md#nodes-nodes-kernel-arguments_nodes-nodes-managing).
 
 > [!NOTE]
 > You can use `bootupd` to update the boot loader to protect against the BootHole vulnerability.
@@ -57,9 +57,7 @@ Procedure
 
     </div>
 
-</div>
-
-1.  OpenShift Container Platform clusters initially installed on version 4.4 and older require an explicit adoption phase.
+2.  OpenShift Container Platform clusters initially installed on version 4.4 and older require an explicit adoption phase.
 
     If the system status is `Adoptable`, perform the adoption by running the following command:
 
@@ -81,7 +79,7 @@ Procedure
 
     </div>
 
-2.  If an update is available, apply the update so that the changes take effect on the next reboot by running the following command:
+3.  If an update is available, apply the update so that the changes take effect on the next reboot by running the following command:
 
     ``` terminal
     # bootupctl update
@@ -100,6 +98,8 @@ Procedure
     ```
 
     </div>
+
+</div>
 
 # Updating the boot loader automatically by using a machine config
 

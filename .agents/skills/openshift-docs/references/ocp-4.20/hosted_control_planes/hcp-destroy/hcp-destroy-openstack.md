@@ -2,7 +2,7 @@
 
 You might want to remove a hosted cluster if you are no longer using it, you are trying to reduce resources, or the hosted cluster is experiencing issues that are difficult to resolve.
 
-# Destroying a hosted cluster by using the CLI
+# Destroying a hosted cluster on RHOSP by using the CLI
 
 You can destroy a hosted cluster and its associated resources on Red Hat OpenStack Platform (RHOSP) by using the `hcp` CLI tool.
 

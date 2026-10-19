@@ -11,7 +11,7 @@ You can create a `Secret` CR for the backup location and install the Data Protec
 
 To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog. For details, see [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks).
 
-# Retrieving Multicloud Object Gateway credentials
+# Retrieve Multicloud Object Gateway credentials
 
 Retrieve the Multicloud Object Gateway (MCG) bucket credentials to create a `Secret` custom resource (CR) for OpenShift API for Data Protection (OADP).
 
@@ -99,7 +99,7 @@ If the backup and snapshot locations use different credentials, you create two s
 >
 > If you do not want to specify backup or snapshot locations during the installation, you can create a default `Secret` with an empty `credentials-velero` file.
 
-## Creating a default Secret
+## Create a default Secret
 
 You create a default `Secret` if your backup and snapshot locations use the same credentials or if you do not require a snapshot location.
 
@@ -152,7 +152,7 @@ Procedure
 
 </div>
 
-## Creating secrets for different credentials
+## Create secrets for different credentials
 
 Create separate `Secret` objects when your backup and snapshot locations require different credentials. This allows you to configure distinct authentication for each storage location while maintaining secure credential management.
 
@@ -218,7 +218,7 @@ Procedure
 
 </div>
 
-## Setting Velero CPU and memory resource allocations
+## Set Velero CPU and memory resource allocations
 
 You set the CPU and memory resource allocations for the `Velero` pod by editing the `DataProtectionApplication` custom resource (CR) manifest.
 
@@ -281,7 +281,7 @@ Procedure
 
 Use the `nodeSelector` field to select which nodes can run the node agent. The `nodeSelector` field is the simplest recommended form of node selection constraint. Any label specified must match the labels on each node.
 
-## Enabling self-signed CA certificates
+## Enable self-signed CA certificates
 
 You must enable a self-signed CA certificate for object storage by editing the `DataProtectionApplication` custom resource (CR) manifest to prevent a `certificate signed by unknown authority` error.
 
@@ -338,7 +338,7 @@ Procedure
 
 </div>
 
-## Using CA certificates with the velero command aliased for Velero deployment
+## Use CA certificates with the velero command aliased for Velero deployment
 
 You might want to use the Velero CLI without installing it locally on your system by creating an alias for it.
 
@@ -419,7 +419,7 @@ Procedure
 
 </div>
 
-# Installing the Data Protection Application
+# Install the Data Protection Application
 
 You install the Data Protection Application (DPA) by creating an instance of the `DataProtectionApplication` API.
 
@@ -606,7 +606,7 @@ Verification
 
 </div>
 
-# Configuring the DPA with client burst and QPS settings
+# Configure the DPA with client burst and QPS settings
 
 The burst setting determines how many requests can be sent to the `velero` server before the limit is applied. After the burst limit is reached, the queries per second (QPS) setting determines how many additional requests can be sent per second.
 
@@ -691,7 +691,7 @@ Procedure
 
 </div>
 
-# Configuring node agents and node labels
+# Configure node agents and node labels
 
 The Data Protection Application (DPA) uses the `nodeSelector` field to select which nodes can run the node agent. The `nodeSelector` field is the recommended form of node selection constraint.
 
@@ -737,7 +737,7 @@ Procedure
 
 </div>
 
-# Configuring node agent load affinity
+# Configure node agent load affinity
 
 You can schedule the node agent pods on specific nodes by using the `spec.podConfig.nodeSelector` object of the `DataProtectionApplication` (DPA) custom resource (CR).
 
@@ -847,7 +847,7 @@ Use the following guidelines to configure the node agent `loadAffinity` object i
             label.io/gpu: 'no'
   ```
 
-# Configuring node agent load concurrency
+# Configure node agent load concurrency
 
 You can control the maximum number of node agent operations that can run simultaneously on each node within your cluster.
 
@@ -912,7 +912,7 @@ Procedure
 
 </div>
 
-# Configuring the node agent as a non-root and non-privileged user
+# Configure the node agent as a non-root and non-privileged user
 
 To enhance the node agent security, you can configure the OADP Operator node agent daemonset to run as a non-root and non-privileged user by using the `spec.configuration.velero.disableFsBackup` setting in the `DataProtectionApplication` (DPA) custom resource (CR).
 
@@ -1055,7 +1055,7 @@ Verification
 
 </div>
 
-# Configuring repository maintenance
+# Configure repository maintenance
 
 OADP repository maintenance is a background job, you can configure it independently of the node agent pods. This means that you can schedule the repository maintenance pod on a node where the node agent is or is not running.
 
@@ -1143,7 +1143,7 @@ Procedure
 
 </div>
 
-# Configuring Velero load affinity
+# Configure Velero load affinity
 
 With each OADP deployment, there is one Velero pod and its main purpose is to schedule Velero workloads. To schedule the Velero pod, you can use the `velero.podConfig.nodeSelector` and the `velero.loadAffinity` objects in the `DataProtectionApplication` (DPA) custom resource (CR) spec.
 
@@ -1210,7 +1210,7 @@ Procedure
 
 </div>
 
-# Overriding the imagePullPolicy setting in the DPA
+# Override the imagePullPolicy setting in the DPA
 
 In OADP 1.4.0 or earlier, the Operator sets the `imagePullPolicy` field of the Velero and node agent pods to `Always` for all images.
 
@@ -1298,7 +1298,7 @@ Procedure
 
 </div>
 
-## Enabling CSI in the DataProtectionApplication CR
+## Enable CSI in the DataProtectionApplication CR
 
 You enable the Container Storage Interface (CSI) in the `DataProtectionApplication` custom resource (CR) in order to back up persistent volumes with CSI snapshots.
 
@@ -1343,7 +1343,7 @@ Procedure
 
 </div>
 
-## Disabling the node agent in DataProtectionApplication
+## Disable the node agent in DataProtectionApplication
 
 If you are not using `Restic`, `Kopia`, or `DataMover` for your backups, you can disable the `nodeAgent` field in the `DataProtectionApplication` custom resource (CR). Before you disable `nodeAgent`, ensure the OADP Operator is idle and not running any backups.
 

@@ -170,7 +170,7 @@ Procedure
 
 </div>
 
-# Viewing the OVN-Kubernetes logs using the CLI
+# View the OVN-Kubernetes logs using the CLI
 
 To view OVN-Kubernetes pod logs in OpenShift Container Platform, you can use the OpenShift CLI (`oc`) to examine logs from containers in the `openshift-ovn-kubernetes` namespace.
 
@@ -248,7 +248,7 @@ Procedure
 
 </div>
 
-# Viewing the OVN-Kubernetes logs using the web console
+# View the OVN-Kubernetes logs using the web console
 
 To view OVN-Kubernetes pod logs in the OpenShift Container Platform web console, you can open pod logs for each container in the `openshift-ovn-kubernetes` project.
 
@@ -566,7 +566,7 @@ OVN-Kubernetes network traffic can be viewed with OVS sampling via the CLI for t
 
 - `AdminNetworkPolicy`
 
-- `BaselineNetworkPolicy`
+- `BaselineAdminNetworkPolicy`
 
 - `UserDefinedNetwork` isolation
 
@@ -594,7 +594,7 @@ Prerequisites
 
 - You have created a source pod and a destination pod and ran traffic between them.
 
-- You have created at least one of the following network APIs: `NetworkPolicy`, `AdminNetworkPolicy`, `BaselineNetworkPolicy`, `UserDefinedNetwork` isolation, multicast, or egress firewalls.
+- You have created at least one of the following network APIs: `NetworkPolicy`, `AdminNetworkPolicy`, `BaselineAdminNetworkPolicy`, `UserDefinedNetwork` isolation, multicast, or egress firewalls.
 
 </div>
 

@@ -951,7 +951,7 @@ Procedure
 
 ## Specifying multiple subnets for your network
 
-Before you install an OpenShift Container Platform cluster on a vSphere host, you can specify multiple subnets for a networking implementation so that the vSphere cloud controller manager (CCM) can select the appropriate subnet for a given networking situation. vSphere can use the subnet for managing pods and services on your cluster.
+Before you install an OpenShift Container Platform cluster on a vSphere host, you can specify multiple subnets so that the vSphere cloud controller manager (CCM) can select the appropriate subnet for managing pods and services.
 
 For this configuration, you must specify internal and external Classless Inter-Domain Routing (CIDR) implementations in the vSphere CCM configuration. Each CIDR implementation lists an IP address range that the CCM uses to decide what subnets interact with traffic from internal and external networks.
 
@@ -1043,7 +1043,9 @@ Additional resources
 
 # Cluster Network Operator configuration
 
-To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity. Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
+To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity.
+
+Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
 
 The CNO configuration inherits the following fields during cluster installation from the `Network` API in the `Network.config.openshift.io` API group:
 
@@ -2168,7 +2170,7 @@ Configure a persistent volume, which is required for production clusters. Where 
 
 You can also allow the image registry to use block storage types by using the `Recreate` rollout strategy during upgrades.
 
-## Configuring registry storage for VMware vSphere
+## Configure registry storage for VMware vSphere
 
 As a cluster administrator, following installation you must configure your registry to use storage.
 
@@ -2281,7 +2283,7 @@ Procedure
 
 </div>
 
-## Configuring block registry storage for VMware vSphere
+## Configure block registry storage for VMware vSphere
 
 To allow the image registry to use block storage types such as vSphere Virtual Machine Disk (VMDK) during upgrades as a cluster administrator, you can use the `Recreate` rollout strategy.
 
@@ -2398,7 +2400,9 @@ Additional resources
 
 # Configuring network components to run on the control plane
 
-You can configure networking components to run exclusively on the control plane nodes. By default, OpenShift Container Platform allows any node in the machine config pool to host the `ingressVIP` virtual IP address. However, some environments deploy compute nodes in separate subnets from the control plane nodes, which requires configuring the `ingressVIP` virtual IP address to run on the control plane nodes.
+You can configure networking components to run exclusively on the control plane nodes.
+
+By default, OpenShift Container Platform allows any node in the machine config pool to host the `ingressVIP` virtual IP address. However, some environments deploy compute nodes in separate subnets from the control plane nodes, which requires configuring the `ingressVIP` virtual IP address to run on the control plane nodes.
 
 > [!NOTE]
 > You can scale the remote nodes by creating a compute machine set in a separate subnet.

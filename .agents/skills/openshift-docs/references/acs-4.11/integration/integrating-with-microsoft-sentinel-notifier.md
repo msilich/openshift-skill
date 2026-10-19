@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Microsoft Sentinel is a security information and event management (SIEM) solution which acts on Red Hat Advanced Cluster Security for Kubernetes (RHACS) alerts and audit logs.
+Microsoft Sentinel is a security information and event management (SIEM) solution that acts on Red Hat Advanced Cluster Security for Kubernetes (RHACS) alerts and audit logs.
 
 <a id="viewing-the-log-analytics-to-detect-threats_integrate-with-sentinel"></a>
 
@@ -74,21 +74,21 @@ Procedure
 
 3.  To create a new integration, click **New integration**.
 
-4.  In the **Create integration** page, provide the following information:
+4.  In the **Create integration** page, enter the following information:
 
     - **Integration name**: Specify a name for the integration.
 
     - **Log ingestion endpoint**: Enter the data collection endpoint. You can find the endpoint in the Microsoft Azure portal.
 
-      For more information, see [Data collection rules (DCRs) in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview) (Microsoft Azure documentation).
+      For more information, see "Data collection rules (DCRs) in Azure Monitor" (Microsoft Azure documentation).
 
     - **Directory tenant ID**: Enter your unique tenant ID within the Microsoft Azure cloud infrastructure. You can find the tenant ID in the Microsoft Azure portal.
 
-      For more information, see [Find tenant name and tenant ID in Azure Active Directory B2C](https://learn.microsoft.com/en-us/azure/active-directory-b2c/tenant-management-read-tenant-name) (Microsoft Azure documentation).
+      For more information, see "Find tenant name and tenant ID in Azure Active Directory B2C" (Microsoft Azure documentation).
 
     - **Application client ID**: Enter the client ID which uniquely identifies the specific application registered within your AAD that needs access to resources. You can find the client ID in the Microsoft Entra portal for the service principal you have created.
 
-      For more information, see [Register applications](https://learn.microsoft.com/en-us/security/zero-trust/develop/app-registration) (Microsoft Azure documentation).
+      For more information, see "Register applications" (Microsoft Azure documentation).
 
     - Choose the appropriate authentication method:
 
@@ -98,7 +98,7 @@ Procedure
 
       - If you want to use an Azure managed identity, select the **Use workload identity** checkbox.
 
-        For more information, see [The new App registrations experience for Azure Active Directory B2C](https://learn.microsoft.com/en-us/azure/active-directory-b2c/app-registrations-training-guide) (Microsoft Azure documentation).
+        For more information, see "The new App registrations experience for Azure Active Directory B2C" (Microsoft Azure documentation).
 
     - Optional: Choose the appropriate method to configure the data collection rule configuration:
 
@@ -110,7 +110,7 @@ Procedure
 
         To create an audit data collection rule, enter the stream name and ID. You can find the stream name and ID in the Microsoft Azure portal.
 
-        For more information, see [Data collection rules (DCRs) in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview) (Microsoft Azure documentation).
+        For more information, see "Data collection rules (DCRs) in Azure Monitor" (Microsoft Azure documentation).
 
 5.  Optional: To test the new integration, click **Test**.
 
@@ -130,8 +130,26 @@ Verification
 
 2.  Scroll down to the **Notifier Integrations** section, and then click **Microsoft Sentinel**.
 
-3.  In the **Integrations Microsoft Sentinel** page, verify that the new integration has been created.
+3.  In the **Integrations Microsoft Sentinel** page, verify that the new integration exists.
 
 4.  Verify that the messages receive the correct log tables in your log analytics workspace.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Data collection rules (DCRs) in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview)
+
+- [Find tenant name and tenant ID in Azure Active Directory B2C](https://learn.microsoft.com/en-us/azure/active-directory-b2c/tenant-management-read-tenant-name)
+
+- [Register applications](https://learn.microsoft.com/en-us/security/zero-trust/develop/app-registration)
+
+- [The new App registrations experience for Azure Active Directory B2C](https://learn.microsoft.com/en-us/azure/active-directory-b2c/app-registrations-training-guide)
 
 </div>

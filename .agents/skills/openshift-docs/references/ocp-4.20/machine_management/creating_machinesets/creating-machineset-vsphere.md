@@ -195,11 +195,15 @@ For more information about creating an account with only the required privileges
 
 # Requirements for clusters with user-provisioned infrastructure to use compute machine sets
 
-To enable the Machine API to manage and scale compute nodes on user-provisioned infrastructure, you can configure a `MachineSet` YAML file with specific vSphere parameters, for example data center and disk image. To use compute machine sets on clusters that have user-provisioned infrastructure, you must ensure that you cluster configuration supports using the Machine API.
+To enable the Machine API to manage and scale compute nodes on user-provisioned infrastructure, you can configure a `MachineSet` YAML file with specific vSphere parameters, for example data center and disk image.
+
+To use compute machine sets on clusters that have user-provisioned infrastructure, you must ensure that you cluster configuration supports using the Machine API.
 
 ## Obtaining the infrastructure ID
 
-To ensure the Machine API correctly identifies and manages virtual machines (VMs) that belong to a specific cluster, you must add the unique infrastructure ID to the `MachineSet` YAML file to label and link resources. To create compute machine sets, you must be able to supply the infrastructure ID for your cluster.
+To ensure the Machine API correctly identifies and manages virtual machines (VMs) that belong to a specific cluster, you must add the unique infrastructure ID to the `MachineSet` YAML file to label and link resources.
+
+To create compute machine sets, you must be able to supply the infrastructure ID for your cluster.
 
 <div>
 
@@ -269,7 +273,9 @@ Procedure
 
 ## Satisfying Ignition configuration requirements
 
-For the Machine API to provision virtual machines (VMs) with the correct initial configuration using Ignition, a valid Ignition configuration is required. The Ignition configuration contains the `machine-config-server` address and a system trust bundle for obtaining further Ignition configurations from the Machine Config Operator.
+For the Machine API to provision virtual machines (VMs) with the correct initial configuration using Ignition, a valid Ignition configuration is required.
+
+The Ignition configuration contains the `machine-config-server` address and a system trust bundle for obtaining further Ignition configurations from the Machine Config Operator.
 
 By default, this configuration is stored in the `worker-user-data` secret in the `machine-api-operator` namespace. Compute machine sets reference the secret during the machine creation process.
 
@@ -338,7 +344,7 @@ Additional resources
 
 </div>
 
-# Creating a compute machine set
+# Create a compute machine set
 
 To dynamically manage machine compute resources, you can create your own compute machine sets in addition to the compute machine sets created by the installation program. Use the OpenShift Container Platform CLI to automate node provisioning.
 
@@ -550,7 +556,7 @@ Verification
 
 </div>
 
-# Labeling GPU machine sets for the cluster autoscaler
+# Label GPU machine sets for the cluster autoscaler
 
 Label your machine sets to indicate which machines the cluster autoscaler can use for GPU-enabled nodes. Applying the accelerator label helps ensure that the autoscaler deploys the correct resources for your GPU workloads.
 

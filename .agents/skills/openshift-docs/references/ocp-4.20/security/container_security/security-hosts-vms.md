@@ -2,7 +2,7 @@
 
 Containers and virtual machines provide ways of separating applications running on a host from the operating system itself. You should understand RHCOS, which is the operating system used by OpenShift Container Platform, to see how the host systems protect containers and hosts from each other.
 
-# Securing containers on Red Hat Enterprise Linux CoreOS (RHCOS)
+# Secure containers on Red Hat Enterprise Linux CoreOS (RHCOS)
 
 You should understand the security enhancements you can make to the containers in your OpenShift Container Platform clusters.
 
@@ -66,7 +66,7 @@ Additional resources
 
 </div>
 
-# Comparing virtualization and containers
+# Compare virtualization and containers
 
 You should understand the differences between containers and VMs to learn the advantages and drawbacks that influence the use cases in which these technologies are typically applied.
 
@@ -90,7 +90,7 @@ Additional resources
 
 </div>
 
-# Securing OpenShift Container Platform
+# Secure OpenShift Container Platform
 
 To make your OpenShift Container Platform cluster more secure, you should understand the security enhancements you can make to your cluster.
 

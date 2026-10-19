@@ -119,7 +119,7 @@ Specify the following parameters:
 
 - `value.zone`. Specifies the zone within your region to place machines on. Be sure that your region supports the zone that you specify.
 
-# Creating a compute machine set
+# Create a compute machine set
 
 To dynamically manage machine compute resources, you can create your own compute machine sets in addition to the compute machine sets created by the installation program. Use the OpenShift Container Platform CLI to automate node provisioning.
 

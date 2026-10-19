@@ -1,8 +1,12 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-The Cluster Network Operator (CNO) runs a controller, the connectivity check controller, that performs a connection health check between resources within your cluster. By reviewing the results of the health checks, you can diagnose connection problems or eliminate network connectivity as the cause of an issue that you are investigating.
+The Cluster Network Operator (CNO) runs a controller, the connectivity check controller, that performs a connection health check between resources within your cluster.
+
+By reviewing the results of the health checks, you can diagnose connection problems or eliminate network connectivity as the cause of an issue that you are investigating.
 
 # Connection health checks that are performed
+
+Establish TCP connections to target services, endpoints, and load balancers to verify that control plane components, routing layers, and node services can communicate without interruption.
 
 To verify that cluster resources are reachable, a TCP connection is made to each of the following cluster API services:
 
@@ -75,13 +79,19 @@ spec:
 
 </div>
 
-- Specifies the network diagnostics configuration. If a value is not specified or an empty object is specified, and `spec.disableNetworkDiagnostics=true` is set in the `network.operator.openshift.io` custom resource named `cluster`, network diagnostics are disabled. If set, this value overrides `spec.disableNetworkDiagnostics=true`.
+where:
 
-- Specifies the diagnostics mode. The value can be the empty string, `All`, or `Disabled`. The empty string is equivalent to specifying `All`.
+`spec.networkDiagnostics`
+Specifies the network diagnostics configuration. If a value is not specified or an empty object is specified, and `spec.disableNetworkDiagnostics=true` is set in the `network.operator.openshift.io` custom resource named `cluster`, network diagnostics are disabled. If set, this value overrides `spec.disableNetworkDiagnostics=true`.
 
-- Optional: Specifies a selector for connectivity check source pods. You can use the `nodeSelector` and `tolerations` fields to further specify the `sourceNode` pods. These are optional for both source and target pods. You can omit them, use both, or use only one of them.
+`spec.networkDiagnostics.mode`
+Specifies the diagnostics mode. The value can be the empty string, `All`, or `Disabled`. The empty string is equivalent to specifying `All`.
 
-- Optional: Specifies a selector for connectivity check target pods. You can use the `nodeSelector` and `tolerations` fields to further specify the `targetNode` pods. These are optional for both source and target pods. You can omit them, use both, or use only one of them.
+`spec.networkDiagnostics.sourcePlacement`
+Optional: Specifies a selector for connectivity check source pods. You can use the `nodeSelector` and `tolerations` fields to further specify the `sourceNode` pods. These are optional for both source and target pods. You can omit them, use both, or use only one of them.
+
+`spec.networkDiagnostics.targetPlacement`
+Optional: Specifies a selector for connectivity check target pods. You can use the `nodeSelector` and `tolerations` fields to further specify the `targetNode` pods. These are optional for both source and target pods. You can omit them, use both, or use only one of them.
 
 # Configuring pod connectivity check placement
 
@@ -129,30 +139,30 @@ Verification
 
 - Verify that the source and target pods are running on the intended nodes by entering the following command:
 
-</div>
+  ``` terminal
+  $ oc get pods -n openshift-network-diagnostics -o wide
+  ```
 
-``` terminal
-$ oc get pods -n openshift-network-diagnostics -o wide
-```
+  <div class="formalpara">
 
-<div class="formalpara">
+  <div class="title">
 
-<div class="title">
+  Example output
 
-Example output
+  </div>
 
-</div>
+  ``` text
+  NAME                                    READY   STATUS    RESTARTS   AGE     IP           NODE                                        NOMINATED NODE   READINESS GATES
+  network-check-source-84c69dbd6b-p8f7n   1/1     Running   0          9h      10.131.0.8   ip-10-0-40-197.us-east-2.compute.internal   <none>           <none>
+  network-check-target-46pct              1/1     Running   0          9h      10.131.0.6   ip-10-0-40-197.us-east-2.compute.internal   <none>           <none>
+  network-check-target-8kwgf              1/1     Running   0          9h      10.128.2.4   ip-10-0-95-74.us-east-2.compute.internal    <none>           <none>
+  network-check-target-jc6n7              1/1     Running   0          9h      10.129.2.4   ip-10-0-21-151.us-east-2.compute.internal   <none>           <none>
+  network-check-target-lvwnn              1/1     Running   0          9h      10.128.0.7   ip-10-0-17-129.us-east-2.compute.internal   <none>           <none>
+  network-check-target-nslvj              1/1     Running   0          9h      10.130.0.7   ip-10-0-89-148.us-east-2.compute.internal   <none>           <none>
+  network-check-target-z2sfx              1/1     Running   0          9h      10.129.0.4   ip-10-0-60-253.us-east-2.compute.internal   <none>           <none>
+  ```
 
-``` text
-NAME                                    READY   STATUS    RESTARTS   AGE     IP           NODE                                        NOMINATED NODE   READINESS GATES
-network-check-source-84c69dbd6b-p8f7n   1/1     Running   0          9h      10.131.0.8   ip-10-0-40-197.us-east-2.compute.internal   <none>           <none>
-network-check-target-46pct              1/1     Running   0          9h      10.131.0.6   ip-10-0-40-197.us-east-2.compute.internal   <none>           <none>
-network-check-target-8kwgf              1/1     Running   0          9h      10.128.2.4   ip-10-0-95-74.us-east-2.compute.internal    <none>           <none>
-network-check-target-jc6n7              1/1     Running   0          9h      10.129.2.4   ip-10-0-21-151.us-east-2.compute.internal   <none>           <none>
-network-check-target-lvwnn              1/1     Running   0          9h      10.128.0.7   ip-10-0-17-129.us-east-2.compute.internal   <none>           <none>
-network-check-target-nslvj              1/1     Running   0          9h      10.130.0.7   ip-10-0-89-148.us-east-2.compute.internal   <none>           <none>
-network-check-target-z2sfx              1/1     Running   0          9h      10.129.0.4   ip-10-0-60-253.us-east-2.compute.internal   <none>           <none>
-```
+  </div>
 
 </div>
 

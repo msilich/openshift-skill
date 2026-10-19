@@ -1,24 +1,24 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-To ensure optimal performance for self-managed Red Hat Advanced Cluster Security for Kubernetes (RHACS) components, allocate CPU and memory resources based on the specific scale of your environment. Calculate your infrastructure requirements by analyzing the number of monitored deployments, concurrent users, and unique images across your clusters. Accurate sizing prevents performance bottlenecks and ensures your deployment handles growth effectively.
+To ensure optimal performance for self-managed Red Hat Advanced Cluster Security for Kubernetes (RHACS) components, assign CPU and memory resources based on the specific scale of your environment. Calculate your infrastructure requirements by analyzing the number of monitored deployments, concurrent users, and unique images across your clusters. Correct sizing prevents performance bottlenecks and ensures your deployment handles growth effectively.
 
 <a id="resource-requirements-for-scaling-based-on-deployment_acs-recommended-requirements"></a>
 
 # Resource requirements for scaling based on deployment
 
-The recommended resource guidelines were developed by performing a focused test that created the following objects across a given number of namespaces:
+The recommended resource guidelines come from a focused test that created the following objects across a given number of namespaces:
 
 - 10 deployments, with 3 pod replicas in a sleep state, mounting 4 secrets, 4 config maps
 
-- 10 services, each one pointing to the TCP/8080 and TCP/8443 ports of one of the previous deployments
+- 10 services, each one pointing to the TCP/8080 and TCP/8443 ports of one of the earlier deployments
 
-- 1 route pointing to the first of the previous services
+- 1 route pointing to the first of the earlier services
 
 - 10 secrets containing 2048 random string characters
 
 - 10 config maps containing 2048 random string characters
 
-During the analysis of results, the number of deployments is identified as a primary factor for increasing of used resources. And we are using the number of deployments for the estimation of required resources.
+During the analysis of results, the number of deployments emerges as a primary factor for increasing resource usage. And we are using the number of deployments for the estimation of required resources.
 
 <div>
 
@@ -36,8 +36,10 @@ Additional resources
 
 # Central services (self-managed)
 
+Review the recommended CPU and memory resource requirements for the Central services components in a self-managed Red Hat Advanced Cluster Security for Kubernetes deployment.
+
 > [!NOTE]
-> If you are using Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service), you do not need to review the requirements for Central services, because they are managed by Red Hat. You only need to look at the requirements for secured cluster services.
+> If you are using Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service), you do not need to review the requirements for Central services, because Red Hat manages them. You only need to examine the requirements for secured cluster services.
 
 Central services contain the following components:
 
@@ -53,13 +55,15 @@ Central services contain the following components:
 
 ## Central
 
+The Central component requires specific CPU and memory allocations based on the number of monitored deployments and concurrent web portal users.
+
 <a id="_memory_and_cpu_requirements"></a>
 
 ### Memory and CPU requirements
 
-The following table lists the minimum memory and CPU values required to run Central. To determine sizing, consider the following data:
+The following table lists the minimum memory and CPU values required to run Central. To decide on sizing, consider the following data:
 
-- The total number of monitored deployments across all secured clusters that are connected to a single Central deployment
+- The total number of monitored deployments across all secured clusters that connect to a single Central deployment
 
 - The number of concurrent web portal users
 
@@ -74,13 +78,15 @@ The following table lists the minimum memory and CPU values required to run Cent
 
 ## Central DB
 
+The Central DB component requires specific CPU and memory allocations based on the number of monitored deployments and concurrent web portal users.
+
 <a id="_memory_and_cpu_requirements_2"></a>
 
 ### Memory and CPU requirements
 
-The following table lists the minimum memory and CPU values required to run Central DB. To determine sizing, consider the following data:
+The following table lists the minimum memory and CPU values required to run Central DB. To decide on sizing, consider the following data:
 
-- The total number of monitored deployments across all secured clusters that are connected to a single Central deployment
+- The total number of monitored deployments across all secured clusters that connect to a single Central deployment
 
 - The number of concurrent web portal users
 
@@ -95,6 +101,8 @@ The following table lists the minimum memory and CPU values required to run Cent
 
 ## StackRox Scanner
 
+The StackRox Scanner deployment in the Central cluster requires specific CPU and memory allocations based on the number of unique images deployed across all secured clusters.
+
 The following table lists the minimum memory and CPU values required for the StackRox Scanner deployment in the Central cluster. The table includes the number of unique images deployed in all secured clusters.
 
 | Number of unique Images | Replicas   | CPU     | Memory  |
@@ -108,11 +116,13 @@ The following table lists the minimum memory and CPU values required for the Sta
 
 ## Scanner V4
 
-The following table lists the minimum memory and CPU values required for the Scanner V4 deployment in the Central cluster. The table includes the number of unique images deployed in all secured clusters.
+The Scanner V4 deployment in the Central cluster includes the Scanner V4 Indexer, Scanner V4 Matcher, and Scanner V4 DB components, each with specific CPU and memory requirements based on the number of unique images deployed across all secured clusters.
 
-<a id="_scanner_v4_indexer"></a>
+<a id="recommended-requirements-scanner-v4-indexer_acs-recommended-requirements"></a>
 
 ### Scanner V4 Indexer
+
+Minimum CPU and memory requirements for the Scanner V4 Indexer component.
 
 | Number of unique images | Replicas | CPU     | Memory  |
 |-------------------------|----------|---------|---------|
@@ -122,9 +132,11 @@ The following table lists the minimum memory and CPU values required for the Sca
 | \< 5000                 | 2        | 5 cores | 1 GiB   |
 | \< 10000                | 3        | 6 cores | 1.5 GiB |
 
-<a id="_scanner_v4_matcher"></a>
+<a id="recommended-requirements-scanner-v4-matcher_acs-recommended-requirements"></a>
 
 ### Scanner V4 Matcher
+
+Minimum CPU and memory requirements for the Scanner V4 Matcher component.
 
 | Number of unique images | Replicas | CPU     | Memory  |
 |-------------------------|----------|---------|---------|
@@ -134,9 +146,11 @@ The following table lists the minimum memory and CPU values required for the Sca
 | \< 5000                 | 2        | 3 cores | 1.6 GiB |
 | \< 10000                | 3        | 3 cores | 1.7 GiB |
 
-<a id="_scanner_v4_db"></a>
+<a id="recommended-requirements-scanner-v4-db_acs-recommended-requirements"></a>
 
 ### Scanner V4 DB
+
+Minimum CPU and memory requirements for the Scanner V4 DB component.
 
 | Number of unique images | Replicas | CPU     | Memory  |
 |-------------------------|----------|---------|---------|
@@ -162,16 +176,44 @@ Additional resources
 
 # Secured cluster services
 
-Secured cluster services contain the following components:
+Secured cluster services contain the Sensor, Admission controller, and Collector components, each with specific resource requirements based on deployment scale.
 
-- Sensor
+> [!NOTE]
+> Information about the resource requirements for the Collector component is included in the Default resource requirements section.
 
-- Admission controller
+<a id="recommended-requirements-secured-cluster-services-sensor_acs-recommended-requirements"></a>
 
-- Collector
+## Sensor
 
-  > [!NOTE]
-  > Information about the resource requirements for the Collector component is included in the Default resource requirements section.
+Sensor monitors your Kubernetes and OpenShift Container Platform clusters, handling interactions with the Kubernetes API and coordinating with Collector.
+
+<a id="_memory_and_cpu_requirements_3"></a>
+
+### Memory and CPU requirements
+
+The following table lists the minimum memory and CPU values required to run Sensor on a secured cluster.
+
+| Deployments | CPU     | Memory |
+|-------------|---------|--------|
+| \< 25,000   | 2 cores | 10 GiB |
+| \< 50,000   | 2 cores | 20 GiB |
+
+<a id="recommended-requirements-secured-cluster-services-admission-controller_acs-recommended-requirements"></a>
+
+## Admission controller
+
+The admission controller prevents users from creating workloads that violate policies that you configure.
+
+<a id="_memory_and_cpu_requirements_4"></a>
+
+### Memory and CPU requirements
+
+The following table lists the minimum memory and CPU values required to run the admission controller on a secured cluster.
+
+| Deployments | CPU       | Memory  |
+|-------------|-----------|---------|
+| \< 25,000   | 0.5 cores | 300 MiB |
+| \< 50,000   | 0.5 cores | 600 MiB |
 
 <a id="recommended-requirements-vm-scanning_acs-recommended-requirements"></a>
 
@@ -179,13 +221,19 @@ Secured cluster services contain the following components:
 
 When using Red Hat Advanced Cluster Security for Kubernetes (RHACS) to scan virtual machines (VMs) for vulnerabilities, you might need to adjust CPU and memory resource allocations for certain components to match the scale of your environment. Scanner V4 might require modified resources depending on the number of VMs and frequency of scans.
 
+<a id="recommended-requirements-vm-scanning-guidelines_acs-recommended-requirements"></a>
+
+## VM scanning resource guidelines
+
+The recommended resource guidelines for VM scanning identify the number of VMs and the frequency of scans as the primary drivers of resource usage.
+
 For more information about configuring VM scanning, see "Scanning virtual machines".
 
-The following guidelines were developed by running tests that deployed large numbers of VMs and identifying the resources that determine the overall system throughput. The tests identified the number of VMs and the frequency of their scans as the primary driver of resource usage. These tests showed that you can achieve higher throughput by modifying Scanner V4 resources.
+The following guidelines come from running tests that deployed large numbers of VMs and identifying the resources that drive overall system throughput. The tests identified the number of VMs and the frequency of their scans as the primary driver of resource usage. These tests showed that you can achieve higher throughput by modifying Scanner V4 resources.
 
 The following settings impact throughput when allocating resources at the OpenShift Container Platform level:
 
-- Scanner V4 Matcher replicas: These are controlled by the Scanner V4 Matcher Horizontal Pod Autoscaler (HPA).
+- Scanner V4 Matcher replicas: The Scanner V4 Matcher Horizontal Pod Autoscaler (HPA) controls these.
 
 - Scanner V4 Matcher CPU limit
 
@@ -201,15 +249,17 @@ When calculating infrastructure requirements, use the standard guidance for the 
 | \< 40000 | 3 | 2 cores | 32 cores |
 | \< 50000 | 6 | 2 cores | 32 cores |
 
-<a id="_factors_affecting_throughput"></a>
+<a id="recommended-requirements-vm-scanning-throughput-factors_acs-recommended-requirements"></a>
 
 ## Factors affecting throughput
 
-While Scanner V4 resources constrain throughput, other factors are relevant when determining the number of VMs that a specific RHACS deployment supports. Consider the following factors:
+While Scanner V4 resources constrain throughput, other factors affect the number of VMs that a specific RHACS deployment supports.
 
-- VM scan interval: System throughput is measured in VM scans per unit of time, and therefore scan interval, a configuration parameter of `roxagent`, directly impacts the number of VMs that RHACS can handle. The figures in the previous table were calculated for a scan interval of 4 hours, the default setting. A scan interval of 2 hours would result in halved numbers of VMs, and an interval of 8 hours would result in doubled numbers of VMs.
+Consider the following factors:
 
-- VM index report rate limiter: RHACS is protected against excessive load by a rate limiter, which rejects index reports sent by VMs when their rate exceeds the maximum value. If you see administration events indicating that VM index reports are being rate limited and you have increased system resources, adjust the rate limit by using the `ROX_VM_INDEX_REPORT_RATE_LIMIT` environment variable. The rate limiter allows bursts according to the `ROX_VM_INDEX_REPORT_BUCKET_CAPACITY` environment variable, which can be increased to allow larger bursts if the Central pod has enough available memory. For more information, see "Advanced virtual machine scanning configuration" in "Scanning virtual machines".
+- VM scan interval: The system measures throughput in VM scans per unit of time, and therefore scan interval, a configuration parameter of `roxagent`, directly impacts the number of VMs that RHACS can handle. The figures in the earlier table use a scan interval of 4 hours, the default setting. A scan interval of 2 hours would result in halved numbers of VMs, and an interval of 8 hours would result in doubled numbers of VMs.
+
+- VM index report rate limiter: A rate limiter protects RHACS against excessive load, rejecting index reports sent by VMs when their rate exceeds the maximum value. If you see administration events indicating that VM index reports are being rate limited and you have increased system resources, adjust the rate limit by using the `ROX_VM_INDEX_REPORT_RATE_LIMIT` environment variable. The rate limiter allows bursts according to the `ROX_VM_INDEX_REPORT_BUCKET_CAPACITY` environment variable, which you can increase to allow larger bursts if the Central pod has enough available memory. For more information, see "Advanced virtual machine scanning configuration" in "Scanning virtual machines".
 
 - Number of packages installed in each VM: Increased numbers of packages result in increased scan times, and therefore reduce throughput.
 
@@ -223,25 +273,29 @@ While Scanner V4 resources constrain throughput, other factors are relevant when
 
 ## Compliance relay concurrency and buffer sizing
 
-The Compliance relay, which runs in the Compliance container of the Collector pod, manages the vsock connections from VMs and buffers index reports before forwarding them to Sensor. The following parameters affect relay capacity:
+The Compliance relay, which runs in the Compliance container of the Collector pod, manages the vsock connections from VMs and buffers index reports before forwarding them to Sensor.
 
-- `ROX_VIRTUAL_MACHINES_MAX_CONCURRENT_VSOCK_CONNECTIONS`: Controls how many VMs can send index reports simultaneously to a single node. Do not change this value unless a single node handles many VMs and you observe performance problems in the Compliance container. Increasing this value increases the load on the Compliance container, and you must ensure that sufficient CPU and memory are allocated to the container.
+The following parameters affect relay capacity:
 
-- `ROX_VIRTUAL_MACHINES_INDEX_REPORTS_BUFFER_SIZE`: Controls the number of index reports buffered in Sensor before they are forwarded to Central. Increase this value only if Central is slow to process reports while Sensor is operating normally. Increasing this buffer causes Sensor to hold more index reports in memory, which can lead to Sensor running out of memory. Before changing this value, investigate the resource allocation for Central and Scanner V4 Matcher.
+- `ROX_VIRTUAL_MACHINES_MAX_CONCURRENT_VSOCK_CONNECTIONS`: Controls how many VMs can send index reports simultaneously to a single node. Do not change this value unless a single node handles many VMs and you observe performance problems in the Compliance container. Increasing this value increases the load on the Compliance container, and you must allocate enough CPU and memory to the container.
 
-- `ROX_VM_RELAY_MAX_REPORTS_PER_MINUTE`: Controls relay-side rate limiting for forwarding reports to Sensor per VM connection. Only increase this value if specific VMs are reporting infrequently, for example, once every one or two days instead of every four hours, which can indicate those VMs are being starved by the rate limiter. In that case, a modest increase, for example, from `1.0` to `2.0`, might help. Do not increase this value significantly unless the Scanner V4 Matcher has enough resources to handle the additional load.
+- `ROX_VIRTUAL_MACHINES_INDEX_REPORTS_BUFFER_SIZE`: Controls the number of index reports that Sensor buffers before forwarding them to Central. Increase this value only if Central is slow to process reports while Sensor is operating normally. Increasing this buffer causes Sensor to hold more index reports in memory, which can lead to Sensor running out of memory. Before changing this value, investigate the resource allocation for Central and Scanner V4 Matcher.
+
+- `ROX_VM_RELAY_MAX_REPORTS_PER_MINUTE`: Controls relay-side rate limiting for forwarding reports to Sensor per VM connection. Only increase this value if specific VMs are reporting infrequently, for example, once every one or two days instead of every four hours, which can indicate that the rate limiter is starving those VMs. In that case, a modest increase, for example, from `1.0` to `2.0`, might help. Do not increase this value significantly unless the Scanner V4 Matcher has enough resources to handle the additional load.
 
 <a id="central-enrichment-throughput_acs-recommended-requirements"></a>
 
 ## Central enrichment throughput
 
-Central processes incoming VM index reports by enriching them with vulnerability data from Scanner V4. At scale, this enrichment adds CPU and memory load to the Central pod. Consider the following:
+Central processes incoming VM index reports by enriching them with vulnerability data from Scanner V4. At scale, this enrichment adds CPU and memory load to the Central pod.
+
+Consider the following:
 
 - Each VM index report triggers a vulnerability matching request to Scanner V4. The Central pod CPU usage increases linearly with the rate of incoming reports.
 
-- Central memory usage increases with the number of active VMs because vulnerability results are cached. For deployments exceeding 10,000 VMs, monitor Central memory usage and increase limits if necessary.
+- Central memory usage increases with the number of active VMs because Central caches vulnerability results. For deployments exceeding 10,000 VMs, monitor Central memory usage and increase limits if necessary.
 
-- If Central is overloaded, the rate limiter (`ROX_VM_INDEX_REPORT_RATE_LIMIT`) rejects excess reports, which delays vulnerability data freshness but protects system stability.
+- If Central receives excessive load, the rate limiter (`ROX_VM_INDEX_REPORT_RATE_LIMIT`) rejects excess reports, which delays vulnerability data freshness but protects system stability.
 
 <div>
 

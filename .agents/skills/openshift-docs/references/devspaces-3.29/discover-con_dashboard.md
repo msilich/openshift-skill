@@ -13,7 +13,7 @@ It needs access to the OpenShift Dev Spaces server, the plug-in registry, and th
 
 <figure>
 <br />
-<img src="assets/a85b8571472140c664c4.png" alt="User dashboard interactions with other components" /><br />
+<img src="assets/c8f62da0b411cc2ea795.png" alt="User dashboard interactions with other components" /><br />
 
 <figcaption>Figure 1. User dashboard interactions with other components</figcaption>
 </figure>

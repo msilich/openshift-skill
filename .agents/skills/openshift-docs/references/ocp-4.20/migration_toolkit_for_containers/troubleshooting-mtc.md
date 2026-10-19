@@ -746,7 +746,7 @@ Procedure
 
 </div>
 
-## Debugging Velero resources with the Velero CLI tool
+## Debug Velero resources with the Velero CLI tool
 
 Debug `Backup` and `Restore` custom resources (CRs) and retrieve logs with the Velero CLI tool. The Velero CLI tool provides more detailed information than the OpenShift CLI tool.
 

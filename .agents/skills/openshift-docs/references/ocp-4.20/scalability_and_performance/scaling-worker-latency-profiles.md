@@ -100,7 +100,7 @@ The Kubernetes Controller Manager waits for 5 minutes to consider a node unhealt
 > [!NOTE]
 > The latency profiles do not support custom machine config pools, only the default worker machine config pools.
 
-# Implementing worker latency profiles at cluster creation
+# Implement worker latency profiles at cluster creation
 
 During cluster creation, you can implement worker latency profiles so that you can control the reaction of the cluster to latency issues without relying on manual methods to determine the best values.
 
@@ -169,7 +169,7 @@ Verification
 
 </div>
 
-# Using and changing worker latency profiles
+# Use and change worker latency profiles
 
 You can change a worker latency profile to deal with network latency at any time by editing the `node.config` object. With this configuration, you can ensure that your cluster runs properly if network latency between the control plane and the compute nodes fluctuates.
 
@@ -343,7 +343,7 @@ Verification
 
 </div>
 
-# Displaying resulting values of worker latency profile
+# Display resulting values of worker latency profile
 
 You can run specific commands to display the values for the worker latency profile. You can then check the displayed values for information accuracy.
 

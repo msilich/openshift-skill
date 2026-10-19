@@ -4,15 +4,21 @@ After deploying a user-provisioned infrastructure cluster, you can use the Bare 
 
 # About scaling a user-provisioned cluster with the Bare Metal Operator
 
-You can scale user-provisioned infrastructure clusters by using the Bare Metal Operator (BMO) and other metal<sup>3</sup> components. User-provisioned infrastructure installations do not feature the Machine API Operator. The Machine API Operator typically manages the lifecycle of bare-metal nodes in a cluster. However, it is possible to use the BMO and other metal<sup>3</sup> components to scale nodes in user-provisioned clusters without requiring the Machine API Operator.
+You can scale user-provisioned infrastructure clusters by using the Bare Metal Operator (BMO) and other metal<sup>3</sup> components.
+
+User-provisioned infrastructure installations do not feature the Machine API Operator. The Machine API Operator typically manages the lifecycle of bare-metal nodes in a cluster. However, it is possible to use the BMO and other metal<sup>3</sup> components to scale nodes in user-provisioned clusters without requiring the Machine API Operator.
 
 ## Prerequisites for scaling a user-provisioned cluster
+
+The following prerequisites must be met before scaling a user-provisioned cluster.
 
 - You installed a user-provisioned infrastructure cluster on bare metal.
 
 - You have baseboard management controller (BMC) access to the hosts.
 
 ## Limitations for scaling a user-provisioned cluster
+
+The following limitations apply to scaling a user-provisioned cluster.
 
 - You cannot use a provisioning network to scale user-provisioned infrastructure clusters by using the Bare Metal Operator (BMO).
 
@@ -219,29 +225,43 @@ Procedure
         preprovisioningNetworkDataName: openshift-worker-<num>-network-config-secret
       ```
 
-      - Replace all instances of `<num>` with a unique compute node number for the bare-metal nodes in the `name`, `credentialsName`, and `preprovisioningNetworkDataName` fields.
+      where:
 
-      - Add the NMState YAML syntax to configure the host interfaces. To configure the network interface for a newly created node, specify the name of the secret that has the network configuration. Follow the `nmstate` syntax to define the network configuration for your node. See "Preparing the bare-metal node" for details on configuring NMState syntax.
+      `metadata.name`
+      Specifies the unique compute node number. Replace all instances of `<num>` with a unique compute node number for the bare-metal nodes in the `name`, `credentialsName`, and `preprovisioningNetworkDataName` fields.
 
-      - Optional: If you have configured the network interface with `nmstate`, and you want to disable an interface, set `state: up` with the IP addresses set to `enabled: false`.
+      `stringData.nmstate`
+      Specifies the NMState YAML syntax to configure the host interfaces. To configure the network interface for a newly created node, specify the name of the secret that has the network configuration. Follow the `nmstate` syntax to define the network configuration for your node. See "Preparing the bare-metal node" for details on configuring NMState syntax.
 
-      - Replace `<nic1_name>` with the name of the bare-metal node’s first network interface controller (NIC).
+      `stringData.nmstate.interfaces`
+      Specifies the network interfaces. If you have configured the network interface with `nmstate`, and you want to disable an interface, set `state: up` with the IP addresses set to `enabled: false`. This field is optional.
 
-      - Replace `<ip_address>` with the IP address of the bare-metal node’s NIC.
+      `stringData.nmstate.interfaces[].name`
+      Specifies the name of the bare-metal node’s first network interface controller (NIC). Replace `<nic1_name>` with the NIC name.
 
-      - Replace `<dns_ip_address>` with the IP address of the bare-metal node’s DNS resolver.
+      `stringData.nmstate.interfaces[].ipv4.address[].ip`
+      Specifies the IP address of the bare-metal node’s NIC. Replace `<ip_address>` with the IP address.
 
-      - Replace `<next_hop_ip_address>` with the IP address of the bare-metal node’s external gateway.
+      `stringData.nmstate.dns-resolver.config.server[]`
+      Specifies the IP address of the bare-metal node’s DNS resolver. Replace `<dns_ip_address>` with the DNS server IP address.
 
-      - Replace `<next_hop_nic1_name>` with the name of the bare-metal node’s external gateway.
+      `stringData.nmstate.routes.config[].next-hop-address`
+      Specifies the IP address of the bare-metal node’s external gateway. Replace `<next_hop_ip_address>` with the gateway IP address.
 
-      - Replace `<base64_of_uid>` and `<base64_of_pwd>` with the base64 string of the user name and password.
+      `stringData.nmstate.routes.config[].next-hop-interface`
+      Specifies the name of the bare-metal node’s external gateway interface. Replace `<next_hop_nic1_name>` with the interface name.
 
-      - Replace `<nic1_mac_address>` with the MAC address of the bare-metal node’s first NIC. See the "BMC addressing" section for additional BMC configuration options.
+      `data.username`
+      Specifies the base64-encoded credentials for the BMC Secret. Replace `<base64_of_uid>` and `<base64_of_pwd>` with the base64 string of the user name and password.
 
-      - Replace `<protocol>` with the BMC protocol, such as IPMI, Redfish, or others. Replace `<bmc_url>` with the URL of the bare-metal node’s baseboard management controller.
+      `spec.bootMACAddress`
+      Specifies the MAC address of the bare-metal node’s first NIC. See the "BMC addressing" section for additional BMC configuration options.
 
-      - Optional: Replace `<root_device_hint>` with a device path when specifying a root device hint. See "Root device hints" for additional details.
+      `spec.bmc.address`
+      Specifies the BMC address. Replace `<protocol>` with the BMC protocol, such as IPMI, Redfish, or others. Replace `<bmc_url>` with the URL of the bare-metal node’s baseboard management controller.
+
+      `spec.rootDeviceHints.deviceName`
+      Specifies the root device hint path. Replace `<root_device_hint>` with a device path when specifying a root device hint. See "Root device hints" for additional details. This field is optional.
 
     - When configuring the network interface with a static configuration by using `nmstate`, set `state: up` with the IP addresses set to `enabled: false`:
 
@@ -299,18 +319,25 @@ Procedure
           deviceName: <root_device_hint>
       ```
 
-      - Replace `<num>` with a unique compute node number for the bare-metal nodes in the `name` and `credentialsName` fields.
+      where:
 
-      - Replace `<base64_of_uid>` and `<base64_of_pwd>` with the base64 string of the user name and password.
+      `metadata.name`
+      Specifies the BMC Secret name. Replace `<num>` with a unique compute node number for the bare-metal nodes in the `name` and `credentialsName` fields.
 
-      - Replace `<nic1_mac_address>` with the MAC address of the bare-metal node’s first NIC. See the "BMC addressing" section for additional BMC configuration options.
+      `data.username`
+      Specifies the base64-encoded credentials. Replace `<base64_of_uid>` and `<base64_of_pwd>` with the base64 string of the user name and password.
 
-      - Replace `<protocol>` with the BMC protocol, such as IPMI, Redfish, or others. Replace `<bmc_url>` with the URL of the bare-metal node’s baseboard management controller.
+      `spec.bootMACAddress`
+      Specifies the MAC address of the bare-metal node’s first NIC. See the "BMC addressing" section for additional BMC configuration options.
 
-      - Optional: Replace `<root_device_hint>` with a device path when specifying a root device hint. See "Root device hints" for additional details.
+      `spec.bmc.address`
+      Specifies the BMC address. Replace `<protocol>` with the BMC protocol, such as IPMI, Redfish, or others. Replace `<bmc_url>` with the URL of the bare-metal node’s baseboard management controller.
 
-        > [!IMPORTANT]
-        > If the MAC address of an existing bare-metal node matches the MAC address of the bare-metal host that you are attempting to provision, then the installation will fail. If the host enrollment, inspection, cleaning, or other steps fail, the Bare Metal Operator retries the installation continuously. See "Diagnosing a duplicate MAC address when provisioning a new host in the cluster" for additional details.
+      `spec.rootDeviceHints.deviceName`
+      Specifies the root device hint path. Replace `<root_device_hint>` with a device path when specifying a root device hint. See "Root device hints" for additional details. This field is optional.
+
+      > [!IMPORTANT]
+      > If the MAC address of an existing bare-metal node matches the MAC address of the bare-metal host that you are attempting to provision, then the installation will fail. If the host enrollment, inspection, cleaning, or other steps fail, the Bare Metal Operator retries the installation continuously. See "Diagnosing a duplicate MAC address when provisioning a new host in the cluster" for additional details.
 
 2.  Create the bare-metal node by running the following command:
 
@@ -456,7 +483,9 @@ Additional resources
 
 # Optional: Managing existing hosts in a user-provisioned cluster by using the BMO
 
-Optionally, you can use the Bare Metal Operator (BMO) to manage existing bare-metal controller hosts in a user-provisioned cluster by creating a `BareMetalHost` object for the existing host. It is not a requirement to manage existing user-provisioned hosts; however, you can enroll them as externally-provisioned hosts for inventory purposes.
+Optionally, you can use the Bare Metal Operator (BMO) to manage existing bare-metal controller hosts in a user-provisioned cluster by creating a `BareMetalHost` object for the existing host.
+
+It is not a requirement to manage existing user-provisioned hosts; however, you can enroll them as externally-provisioned hosts for inventory purposes.
 
 > [!IMPORTANT]
 > To manage existing hosts by using the BMO, you must set the `spec.externallyProvisioned` specification in the `BareMetalHost` custom resource to `true` to prevent the BMO from re-provisioning the host.
@@ -520,9 +549,13 @@ Procedure
             namespace: openshift-machine-api
         ```
 
-        - You can only use bare-metal host drivers that support virtual media networking booting, for example `redfish-virtualmedia` and `idrac-virtualmedia`.
+        where:
 
-        - You must set the value to true to prevent the BMO from re-provisioning the bare-metal controller host.
+        `spec.bmc.address`
+        Specifies the BMC address. Only bare-metal host drivers that support virtual media networking booting are supported, for example `redfish-virtualmedia` and `idrac-virtualmedia`.
+
+        `spec.externallyProvisioned`
+        Specifies whether the host is externally provisioned. You must set this value to `true` to prevent the BMO from re-provisioning the bare-metal controller host.
 
 2.  Create the bare-metal host object by running the following command:
 

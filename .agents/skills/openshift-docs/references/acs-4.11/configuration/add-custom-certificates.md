@@ -1,8 +1,8 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Learn how to use a custom TLS certificate with Red Hat Advanced Cluster Security for Kubernetes. After you set up a certificate, users and API clients do not have to bypass the certificate security warnings when connecting to Central.
+You can configure Red Hat Advanced Cluster Security for Kubernetes to use custom TLS certificates for Central and configure Sensor to trust custom certificates. After you set up a certificate, users and API clients do not have to bypass the certificate security warnings when connecting to Central.
 
-<a id="add-custom-security-cert"></a>
+<a id="add-custom-security-cert_add-custom-cert"></a>
 
 # Adding a custom security certificate
 
@@ -12,13 +12,7 @@ You can apply a security certificate during the installation or on an existing R
 
 ## Prerequisites for adding custom certificates
 
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
+Before adding custom certificates, ensure you have the required certificate files and understand the certificate chain requirements.
 
 - You must already have PEM-encoded private key and certificate files.
 
@@ -40,7 +34,7 @@ Prerequisites
 
   </div>
 
-  - If the certificate is not directly signed by a trusted root, you must provide the full certificate chain, including any intermediate certificates.
+  - If the certificate is not directly signed by a trusted root, you must give the full certificate chain, including any intermediate certificates.
 
   - All certificates in the chain must be in order so that the leaf certificate is the first and the root certificate is the last in the chain.
 
@@ -48,11 +42,11 @@ Prerequisites
 
 - If you are using a custom certificate that is not globally trusted, you must also configure the Sensor to trust your custom certificate.
 
-</div>
-
 <a id="custom-cert-new-install_add-custom-cert"></a>
 
 ## Adding a custom certificate during a new installation
+
+You can add a custom certificate during installation by using the Operator, Helm, or roxctl CLI.
 
 <div>
 
@@ -64,10 +58,10 @@ Procedure
 
 - If you are installing Red Hat Advanced Cluster Security for Kubernetes using the Operator:
 
-  1.  Create a `central-default-tls-cert` secret that contains the appropriate TLS certificates in the namespace where the Central service will be installed by entering the following command:
+  1.  Create a `central-default-tls-cert` secret that has the appropriate TLS certificates in the namespace where you install the Central service by entering the following command:
 
       ``` terminal
-      oc -n <namespace> create secret tls central-default-tls-cert --cert <tls-cert.pem> --key <tls-key.pem>
+      $ oc -n <namespace> create secret tls central-default-tls-cert --cert <tls-cert.pem> --key <tls-key.pem>
       ```
 
 - If you are installing Red Hat Advanced Cluster Security for Kubernetes using Helm:
@@ -90,21 +84,21 @@ Procedure
             -----END EC PRIVATE KEY-----
       ```
 
-  2.  Provide the configuration file during the installation:
+  2.  Give the configuration file during the installation:
 
       ``` terminal
       $ helm install -n stackrox --create-namespace stackrox-central-services rhacs/central-services -f values-private.yaml
       ```
 
-- If you are installing Red Hat Advanced Cluster Security for Kubernetes using the `roxctl` CLI, provide the certificate and key files when you run the installer:
+- If you are installing Red Hat Advanced Cluster Security for Kubernetes using the `roxctl` CLI, give the certificate and key files when you run the installation program:
 
-  - For the non-interactive installer, use the `--default-tls-cert` and `--default-tls-key` options:
+  - For the noninteractive installation program, use the `--default-tls-cert` and `--default-tls-key` options:
 
     ``` terminal
     $ roxctl central generate --default-tls-cert "cert.pem" --default-tls-key "key.pem"
     ```
 
-  - For the interactive installer, provide the certificate and key files when you enter answers for the prompts:
+  - For the interactive installation program, give the certificate and key files when you enter answers for the prompts:
 
     ``` text
     ...
@@ -121,6 +115,8 @@ Procedure
 
 ## Adding a custom certificate for an existing instance
 
+You can add a custom certificate to an existing installation by using the Operator, Helm, or roxctl CLI.
+
 <div>
 
 <div class="title">
@@ -131,10 +127,10 @@ Procedure
 
 - If you have installed Red Hat Advanced Cluster Security for Kubernetes using the Operator:
 
-  1.  Create a `central-default-tls-cert` secret that contains the appropriate TLS certificates in the namespace where the Central service is installed by entering the following command:
+  1.  Create a `central-default-tls-cert` secret that has the appropriate TLS certificates in the namespace where you installed the Central service by entering the following command:
 
       ``` terminal
-      oc -n <namespace> create secret tls central-default-tls-cert --cert <tls-cert.pem> --key <tls-key.pem>
+      $ oc -n <namespace> create secret tls central-default-tls-cert --cert <tls-cert.pem> --key <tls-key.pem>
       ```
 
 - If you have installed Red Hat Advanced Cluster Security for Kubernetes using Helm:
@@ -157,7 +153,7 @@ Procedure
             -----END EC PRIVATE KEY-----
       ```
 
-  2.  Use the `helm upgrade` command and provide the updated configuration file:
+  2.  Use the `helm upgrade` command and give the updated configuration file:
 
       ``` terminal
       $ helm upgrade -n stackrox --create-namespace stackrox-central-services \
@@ -181,7 +177,7 @@ Procedure
       --dry-run -o yaml | oc apply -f -
     ```
 
-    After you run this command, Central automatically applies the new key and certificate without requiring the pod to be restarted. It might take up to a minute to propagate the changes.
+    After you run this command, Central automatically applies the new key and certificate without restarting the pod. It might take up to a minute to propagate the changes.
 
 </div>
 
@@ -220,7 +216,7 @@ Procedure
 
 <a id="restart-central_add-custom-cert"></a>
 
-### Restarting the Central container
+## Restarting the Central container
 
 You can restart the Central container by deleting the Central pod.
 
@@ -243,11 +239,11 @@ Procedure
 
 </div>
 
-<a id="configure-sensor-to-trust-cert"></a>
+<a id="configure-sensor-to-trust-cert_add-custom-cert"></a>
 
 # Configuring Sensor to trust custom certificates
 
-If you are using a custom certificate that is not trusted globally, you must configure the Sensor to trust your custom certificate. Otherwise, you might get errors. The specific type of error may vary based on your setup and the certificate you use. Usually, it is an `x509 validation` related error.
+If you are using a custom certificate that is not trusted globally, you must configure the Sensor to trust your custom certificate. Otherwise, you might get errors. The specific type of error might vary based on your setup and the certificate you use. Usually, it is an `x509 validation` related error.
 
 > [!NOTE]
 > You do not need to configure the Sensor to trust your custom certificate if you are using a globally trusted certificate.
@@ -289,6 +285,8 @@ Procedure
 
 ## Configuring Sensor to trust custom certificates when deploying a new Sensor
 
+You can configure a new Sensor to trust custom certificates by using the sensor.sh script or manually creating the secret.
+
 <div>
 
 <div class="title">
@@ -311,7 +309,7 @@ Procedure
 
 - If you are using the `sensor.sh` script:
 
-  1.  Unzip the Sensor bundle:
+  1.  Extract the Sensor bundle:
 
       ``` terminal
       $ unzip -d sensor sensor-<cluster_name>.zip
@@ -327,7 +325,7 @@ Procedure
 
 - If you are not using the `sensor.sh` script:
 
-  1.  Unzip the Sensor bundle:
+  1.  Extract the Sensor bundle:
 
       ``` terminal
       $ unzip -d sensor sensor-<cluster_name>.zip
@@ -359,6 +357,8 @@ Procedure
 
 ## Configuring an existing Sensor to trust custom certificates
 
+You can configure an existing Sensor to trust custom certificates by creating the secret with the ca-setup-sensor.sh script.
+
 <div>
 
 <div class="title">
@@ -379,7 +379,7 @@ Procedure
 
 </div>
 
-1.  Unzip the Sensor bundle:
+1.  Extract the Sensor bundle:
 
     ``` terminal
     $ unzip -d sensor sensor-<cluster_name>.zip
@@ -407,13 +407,11 @@ Procedure
 
 </div>
 
-If you added the certificates to an existing sensor, you must restart the Sensor container.
-
 <a id="restart-sensor_add-custom-cert"></a>
 
-### Restarting the Sensor container
+## Restarting the Sensor container
 
-You can restart the Sensor container either by killing the container or by deleting the Sensor pod.
+If you added the certificates to an existing Sensor, you must restart the Sensor container. You can restart the Sensor container either by stopping the container or by deleting the Sensor pod.
 
 <div>
 
@@ -423,7 +421,7 @@ Procedure
 
 </div>
 
-- Run the following command to kill the Sensor container:
+- Run the following command to stop the Sensor container:
 
   > [!NOTE]
   > You must wait for at least 1 minute, until OpenShift Container Platform or Kubernetes propagates your changes and restarts the Sensor container.

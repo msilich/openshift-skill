@@ -2,7 +2,7 @@
 
 To secure application traffic and serve custom certificates to clients, configure routes by using edge, passthrough, or re-encrypt TLS termination. By using these methods, you can define granular encryption rules, ensuring that traffic is decrypted and re-encrypted according to your specific security requirements.
 
-# Creating an edge route with a custom certificate
+# Create an edge route with a custom certificate
 
 To secure traffic by using a custom certificate, configure a route with edge TLS termination by running the `oc create route` command. This configuration terminates encryption at the Ingress Controller before forwarding traffic to the destination pod.
 
@@ -90,7 +90,7 @@ Procedure
 
 </div>
 
-# Creating a re-encrypt route with a custom certificate
+# Create a re-encrypt route with a custom certificate
 
 To secure traffic by using a custom certificate, configure a route with re-encrypt TLS termination by running the `oc create route` command. This configuration enables the Ingress Controller to decrypt traffic, and then re-encrypt traffic before forwarding the traffic to the destination pod.
 
@@ -182,7 +182,7 @@ Procedure
 
 </div>
 
-# Creating a passthrough route
+# Create a passthrough route
 
 To send encrypted traffic directly to the destination without decryption at the router, configure a route with passthrough termination by running the `oc create route` command. This configuration requires no key or certificate on the route, as the destination pod handles TLS termination.
 
@@ -364,7 +364,7 @@ Procedure
 
 </div>
 
-# Creating a route with externally managed certificates
+# Create a route with externally managed certificates
 
 You can configure OpenShift Container Platform routes with third-party certificate management solutions by using the `.spec.tls.externalCertificate` field of the route API. You can reference externally managed TLS certificates via secrets, eliminating the need for manual certificate management.
 

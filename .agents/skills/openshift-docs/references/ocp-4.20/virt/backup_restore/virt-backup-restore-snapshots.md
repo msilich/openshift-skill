@@ -127,7 +127,7 @@ Prerequisites
 - Ensure the `Snapshot` feature gate is enabled for the `kubevirt` CR by using the following command:
 
   ``` terminal
-  $ oc get kubevirt kubevirt-hyperconverged -n openshift-cnv -o yaml
+  $ oc get kubevirt kubevirt-kubevirt-hyperconverged -n openshift-cnv -o yaml
   ```
 
   Truncated output:

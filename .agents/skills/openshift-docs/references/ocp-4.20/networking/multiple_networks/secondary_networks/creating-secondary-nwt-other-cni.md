@@ -445,7 +445,7 @@ The following example configures a secondary network named `mynet`:
 }
 ```
 
-# Setting SELinux boolean for the TAP CNI plugin
+# Set SELinux boolean for the TAP CNI plugin
 
 To create the tap device with the `container_t` SELinux context, enable the `container_use_devices` boolean on the host by using the Machine Config Operator (MCO).
 
@@ -546,7 +546,7 @@ Verification
 
 </div>
 
-# Configuring routes using the route-override plugin on a secondary network
+# Configure routes using the route-override plugin on a secondary network
 
 The Route override CNI plugin JSON configuration object describes the configuration parameters for the `route-override` CNI plugin. The following table details these parameters:
 

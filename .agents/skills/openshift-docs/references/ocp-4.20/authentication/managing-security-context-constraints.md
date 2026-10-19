@@ -51,8 +51,9 @@ The cluster contains several default security context constraints (SCCs) as desc
 >
 > Instead of modifying the default SCCs, create and modify your own SCCs as needed. For detailed steps, see *Creating security context constraints*.
 
+The following table describes the default SCCs that are available in OpenShift Container Platform.
+
 <table>
-<caption>Default security context constraints</caption>
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 75%" />
@@ -269,13 +270,7 @@ The containers use the capabilities from this default list, but pod manifest aut
 
 ## Security context constraints strategies
 
-<div>
-
-<div class="title">
-
-RunAsUser
-
-</div>
+The following example shows the strategies that are available for the `RunAsUser` field.
 
 - `MustRunAs` - Requires a `runAsUser` to be configured. Uses the configured `runAsUser` as the default. Validates against the configured `runAsUser`.
 
@@ -356,49 +351,23 @@ RunAsUser
 
   </div>
 
-</div>
-
-<div>
-
-<div class="title">
-
-SELinuxContext
-
-</div>
+The following example shows the strategies that are available for the `seLinuxOptions` field.
 
 - `MustRunAs` - Requires `seLinuxOptions` to be configured if not using pre-allocated values. Uses `seLinuxOptions` as the default. Validates against `seLinuxOptions`.
 
 - `RunAsAny` - No default provided. Allows any `seLinuxOptions` to be specified.
 
-</div>
-
-<div>
-
-<div class="title">
-
-SupplementalGroups
-
-</div>
+The following example shows the strategies that are available for the `supplementalGroups` field.
 
 - `MustRunAs` - Requires at least one range to be specified if not using pre-allocated values. Uses the minimum value of the first range as the default. Validates against all ranges.
 
 - `RunAsAny` - No default provided. Allows any `supplementalGroups` to be specified.
 
-</div>
-
-<div>
-
-<div class="title">
-
-FSGroup
-
-</div>
+The following example shows the strategies that are available for the `fsGroup` field.
 
 - `MustRunAs` - Requires at least one range to be specified if not using pre-allocated values. Uses the minimum value of the first range as the default. Validates against the first ID in the first range.
 
 - `RunAsAny` - No default provided. Allows any `fsGroup` ID to be specified.
-
-</div>
 
 ## Controlling volumes
 
@@ -704,7 +673,7 @@ spec:
 
 This configuration is valid for SELinux, fsGroup, and Supplemental Groups.
 
-# Creating security context constraints
+# Create security context constraints
 
 If the default security context constraints (SCCs) do not satisfy your application workload requirements, you can create a custom SCC by using the OpenShift CLI (`oc`).
 
@@ -825,7 +794,7 @@ Verification
 
 </div>
 
-# Configuring a workload to require a specific SCC
+# Configure a workload to require a specific SCC
 
 You can configure a workload to require a certain security context constraint (SCC). This is useful in scenarios where you want to pin a specific SCC to the workload or if you want to prevent your required SCC from being preempted by another SCC in the cluster.
 

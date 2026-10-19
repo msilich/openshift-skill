@@ -42,7 +42,7 @@ You can add nodes with this method in the following two ways:
 
   You can add a node by running the `oc adm node-image create` command with flags to specify your configurations. This is useful if you want to add only a single node at a time, and have only simple configurations to specify for that node.
 
-# Adding one or more nodes using a configuration file
+# Add one or more nodes using a configuration file
 
 You can add one or more nodes to your cluster by using the `nodes-config.yaml` file to specify configurations for the new nodes.
 
@@ -164,7 +164,7 @@ Procedure
 
 </div>
 
-# Adding a node with command flags
+# Add a node with command flags
 
 You can add a single node to your cluster by using command flags to specify configurations for the new node.
 
@@ -239,7 +239,9 @@ Procedure
 
 # Cluster configuration reference
 
-When creating the ISO image, configurations are retrieved from the target cluster and are applied to the new nodes. You can override these configurations by specifying new values in either the `nodes-config.yaml` file or any flags you add to the `oc adm node-image create` command before you create the ISO image.
+When creating the ISO image, configurations are retrieved from the target cluster and are applied to the new nodes.
+
+You can override these configurations by specifying new values in either the `nodes-config.yaml` file or any flags you add to the `oc adm node-image create` command before you create the ISO image.
 
 YAML file parameters
 Configuration parameters that can be specified in the `nodes-config.yaml` file are described in the following table:

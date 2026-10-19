@@ -58,7 +58,7 @@ The **Dev Workspace Metrics** panel displays Dev Workspace-specific metrics.
 
 <figure>
 <br />
-<img src="assets/2f9a5b3a7d24c4d1a2fa.png" alt="Grafana dashboard panels that contain metrics related to DevWorkspace startup" /><br />
+<img src="assets/a85a9d2b5ea15e18a131.png" alt="Grafana dashboard panels that contain metrics related to DevWorkspace startup" /><br />
 
 <figcaption>Figure 1. The Dev Workspace Metrics panel</figcaption>
 </figure>
@@ -86,7 +86,7 @@ The **Operator Metrics** panel displays Operator-specific metrics.
 
 <figure>
 <br />
-<img src="assets/4600f72d27afe929d394.png" alt="Grafana dashboard panels that contain Operator metrics" /><br />
+<img src="assets/18a014f07c7e0313e9e0.png" alt="Grafana dashboard panels that contain Operator metrics" /><br />
 
 <figcaption>Figure 2. The Operator Metrics panel</figcaption>
 </figure>

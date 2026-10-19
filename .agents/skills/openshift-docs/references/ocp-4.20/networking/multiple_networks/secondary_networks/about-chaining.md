@@ -18,7 +18,7 @@ Some scenarios where this might be useful include:
 
 - **Enhanced network performance**: Allows you to prioritize certain traffic types or manage congestion by directing them through dedicated network interfaces.
 
-# Configuring plugin chaining with the route-override CNI plugin
+# Configure plugin chaining with the route-override CNI plugin
 
 Plugin chaining allows you to configure multiple CNI plugins to be applied sequentially to the same network interface, where each plugin in the chain processes the interface in order.
 

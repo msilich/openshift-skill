@@ -2,22 +2,24 @@
 
 You can provision and manage bare-metal hosts by using the Metal<sup>3</sup> API and the Bare Metal Operator (BMO). These hosts, external to the OpenShift Container Platform cluster, can run workloads that might not be suitable for containerization or virtualization, such as legacy applications or applications that require direct hardware access.
 
-Red Hat Bare Metal as a Service for OpenShift has the following capabilities:
+Red Hat Bare-Metal-as-a-Service for OpenShift has the following capabilities:
 
 - Provisioning of bare-metal hosts, including initial configuration.
 
 - Lifecycle management such as power management, firmware updates, and decommissioning by using the BMO.
 
-As standalone systems, these hosts operate independently of the OpenShift Container Platform cluster and support diverse workloads by integrating bare metal resources with containerized and virtualized applications. Red Hat Bare Metal as a Service for OpenShift can run other operating systems, but only Red Hat Enterprise Linux (RHEL) and CentOS Stream 9 were tested.
+As standalone systems, these hosts operate independently of the OpenShift Container Platform cluster and support diverse workloads by integrating bare metal resources with containerized and virtualized applications. Red Hat Bare-Metal-as-a-Service for OpenShift can run other operating systems, but only Red Hat Enterprise Linux (RHEL) and CentOS Stream 9 were tested.
 
 > [!IMPORTANT]
-> Red Hat Bare Metal as a Service for OpenShift is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+> Red Hat Bare-Metal-as-a-Service for OpenShift is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
-# Prerequisites for using Red Hat Bare Metal as a Service for OpenShift
+# Prerequisites for using Red Hat Bare-Metal-as-a-Service for OpenShift
 
-Red Hat Bare Metal as a Service for OpenShift lets you apply cloud-native management practices to bare-metal infrastructure, enabling automated provisioning and lifecycle management for workloads that require physical hardware. To use the Red Hat Bare Metal as a Service for OpenShift Technology Preview, complete the following prerequisites:
+Red Hat Bare-Metal-as-a-Service for OpenShift lets you apply cloud-native management practices to bare-metal infrastructure, enabling automated provisioning and lifecycle management for workloads that require physical hardware.
+
+To use the Red Hat Bare-Metal-as-a-Service for OpenShift Technology Preview, complete the following prerequisites:
 
 BareMetalHost Configuration
 All bare-metal hosts must use a Baseboard Management Controller (BMC) configured with the Redfish protocol and virtual media (`redfish-virtualmedia`) driver. Each bare-metal host requires a boot interface with a MAC address configured to receive an IP address lease.
@@ -29,7 +31,7 @@ Cluster Privileges
 You must have `cluster-admin` privileges on the OpenShift Container Platform cluster to perform configuration tasks.
 
 Web server with images
-Red Hat Bare Metal as a Service for OpenShift does not provide images for deployment on hardware. You must configure a web server with the images and checksums you want to use. The `image` field of the `BareMetalHost` spec references these images during deployment. Ensure that the bare-metal hosts can reach the web server URL. The following is an example of an image and checksum you might include:
+Red Hat Bare-Metal-as-a-Service for OpenShift does not provide images for deployment on hardware. You must configure a web server with the images and checksums you want to use. The `image` field of the `BareMetalHost` spec references these images during deployment. Ensure that the bare-metal hosts can reach the web server URL. The following is an example of an image and checksum you might include:
 
 - `http://example.com/rhel9.qcow2`
 
@@ -43,7 +45,9 @@ These prerequisites ensure that you can provision and manage bare-metal hosts ef
 
 # Using the Bare Metal Operator to manage resources across all namespaces
 
-For the Bare Metal Operator (BMO) to manage `BareMetalHost` resources across all namespaces in your OpenShift Container Platform cluster, you must configure the Operator to watch all namespaces. This configuration is important to avoid mixing non-OpenShift Container Platform workloads with other components in the same namespace.
+For the Bare Metal Operator (BMO) to manage `BareMetalHost` resources across all namespaces in your OpenShift Container Platform cluster, you must configure the Operator to watch all namespaces.
+
+This configuration is important to avoid mixing non-OpenShift Container Platform workloads with other components in the same namespace.
 
 <div>
 
@@ -78,7 +82,7 @@ Procedure
 
 # Setting up a dedicated namespace
 
-To prevent accidental interference between Red Hat Bare Metal as a Service for OpenShift workloads and the OpenShift Container Platform infrastructure, set up a dedicated namespace. Repeat this procedure for every project where you intend to use Red Hat Bare Metal as a Service for OpenShift.
+To prevent accidental interference between Red Hat Bare-Metal-as-a-Service for OpenShift workloads and the OpenShift Container Platform infrastructure, set up a dedicated namespace. Repeat this procedure for every project where you intend to use Red Hat Bare-Metal-as-a-Service for OpenShift.
 
 <div>
 
@@ -220,7 +224,7 @@ Procedure
     \<username\>
     The user name. Replace `<username>` with your username. The following examples use `bmadmin` as the username.
 
-4.  Create a dedicated `bmaas` namespace for Red Hat Bare Metal as a Service for OpenShift hosts by running the following command:
+4.  Create a dedicated `bmaas` namespace for Red Hat Bare-Metal-as-a-Service for OpenShift hosts by running the following command:
 
     ``` terminal
     $ oc new-project <namespace>
@@ -393,7 +397,7 @@ Verification
 
 </div>
 
-# Configuring users for Red Hat Bare Metal as a Service for OpenShift hosts
+# Configuring users for Red Hat Bare-Metal-as-a-Service for OpenShift hosts
 
 Configure bare-metal host users and add them to a Kubernetes secret. Then, create and apply the secret to customize the host. With configured users you can access or manage the bare-metal host after it is provisioned.
 
@@ -485,7 +489,9 @@ Procedure
 
 # Configuring the networkData parameter in the BareMetalHost resource
 
-The `networkData` field in the `BareMetalHost` custom resource (CR) allows you to control the network configuration of the bare-metal host at creation time. For most operating systems, this is achieved using a configuration file encapsulated in a Kubernetes secret. Then, the `cloud-init` service uses it to customize services.
+The `networkData` field in the `BareMetalHost` custom resource (CR) allows you to control the network configuration of the bare-metal host at creation time.
+
+For most operating systems, this is achieved using a configuration file encapsulated in a Kubernetes secret. Then, the `cloud-init` service uses it to customize services.
 
 <div>
 
@@ -541,7 +547,9 @@ Procedure
 
 # Deploying an image to the bare-metal host
 
-To deploy the image to the host, update the `image` field in the `spec` section of the `BareMetalHost` resource. Once you update the `image` field, provisioning begins immediately. Deploying an image transforms bare hardware into a functional system ready to run your workloads, in an automated and repeatable way.
+To deploy the image to the host, update the `image` field in the `spec` section of the `BareMetalHost` resource. Once you update the `image` field, provisioning begins immediately.
+
+Deploying an image transforms bare hardware into a functional system ready to run your workloads, in an automated and repeatable way.
 
 <div>
 

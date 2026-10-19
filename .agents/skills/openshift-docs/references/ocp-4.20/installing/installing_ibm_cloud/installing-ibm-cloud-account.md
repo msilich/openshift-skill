@@ -261,10 +261,10 @@ Procedure
 
 3.  Record the name of the DNS zone you have created. As part of the installation process, you must update the `install-config.yaml` file before deploying the cluster. Use the name of the DNS zone as the value for the `baseDomain` parameter.
 
-</div>
+    > [!NOTE]
+    > You do not have to manage permitted networks or configure an "A" DNS resource record. As required, the installation program configures these resources automatically.
 
-> [!NOTE]
-> You do not have to manage permitted networks or configure an "A" DNS resource record. As required, the installation program configures these resources automatically.
+</div>
 
 <div>
 

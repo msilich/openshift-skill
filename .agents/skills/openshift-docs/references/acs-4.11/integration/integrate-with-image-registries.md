@@ -2,20 +2,53 @@
 
 Red Hat Advanced Cluster Security for Kubernetes (RHACS) integrates with a variety of image registries so that you can understand your images and apply security policies for image usage.
 
-When you integrate with image registries, you can view important image details, such as image creation date and Dockerfile details (including image layers).
+<a id="integrate-image-registries-overview_integrate-with-image-registries"></a>
 
-After you integrate RHACS with your registry, you can scan images, view image components, and apply security policies to images before or after deployment.
+# Image registry integration overview
 
-> [!NOTE]
-> When you integrate with an image registry, RHACS does not scan all images in your registry. RHACS only scans the images when you:
->
-> - Use the images in deployments
->
-> - Use the `roxctl` CLI to check images
->
-> - Use a continuous integration (CI) system to enforce security policies
+When you integrate with image registries, you can view image details, scan images, view components, and apply security policies before or after deployment.
+
+When you integrate with an image registry, RHACS does not scan all images in your registry. RHACS only scans the images when you:
+
+- Use the images in deployments
+
+- Use the `roxctl` CLI to check images
+
+- Use a continuous integration (CI) system to enforce security policies
 
 You can integrate RHACS with major image registries, including:
+
+- Amazon Elastic Container Registry (ECR)
+
+- Docker Hub
+
+- Google Container Registry (GCR)
+
+- Google Artifact Registry
+
+- IBM Cloud Container Registry (ICR)
+
+- JFrog Artifactory
+
+- Microsoft Azure Container Registry (ACR)
+
+- Red Hat Quay
+
+- Red Hat container registries
+
+- Sonatype Nexus
+
+- GitHub container registry (GHCR)
+
+- Any other registry that uses the Docker Registry HTTP API
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Amazon Elastic Container Registry (ECR)](https://aws.amazon.com/ecr/)
 
@@ -39,13 +72,15 @@ You can integrate RHACS with major image registries, including:
 
 - [GitHub container registry (GHCR)](https://docs.github.com/en/packages)
 
-- Any other registry that uses the [Docker Registry HTTP API](https://docs.docker.com/registry/spec/api/)
+- [Docker Registry HTTP API](https://docs.docker.com/registry/spec/api/)
+
+</div>
 
 <a id="automatic-configuration-image-registry_integrate-with-image-registries"></a>
 
 # Automatic configuration
 
-Red Hat Advanced Cluster Security for Kubernetes includes default integrations with standard registries, such as Docker Hub and others. It can also automatically configure integrations based on artifacts found in the monitored clusters, such as image pull secrets. Usually, you do not need to configure registry integrations manually.
+Red Hat Advanced Cluster Security for Kubernetes includes default integrations with standard registries and can automatically configure integrations based on artifacts found in monitored clusters, such as image pull secrets. You usually do not need to configure registry integrations manually.
 
 <div class="important">
 
@@ -61,9 +96,11 @@ Red Hat Advanced Cluster Security for Kubernetes includes default integrations w
 
 <a id="amazon_ecr_integrate-with-image-registries"></a>
 
-# Amazon ECR integrations
+## Amazon ECR integrations
 
-For Amazon ECR integrations, Red Hat Advanced Cluster Security for Kubernetes automatically generates ECR registry integrations if the following conditions are met:
+For Amazon ECR integrations, Red Hat Advanced Cluster Security for Kubernetes automatically generates ECR registry integrations if specific conditions are met.
+
+Red Hat Advanced Cluster Security for Kubernetes automatically generates ECR registry integrations if the following conditions are met:
 
 - The cloud provider for the cluster is AWS.
 
@@ -73,7 +110,7 @@ For Amazon ECR integrations, Red Hat Advanced Cluster Security for Kubernetes au
 
 If the listed conditions are met, Red Hat Advanced Cluster Security for Kubernetes monitors deployments that pull from ECR registries and automatically generates ECR integrations for them. You can edit these integrations after they are automatically generated.
 
-<a id="manual-configuration-image-registry"></a>
+<a id="manual-configuration-image-registry_integrate-with-image-registries"></a>
 
 # Manually configuring image registries
 
@@ -133,7 +170,7 @@ Procedure
 
 ## Manually configuring Amazon Elastic Container Registry
 
-You can use Red Hat Advanced Cluster Security for Kubernetes to create and modify Amazon Elastic Container Registry (ECR) integrations manually. If you are deploying from Amazon ECR, integrations for the Amazon ECR registries are usually automatically generated. However, you might want to create integrations on your own to scan images outside deployments. You can also modify the parameters of an automatically-generated integration. For example, you can change the authentication method used by an automatically-generated Amazon ECR integration to use AssumeRole authentication or other authorization models.
+You can manually create and change Amazon Elastic Container Registry (ECR) integrations. While ECR integrations are usually automatically generated, you can create them manually to scan images outside deployments or change parameters such as authentication methods.
 
 > [!IMPORTANT]
 > To erase changes you made to an automatically-generated ECR integration, delete the integration, and Red Hat Advanced Cluster Security for Kubernetes creates a new integration for you with the automatically-generated parameters when you deploy images from Amazon ECR.
@@ -148,9 +185,9 @@ Prerequisites
 
 - You must have an Amazon Identity and Access Management (IAM) access key ID and a secret access key. Alternatively, you can use a node-level IAM proxy such as `kiam` or `kube2iam`.
 
-- The access key must have read access to ECR. See [How do I create an AWS access key?](https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/) for more information.
+- The access key must have read access to ECR.
 
-- If you are running Red Hat Advanced Cluster Security for Kubernetes in Amazon Elastic Kubernetes Service (EKS) and want to integrate with an ECR from a separate Amazon account, you must first set a repository policy statement in your ECR. Follow the instructions at [Setting a repository policy statement](https://docs.aws.amazon.com/AmazonECR/latest/userguide/set-repository-policy.html) and for **Actions**, choose the following scopes of the Amazon ECR API operations:
+- If you are running Red Hat Advanced Cluster Security for Kubernetes in Amazon Elastic Kubernetes Service (EKS) and want to integrate with an ECR from a separate Amazon account, you must first set a repository policy statement in your ECR and for **Actions**, choose the following scopes of the Amazon ECR API operations:
 
   - ecr:BatchCheckLayerAvailability
 
@@ -178,9 +215,9 @@ Procedure
 
 3.  Click **New integration**, or click one of the automatically-generated integrations to open it, then click **Edit**.
 
-4.  Enter or modify the details for the following fields:
+4.  Enter or change the details for the following fields:
 
-    1.  **Update stored credentials**: Clear this box if you are modifying an integration without updating the credentials such as access keys and passwords.
+    1.  **Update stored credentials**: Clear this box if you are changing an integration without updating the credentials such as access keys and passwords.
 
     2.  **Integration name**: The name of the integration.
 
@@ -196,7 +233,7 @@ Procedure
 
     1.  **AssumeRole ID**: The ID of the role to assume.
 
-    2.  **AssumeRole External ID** (optional): If you are using an [external ID with AssumeRole](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html), you can enter it here.
+    2.  **AssumeRole External ID** (optional): If you are using an external ID with AssumeRole, you can enter it here.
 
 7.  Select **Create integration without testing** to create the integration without testing the connection to the registry.
 
@@ -206,15 +243,43 @@ Procedure
 
 </div>
 
-<a id="use-assumerole-with-ecr"></a>
+<div>
 
-### Using assumerole with Amazon ECR
+<div class="title">
 
-You can use [AssumeRole](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html) to grant access to AWS resources without manually configuring each user’s permissions. Instead, you can define a role with the desired permissions so that the user is granted access to assume that role. `AssumeRole` enables you to grant, revoke, or otherwise generally manage more fine-grained permissions.
+Additional resources
+
+</div>
+
+- [How do I create an AWS access key?](https://aws.amazon.com/premiumsupport/knowledge-center/create-access-key/)
+
+- [Setting a repository policy statement](https://docs.aws.amazon.com/AmazonECR/latest/userguide/set-repository-policy.html)
+
+- [External ID with AssumeRole](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html)
+
+</div>
+
+<a id="use-assumerole-with-ecr_integrate-with-image-registries"></a>
+
+## Using AssumeRole with Amazon ECR
+
+You can use AssumeRole to grant access to AWS resources by defining a role with the required permissions instead of manually configuring each user’s permissions. This enables you to manage more fine-grained permissions.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [AssumeRole](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html)
+
+</div>
 
 <a id="configuring-assumerole-with-iam_integrate-with-image-registries"></a>
 
-#### Configuring AssumeRole with container IAM
+### Configuring AssumeRole with container IAM
 
 Before you can use AssumeRole with Red Hat Advanced Cluster Security for Kubernetes, you must first configure it.
 
@@ -232,9 +297,9 @@ Procedure
     $ eksctl utils associate-iam-oidc-provider --cluster <cluster name> --approve
     ```
 
-2.  [Create an IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html) for your EKS cluster.
+2.  Create an IAM role for your EKS cluster.
 
-3.  Associate the newly created role with a service account:
+3.  Associate the new role with a service account:
 
     ``` terminal
     $ kubectl -n stackrox annotate sa central eks.amazonaws.com/role-arn=arn:aws:iam::67890:role/<role-name>
@@ -293,11 +358,23 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Create an IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html)
+
+</div>
+
 <a id="configuring-assumerole-without-iam_integrate-with-image-registries"></a>
 
-#### Configuring AssumeRole without container IAM
+### Configuring AssumeRole without container IAM
 
-To use AssumeRole without container IAM, you must use an access and a secret key to authenticate as an [AWS user with programmatic access](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html).
+To use AssumeRole without container IAM, you must use an access and a secret key to authenticate as an AWS user with programmatic access.
 
 <div>
 
@@ -309,7 +386,7 @@ Procedure
 
 1.  Depending on whether the AssumeRole user is in the same account as the ECR registry or in a different account, you must either:
 
-    - Create a new role with the desired permissions if the user for which you want to assume role is in the same account as the ECR registry.
+    - Create a new role with the required permissions if the user for which you want to assume role is in the same account as the ECR registry.
 
       > [!NOTE]
       > When creating the role, you can choose any trusted entity as required. However, you must modify it after creation.
@@ -356,9 +433,21 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [AWS user with programmatic access](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html)
+
+</div>
+
 <a id="configuring-assumerole-acs_integrate-with-image-registries"></a>
 
-#### Configuring AssumeRole in RHACS
+### Configuring AssumeRole in RHACS
 
 After configuring AssumeRole in ECR, you can integrate Red Hat Advanced Cluster Security for Kubernetes with Amazon Elastic Container Registry (ECR) by using AssumeRole.
 
@@ -390,11 +479,23 @@ Procedure
 
     1.  **AssumeRole ID**: The ID of the role to assume.
 
-    2.  **AssumeRole External ID** (optional): If you are using an [external ID with AssumeRole](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html), you can enter it here.
+    2.  **AssumeRole External ID** (optional): If you are using an external ID with AssumeRole, you can enter it here.
 
 7.  Select **Test** to test that the integration with the selected registry is working.
 
 8.  Select **Save**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [External ID with AssumeRole](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html)
 
 </div>
 
@@ -414,11 +515,7 @@ Prerequisites
 
 - You have a workload identity or service account key for authentication.
 
-  For more information, see [Authenticate to Google Cloud APIs from GKE workloads](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (Google Cloud documentation).
-
 - You have access to the registry for the associated service account.
-
-  For more information, see [Access control with IAM](https://cloud.google.com/container-registry/docs/access-control) (Google Cloud documentation).
 
 - You have granted the following roles to the service account, if you use GCR Container Analysis:
 
@@ -427,8 +524,6 @@ Prerequisites
   - Container Analysis Occurrences Viewer
 
   - Storage Object Viewer
-
-    For more information, see [Container analysis and vulnerability scanning](https://cloud.google.com/container-registry/docs/container-analysis) (Google Cloud documentation).
 
 </div>
 
@@ -472,6 +567,22 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Authenticate to Google Cloud APIs from GKE workloads](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
+
+- [Access control with IAM](https://cloud.google.com/container-registry/docs/access-control)
+
+- [Container analysis and vulnerability scanning](https://cloud.google.com/container-registry/docs/container-analysis)
+
+</div>
+
 <a id="manual-configuration-image-registry-gar_integrate-with-image-registries"></a>
 
 ## Manually configuring Google Artifact Registry
@@ -487,8 +598,6 @@ Prerequisites
 </div>
 
 - You have a workload identity or service account key for authentication.
-
-  For more information, see [Authenticate to Google Cloud APIs from GKE workloads](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) (Google Cloud documentation).
 
 - You have the artifact registry reader Identity and Access Management (IAM) role, `roles/artifactregistry.reader` for the associated service account.
 
@@ -526,6 +635,18 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Authenticate to Google Cloud APIs from GKE workloads](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
+
+</div>
+
 <a id="manual-configuration-image-registry-acr_integrate-with-image-registries"></a>
 
 ## Manually configuring Microsoft Azure Container Registry
@@ -541,10 +662,6 @@ Prerequisites
 </div>
 
 - You have either an Azure managed or Azure workload identity.
-
-  For more information about Azure managed identities, see [What are managed identities for Azure resources?](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview) (Microsoft Azure documentation).
-
-  For more information about Azure workload identities, see [Workload identity federation](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation) (Microsoft Azure documentation).
 
 - You have the **Reader** role for the identity over a scope that includes the container registry.
 
@@ -579,6 +696,20 @@ Procedure
 6.  Select **Test** to test that the integration with the selected registry is working.
 
 7.  Select **Save**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [What are managed identities for Azure resources?](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview)
+
+- [Workload identity federation](https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation)
 
 </div>
 
@@ -636,7 +767,9 @@ Procedure
 
 ## Manually configuring Quay Container Registry
 
-You can integrate Red Hat Advanced Cluster Security for Kubernetes (RHACS) with Quay Container Registry. You can integrate with Quay by using the following methods:
+You can integrate Red Hat Advanced Cluster Security for Kubernetes (RHACS) with Quay Container Registry.
+
+You can integrate with Quay by using the following methods:
 
 - Integrating with the Quay public repository (registry): This method does not require authentication.
 
@@ -694,10 +827,10 @@ Procedure
 
 8.  Select **Save**.
 
-</div>
+    > [!NOTE]
+    > If you are editing a Quay integration but do not want to update your credentials, verify that **Update stored credentials** is not selected.
 
-> [!NOTE]
-> If you are editing a Quay integration but do not want to update your credentials, verify that **Update stored credentials** is not selected.
+</div>
 
 <div>
 
@@ -712,6 +845,8 @@ Additional resources
 - [Red Hat Quay Robot Account overview](https://docs.redhat.com/en/documentation/red_hat_quay/3.18/html/about_quay_io/allow-robot-access-user-repo)
 
 - [External Secrets Operator - Quay](https://external-secrets.io/latest/api/generator/quay/)
+
+- [Red Hat Quay Robot Account overview](https://docs.redhat.com/en/documentation/red_hat_quay/3.14/html/about_quay_io/allow-robot-access-user-repo)
 
 </div>
 
@@ -739,8 +874,6 @@ Prerequisites
 
   - The `sub claim` subject must match the service account name and namespace that you configure in your cluster.
 
-  See the [Red Hat Quay Robot Account overview](https://docs.redhat.com/en/documentation/red_hat_quay/latest/html/about_quay_io/allow-robot-access-user-repo) topic in Quay documentation for more information.
-
 </div>
 
 <div>
@@ -753,7 +886,7 @@ Procedure
 
 1.  In your Quay instance, navigate to your robot account settings and configure OIDC federation.
 
-    Ensure the **Issuer URL** and **Subject** fields are correctly set to match your OpenShift Container Platform service account that ESO uses. See the [Setting up robot account federation](https://docs.redhat.com/en/documentation/red_hat_quay/latest/html/about_quay_io/allow-robot-access-user-repo#setting-robot-federation) topic in the Red Hat Quay documentation for more information.
+    Ensure the **Issuer URL** and **Subject** fields are correctly set to match your OpenShift Container Platform service account that ESO uses.
 
 2.  If ESO is not already present in your cluster, install it using Helm or another preferred method.
 
@@ -864,7 +997,11 @@ Additional resources
 
 </div>
 
-- [Accessing delegated image scanning](../operating/examine-images-for-vulnerabilities.md#accessing-delegated-image-scanning_examine-images-for-vulnerabilities).
+- [Accessing delegated image scanning](../operating/examine-images-for-vulnerabilities.md#accessing-delegated-image-scanning_examine-images-for-vulnerabilities)
+
+- [Red Hat Quay Robot Account overview](https://docs.redhat.com/en/documentation/red_hat_quay/latest/html/about_quay_io/allow-robot-access-user-repo)
+
+- [Setting up robot account federation](https://docs.redhat.com/en/documentation/red_hat_quay/latest/html/about_quay_io/allow-robot-access-user-repo#setting-robot-federation)
 
 </div>
 
@@ -882,7 +1019,7 @@ Prerequisites
 
 </div>
 
-- You need a GitHub account and personal access token with at least `packages:read` permissions. See [Working with the Container registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry) for more information.
+- You need a GitHub account and personal access token with at least `packages:read` permissions.
 
 </div>
 
@@ -915,6 +1052,18 @@ Procedure
 6.  Select **Test** to test that the integration with the selected registry is working.
 
 7.  Select **Save**.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Working with the Container registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
 
 </div>
 
@@ -1011,3 +1160,9 @@ Procedure
 7.  Select **Save**.
 
 </div>
+
+<a id="additional-resources_integrate-with-image-registries"></a>
+
+# Additional resources
+
+- [Integrating with image vulnerability scanners](integrate-with-image-vulnerability-scanners.md)

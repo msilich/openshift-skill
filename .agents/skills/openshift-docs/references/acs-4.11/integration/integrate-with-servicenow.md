@@ -1,20 +1,42 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can use Red Hat Advanced Cluster Security for Kubernetes (RHACS) with ServiceNow by using one of the following methods:
+You can integrate Red Hat Advanced Cluster Security for Kubernetes (RHACS) with ServiceNow by using the Red Hat Security Container Vulnerability Response Integration or by configuring a generic webhook integration.
 
-- Use the Red Hat Security Container Vulnerability Response Integration to pull data from your RHACS instances to the ServiceNow Vulnerability Response application. For more information, see [RHACS Vulnerability Response](https://store.servicenow.com/store/app/edea7344476072502ec7c1c4f16d4343) on the ServiceNow marketplace.
+<a id="servicenow-integration-overview_integrate-with-servicenow"></a>
+
+# ServiceNow integration overview
+
+You can integrate Red Hat Advanced Cluster Security for Kubernetes with ServiceNow by using the Red Hat Security Container Vulnerability Response Integration or by configuring a generic webhook integration.
+
+You can use RHACS with ServiceNow by using one of the following methods:
+
+- Use the Red Hat Security Container Vulnerability Response Integration to pull data from your RHACS instances to the ServiceNow Vulnerability Response application.
 
 - Configure Red Hat Advanced Cluster Security for Kubernetes to send events to ServiceNow by configuring a generic webhook integration in RHACS.
 
 To integrate RHACS with ServiceNow by using a generic webhook integration, complete the following steps:
 
-1.  In ServiceNow, configure a REST API endpoint to use in RHACS. For more information that includes steps for ServiceNow configuration, see [How to integrate Red Hat Advanced Cluster Security for Kubernetes with ServiceNow](https://www.redhat.com/en/blog/how-integrate-red-hat-advanced-cluster-security-kubernetes-servicenow).
+1.  In ServiceNow, configure a REST API endpoint to use in RHACS.
 
 2.  In RHACS, complete these steps:
 
     1.  Configure the generic webhook.
 
     2.  Identify policies for which you want to send notifications, and update the notification settings for those policies.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [RHACS Vulnerability Response](https://store.servicenow.com/store/app/edea7344476072502ec7c1c4f16d4343)
+
+- [How to integrate Red Hat Advanced Cluster Security for Kubernetes with ServiceNow](https://www.redhat.com/en/blog/how-integrate-red-hat-advanced-cluster-security-kubernetes-servicenow)
+
+</div>
 
 <a id="webhook-configuring-acs_integrate-with-servicenow"></a>
 
@@ -43,7 +65,7 @@ Procedure
 6.  If your webhook receiver uses an untrusted certificate, enter a CA certificate in the **CA certificate** field. Otherwise, leave it blank.
 
     > [!NOTE]
-    > The server certificate used by the webhook receiver must be valid for the endpoint DNS name. You can click **Skip TLS verification** to ignore this validation. Red Hat does not suggest turning off TLS verification. Without TLS verification, data could be intercepted by an unintended recipient.
+    > The server certificate used by the webhook receiver must be valid for the endpoint DNS name. You can click **Skip TLS verification** to ignore this validation. Red Hat does not suggest turning off TLS verification. Without TLS verification, an unintended recipient could intercept data.
 
 7.  Optional: Click **Enable audit logging** to receive alerts about all the changes made in Red Hat Advanced Cluster Security for Kubernetes.
 
@@ -56,7 +78,7 @@ Procedure
 
     - Custom **Header**, for example: `Authorization: Bearer <access_token>`
 
-9.  Use **Extra fields** to include additional key-value pairs in the JSON object that Red Hat Advanced Cluster Security for Kubernetes sends. For example, if your webhook receiver accepts objects from multiple sources, you can add `"source": "rhacs"` as an extra field and filter on this value to identify all alerts from Red Hat Advanced Cluster Security for Kubernetes.
+9.  Use **Extra fields** to include additional key-value pairs in the JSON object that Red Hat Advanced Cluster Security for Kubernetes sends. For example, if your webhook receiver accepts objects from many sources, you can add `"source": "rhacs"` as an extra field and filter on this value to identify all alerts from Red Hat Advanced Cluster Security for Kubernetes.
 
 10. Select **Test** to send a test message to verify that the integration with your generic webhook is working.
 
@@ -87,7 +109,7 @@ Procedure
 4.  In the **Enable notification** window, select the **webhook** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 

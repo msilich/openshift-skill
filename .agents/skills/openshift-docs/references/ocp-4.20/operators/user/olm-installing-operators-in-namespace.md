@@ -41,7 +41,7 @@ Additional resources
 
 </div>
 
-# Installing from the software catalog by using the web console
+# Install from the software catalog by using the web console
 
 To install and subscribe to an Operator from the software catalog, you can use the OpenShift Container Platform web console. The console guides you through selecting an install mode, namespace, and approval strategy.
 
@@ -138,7 +138,7 @@ Verification
 
 </div>
 
-# Installing from the software catalog by using the CLI
+# Install from the software catalog by using the CLI
 
 To install an Operator from the software catalog without using the web console, you can create or update a `Subscription` object by using the `oc` command in OpenShift Container Platform.
 

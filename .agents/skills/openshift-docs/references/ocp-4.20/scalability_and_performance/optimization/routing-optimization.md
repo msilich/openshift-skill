@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You can scale or configure the OpenShift Container Platform HAProxy router to optimize routing performance.
+Scale the router tier or adjust HAProxy reload behavior so that you can match routing behavior to your applications and cluster capacity.
 
 # Baseline Ingress Controller (router) performance
 
@@ -67,7 +67,9 @@ Ingress, or router, sharding should be used to serve more routes towards applica
 
 # Configuring Ingress Controller liveness, readiness, and startup probes
 
-As a cluster administrator, you can configure the timeout values for the kubelet liveness, readiness, and startup probes for router deployments that are managed by the OpenShift Container Platform Ingress Controller (router). The ability to set larger timeout values can reduce the risk of unnecessary and unwanted restarts.
+As a cluster administrator, you can configure the timeout values for the kubelet liveness, readiness, and startup probes for router deployments that are managed by the OpenShift Container Platform Ingress Controller (router).
+
+The ability to set larger timeout values can reduce the risk of unnecessary and unwanted restarts.
 
 The liveness and readiness probes of the router use the default timeout value of 1 second, which is too brief when networking or runtime performance is severely degraded. Probe timeouts can cause unwanted router restarts that interrupt application connections.
 
@@ -104,15 +106,18 @@ $ oc -n openshift-ingress describe deploy/router-default | grep -e Liveness: -e 
 
 </div>
 
-# Configuring HAProxy reload interval
+# Configure HAProxy reload interval
 
-You can configure the HAProxy reload interval, so that when HAProxy reloads it generates a new process that handles new connections by using the updated configuration.
+To reduce how often the router reloads HAProxy, change the minimum reload interval on the Ingress Controller. By doing this task, you can spread reload work over time and limit resource use from long-lived connections.
 
-When you update a route or an endpoint associated with a route, the OpenShift Container Platform router updates the configuration for HAProxy. The HAProxy then reloads the updated configuration for those changes to take effect.
+> [!NOTE]
+> The higher the reload interval, the longer a route update takes.
 
-HAProxy keeps the old process running to handle existing connections until those connections are all closed. When old processes have long-lived connections, these processes can accumulate and consume resources.
+When you update a route or an endpoint associated with a route, the OpenShift Container Platform router updates the configuration for HAProxy and reloads it so those changes take effect. Each reload starts a new HAProxy process for new connections while the old process handles existing connections until they close.
 
-The default minimum HAProxy reload interval is 5 seconds. You can configure an Ingress Controller using its `spec.tuningOptions.reloadInterval` field to set a longer minimum reload interval.
+When connections last a long time, old processes can accumulate and consume resources.
+
+The default minimum HAProxy reload interval is 5 seconds. You can configure an Ingress Controller by using its `spec.tuningOptions.reloadInterval` field to set a longer minimum reload interval.
 
 > [!WARNING]
 > Setting a large value for the minimum HAProxy reload interval can cause latency in observing updates to routes and their endpoints. To lessen the risk, avoid setting a value larger than the tolerable latency for updates.

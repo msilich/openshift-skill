@@ -2,7 +2,7 @@
 
 To use image streams with both OpenShift Container Platform native resources and standard Kubernetes resources, reference them in your resource definitions. Image streams work with resources such as `Build`, `DeploymentConfigs`, `Job`, `ReplicationController`, `ReplicaSet`, and `Deployment` resources.
 
-# Enabling image streams with Kubernetes resources
+# Enable image streams with Kubernetes resources
 
 When using Kubernetes resources, you must reference image streams located within the same project by specifying a single segment value, such as `ruby:2.5`, which identifies the image stream name and its tag. This ensures the resource correctly targets the local image stream within its scope.
 

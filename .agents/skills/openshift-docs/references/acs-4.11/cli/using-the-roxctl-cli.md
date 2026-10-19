@@ -2,32 +2,13 @@
 
 Use the `roxctl` CLI to interact with RHACS for authentication, configuration, and administrative tasks.
 
-<a id="setting-up-environment-variables_using-roxctl-cli"></a>
+Before you begin, configure the `ROX_ENDPOINT` environment variable to specify the host and port information for Central:
 
-# Prerequisites
+``` terminal
+$ export ROX_ENDPOINT=<host:port>
+```
 
-Configure the `ROX_ENDPOINT` environment variable to specify the host and port information for Central.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-- To configure the `ROX_ENDPOINT` environment variable, run the following command:
-
-  ``` terminal
-  $ export ROX_ENDPOINT=<host:port>
-  ```
-
-  where:
-
-  `<host:port>`  
-  Specifies the host and port information that you want to store in the `ROX_ENDPOINT` environment variable.
-
-</div>
+where `<host:port>` specifies the host and port information for Central.
 
 <a id="getting-authentication-information_using-roxctl-cli"></a>
 
@@ -206,7 +187,7 @@ Procedure
 
 ## Using an authentication provider to authenticate with roxctl
 
-You can configure an authentication provider in Central and initiate the login process with the `roxctl` CLI. Set the `ROX_ENDPOINT` variable, initiate the login process with the `roxctl central login` command, select the authentication provider in a browser window, and retrieve the token information from the `roxctl` CLI as described in the following procedure.
+You can configure an authentication provider in Central and use the `roxctl central login` command to authenticate.
 
 <div>
 

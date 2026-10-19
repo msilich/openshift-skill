@@ -2,7 +2,7 @@
 
 Learn about the installation methods, requirements, and process for deploying an OpenShift Container Platform cluster.
 
-# The OpenShift Container Platform installation
+# OpenShift Container Platform installation options
 
 The OpenShift Container Platform installation program offers four methods for deploying a cluster. Each method has unique characteristics so that you can choose a method that meets your needs.
 
@@ -171,7 +171,7 @@ Additional resources
 
 </div>
 
-## Verifying node state after installation
+## Verify node state after installation
 
 The OpenShift Container Platform installation completes when the following installation health checks are successful:
 
@@ -299,7 +299,9 @@ Additional resources
 
 ## OpenShift Local overview
 
-OpenShift Local supports rapid application development to get started building OpenShift Container Platform clusters. OpenShift Local is designed to run on a local computer to simplify setup and testing, and to emulate the cloud development environment locally with all of the tools needed to develop container-based applications.
+OpenShift Local supports rapid application development to get started building OpenShift Container Platform clusters.
+
+OpenShift Local is designed to run on a local computer to simplify setup and testing, and to emulate the cloud development environment locally with all of the tools needed to develop container-based applications.
 
 Regardless of the programming language you use, OpenShift Local hosts your application and brings a minimal, preconfigured Red Hat OpenShift Container Platform cluster to your local PC without the need for a server-based infrastructure.
 

@@ -11,7 +11,7 @@ Before you can use the Security Profiles Operator, you must ensure the Operator 
 > [!IMPORTANT]
 > The Security Profiles Operator supports `x86_64` and `ppc64le` architecture.
 
-# Installing the Security Profiles Operator
+# Install the Security Profiles Operator
 
 You can use the OpenShift Container Platform web console to install the Security Profiles Operator. This installs the Security Profiles Operator into the `openshift-security-profiles` namespace by default. You can also verify correct installation by using the OpenShift Container Platform web console.
 
@@ -67,7 +67,7 @@ If the Operator is not installed successfully:
 
 2.  Navigate to the **Workloads** → **Pods** page and check the logs in any pods in the `openshift-security-profiles` project that are reporting issues.
 
-# Installing the Security Profiles Operator using the CLI
+# Install the Security Profiles Operator using the CLI
 
 You can install the OpenShift Container Platform Security Profiles Operator by using the command line interface.
 
@@ -203,7 +203,7 @@ Verification
 
 </div>
 
-# Configuring logging verbosity
+# Configure logging verbosity
 
 The Security Profiles Operator supports the default logging verbosity of `0` and an enhanced verbosity of `1`.
 

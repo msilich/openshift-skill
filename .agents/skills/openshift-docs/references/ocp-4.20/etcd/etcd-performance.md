@@ -96,7 +96,7 @@ When a high latency disk is used, a message states that the disk is not recommen
 
 When you use cluster deployments that span multiple data centers that are using disks for etcd that do not meet the recommended latency, it increases the chances of service-affecting failures and dramatically reduces the network latency that the control plane can sustain.
 
-# Monitoring consensus latency for etcd
+# Monitor consensus latency for etcd
 
 Use the `etcdctl` command-line interface (CLI) to check endpoint health and consensus latency on a running cluster. Regular monitoring helps you spot delays before they cause leader elections and Kubernetes API instability.
 
@@ -201,7 +201,7 @@ Procedure
 
 </div>
 
-# Moving etcd to a different disk
+# Move etcd to a different disk
 
 Move etcd data from a shared disk to a dedicated disk to resolve or prevent performance problems. Isolating etcd storage reduces latency from competing I/O on the control plane.
 
@@ -633,7 +633,7 @@ Procedure
 
 </div>
 
-# Setting tuning parameters for etcd
+# Set tuning parameters for etcd
 
 Configure the control plane hardware speed setting for etcd to match your environment’s latency.
 
@@ -830,7 +830,7 @@ This timeout is how long a follower node will go without hearing a heartbeat bef
 
 These values do not provide the whole story for the control plane or even etcd. An etcd cluster is sensitive to disk latencies. Because etcd must persist proposals to its log, disk activity from other processes might cause long fsync latencies. The consequence is that etcd might miss heartbeats, causing request timeouts and temporary leader loss. During a leader loss and reelection, the Kubernetes API cannot process any request that causes a service-affecting event and instability of the cluster.
 
-# Determining the size of the etcd database and understanding its effects
+# Determine the size of the etcd database and understand its effects
 
 etcd database size affects defragmentation duration, resync time after network partitions, and transaction rates. Plan capacity so maintenance and recovery do not degrade cluster stability.
 
@@ -911,7 +911,7 @@ Procedure
 
 </div>
 
-# Increasing the database size for etcd
+# Increase the database size for etcd
 
 Increase the etcd disk quota when low space or excessive growth alerts appear. Expanding the quota before etcd runs out of space prevents write failures and cluster instability.
 
@@ -1170,7 +1170,7 @@ The Etcd "cluster" is invalid: spec.backendQuotaGiB: Invalid value: "integer": e
 
 To resolve this issue, specify an integer greater than `10`.
 
-# Measuring network jitter between control plane nodes
+# Measure network jitter between control plane nodes
 
 Measure network jitter between control plane nodes to validate latency for etcd heartbeats. High jitter causes missed heartbeats, leader loss, and Kubernetes API request failures.
 
@@ -1451,7 +1451,7 @@ Additional resources
 
 </div>
 
-# Determining Kubernetes API transaction rate for your environment
+# Determine Kubernetes API transaction rate for your environment
 
 Test sustained Kubernetes API transaction rates for stretched control plane deployments by using `kube-burner-ocp` density profiles. Validate limits before production workloads exceed etcd capacity.
 

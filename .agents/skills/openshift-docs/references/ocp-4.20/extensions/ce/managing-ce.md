@@ -54,7 +54,7 @@ Additional resources
 
 </div>
 
-# Finding Operators to install from a catalog
+# Find Operators to install from a catalog
 
 After you add a catalog to your cluster, you can query the catalog to find Operators and extensions to install.
 
@@ -1729,7 +1729,7 @@ Procedure
 
 </div>
 
-# Installing a cluster extension in all namespaces
+# Install a cluster extension in all namespaces
 
 You can install an extension from a catalog by creating a custom resource (CR) and applying it to the cluster. Operator Lifecycle Manager (OLM) v1 supports installing cluster extensions, including OLM (Classic) Operators in the `registry+v1` bundle format, that are scoped to the cluster.
 
@@ -1974,7 +1974,7 @@ Verification
 
 </div>
 
-# Deploying a cluster extension in a specific namespace (Technology Preview)
+# Deploy a cluster extension in a specific namespace (Technology Preview)
 
 Install modes are a multi-tenancy feature of Operator Lifecycle Manager (OLM) Classic. OLM v1 does not support multi-tenancy and deploys cluster extensions to the cluster by default by using the `AllNamespaces` install mode.
 

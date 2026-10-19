@@ -23,7 +23,9 @@ Additional resources
 
 # GitOps ZTP and Topology Aware Lifecycle Manager
 
-GitOps Zero Touch Provisioning (ZTP) generates installation and configuration CRs from manifests stored in Git. These artifacts are applied to a centralized hub cluster where Red Hat Advanced Cluster Management (RHACM), the assisted service, and the Topology Aware Lifecycle Manager (TALM) use the CRs to install and configure the managed cluster. The configuration phase of the GitOps ZTP pipeline uses the TALM to orchestrate the application of the configuration CRs to the cluster. There are several key integration points between GitOps ZTP and the TALM.
+GitOps Zero Touch Provisioning (ZTP) generates installation and configuration CRs from Git manifests and applies them to a hub cluster where Red Hat Advanced Cluster Management (RHACM), the assisted service, and the Topology Aware Lifecycle Manager (TALM) manage the cluster lifecycle.
+
+The configuration phase of the GitOps ZTP pipeline uses the TALM to orchestrate the application of configuration CRs to the cluster.
 
 Inform policies
 By default, GitOps ZTP creates all policies with a remediation action of `inform`. These policies cause RHACM to report on compliance status of clusters relevant to the policies but does not apply the desired configuration. During the GitOps ZTP process, after OpenShift installation, the TALM steps through the created `inform` policies and enforces them on the target managed cluster(s). This applies the configuration to the managed cluster. Outside of the GitOps ZTP phase of the cluster lifecycle, this allows you to change policies without the risk of immediately rolling those changes out to affected managed clusters. You can control the timing and the set of remediated clusters by using TALM.
@@ -74,7 +76,9 @@ The automatically created `ClusterGroupUpgrade` CR has the owner reference set a
 
 # Overview of deploying managed clusters with GitOps ZTP
 
-Red Hat Advanced Cluster Management (RHACM) uses GitOps Zero Touch Provisioning (ZTP) to deploy single-node OpenShift Container Platform clusters, three-node clusters, and standard clusters. You manage site configuration data as OpenShift Container Platform custom resources (CRs) in a Git repository. GitOps ZTP uses a declarative GitOps approach for a develop once, deploy anywhere model to deploy the managed clusters.
+Red Hat Advanced Cluster Management (RHACM) uses GitOps Zero Touch Provisioning (ZTP) to deploy single-node OpenShift Container Platform clusters, three-node clusters, and standard clusters. You manage site configuration data as OpenShift Container Platform CRs in a Git repository.
+
+GitOps ZTP uses a declarative GitOps approach for a develop-once, deploy-anywhere model to deploy the managed clusters.
 
 The deployment of the clusters includes:
 
@@ -110,9 +114,9 @@ The Discovery image ISO process is complete when the `Agent` CR for the managed 
 > [!IMPORTANT]
 > The target bare-metal host must meet the networking, firmware. For more information, see "Recommended single-node OpenShift cluster configuration for vDU application workloads".
 
-# Creating the managed bare-metal host secrets
+# Create the managed bare-metal host secrets
 
-Add the required `Secret` custom resources (CRs) for the managed bare-metal host to the hub cluster. You need a secret for the GitOps Zero Touch Provisioning (ZTP) pipeline to access the Baseboard Management Controller (BMC) and a secret for the assisted installer service to pull cluster installation images from the registry.
+Add the required `Secret` custom resources (CRs) for the managed bare-metal host to the hub cluster. You need a secret for the GitOps Zero Touch Provisioning (ZTP) pipeline to access the Baseboard Management Controller (BMC) and a pull secret for the Assisted Installer service.
 
 > [!NOTE]
 > The secrets are referenced from the `SiteConfig` CR by name. The namespace must match the `SiteConfig` namespace.
@@ -165,9 +169,9 @@ Procedure
 
 </div>
 
-# Configuring Discovery ISO kernel arguments for installations using GitOps ZTP
+# Configure Discovery ISO kernel arguments for installations using GitOps ZTP
 
-The GitOps Zero Touch Provisioning (ZTP) workflow uses the Discovery ISO as part of the OpenShift Container Platform installation process on managed bare-metal hosts. You can edit the `InfraEnv` resource to specify kernel arguments for the Discovery ISO. This is useful for cluster installations with specific environmental requirements.
+You can edit the `InfraEnv` resource to specify kernel arguments for the Discovery ISO that the GitOps Zero Touch Provisioning (ZTP) workflow uses during OpenShift Container Platform installation on managed bare-metal hosts.
 
 For example, configure the `rd.net.timeout.carrier` kernel argument for the Discovery ISO to facilitate static networking for the cluster or to receive a DHCP address before downloading the root file system during installation.
 
@@ -281,7 +285,7 @@ To verify that the kernel arguments are applied, after the Discovery image verif
     $ cat /proc/cmdline
     ```
 
-# Deploying a managed cluster with SiteConfig and GitOps ZTP
+# Deploy a managed cluster with SiteConfig and GitOps ZTP
 
 Use the following procedure to create a `SiteConfig` custom resource (CR) and related files and initiate the GitOps Zero Touch Provisioning (ZTP) cluster deployment.
 
@@ -367,160 +371,156 @@ Procedure
         </div>
 
         ``` yaml
-        # example-node1-bmh-secret & assisted-deployment-pull-secret need to be created under same namespace example-sno
-        ---
-        apiVersion: ran.openshift.io/v1
-        kind: SiteConfig
+        apiVersion: siteconfig.open-cluster-management.io/v1alpha1
+        kind: ClusterInstance
         metadata:
-          name: "example-sno"
-          namespace: "example-sno"
+          name: "example-ai-sno"
+          namespace: "example-ai-sno"
         spec:
           baseDomain: "example.com"
           pullSecretRef:
             name: "assisted-deployment-pull-secret"
-          clusterImageSetNameRef: "openshift-4.18"
+          clusterImageSetNameRef: "openshift-4.22"
           sshPublicKey: "ssh-rsa AAAA..."
-          clusters:
-            - clusterName: "example-sno"
-              networkType: "OVNKubernetes"
-              # installConfigOverrides is a generic way of passing install-config
-              # parameters through the siteConfig.  The 'capabilities' field configures
-              # the composable openshift feature.  In this 'capabilities' setting, we
-              # remove all the optional set of components.
-              # Notes:
-              # - OperatorLifecycleManager is needed for 4.15 and later
-              # - NodeTuning is needed for 4.13 and later, not for 4.12 and earlier
-              # - Ingress is needed for 4.16 and later
-              installConfigOverrides: |
+          clusterName: "example-ai-sno"
+          networkType: "OVNKubernetes"
+          # installConfigOverrides is a generic way of passing install-config
+          # parameters through the siteConfig.  The 'capabilities' field configures
+          # the composable openshift feature.  In this 'capabilities' setting, we
+          # remove all the optional set of components.
+          # Notes:
+          # - OperatorLifecycleManager is needed for 4.15 and later
+          # - NodeTuning is needed for 4.13 and later, not for 4.12 and earlier
+          # - Ingress is needed for 4.16 and later
+          installConfigOverrides: |
+            {
+              "capabilities": {
+                "baselineCapabilitySet": "None",
+                "additionalEnabledCapabilities": [
+                  "NodeTuning",
+                  "OperatorLifecycleManager",
+                  "Ingress"
+                ]
+              }
+            }
+          # Include references to extraManifest ConfigMaps.
+          extraManifestsRefs:
+            - name: sno-extra-manifest-configmap
+          extraLabels:
+            ManagedCluster:
+              # These example cluster labels correspond to the bindingRules in the PolicyGenTemplate examples
+              du-profile: "latest"
+              # These example cluster labels correspond to the bindingRules in the PolicyGenTemplate examples in ../policygentemplates:
+              # ../policygentemplates/common-ranGen.yaml will apply to all clusters with 'common: true'
+              common: "true"
+              # ../policygentemplates/group-du-sno-ranGen.yaml will apply to all clusters with 'group-du-sno: ""'
+              group-du-sno: ""
+              # ../policygentemplates/example-sno-site.yaml will apply to all clusters with 'sites: "example-sno"'
+              # Normally this should match or contain the cluster name so it only applies to a single cluster
+              sites : "example-sno"
+          clusterNetwork:
+            - cidr: 1001:1::/48
+              hostPrefix: 64
+          machineNetwork:
+            - cidr: 1111:2222:3333:4444::/64
+          serviceNetwork:
+            - cidr: 1001:2::/112
+          additionalNTPSources:
+            - 1111:2222:3333:4444::2
+          # Initiates the cluster for workload partitioning. Setting specific reserved/isolated CPUSets is done via PolicyTemplate
+          # please see Workload Partitioning Feature for a complete guide.
+          cpuPartitioningMode: AllNodes
+          templateRefs:
+            - name: ai-cluster-templates-v1
+              namespace: open-cluster-management
+          nodes:
+            - hostName: "example-node1.example.com"
+              role: "master"
+              bmcAddress: "idrac-virtualmedia+https://[1111:2222:3333:4444::bbbb:1]/redfish/v1/Systems/System.Embedded.1"
+              bmcCredentialsName:
+                name: "example-node1-bmh-secret"
+              bootMACAddress: "AA:BB:CC:DD:EE:11"
+              # Use UEFISecureBoot to enable secure boot, UEFI to disable.
+              bootMode: "UEFISecureBoot"
+              rootDeviceHints:
+                deviceName: "/dev/disk/by-path/pci-0000:01:00.0-scsi-0:2:0:0"
+              # disk partition at `/var/lib/containers` with ignitionConfigOverride. Some values must be updated. See DiskPartitionContainer.md in argocd folder for more details
+              ignitionConfigOverride: |
                 {
-                  "capabilities": {
-                    "baselineCapabilitySet": "None",
-                    "additionalEnabledCapabilities": [
-                      "NodeTuning",
-                      "OperatorLifecycleManager",
-                      "Ingress"
+                  "ignition": {
+                    "version": "3.2.0"
+                  },
+                  "storage": {
+                    "disks": [
+                      {
+                        "device": "/dev/disk/by-path/pci-0000:01:00.0-scsi-0:2:0:0",
+                        "partitions": [
+                          {
+                            "label": "var-lib-containers",
+                            "sizeMiB": 0,
+                            "startMiB": 250000
+                          }
+                        ],
+                        "wipeTable": false
+                      }
+                    ],
+                    "filesystems": [
+                      {
+                        "device": "/dev/disk/by-partlabel/var-lib-containers",
+                        "format": "xfs",
+                        "mountOptions": [
+                          "defaults",
+                          "prjquota"
+                        ],
+                        "path": "/var/lib/containers",
+                        "wipeFilesystem": true
+                      }
+                    ]
+                  },
+                  "systemd": {
+                    "units": [
+                      {
+                        "contents": "# Generated by Butane\n[Unit]\nRequires=systemd-fsck@dev-disk-by\\x2dpartlabel-var\\x2dlib\\x2dcontainers.service\nAfter=systemd-fsck@dev-disk-by\\x2dpartlabel-var\\x2dlib\\x2dcontainers.service\n\n[Mount]\nWhere=/var/lib/containers\nWhat=/dev/disk/by-partlabel/var-lib-containers\nType=xfs\nOptions=defaults,prjquota\n\n[Install]\nRequiredBy=local-fs.target",
+                        "enabled": true,
+                        "name": "var-lib-containers.mount"
+                      }
                     ]
                   }
                 }
-              # It is strongly recommended to include crun manifests as part of the additional install-time manifests for 4.13+.
-              # The crun manifests can be obtained from source-crs/optional-extra-manifest/ and added to the git repo ie.sno-extra-manifest.
-              # extraManifestPath: sno-extra-manifest
-              clusterLabels:
-                # These example cluster labels correspond to the bindingRules in the PolicyGenTemplate examples
-                du-profile: "latest"
-                # These example cluster labels correspond to the bindingRules in the PolicyGenTemplate examples in ../policygentemplates:
-                # ../acmpolicygenerator/common-ranGen.yaml will apply to all clusters with 'common: true'
-                common: true
-                # ../policygentemplates/group-du-sno-ranGen.yaml will apply to all clusters with 'group-du-sno: ""'
-                group-du-sno: ""
-                # ../policygentemplates/example-sno-site.yaml will apply to all clusters with 'sites: "example-sno"'
-                # Normally this should match or contain the cluster name so it only applies to a single cluster
-                sites: "example-sno"
-              clusterNetwork:
-                - cidr: 1001:1::/48
-                  hostPrefix: 64
-              machineNetwork:
-                - cidr: 1111:2222:3333:4444::/64
-              serviceNetwork:
-                - 1001:2::/112
-              additionalNTPSources:
-                - 1111:2222:3333:4444::2
-              # Initiates the cluster for workload partitioning. Setting specific reserved/isolated CPUSets is done via PolicyTemplate
-              # please see Workload Partitioning Feature for a complete guide.
-              cpuPartitioningMode: AllNodes
-              # Optionally; This can be used to override the KlusterletAddonConfig that is created for this cluster:
-              #crTemplates:
-              #  KlusterletAddonConfig: "KlusterletAddonConfigOverride.yaml"
-              nodes:
-                - hostName: "example-node1.example.com"
-                  role: "master"
-                  # Optionally; This can be used to configure desired BIOS setting on a host:
-                  #biosConfigRef:
-                  #  filePath: "example-hw.profile"
-                  bmcAddress: "idrac-virtualmedia+https://[1111:2222:3333:4444::bbbb:1]/redfish/v1/Systems/System.Embedded.1"
-                  bmcCredentialsName:
-                    name: "example-node1-bmh-secret"
-                  bootMACAddress: "AA:BB:CC:DD:EE:11"
-                  # Use UEFISecureBoot to enable secure boot.
-                  bootMode: "UEFISecureBoot"
-                  rootDeviceHints:
-                    deviceName: "/dev/disk/by-path/pci-0000:01:00.0-scsi-0:2:0:0"
-                  #crTemplates:
-                  #  BareMetalHost: "bmhOverride.yaml"
-                  # disk partition at `/var/lib/containers` with ignitionConfigOverride. Some values must be updated. See DiskPartitionContainer.md for more details
-                  ignitionConfigOverride: |
-                    {
-                      "ignition": {
-                        "version": "3.2.0"
-                      },
-                      "storage": {
-                        "disks": [
-                          {
-                            "device": "/dev/disk/by-id/wwn-0x6b07b250ebb9d0002a33509f24af1f62",
-                            "partitions": [
-                              {
-                                "label": "var-lib-containers",
-                                "sizeMiB": 0,
-                                "startMiB": 250000
-                              }
-                            ],
-                            "wipeTable": false
-                          }
-                        ],
-                        "filesystems": [
-                          {
-                            "device": "/dev/disk/by-partlabel/var-lib-containers",
-                            "format": "xfs",
-                            "mountOptions": [
-                              "defaults",
-                              "prjquota"
-                            ],
-                            "path": "/var/lib/containers",
-                            "wipeFilesystem": true
-                          }
-                        ]
-                      },
-                      "systemd": {
-                        "units": [
-                          {
-                            "contents": "# Generated by Butane\n[Unit]\nRequires=systemd-fsck@dev-disk-by\\x2dpartlabel-var\\x2dlib\\x2dcontainers.service\nAfter=systemd-fsck@dev-disk-by\\x2dpartlabel-var\\x2dlib\\x2dcontainers.service\n\n[Mount]\nWhere=/var/lib/containers\nWhat=/dev/disk/by-partlabel/var-lib-containers\nType=xfs\nOptions=defaults,prjquota\n\n[Install]\nRequiredBy=local-fs.target",
-                            "enabled": true,
-                            "name": "var-lib-containers.mount"
-                          }
-                        ]
-                      }
-                    }
-                  nodeNetwork:
-                    interfaces:
-                      - name: eno1
-                        macAddress: "AA:BB:CC:DD:EE:11"
+              nodeNetwork:
+                interfaces:
+                  - name: eno1
+                    macAddress: "AA:BB:CC:DD:EE:11"
+                config:
+                  interfaces:
+                    - name: eno1
+                      type: ethernet
+                      state: up
+                      ipv4:
+                        enabled: false
+                      ipv6:
+                        enabled: true
+                        address:
+                        # For SNO sites with static IP addresses, the node-specific,
+                        # API and Ingress IPs should all be the same and configured on
+                        # the interface
+                        - ip: 1111:2222:3333:4444::aaaa:1
+                          prefix-length: 64
+                  dns-resolver:
                     config:
-                      interfaces:
-                        - name: eno1
-                          type: ethernet
-                          state: up
-                          ipv4:
-                            enabled: false
-                          ipv6:
-                            enabled: true
-                            address:
-                              # For SNO sites with static IP addresses, the node-specific,
-                              # API and Ingress IPs should all be the same and configured on
-                              # the interface
-                              - ip: 1111:2222:3333:4444::aaaa:1
-                                prefix-length: 64
-                      dns-resolver:
-                        config:
-                          search:
-                            - example.com
-                          server:
-                            - 1111:2222:3333:4444::2
-                      routes:
-                        config:
-                          - destination: ::/0
-                            next-hop-interface: eno1
-                            next-hop-address: 1111:2222:3333:4444::1
-                            table-id: 254
+                      search:
+                      - example.com
+                      server:
+                      - 1111:2222:3333:4444::2
+                  routes:
+                    config:
+                    - destination: ::/0
+                      next-hop-interface: eno1
+                      next-hop-address: 1111:2222:3333:4444::1
+                      table-id: 254
+              templateRefs:
+                - name: ai-node-templates-v1
+                  namespace: open-cluster-management
         ```
 
         </div>
@@ -1669,7 +1669,7 @@ Verification
 
 # Monitoring managed cluster installation progress
 
-The ArgoCD pipeline uses the `SiteConfig` CR to generate the cluster configuration CRs and syncs it with the hub cluster. You can monitor the progress of the synchronization in the ArgoCD dashboard.
+After the Argo CD pipeline syncs the `SiteConfig` CR to the hub cluster, you can monitor installation progress from the Argo CD dashboard or the command line to identify and troubleshoot deployment issues.
 
 <div>
 
@@ -1715,7 +1715,7 @@ Procedure
 
 </div>
 
-# Troubleshooting GitOps ZTP by validating the installation CRs
+# Troubleshoot GitOps ZTP by validating the installation CRs
 
 The ArgoCD pipeline uses the `SiteConfig` and `PolicyGenerator` or `PolicyGentemplate` custom resources (CRs) to generate the cluster configuration CRs and Red Hat Advanced Cluster Management (RHACM) policies. Use the following steps to troubleshoot issues that might occur during this process.
 
@@ -1837,7 +1837,7 @@ Procedure
 
 </div>
 
-# Removing a managed cluster site from the GitOps ZTP pipeline
+# Remove a managed cluster site from the GitOps ZTP pipeline
 
 You can remove a managed site and the associated installation and configuration policy CRs from the GitOps Zero Touch Provisioning (ZTP) pipeline.
 

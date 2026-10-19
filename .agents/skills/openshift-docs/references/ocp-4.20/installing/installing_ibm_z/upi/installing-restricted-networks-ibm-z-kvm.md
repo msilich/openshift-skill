@@ -55,7 +55,7 @@ Additional resources
 
 # About installations in restricted networks
 
-You can install OpenShift Container Platform 4.20 in a restricted network without an active internet connection to obtain software components. Restricted network installations can use installer-provisioned or user-provisioned infrastructure, depending on the cloud platform to which you are installing the cluster.
+You can install OpenShift Container Platform 4.20 in a restricted network that lacks an active internet connection. These restricted installations use installer-provisioned or user-provisioned infrastructure, depending on your cloud platform.
 
 If you choose to perform a restricted network installation on a cloud platform, you still require access to its cloud APIs. Some cloud functions, such as Amazon Web Service’s Route 53 DNS and IAM services, require internet access. Depending on your network, you might require less internet access for an installation on bare-metal hardware, Nutanix, or on VMware vSphere.
 
@@ -581,7 +581,9 @@ For three-node cluster installations, follow these next steps:
 
 # Cluster Network Operator configuration
 
-To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity. Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
+To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity.
+
+Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
 
 The CNO configuration inherits the following fields during cluster installation from the `Network` API in the `Network.config.openshift.io` API group:
 
@@ -1907,7 +1909,9 @@ Procedure
 
 # Waiting for the bootstrap process to complete
 
-The OpenShift Container Platform bootstrap process begins after the cluster nodes first boot into the persistent RHCOS environment that has been installed to disk. The configuration information provided through the Ignition config files is used to initialize the bootstrap process and install OpenShift Container Platform on the machines. You must wait for the bootstrap process to complete.
+After your cluster nodes first boot into the persistent RHCOS environment installed to disk, wait for the OpenShift Container Platform bootstrap process to complete.
+
+The configuration information provided through the Ignition config files is used to initialize the bootstrap process and install OpenShift Container Platform on the machines.
 
 <div>
 
@@ -2053,7 +2057,7 @@ Next steps
 
 </div>
 
-# Approving the certificate signing requests for your machines
+# Approve the certificate signing requests for your machines
 
 To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 
@@ -2341,7 +2345,7 @@ Configure a persistent volume, which is required for production clusters. Where 
 
 You can also allow the image registry to use block storage types by using the `Recreate` rollout strategy during upgrades.
 
-### Configuring registry storage for IBM Z
+### Configure registry storage for IBM Z
 
 As a cluster administrator, following installation you must configure your registry to use storage.
 
@@ -2463,7 +2467,7 @@ Procedure
 
 </div>
 
-### Configuring storage for the image registry in non-production clusters
+### Configure storage for the image registry in non-production clusters
 
 You must configure storage for the Image Registry Operator. For non-production clusters, you can set the image registry to an empty directory, but you lose all images if you restart the registry.
 

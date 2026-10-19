@@ -116,7 +116,7 @@ Procedure
     where:
 
     `<crs_file_name.yaml>`  
-    Specifies the name of the file where you stored the generated CRS.
+    Specifies the name of the file in which you stored the generated CRS.
 
     `<path_to_pull_secret.yaml>`  
     Specifies the path for the pull secret for Red Hat Container Registry authentication. Or, you can specify `--set imagePullSecrets.username=<your redhat.com username>` and `--set imagePullSecrets.password=<your redhat.com password>` in the command.
@@ -165,7 +165,7 @@ Procedure
     where:
 
     `<crs_file_name.yaml>`  
-    Specifies the name of the file where you stored the generated CRS.
+    Specifies the name of the file in which you stored the generated CRS.
 
     `<path_to_pull_secret.yaml>`  
     Specifies the path for the pull secret for Red Hat Container Registry authentication. Or, you can specify `--set imagePullSecrets.username=<your redhat.com username>` and `--set imagePullSecrets.password=<your redhat.com password>` in the command.
@@ -211,6 +211,8 @@ Additional resources
 </div>
 
 - [Generating and applying a cluster registration secret or init bundle for RHACS on other platforms](init-bundle-other.md)
+
+- [Red Hat Container Registry Authentication](https://access.redhat.com/RegistryAuthentication)
 
 </div>
 
@@ -441,7 +443,7 @@ Reference of configuration parameters for customizing the secured-cluster-servic
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>admissionControl.dynamic.timeout</code></p></td>
-<td style="text-align: left;"><p>The ability to configure this parameter is deprecated. RHACS uses a preset value for the timeout period and you cannot change it. This parameter is ignored.</p></td>
+<td style="text-align: left;"><p>The ability to configure this parameter is deprecated. RHACS uses a preset value for the timeout period and you cannot change it. RHACS ignores this parameter.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>admissionControl.resources.requests.memory</code></p></td>
@@ -545,7 +547,7 @@ Reference of configuration parameters for customizing the secured-cluster-servic
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>scanner.logLevel</code></p></td>
-<td style="text-align: left;"><p>Setting this parameter allows you to change the scanner log level. Use this option only for troubleshooting purposes.</p></td>
+<td style="text-align: left;"><p>Set this parameter to change the scanner log level. Use this option only for troubleshooting purposes.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>scanner.autoscaling.disable</code></p></td>
@@ -613,7 +615,7 @@ Reference of configuration parameters for customizing the secured-cluster-servic
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>network.enableNetworkPolicies</code></p></td>
-<td style="text-align: left;"><p>To provide security at the network level, RHACS creates default <code>NetworkPolicy</code> resources in the namespace where secured cluster resources are installed. These network policies allow ingress to specific components on specific ports. If you do not want RHACS to create these policies, set this parameter to <code>False</code>. This is a Boolean value. The default value is <code>True</code>, which means the default policies are automatically created.</p>
+<td style="text-align: left;"><p>For security at the network level, RHACS creates default <code>NetworkPolicy</code> resources in the namespace where you install secured cluster resources. These network policies allow ingress to specific components on specific ports. If you do not want RHACS to create these policies, set this parameter to <code>False</code>. This is a Boolean value. The default value is <code>True</code>, which means the default policies are automatically created.</p>
 <div class="warning">
 <div class="title">
 &#10;</div>
@@ -622,6 +624,25 @@ Reference of configuration parameters for customizing the secured-cluster-servic
 </tr>
 </tbody>
 </table>
+
+<a id="secured-cluster-services-environment-variables_install-secured-cluster-other"></a>
+
+#### Environment variables
+
+You can specify environment variables and custom Kubernetes metadata for workloads deployed by the secured-cluster-services Helm chart.
+
+You can specify environment variables for Sensor and Admission controller in the following format:
+
+``` yaml
+customize:
+  envVars:
+    ENV_VAR1: "value1"
+    ENV_VAR2: "value2"
+```
+
+Use the `customize` setting to specify custom Kubernetes metadata (labels and annotations) for all objects created by this Helm chart and additional pod labels, pod annotations, and container environment variables for workloads.
+
+The configuration is hierarchical, in the sense that metadata defined at a more generic scope (for example, for all objects) can be overridden by metadata defined at a narrower scope (for example, only for the Sensor deployment).
 
 <a id="install-secured-cluster-services-helm-chart_install-secured-cluster-other"></a>
 
@@ -637,11 +658,11 @@ After you configure the `values-public.yaml` and `values-private.yaml` files, in
 
 - Collector
 
-- Scanner: optional for secured clusters when the StackRox Scanner is installed
+- Scanner: optional for secured clusters when you install the StackRox Scanner
 
-- Scanner DB: optional for secured clusters when the StackRox Scanner is installed
+- Scanner DB: optional for secured clusters when you install the StackRox Scanner
 
-- Scanner V4 Indexer and Scanner V4 DB: optional for secured clusters when Scanner V4 is installed
+- Scanner V4 Indexer and Scanner V4 DB: optional for secured clusters when you install Scanner V4
 
 <div>
 
@@ -714,6 +735,8 @@ Additional resources
 
 - [Generating and applying a cluster registration secret or an init bundle for RHACS on other platforms](init-bundle-other.md)
 
+- [Red Hat Container Registry Authentication](https://access.redhat.com/RegistryAuthentication)
+
 </div>
 
 <a id="change-config-options-after-deployment_install-secured-cluster-other"></a>
@@ -728,11 +751,11 @@ When using the `helm upgrade` command to make changes, the following guidelines 
 
 - You can also specify configuration values using the `--set` or `--set-file` parameters. However, these options are not saved, and you must manually specify all the options again whenever you make changes.
 
-- Some changes, such as enabling a new component, require issuing new certificates for the component. Therefore, you must provide a CA when making these changes.
+- Some changes, such as enabling a new component, require issuing new certificates for the component. Therefore, you must include a CA when making these changes.
 
-  - If the Helm chart generated the CA during the initial installation, you must retrieve these automatically generated values from the cluster and provide them to the `helm upgrade` command. The postinstallation notes of the `central-services` Helm chart include a command for retrieving the automatically generated values.
+  - If the Helm chart generated the CA during the initial installation, you must retrieve these automatically generated values from the cluster and pass them to the `helm upgrade` command. The postinstallation notes of the `central-services` Helm chart include a command for retrieving the automatically generated values.
 
-  - If you generated the CA outside of the Helm chart and provided it during the installation of the `central-services` chart, then you must perform that action again when using the `helm upgrade` command, for example, by using the `--reuse-values` flag with the `helm upgrade` command.
+  - If you generated the CA outside of the Helm chart and included it during the installation of the `central-services` chart, then you must perform that action again when using the `helm upgrade` command, for example, by using the `--reuse-values` flag with the `helm upgrade` command.
 
 <div>
 
@@ -799,7 +822,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Linux/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Linux/roxctl${arch}"
     ```
 
 3.  Make the `roxctl` binary executable:
@@ -860,7 +883,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Darwin/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Darwin/roxctl${arch}"
     ```
 
 3.  Remove all extended attributes from the binary:
@@ -921,7 +944,7 @@ Procedure
 - Download the `roxctl` CLI:
 
   ``` terminal
-  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Windows/roxctl.exe
+  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Windows/roxctl.exe
   ```
 
 </div>
@@ -956,7 +979,8 @@ To perform an installation by using the manifest installation method, follow *on
 
 - Use the `roxctl` CLI to generate the required sensor configuration for your OpenShift Container Platform cluster and associate it with your Central instance.
 
-You must have already installed Central services, or you can access Central services by selecting your **ACS instance** on Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service).
+> [!IMPORTANT]
+> You must have already installed Central services, or you can access Central services by selecting your **ACS instance** on Red Hat Advanced Cluster Security Cloud Service (RHACS Cloud Service).
 
 <a id="installing-manifest-web-portal_install-secured-cluster-other"></a>
 

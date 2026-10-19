@@ -98,7 +98,7 @@ The manual remediation steps are typically stored in the `description` attribute
 
 ComplianceCheckResult Status
 
-# Reviewing a remediation
+# Review a remediation
 
 You can review a `ComplianceRemediation` object and the `ComplianceCheckResult` object to understand what a check verifies, its severity and security controls, and how the remediation fixes the issue. After the first scan, check for remediations with the state `MissingDependencies`.
 
@@ -168,7 +168,7 @@ Procedure
 
 </div>
 
-# Applying remediation when using customized machine config pools
+# Apply remediation when using customized machine config pools
 
 When you create a custom `MachineConfigPool`, add a label to the `MachineConfigPool` so that `machineConfigPoolSelector` present in the `KubeletConfig` can match the label with `MachineConfigPool`.
 
@@ -261,7 +261,7 @@ Procedure
 
 </div>
 
-# Evaluating KubeletConfig rules against default configuration values
+# Evaluate KubeletConfig rules against default configuration values
 
 The Compliance Operator uses the Node/Proxy API to evaluate `KubeletConfig` object rules against actual node configurations, preventing inaccurate results caused by incomplete configuration files and default values for missing options.
 
@@ -271,7 +271,7 @@ To prevent false negative results where the default configuration value passes a
 
 No additional configuration changes are required to use this feature with default `master` and `worker` node pools configurations.
 
-# Scanning custom node pools
+# Scan custom node pools
 
 The Compliance Operator does not maintain a copy of each node pool configuration.
 
@@ -346,7 +346,7 @@ Verification
 
 </div>
 
-# Remediating `KubeletConfig` sub pools
+# Remediate `KubeletConfig` sub pools
 
 You can apply `KubeletConfig` remediation labels to `MachineConfigPool` sub-pools.
 
@@ -366,7 +366,7 @@ Procedure
 
 </div>
 
-# Applying a remediation
+# Apply a remediation
 
 The boolean attribute `spec.apply` controls whether the remediation should be applied by the Compliance Operator. You can apply the remediation by setting the attribute to `true`.
 
@@ -400,7 +400,7 @@ Procedure
 
 </div>
 
-# Remediating a platform check manually
+# Remediate a platform check manually
 
 You must manually remediate checks from Platform scans so you can fix findings that the Compliance Operator cannot apply automatically.
 
@@ -464,7 +464,7 @@ Procedure
 
 </div>
 
-# Updating remediations
+# Update remediations
 
 When you update compliance content to a newer version, the Compliance Operator marks previously applied remediations as **Outdated**. Review these remediations and apply the updated versions to ensure your nodes use the latest configuration.
 
@@ -538,7 +538,7 @@ Procedure
 
 </div>
 
-# Unapplying a remediation
+# Unapply a remediation
 
 You can unapply a remediation that was previously applied to roll back a change when you need to revert it.
 
@@ -568,7 +568,7 @@ Procedure
 
 </div>
 
-# Removing a KubeletConfig remediation
+# Remove a KubeletConfig remediation
 
 `KubeletConfig` remediations are included in node-level profiles. To remove a `KubeletConfig` remediation, you must manually remove it from the `KubeletConfig` objects.
 

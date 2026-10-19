@@ -617,7 +617,7 @@ MTC supports the [file system and snapshot data copy methods](about-mtc.md#migra
 
 - If you use a proxy server with an internally hosted replication repository, you must ensure that the proxy allows access to the replication repository.
 
-## Retrieving Multicloud Object Gateway credentials
+## Retrieve Multicloud Object Gateway credentials
 
 > [!NOTE]
 > Although the MCG Operator is [deprecated](https://catalog.redhat.com/software/containers/ocs4/mcg-rhel8-operator/5ddbcefbdd19c71643b56ce9?architecture=amd64&image=64243f5dcd0eb61355af9abd), the MCG plugin is still available for OpenShift Data Foundation. To download the plugin, browse to [Download Red Hat OpenShift Data Foundation](https://access.redhat.com/downloads/content/547/ver=4/rhel---9/4.15.4/x86_64/product-software) and download the appropriate MCG plugin for your operating system.

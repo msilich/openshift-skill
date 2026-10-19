@@ -199,7 +199,7 @@ Additional resources
 
 </div>
 
-# Viewing cluster roles and bindings
+# View cluster roles and bindings
 
 You can view cluster roles and bindings by using the `oc` CLI to determine the permissions associated with roles and identify the users, groups, and service accounts assigned to them.
 
@@ -521,7 +521,7 @@ Procedure
 
 </div>
 
-# Viewing local roles and bindings
+# View local roles and bindings
 
 You can view local role bindings by using the `oc` CLI to identify the users, groups, and service accounts that have roles within the current project or another project.
 
@@ -632,7 +632,7 @@ Procedure
 
 </div>
 
-# Adding roles to users
+# Add roles to users
 
 To grant a user access within a project, you can bind an appropriate role to the user and verify the resulting role binding.
 
@@ -773,7 +773,7 @@ Procedure
 
 </div>
 
-# Creating a local role
+# Create a local role
 
 You can create a local role and bind it to a user to define custom permissions within a project.
 
@@ -815,7 +815,7 @@ Procedure
 
 </div>
 
-# Creating a cluster role
+# Create a cluster role
 
 To define custom cluster-wide permissions, you can create a cluster role that specifies the verbs and resources users can access.
 
@@ -884,7 +884,7 @@ You can also manage cluster role bindings using the following operations. The `-
 
 Cluster role binding operations
 
-# Creating a cluster admin
+# Create a cluster admin
 
 To grant a user full administrative access to the cluster, you can bind the `cluster-admin` cluster role to that user.
 

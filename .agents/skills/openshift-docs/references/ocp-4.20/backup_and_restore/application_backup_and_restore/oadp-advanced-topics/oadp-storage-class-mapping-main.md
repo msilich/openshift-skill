@@ -14,7 +14,7 @@ You can use the `change-storage-class-config` field to change the storage class 
 
 You can use the Migration Toolkit for Containers (MTC) to migrate containers, including application data, from one OpenShift Container Platform cluster to another cluster and for storage class mapping and conversion. You can convert the storage class of a persistent volume (PV) by migrating it within the same cluster. To do so, you must create and run a migration plan in the MTC web console.
 
-## Mapping storage classes with OADP
+## Map storage classes with OADP
 
 Change the storage class of a persistent volume (PV) during a restore by configuring a storage class mapping in the Velero namespace. This helps you customize storage destinations when recovering applications with OADP.
 

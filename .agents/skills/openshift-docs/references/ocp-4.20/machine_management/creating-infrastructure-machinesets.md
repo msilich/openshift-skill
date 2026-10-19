@@ -465,7 +465,9 @@ Specifies the availability set for the cluster.
 
 # Sample YAML for a compute machine set custom resource on IBM Cloud
 
-You can use the sample YAML file to automate the provisioning of compute or infrastructure nodes within a specific Virtual Private Cloud (VPC). The sample YAML defines a compute machine set that runs in a specified IBM Cloud® zone in a region and creates nodes that are labeled with `node-role.kubernetes.io/infra: ""`.
+You can use the sample YAML file to automate the provisioning of compute or infrastructure nodes within a specific Virtual Private Cloud (VPC).
+
+The sample YAML defines a compute machine set that runs in a specified IBM Cloud® zone in a region and creates nodes that are labeled with `node-role.kubernetes.io/infra: ""`.
 
 In the sample, `<infrastructure_id>` is the infrastructure ID label that is based on the cluster ID that you set when you provisioned the cluster, and `<infra>` is the node label to add.
 
@@ -564,7 +566,9 @@ Specifies the taint to prevent user workloads from being scheduled on infra node
 
 # Sample YAML for a compute machine set custom resource on Google Cloud
 
-The sample YAML defines a compute machine set for Google Cloud, enabling the automated provisioning of nodes within a specific VPC. When you apply this configuration by using the OpenShift Container Platform CLI, you can ensure consistent scaling, scheduling, and infrastructure ID labeling for compute resources in your cluster.
+The sample YAML defines a compute machine set for Google Cloud, enabling the automated provisioning of nodes within a specific VPC.
+
+When you apply this configuration by using the OpenShift Container Platform CLI, you can ensure consistent scaling, scheduling, and infrastructure ID labeling for compute resources in your cluster.
 
 The sample YAML defines a compute machine set that runs in Google Cloud and creates nodes that are labeled with `node-role.kubernetes.io/infra: ""`, where `infra` is the node label to add.
 
@@ -1060,7 +1064,7 @@ Specifies a taint to prevent user workloads from being scheduled on infra nodes.
 > [!NOTE]
 > After adding the `NoSchedule` taint on the infrastructure node, existing DNS pods running on that node are marked as `misscheduled`. You must either delete or [add toleration on `misscheduled` DNS pods](https://access.redhat.com/solutions/6592171).
 
-# Creating a compute machine set
+# Create a compute machine set
 
 To dynamically manage machine compute resources, you can create your own compute machine sets in addition to the compute machine sets created by the installation program. Use the OpenShift Container Platform CLI to automate node provisioning.
 
@@ -1200,7 +1204,7 @@ Verification
 
 </div>
 
-# Creating an infrastructure node
+# Create an infrastructure node
 
 To reduce subscription costs, you can use labels to configure compute nodes as infrastructure nodes, where you can move infrastructure resources.
 
@@ -1286,7 +1290,7 @@ Additional resources
 
 </div>
 
-# Creating a machine config pool for infrastructure machines
+# Create a machine config pool for infrastructure machines
 
 You can create a machine configuration pool for infrastructure machines to apply dedicated configuration to infra machines. You might want to apply dedicated configuration to infra machines because they run distinct workloads from other nodes in the cluster.
 
@@ -1457,7 +1461,7 @@ Additional resources
 
 </div>
 
-# Binding infrastructure node workloads using taints and tolerations
+# Bind infrastructure node workloads using taints and tolerations
 
 To avoid user workloads being inadvertently assigned to an infra node, you can apply a taint to the infra node and tolerations for the pods you want to control. After creating an infrastructure machine set, the `worker` and `infra` roles are applied to new infra nodes.
 
@@ -1610,7 +1614,7 @@ Additional resources
 
 </div>
 
-# Moving resources to infrastructure machine sets
+# Move resources to infrastructure machine sets
 
 Some of the infrastructure resources are deployed in your cluster by default. You can move them to the infrastructure machine sets that you created by adding the infrastructure node selector.
 
@@ -1650,7 +1654,7 @@ Procedure
 
 </div>
 
-## Moving the router
+## Move the router
 
 Deploying the router pod on an infrastructure node can reduce your OpenShift Container Platform subscription size. Move the router pod by editing the `IngressController` object in the `openshift-ingress-operator` namespace. By default, the pod is deployed to a worker node.
 
@@ -1819,7 +1823,7 @@ Verification
 
 </div>
 
-## Moving the default registry
+## Move the default registry
 
 Deploying the registry pod on an infrastructure node can reduce your OpenShift Container Platform subscription size. Move the registry pod by editing the `configs.imageregistry.operator.openshift.io/cluster` config object.
 
@@ -1901,9 +1905,11 @@ Verification
 
 </div>
 
-## Moving the monitoring solution
+## Move the monitoring solution
 
-Redeploy the monitoring stack to infrastructure nodes to reduce your subscription requirements. Create and apply a custom config map to move the monitoring stack to infrastructure nodes. The monitoring stack includes Prometheus, Thanos Querier, and Alertmanager, and is managed by the Cluster Monitoring Operator (CMO).
+Redeploy the monitoring stack to infrastructure nodes to reduce your subscription requirements. Create and apply a custom config map to move the monitoring stack to infrastructure nodes.
+
+The monitoring stack includes Prometheus, Thanos Querier, and Alertmanager, and is managed by the Cluster Monitoring Operator (CMO).
 
 <div>
 
@@ -2026,7 +2032,7 @@ Procedure
 
 </div>
 
-## Moving the Vertical Pod Autoscaler Operator components
+## Move the Vertical Pod Autoscaler Operator components
 
 You can move the VPA Operator and component pods to infrastructure nodes by adding a node selector to the VPA subscription and the `VerticalPodAutoscalerController` CR.
 
@@ -2246,7 +2252,7 @@ Verification
 
 </div>
 
-## Moving the Cluster Resource Override Operator pods
+## Move the Cluster Resource Override Operator pods
 
 By default, the Cluster Resource Override Operator installation process creates an Operator pod and two Cluster Resource Override pods on nodes in the `clusterresourceoverride-operator` namespace. You can move these pods to other nodes, such as infrastructure nodes, as needed.
 

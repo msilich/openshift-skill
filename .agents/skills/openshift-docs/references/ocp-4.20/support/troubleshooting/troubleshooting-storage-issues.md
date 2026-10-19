@@ -2,7 +2,7 @@
 
 A multi-attach storage error occurs when the mounting volume on a new node is not possible because the failed node cannot unmount the attached volume. A cluster administrator can resolve multi-attach storage issues by enabling multiple attachments using RWX volumes or recovering/deleting the failed node when using an RWO volume.
 
-# Resolving multi-attach errors
+# Resolve multi-attach errors
 
 When a node crashes or shuts down abruptly, the attached ReadWriteOnce (RWO) volume is expected to be unmounted from the node so that it can be used by a pod scheduled on another node.
 

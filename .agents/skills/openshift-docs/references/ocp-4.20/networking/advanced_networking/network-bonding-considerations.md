@@ -32,7 +32,9 @@ During a failover process, if an active port or its link fails, the bonding logi
 
 ## Enabling OVS balance-slb mode for your cluster
 
-You can enable the Open vSwitch (OVS) `balance-slb` mode so that two or more physical interfaces can share their network traffic. A `balance-slb` mode interface can give source load balancing (SLB) capabilities to a cluster that runs virtualization workloads, without requiring load balancing negotiation with the network switch.
+You can enable the Open vSwitch (OVS) `balance-slb` mode so that two or more physical interfaces can share their network traffic.
+
+A `balance-slb` mode interface can give source load balancing (SLB) capabilities to a cluster that runs virtualization workloads, without requiring load balancing negotiation with the network switch.
 
 Currently, source load balancing runs on a bond interface, where the interface connects to an auxiliary bridge, such as `br-phy`. Source load balancing balances only across different Media Access Control (MAC) address and virtual local area network (VLAN) combinations. Note that all OVN-Kubernetes pod traffic uses the same MAC address and VLAN, so this traffic cannot be load balanced across many physical interfaces.
 
@@ -268,7 +270,9 @@ Procedure
 
 # Kernel bonding
 
-You can use kernel bonding, which is a built-in Linux kernel function where link aggregation can exist among many Ethernet interfaces, to create a single logical physical interface. Kernel bonding allows multiple network interfaces to be combined into a single logical interface, which can enhance network performance by increasing bandwidth and providing redundancy in case of a link failure.
+You can use kernel bonding, which is a built-in Linux kernel function where link aggregation can exist among many Ethernet interfaces, to create a single logical physical interface.
+
+Kernel bonding allows multiple network interfaces to be combined into a single logical interface, which can enhance network performance by increasing bandwidth and providing redundancy in case of a link failure.
 
 Kernel bonding is the default mode if no bond interfaces depend on OVS bonds. This bonding type does not give the same level of customization as supported OVS bonding.
 

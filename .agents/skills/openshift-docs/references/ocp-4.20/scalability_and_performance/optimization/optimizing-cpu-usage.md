@@ -47,7 +47,7 @@ The following diagram illustrates the system state after encapsulation.
 
 - The behavior of Container 2 and Container 3 is unchanged.
 
-# Configuring mount namespace encapsulation
+# Configure mount namespace encapsulation
 
 You can configure mount namespace encapsulation so that a cluster runs with less resource overhead.
 
@@ -262,7 +262,7 @@ Verification
 
 </div>
 
-# Inspecting encapsulated namespaces
+# Inspect encapsulated namespaces
 
 You can inspect Kubernetes-specific mount points in the cluster host operating system for debugging or auditing purposes by using the `kubensenter` script that is available in Red Hat Enterprise Linux CoreOS (RHCOS).
 

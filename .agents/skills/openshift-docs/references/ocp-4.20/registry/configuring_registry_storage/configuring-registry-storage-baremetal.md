@@ -8,7 +8,7 @@ On platforms that do not provide shareable object storage, the OpenShift Image R
 
 After installation, you must edit the Image Registry Operator configuration to switch the `managementState` from `Removed` to `Managed`. When this has completed, you must configure storage.
 
-# Changing the image registry’s management state
+# Change the image registry’s management state
 
 To start the image registry, you must change the Image Registry Operator configuration’s `managementState` from `Removed` to `Managed`.
 
@@ -36,7 +36,7 @@ Configure a persistent volume, which is required for production clusters. Where 
 
 You can also allow the image registry to use block storage types by using the `Recreate` rollout strategy during upgrades.
 
-## Configuring registry storage for bare metal and other manual installations
+## Configure registry storage for bare metal and other manual installations
 
 As a cluster administrator, following installation you must configure your registry to use storage.
 
@@ -158,7 +158,7 @@ Procedure
 
 </div>
 
-## Configuring storage for the image registry in non-production clusters
+## Configure storage for the image registry in non-production clusters
 
 You must configure storage for the Image Registry Operator. For non-production clusters, you can set the image registry to an empty directory, but you lose all images if you restart the registry.
 
@@ -199,7 +199,7 @@ Procedure
 
 </div>
 
-## Configuring block registry storage for bare metal
+## Configure block registry storage for bare metal
 
 To allow the image registry to use block storage types during upgrades as a cluster administrator, you can use the `Recreate` rollout strategy.
 

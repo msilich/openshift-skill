@@ -104,7 +104,7 @@ Procedure
 
 </div>
 
-# Creating OADP service monitor
+# Create OADP service monitor
 
 Create a `ServiceMonitor` resource to scrape Velero metrics from the OADP service endpoint. This helps you collect metrics for monitoring backup and restore operations in the OpenShift Container Platform monitoring stack.
 
@@ -205,7 +205,7 @@ Verification
 
 </div>
 
-# Creating an alerting rule
+# Create an alerting rule
 
 Create a `PrometheusRule` resource to configure alerting rules for OADP backup operations. This helps you receive notifications when backup failures or other issues occur in your environment.
 
@@ -331,7 +331,7 @@ Review the following table for a list of `Velero` metrics provided by OADP toget
 
 Velero metrics
 
-# Viewing metrics using the Observe UI
+# View metrics using the Observe UI
 
 Review metrics in the OpenShift Container Platform web console from the **Administrator** or **Developer** perspective, which must have access to the `openshift-adp` project.
 

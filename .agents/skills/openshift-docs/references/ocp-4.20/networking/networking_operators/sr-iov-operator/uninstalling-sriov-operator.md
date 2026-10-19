@@ -2,7 +2,7 @@
 
 To uninstall the SR-IOV Network Operator, you must delete any running SR-IOV workloads, uninstall the Operator, and delete the webhooks that the Operator used.
 
-# Uninstalling the SR-IOV Network Operator
+# Uninstall the SR-IOV Network Operator
 
 You can remove the SR-IOV Network Operator from your cluster by uninstalling the Operator. This ensures that the Operator and its associated resources are deleted when you no longer need to manage SR-IOV network devices.
 

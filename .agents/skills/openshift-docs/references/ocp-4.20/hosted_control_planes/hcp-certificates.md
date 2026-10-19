@@ -4,7 +4,7 @@ To establish secure and encrypted communication between your clients and the hos
 
 With hosted control planes, the steps to configure certificates differ from those of standalone OpenShift Container Platform.
 
-# Configuring a custom API server certificate in a hosted cluster
+# Configure a custom API server certificate in a hosted cluster
 
 To configure a custom certificate for the API server, specify the certificate details in the `spec.configuration.apiServer` section of your `HostedCluster` configuration.
 
@@ -95,7 +95,7 @@ Verification
 
 </div>
 
-# Configuring the Kubernetes API server for a hosted cluster
+# Configure the Kubernetes API server for a hosted cluster
 
 You can customize the Kubernetes API server for your hosted cluster.
 
@@ -219,7 +219,7 @@ In hosted control planes, the Control Plane Operator reads serving certificates 
 
 OAuth certificate differences between OpenShift Container Platform and hosted control planes
 
-# Configuring OAuth server certificates for a hosted cluster
+# Configure OAuth server certificates for a hosted cluster
 
 If you want to use certificates from a trusted certificate authority (CA) to access a hosted cluster, you can configure OAuth server certificates.
 
@@ -267,33 +267,64 @@ Procedure
         $ export CLUSTER_NAME=<hosted_cluster_name>
         ```
 
-2.  Generate a quick test certificate by entering the following command:
+2.  Discover the correct OAuth route:
+
+    1.  Use the management cluster `kubeconfig` file to enter the following command:
+
+        ``` terminal
+        $ oc get route oauth -n ${HC_NAMESPACE}-${CLUSTER_NAME}
+        ```
+
+    2.  Prepare to extract the OAuth route host by entering the following command:
+
+        ``` terminal
+        $ export OAUTH_HOST=$(oc get route oauth \
+          -n ${HC_NAMESPACE}-${CLUSTER_NAME} \
+          -o jsonpath='{.spec.host}')
+        ```
+
+    3.  Extract the OAuth route host by entering the following command:
+
+        ``` terminal
+        $ echo "${OAUTH_HOST}"
+        ```
+
+        <div class="formalpara">
+
+        <div class="title">
+
+        Example output
+
+        </div>
+
+        ``` terminal
+        oauth-<hosted_cluster_namespace>-<hosted_cluster_name>.apps.<management_cluster_name>.<base_domain>
+        ```
+
+        </div>
+
+3.  Generate a quick test certificate by entering the following command:
 
     ``` terminal
     $ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
       -keyout tls.key \
       -out tls.crt \
       -subj "/CN=openshift-oauth" \
-      -addext "subjectAltName=DNS:oauth-${HC_NAMESPACE}-${CLUSTER_NAME}.api-custom-cert-sample-hosted.sample-hosted.example.com"
+      -addext "subjectAltName=DNS:${OAUTH_HOST}"
     ```
 
-    The `api-custom-cert-sample-hosted.sample-hosted.example.com` value is used in the command and throughout the rest of this procedure as an example.
-
-    > [!NOTE]
-    > This example uses a placeholder hostname. After you discover your OAuth route later in this procedure, you must regenerate this certificate with the correct hostname before you edit the `HostedCluster` resource.
-
-3.  Confirm that the file exists by entering the following command:
+4.  Confirm that the file exists by entering the following command:
 
     ``` terminal
     $ ls tls.crt tls.key
     ```
 
-4.  If you have not already created the TLS secret in the hosted cluster namespace, create the secret by entering the following command:
+5.  If you have not already created the TLS secret in the hosted cluster namespace, create the secret by entering the following command:
 
     ``` terminal
     $ oc create secret tls my-oauth-cert-secret \
-      --cert=path/to/tls.crt \
-      --key=path/to/tls.key \
+      --cert=tls.crt \
+      --key=tls.key \
       -n $HC_NAMESPACE
     ```
 
@@ -313,48 +344,6 @@ Procedure
 
     > [!NOTE]
     > Although the OAuth server runs in the hosted control plane namespace, the serving certificate must exist in the hosted cluster namespace. Secrets that are created in the hosted control plane namespace are not picked up.
-
-5.  Discover the correct OAuth route:
-
-    1.  Use the management cluster `kubconfig` file to enter the following command:
-
-        ``` terminal
-        $ oc get routes -n ${HC_NAMESPACE}-${CLUSTER_NAME}
-        ```
-
-    2.  If the route name is `oauth`, confirm it by entering the following command:
-
-        ``` terminal
-        $ oc get route oauth -n ${HC_NAMESPACE}-${CLUSTER_NAME} -o yaml
-        ```
-
-    3.  Prepare to extract the OAuth route host by entering the following command:
-
-        ``` terminal
-        OAUTH_HOST=$(oc get route oauth \
-          -n ${HC_NAMESPACE}-${CLUSTER_NAME} \
-          -o jsonpath='{.spec.host}')
-        ```
-
-    4.  Extract the OAuth route host by entering the following command:
-
-        ``` terminal
-        $ echo "${OAUTH_HOST}"
-        ```
-
-        <div class="formalpara">
-
-        <div class="title">
-
-        Example output
-
-        </div>
-
-        ``` terminal
-        oauth-${HC_NAMESPACE}-${CLUSTER_NAME}.api-custom-cert-sample-hosted.sample-hosted.example.com
-        ```
-
-        </div>
 
 6.  Edit the `HostedCluster` resource:
 
@@ -380,7 +369,7 @@ Procedure
               servingCerts:
                 namedCertificates:
                 - names:
-                  - api-custom-cert-sample-hosted.sample-hosted.example.com
+                  - oauth-<hosted_cluster_namespace>-<hosted_cluster_name>.apps.<management_cluster_name>.<base_domain>
                   servingCertificate:
                     name: my-oauth-cert-secret
         # ...
@@ -431,7 +420,7 @@ Verification
   subject=CN=openshift-oauth
   issuer=CN=openshift-oauth
   X509v3 Subject Alternative Name:
-      DNS:oauth-${HC_NAMESPACE}-${CLUSTER_NAME}.api-custom-cert-sample-hosted.sample-hosted.example.com
+      DNS:oauth-<hosted_cluster_namespace>-<hosted_cluster_name>.apps.<management_cluster_name>.<base_domain>
   ```
 
   </div>
@@ -440,7 +429,7 @@ Verification
 
 </div>
 
-# Troubleshooting accessing a hosted cluster by using a custom DNS
+# Troubleshoot accessing a hosted cluster by using a custom DNS
 
 If you encounter an issue when you access a hosted cluster by using a custom DNS, you can determine the root cause so that you can resolve the issue.
 

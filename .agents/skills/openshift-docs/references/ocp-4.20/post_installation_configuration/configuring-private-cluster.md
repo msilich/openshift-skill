@@ -33,7 +33,7 @@ On Google Cloud, a single load balancer is created to manage both internal and e
 
 On Microsoft Azure, both public and private load balancers are created. However, because of limitations in current implementation, you just retain both load balancers in a private cluster.
 
-# Configuring DNS records to be published in a private zone
+# Configure DNS records to be published in a private zone
 
 You can remove the public zone from the cluster DNS configuration so that new DNS records are published only to the private zone and remain available to internal clients.
 
@@ -164,7 +164,7 @@ Verification
 
 </div>
 
-# Setting the Ingress Controller to private
+# Set the Ingress Controller to private
 
 You can configure the default Ingress Controller to use an internal endpoint so that application routes are published only in the private DNS zone.
 
@@ -214,9 +214,11 @@ Procedure
 
 </div>
 
-# Restricting the API server to private for an Amazon Web Services cluster
+# Restrict the API server to private for an Amazon Web Services cluster
 
-If the security posture of your organization does not allow clusters to use an open API endpoint, you can restrict the API server to use only internal load balancers. To implement this API server restriction, use the Amazon Web Services (AWS) console and OpenShift CLI (`oc`) to delete the external load balancer components.
+If the security posture of your organization does not allow clusters to use an open API endpoint, you can restrict the API server to use only internal load balancers.
+
+To implement this API server restriction, use the Amazon Web Services (AWS) console and OpenShift CLI (`oc`) to delete the external load balancer components.
 
 > [!IMPORTANT]
 > The OpenShift CLI (`oc`) steps that remove the external load balancers require the Machine API. For clusters that cannot use the Machine API, you must manually remove the external load balancers.
@@ -381,7 +383,7 @@ Additional resources
 
 </div>
 
-# Restricting the API server to private for an Microsoft Azure cluster
+# Restrict the API server to private for an Microsoft Azure cluster
 
 If the security posture of your organization does not allow clusters to use an open API endpoint, you can restrict the API server to use only internal load balancers. To implement this API server restriction, use the Microsoft Azure console to delete the external load balancer component.
 
@@ -437,7 +439,7 @@ Additional resources
 
 </div>
 
-# Configuring a private storage endpoint on Azure
+# Configure a private storage endpoint on Azure
 
 You can configure the Image Registry Operator to use a private Azure storage endpoint so that registry storage is not exposed through a public-facing endpoint.
 
@@ -460,7 +462,7 @@ The following limitations apply when configuring a private storage endpoint on A
 
 - This operation cannot be undone by the Image Registry Operator.
 
-## Configuring a private storage endpoint on Azure by enabling the Image Registry Operator to discover VNet and subnet names
+## Configure a private storage endpoint on Azure by enabling the Image Registry Operator to discover VNet and subnet names
 
 You can configure a private Azure storage endpoint by enabling the Image Registry Operator to discover the VNet and subnet, allowing registry storage without public network access.
 
@@ -615,7 +617,7 @@ Verification
 
 </div>
 
-## Configuring a private storage endpoint on Azure with user-provided VNet and subnet names
+## Configure a private storage endpoint on Azure with user-provided VNet and subnet names
 
 You can configure a private Azure storage endpoint for the image registry by specifying user-provided VNet and subnet names, enabling registry storage without public network access.
 

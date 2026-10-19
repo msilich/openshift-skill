@@ -2,9 +2,11 @@
 
 To gain better visibility into cluster traffic, you can associate secondary interface metrics with specific network attachments. By using the `pod_network_info` metric to label interfaces based on their `NetworkAttachmentDefinition` resource, you can more easily monitor performance and troubleshoot connectivity issues across your network.
 
-# Extending secondary network metrics for monitoring
+# Extend secondary network metrics for monitoring
 
-To monitor and manage network traffic effectively, you can extend secondary network metrics with identifying information. By using the `pod_network_name_info` metric to label interfaces based on their `NetworkAttachmentDefinition` resource, you can classify interface types to enable precise metric aggregation and alerting.
+To monitor and manage network traffic effectively, you can extend secondary network metrics with identifying information.
+
+By using the `pod_network_name_info` metric to label interfaces based on their `NetworkAttachmentDefinition` resource, you can classify interface types to enable precise metric aggregation and alerting.
 
 Secondary devices, or interfaces, are used for different purposes. Metrics from secondary network interfaces need to be classified to allow for effective aggregation and monitoring.
 
@@ -46,15 +48,21 @@ The labels in these metrics contain, among others:
 
 - Interface name (such as `eth0`)
 
-These metrics work well until new interfaces are added to the pod, for example via [Multus](https://github.com/intel/multus-cni), as it is not clear what the interface names refer to.
+These metrics work well until new interfaces are added to the pod, for example via Multus, as it is not clear what the interface names refer to.
 
 The interface label refers to the interface name, but it is not clear what that interface is meant for. In case of many different interfaces, it would be impossible to understand what network the metrics you are monitoring refer to.
 
 This is addressed by introducing the new `pod_network_name_info` described in the following section.
 
+## Additional resources
+
+- [Multus](https://github.com/intel/multus-cni)
+
 # Metrics with network name
 
-To simplify the monitoring of secondary networks, you can use the `pod_network_name_info` metric to correlate network performance data with specific network names. By joining this metric with container network metrics, you can identify traffic patterns and errors across distinct network attachment definitions.
+To simplify the monitoring of secondary networks, you can use the `pod_network_name_info` metric to correlate network performance data with specific network names.
+
+By joining this metric with container network metrics, you can identify traffic patterns and errors across distinct network attachment definitions.
 
 <div class="formalpara">
 
