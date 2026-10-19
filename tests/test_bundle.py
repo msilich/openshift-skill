@@ -118,7 +118,7 @@ class SkillBundleTest(unittest.TestCase):
         )
         self.assertEqual(
             sources["openshift_docs"]["commit"],
-            "3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98",
+            json.loads((ROOT / "tools/docs/build.lock.json").read_text())["sources"]["openshift_docs"]["commit"],
         )
 
     def test_opencode_profiles_are_airgap_scoped(self) -> None:
@@ -409,21 +409,21 @@ class SkillBundleTest(unittest.TestCase):
         docs_skill = SKILLS_ROOT / "openshift-docs"
         docs = docs_skill / "references" / "ocp-4.20"
         source = json.loads((docs / "SOURCE.json").read_text(encoding="utf-8"))
+        build_lock = json.loads((ROOT / "tools/docs/build.lock.json").read_text())
         self.assertEqual(source["artifact"]["version"], "4.20")
         self.assertIn(
             "OpenShift Container Platform 4.20 documentation",
             (docs / "welcome/index.md").read_text(),
         )
         self.assertTrue((docs / "release_notes/ocp-4-20-release-notes.md").is_file())
-        self.assertEqual(source["artifact"]["converted_topics"], 1749)
+        self.assertEqual(source["artifact"]["converted_topics"], build_lock["expected_output"]["converted_topics"])
         self.assertEqual(source["conversion"]["failed_topics"], 0)
         self.assertEqual(
             source["sources"]["openshift_docs"]["commit"],
-            "3d4fc17cc6638735acdf8ccfcfe7b183b9fdab98",
+            build_lock["sources"]["openshift_docs"]["commit"],
         )
         markdown_files = sorted(docs.rglob("*.md"))
-        self.assertEqual(len(markdown_files), 1751)
-        build_lock = json.loads((ROOT / "tools/docs/build.lock.json").read_text())
+        self.assertEqual(len(markdown_files), build_lock["expected_output"]["markdown_files"])
         source_lock = json.loads((ROOT / "sources.lock.json").read_text())
         self.assertEqual(source["sources"], build_lock["sources"])
         self.assertEqual(source["artifact"]["version"], source_lock["documentation_version"])

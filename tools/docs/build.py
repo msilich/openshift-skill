@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
-from convert import get_distro_attributes, parse_distro_map
+from convert import collect_topics, get_distro_attributes, parse_distro_map, parse_topic_map, should_include_topic
 
 
 TOOLS_DIR = Path(__file__).resolve().parent
@@ -129,6 +129,15 @@ def document_definition(lock: dict) -> dict:
     if document["branch"] != lock["sources"]["openshift_docs"]["branch_hint"]:
         raise RuntimeError("document branch and source branch_hint disagree")
     return document
+
+
+def source_topic_count(source_dir: Path, distro: str) -> int:
+    count = sum(len(collect_topics(group.get("Topics", []), group.get("Dir", ""), distro))
+                for group in parse_topic_map(str(source_dir))
+                if group and should_include_topic(group, distro))
+    if count < 1:
+        raise RuntimeError("source topic map is empty")
+    return count
 
 
 def post_process(output_dir: Path, product: str = "OpenShift Container Platform") -> None:
@@ -291,6 +300,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source-dir", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--refresh-lock", action="store_true", help="Maintainer operation: record new expected output after validating the complete source topic map")
     return parser.parse_args()
 
 
@@ -340,7 +350,9 @@ def main() -> int:
         if not summary:
             raise RuntimeError("converter did not emit a conversion summary")
         successful_topics, failed_topics = map(int, summary.groups())
-        expected_topics = int(lock["expected_output"]["converted_topics"])
+        expected_topics = source_topic_count(source_dir, definition["distro"])
+        if not args.refresh_lock and expected_topics != int(lock["expected_output"]["converted_topics"]):
+            raise RuntimeError("source topic count does not match the build lock")
         if failed_topics or successful_topics != expected_topics:
             raise RuntimeError(
                 f"unexpected conversion result: {successful_topics} succeeded, "
@@ -356,8 +368,10 @@ def main() -> int:
         shutil.copy2(CONVERTER_LICENSE_PATH, staged_output / "LICENSE.agentic-skills")
         markdown_files, manifest_sha256 = markdown_manifest(staged_output)
 
-        expected_files = int(lock["expected_output"]["markdown_files"])
-        expected_manifest = str(lock["expected_output"]["markdown_manifest_sha256"])
+        measured = {"converted_topics": successful_topics, "markdown_files": markdown_files,
+                    "markdown_manifest_sha256": manifest_sha256}
+        expected_files = expected_topics + 2 if args.refresh_lock else int(lock["expected_output"]["markdown_files"])
+        expected_manifest = manifest_sha256 if args.refresh_lock else str(lock["expected_output"]["markdown_manifest_sha256"])
         if markdown_files != expected_files:
             raise RuntimeError(
                 f"generated {markdown_files} Markdown files; expected {expected_files}"
@@ -387,6 +401,9 @@ def main() -> int:
             metadata["conversion"]["modifications"].append("RHACS-only: retain explicit anchors, verify code/table round trips, bundle images and record missing source links/fragments and external references in CONVERSION.json.")
             metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
         replace_output(staged_output, output_dir, definition)
+        if args.refresh_lock:
+            lock["expected_output"] = measured
+            args.lock.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
     finally:
         shutil.rmtree(staging_root, ignore_errors=True)
 
