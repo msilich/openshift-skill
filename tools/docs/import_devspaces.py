@@ -11,12 +11,15 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import hashlib
+from http.client import IncompleteRead
 from importlib.metadata import version
 import json
 from pathlib import Path
 import re
 import subprocess
 import sys
+import time
+from urllib.error import HTTPError, URLError
 from urllib.parse import unquote, urldefrag, urljoin, urlsplit
 from urllib.request import Request, urlopen
 import zipfile
@@ -25,6 +28,7 @@ from bs4 import BeautifulSoup
 
 HERE = Path(__file__).resolve().parent
 IMPORTER_VERSION = "1"
+DOWNLOAD_ATTEMPTS = 4
 
 
 def digest(data):
@@ -93,17 +97,35 @@ def download(url, cache):
         return data, meta
     # The public CC license endpoint rejects urllib's default user-agent.
     request = Request(url, headers={"User-Agent": "curl/8.7.1"}) if urlsplit(url).hostname == "creativecommons.org" else url
-    with urlopen(request, timeout=45) as response:
-        final = response.url
-        if urlsplit(final).hostname != urlsplit(url).hostname:
-            raise ValueError(f"Cross-host redirect requires review: {url} -> {final}")
-        data = response.read(20 * 1024 * 1024 + 1)
-        if len(data) > 20 * 1024 * 1024:
-            raise ValueError(f"Source exceeds 20 MiB limit: {url}")
-        meta = {"url": url, "final_url": final,
-                "retrieved_at": datetime.now(timezone.utc).isoformat(),
-                "content_type": response.headers.get("Content-Type", ""),
-                "response_sha256": digest(data)}
+    for attempt in range(1, DOWNLOAD_ATTEMPTS + 1):
+        try:
+            with urlopen(request, timeout=45) as response:
+                final = response.url
+                if urlsplit(final).hostname != urlsplit(url).hostname:
+                    raise ValueError(f"Cross-host redirect requires review: {url} -> {final}")
+                data = response.read(20 * 1024 * 1024 + 1)
+                if len(data) > 20 * 1024 * 1024:
+                    raise ValueError(f"Source exceeds 20 MiB limit: {url}")
+                meta = {"url": url, "final_url": final,
+                        "retrieved_at": datetime.now(timezone.utc).isoformat(),
+                        "content_type": response.headers.get("Content-Type", ""),
+                        "response_sha256": digest(data)}
+            break
+        except (TimeoutError, ConnectionError, IncompleteRead, URLError) as error:
+            retryable = isinstance(error, (TimeoutError, ConnectionError, IncompleteRead))
+            if isinstance(error, HTTPError):
+                retryable = error.code in (408, 429, 500, 502, 503, 504)
+                error.close()
+            elif isinstance(error, URLError):
+                retryable = isinstance(error.reason, (TimeoutError, ConnectionError))
+            if not retryable:
+                raise
+            if attempt == DOWNLOAD_ATTEMPTS:
+                raise RuntimeError(f"Download failed after {attempt} attempts: {url}: {error}") from error
+            delay = 2 ** attempt
+            print(f"Retrying download {attempt + 1}/{DOWNLOAD_ATTEMPTS} in {delay}s: {url}: {error}",
+                  file=sys.stderr, flush=True)
+            time.sleep(delay)
     body_path.write_bytes(data)
     meta_path.write_bytes(encoded(meta))
     return data, meta
@@ -152,7 +174,7 @@ def fetch(lock, cache, archive):
         if len(seen) + len(batch) > 1500:
             raise ValueError("Unexpected topic closure size; review the inventory")
         pending = set()
-        with ThreadPoolExecutor(max_workers=6) as pool:
+        with ThreadPoolExecutor(max_workers=3) as pool:
             for url, metadata, content, title in pool.map(read_topic, batch):
                 seen.add(url)
                 slug = local_topic(url, doc)
