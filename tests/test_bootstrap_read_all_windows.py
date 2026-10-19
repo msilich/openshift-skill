@@ -22,6 +22,7 @@ def find_powershell() -> str | None:
     return shutil.which("pwsh") or shutil.which("powershell")
 
 
+@unittest.skipUnless(os.name == "nt", "requires Windows")
 class BootstrapReadAllWindowsTests(unittest.TestCase):
     def setUp(self) -> None:
         self.powershell = find_powershell()
