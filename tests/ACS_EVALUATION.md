@@ -2,13 +2,13 @@
 
 ## Documentation and static checks
 
-RHACS 4.11 uses the complete 225-topic `openshift-acs` map at
-`e516555e0cb6bcc6ba88c423e88c8dd054532425`, including all REST services and the
-common object reference. The build produces 227 Markdown files and 9 source images.
-The RHACS-only converter compares 836 code blocks and 1,960 tables through a
+RHACS 4.11 uses the complete `openshift-acs` map pinned in `tools/docs/acs.lock.json`,
+including all REST services and the common object reference. Exact topic/file
+counts, images and source revision are recorded in SOURCE.json and CONVERSION.json.
+The RHACS-only converter compares code blocks and tables through a
 DocBook -> GFM -> rendered HTML -> AST round trip. It compares code values and
 table cell text; layout and table captions can be represented differently.
-The final bundled Markdown is parsed again after link rewriting; all 225 topics
+The final bundled Markdown is parsed again after link rewriting; all topics
 must still match the pre-rewrite code-value and table-text hashes.
 Credential-shaped Slack webhook examples from the source are replaced with
 placeholders before the comparison and marked in the affected chapter and report.
@@ -18,7 +18,7 @@ text. Explicit section anchors are retained and required images are local.
 
 The local link check covers both Markdown and raw HTML links, local fragments and
 image paths. `CONVERSION.json` inventories every topic, image hash, external URL,
-conversion warning and unresolved reference. The pinned snapshot has 262 distinct
+conversion warning and unresolved reference. The original September 2026 snapshot had 262 distinct
 external references, 183 fragment adjustments and one missing upstream target:
 `installing/acs-default-requirements.md` links to the absent legacy
 `installing/installing-rhacs-on-red-hat-openshift` topic. Missing fragments fall

@@ -706,13 +706,13 @@ resources technically. It is not enabled automatically.
 
 ## Offline OCP 4.22 documentation
 
-The `openshift-docs` skill contains 1,797 converted OCP 4.22 topics and requires
+The `openshift-docs` skill contains the complete converted OCP 4.22 topic map and requires
 no network access at runtime. Provenance, exact commits, licenses, conversion
 details, and the content manifest are recorded in
 `.agents/skills/openshift-docs/references/ocp-4.22/SOURCE.json`.
 
 The snapshot is pinned to `openshift/openshift-docs` branch `enterprise-4.22`,
-commit `d8cc5bae880cc93ecd22fecd660c1b3a7f1358ff` (September 7, 2026).
+commit `d8cc5bae880cc93ecd22fecd660c1b3a7f1358ff`.
 The converter includes a small local correction: this source revision's distro
 map lacks a 4.22 entry, so the product version is derived from the explicit
 `enterprise-4.22` branch instead of silently using the upstream 4.17 fallback.
@@ -733,7 +733,7 @@ complete Markdown content manifest against `tools/docs/build.lock.json`.
 
 ## Offline GitOps documentation and procedure sources
 
-Both OCP branches additionally bundle all 56 GitOps 1.21 topics (58 Markdown files)
+Both OCP branches additionally bundle the complete GitOps 1.21 topic map
 from `openshift/openshift-docs` at `ca5db8539a097b38e2975980963e0959782d105f`.
 GitOps 1.21 is a separate product baseline, not inferred from the OCP version.
 Use `search_docs.py "repo server" --product gitops`; the default search remains OCP.
@@ -759,8 +759,8 @@ the API actually served by the cluster is authoritative.
 
 ## Offline Dev Spaces 3.29
 
-Both OCP branches include the same official Dev Spaces 3.29 HTML snapshot: all 302
-table-of-contents topics and 46 illustrations. Use `$openshift-devspaces` for platform
+Both OCP branches include an official Dev Spaces 3.29 HTML snapshot with the full
+table of contents and referenced illustrations. Use `$openshift-devspaces` for platform
 and workspace operations, or search the documentation without accessing a cluster:
 
 ```bash
@@ -793,7 +793,7 @@ python3 tools/docs/import_devspaces.py fetch \
   --cache-dir /path/to/new-response-cache --archive /path/to/new-devspaces-source.zip
 ```
 
-A new archive requires explicit review and a new lock checksum; it cannot silently
+A new archive requires review and a new lock checksum; it cannot silently
 replace the pinned input. Build and compare two outputs before publishing an update.
 Raw response caches are preparation artifacts and are not installed. The installed
 skills need neither Pandoc nor the importer dependencies and perform no downloads.
@@ -801,6 +801,57 @@ skills need neither Pandoc nor the importer dependencies and perform no download
 Dev Spaces documentation and the new skill's adapted text use CC BY-SA 3.0, unlike
 the Apache-licensed OCP/GitOps snapshots. The complete legal notice, license and
 per-topic source URLs are retained; see [third-party notices](THIRD_PARTY_NOTICES.md).
+
+## Automated documentation update PRs
+
+[Documentation maintenance](.github/workflows/documentation.yml) runs every Monday
+at 05:23 UTC and can also be started from GitHub Actions with **Run workflow**.
+The scheduled workflow lives on the default branch and checks `main` and `v4.22`
+as separate jobs. Each branch keeps the product versions in its build locks:
+OCP 4.20 or 4.22, GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11. Moving to another
+product version requires a separate reviewed change.
+
+The updater checks the selected upstream Git branches and fetches a fresh versioned
+Dev Spaces HTML inventory. It builds changed candidates twice and compares every
+output file, checks topic coverage and local links, and updates the source locks,
+skill source maps and notices together. Dev Spaces retrieval timestamps alone do
+not cause an update PR. Removed chapters still referenced by a skill fail the test
+suite and require maintainer intervention. Source gaps and external references
+remain visible in provenance and the PR report.
+
+After the offline test suite passes, the workflow creates or refreshes one PR per
+base branch using the reserved `automation/docs-main` and `automation/docs-v4.22`
+branches. Do not edit those branches manually: each run replaces their generated
+contents using a Git lease. PRs are not automatically merged. Review changed
+procedures and the source/quality reports before merging; repeatable conversion
+does not certify the advice or evaluate Qwen.
+
+Enable **Settings → Actions → General → Workflow permissions → Allow GitHub Actions
+to create and approve pull requests** for the repository. The workflow requests
+`contents: write` and `pull-requests: write` only for the update job; validation runs
+with read access. No personal access token is required. Depending on GitHub's
+repository policy, PR checks created with `GITHUB_TOKEN` can require approval to run;
+the update job already runs the same tests before opening the PR.
+See [GitHub's token-trigger rules](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
+Scheduled workflows in inactive public repositories can be disabled after 60 days;
+check the Actions page if expected runs stop.
+
+For connected maintainer use with the pinned build dependencies installed:
+
+```bash
+python3 tools/docs/update.py --report /path/to/update-report.md
+# Or refresh only one product:
+python3 tools/docs/update.py --product gitops
+```
+
+This command updates the checkout after all selected builds succeed. Run it in a
+clean checkout, inspect the diff and run the test suite before committing. Build
+failures stop the job before a PR is published. The automation refreshes source
+revisions within the fixed product versions; it does not rewrite skill instructions,
+upgrade OpenCode/MCP binaries or change permission profiles. Installed customer
+skills remain offline and are updated separately with the installer after transfer
+of a reviewed repository revision. The Dev Spaces installer HOME check is separate
+from this documentation workflow.
 
 ## Validation
 

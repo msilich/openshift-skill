@@ -22,6 +22,7 @@ def find_powershell() -> str | None:
     return shutil.which("pwsh") or shutil.which("powershell")
 
 
+@unittest.skipUnless(os.name == "nt", "requires Windows")
 class BootstrapReadAllWindowsTests(unittest.TestCase):
     def setUp(self) -> None:
         self.powershell = find_powershell()
@@ -220,21 +221,21 @@ class BootstrapReadAllWindowsTests(unittest.TestCase):
 
             preview = self.run_phase("Preview", admin, ca, output, log, harness)
             self.assertEqual(preview.returncode, 0, preview.stderr)
-            self.assertIn('"PersistentChanges":  "none"', preview.stdout)
+            self.assertRegex(preview.stdout, r'"PersistentChanges":\s*"none"')
             self.assertFalse(output.exists())
 
             apply_rbac = self.run_phase(
                 "ApplyRbac", admin, ca, output, log, harness
             )
             self.assertEqual(apply_rbac.returncode, 0, apply_rbac.stderr)
-            self.assertIn('"CredentialCreated":  false', apply_rbac.stdout)
+            self.assertRegex(apply_rbac.stdout, r'"CredentialCreated":\s*false\b')
             self.assertFalse(output.exists())
 
             create = self.run_phase(
                 "CreateKubeconfig", admin, ca, output, log, harness
             )
             self.assertEqual(create.returncode, 0, create.stderr)
-            self.assertIn('"BootstrapCompleted":  true', create.stdout)
+            self.assertRegex(create.stdout, r'"BootstrapCompleted":\s*true\b')
             self.assertTrue(output.exists())
             self.assertNotIn(
                 "fake-service-account-token",
