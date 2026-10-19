@@ -10,11 +10,11 @@ The importer code remains under the repository's code license.
 
 Source: [official 3.29 documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29).
 No public product Git revision is asserted. The original HTML document fragments
-and illustrations were retrieved on September 7, 2026 and pinned in an archive:
+and illustrations are pinned in an archive:
 `995e09d2a2796f05c9285d54c79be3bc373552efb2536468f3df2dcb3d2621a2` (SHA-256).
 Every URL, retrieval time, HTTP-response hash and retained-fragment hash is in
 [SOURCE.json](../../openshift-docs/references/devspaces-3.29/SOURCE.json).
-This covers all 302 HTML TOC topics, not external websites referenced by those topics.
+This covers the complete versioned HTML TOC, not external websites referenced by those topics.
 
 The links below are relative to this file. Open the listed chapter and its relevant
 section before using a procedure; follow its local child-topic links as needed.

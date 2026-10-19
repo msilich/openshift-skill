@@ -71,6 +71,15 @@ def local_topic(url, doc):
     return slug
 
 
+def permitted_image(url, doc):
+    parts = urlsplit(url)
+    # The current Red Hat portal serves versioned illustrations from this CDN.
+    return parts.scheme == "https" and (parts.netloc == "docs.redhat.com" or (
+        parts.netloc == "d2b7uw8yp7hpzk.cloudfront.net"
+        and parts.path.startswith(urlsplit(doc["base_url"]).path + "images/")
+    ))
+
+
 def download(url, cache):
     """Resumable connected preparation; never used by build/verify."""
     if urlsplit(url).scheme != "https":
@@ -106,7 +115,7 @@ def fetch(lock, cache, archive):
     if archive.exists():
         raise ValueError("Archive already exists; choose a new output path")
     page, meta = download(doc["toc_url"], cache)
-    toc = soup(page).select_one("#desktop-toc")
+    toc = soup(page).select_one("#desktop-toc, nav#toc.table-of-contents")
     if toc is None:
         raise ValueError("Full desktop table of contents is missing")
     inventory = sorted({urldefrag(urljoin(doc["toc_url"], a["href"]))[0]
@@ -157,7 +166,7 @@ def fetch(lock, cache, archive):
                         external.add(target)
                 for img in content.select("img[src]"):
                     target = urljoin(url, img["src"])
-                    if urlsplit(target).hostname != "docs.redhat.com":
+                    if not permitted_image(target, doc):
                         raise ValueError(f"External image requires review: {target}")
                     asset_urls.add(target)
         print(f"Fetched {len(seen)} topics; {len(pending - seen)} additional references", flush=True)

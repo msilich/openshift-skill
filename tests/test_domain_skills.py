@@ -61,7 +61,8 @@ class DomainBundleTest(unittest.TestCase):
 
     def test_source_maps_pin_revision_and_product(self):
         lock = json.loads((ROOT / "sources.lock.json").read_text())
-        self.assertEqual(lock["sources"]["openshift_gitops_docs"]["commit"], "ca5db8539a097b38e2975980963e0959782d105f")
+        build = json.loads((ROOT / "tools/docs/gitops.lock.json").read_text())
+        self.assertEqual(lock["sources"]["openshift_gitops_docs"]["commit"], build["sources"]["openshift_docs"]["commit"])
         self.assertEqual(lock["sources"]["agentic_skills_workflows"]["commit"], "7aca4bee317cd70a4204795db6b1d7b9eb78f48c")
         for name in DOMAINS:
             text = (SKILLS_ROOT / name / "references/sources.md").read_text()

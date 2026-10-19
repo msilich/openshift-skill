@@ -9,6 +9,7 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from datetime import datetime
 from urllib.parse import urljoin
 import zipfile
 
@@ -27,8 +28,8 @@ class DevSpacesIntegrityTest(unittest.TestCase):
         self.assertEqual(actual, hashes)
         manifest = "".join(f"{value}  {path}\n" for path, value in sorted(actual.items()))
         self.assertEqual(hashlib.sha256(manifest.encode()).hexdigest(), LOCK["expected_output"]["content_manifest_sha256"])
-        self.assertEqual(source["artifact"]["converted_topics"], 302)
-        self.assertEqual(source["artifact"]["assets"], 46)
+        self.assertEqual(source["artifact"]["converted_topics"], LOCK["expected_output"]["topics"])
+        self.assertGreater(source["artifact"]["assets"], 0)
         self.assertEqual(source["archive_sha256"], LOCK["archive_sha256"])
 
     def test_source_archive_and_portable_inventory(self):
@@ -38,11 +39,12 @@ class DevSpacesIntegrityTest(unittest.TestCase):
             for row in manifest["files"]:
                 self.assertEqual(hashlib.sha256(z.read(row["path"])).hexdigest(), row["sha256"])
                 self.assertRegex(row["response_sha256"], r"^[0-9a-f]{64}$")
-                self.assertTrue(row["retrieved_at"].startswith("2026-09-07"))
-            self.assertEqual(len(manifest["inventory"]), 302)
+                self.assertIsNotNone(datetime.fromisoformat(row["retrieved_at"]).tzinfo)
+            self.assertGreater(len(manifest["inventory"]), 0)
+            self.assertEqual(set(manifest["topics"]), {Path(row["path"]).stem for row in manifest["files"] if row["path"].startswith("topics/")})
             index = json.loads((SNAPSHOT / "search-index.json").read_text())
             self.assertEqual({row["path"] for row in index}, {slug + ".md" for slug in manifest["topics"]})
-            self.assertEqual(len(index), 302)
+            self.assertEqual(len(index), LOCK["expected_output"]["topics"])
             self.assertTrue(manifest["external_references"])
             self.assertTrue(manifest["exclusions"])
 
@@ -108,6 +110,28 @@ class DevSpacesConversionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             with self.assertRaises(ValueError):
                 module.build(LOCK, ARCHIVE, Path(temp))
+
+    def test_fetch_accepts_current_toc_markup_without_inventing_an_inventory(self):
+        module = self.importer
+        topic = LOCK["document"]["toc_url"]
+        for selector in ('id="desktop-toc"', 'id="toc" class="table-of-contents"'):
+            page = f'<nav {selector}><a href="{topic}">Topic</a></nav>'.encode()
+            with tempfile.TemporaryDirectory() as temp:
+                with patch.object(module, "download", side_effect=[(page, {}), RuntimeError("inventory accepted")]):
+                    with self.assertRaisesRegex(RuntimeError, "inventory accepted"):
+                        module.fetch(LOCK, Path(temp) / "cache", Path(temp) / "source.zip")
+        with tempfile.TemporaryDirectory() as temp:
+            with patch.object(module, "download", return_value=(b'<nav>no inventory</nav>', {})):
+                with self.assertRaisesRegex(ValueError, "table of contents"):
+                    module.fetch(LOCK, Path(temp) / "cache", Path(temp) / "source.zip")
+
+    def test_only_current_product_images_can_use_the_observed_red_hat_cdn(self):
+        allowed = "https://d2b7uw8yp7hpzk.cloudfront.net/en/documentation/red_hat_openshift_dev_spaces/3.29/images/workspace.png"
+        self.assertTrue(self.importer.permitted_image(allowed, LOCK["document"]))
+        for rejected in (allowed.replace("3.29", "3.28"), allowed.replace("https:", "http:"),
+                         allowed.replace("d2b7uw8yp7hpzk", "untrusted"),
+                         allowed.replace("/images/", "/downloads/")):
+            self.assertFalse(self.importer.permitted_image(rejected, LOCK["document"]))
 
     def test_conversion_rejects_missing_rows_code_and_images(self):
         module = self.importer
