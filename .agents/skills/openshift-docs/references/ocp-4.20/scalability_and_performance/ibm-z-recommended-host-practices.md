@@ -7,9 +7,9 @@ The s390x architecture is unique in many aspects. Some host practice recommendat
 > [!NOTE]
 > Unless stated otherwise, the host practices apply to both z/VM and Red Hat Enterprise Linux (RHEL) KVM installations on IBM Z® and IBM® LinuxONE.
 
-# Managing CPU overcommitment
+# Manage CPU overcommitment
 
-To optimize infrastructure sizing in a highly virtualized IBM Z environment, manage CPU overcommitment. By adopting this strategy, you can allocate more resources to virtual machines than are physically available at the hypervisor level. This capability requires that you plan carefully for specific workload dependencies.
+Manage CPU overcommitment to optimize infrastructure sizing in a virtualized IBM Z environment. This strategy allocates more resources to virtual machines than are physically available, but requires careful workload planning.
 
 Depending on your setup, consider the following best practices regarding CPU overcommitment:
 
@@ -47,7 +47,7 @@ To prevent the operating system from automatically managing memory segments, dis
 
 Transparent Huge Pages (THP) tries to automate most aspects of creating, managing, and using huge pages. Since THP automatically manages the huge pages, THP does not always handle optimally for all types of workloads. THP can lead to performance regressions, since many applications handle huge pages on their own.
 
-# Boosting networking performance with RFS
+# Boost networking performance with RFS
 
 To boost networking performance, activate Receive Flow Steering (RFS) by using the Machine Config Operator (MCO). This configuration improves packet processing efficiency.
 
@@ -162,7 +162,7 @@ Additional resources
 
 # Ensure high disk performance with HyperPAV on z/VM
 
-To improve I/O performance for Direct Access Storage Devices (DASD) disks in z/VM environments, configure HyperPAV alias devices. To increase throughput for both control plane nodes and compute nodes, add YAML configurations with full-pack minidisks to the Machine Config Operator (MCO) profiles for IBM Z clusters.
+To improve I/O performance for Direct Access Storage Devices (DASD) disks in z/VM, configure HyperPAV alias devices. To increase control plane and compute node throughput, add YAML configurations with full-pack minidisks to Machine Config Operator (MCO) profiles for IBM Z clusters.
 
 DASD and Extended Count Key Data (ECKD) devices are commonly used disk types in IBM Z® environments. In a typical OpenShift Container Platform setup in z/VM environments, DASD disks are commonly used to support the local storage for the nodes. You can set up HyperPAV alias devices to provide more throughput and overall better I/O performance for the DASD disks that support the z/VM guests.
 
@@ -340,7 +340,7 @@ Example configuration
 
 </div>
 
-## Excluding the memory balloon device
+## Exclude the memory balloon device
 
 Unless you need a dynamic memory size, do not define a memory balloon device and ensure that libvirt does not create one for you. Include the `memballoon` parameter as a child of the devices element in your domain configuration file.
 
@@ -360,7 +360,7 @@ Procedure
 
 </div>
 
-## Tuning the CPU migration algorithm of the host scheduler
+## Tune the CPU migration algorithm of the host scheduler
 
 You can tune the CPU migration algorithm of the host scheduler to meet the demands of your production system.
 
@@ -393,7 +393,7 @@ Procedure
 
 </div>
 
-## Disabling the cpuset cgroup controller
+## Disable the cpuset cgroup controller
 
 You can disable the cpuset cgroup controller. Disabling the controller requires a restart of the libvirtd daemon.
 
@@ -436,7 +436,7 @@ Procedure
 
 </div>
 
-## Tuning the polling period for idle virtual CPUs
+## Tune the polling period for idle virtual CPUs
 
 When a virtual CPU becomes idle, KVM polls for wakeup conditions for the virtual CPU before allocating the host resource. You can specify the time interval, during which polling takes place in sysfs at `/sys/module/kvm/parameters/halt_poll_ns`.
 

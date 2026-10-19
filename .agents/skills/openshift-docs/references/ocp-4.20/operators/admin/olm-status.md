@@ -31,7 +31,7 @@ Additional resources
 
 </div>
 
-# Viewing Operator subscription status by using the CLI
+# View Operator subscription status by using the CLI
 
 You can view Operator subscription status by using the CLI.
 
@@ -103,7 +103,7 @@ Procedure
 
 </div>
 
-# Viewing Operator catalog source status by using the CLI
+# View Operator catalog source status by using the CLI
 
 You can view the status of an Operator catalog source by using the CLI.
 

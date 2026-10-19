@@ -11,7 +11,7 @@ The importer code remains under the repository's code license.
 Source: [official 3.29 documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_dev_spaces/3.29).
 No public product Git revision is asserted. The original HTML document fragments
 and illustrations are pinned in an archive:
-`995e09d2a2796f05c9285d54c79be3bc373552efb2536468f3df2dcb3d2621a2` (SHA-256).
+`32434c757a894ef6f321b8fb6f3a2ce1ae1960105f2a1a43a137382e9e56d169` (SHA-256).
 Every URL, retrieval time, HTTP-response hash and retained-fragment hash is in
 [SOURCE.json](../../openshift-docs/references/devspaces-3.29/SOURCE.json).
 This covers the complete versioned HTML TOC, not external websites referenced by those topics.

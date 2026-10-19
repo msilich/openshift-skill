@@ -41,11 +41,25 @@ You can modify the following subsystems by using sysctls:
 
 - MDADM (common prefix: `dev.`)
 
-Refer to the [Kernel.org documentation](https://www.kernel.org/doc/Documentation/sysctl/README) for more information on the subsystems you can manage. You can get a list of all parameters by running the following command:
+For more information on the subsystems you can manage, see "Kernel.org documentation".
+
+You can get a list of all parameters by running the following command:
 
 ``` terminal
 $ sudo sysctl -a
 ```
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Kernel.org documentation](https://www.kernel.org/doc/Documentation/sysctl/README)
+
+</div>
 
 # Namespaced and node-level sysctls
 
@@ -242,7 +256,7 @@ OpenShift Container Platform adds the following system-wide and interface-specif
 
 - [Configuring ingress cluster traffic using a NodePort](../../networking/ingress_load_balancing/configuring_ingress_cluster_traffic/configuring-ingress-cluster-traffic-nodeport.md#configuring-ingress-cluster-traffic-nodeport)
 
-# Updating the interface-specific safe sysctls list
+# Update the interface-specific safe sysctls list
 
 You can modify the default list of safe interface-specific `sysctls` by updating the `cni-sysctl-allowlist` in the `openshift-multus` namespace.
 
@@ -491,7 +505,7 @@ Verification
 
 </div>
 
-# Starting a pod with safe sysctls
+# Start a pod with safe sysctls
 
 You can modify kernel parameters for all containers in a pod by adding the sysctls parameter to the `securityContext` parameter in a pod spec.
 
@@ -642,7 +656,7 @@ Verification
 
 </div>
 
-# Starting a pod with unsafe sysctls
+# Start a pod with unsafe sysctls
 
 You can run a pod that is configured to use unsafe sysctls on a node where a cluster administrator explicitly enabled unsafe sysctls. You might use unsafe sysctls for situations such as high performance or real-time application tuning.
 
@@ -723,7 +737,7 @@ Procedure
 
 </div>
 
-# Enabling unsafe sysctls
+# Enable unsafe sysctls
 
 As a cluster administrator, you can allow certain unsafe sysctls for very special situations such as high performance or real-time application tuning.
 

@@ -6,6 +6,24 @@ The Secondary Scheduler Operator allows you to deploy a custom secondary schedul
 
 For more information, see [About the Secondary Scheduler Operator](index.md#nodes-secondary-scheduler-about_nodes-secondary-scheduler-about).
 
+# Release notes for Secondary Scheduler Operator for Red Hat OpenShift 1.5.2
+
+Review the release notes for Secondary Scheduler Operator 1.5.2 to learn what is new and updated with this release.
+
+Issued: 9 September 2026
+
+The following advisory is available for the Secondary Scheduler Operator for Red Hat OpenShift 1.5.2:
+
+- [RHBA-2026:65924](https://access.redhat.com/errata/RHBA-2026:65924)
+
+## New features and enhancements
+
+- This release rebuilds the base image for the Secondary Scheduler Operator to improve its image grade.
+
+## Known issues
+
+- Currently, you cannot deploy additional resources, such as config maps, CRDs, or RBAC policies through the Secondary Scheduler Operator. Any resources other than roles and role bindings that are required by your custom secondary scheduler must be applied externally. ([WRKLDS-645](https://issues.redhat.com/browse/WRKLDS-645))
+
 # Release notes for Secondary Scheduler Operator for Red Hat OpenShift 1.5.1
 
 Review the release notes for Secondary Scheduler Operator 1.5.1 to learn what is new and updated with this release.

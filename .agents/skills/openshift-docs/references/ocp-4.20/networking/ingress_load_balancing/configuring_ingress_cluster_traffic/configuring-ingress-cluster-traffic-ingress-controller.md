@@ -14,7 +14,7 @@ Before you begin any of the procedures that are listed in the Configuring ingres
 
 - You have an OpenShift Container Platform cluster with at least one master and at least one node and a system outside the cluster that has network access to the cluster. This procedure assumes that the external system is on the same subnet as the cluster. The additional networking required for external systems on a different subnet is out-of-scope for this topic.
 
-# Using Ingress Controllers and routes
+# Use Ingress Controllers and routes
 
 You can use the Ingress Controller to allow external access to an OpenShift Container Platform cluster. The Ingress Operator manages Ingress Controllers and wildcard DNS.
 
@@ -305,7 +305,7 @@ In the previous scenario, sharding becomes a special case of partitioning, with 
 
 ## Overlapped sharding example
 
-An example of a configured Ingress Controller `devops-router` that has the label selector `spec.namespaceSelector.matchExpressions` with key values set to `dev` and `ops`:
+An overlapped sharding example shows how an Ingress Controller in OpenShift Container Platform can serve overlapping namespace label selectors so that more than one controller can admit the same routes.
 
 <div class="formalpara">
 
@@ -415,7 +415,7 @@ Separate DNS entries must resolve `*.foo.com` to the node hosting Router A and `
 
 - `*.example.com A IN 192.168.1.9`
 
-## Configuring Ingress Controller sharding by using route labels
+## Configure Ingress Controller sharding by using route labels
 
 You can use route labels to configure Ingress Controller sharding so that the Ingress Controller serves any route in any namespace that is selected by the route selector.
 
@@ -471,7 +471,7 @@ Procedure
 
 </div>
 
-## Configuring Ingress Controller sharding by using namespace labels
+## Configure Ingress Controller sharding by using namespace labels
 
 You can use namespace labels to configure Ingress Controller sharding so that the Ingress Controller serves any route in any namespace that is selected by the namespace selector.
 
@@ -543,9 +543,7 @@ Procedure
 
 ## Creating a route for Ingress Controller sharding
 
-You can use a route to host your application at a URL. Ingress Controller sharding helps balance incoming traffic load among a set of Ingress Controllers. Ingress Controller sharding can also isolate traffic to a specific Ingress Controller. For example, company A goes to one Ingress Controller and company B to another.
-
-The following procedure describes how to create a route for Ingress Controller sharding, using the `hello-openshift` application as an example.
+Ingress Controller sharding balances incoming traffic among a set of Ingress Controllers and can isolate traffic to a specific Ingress Controller. You create a route to direct traffic to the appropriate shard.
 
 <div>
 

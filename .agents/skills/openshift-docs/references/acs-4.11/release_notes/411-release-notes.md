@@ -10,12 +10,14 @@ RHACS deploys into your infrastructure and integrates with your DevOps tools and
 
 Review the official release dates and update schedule for RHACS 4.11.
 
-| RHACS version | Released on    |
-|---------------|----------------|
-| `4.11.0`      | 15 June 2026   |
-| `4.11.1`      | 7 July 2026    |
-| `4.11.2`      | 30 July 2026   |
-| `4.11.3`      | 25 August 2026 |
+| RHACS version | Released on       |
+|---------------|-------------------|
+| `4.11.0`      | 15 June 2026      |
+| `4.11.1`      | 7 July 2026       |
+| `4.11.2`      | 30 July 2026      |
+| `4.11.3`      | 25 August 2026    |
+| `4.11.4`      | 15 September 2026 |
+| `4.11.5`      | 12 October 2026   |
 
 Release dates
 
@@ -25,7 +27,7 @@ Release dates
 
 RHACS 4.11 includes new features, improvements, and updates.
 
-<a id="new-features-411_release-notes-411"></a>
+<a id="new-features_release-notes-411"></a>
 
 # New features
 
@@ -682,6 +684,106 @@ RHACS includes the fix for the following security vulnerability:
 
 - brace-expansion: Denial of service via unbounded intermediate arrays ([CVE-2026-69152](https://access.redhat.com/security/cve/CVE-2026-69152))
 
+<a id="about-this-release-4114_release-notes-411"></a>
+
+# About release 4.11.4
+
+<a id="bug-fixes-in-version-4114_release-notes-411"></a>
+
+## Bug fixes and security updates in version 4.11.4
+
+This release includes the following bug fixes:
+
+- Before this update, the security policy criterion "CVE is not yet fixable" did not generate violations for deployments with unfixable CVEs. With this release, Red Hat fixed the policy matching logic. As a result, you can now create policies that detect deployments with unfixable CVEs.
+
+<!-- -->
+
+- Before this update, RHACS Scanner incorrectly flagged the PyPI package `langsmith` as vulnerable to CVE-2026-45134 when scanning versions where the fix version comparison failed. With this release, Red Hat corrected the ecosystem-specific version matching logic. As a result, Scanner accurately reports vulnerability status for language-ecosystem packages.
+
+<!-- -->
+
+- Before this update, when you applied a security policy by using a SecurityPolicy custom resource (CR) with `clusterlabel` or `namespacelabel` scope fields, RHACS ignored the scope filters because of a field name mismatch between the YAML export format and the CR definition. With this release, Red Hat aligned the field naming. As a result, cluster and namespace label scopes now work correctly in Policy-as-Code deployments.
+
+<!-- -->
+
+- Before this update, the Policy Management filter bar did not display available policy categories when you attempted to filter by category. With this release, Red Hat restored the category suggestions. As a result, you can now filter policies by category through the RHACS portal.
+
+<!-- -->
+
+- Before this update, the `stackrox` `ValidatingWebhookConfiguration` used an incorrect namespace label selector (`namespace.metadata.stackrox.io/name`) that does not exist on standard Kubernetes namespaces. This caused the admission controller to incorrectly process system namespaces such as `kube-system` and `kube-public` instead of excluding them. With this release, Red Hat updated the namespace selector to use the standard `kubernetes.io/metadata.name` label. As a result, system namespaces are now correctly excluded from admission control evaluation.
+
+<!-- -->
+
+- Before this update, you could not download compliance reports for node profiles on Hosted Control Plane (HCP) clusters. The report generation job would wait indefinitely and eventually fail. With this release, Red Hat fixed the report generation logic for HCP clusters. As a result, compliance reports for node profiles on HCP clusters now download successfully.
+
+<!-- -->
+
+- Red Hat now redacts the value of annotations known to contain plain text secrets in RHACS diagnostic bundles.
+
+This release also addresses the following security vulnerabilities:
+
+- qs:
+
+  - Denial of Service via improper validation in stringify function ([CVE-2026-82417](https://access.redhat.com/security/cve/CVE-2026-82417))
+
+- js-yaml:
+
+  - Denial of Service vulnerability in YAML parsing ([CVE-2026-84375](https://access.redhat.com/security/cve/CVE-2026-84375))
+
+- DOMPurify:
+
+  - Cross-Site Scripting via IN_PLACE sanitization ([CVE-2026-75838](https://access.redhat.com/security/cve/CVE-2026-75838))
+
+- axios:
+
+  - Denial of Service via uncontrolled recursion in formDataToJSON ([CVE-2026-67313](https://access.redhat.com/security/cve/CVE-2026-67313))
+
+  - Denial of Service via object serialization bypass ([CVE-2026-67321](https://access.redhat.com/security/cve/CVE-2026-67321))
+
+- Go and golang.org:
+
+  - golang.org/x/net/dns/dnsmessage: Denial of Service via invalid DNS record parsing ([CVE-2026-46600](https://access.redhat.com/security/cve/CVE-2026-46600))
+
+  - golang net/url: Denial of Service from quadratic complexity in path resolution ([CVE-2026-56860](https://access.redhat.com/security/cve/CVE-2026-56860))
+
+  - Go encoding/asn1: Denial of Service via excessive recursion in Unmarshal ([CVE-2026-33818](https://access.redhat.com/security/cve/CVE-2026-33818))
+
+  - Golang crypto/tls: Denial of Service via indefinite KeyUpdate messages ([CVE-2026-56862](https://access.redhat.com/security/cve/CVE-2026-56862))
+
+  - Go html/template: Cross-Site Scripting via pathological input ([CVE-2026-56858](https://access.redhat.com/security/cve/CVE-2026-56858))
+
+  - Go net/http: Unencrypted HTTP/2 connections vulnerable to Denial of Service ([CVE-2026-56853](https://access.redhat.com/security/cve/CVE-2026-56853))
+
+  - Go: Denial of Service via XML decoding recursion depth issue ([CVE-2026-56859](https://access.redhat.com/security/cve/CVE-2026-56859))
+
+  - golang.org/x/mod/sumdb: Supply chain compromise via malicious GOSUMDB ([CVE-2026-56864](https://access.redhat.com/security/cve/CVE-2026-56864))
+
+  - golang.org/x/mod/sumdb/tlog: Supply chain compromise via transparency log tile verification bypass ([CVE-2026-56865](https://access.redhat.com/security/cve/CVE-2026-56865))
+
+<a id="about-this-release-4115_release-notes-411"></a>
+
+# About release 4.11.5
+
+<a id="bug-fixes-in-version-4115_release-notes-411"></a>
+
+## Bug fixes and security updates in version 4.11.5
+
+This release includes the following bug fixes:
+
+- Before this update, vulnerability scans failed with "unexpected status code: 403 Forbidden" errors when scanning container images that included large files. With this release, Red Hat fixed the scanning logic for large files. As a result, vulnerability scans complete successfully, regardless of file size.
+
+<!-- -->
+
+- Before this update, creating ad hoc vulnerability reports from the **Results** tab required the `WorkflowAdministration` "write" permission that is needed for users to modify or delete other users' report configurations. With this release, Red Hat separated the report creation permission from report configuration management. As a result, users can now create ad hoc reports without requiring excessive permissions.
+
+<!-- -->
+
+- Before this update, vulnerability counts displayed in the OpenShift Container Platform web console differed from the counts shown in the RHACS portal. With this release, Red Hat aligned the vulnerability reporting logic between the two interfaces. As a result, vulnerability counts are now consistent across the OpenShift Container Platform web console and RHACS portal.
+
+This release also addresses the following security vulnerabilities:
+
+- gRPC-Go: Denial of Service through malformed RPC requests ([CVE-2026-84445](https://access.redhat.com/security/cve/CVE-2026-84445))
+
 <a id="image-versions_release-notes-411"></a>
 
 # Image versions
@@ -706,40 +808,40 @@ You can manually pull, retag, and push Red Hat Advanced Cluster Security for Ku
 <tr>
 <td style="text-align: left;"><p>Main</p></td>
 <td style="text-align: left;"><p>Includes Central, Sensor, Admission controller, and Compliance components. Also includes <code>roxctl</code> for use in continuous integration (CI) systems.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.3</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Central DB</p></td>
 <td style="text-align: left;"><p>PostgreSQL instance that provides the database storage for Central.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.3</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.5</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner</p></td>
 <td style="text-align: left;"><p>Scans images and nodes.</p></td>
 <td style="text-align: left;"><ul>
-<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.3</code></p></li>
-<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.3</code></p></li>
+<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.5</code></p></li>
+<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.5</code></p></li>
 </ul></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner DB</p></td>
 <td style="text-align: left;"><p>Stores image scan results and vulnerability definitions.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.3</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.5</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner V4</p></td>
 <td style="text-align: left;"><p>Scans images.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-rhel9:4.11.3</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-rhel9:4.11.5</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner V4 DB</p></td>
 <td style="text-align: left;"><p>Stores image scan results and vulnerability definitions for Scanner V4.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-db-rhel9:4.11.3</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-db-rhel9:4.11.5</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Collector</p></td>
 <td style="text-align: left;"><p>Collects runtime activity in Kubernetes or OpenShift Container Platform clusters.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.3</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.5</code></p></td>
 </tr>
 </tbody>
 </table>

@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Create custom security policies in the {product-title-short} portal to enforce configuration rules and minimize risks. Define detailed criteria, lifecycle stages, and automated enforcement options to detect and block noncompliant images or workloads. By using these policies, you support consistent security standards across the build, deploy, and runtime phases.
+Create custom security policies in the RHACS portal to enforce configuration rules and minimize risks. Define detailed criteria, lifecycle stages, and automated enforcement options to detect and block noncompliant images or workloads. By using these policies, you support consistent security standards across the build, deploy, and runtime phases.
 
 <a id="create-policy-from-system-policies-view_custom-security-policies"></a>
 
@@ -50,7 +50,7 @@ Procedure
 
 6.  Enter steps to resolve violations of the policy in the **Guidance** field.
 
-7.  Select the [tactic and the techniques](https://attack.mitre.org/matrices/enterprise/containers/) you want to specify for the policy:
+7.  Select the "tactic and the techniques" you want to specify for the policy:
 
     1.  From the **Add tactic** list, select a tactic.
 
@@ -78,8 +78,6 @@ Additional resources
 
 Define when RHACS evaluates policies by assigning a specific lifecycle stage. You can target these specific phases to inspect images during the continuous integration (CI) process or monitor workload activity on a live node, ensuring that enforcement actions occur at the appropriate time.
 
-For more information, see "Understanding the RHACS policy evaluation engine".
-
 <div>
 
 <div class="title">
@@ -90,7 +88,7 @@ Procedure
 
 1.  Select the **Lifecycle stages** for the policy:
 
-    The following options are associated with the lifecycle stages:
+    The lifecycle stages have the following options:
 
     Build  
     Policies in this stage inspect image criteria such as the image registry, content, vulnerability data, and the scanning process. The CI pipeline evaluates these policies during the build process. If you enable enforcement, a policy violation fails the build. RHACS does not store violations from this stage.
@@ -117,11 +115,23 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Understanding the RHACS policy evaluation engine](about-security-policies.md#policy-evaluation-engine_about-security-policies)
+
+</div>
+
 <a id="configure-policy-rules_custom-security-policies"></a>
 
 ## Configuring policy rules
 
-To control when a policy is triggered, configure the specific conditions and rules that apply to your environment. You can customize these rules by dragging and dropping policy fields, such as networking or workload activity, to define criteria appropriate for the build or runtime lifecycle stages.
+To control when a policy triggers, configure the specific conditions and rules that apply to your environment. You can customize these rules by dragging and dropping policy fields, such as networking or workload activity, to define criteria appropriate for the build or runtime lifecycle stages.
 
 <div>
 
@@ -136,7 +146,7 @@ Procedure
 2.  For each rule, click and drag policy fields into the policy section to add policy fields or criteria.
 
     > [!NOTE]
-    > The policy fields that are available depend on the lifecycle stage you chose for the policy. For example, the criteria associated to **Networking** or **Workload activity** are available when creating a policy for the runtime lifecycle, but not when creating a policy for the build lifecycle. For more information about policy criteria, including information about criteria and the lifecycle phase in which they are available, see "Policy criteria".
+    > The lifecycle stage you chose for the policy determines which policy fields become available. For example, the criteria associated to **Networking** or **Workload activity** become available when creating a policy for the runtime lifecycle, but not when creating a policy for the build lifecycle.
 
 3.  For each field, you can select from options that are specific to the field. These differ depending on the type of field. For example:
 
@@ -151,7 +161,7 @@ Procedure
     - If you select an attribute with compound values, such as `Environment variable`, you can enter values for the `Key`, `Value`, and `Value From` fields, and then click the icon to add more values for the available options.
 
       > [!NOTE]
-      > For more information about values available for policy criteria, see "Policy criteria".
+      > For more information about values available for policy criteria, see the "Policy criteria" reference.
 
 4.  To combine multiple values for an attribute, click the **Add value of policy field** icon.
 
@@ -449,7 +459,7 @@ Procedure
 
     - In clusters with admission controller enforcement, the Kubernetes or OpenShift Container Platform API server blocks all noncompliant deployments. In clusters without admission controller enforcement, RHACS modifies noncompliant deployments to prevent pods from scheduling.
 
-    - For existing deployments, policy changes only result in enforcement at the next detection of the criteria, when a Kubernetes event occurs. For more information about enforcement, see "Deploy stage enforcement".
+    - For existing deployments, policy changes only result in enforcement at the next detection of the criteria, when a Kubernetes event occurs.
 
     Runtime  
     Set **Enforce on Runtime** to on to have RHACS delete all pods when an event in the pods matches the criteria of the policy.
@@ -519,12 +529,12 @@ Procedure
 
 1.  Verify that the policy configuration is configured with the correct options.
 
-2.  View the results in the **Preview policy violations** panel to ensure that the policy is working. This panel provides additional information, including whether build phase or deploy phase deployments have policy violations.
+2.  View the results in the **Preview policy violations** panel to ensure that the policy works correctly. This panel provides additional information, including whether build phase or deploy phase deployments have policy violations.
 
     > [!NOTE]
-    > Runtime violations are not available in this preview because they are generated when events occur in the future.
+    > Runtime violations do not appear in this preview because the system generates them when events occur in the future.
 
-    Before you save the policy, verify that the violations seem accurate.
+    Before you save the policy, verify that the violations seem exact.
 
 3.  Click **Save**.
 
@@ -599,7 +609,19 @@ Procedure
 
 2.  Apply the local page filtering criteria that you want to create a policy for. For example, you can filter by using criteria such as a specific CVE, a cluster, a deployment, an image, or various other criteria.
 
-3.  Click **Create policy** and complete the required fields to create a new policy. For the steps to create a policy, see "Creating a security policy from the system policies view".
+3.  Click **Create policy** and complete the required fields to create a new policy.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Creating a security policy from the system policies view](custom-security-policies.md#create-policy-from-system-policies-view_custom-security-policies)
 
 </div>
 
@@ -674,7 +696,7 @@ Procedure
 
 1.  In the RHACS portal, go to **Platform Configuration** → **Policy Management**.
 
-2.  Click the **Policy categories** tab. This tab provides a list of existing categories and allows you to filter the list by category name. You can also click **Show all categories** and select the checkbox to remove default or custom categories from the displayed list.
+2.  Click the **Policy categories** tab. This tab provides a list of existing categories that you can filter by category name. You can also click **Show all categories** and select the checkbox to remove default or custom categories from the displayed list.
 
 3.  Click **Create category**.
 
@@ -686,7 +708,7 @@ Procedure
 
 ## Modifying policy categories by using the Policy categories tab
 
-You can modify policy categories by using the policy categories tab. You can also configure policy categories by using the `PolicyCategoryService` API object. For more information, go to **Help** → **API reference** in the RHACS portal.
+You can change policy categories by using the policy categories tab. You can also configure policy categories by using the `PolicyCategoryService` API object. For more information, go to **Help** → **API reference** in the RHACS portal.
 
 <div>
 
@@ -698,8 +720,8 @@ Procedure
 
 1.  In the RHACS portal, go to **Platform Configuration** → **Policy Management**.
 
-2.  Click the **Policy categories** tab. This tab provides a list of existing categories and allows you to filter the list by category name. You can also click **Show all categories** and select the checkbox to remove default or custom categories from the displayed list.
+2.  Click the **Policy categories** tab. This tab provides a list of existing categories that you can filter by category name. You can also click **Show all categories** and select the checkbox to remove default or custom categories from the displayed list.
 
-3.  Click a policy name to edit or delete it. Default policy categories cannot be selected, edited, or deleted.
+3.  Click a policy name to edit or delete it. You cannot select, edit, or delete default policy categories.
 
 </div>

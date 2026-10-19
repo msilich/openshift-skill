@@ -16,7 +16,7 @@ The following steps outline the high-level workflow about updating a cluster in 
 
 6.  Perform a supported update procedure from the documentation as you would with a connected cluster.
 
-# Using the OpenShift Update Service in a disconnected environment
+# Use the OpenShift Update Service in a disconnected environment
 
 The OpenShift Update Service (OSUS) provides update recommendations to OpenShift Container Platform clusters. Red Hat publicly hosts the OpenShift Update Service, and clusters in a connected environment can connect to the service through public APIs to retrieve update recommendations.
 
@@ -42,7 +42,7 @@ Additional resources
 
 </div>
 
-# Configuring access to a secured registry for the OpenShift Update Service
+# Configure access to a secured registry for the OpenShift Update Service
 
 If your release images are contained in a registry whose HTTPS X.509 certificate is signed by a custom certificate authority, you must configure additional trust stores for image registry access for the update service.
 
@@ -118,9 +118,11 @@ Additional resources
 
 </div>
 
-# Updating the global cluster pull secret
+# Update the global cluster pull secret
 
-To add new registries or change authentication for your OpenShift Container Platform cluster, you can update the global pull secret by replacing it or appending new credentials. Use the `oc set data secret/pull-secret` command to apply the updated pull secret to all nodes in your cluster.
+To add new registries or update authentication for your OpenShift Container Platform cluster, you can update the global pull secret by appending new credentials to the *additional-pull-secret* by using the `oc set data secret/additional-pull-secret -n kube-system` command.
+
+Hypershift manages the new credential propagation among the HostedCluster nodes.
 
 Use this procedure when you need a separate registry to store images than the registry used during installation.
 
@@ -202,14 +204,14 @@ Additional resources
 
 </div>
 
-# Installing the OpenShift Update Service Operator
+# Install the OpenShift Update Service Operator
 
 To install the OpenShift Update Service, you must first install the OpenShift Update Service Operator by using the OpenShift Container Platform web console or CLI.
 
 > [!NOTE]
 > For clusters that are installed in disconnected environments, also known as disconnected clusters, Operator Lifecycle Manager by default cannot access the Red Hat-provided software catalog sources hosted on remote registries because those remote sources require full internet connectivity. For more information, see "Using Operator Lifecycle Manager in disconnected environments".
 
-## Installing the OpenShift Update Service Operator by using the web console
+## Install the OpenShift Update Service Operator by using the web console
 
 You can use the web console to install the OpenShift Update Service Operator.
 
@@ -250,7 +252,7 @@ Procedure
 
 </div>
 
-## Installing the OpenShift Update Service Operator by using the CLI
+## Install the OpenShift Update Service Operator by using the CLI
 
 You can use the OpenShift CLI (`oc`) to install the OpenShift Update Service Operator.
 
@@ -403,9 +405,11 @@ Additional resources
 
 </div>
 
-# Creating the OpenShift Update Service graph data container image
+# Create the OpenShift Update Service graph data container image
 
-The OpenShift Update Service requires a graph data container image, from which the OpenShift Update Service retrieves information about channel membership and blocked update edges. Graph data is typically fetched directly from the update graph data repository. In environments where an internet connection is unavailable, loading this information from an init container is another way to make the graph data available to the OpenShift Update Service.
+The OpenShift Update Service requires a graph data container image, from which the OpenShift Update Service retrieves information about channel membership and blocked update edges.
+
+Graph data is typically fetched directly from the update graph data repository. In environments where an internet connection is unavailable, loading this information from an init container is another way to make the graph data available to the OpenShift Update Service.
 
 The role of the init container is to provide a local copy of the graph data, and during pod initialization, the init container copies the data to a volume that is accessible by the service.
 
@@ -449,11 +453,11 @@ Procedure
 
 </div>
 
-# Creating an OpenShift Update Service application
+# Create an OpenShift Update Service application
 
 You can create an OpenShift Update Service application by using the OpenShift Container Platform web console or CLI.
 
-## Creating an OpenShift Update Service application by using the web console
+## Create an OpenShift Update Service application by using the web console
 
 You can use the OpenShift Container Platform web console to create an OpenShift Update Service application by using the OpenShift Update Service Operator.
 
@@ -509,7 +513,7 @@ Procedure
 
 </div>
 
-## Creating an OpenShift Update Service application by using the CLI
+## Create an OpenShift Update Service application by using the CLI
 
 You can use the OpenShift CLI (`oc`) to create an OpenShift Update Service application.
 
@@ -601,7 +605,7 @@ Procedure
 
 </div>
 
-# Configuring the Cluster Version Operator (CVO)
+# Configure the Cluster Version Operator (CVO)
 
 After the OpenShift Update Service Operator has been installed and the OpenShift Update Service application has been created, the Cluster Version Operator (CVO) can be updated to pull graph data from the OpenShift Update Service installed in your environment.
 

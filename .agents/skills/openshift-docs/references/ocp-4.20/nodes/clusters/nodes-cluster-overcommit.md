@@ -5,7 +5,7 @@ OpenShift Container Platform administrators can control the level of overcommit 
 > [!NOTE]
 > In OpenShift Container Platform, you must enable cluster-level overcommit. Node overcommitment is enabled by default.
 
-In an *overcommitted* state, the sum of the container compute resource requestsand limits exceeds the resources available on the system. For example, you might want to use overcommitment in development environments where a trade-off of guaranteed performance for capacity is acceptable.
+In an *overcommitted* state, the sum of the container compute resource requests and limits exceeds the resources available on the system. For example, you might want to use overcommitment in development environments where a trade-off of guaranteed performance for capacity is acceptable.
 
 Containers can specify compute resource requests and limits. Requests are used for scheduling your container and provide a minimum service guarantee. Limits constrain the amount of compute resource that can be consumed on your node.
 
@@ -130,7 +130,7 @@ Specifies that the CPU limit has been overridden to `1` because the `limitCPUToM
 `spec.containers.resources.memory.cpu`
 Specifies that the CPU request is now `250m` because the `cpuRequestToLimit` is set to `25` in the `ClusterResourceOverride` object. As such, 25% of the 1 CPU core is 250m.
 
-## Installing the Cluster Resource Override Operator using the web console
+## Install the Cluster Resource Override Operator using the web console
 
 You can use the OpenShift Container Platform web console to install the Cluster Resource Override Operator to help you control overcommit in your cluster.
 
@@ -257,7 +257,7 @@ Procedure
 
 </div>
 
-## Installing the Cluster Resource Override Operator using the CLI
+## Install the Cluster Resource Override Operator using the CLI
 
 You can use the OpenShift CLI to install the Cluster Resource Override Operator to help you control overcommit in your cluster.
 
@@ -469,7 +469,7 @@ Procedure
 
 </div>
 
-## Configuring cluster-level overcommit
+## Configure cluster-level overcommit
 
 You can use the OpenShift CLI to configure the Cluster Resource Override Operator to help control overcommit in your cluster.
 
@@ -546,7 +546,7 @@ Procedure
 
 </div>
 
-## Moving the Cluster Resource Override Operator pods
+## Move the Cluster Resource Override Operator pods
 
 By default, the Cluster Resource Override Operator installation process creates an Operator pod and two Cluster Resource Override pods on nodes in the `clusterresourceoverride-operator` namespace. You can move these pods to other nodes, such as infrastructure nodes, as needed.
 
@@ -870,7 +870,7 @@ You can also perform the following configurations for each node:
 
 - Reserve memory across quality of service tiers
 
-## Disabling or enforcing CPU limits using CPU CFS quotas
+## Disable or enforce CPU limits using CPU CFS quotas
 
 You can disable the default enforcement of CPU limits for nodes in a machine config pool.
 
@@ -959,7 +959,7 @@ To provide more reliable scheduling and minimize node resource overcommitment, e
 
 For more details, see "Allocating Resources for Nodes".
 
-## Disabling overcommitment for a node
+## Disable overcommitment for a node
 
 When overcommitment is enabled on a node, you can disable overcommitment on that node. Disabling overcommit can help ensure predictability, stability, and high performance in your cluster.
 
@@ -987,9 +987,9 @@ For information on project-level resource limits, see the *Additional resources*
 
 Alternatively, you can disable overcommitment for specific projects.
 
-## Disabling overcommitment for a project
+## Disable overcommitment for a project
 
-If overcommitment is enabled on a project, you can disable overcommitment for that projects. This allows infrastructure components to be configured independently of overcommitment.
+If overcommitment is enabled on a project, you can disable overcommitment for that project. This allows infrastructure components to be configured independently of overcommitment.
 
 <div>
 

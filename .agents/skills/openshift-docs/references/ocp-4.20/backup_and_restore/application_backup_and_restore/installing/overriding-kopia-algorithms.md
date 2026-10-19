@@ -2,7 +2,7 @@
 
 Override the default values of Kopia hashing, encryption, and splitter algorithms by using specific environment variables in the Data Protection Application (DPA).
 
-# Configuring the DPA to override Kopia hashing, encryption, and splitter algorithms
+# Configure the DPA to override Kopia hashing, encryption, and splitter algorithms
 
 Configure the Data Protection Application (DPA) to override the default Kopia hashing, encryption, and splitter algorithms by setting environment variables in the Velero pod configuration. This helps you improve Kopia performance and compare performance metrics for your backup operations.
 
@@ -293,7 +293,7 @@ Verification
 
 </div>
 
-# Benchmarking Kopia hashing, encryption, and splitter algorithms
+# Benchmark Kopia hashing, encryption, and splitter algorithms
 
 Run Kopia commands to benchmark the hashing, encryption, and splitter algorithms. Based on the benchmarking results, you can select the most suitable algorithm for your workload. You run the Kopia benchmarking commands from a pod on the cluster. The benchmarking results can vary depending on CPU speed, available RAM, disk speed, current I/O load, and so on.
 

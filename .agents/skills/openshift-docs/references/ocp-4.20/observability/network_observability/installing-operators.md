@@ -42,7 +42,7 @@ Additional resources
 
 </div>
 
-# Installing the Loki Operator
+# Install the Loki Operator
 
 Install the supported Loki Operator version from the software catalog to enable the secure `LokiStack` instance, which provides automatic in-cluster authentication and authorization for network observability.
 
@@ -97,7 +97,7 @@ Verification
 > [!IMPORTANT]
 > To uninstall Loki, refer to the uninstallation process that corresponds with the method you used to install Loki. You might have remaining `ClusterRoles` and `ClusterRoleBindings`, data stored in object store, and persistent volume that must be removed.
 
-## Creating a secret for Loki storage
+## Create a secret for Loki storage
 
 Create a secret with cloud storage credentials, such as for Amazon Web Services (AWS), to allow the Loki Operator to access the necessary object store for log persistence.
 
@@ -167,7 +167,7 @@ Verification
 
 </div>
 
-## Creating a LokiStack custom resource
+## Create a LokiStack custom resource
 
 Deploy the `LokiStack` custom resource using the web console or OpenShift CLI (`oc`), ensuring you configure the correct namespace, deployment size, and secret name for Loki object storage.
 
@@ -336,7 +336,7 @@ Additional resources
 
 </div>
 
-# Installing the Network Observability Operator
+# Install the Network Observability Operator
 
 Install the Network Observability Operator and use the setup wizard to create the `FlowCollector` custom resource definition (CRD) to complete the initial configuration.
 
@@ -444,105 +444,7 @@ Additional resources
 
 </div>
 
-# Migrating removed stored versions of the FlowCollector CRD
-
-Manually remove the deprecated `v1alpha1` version from the `FlowCollector` custom resource definition (CRD) `storedVersion` list to prevent upgrade errors and successfully migrate to Network Observability Operator 1.6.
-
-There are two options to remove stored versions:
-
-1.  Use the Storage Version Migrator Operator.
-
-2.  Uninstall and reinstall the Network Observability Operator, ensuring that the installation is in a clean state.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You have an older version of the Operator installed, and you want to prepare your cluster to install the latest version of the Operator. Or you have attempted to install the Network Observability Operator 1.6 and run into the error: `Failed risk of data loss updating "flowcollectors.flows.netobserv.io": new CRD removes version v1alpha1 that is listed as a stored version on the existing CRD`.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Verify that the old `FlowCollector` CRD version is still referenced in the `storedVersion`:
-
-    ``` terminal
-    $ oc get crd flowcollectors.flows.netobserv.io -ojsonpath='{.status.storedVersions}'
-    ```
-
-2.  If `v1alpha1` appears in the list of results, proceed with **Step a** to use the Kubernetes Storage Version Migrator or **Step b** to uninstall and reinstall the CRD and the Operator.
-
-    1.  **Option 1: Kubernetes Storage Version Migrator**: Create a YAML to define the `StorageVersionMigration` object, for example `migrate-flowcollector-v1alpha1.yaml`:
-
-        ``` yaml
-        apiVersion: migration.k8s.io/v1alpha1
-        kind: StorageVersionMigration
-        metadata:
-          name: migrate-flowcollector-v1alpha1
-        spec:
-          resource:
-            group: flows.netobserv.io
-            resource: flowcollectors
-            version: v1alpha1
-        ```
-
-        1.  Save the file.
-
-        2.  Apply the `StorageVersionMigration` by running the following command:
-
-            ``` terminal
-            $ oc apply -f migrate-flowcollector-v1alpha1.yaml
-            ```
-
-        3.  Update the `FlowCollector` CRD to manually remove `v1alpha1` from the `storedVersion`:
-
-            ``` terminal
-            $ oc edit crd flowcollectors.flows.netobserv.io
-            ```
-
-    2.  **Option 2: Reinstall**: Save the Network Observability Operator 1.5 version of the `FlowCollector` CR to a file, for example `flowcollector-1.5.yaml`.
-
-        ``` terminal
-        $ oc get flowcollector cluster -o yaml > flowcollector-1.5.yaml
-        ```
-
-        1.  Follow the steps in "Uninstalling the Network Observability Operator", which uninstalls the Operator and removes the existing `FlowCollector` CRD.
-
-        2.  Install the Network Observability Operator latest version, 1.6.0.
-
-        3.  Create the `FlowCollector` using backup that was saved in Step b.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-- Run the following command:
-
-  ``` terminal
-  $ oc get crd flowcollectors.flows.netobserv.io -ojsonpath='{.status.storedVersions}'
-  ```
-
-  The list of results should no longer show `v1alpha1` and only show the latest version, `v1beta1`.
-
-</div>
-
-# Enabling multi-tenancy in network observability
+# Enable multi-tenancy in network observability
 
 Enable multi-tenancy in network observability by configuring cluster roles and namespace roles to grant project administrators and developers granular, restricted access to flows and metrics in Loki and Prometheus.
 
@@ -610,7 +512,7 @@ Additional resources
 
 </div>
 
-# Uninstalling the Network Observability Operator
+# Uninstall the Network Observability Operator
 
 Uninstall the Network Observability Operator using the OpenShift Container Platform web console Operator Hub, working in the **Ecosystem** → **Installed Operators** area.
 

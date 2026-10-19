@@ -17,7 +17,7 @@ Additional resources
 
 </div>
 
-# Converting to a dual-stack cluster network
+# Convert to a dual-stack cluster network
 
 To convert your cluster network from IPv4 single-stack to dual-stack in OpenShift Container Platform, you can patch the cluster network and, on installer-provisioned infrastructure, the infrastructure custom resources. You must re-create existing pods after conversion to receive IPv6 addresses.
 
@@ -262,7 +262,7 @@ Verification
 
 </div>
 
-# Converting to a single-stack cluster network
+# Convert to a single-stack cluster network
 
 To revert dual-stack networking in OpenShift Container Platform, you can edit the cluster network configuration and remove the IPv4 or IPv6 blocks you added during dual-stack conversion. You can convert back only to the same single-stack family you had before dual-stack (IPv4 or IPv6).
 

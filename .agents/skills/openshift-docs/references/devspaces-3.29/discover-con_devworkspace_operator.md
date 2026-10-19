@@ -11,7 +11,7 @@ The Dev Workspace CR is an OpenShift resource representation of an OpenShift Dev
 
 <figure>
 <br />
-<img src="assets/fc068aa12d7c7900e304.png" alt="DevWorkspace CR example" /><br />
+<img src="assets/6a18f8b2f5a38b471fd3.png" alt="DevWorkspace CR example" /><br />
 
 <figcaption>Figure 1. Example of a Dev Workspace CR in a cluster</figcaption>
 </figure>

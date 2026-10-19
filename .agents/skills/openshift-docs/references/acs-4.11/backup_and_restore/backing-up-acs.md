@@ -2,13 +2,15 @@
 
 You can perform data backups for Red Hat Advanced Cluster Security for Kubernetes and use these for data restoration in case of an infrastructure disaster or corrupt data.
 
-You can configure automatic backups for the Central database by integrating with Amazon S3, S3 API compatible services, or Google Cloud Storage. You can perform on-demand backups of the Central database by using the `roxctl` CLI. You can also back up your Central deployment by using RHACS Operator or Helm Chart installation methods.
+You can configure automatic backups for the Central database by integrating with Amazon S3, S3 API compatible services, or Google Cloud Storage. You can perform on-demand backups of the Central database by using the `roxctl` CLI. You can also back up your Central deployment by using RHACS Operator or Helm chart installation methods.
 
 Depending on your requirements, you can create two types of backups:
 
-1.  A backup of the Central database: It includes RHACS configurations, resources, events, and certificates. In an unforeseen incident, such as database failure or data corruption, you can use the backup to recover and restore the Central database to its earlier functional state. Doing this ensures the availability and integrity of essential data, allowing you to continue normal operations without significant disruptions or loss of critical information.
+Central database backup  
+Includes RHACS configurations, resources, events, and certificates. If the database fails or the data becomes corrupt, you can restore the database to its earlier state. The restore recovers your essential data so that you can resume normal operations.
 
-2.  A backup of all custom deployment configurations: If you installed RHACS by using Helm charts or the RHACS Operator, you can back up settings, parameters, and customizations specific to your installation. When the RHACS installation gets accidentally deleted, or you need to migrate it to another cluster or namespace, having a backup of the deployment configurations enables a seamless recovery process. In addition, by restoring the custom settings from the backup, you can efficiently reinstate your Central installation’s unique requirements and configurations, ensuring consistent and exact deployment of the system.
+Deployment configuration backup  
+Includes the settings, parameters, and customizations that are specific to your installation. This backup applies if you installed RHACS by using Helm charts or the RHACS Operator. Use it to recover an installation that was deleted, or to migrate an installation to another cluster or namespace. Restoring the custom settings returns Central to its earlier configuration.
 
 > [!IMPORTANT]
 > Because backup files include secrets and certificates, you must securely store the backup files.
@@ -69,6 +71,24 @@ By backing up your Red Hat Advanced Cluster Security for Kubernetes (RHACS) ins
 
 <div class="title">
 
+Prerequisites
+
+</div>
+
+- You have installed the `pg_dump` utility and the `roxctl` CLI.
+
+- You have network access to the external PostgreSQL database.
+
+- You have a database user with permission to dump the RHACS database.
+
+- You have set the `ROX_ENDPOINT` environment variable and you have an API token with the `Admin` role or the administrator password.
+
+</div>
+
+<div>
+
+<div class="title">
+
 Procedure
 
 </div>
@@ -98,13 +118,36 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Confirm that the database dump file exists and is not empty by running the following command:
+
+  ``` terminal
+  $ ls -l <output_file_path>
+  ```
+
+  where:
+
+  `<output_file_path>`  
+  Specifies the location and name of the database dump file that you created.
+
+- Confirm that the `roxctl` CLI created the certificate bundle in the directory where you ran the `roxctl central backup --certs-only=true` command.
+
+</div>
+
 <a id="backing-up-central-db-roxctl_backing-up-acs"></a>
 
 # Backing up Central database by using the roxctl CLI
 
 Backing up the Central database is critical to ensure data integrity and system reliability. Regular backups of the database, containing necessary configurations, resources, events, and certificates, protect against database failures, corruption, and accidental data loss.
 
-You can use the `roxctl` CLI to take the backups by using the `backup` command. You require an API token or your administrator password to run this command.
+You can use the `roxctl` CLI to create backups by using the `backup` command. You require an API token or your administrator password to run this command.
 
 > [!NOTE]
 > Red Hat supports backups for the Central database through integration with Amazon S3 or Google Cloud Storage.
@@ -123,7 +166,7 @@ Additional resources
 
 - [Perform on-demand backups with Google Cloud Storage](../integration/integrate-with-google-cloud-storage.md#perform-on-demand-backups-google-cloud-storage_integrate-with-google-cloud-storage)
 
-- [Integrate with S3 API compatible services](../integration/integrate-with-s3-api-compatible-services.md)
+- [Perform on-demand backups with S3 API compatible services](../integration/integrate-with-s3-api-compatible-services.md#perform-on-demand-backups-s3-api-compatible-services_integrate-with-s3-api-compatible-services)
 
 </div>
 
@@ -165,7 +208,7 @@ Procedure
     $ export ROX_ENDPOINT=<address>:<port_number>
     ```
 
-2.  Initiate a backup for Central by running the following command:
+2.  Start a backup for Central by running the following command:
 
     ``` terminal
     $ roxctl central backup
@@ -174,6 +217,27 @@ Procedure
     You can use the `--output` option to specify the backup file location.
 
     By default, the `roxctl` CLI saves the backup file in the directory where you run the command.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Confirm that the `roxctl` CLI created the backup file in the output directory and that the file is not empty by running the following command:
+
+  ``` terminal
+  $ ls -l <backup_directory>
+  ```
+
+  where:
+
+  `<backup_directory>`  
+  Specifies the directory where the `roxctl` CLI saved the backup file.
 
 </div>
 
@@ -223,7 +287,7 @@ Procedure
     $ export ROX_ENDPOINT=<address>:<port_number>
     ```
 
-2.  Initiate a backup for Central by running the following command:
+2.  Start a backup for Central by running the following command:
 
     ``` terminal
     $ roxctl -p <admin_password> central backup
@@ -235,6 +299,27 @@ Procedure
     Specifies the administrator password.
 
     By default, the `roxctl` CLI saves the backup file in the directory in which you run the command. You can use the `--output` option to specify the backup file location.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Confirm that the `roxctl` CLI created the backup file in the output directory and that the file is not empty by running the following command:
+
+  ``` terminal
+  $ ls -l <backup_directory>
+  ```
+
+  where:
+
+  `<backup_directory>`  
+  Specifies the directory where the `roxctl` CLI saved the backup file.
 
 </div>
 
@@ -251,7 +336,25 @@ You can back up the deployment of a Central instance. This backup can be useful 
 
 ## Backing up deployment using the RHACS Operator
 
-When you use the RHACS Operator to instal RHACS, OpenShift Container Platform stores all the custom configuration for your Central deployment within the Central custom resource. You can backup the Central custom resource, the `central-tls` secret, and the administrator password. The `central-tls` secret includes the certificates for authenticating with Secured clusters and signing API tokens.
+When you install RHACS by using the RHACS Operator, OpenShift Container Platform stores the custom configuration for your Central deployment in the Central custom resource. You can back up the Central custom resource, the `central-tls` secret, and the administrator password.
+
+The `central-tls` secret includes the certificates for authenticating with secured clusters and signing API tokens.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the `oc` CLI and the `jq` command-line JSON processor.
+
+- You have access to the cluster where Central is installed.
+
+- You know the namespace and the name of the Central custom resource.
+
+</div>
 
 <div>
 
@@ -264,20 +367,44 @@ Procedure
 1.  Run the following command to save the Central custom resource in a YAML file:
 
     ``` terminal
-    $ oc get central -n _<central-namespace>_ _<central-name>_ -o yaml > central-cr.yaml
+    $ oc get central -n <central_namespace> <central_name> -o yaml > central-cr.yaml
     ```
+
+    where:
+
+    `<central_namespace>`  
+    Specifies the namespace in which Central is installed.
+
+    `<central_name>`  
+    Specifies the name of the Central custom resource.
 
 2.  Run the following command to save `central-tls` in a JSON file:
 
     ``` terminal
-    $ oc get secret -n _<central-namespace>_ central-tls -o json | jq 'del(.metadata.ownerReferences)' > central-tls.json
+    $ oc get secret -n <central_namespace> central-tls -o json | jq 'del(.metadata.ownerReferences)' > central-tls.json
     ```
 
-3.  Run the following command to the administrator password in a JSON file:
+3.  Run the following command to save the administrator password in a JSON file:
 
     ``` terminal
-    $ oc get secret -n _<central-namespace>_ central-htpasswd -o json | jq 'del(.metadata.ownerReferences)' > central-htpasswd.json
+    $ oc get secret -n <central_namespace> central-htpasswd -o json | jq 'del(.metadata.ownerReferences)' > central-htpasswd.json
     ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Confirm that the `central-cr.yaml`, `central-tls.json`, and `central-htpasswd.json` files exist in the directory where you ran the commands and that each file is not empty by running the following command:
+
+  ``` terminal
+  $ ls -l central-cr.yaml central-tls.json central-htpasswd.json
+  ```
 
 </div>
 
@@ -287,7 +414,23 @@ Procedure
 
 When you use the Helm chart to install RHACS, you store all the custom configuration for your Central deployment within the custom values that you apply to the Helm chart.
 
-You can back up the custom values and save it in a YAML file.
+You can back up the custom values and save them in a YAML file.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have installed the Helm CLI.
+
+- You have access to the cluster where Central is installed.
+
+- You know the namespace and the Helm release name of your Central installation.
+
+</div>
 
 <div>
 
@@ -300,7 +443,31 @@ Procedure
 - Run the following command to back up custom Helm chart values in a YAML file:
 
   ``` terminal
-  $ helm get values --all -n _<central-namespace>_ _<central-helm-release>_ -o yaml > central-values-backup.yaml
+  $ helm get values --all -n <central_namespace> <central_helm_release> -o yaml > central-values-backup.yaml
+  ```
+
+  where:
+
+  `<central_namespace>`  
+  Specifies the namespace in which Central is installed.
+
+  `<central_helm_release>`  
+  Specifies the name of the Helm release for your Central installation.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+- Confirm that the `central-values-backup.yaml` file contains your custom values by running the following command:
+
+  ``` terminal
+  $ cat central-values-backup.yaml
   ```
 
 </div>

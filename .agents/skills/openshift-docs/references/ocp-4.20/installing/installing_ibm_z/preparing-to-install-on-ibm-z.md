@@ -32,7 +32,7 @@ For more information about the installation process, see Installation process in
 
 # User-provisioned infrastructure installation of OpenShift Container Platform on IBM Z
 
-User-provisioned infrastructure requires you to provision and manage all resources that OpenShift Container Platform needs, including networking, load balancing, storage, and compute. This approach suits organizations that have specific infrastructure requirements or that operate in air-gapped or restricted networks.
+User-provisioned infrastructure requires that you manage all resources that OpenShift Container Platform needs, including networking, load balancing, storage, and compute. This approach suits organizations with specific needs or those in air-gapped networks.
 
 > [!IMPORTANT]
 > These steps for performing a user-provisioned infrastructure installation are an example only. Installing a cluster with infrastructure you offer requires knowledge of the IBM Z® platform and the installation process of OpenShift Container Platform. Use the user-provisioned infrastructure installation instructions as a guide; you are free to create the required resources through other methods.

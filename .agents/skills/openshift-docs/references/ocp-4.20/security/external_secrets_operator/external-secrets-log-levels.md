@@ -22,7 +22,7 @@ Additional resources
 
 </div>
 
-# Setting a log level for the External Secrets Operator for Red Hat OpenShift
+# Set a log level for the External Secrets Operator for Red Hat OpenShift
 
 You can configure the log verbosity for the lifecycle manager. You must adjust this setting to troubleshoot issues related to the installation, upgrade, or configuration of the operator itself, rather than secret synchronization.
 
@@ -93,7 +93,7 @@ Verification
 
 </div>
 
-# Setting a log level for the External Secrets Operator for Red Hat OpenShift operand
+# Set a log level for the External Secrets Operator for Red Hat OpenShift operand
 
 You can troubleshoot common issues, such as secret synchronization failures, provider authentication errors, or data formatting problems, by configuring the log verbosity for the core controller.
 
@@ -153,7 +153,7 @@ Procedure
 
 </div>
 
-# Configuring cert-manager for the external-secrets certificate requirements
+# Configure cert-manager for the external-secrets certificate requirements
 
 You can optionally configure cert-manager to manage certificates for the External Secrets Operator for Red Hat OpenShift webhook and plugins. If you do not use cert-manager, the Operator automatically generates webhook certificates, but you must manually configure certificates for any plugins.
 
@@ -266,7 +266,7 @@ Additional resources
 
 </div>
 
-# Configuring the bitwardenSecretManagerProvider plugin
+# Configure the bitwardenSecretManagerProvider plugin
 
 You must configure the `bitwardenSecretManagerProvider` plugin to enable communication with the Bitwarden API. This configuration enables the Operator to authenticate and fetch secrets for synchronization.
 
@@ -339,7 +339,7 @@ Procedure
 
 </div>
 
-# Adding custom annotations to external-secrets resources
+# Add custom annotations to external-secrets resources
 
 To customize your resources, you can define up to 20 custom annotations in the custom resource (CR). The Operator merges the annotations with the defaults, prioritizes them, and safely preserves annotations set by external systems.
 
@@ -433,7 +433,7 @@ Verification
 
 </div>
 
-# Configuring the revisionHistoryLimit for external-secrets components
+# Configure the revisionHistoryLimit for external-secrets components
 
 Configure the number of old `ReplicaSet` objects retained for rollback by setting the `revisionHistoryLimit` parameter for `external-secrets` components.
 
@@ -519,7 +519,7 @@ Verification
 
 </div>
 
-# Setting custom environment variables for external-secrets components
+# Set custom environment variables for external-secrets components
 
 To configure component behavior at runtime or integrate with external services, set custom environment variables for individual `external-secrets` components.
 
@@ -605,7 +605,7 @@ Verification
 
 </div>
 
-# Enabling optional features for External Secrets Operator for Red Hat OpenShift
+# Enable optional features for External Secrets Operator for Red Hat OpenShift
 
 The External Secrets Operator for Red Hat OpenShift supports optional capabilities that can be enabled cluster-wide through the `ExternalSecretsManager` custom resource (CR). Features are disabled by default and must be explicitly enabled.
 
@@ -732,9 +732,11 @@ Verification
 
 </div>
 
-# Mounting a custom trusted certificate authority bundle for external-secrets
+# Mount a custom trusted certificate authority bundle for external-secrets
 
-You can configure the External Secrets Operator for Red Hat OpenShift to trust a custom certificate authority (CA) bundle when the `external-secrets` core controller communicates with external secret backends over transport layer socket (TLS). This is required when your organization uses a private CA or a self-signed certificate that is not included in the default system truststore.
+You can configure the External Secrets Operator for Red Hat OpenShift to trust a custom certificate authority (CA) bundle when the `external-secrets` core controller communicates with external secret backends over transport layer socket (TLS).
+
+This is required when your organization uses a private CA or a self-signed certificate that is not included in the default system truststore.
 
 To enable mounting a custom trusted CA, you reference a `ConfigMap` that contains the Privacy Enhanced Mail (PEM)-encoded CA certificates in the `spec.controllerConfig.trustedCABundle` field of the `ExternalSecretsConfig` custom resource (CR). The Operator mounts the bundle into the core controller pod and configures the TLS library to use it alongside the default system trust stores.
 
@@ -908,7 +910,7 @@ Verification
 
 </div>
 
-# Overriding operand container arguments for the External Secrets Operator for Red Hat OpenShift
+# Override operand container arguments for the External Secrets Operator for Red Hat OpenShift
 
 You can override container arguments for the `external-secrets` operand deployments by setting environment variables on the External Secrets Operator for Red Hat OpenShift subscription. Use this method when you need to pass additional or replacement `--key=value` flags to operand containers.
 

@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Configure policies in Red Hat Advanced Cluster Security (RHACS) to detect and alert on sensitive file accesses or operations for containerized workloads or cluster nodes. Define criteria to identify high risk accesses of sensitive files, such as opening a file for writing, file deletion, or permission changes. You can configure the system to send notifications when this activity occurs, and set enforcement actions to automatically block noncompliant workloads.
+Configure policies in Red Hat Advanced Cluster Security for Kubernetes (RHACS) to detect and alert on sensitive file accesses or operations for containerized workloads or cluster nodes. Define criteria to identify high risk accesses of sensitive files, such as opening a file for writing, file deletion, or permission changes. You can configure the system to send notifications when this activity occurs, and set enforcement actions to automatically block noncompliant workloads.
 
 > [!IMPORTANT]
 > File activity monitoring is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
@@ -13,7 +13,7 @@ Configure policies in Red Hat Advanced Cluster Security (RHACS) to detect and a
 
 # Detection of unauthorized file modifications
 
-Protect your infrastructure by configuring RHACS policies that monitor sensitive file activity. Policies can check custom file paths identified with wildcard patterns. The unified file path criterion that replaces separate effective path and actual path fields enables you to define flexible monitoring rules. These flexible rules can match your specific security and compliance requirements, from individual critical files to entire directory trees. You can detect unauthorized modifications and host breakouts even when attackers try to obscure their targets by using symbolic links or volume mounts.
+Protect your infrastructure by configuring RHACS policies that monitor sensitive file activity. Policies can check custom file paths identified with wildcard patterns. With the unified file path criterion that replaces separate effective path and actual path fields, you can define flexible monitoring rules. These flexible rules can match your specific security and compliance requirements, from individual critical files to entire directory trees. You can detect unauthorized modifications and host breakouts even when attackers try to obscure their targets by using symbolic links or volume mounts.
 
 When creating policies for unauthorized file modifications, you specify file paths by using glob pattern syntax. For example, you add `/etc/*.conf` or `/var/log/app/**/*.log` in a single file path field during policy creation. The file activity monitoring system evaluates violations against both the effective path, which is how the process views the file inside the container, and the actual path, which is the true location on the host filesystem. This dual matching ensures comprehensive detection while violation records display both path values for forensic investigation.
 
@@ -28,7 +28,7 @@ You can combine file path patterns with process filtering criteria to create pre
 
 ## Dynamic path support for file activity monitoring
 
-RHACS 4.11 enhances the Technology Preview file activity monitoring feature with dynamic path support and process-based filtering. You can now define custom file paths by using wildcard patterns instead of being limited to four fixed critical paths. The unified file path criterion simplifies policy creation by replacing separate effective path and actual path fields, while violation records continue to display both values for forensic analysis.
+RHACS 4.11 enhances the Technology Preview file activity monitoring feature with dynamic path support and process-based filtering. You can now define custom file paths by using wildcard patterns rather than only the four fixed critical paths. The unified file path criterion simplifies policy creation by replacing separate effective path and actual path fields, while violation records continue to display both values for forensic analysis.
 
 You can use process filtering to suppress alerts from legitimate system operations such as OpenShift upgrades and package installations. You can configure policies with process name, process ancestor, process arguments, and process UID criteria to reduce false positives while maintaining comprehensive file integrity monitoring coverage.
 
@@ -50,7 +50,7 @@ Additional resources
 
 </div>
 
-- [Using the Red Hat Advanced Cluster Security for Kubernetes add-on](../../integration/integrate-with-splunk.md#integrate-splunk-add-on)
+- [Using the Red Hat Advanced Cluster Security for Kubernetes add-on](../../integration/integrate-with-splunk.md#integrate-splunk-add-on_integrate-with-splunk)
 
 - [Migrate file activity monitoring policies from 4.10 to 4.11](configuring-file-activity-monitoring.md#migrate-file-activity-monitoring-policies-from-410-to-411_file-activity-monitoring)
 
@@ -63,13 +63,13 @@ Additional resources
 The following are the known limitations of the file activity monitoring feature:
 
 Architecture support  
-This feature supports only x86 architecture in RHACS 4.11. On hybrid clusters with multiple architectures, file activity monitoring operates only on x86 nodes. ARM, Power, and Z architecture nodes do not report file activity violations. Future general availability releases might expand architecture support.
+This feature supports only x86_64 architecture in RHACS 4.11. On hybrid clusters with multiple architectures, file activity monitoring operates only on x86_64 nodes. ARM, Power, and Z architecture nodes do not report file activity violations. Future general availability releases might expand architecture support.
 
 Wildcard pattern performance constraints  
-Patterns exceeding this limit are rejected during policy creation. Under sustained load of 100 file operations per second, the file activity monitoring collector consumes approximately 5% CPU and 200 MB RAM. Exceeding these thresholds might result in missed violations or delayed violation reporting.
+RHACS rejects patterns that exceed this limit during policy creation. Under sustained load of 100 file operations per second, the file activity monitoring collector consumes about 5% CPU and 200 MB RAM. Exceeding these thresholds might result in missed violations or delayed violation reporting.
 
 Hosted control plane compatibility  
-File activity monitoring operates on OpenShift cluster worker nodes regardless of whether the control plane is hosted externally (for example, Red Hat Advanced Cluster Security for Kubernetes (RHACS) on Hosted Control Planes). The feature does not monitor control plane file activity, only workloads and system processes running on managed worker nodes. Worker node architecture must be x86 for file activity monitoring to function.
+File activity monitoring operates on OpenShift cluster worker nodes regardless of whether an external provider hosts the control plane (for example, Red Hat Advanced Cluster Security for Kubernetes (RHACS) on Hosted Control Planes). The feature does not monitor control plane file activity, only workloads and system processes running on managed worker nodes. Worker node architecture must be x86_64 for file activity monitoring to function.
 
 Splunk Technology Add-on integration  
 File activity violation data requires Splunk Technology Add-on 3.0.0 or later. Earlier versions of the Splunk TA do not support the file activity input type. For more information, see "Install and configure the Splunk add-on".
@@ -88,13 +88,13 @@ Prerequisites
 
 </div>
 
-- RHACS 4.11 or later is installed.
+- You have installed RHACS 4.11 or later.
 
 - You have identified which files and directories require monitoring based on security policy and compliance requirements.
 
 - You understand glob pattern syntax and wildcard matching behavior.
 
-- The file activity monitoring setting is enabled in the **Per Node Settings** section during secured cluster configuration.
+- You have enabled the file activity monitoring setting in the **Per Node Settings** section during secured cluster configuration.
 
 </div>
 
@@ -153,7 +153,7 @@ Procedure
 
     - **Create** - Detects new file creation.
 
-    - **Rename** - Detects file rename operations. Provides the file that was moved and the location where the file was moved to.
+    - **Rename** - Detects file rename operations. Shows the original file location and the new location.
 
     - **Delete (Unlink)** - Detects file deletion.
 
@@ -209,18 +209,18 @@ Additional resources
 
 # Process filtering for file activity policies
 
-File activity monitoring policies support process-based filtering to reduce false positive alerts from legitimate system operations. You can configure policies to suppress violations when specific processes, process ancestors, process UIDs, or process arguments match expected patterns during maintenance windows or system upgrades. This capability enables you to maintain comprehensive file integrity monitoring coverage while minimizing alert fatigue from authorized changes.
+File activity monitoring policies support process-based filtering to reduce false positive alerts from legitimate system operations. You can configure policies to suppress violations when specific processes, process ancestors, process UIDs, or process arguments match expected patterns during maintenance windows or system upgrades. With this capability, you can keep comprehensive file integrity monitoring coverage while minimizing alert fatigue from authorized changes.
 
-Process filtering works by adding process criteria to file activity policies with the file path and file operation criteria. When a file operation occurs, RHACS evaluates all configured criteria. If the operation matches the file criteria but the initiating process matches the exclusion filter, no violation is generated.
+Process filtering works by adding process criteria to file activity policies with the file path and file operation criteria. When a file operation occurs, RHACS evaluates all configured criteria. If the operation matches the file criteria but the initiating process matches the exclusion filter, RHACS does not generate a violation.
 
 <a id="available-process-filtering-criteria_file-activity-monitoring"></a>
 
 ## Available process filtering criteria
 
-RHACS supports four process-based criteria for file activity policy filtering:
+RHACS supports four process-based criteria for file activity policy filtering.
 
 **Process name**  
-Filters based on the executable name of the process that performed the file operation. Use this criterion to exclude known system components such as `rpm`, `dpkg`, or operator binaries.
+Filters by the name of the executable program that performed the file operation. Use this criterion to exclude known system components such as `rpm`, `dpkg`, or Operator binaries.
 
 **Process ancestor**  
 Filters based on parent or ancestor processes in the process tree. Use this criterion to exclude all operations initiated by specific management frameworks, such as the Machine Config Operator (MCO) on OpenShift clusters.
@@ -229,11 +229,13 @@ Filters based on parent or ancestor processes in the process tree. Use this crit
 Filters based on command-line arguments passed to the process. Use this criterion to distinguish between different invocations of the same binary, such as excluding `systemctl daemon-reload` while monitoring other `systemctl` operations.
 
 **Process UID**  
-Filters based on the numeric user ID of the process. Use this criterion to allow privileged system maintenance (UID 0) while detecting unprivileged user attempts to modify protected files.
+Filters based on the numeric user ID of the process. Use this criterion to allow privileged system maintenance (UID 0) while detecting unprivileged user attempts to change protected files.
 
 <a id="common-use-cases-for-process-filtering_file-activity-monitoring"></a>
 
 ## Common use cases for process filtering
+
+You can use process filtering to suppress file activity alerts from legitimate system operations while maintaining comprehensive monitoring coverage.
 
 **Suppress OpenShift upgrade activity**  
 During OpenShift cluster upgrades, the MCO modifies system configuration files as part of normal upgrade procedures. You can filter violations by adding a process ancestor criterion matching the MCO binary to prevent alert storms during planned maintenance.
@@ -242,7 +244,7 @@ During OpenShift cluster upgrades, the MCO modifies system configuration files a
 System administrators regularly install and update packages by using `yum`, `dnf`, or `rpm` on cluster nodes. You can filter violations by adding a process name criterion matching the package management tools to allow these expected modifications while detecting unauthorized changes.
 
 **Allow Operator-initiated changes**  
-Kubernetes operators frequently update application configuration files as part of their reconciliation loops. You can filter violations by adding process name or process ancestor criteria matching the Operator binary to distinguish between automated configuration management and potential security incidents.
+Kubernetes Operators often update application configuration files as part of their reconciliation loops. You can filter violations by adding process name or process ancestor criteria matching the Operator binary to distinguish between automated configuration management and potential security incidents.
 
 **Detect privilege escalation attempts**  
 You can monitor sensitive files for modifications while excluding expected system daemon activity by combining file path patterns with process UID filters. For example, monitor `/etc/sudoers` modifications and exclude UID 0 operations to detect unprivileged who are attempting privilege escalation.
@@ -264,7 +266,7 @@ For example, you can create a policy that performs the following tasks:
 This policy detects unauthorized permission changes while ignoring legitimate system maintenance, reducing false positives without sacrificing security visibility.
 
 > [!NOTE]
-> Process filtering criteria use the same matching logic as other RHACS policy criteria. You can configure multiple process filters in a single policy, and all configured criteria must match for a violation to be suppressed.
+> Process filtering criteria use the same matching logic as other RHACS policy criteria. You can configure multiple process filters in a single policy, and all configured criteria must match to suppress a violation.
 
 <a id="create-file-activity-policies-with-process-filters_file-activity-monitoring"></a>
 
@@ -280,13 +282,13 @@ Prerequisites
 
 </div>
 
-- RHACS 4.11 or later is installed.
+- You have installed RHACS 4.11 or later.
 
 - You understand which files require monitoring based on security and compliance requirements.
 
 - You understand which processes initiate legitimate modifications to monitored files.
 
-- The file activity monitoring setting is enabled in the **Per Node Settings** section during secured cluster configuration.
+- You have enabled the file activity monitoring setting in the **Per Node Settings** section during secured cluster configuration.
 
 </div>
 
@@ -370,7 +372,7 @@ Verification
 
 ### Policies with process filter examples
 
-You can combine file path, operations, and process name criteria to create file activity monitoring policies that provide alerts with fewer false positives.
+You can combine file path, operations, and process name criteria to create file activity monitoring policies that give you alerts with fewer false positives.
 
 The following example policy configurations show common file activity monitoring scenarios with process filtering:
 
@@ -453,7 +455,7 @@ Procedure
 
         - Any observed false positive patterns during 4.10 usage
 
-2.  Map 4.10 fixed paths to 4.11 wildcard patterns. Review each monitored path and determine whether you can expand coverage using wildcard patterns:
+2.  Map 4.10 fixed paths to 4.11 wildcard patterns. Review each monitored path and decide whether you can expand coverage using wildcard patterns:
 
     - For paths monitoring specific files, use the exact path without wildcards.
 
@@ -467,11 +469,11 @@ Procedure
 
     2.  In the **Policy name** field, enter a name for the migrated policy purpose.
 
-    3.  Verify that the correct severity is selected.
+    3.  Verify that you have selected the correct severity.
 
     4.  In the **Categories** section, select **File Activity Monitoring**.
 
-    5.  Verify that the correct **lifecycle stage** is selected.
+    5.  Verify that you have selected the correct **lifecycle stage**.
 
     6.  Select the same **Event source** value configured in your 4.10 policy.
 
@@ -527,7 +529,7 @@ Verification
 
 </div>
 
-<div>
+<div id="additional-resources_configuring-file-activity-monitoring">
 
 <div class="title">
 

@@ -22,7 +22,7 @@ Edit the source code of applications running on OpenShift directly from the Deve
     The deployments are displayed as graphical circles surrounded by circular buttons. One of these buttons is **Edit Source Code**.
 
       
-    ![Edit Source Code button in the OpenShift Developer Perspective](assets/bd41b7372a9e76c7e5c7.png)  
+    ![Edit Source Code button in the OpenShift Developer Perspective](assets/c1253b8c7cb79d930e8b.png)  
 
 4.  Click the **Edit Source Code** button. This redirects to a workspace with the cloned source code of the application component.
 

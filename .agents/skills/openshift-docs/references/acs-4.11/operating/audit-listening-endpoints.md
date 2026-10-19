@@ -2,7 +2,13 @@
 
 Red Hat Advanced Cluster Security for Kubernetes (RHACS) provides the ability to audit the processes that are listening on ports in your secured clusters and filter this data by deployment, namespace, or cluster.
 
-You can view information about processes and ports that they are listening on by using the following methods:
+<a id="audit-listening-endpoints-overview_audit-listening-endpoints"></a>
+
+# Listening endpoints overview
+
+You can view information about processes and the ports that they are listening on by using the RHACS web portal or the API.
+
+Use one of the following methods:
 
 - In the RHACS web portal, go to **Network** → **Listening Endpoints**.
 
@@ -20,7 +26,7 @@ The page provides a list of processes by deployment, with the following informat
 
 You can further filter the information displayed on the page by using the filter field and entering individual deployments, namespaces, and clusters.
 
-Click the expand icon at the top of the list to expand all sections for all deployments listed, or click the expand icon on a single deployment line to view additional information about that deployment. The following information is provided:
+Click the expand icon at the top of the list to expand all sections for all deployments listed, or click the expand icon on a single deployment line to view additional information about that deployment. The expanded view displays the following information:
 
 - Exec file path: Location of the process
 
@@ -30,8 +36,8 @@ Click the expand icon at the top of the list to expand all sections for all depl
 
 - Protocol: Protocol in use by the process
 
-- Pod ID: Name of the pod where the process is contained
+- Pod ID: Name of the pod that contains the process
 
-- Container name: Name of the container in which the process that is listening is located
+- Container name: Name of the container that runs the listening process
 
 Clicking on a deployment name brings you to the **Risk** page in the RHACS web portal, where you can view information about the deployment, including risk indicators such as policy violations and additional deployment details.

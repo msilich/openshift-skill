@@ -9,7 +9,7 @@ Developers get browser-based IDEs running in OpenShift containers, with on-deman
 
 <figure>
 <br />
-<img src="assets/338a5f752da02137cb71.png" alt="User workspaces interactions with other components" /><br />
+<img src="assets/d57b80eab461a8ca6771.png" alt="User workspaces interactions with other components" /><br />
 
 <figcaption>Figure 1. User workspaces interactions with other components</figcaption>
 </figure>
@@ -33,7 +33,7 @@ The devfile v2 format specifies which tools and runtimes a workspace includes. W
 
 <figure>
 <br />
-<img src="assets/9fdf5f294a71703c5bf2.png" alt="Workspace components" /><br />
+<img src="assets/734adbdf55abe6e016fb.png" alt="Workspace components" /><br />
 
 <figcaption>Figure 2. OpenShift Dev Spaces workspace components</figcaption>
 </figure>

@@ -25,7 +25,7 @@ In OpenShift Container Platform 4.20, you can install a cluster on bare metal in
 
 # About installations in restricted networks
 
-You can install OpenShift Container Platform 4.20 in a restricted network without an active internet connection to obtain software components. Restricted network installations can use installer-provisioned or user-provisioned infrastructure, depending on the cloud platform to which you are installing the cluster.
+You can install OpenShift Container Platform 4.20 in a restricted network that lacks an active internet connection. These restricted installations use installer-provisioned or user-provisioned infrastructure, depending on your cloud platform.
 
 If you choose to perform a restricted network installation on a cloud platform, you still require access to its cloud APIs. Some cloud functions, such as Amazon Web Service’s Route 53 DNS and IAM services, require internet access. Depending on your network, you might require less internet access for an installation on bare-metal hardware, Nutanix, or on VMware vSphere.
 
@@ -196,8 +196,8 @@ This section provides details about the ports that are required.
 | `500` | IPsec IKE packets |  |
 | `4500` | IPsec NAT-T packets |  |
 | `123` | Network Time Protocol (NTP) on UDP port `123`. If an external NTP time server is configured, you must open UDP port `123`. |  |
-| TCP/UDP | `30000`-`32767` |  |
-| Kubernetes node port | ESP | N/A |
+| TCP/UDP | `30000`-`32767` | Kubernetes node port |
+| ESP | N/A | IPsec Encapsulating Security Payload (ESP) |
 
 Ports used for all-machine to all-machine communications
 
@@ -423,7 +423,7 @@ Provides reverse DNS resolution for the Kubernetes API. The PTR record refers to
 Provides reverse DNS resolution for the bootstrap machine.
 
 `control-plane0.ocp4.example.com.`
-Provides rebootstrap.ocp4.example.com.verse DNS resolution for the control plane machines.
+Provides reverse DNS resolution for the control plane machines.
 
 `compute0.ocp4.example.com.`
 Provides reverse DNS resolution for the compute machines.
@@ -591,6 +591,9 @@ Port `80` handles the HTTP traffic and points to the machines that run the Ingre
 # Creating a manifest object that includes a customized br-ex bridge
 
 By default, OpenShift Container Platform automatically configures the Open vSwitch (OVS) `br-ex` bridge on bare-metal nodes. For advanced networking requirements, you can override this default behavior on bare-metal platforms. To do this, create a `MachineConfig` object that includes an NMState configuration file.
+
+> [!NOTE]
+> You can use Butane to create machine configs. For more information, see "Creating a MachineConfig object by using Butane".
 
 Consider using the customized `br-ex` bridge configuration for any of the following tasks:
 
@@ -831,6 +834,8 @@ Next steps
 Additional resources
 
 </div>
+
+- [Creating a MachineConfig object by using Butane](../../install_config/installing-customizing.md#installation-special-config-butane-create_installing-customizing)
 
 - [Converting to a dual-stack cluster network](../../../networking/ovn_kubernetes_network_provider/converting-to-dual-stack.md#nw-dual-stack-convert_converting-to-dual-stack)
 
@@ -1243,7 +1248,7 @@ Additional resources
 
 # Generating a key pair for cluster node SSH access
 
-During an OpenShift Container Platform installation, you can provide an SSH public key to the installation program. The key is passed to the Red Hat Enterprise Linux CoreOS (RHCOS) nodes through their Ignition config files and is used to authenticate SSH access to the nodes. The key is added to the `~/.ssh/authorized_keys` list for the `core` user on each node, which enables password-less authentication.
+During an OpenShift Container Platform installation, you can provide an SSH public key to the installation program. The key is passed to Red Hat Enterprise Linux CoreOS (RHCOS) nodes through their Ignition config files and is added to `~/.ssh/authorized_keys` for the `core` user on each node.
 
 The key is added to the `~/.ssh/authorized_keys` list for the `core` user on each node, which enables password-less authentication. After the key is passed to the nodes, you can use the key pair to SSH in to the RHCOS nodes as the user `core`. To access the nodes through SSH, the private key identity must be managed by SSH for your local user.
 
@@ -1828,7 +1833,7 @@ Additional resources
 
 </div>
 
-# Configuring chrony time service
+# Configure chrony time service
 
 You must set the time server and related settings used by the chrony time service (`chronyd`) by modifying the contents of the `chrony.conf` file and passing those contents to your nodes as a machine config.
 
@@ -2591,7 +2596,9 @@ Additional resources
 
 ### Default console configuration
 
-Red Hat Enterprise Linux CoreOS (RHCOS) nodes installed from an OpenShift Container Platform 4.20 boot image use a default console that is meant to accomodate most virtualized and bare metal setups. Different cloud and virtualization platforms may use different default settings depending on the chosen architecture.
+Red Hat Enterprise Linux CoreOS (RHCOS) nodes installed from an OpenShift Container Platform 4.20 boot image use a default console that is meant to accommodate most virtualized and bare metal setups.
+
+Different cloud and virtualization platforms may use different default settings depending on the chosen architecture.
 
 Bare-metal installations use the kernel default settings which typically means the graphical console is the primary console and the serial console is disabled.
 
@@ -4410,7 +4417,9 @@ Procedure
 
 # Waiting for the bootstrap process to complete
 
-The OpenShift Container Platform bootstrap process begins after the cluster nodes first boot into the persistent RHCOS environment that has been installed to disk. The configuration information provided through the Ignition config files is used to initialize the bootstrap process and install OpenShift Container Platform on the machines. You must wait for the bootstrap process to complete.
+After your cluster nodes first boot into the persistent RHCOS environment installed to disk, wait for the OpenShift Container Platform bootstrap process to complete.
+
+The configuration information provided through the Ignition config files is used to initialize the bootstrap process and install OpenShift Container Platform on the machines.
 
 <div>
 
@@ -4568,7 +4577,7 @@ Next steps
 
 </div>
 
-# Approving the certificate signing requests for your machines
+# Approve the certificate signing requests for your machines
 
 To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 
@@ -4870,7 +4879,7 @@ Configure a persistent volume, which is required for production clusters. Where 
 
 You can also allow the image registry to use block storage types by using the `Recreate` rollout strategy during upgrades.
 
-### Changing the image registry’s management state
+### Change the image registry’s management state
 
 To start the image registry, you must change the Image Registry Operator configuration’s `managementState` from `Removed` to `Managed`.
 
@@ -4890,7 +4899,7 @@ Procedure
 
 </div>
 
-### Configuring registry storage for bare metal and other manual installations
+### Configure registry storage for bare metal and other manual installations
 
 As a cluster administrator, following installation you must configure your registry to use storage.
 
@@ -5012,7 +5021,7 @@ Procedure
 
 </div>
 
-### Configuring storage for the image registry in non-production clusters
+### Configure storage for the image registry in non-production clusters
 
 You must configure storage for the Image Registry Operator. For non-production clusters, you can set the image registry to an empty directory, but you lose all images if you restart the registry.
 
@@ -5053,7 +5062,7 @@ Procedure
 
 </div>
 
-### Configuring block registry storage for bare metal
+### Configure block registry storage for bare metal
 
 To allow the image registry to use block storage types during upgrades as a cluster administrator, you can use the `Recreate` rollout strategy.
 

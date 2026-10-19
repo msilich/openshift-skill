@@ -37,7 +37,7 @@ Additional resources
 
 </div>
 
-# Labeling management cluster nodes
+# Label management cluster nodes
 
 Proper node labeling is a prerequisite to deploying hosted control planes.
 

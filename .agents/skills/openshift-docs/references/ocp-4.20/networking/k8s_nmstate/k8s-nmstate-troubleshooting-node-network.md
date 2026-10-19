@@ -8,7 +8,7 @@ If the node network configuration encounters an issue, the policy is automatical
 
 - The host loses connection to the API server.
 
-# Troubleshooting an incorrect node network configuration policy configuration
+# Troubleshoot an incorrect node network configuration policy configuration
 
 You can apply changes to the node network configuration across your entire cluster by applying a node network configuration policy. If you applied an incorrect configuration, you can use the following example to troubleshoot and correct the failed node network policy.
 
@@ -169,7 +169,7 @@ Procedure
 
 </div>
 
-# Troubleshooting DNS connectivity issues in a disconnected environment
+# Troubleshoot DNS connectivity issues in a disconnected environment
 
 If you experience health check probe issues when configuring `nmstate` in a disconnected environment, you can configure the DNS server to resolve the custom domain name instead of the default `root-servers.net` domain.
 

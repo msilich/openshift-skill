@@ -231,7 +231,7 @@ Procedure
 4.  In the **Enable notification** window, select the **Jira** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 

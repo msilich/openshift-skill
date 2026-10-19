@@ -166,7 +166,7 @@ The `oc adm must-gather` CLI command collects the following information from you
 
 You can specify one or more images when you run the command by including the `--image` argument. When you specify an image, the tool collects data related to that feature or product. When you run `oc adm must-gather`, a new pod is created on the cluster. The data is collected on that pod and saved in a new directory that starts with `must-gather.local`. This directory is created in your current working directory.
 
-# Collecting low latency tuning debugging data for Red Hat Support
+# Collect low latency tuning debugging data for Red Hat Support
 
 To debug low latency setup issues when opening a support case, collect diagnostic information for Red Hat Support using the `must-gather` tool. This command gathers essential data, such as node tuning and NUMA topology, from your OpenShift Container Platform cluster.
 

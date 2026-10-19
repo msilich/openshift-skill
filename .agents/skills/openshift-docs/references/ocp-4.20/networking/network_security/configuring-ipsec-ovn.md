@@ -100,7 +100,9 @@ The encrypted and unencrypted flows are illustrated in the following diagram:
 
 ## Encryption protocol and IPsec mode
 
-The encrypt cipher used is `AES-GCM-16-256`. The integrity check value (ICV) is `16` bytes. The key length is `256` bits.
+Pod-to-pod IPsec in OpenShift Container Platform uses `AES-GCM-16-256` in transport mode with a 256-bit key and a 16-byte integrity check value (ICV).
+
+*Transport mode* encrypts end-to-end communication by adding an Encapsulated Security Payload (ESP) header to the IP header of the original packet and encrypts the packet data.
 
 The IPsec mode used is *Transport mode*, a mode that encrypts end-to-end communication by adding an Encapsulated Security Payload (ESP) header to the IP header of the original packet and encrypts the packet data. OpenShift Container Platform does not currently use or support IPsec *Tunnel mode* for pod-to-pod communication.
 
@@ -139,7 +141,7 @@ Ensure that the following prohibitions are observed:
 
 - Certificate common names (CN) in the provided certificate bundle must not begin with the `ovs_` prefix, because this naming can conflict with pod-to-pod IPsec CN names in the Network Security Services (NSS) database of each node.
 
-# Enabling IPsec encryption
+# Enable IPsec encryption
 
 As a cluster administrator you can enable pod-to-pod IPsec encryption between the cluster and external IPsec endpoints.
 
@@ -273,7 +275,7 @@ Verification
 
 </div>
 
-# Configuring IPsec encryption for external traffic
+# Configure IPsec encryption for external traffic
 
 As a cluster administrator, to encrypt external traffic with IPsec you must configure IPsec for your network infrastructure, including providing PKCS#12 certificates. Because this procedure uses Butane to create machine configs, you must have the `butane` tool installed.
 
@@ -575,7 +577,7 @@ Verification
 
 - [IPsec Encryption](https://nmstate.io/devel/yaml_api.html#ipsec-encryption)
 
-# Disabling IPsec encryption for an external IPsec endpoint
+# Disable IPsec encryption for an external IPsec endpoint
 
 As a cluster administrator, you can remove an existing IPsec tunnel to an external host.
 
@@ -639,7 +641,7 @@ Procedure
 
 </div>
 
-# Disabling IPsec encryption
+# Disable IPsec encryption
 
 As a cluster administrator, you can disable IPsec encryption.
 

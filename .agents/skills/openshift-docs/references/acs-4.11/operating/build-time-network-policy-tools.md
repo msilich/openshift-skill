@@ -1,14 +1,34 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Build-time network policy tools let you automate the creation and validation of network policies, including Kubernetes network policies, and the cluster-wide Admin Network Policy (ANP) and Baseline Admin Network Policy (BANP), in your development and operations workflows by using the `roxctl` CLI. These tools work with a specified file directory containing your project’s workload and network policy manifests and do not require RHACS authentication.
+You can use build-time network policy tools to automate the creation and validation of network policies, including Kubernetes network policies, and the cluster-wide Admin Network Policy (ANP) and Baseline Admin Network Policy (BANP), in your development and operations workflows by using the `roxctl` CLI. These tools work with a specified file directory containing your project’s workload and network policy manifests and do not require RHACS authentication.
+
+<a id="build-time-network-policy-tools-commands_network-policy-tools"></a>
+
+# Network policy tools
+
+The `roxctl` CLI provides build-time network policy tools for generating network policies, mapping connectivity, and comparing policy versions.
 
 | Command | Description |
 |----|----|
-| `roxctl netpol generate` | Generates Kubernetes network policies by analyzing your project’s YAML manifests in a specified directory. For more information, see [Using the build-time network policy generator](build-time-network-policy-tools.md#using-the-build-time-network-policy-generator_network-policy-tools). |
-| `roxctl netpol connectivity map` | Lists the allowed connections between workloads in your project directory by examining the workload, Kubernetes network policy, ANP, and BANP manifests. You can generate the output in various text formats or in a graphical `.dot` format. For more information, see [Connectivity mapping using the roxctl netpol connectivity map command](build-time-network-policy-tools.md#connectivity-mapping-using-the-roxctl-netpol-connectivity-map-command_network-policy-tools). |
-| `roxctl netpol connectivity diff` | Creates a list of variations in the allowed connections between two project versions. This is determined by the workload and Kubernetes network policy, ANP, and BANP manifests in each version’s directory. This feature shows the semantic differences which are not obvious when performing a source code (syntactic) `diff`. For more information, see [Identifying the differences in allowed connections between project versions](build-time-network-policy-tools.md#identifying-the-differences-in-allowed-connections-between-project-versions_network-policy-tools). |
+| `roxctl netpol generate` | Generates Kubernetes network policies by analyzing your project’s YAML manifests in a specified directory. |
+| `roxctl netpol connectivity map` | Lists the allowed connections between workloads in your project directory by examining the workload, Kubernetes network policy, ANP, and BANP manifests. You can generate the output in various text formats or in a graphical `.dot` format. |
+| `roxctl netpol connectivity diff` | Creates a list of variations in the allowed connections between two project versions. The workload and Kubernetes network policy, ANP, and BANP manifests in each version’s directory decide the variations. This feature shows the semantic differences which are not obvious when performing a source code (syntactic) `diff`. |
 
-Network policy tools
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Using the build-time network policy generator](build-time-network-policy-tools.md#using-the-build-time-network-policy-generator_network-policy-tools)
+
+- [Connectivity mapping using the roxctl netpol connectivity map command](build-time-network-policy-tools.md#connectivity-mapping-using-the-roxctl-netpol-connectivity-map-command_network-policy-tools)
+
+- [Identifying the differences in allowed connections between project versions](build-time-network-policy-tools.md#identifying-the-differences-in-allowed-connections-between-project-versions_network-policy-tools)
+
+</div>
 
 <a id="build-time-network-policy-generator_network-policy-tools"></a>
 
@@ -16,13 +36,25 @@ Network policy tools
 
 The build-time network policy generator can automatically generate Kubernetes network policies based on application YAML manifests. You can use it to develop network policies as part of the continuous integration/continuous deployment (CI/CD) pipeline before deploying applications on your cluster.
 
-Red Hat developed this feature in partnership with the developers of the [NP-Guard project](https://np-guard.github.io/). First, the build-time network policy generator analyzes Kubernetes manifests in a local folder, including service manifests, config maps, and workload manifests such as `Pod`, `Deployment`, `ReplicaSet`, `Job`, `DaemonSet`, and `StatefulSet`. Then, it discovers the required connectivity and creates the Kubernetes network policies to achieve pod isolation. These policies allow no more and no less than the needed ingress and egress traffic.
+Red Hat developed this feature in partnership with the developers of the NP-Guard project. First, the build-time network policy generator analyzes Kubernetes manifests in a local folder, including service manifests, config maps, and workload manifests such as `Pod`, `Deployment`, `ReplicaSet`, `Job`, `DaemonSet`, and `StatefulSet`. Then, it discovers the required connectivity and creates the Kubernetes network policies to achieve pod isolation. These policies allow no more and no less than the needed ingress and egress traffic.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [NP-Guard project](https://np-guard.github.io/)
+
+</div>
 
 <a id="using-the-build-time-network-policy-generator_network-policy-tools"></a>
 
 ## Using the build-time network policy generator
 
-The build-time network policy generator is included in the `roxctl` CLI. For the build-time network policy generation feature, `roxctl` CLI does not need to communicate with RHACS Central so you can use it in any development environment.
+The `roxctl` CLI includes the build-time network policy generator. For the build-time network policy generation feature, `roxctl` CLI does not need to communicate with RHACS Central so you can use it in any development environment.
 
 <div>
 
@@ -38,11 +70,11 @@ Prerequisites
 
 3.  Verify that the service network addresses are not hard-coded. Every workload that needs to connect to a service must specify the service network address as a variable. You can specify this variable by using the workload’s resource environment variable or in a config map.
 
-    - [Example 1: Using an environment variable](https://github.com/np-guard/cluster-topology-analyzer/blob/main/tests/k8s_guestbook/frontend-deployment.yaml#L25:L28)
+    - Example 1: Using an environment variable
 
-    - [Example 2: Using a config map](https://github.com/np-guard/cluster-topology-analyzer/blob/main/tests/onlineboutique/kubernetes-manifests.yaml#L105:L109)
+    - Example 2: Using a config map
 
-    - [Example 3: Using a config map](https://github.com/np-guard/cluster-topology-analyzer/blob/main/tests/onlineboutique/kubernetes-manifests.yaml#L269:L271)
+    - Example 3: Using a config map
 
 4.  Service network addresses must match the following official regular expression pattern:
 
@@ -101,23 +133,25 @@ Additional resources
 
 </div>
 
-- [roxctl netpol generate command options](../cli/command-reference/roxctl-netpol.md#roxctl-netpol-generate_roxctl-netpol).
+- [roxctl netpol generate command options](../cli/command-reference/roxctl-netpol.md#roxctl-netpol-generate_roxctl-netpol)
+
+- [Example 1: Using an environment variable](https://github.com/np-guard/cluster-topology-analyzer/blob/main/tests/k8s_guestbook/frontend-deployment.yaml#L25:L28)
+
+- [Example 2: Using a config map](https://github.com/np-guard/cluster-topology-analyzer/blob/main/tests/onlineboutique/kubernetes-manifests.yaml#L105:L109)
+
+- [Example 3: Using a config map](https://github.com/np-guard/cluster-topology-analyzer/blob/main/tests/onlineboutique/kubernetes-manifests.yaml#L269:L271)
 
 </div>
 
-<div>
+<a id="build-time-network-policy-generator-next-steps_network-policy-tools"></a>
 
-<div class="title">
+## Next steps
 
-Next steps
-
-</div>
+After generating the network policies, verify the policies for completeness and accuracy before deploying them.
 
 - After generating the policies, you must inspect them for completeness and accuracy, in case any relevant network address was not specified as expected in the YAML files.
 
 - Most importantly, verify that required connections are not blocked by the isolating policies. To help with this inspection you can use the `roxctl netpol connectivity map` tool.
-
-</div>
 
 > [!NOTE]
 > Applying network policies to the cluster as part of the workload deployment using automation saves time and ensures accuracy. You can follow a GitOps approach by submitting the generated policies using pull requests, providing the team an opportunity to review the policies before deploying them as part of the pipeline.
@@ -153,7 +187,9 @@ Procedure
     where:
 
     `<folder_path>`  
-    Specifies the path to the folder, which can include sub-folders that contain YAML resources and network policies for analysis, for example, [`netpol-analysis-example-minimal/`](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-analysis-example-minimal). The command scans the entire sub-folder tree. Optionally, you can also specify parameters to modify the behavior of the command.
+    Specifies the path to the folder, which can include sub-folders that contain YAML resources and network policies for analysis, for example, `netpol-analysis-example-minimal/`. The command scans the entire sub-folder tree. Optionally, you can also specify parameters to change the behavior of the command.
+
+    The following is an example output:
 
     | src                            | dst                            | conn     |
     |--------------------------------|--------------------------------|----------|
@@ -161,9 +197,7 @@ Procedure
     | default/frontend\[Deployment\] | 0.0.0.0-255.255.255.255        | UDP 53   |
     | default/frontend\[Deployment\] | default/backend\[Deployment\]  | TCP 9090 |
 
-    Example output
-
-    The output displays a table listing the allowed connectivity lines. Each line is composed of the following elements:
+    The output displays a table listing the allowed connectivity lines. Each line has the following elements:
 
     `src`  
     Represents the source endpoint.
@@ -188,7 +222,9 @@ Additional resources
 
 </div>
 
-- [roxctl netpol connectivity map command options](../cli/command-reference/roxctl-netpol.md#roxctl-netpol-connectivity-map_roxctl-netpol).
+- [roxctl netpol connectivity map command options](../cli/command-reference/roxctl-netpol.md#roxctl-netpol-connectivity-map_roxctl-netpol)
+
+- [netpol-analysis-example-minimal](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-analysis-example-minimal)
 
 </div>
 
@@ -196,7 +232,7 @@ Additional resources
 
 ## Retrieving explanations
 
-You can understand why connections are allowed or denied based on your Kubernetes network policy rules by retrieving the explanations.
+You can understand why your Kubernetes network policy rules allow or deny connections by retrieving the explanations.
 
 <div>
 
@@ -227,7 +263,7 @@ Procedure
 
 To understand precisely which parts of your Kubernetes network policy YAML files are responsible for allowing or denying connections, you can use the `roxctl netpol connectivity map` command which includes an explainability mode. You can debug and refine your network policies by using the explainability mode which provides additional details beyond the standard connectivity report.
 
-As a developer or DevOps professional, you might encounter situations where a connection you expect to be open is denied, or you need to confirm which specific rules allow the connection.
+As a developer or DevOps professional, you might meet situations where a connection you expect to be open fails, or you need to confirm which specific rules allow the connection.
 
 The following are examples of some common issues:
 
@@ -235,11 +271,13 @@ The following are examples of some common issues:
 
 - Typographical errors that cause policies to open different ports or protocols than intended.
 
-The explainability mode provides insights into how each side of a connection is affected by your policy rules. You can quickly identify the configuration mistakes by using the explainability mode.
+The explainability mode provides insights into how your policy rules affect each side of a connection. You can quickly identify the configuration mistakes by using the explainability mode.
 
-<a id="_example_allowed_connections"></a>
+<a id="understanding-connectivity-explanations-allowed_network-policy-tools"></a>
 
 #### Example allowed connections
+
+This example shows the explainability output for a connection that a combination of Admin Network Policy (ANP) and NetworkPolicy rules allows.
 
 Consider that you have a Kubernetes cluster with the following components:
 
@@ -247,13 +285,15 @@ Consider that you have a Kubernetes cluster with the following components:
 
 - A core **Internal application A** called `internal-app-a` that actively exposes monitoring endpoints and needs monitoring.
 
-- A network policy configuration that defines Admin Network Policy (ANP) to `pass` connections from monitoring into namespaces with label `security: internal`, and a specific Network Policy (NP) that explicitly allows connections from `monitoring-service` into `internal-app-a`.
+- A network policy configuration that defines an ANP to `pass` connections from monitoring into namespaces with label `security: internal`, and a specific Network Policy (NP) that explicitly allows connections from `monitoring-service` into `internal-app-a`.
 
-You can see the YAML manifest for this example at [`netpol-analyzer/tests/anp_banp_explain_demo/`](https://github.com/np-guard/netpol-analyzer/tree/0ac857e19bfab4b281ca9bdfb2bbc5ea319b5065/tests/anp_banp_explain_demo).
+You can see the YAML manifest for this example at the `netpol-analyzer/tests/anp_banp_explain_demo/` directory.
 
 To analyze the network policies and provides an explanation for each connection, you can run the `roxctl netpol connectivity map --explain` command on this setup.
 
 The explainability output for allowed connections from the `monitoring-service` deployment for such configuration shows:
+
+The following is an example output:
 
 ``` terminal
 Connections between monitoring/monitoring-service[Pod] => internal-apps/internal-app-a[Pod]:
@@ -265,19 +305,35 @@ Allowed connections:
             NetworkPolicy 'internal-apps/allow-monitoring' allows connections by Ingress rule #1
 ```
 
-In this example, the connection from `monitoring/monitoring-service` to `internal-apps/internal-app-a` is allowed by the combination of ANP `pass-monitoring` that applies broadly on all namespaces with the label `security: internal` and a more specific NP `internal-apps/allow-monitoring` tailored for `internal-app-a`. The output shows that multiple policies can contribute to allowing a connection.
+In this example, the combination of ANP `pass-monitoring` that applies broadly on all namespaces with the label `security: internal` and a more specific NP `internal-apps/allow-monitoring` tailored for `internal-app-a` allows the connection from `monitoring/monitoring-service` to `internal-apps/internal-app-a`. The output shows that many policies can contribute to allowing a connection.
 
-<a id="_example_blocked_connections"></a>
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [netpol-analyzer/tests/anp_banp_explain_demo](https://github.com/np-guard/netpol-analyzer/tree/0ac857e19bfab4b281ca9bdfb2bbc5ea319b5065/tests/anp_banp_explain_demo)
+
+</div>
+
+<a id="understanding-connectivity-explanations-blocked_network-policy-tools"></a>
 
 #### Example blocked connections
 
+This example shows the explainability output for a connection that Admin Network Policy (ANP) and Baseline Admin Network Policy (BANP) rules block.
+
 Consider an isolated data service `isolated-data-service` which denies all external access by default for security reasons.
 
-You can see the YAML manifest for this example at [`netpol-analyzer/tests/anp_banp_explain_demo_2/`](https://github.com/np-guard/netpol-analyzer/tree/7ab6bbd421d3d80cbfff7cd1529ff8caf0137fbc/tests/anp_banp_explain_demo_2).
+You can see the YAML manifest for this example at the `netpol-analyzer/tests/anp_banp_explain_demo_2/` directory.
 
 To analyze the network policies and provides an explanation for each connection, you can run the `roxctl netpol connectivity map --explain` command on this setup.
 
 The explainability output for blocked connections from the `monitoring-service` deployment to this workload shows:
+
+The following is an example output:
 
 ``` terminal
 Connections between monitoring/monitoring-service[Pod] => isolated-apps/isolated-data-service[Pod]:
@@ -290,19 +346,45 @@ Denied connections:
             BaselineAdminNetworkPolicy 'default' denies connections by Ingress rule deny-ingress-from-monitoring
 ```
 
-In this example, the connection to `data/isolated-data-service` is blocked by a combination of ANP with Pass action, and of BANP that denies all connections from `monitoring` by default.
+In this example, a combination of ANP with Pass action and BANP that denies all connections from `monitoring` by default blocks the connection to `data/isolated-data-service`.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [netpol-analyzer/tests/anp_banp_explain_demo_2](https://github.com/np-guard/netpol-analyzer/tree/7ab6bbd421d3d80cbfff7cd1529ff8caf0137fbc/tests/anp_banp_explain_demo_2)
+
+</div>
 
 <a id="connectivity-map-output-formats-and-visualizations_network-policy-tools"></a>
 
 ## Connectivity map output formats and visualizations
 
-You can use various output formats, including `txt`, `md`, `csv`, `json`, and `dot`. The `dot` format is ideal for visualizing the output as a connectivity graph. It can be viewed using graph visualization software such as [Graphviz tool](https://graphviz.org/), and [extensions to VSCode](https://www.google.com/search?q=vscode+Graphviz+extension). You can convert the `dot` output to formats such as `svg`, `jpeg`, or `png` using Graphviz, whether it is installed locally or through an online viewer.
+You can use various output formats, including `txt`, `md`, `csv`, `json`, and `dot`. The `dot` format is ideal for visualizing the output as a connectivity graph. You can view it by using graph visualization software such as Graphviz and extensions to VSCode. You can convert the `dot` output to formats such as `svg`, `jpeg`, or `png` by using Graphviz, whether you install it locally or use an online viewer.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Graphviz](https://graphviz.org/)
+
+- [VSCode Graphviz extensions](https://www.google.com/search?q=vscode+Graphviz+extension)
+
+</div>
 
 <a id="generating-svg-graphs-from-the-dot-output-using-graphviz_network-policy-tools"></a>
 
 ## Generating svg graphs from the dot output using Graphviz
 
-Follow these steps to create a graph in `svg` format from the `dot` output.
+You can create a graph in `svg` format from the `dot` output by using Graphviz.
 
 <div>
 
@@ -312,7 +394,7 @@ Prerequisites
 
 </div>
 
-- [Graphviz](https://graphviz.org/) is installed on your local system.
+- You have installed Graphviz on your local system.
 
 </div>
 
@@ -330,11 +412,21 @@ Procedure
   $ dot -Tsvg connlist_output.dot > connlist_output_graph.svg
   ```
 
-  The following are examples of the dot output and the resulting graph generated by Graphviz:
+</div>
 
-  - [Example 1: dot output](https://github.com/np-guard/netpol-analyzer/blob/main/test_outputs/connlist/netpol-analysis-example-minimal_connlist_output.dot)
+<div>
 
-  - [Example 2: Graph generated by Graphviz](https://github.com/np-guard/netpol-analyzer/blob/main/test_outputs/connlist/netpol-analysis-example-minimal_connlist_output.dot.svg)
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Graphviz](https://graphviz.org/)
+
+- [Example 1: dot output](https://github.com/np-guard/netpol-analyzer/blob/main/test_outputs/connlist/netpol-analysis-example-minimal_connlist_output.dot)
+
+- [Example 2: Graph generated by Graphviz](https://github.com/np-guard/netpol-analyzer/blob/main/test_outputs/connlist/netpol-analysis-example-minimal_connlist_output.dot.svg)
 
 </div>
 
@@ -380,23 +472,23 @@ Procedure
 
   Specify the path to the folders, which can include sub-folders that contain YAML resources and network policies for analysis. The command scans the entire sub-folder trees for both the directories.
 
-  For example, `<folder_path_1>` is [`netpol-analysis-example-minimal/`](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-analysis-example-minimal) and `<folder_path_2>` is [`netpol-diff-example-minimal/`](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-diff-example-minimal). Optionally, you can also specify parameters to change the behavior of the command.
+  For example, `<folder_path_1>` is `netpol-analysis-example-minimal/` and `<folder_path_2>` is `netpol-diff-example-minimal/`. Optionally, you can also specify parameters to change the behavior of the command.
 
   > [!NOTE]
   > The command considers all YAML files that you can accept by using `kubectl apply -f`, and the YAML files then become valid inputs for your `roxctl netpol connectivity diff` command.
+
+  The following is an example output:
 
   | diff-type | source | destination | dir 1 | dir 2 | workloads-diff-info |
   |----|----|----|----|----|----|
   | changed | default/frontend\[Deployment\] | default/backend\[Deployment\] | TCP 9090 | TCP 9090,UDP 53 |  |
   | added | 0.0.0.0-255.255.255.255 | default/backend\[Deployment\] | No Connections | TCP 9090 |  |
 
-  Example output
-
-  The semantic difference report gives you an overview of the connections that were changed, added, or removed in `dir2` compared to the connections allowed in `dir1`. When you review the output, each line represents one allowed connection that was added, removed, or changed in `dir2` compared to `dir1`.
+  The semantic difference report gives you an overview of the connections that changed, that you added, or that you removed in `dir2` compared to the connections allowed in `dir1`. When you review the output, each line represents one allowed connection that you added, removed, or changed in `dir2` compared to `dir1`.
 
   If applicable, the `workloads-diff-info` provides additional details about added or removed workloads related to the added or removed connection.
 
-  For example, if a connection from workload `A` to workload `B` is removed because workload `B` was deleted, the `workloads-diff-info` indicates that workload `B` was removed. However, if such a connection was removed only because of network policy changes and neither workload `A` nor `B` was deleted, the `workloads-diff-info` is empty.
+  For example, if you remove a connection from workload `A` to workload `B` because you deleted workload `B`, the `workloads-diff-info` indicates that you removed workload `B`. However, if you removed such a connection only because of network policy changes and you did not delete workload `A` or `B`, the `workloads-diff-info` is empty.
 
 </div>
 
@@ -408,7 +500,11 @@ Additional resources
 
 </div>
 
-- [roxctl netpol connectivity diff command options](../cli/command-reference/roxctl-netpol.md#roxctl-netpol-connectivity-diff_roxctl-netpol).
+- [roxctl netpol connectivity diff command options](../cli/command-reference/roxctl-netpol.md#roxctl-netpol-connectivity-diff_roxctl-netpol)
+
+- [netpol-analysis-example-minimal](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-analysis-example-minimal)
+
+- [netpol-diff-example-minimal](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-diff-example-minimal)
 
 - [Output generated by the `roxctl netpol connectivity diff` command. Example 1: text format](https://github.com/np-guard/netpol-analyzer/blob/main/test_outputs/diff/diff_between_netpol-diff-example-minimal_and_netpol-analysis-example-minimal.txt)
 
@@ -424,7 +520,9 @@ Additional resources
 
 ## Distinguishing between syntactic and semantic difference outputs
 
-In the following example, `dir1` is [`netpol-analysis-example-minimal/`](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-analysis-example-minimal), and `dir2` is [`netpol-diff-example-minimal/`](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-diff-example-minimal). The difference between the directories is a small change in the network policy `backend-netpol`.
+The following example compares syntactic and semantic difference outputs to show how source code changes affect network connectivity.
+
+In the following example, `dir1` is `netpol-analysis-example-minimal/`, and `dir2` is `netpol-diff-example-minimal/`. The difference between the directories is a small change in the network policy `backend-netpol`.
 
 <div class="formalpara">
 
@@ -462,9 +560,25 @@ status: {}
 
 The change in `dir2` is an added `-` before the ports attribute, which produces a difference output.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [netpol-analysis-example-minimal](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-analysis-example-minimal)
+
+- [netpol-diff-example-minimal](https://github.com/np-guard/netpol-analyzer/tree/main/tests/netpol-diff-example-minimal)
+
+</div>
+
 <a id="syntactic-difference-output_network-policy-tools"></a>
 
 ### Syntactic difference output
+
+You can compare the contents of YAML files in two directories to see the syntactic differences.
 
 <div>
 
@@ -478,13 +592,7 @@ Procedure
 
       $ diff netpol-diff-example-minimal/netpols.yaml netpol-analysis-example-minimal/netpols.yaml
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  The following is an example output:
 
   ``` text
   12c12
@@ -493,13 +601,13 @@ Procedure
   >     ports:
   ```
 
-  </div>
-
 </div>
 
 <a id="semantic-difference-output_network-policy-tools"></a>
 
 ### Semantic difference output
+
+You can analyze the connectivity differences between Kubernetes manifests and network policies in two directories to see the semantic differences.
 
 <div>
 
@@ -515,20 +623,12 @@ Procedure
   $ roxctl netpol connectivity diff --dir1=roxctl/netpol/connectivity/diff/testdata/netpol-analysis-example-minimal/ --dir2=roxctl/netpol/connectivity/diff/testdata/netpol-diff-example-minimal
   ```
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  The following is an example output:
 
   ``` text
   Connectivity diff:
   diff-type: changed, source: default/frontend[Deployment], destination: default/backend[Deployment], dir1:  TCP 9090, dir2: TCP 9090,UDP 53
   diff-type: added, source: 0.0.0.0-255.255.255.255, destination: default/backend[Deployment], dir1:  No Connections, dir2: TCP 9090
   ```
-
-  </div>
 
 </div>

@@ -4,6 +4,50 @@ The Compliance Operator lets OpenShift Container Platform administrators describ
 
 These release notes track the development of the Compliance Operator in the OpenShift Container Platform.
 
+# Release notes for OpenShift Compliance Operator 1.10.0
+
+OpenShift Compliance Operator 1.10.0 is now available. The `stable` update channel tracks and receives updates for the Compliance Operator. For more information, see [Updating the Compliance Operator](co-management/compliance-operator-updating.md#compliance-operator-updating). The following Red Hat Security Advisory (RHSA) is available:
+
+- [RHSA-2026:67707 - OpenShift Compliance Operator 1.10.0 bug fix and enhancement update](https://access.redhat.com/errata/RHSA-2026:67707)
+
+## New features and enhancements
+
+- With this release, the `ocp4-cis` and `ocp4-cis-node` profiles align with the CIS Red Hat OpenShift Container Platform 4 Benchmark v2.0.0. Benchmark version 1.9.0 is deprecated and remains available as the `ocp4-cis-1-9` and `ocp4-cis-node-1-9` profiles, and the CIS 1.7 profiles are removed. For more information, see ([CMP-4289](https://redhat.atlassian.net/browse/CMP-4289)).
+
+- With this release, the `ocp4-stig`, `ocp4-stig-node`, and `rhcos4-stig` profiles align with DISA STIG V2R6. A new profile `ocp4-stig-vm-extension` was added to support systems with OpenShift Virtualization. Version V2R3 is deprecated and remains available as the `ocp4-stig-v2r3` and `ocp4-stig-node-v2r3` profiles, and the V2R2 profiles are removed. For more information, see ([CMP-4615](https://redhat.atlassian.net/browse/CMP-4615)).
+
+- With this release, the Compliance Operator adds support for the CIS Red Hat OpenShift Virtual Machine Extension Benchmark v1.0.0. The `ocp4-cis-vm-extension` and `ocp4-cis-vm-extension-node` profiles are available to scan OpenShift Virtualization. For more information, see ([CMP-4424](https://redhat.atlassian.net/browse/CMP-4424)).
+
+- With this release, the default `ocp4` `ProfileBundle` includes two Profiles using the Common Expression Language (CEL) checking engine. Both target OpenShift Virtualization settings: the `ocp4-cis-vm-extension` profile for the CIS Virt benchmark and the `ocp4-stig-vm-extension` profile included with the DISA STIG V2R6 update. For more information, see ([CMP-4424](https://redhat.atlassian.net/browse/CMP-4424)) and ([CMP-4615](https://redhat.atlassian.net/browse/CMP-4615)).
+
+- With this release, CEL `Rules` and `CustomRule` objects are in General Availability (GA). CEL does not replace the existing Extensible Configuration Checklist Description Format (XCCDF) profiles but extends the ability to comply with custom security policies. For more information, see ([CMP-4574](https://redhat.atlassian.net/browse/CMP-4574)).
+
+- With this release, the CEL scanner introduces support for MANUAL rules, which can be used as the basis for a `CustomRule` object with user provided CEL check. For more information, see ([CMP-4518](https://redhat.atlassian.net/browse/CMP-4518)).
+
+- With this release, the Compliance Operator creates `NetworkPolicy` objects for operand pods. Operand traffic uses a default-deny policy, with required ingress and egress allowed. For more information, see ([CMP-4569](https://redhat.atlassian.net/browse/CMP-4569)).
+
+- With this release, the Compliance Operator uses the OpenShift Container Platform API server TLS configuration instead of hard-coded TLS settings. For more information, see ([CMP-4147](https://redhat.atlassian.net/browse/CMP-4147)).
+
+## Fixed issues
+
+- Before this release, the node scanner delivered the runtime kubelet configuration with a host symlink. Later scans on the same node could fail to refresh that configuration, resulting in kubelet rules failure. With this release, the operator copies the kubelet configuration into a shared `emptyDir` volume. For more information, see ([CMP-4341](https://redhat.atlassian.net/browse/CMP-4341)).
+
+- Before this release, the metrics TLS endpoint could fail to start if the serving certificate was not ready, and metrics stayed unavailable for the life of the pod. With this release, the operator waits for the serving certificate before serving metrics over TLS. For more information, see ([CMP-4601](https://redhat.atlassian.net/browse/CMP-4601)).
+
+- Before this release, changing the `celContentFile` field on a `ProfileBundle` object did not redeploy the profile parser, so CEL profiles were not created. With this release, the operator detects `celContentFile` changes and re-parses CEL content. For more information, see ([CMP-4599](https://redhat.atlassian.net/browse/CMP-4599)).
+
+- Before this release, remediating `rhcos4-moderate` chrony settings could cause `chrony-wait.service` to time out after node restarts. With this release, the remediation no longer breaks `chrony-wait.service`. For more information, see ([CMP-3618](https://redhat.atlassian.net/browse/CMP-3618)).
+
+- Before this release, the `banner_etc_issue` rule used a hard-coded remediation that did not match configurable banner values allowed by the check, so remediation could fail. With this release, remediation uses the configured banner variable. For more information, see ([CMP-3730](https://redhat.atlassian.net/browse/CMP-3730)).
+
+- Before this release, the route IP whitelist rule linked to documentation that redirected away from the route annotations topic. With this release, the rule references the current route annotations documentation. For more information, see ([CMP-3922](https://redhat.atlassian.net/browse/CMP-3922)).
+
+- Before this release, the `ncp-ocp4-cis-api-server-bind-address` check failed on IPv6-only clusters because it expected an IPv4 API server bind address, requiring a `TailoredProfile` workaround. With this release, the check passes on IPv6-only clusters without a workaround.
+
+- Before this release, the `audit_error_alert_exists` check could fail when an empty `PrometheusRule` existed in the cluster, reporting a `jq` parsing error instead of evaluating other rules. With this release, empty `PrometheusRule` resources are skipped.
+
+- Before this release, the `ocp4-file-permissions-scheduler` rule required file mode `0644` for kube-scheduler static pod files that use `0600`, causing incorrect failures. With this release, the rule expects `0600`, matching the CIS benchmark. For more information, see ([CMP-4609](https://redhat.atlassian.net/browse/CMP-4609)).
+
 # Release notes for OpenShift Compliance Operator 1.9.2
 
 OpenShift Compliance Operator 1.9.2 is now available. The `stable` update channel tracks and receives updates for the Compliance Operator. For more information, see [Updating the Compliance Operator](co-management/compliance-operator-updating.md#compliance-operator-updating). The following Red Hat Security Advisory (RHSA) is available:

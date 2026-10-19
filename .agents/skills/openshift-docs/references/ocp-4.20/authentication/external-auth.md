@@ -77,7 +77,7 @@ Additional resources
 
 </div>
 
-# Configuring an external OIDC identity provider for direct authentication
+# Configure an external OIDC identity provider for direct authentication
 
 Configure OpenShift Container Platform to use an external OIDC identity provider for direct authentication, enabling users to log in with existing corporate credentials while bypassing the built-in OAuth server for streamlined single sign-on.
 
@@ -122,7 +122,7 @@ Procedure
 
     ``` terminal
     $ oc create secret generic console-secret \
-        --from-literal=clientSecret=<secret_value> \//
+        --from-literal=clientSecret=<secret_value> \
         -n openshift-config
     ```
 
@@ -573,7 +573,7 @@ spec:
 
 </div>
 
-# Disabling direct authentication
+# Disable direct authentication
 
 Disable direct authentication to revert your cluster back to using the built-in OpenShift Container Platform OAuth server for authentication when external OIDC integration is no longer needed.
 

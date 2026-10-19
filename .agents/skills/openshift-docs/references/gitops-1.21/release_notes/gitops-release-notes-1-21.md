@@ -50,11 +50,13 @@ In the table, features are marked with the following statuses:
 
 | GitOps | Argo CD CLI | Helm | Kustomize | Argo CD | Argo Rollouts | Dex | Argo CD Agent | Argo CD Image Updater | OpenShift Container Platform |
 |----|----|----|----|----|----|----|----|----|----|
-| 1.21.0 | 3.4.3 GA | 3.19.4 GA | 5.8.1 GA | 3.4.3 GA | 1.9.0 GA | 2.45.0 GA | 0.9.0 GA | 1.2.1 GA | 4.14, 4.16-4.22 |
+| 1.21.0 | 3.4.3 GA | 3.19.4 GA | 5.8.1 GA | 3.4.3 GA | 1.9.0 GA | 2.45.0 GA | 0.9.0 GA | 1.2.1 GA | 4.18-4.22 |
 | 1.20.0 | 3.3.2 TP | 3.19.4 GA | 5.8.1 GA | 3.3.2 GA | 1.8.4 GA | 2.43.1 GA | 0.7.0 GA | 1.1.2 TP | 4.14, 4.16-4.21 |
 | 1.19.0 | 3.1.9 TP | 3.18.4 GA | 5.7.0 GA | 3.1.9 GA | 1.8.3 GA | 2.43.0 GA | 0.5.3 GA | 1.0.4 TP | 4.14, 4.16-4.21 |
 
 GitOps and component versions
+
+For more information about lifecycle and support timelines, see [OpenShift Operator Life Cycles](https://access.redhat.com/support/policy/updates/openshift_operators).
 
 <div class="important">
 
@@ -72,6 +74,7 @@ The features mentioned in the following table are currently in Technology Previe
 
 | Feature | TP in Red Hat OpenShift GitOps versions | GA in Red Hat OpenShift GitOps versions |
 |----|----|----|
+| GitOps Console plugin | 1.21.0 | NA |
 | Argo CD Agent | 1.17.0 | 1.19.0 |
 | Argo CD Image Updater | 1.18.0 | 1.21.0 |
 | The GitOps `argocd` CLI tool | 1.12.0 | 1.21.0 |
@@ -88,6 +91,35 @@ Technology Preview tracker
 
 > [!NOTE]
 > The `ApplicationSet Progressive Sync Strategy` feature name aligns with the upstream naming convention and replaces the earlier name, `ApplicationSet Progressive Rollout Strategy`, used in previous Red Hat OpenShift GitOps versions. The functionality remains unchanged.
+
+# Release notes for Red Hat OpenShift GitOps 1.21.5
+
+Red Hat OpenShift GitOps 1.21.5 is now available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.
+
+## Errata updates
+
+RHSA-2026:77269 - Red Hat OpenShift GitOps 1.21.5 security update advisory
+Issued: 2026-10-07
+
+The following advisory documents the security fixes and enhancements in this release:
+
+- [RHSA-2026:77269](https://access.redhat.com/errata/RHSA-2026:77269)
+
+If you have installed the Red Hat OpenShift GitOps Operator in the default namespace, run the following command to view the container images in this release:
+
+``` terminal
+$ oc describe deployment gitops-operator-controller-manager -n openshift-gitops-operator
+```
+
+## Fixed issues
+
+Dex service account token rotation causing out-of-memory errors
+Before this update, when the Dex service account token expired, token rotation modified the Dex configuration. This triggered a restart of the Argo CD server and Dex processes. During each restart, the system did not fully release internal resources, which caused a memory leak in the Argo CD server pod. Over time, memory consumption grew until an out-of-memory error terminated the pod. With this update, the system handles service account token rotation on disk without modifying the Dex configuration, so the system no longer restarts the Argo CD server and Dex processes. The Argo CD server pod no longer experiences memory growth caused by token rotation, and users are no longer affected by out-of-memory restarts.
+
+> [!NOTE]
+> This fix is included in the downstream Dex image. If you use an upstream Dex image, this fix does not apply.
+
+[GITOPS-10364](https://redhat.atlassian.net/browse/GITOPS-10364)
 
 # Release notes for Red Hat OpenShift GitOps 1.21.4
 
@@ -255,7 +287,7 @@ Before this update, permissions were missing to access the web terminal from the
 
 # Release notes for Red Hat OpenShift GitOps 1.21.0
 
-Red Hat OpenShift GitOps 1.21.0 is available on OpenShift Container Platform 4.14, 4.16, 4.17, 4.18, 4.19, 4.20, 4.21, and 4.22.
+Red Hat OpenShift GitOps 1.21.0 is available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.
 
 ## Errata updates
 

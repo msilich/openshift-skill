@@ -73,7 +73,7 @@ spec:
 
 </div>
 
-# Configuring the FRRConfiguration CR
+# Configure the FRRConfiguration CR
 
 To customize routing behavior beyond standard MetalLB capabilities, configure the `FRRConfiguration` custom resource (CR).
 

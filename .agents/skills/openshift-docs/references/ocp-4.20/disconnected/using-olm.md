@@ -79,7 +79,7 @@ Procedure
 
 </div>
 
-# Mirroring an Operator catalog
+# Mirror an Operator catalog
 
 For instructions about mirroring Operator catalogs for use with disconnected clusters, see "Mirroring Operator catalogs for use with disconnected clusters".
 
@@ -108,7 +108,7 @@ Additional resources
 
 </div>
 
-# Adding a catalog source to a cluster
+# Add a catalog source to a cluster
 
 To make Operators from a custom index image available for installation, create a catalog source that adds the catalog content to your cluster.
 

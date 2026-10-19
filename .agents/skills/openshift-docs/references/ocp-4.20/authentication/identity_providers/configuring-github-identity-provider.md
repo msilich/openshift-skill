@@ -20,7 +20,7 @@ Configure GitHub authentication so users can log in with GitHub or GitHub Enterp
 
 To prevent anyone with any GitHub user ID from logging in to your OpenShift Container Platform cluster, you can restrict access to only those in specific GitHub organizations.
 
-# Registering a GitHub application
+# Register a GitHub application
 
 Register an OAuth application on GitHub or GitHub Enterprise to obtain the client ID and client secret for the identity provider configuration.
 
@@ -58,7 +58,7 @@ Procedure
 
 </div>
 
-# Creating the secret
+# Create the secret
 
 Create a `Secret` object in the `openshift-config` namespace to store the client secret for your identity provider. The identity provider custom resource (CR) references this secret during configuration.
 
@@ -97,7 +97,7 @@ Procedure
 
 </div>
 
-# Creating a ConfigMap
+# Create a ConfigMap
 
 Create a `ConfigMap` object in the `openshift-config` namespace that contains the certificate authority bundle for the identity provider. OpenShift Container Platform uses this bundle to validate Transport Layer Security (TLS) connections to the identity provider.
 
@@ -205,7 +205,7 @@ Additional resources
 
 </div>
 
-# Adding an identity provider to your cluster
+# Add an identity provider to your cluster
 
 Apply the identity provider custom resource (CR) to your cluster after you define it. With this configuration, you can authenticate with the configured identity provider.
 
@@ -254,15 +254,16 @@ Procedure
     $ oc login --token=<token>
     ```
 
-</div>
+    > [!NOTE]
+    > This identity provider does not support logging in with a username and password.
 
-This identity provider does not support logging in with a username and password.
-
-1.  Confirm that the user logged in successfully and that the username displays by running the following command:
+4.  Confirm that the user logged in successfully and that the username displays by running the following command:
 
     ``` terminal
     $ oc whoami
     ```
+
+</div>
 
 <div>
 

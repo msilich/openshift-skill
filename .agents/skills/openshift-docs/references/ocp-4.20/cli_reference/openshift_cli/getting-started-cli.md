@@ -14,15 +14,15 @@ The OpenShift CLI is ideal in the following situations:
 
 - Managing projects while restricted by bandwidth resources and the web console is unavailable.
 
-# Installing the OpenShift CLI
+# Install the OpenShift CLI
 
 To interact with a OpenShift Container Platform cluster from the terminal, install the OpenShift CLI (`oc`). Depending on your operating system, you can install `oc` by downloading the binary from the Customer Portal or OpenShift Container Platform web console, by using an RPM, or by using Homebrew.
 
-## Installing the OpenShift CLI by downloading the binary from the Customer Portal
+## Install the OpenShift CLI by downloading the binary from the Customer Portal
 
 You can download the OpenShift CLI (`oc`) from the Customer Portal and install it to interact with OpenShift Container Platform clusters from a terminal on Linux, Windows, or macOS.
 
-### Installing the OpenShift CLI on Linux
+### Install the OpenShift CLI on Linux
 
 To manage your cluster and deploy applications from the command line on Linux, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -79,7 +79,7 @@ Verification
 
 </div>
 
-### Installing the OpenShift CLI on Windows
+### Install the OpenShift CLI on Windows
 
 To manage your cluster and deploy applications from the command line on Windows, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -130,7 +130,7 @@ Verification
 
 </div>
 
-### Installing the OpenShift CLI on macOS
+### Install the OpenShift CLI on macOS
 
 To manage your cluster and deploy applications from the command line on macOS, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the Red  Customer Portal.
 
@@ -186,14 +186,14 @@ Verification
 
 </div>
 
-## Installing the OpenShift CLI by downloading the binary from the web console
+## Install the OpenShift CLI by downloading the binary from the web console
 
 You can download the OpenShift CLI (`oc`) from the web OpenShift Container Platform console and install it to interact with OpenShift Container Platform clusters from a terminal on Linux, Windows, or macOS.
 
 > [!IMPORTANT]
 > If you installed an earlier version of `oc`, you cannot use it to complete all of the commands in OpenShift Container Platform 4.20. Download and install the new version of `oc`.
 
-### Installing the OpenShift CLI on Linux using the web console
+### Install the OpenShift CLI on Linux using the web console
 
 To manage your cluster and deploy applications from the command line on Linux, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the web console.
 
@@ -253,7 +253,7 @@ Verification
 
 </div>
 
-### Installing the OpenShift CLI on Windows using the web console
+### Install the OpenShift CLI on Windows using the web console
 
 To manage your cluster and deploy applications from the command line on Windows, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the web console.
 
@@ -309,7 +309,7 @@ Verification
 
 </div>
 
-### Installing the OpenShift CLI on macOS using the web console
+### Install the OpenShift CLI on macOS using the web console
 
 To manage your cluster and deploy applications from the command line on macOS, install the OpenShift CLI (`oc`) binary. You can download the OpenShift CLI (`oc`) from the web console.
 
@@ -368,7 +368,7 @@ Verification
 
 </div>
 
-## Installing the OpenShift CLI by using an RPM
+## Install the OpenShift CLI by using an RPM
 
 For Red Hat Enterprise Linux (RHEL), you can install the OpenShift CLI (`oc`) as an RPM if you have an active OpenShift Container Platform subscription on your Red Hat account.
 
@@ -449,7 +449,7 @@ Verification
 
 </div>
 
-## Installing the OpenShift CLI by using Homebrew
+## Install the OpenShift CLI by using Homebrew
 
 For macOS, you can install the OpenShift CLI (`oc`) by using the [Homebrew](https://brew.sh) package manager.
 
@@ -497,7 +497,7 @@ Verification
 
 </div>
 
-# Logging in to the OpenShift CLI
+# Log in to the OpenShift CLI
 
 You can log in to the OpenShift CLI (`oc`) to access and manage your cluster.
 
@@ -579,7 +579,7 @@ Procedure
 
 </div>
 
-# Logging in to the OpenShift CLI using a web browser
+# Log in to the OpenShift CLI using a web browser
 
 You can log in to the OpenShift CLI (`oc`) with the help of a web browser to access and manage your cluster. This allows you to avoid inserting your access token into the command line.
 
@@ -666,11 +666,11 @@ Procedure
 
 </div>
 
-# Using the OpenShift CLI
+# Use the OpenShift CLI
 
 Review how to complete common tasks with the OpenShift CLI (`oc`).
 
-## Creating a project
+## Create a project
 
 Use the `oc new-project` command to create a new project.
 
@@ -704,7 +704,7 @@ Procedure
 
 </div>
 
-## Creating a new application
+## Create a new application
 
 Use the `oc new-app` command to create a new application.
 
@@ -742,7 +742,7 @@ Procedure
 
 </div>
 
-## Viewing pods
+## View pods
 
 Use the `oc get pods` command to view the pods for the current project.
 
@@ -782,7 +782,7 @@ Procedure
 
 </div>
 
-## Viewing pod logs
+## View pod logs
 
 Use the `oc logs` command to view logs for a particular pod.
 
@@ -817,7 +817,7 @@ Procedure
 
 </div>
 
-## Viewing the current project
+## View the current project
 
 Use the `oc project` command to view the current project.
 
@@ -851,7 +851,7 @@ Procedure
 
 </div>
 
-## Viewing the status of the current project
+## View the status of the current project
 
 Use the `oc status` command to view information about the current project, such as services, deployments, and build configs.
 
@@ -892,7 +892,7 @@ Procedure
 
 </div>
 
-## Listing supported API resources
+## List supported API resources
 
 Use the `oc api-resources` command to view the list of supported API resources on the server.
 
@@ -930,7 +930,7 @@ Procedure
 
 </div>
 
-# Getting help
+# Get help through the CLI
 
 Review the ways to get help with CLI commands and OpenShift Container Platform resources.
 
@@ -1068,7 +1068,7 @@ Procedure
 
 </div>
 
-# Logging out of the OpenShift CLI
+# Log out of the OpenShift CLI
 
 You can log out the OpenShift CLI (`oc`) to end your current session.
 

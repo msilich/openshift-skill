@@ -2,6 +2,12 @@
 
 If you use an enterprise certificate authority (CA) for authentication, you can configure Red Hat Advanced Cluster Security for Kubernetes (RHACS) to authenticate users by using their personal certificates.
 
+<a id="enable-pki-authentication-overview_enable-pki-authentication"></a>
+
+# PKI authentication overview
+
+After you configure PKI authentication, users and API clients can authenticate using their personal certificates while other authentication methods remain available.
+
 After you configure PKI authentication, users and API clients can log in using their personal certificates. Users without certificates can still use other authentication options, including API tokens, the local administrator password, or other authentication providers. PKI authentication is available on the same port number as the Web UI, gRPC, and REST APIs.
 
 When you configure PKI authentication, by default, Red Hat Advanced Cluster Security for Kubernetes uses the same port for PKI, web UI, gRPC, other single sign-on (SSO) providers, and REST APIs. You can also configure a separate port for PKI authentication by using a YAML configuration file to configure and expose endpoints.
@@ -93,9 +99,7 @@ Procedure
 
 # Logging in by using a client certificate
 
-After you configure PKI authentication, users see a certificate prompt in the RHACS portal login page. The prompt only shows up if a client certificate trusted by the configured root CA is installed on the user’s system.
-
-Use the procedure described in this section to log in by using a client certificate.
+After you configure PKI authentication, users see a certificate prompt in the RHACS portal login page if the user’s system has a client certificate trusted by the configured root CA.
 
 <div>
 
@@ -109,9 +113,11 @@ Procedure
 
 2.  Select a certificate in the browser prompt.
 
-3.  On the login page, select the authentication provider name option to log in with a certificate. If you do not want to log in by using the certificate, you can also log in by using the administrator password or another login method.
+3.  On the login page, select the authentication provider name option to log in with a certificate.
+
+    If you do not want to log in by using the certificate, you can also log in by using the administrator password or another login method.
+
+    > [!NOTE]
+    > Once you use a client certificate to log in to the RHACS portal, you cannot log in with a different certificate unless you restart your browser.
 
 </div>
-
-> [!NOTE]
-> Once you use a client certificate to log into the RHACS portal, you cannot log in with a different certificate unless you restart your browser.

@@ -46,7 +46,7 @@ Additional resources
 
 </div>
 
-- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix](https://access.redhat.com/articles/7045053)
+- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053)
 
 - [Installing Central services for RHACS on Red Hat OpenShift](installing_ocp/install-central-ocp.md)
 
@@ -81,7 +81,7 @@ Additional resources
 
 </div>
 
-- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix](https://access.redhat.com/articles/7045053)
+- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053)
 
 </div>
 
@@ -342,7 +342,7 @@ Procedure
 
 # Additional resources
 
-- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix](https://access.redhat.com/articles/7045053)
+- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053)
 
 - [Red Hat Advanced Cluster Security for Kubernetes Support Policy](https://access.redhat.com/support/policy/updates/rhacs)
 

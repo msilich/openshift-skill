@@ -8,7 +8,7 @@ Before you perform any tasks in the following documentation, ensure that you [in
 
 For guidance on tasks such as creating a SR-IOV network, network policies, network attachment definitions and pods, see [Configuring an SR-IOV network device](configuring-sriov-device.md#configuring-sriov-device).
 
-# Configuring a bond interface from two SR-IOV interfaces
+# Configure a bond interface from two SR-IOV interfaces
 
 Bonding enables multiple network interfaces to be aggregated into a single logical "bonded" interface. Bond Container Network Interface (Bond-CNI) brings bond capability into containers.
 
@@ -16,7 +16,7 @@ Bond-CNI can be created by using Single Root I/O Virtualization (SR-IOV) virtual
 
 OpenShift Container Platform only supports Bond-CNI by using SR-IOV virtual functions. The SR-IOV Network Operator provides the SR-IOV CNI plugin needed to manage the virtual functions. Other CNI plugins or types of interfaces are not supported.
 
-# Creating a bond network attachment definition
+# Create a bond network attachment definition
 
 After the SR-IOV virtual functions are available, you can create a bond network attachment definition.
 
@@ -74,7 +74,7 @@ apiVersion: "k8s.cni.cncf.io/v1"
 
 - The `links` field defines which interfaces to use for the bond. By default, Multus names the attached interfaces as "net" plus a consecutive number, starting with one.
 
-# Creating a pod using a bond interface
+# Create a pod using a bond interface
 
 You can create a pod that uses a bond interface by applying a YAML configuration that references SR-IOV and bond network attachments.
 

@@ -31,7 +31,7 @@ Subscription condition types
 
 - [Catalog health requirements](../../operators/understanding/olm/olm-understanding-olm.md#olm-cs-health_olm-understanding-olm)
 
-# Viewing Operator subscription status by using the CLI
+# View Operator subscription status by using the CLI
 
 You can view Operator subscription status by using the CLI.
 
@@ -103,7 +103,7 @@ Procedure
 
 </div>
 
-# Viewing Operator catalog source status by using the CLI
+# View Operator catalog source status by using the CLI
 
 You can view the status of an Operator catalog source by using the CLI.
 
@@ -267,7 +267,7 @@ Procedure
 
 - [Accessing images for Operators from private registries](../../operators/admin/olm-managing-custom-catalogs.md#olm-accessing-images-private-registries_olm-managing-custom-catalogs)
 
-# Querying Operator pod status
+# Query Operator pod status
 
 You can list Operator pods within a cluster and their status. You can also collect a detailed Operator pod summary.
 
@@ -346,7 +346,7 @@ Procedure
 
 </div>
 
-# Gathering Operator logs
+# Gather Operator logs
 
 If you experience Operator issues, you can gather detailed diagnostic information from Operator pod logs.
 

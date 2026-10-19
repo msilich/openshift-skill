@@ -7,6 +7,14 @@ You can assess compliance across your entire OpenShift cluster fleet and ensure 
 
 You can create and manage compliance scan schedules on the schedules page that meet your operational needs. You can only have one schedule that scans the same profile on the same cluster.
 
+<a id="using-openshift-compliance-overview_using-openshift-compliance"></a>
+
+# Using OpenShift compliance overview
+
+You can create and manage compliance scan schedules to meet your operational needs, and monitor compliance status across all clusters by viewing and filtering scan results.
+
+You can create and manage compliance scan schedules on the schedules page that meet your operational needs. You can only have one schedule that scans the same profile on the same cluster.
+
 By viewing and filtering the scan results on the coverage page, you can monitor the compliance status across all clusters.
 
 <a id="customizing-and-automating-your-compliance-scans_using-openshift-compliance"></a>
@@ -16,7 +24,7 @@ By viewing and filtering the scan results on the coverage page, you can monitor 
 By creating a compliance scan schedule, you can customize and automate your compliance scans to align with your operational requirements.
 
 > [!NOTE]
-> You can only have one schedule that scans the same profile on the same cluster. This means that you cannot create multiple scan schedules for the same profile on a single cluster.
+> You can only have one schedule that scans the same profile on the same cluster. This means that you cannot create many scan schedules for the same profile on a single cluster.
 
 <div>
 
@@ -56,7 +64,7 @@ Procedure
 
 2.  Click **Create scan schedule**.
 
-3.  In the **Create scan schedule** page, provide the following information:
+3.  In the **Create scan schedule** page, enter the following information:
 
     - **Name**: Enter a name to identify different compliance scans.
 
@@ -64,9 +72,9 @@ Procedure
 
     - **Schedule**: Adjust the scan schedule to fit your required schedule:
 
-      - **Frequency**: From the drop-down list, select how often you want to run the scan. If you do not select a frequency, `Daily` is selected automatically.
+      - **Frequency**: From the drop-down list, select how often you want to run the scan. If you do not select a frequency, the system selects `Daily` automatically.
 
-        The following values are associated with how often you want to perform the scan:
+        The following values define how often you want to perform the scan:
 
         - `Daily`
 
@@ -76,7 +84,7 @@ Procedure
 
       - **On day(s)**: From the list, select one or more days of the week on which you want to perform the scan.
 
-        The following values are associated with the days of the week on which you want to perform the scan:
+        The following values define the days of the week on which you want to perform the scan:
 
         - `Monday`
 
@@ -118,7 +126,7 @@ Procedure
 
     1.  Expand **Add delivery destination**.
 
-    2.  In the **Delivery destination** page, provide the following information:
+    2.  In the **Delivery destination** page, enter the following information:
 
         - **Email notifier**: Select an email notifier from the drop-down list.
 
@@ -126,23 +134,23 @@ Procedure
 
           1.  From **Select a notifier** drop-down list, click **Create email notifier**.
 
-          2.  In the **Create email notifier** page, provide the following information:
+          2.  In the **Create email notifier** page, enter the following information:
 
               - **Integration name**: Enter a unique name for the email notifier. This name helps you identify and manage this specific email notifier configuration.
 
               - **Email server**: Specify the address of the SMTP server that you want to use to send the emails.
 
-              - **Username**: Enter the username that is required for authentication with the SMTP server. This is often the email address used for sending the emails.
+              - **Username**: Enter the username for authentication with the SMTP server. This is often the email address for sending the emails.
 
-              - **Password**: Enter the password associated with the SMTP username. This password is used for authentication with the SMTP server.
+              - **Password**: Enter the password for the SMTP username. The system uses this password for authentication with the SMTP server.
 
               - **From**: This address usually represents the sender of the emails and is visible to the recipients. This is optional.
 
               - **Sender**: Enter the name of the sender, which is displayed together with the *From* email address. This name helps recipients identify who sent the email.
 
-              - **Default recipient**: Enter the default email address that should receive the notifications if no specific recipient is specified. This ensures that there is always a recipient for the emails.
+              - **Default recipient**: Enter the default email address that receives the notifications if you do not specify a recipient. This ensures that there is always a recipient for the emails.
 
-              - **Annotation key for recipient**: Specify the annotation key to define a recipient that you want to notify about the policy violations related to a specific deployment or namespace. This is optional.
+              - **Annotation key for recipient**: Specify the annotation key to define a recipient to inform about the policy violations related to a specific deployment or namespace. This is optional.
 
               - Optional: Select the **Enable unauthenticated SMTP** checkbox, if your SMTP server does not require authentication. This is not recommended due to security reasons.
 
@@ -153,7 +161,7 @@ Procedure
                 > [!IMPORTANT]
                 > To use this option, you must disable TLS certificate validation.
 
-                The following values are associated with the type of STARTTLS for securing the connection to the SMTP server:
+                The following values define the type of STARTTLS for securing the connection to the SMTP server:
 
                 - `Disabled`
 
@@ -169,7 +177,7 @@ Procedure
 
           3.  Click **Save integration**.
 
-        - **Distribution list**: Enter one or more comma-separated email addresses of the recipients who should receive the report.
+        - **Distribution list**: Enter one or more comma-separated email addresses of the recipients to receive the report.
 
         - **Email template**: The default template is automatically applied.
 
@@ -177,9 +185,9 @@ Procedure
 
           1.  Click the pencil icon.
 
-          2.  In the **Edit email template** page, provide the following information:
+          2.  In the **Edit email template** page, enter the following information:
 
-              - **Email subject**: Enter the desired subject line for the email. This subject is displayed in the recipient’s inbox and should clearly indicate the purpose of the email.
+              - **Email subject**: Enter the desired subject line for the email. The recipient’s inbox shows this subject and it should clearly indicate the purpose of the email.
 
               - **Email body**: Compose the text of the email. This is the main content of the email and can include text, placeholders for dynamic content and any formatting necessary to get your message across effectively.
 
@@ -374,13 +382,13 @@ Identifies the one or more profiles applied in the compliance scan.
 My last job status  
 Shows the status of your job.
 
-The following values are associated with the job status:
+The following values define the job status:
 
 `Waiting`  
 The report job is in the queue.
 
 `Preparing`  
-The report job is being processed.
+The system is processing the report job.
 
 `Report ready for download`  
 The report is ready and available for download.
@@ -400,7 +408,7 @@ There was an issue with the report job. Hover to view the error message.
 `None`  
 There are no recent jobs available.
 
-To view the configuration details and report job status associated with a compliance scan, select the compliance scan you created.
+To view the configuration details and report job status for a compliance scan, select the compliance scan you created.
 
 <a id="configuration-details-tab_using-openshift-compliance"></a>
 
@@ -408,11 +416,13 @@ To view the configuration details and report job status associated with a compli
 
 The **Configuration details** tab displays information about the scan schedule information such as the essential parameters, cluster status, associated profiles, and email delivery destinations.
 
-<a id="_parameters_section"></a>
+<a id="configuration-details-parameters-section_using-openshift-compliance"></a>
 
 #### Parameters section
 
-The **Parameters** section organizes information into the following groups:
+The **Parameters** section displays essential information about the compliance scan configuration.
+
+The **Parameters** section has the following groups:
 
 Name  
 The unique identifier for the compliance scan.
@@ -429,11 +439,13 @@ The timestamp of the last compliance scan performed.
 Last updated  
 The last date and time that the compliance scan data was modified.
 
-<a id="_clusters_section"></a>
+<a id="configuration-details-clusters-section_using-openshift-compliance"></a>
 
 #### Clusters section
 
-The **Clusters** section organizes information into the following groups:
+The **Clusters** section displays information about the clusters associated with the compliance scan.
+
+The **Clusters** section has the following groups:
 
 Cluster  
 Lists the one or more clusters associated with a compliance scan.
@@ -441,48 +453,52 @@ Lists the one or more clusters associated with a compliance scan.
 Operator status  
 Indicates the current health or operational status of the Operator.
 
-<a id="_profiles_section"></a>
+<a id="configuration-details-profiles-section_using-openshift-compliance"></a>
 
 #### Profiles section
 
+The **Profiles** section lists the compliance profiles associated with the scan.
+
 The **Profiles** section lists the one or more profiles associated with a compliance scan.
 
-<a id="_delivery_destinations_section"></a>
+<a id="configuration-details-delivery-destinations-section_using-openshift-compliance"></a>
 
 #### Delivery destinations section
 
-The **Delivery destinations** section organizes information into the following groups:
+The **Delivery destinations** section displays information about email notification settings for compliance reports.
+
+The **Delivery destinations** section has the following groups:
 
 Email notifier  
 Specifies the email notification system or tool set up to distribute reports or alerts.
 
 Distribution list  
-Lists the recipients who should receive the notifications or reports.
+Lists the recipients to receive the notifications or reports.
 
 Email template  
-Specifies the email format used for the notifications. You can use the default or customize the email subject and body as needed.
+Specifies the email format for the notifications. You can use the default or customize the email subject and body as needed.
 
 <a id="all-report-jobs-tab_using-openshift-compliance"></a>
 
 ### All report jobs tab
 
-The **All report jobs** tab shows the current status and requester for each report job, with completed jobs indicated in the row expansion section.
+The **All report jobs** tab shows the current status and requester for each report job. The row expansion section shows completed jobs.
 
-The report jobs are organized into the following groups:
+The report jobs have the following groups:
 
 Completed  
-Indicates which report jobs have been finished.
+Indicates which report jobs finished.
 
 Status  
 Displays the current state of each report job.
 
-The following values are associated with the report job status:
+The following values define the report job status:
 
 `Waiting`  
 The report job is in the queue.
 
 `Preparing`  
-The report job is being processed.
+The system is processing the report job.
 
 `Report ready for download`  
 The report is ready and available for download.
@@ -571,7 +587,7 @@ Additional resources
 
 ## OpenShift Coverage page overview
 
-When you view the **Coverage** page and apply a filter to a schedule, all results are filtered accordingly. This filter remains active for all coverage pages until you delete it. You can always view the results based on a single profile.
+When you view the **Coverage** page and apply a filter to a schedule, the system filters all results accordingly. This filter remains active for all coverage pages until you delete it. You can always view the results based on a single profile.
 
 You can select profiles grouped according to their associated benchmarks by using the toggle group. Tailored profiles appear under a dedicated **Tailored Profiles** tab.
 
@@ -580,9 +596,9 @@ You calculate the compliance percentage based on the number of passed checks in 
 > [!NOTE]
 > The **Coverage** page now only shows the results of the last scan. If the last scan fails, the Red Hat Advanced Cluster Security for Kubernetes (RHACS) deletes the previous results and you cannot see any information for this scan on the **Coverage** page.
 
-The **Checks** view lists the profile checks and enables you to easily navigate and understand your compliance status.
+The **Checks** view lists the profile checks. Use this view to easily navigate and understand your compliance status.
 
-The profile check information is organized into the following groups:
+The profile check information has the following groups:
 
 Check  
 The name of the profile check.
@@ -597,7 +613,7 @@ Pass status
 Shows the checks that have been successfully passed.
 
 Manual status  
-Shows the checks that require a manual review because additional organizational or technical knowledge is required that you cannot automate.
+Shows the checks that require a manual review because they need additional organizational or technical knowledge that you cannot automate.
 
 Other status  
 Shows the checks with a status other than pass or fail, such as warnings or informational statuses.
@@ -614,15 +630,15 @@ Shows the overall compliance status and helps you to ensure that your environmen
 >
 > You can expect this behavior. Each cluster’s check results reflect the actual profile definition on that cluster. For more information, see "Understanding tailored profiles in compliance scans".
 
-The **Clusters** view lists the clusters and enables you to effectively monitor and manage your clusters.
+The **Clusters** view lists the clusters. Use this view to effectively monitor and manage your clusters.
 
-The cluster information is organized into the following groups:
+The cluster information has the following groups:
 
 Cluster  
 The name of the cluster.
 
 Last scanned  
-Indicates when the individual clusters were last scanned.
+Indicates when the system last scanned the individual clusters.
 
 Fail status  
 Shows the clusters whose scan has failed and which require your attention.
@@ -631,7 +647,7 @@ Pass status
 Shows the clusters that have successfully passed all checks.
 
 Manual status  
-Shows the checks that require a manual review because additional organizational or technical knowledge is required that you cannot automate.
+Shows the checks that require a manual review because they need additional organizational or technical knowledge that you cannot automate.
 
 Other status  
 Shows the clusters that have a status other than pass or fail, such as warnings or informational alerts.
@@ -674,18 +690,18 @@ Procedure
 
 3.  Optional: Choose the appropriate method to re-organize the information in the **Coverage** page.
 
-    - To filter the scan results based on a scan schedule, from the drop-down list, select the scan schedule. If you do not select a particular scan schedule, **All scan schedules** is selected automatically.
+    - To filter the scan results based on a scan schedule, from the drop-down list, select the scan schedule. If you do not select a particular scan schedule, the system selects **All scan schedules** automatically.
 
     - To filter the scan results based on an entity and its attributes, do any of the following tasks:
 
       > [!IMPORTANT]
-      > To select multiple entities and attributes, click the right arrow icon to add another search criteria.
+      > To select many entities and attributes, click the right arrow icon to add another search criteria.
 
       - To filter the scan results based on a profile check, enter the name of the profile check in the search bar to view the status.
 
       - To filter the scan results based on cluster attributes, from the drop-down list, select **Cluster**, and then select an attribute. Enter the details of the cluster attribute in the search bar to view the status.
 
-        The following values are associated with the attributes of a cluster:
+        The following values define the attributes of a cluster:
 
         - `ID`
 
@@ -699,7 +715,7 @@ Procedure
 
 4.  Optional: From the **Compliance status** drop-down list, select one or more statuses by using which you want to filter the scan details.
 
-    The following values are associated with how you want to filter the scan details:
+    The following values define how you want to filter the scan details:
 
     - `Pass`
 
@@ -730,7 +746,7 @@ By understanding the compliance scan status, you can manage the overall security
 | `Not Applicable` | Skipped the compliance check because it was not applicable. |
 | `Info` | The compliance check gathered data, but RHACS could not make a pass or fail determination. |
 | `Error` | The compliance check failed due to a technical issue. |
-| `Manual` | Manual intervention is required to ensure compliance. |
+| `Manual` | You must manually intervene to ensure compliance. |
 | `Inconsistent` | The compliance scan data is inconsistent, and requires closer inspection and targeted resolution. |
 
 <a id="understanding-tailored-profiles-in-compliance-scans_using-openshift-compliance"></a>

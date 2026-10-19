@@ -2,7 +2,7 @@
 
 Review and manage your user-owned OAuth access tokens to monitor active sessions, verify token scopes, and revoke tokens that are no longer needed.
 
-# Listing user-owned OAuth access tokens
+# List user-owned OAuth access tokens
 
 List your user-owned OAuth access tokens to review active sessions, check token expiration, and identify tokens associated with specific OAuth clients.
 
@@ -62,7 +62,7 @@ Procedure
 
 </div>
 
-# Viewing the details of a user-owned OAuth access token
+# View the details of a user-owned OAuth access token
 
 View details of a user-owned OAuth access token to identify the associated client application, check expiration and inactivity timeouts, verify scopes, and see other information fields.
 
@@ -94,7 +94,7 @@ Procedure
   Labels:                      <none>
   Annotations:                 <none>
   API Version:                 oauth.openshift.io/v1
-  Authorize Token:             sha256~Ksckkug-9Fg_RWn_AUysPoIg-_HqmFI9zUL_CgD8wr8
+  Authorize Token:             sha256~<authorize_token>
   Client Name:                 openshift-browser-client
   Expires In:                  86400
   Inactivity Timeout Seconds:  317
@@ -150,7 +150,7 @@ Procedure
 
 </div>
 
-# Deleting user-owned OAuth access tokens
+# Delete user-owned OAuth access tokens
 
 You can use the following procedure to delete any user-owned OAuth tokens that are no longer needed.
 
@@ -186,7 +186,7 @@ Procedure
 
 </div>
 
-# Adding unauthenticated groups to cluster roles
+# Add unauthenticated groups to cluster roles
 
 Grant unauthenticated users access to specific cluster roles to enable features that require cluster access without authentication, such as external webhooks or automated token management.
 

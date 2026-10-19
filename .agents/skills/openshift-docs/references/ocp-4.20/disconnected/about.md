@@ -6,7 +6,9 @@ OpenShift Container Platform is designed to perform many automatic functions tha
 
 # Glossary of disconnected environment terms
 
-Although it is used throughout the OpenShift Container Platform documentation, *disconnected environment* is a broad term that can refer to environments with various levels of internet connectivity. Other terms are sometimes used to refer to a specific level of internet connectivity, and these environments might require additional unique configurations.
+Although it is used throughout the OpenShift Container Platform documentation, *disconnected environment* is a broad term that can refer to environments with various levels of internet connectivity.
+
+Other terms are sometimes used to refer to a specific level of internet connectivity, and these environments might require additional unique configurations.
 
 The following table describes the different terms used to refer to environments without a full internet connection:
 

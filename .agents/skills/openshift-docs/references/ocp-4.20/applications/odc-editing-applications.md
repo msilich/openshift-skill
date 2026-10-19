@@ -10,7 +10,7 @@ You can edit the configuration and the source code of the application you create
 
 - You have [logged in to the web console](../web_console/web-console.md#web-console) and have switched to [the **Developer** perspective](../web_console/web-console-overview.md#about-developer-perspective_web-console-overview).
 
-# Editing the source code of an application using the Developer perspective
+# Edit the source code of an application using the Developer perspective
 
 You can use the **Topology** view in the **Developer** perspective to edit the source code of your application.
 
@@ -31,7 +31,7 @@ Procedure
 
 </div>
 
-# Editing the application configuration using the Developer perspective
+# Edit the application configuration using the Developer perspective
 
 You can use the **Topology** view in the **Developer** perspective to edit the configuration of your application.
 

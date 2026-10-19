@@ -76,7 +76,7 @@ You can assign IP addresses from an `IPAddressPool` to services and namespaces b
 
 MetalLB IPAddressPool custom resource spec.serviceAllocation subfields
 
-# Configuring an address pool
+# Configure an address pool
 
 To precisely manage external access to application workloads, configure MetalLB address pools for your cluster. By defining these pools, you can control the specific IP address ranges assigned to load balancer services for consistent network routing.
 
@@ -266,7 +266,7 @@ Procedure
 
 # Example address pool configurations
 
-To precisely allocate IP address ranges for cluster services, configure MetalLB address pools by using Classless Inter-Domain Routing (CIDR) notation or hyphenated bounds. Defining these specific ranges ensures that application workloads receive valid IP assignments that align with your existing network infrastructure requirements.
+Configure MetalLB address pools by using Classless Inter-Domain Routing (CIDR) notation or hyphenated bounds to allocate IP address ranges for cluster services.
 
 Example of IPv4 and CIDR ranges
 You can specify a range of IP addresses in classless inter-domain routing (CIDR) notation. You can combine CIDR notation with the notation that uses a hyphen to separate lower and upper bounds.

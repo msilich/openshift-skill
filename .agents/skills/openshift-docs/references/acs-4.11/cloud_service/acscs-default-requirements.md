@@ -72,7 +72,7 @@ Additional resources
 
 </div>
 
-- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix](https://access.redhat.com/articles/7045053)
+- [Red Hat Advanced Cluster Security for Kubernetes Support Matrix (Red Hat Knowledgebase)](https://access.redhat.com/articles/7045053)
 
 - [Red Hat Container Registry Authentication](https://access.redhat.com/RegistryAuthentication)
 

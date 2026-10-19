@@ -5,7 +5,7 @@ As a cluster administrator, you can use cluster capabilities to enable or disabl
 > [!NOTE]
 > You cannot disable a cluster capability after it is enabled.
 
-# Enabling cluster capabilities
+# Enable cluster capabilities
 
 If you are using an installation method that includes customizing your cluster by creating an `install-config.yaml` file, you can select which cluster capabilities you want to make available on the cluster.
 
@@ -88,7 +88,9 @@ Additional resources
 
 The Cluster Baremetal Operator provides the features for the `baremetal` capability.
 
-The Cluster Baremetal Operator (CBO) deploys all the components necessary to take a bare-metal server to a fully functioning worker node ready to run OpenShift Container Platform compute nodes. The CBO ensures that the metal3 deployment, which consists of the Bare Metal Operator (BMO) and Ironic containers, runs on one of the control plane nodes within the OpenShift Container Platform cluster. The CBO also listens for OpenShift Container Platform updates to resources that it watches and takes appropriate action.
+The Cluster Baremetal Operator (CBO) deploys all the components necessary to take a bare-metal server to a fully functioning worker node ready to run OpenShift Container Platform compute nodes.
+
+The CBO ensures that the metal3 deployment, which consists of the Bare Metal Operator (BMO) and Ironic containers, runs on one of the control plane nodes within the OpenShift Container Platform cluster. The CBO also listens for OpenShift Container Platform updates to resources that it watches and takes appropriate action.
 
 The bare-metal capability is required for deployments using installer-provisioned infrastructure. Disabling the bare-metal capability can result in unexpected problems with these deployments.
 
@@ -181,7 +183,9 @@ The Cloud Credential Operator provides features for the `CloudCredential` capabi
 > [!NOTE]
 > Currently, disabling the `CloudCredential` capability is only supported for bare-metal clusters.
 
-The Cloud Credential Operator (CCO) manages cloud provider credentials as Kubernetes custom resource definitions (CRDs). The CCO syncs on `CredentialsRequest` custom resources (CRs) to allow OpenShift Container Platform components to request cloud provider credentials with the specific permissions that are required for the cluster to run.
+The Cloud Credential Operator (CCO) manages cloud provider credentials as Kubernetes custom resource definitions (CRDs).
+
+The CCO syncs on `CredentialsRequest` custom resources (CRs) to allow OpenShift Container Platform components to request cloud provider credentials with the specific permissions that are required for the cluster to run.
 
 By setting different values for the `credentialsMode` parameter in the `install-config.yaml` file, the CCO can be configured to operate in several different modes. If no mode is specified, or the `credentialsMode` parameter is set to an empty string (`""`), the CCO operates in its default mode.
 
@@ -384,7 +388,9 @@ Additional resources
 
 The Insights Operator provides the features for the `Insights` capability.
 
-The Insights Operator gathers OpenShift Container Platform configuration data and sends it to Red Hat. The data is used to produce proactive insights recommendations about potential issues that a cluster might be exposed to. These insights are communicated to cluster administrators through the Red Hat Lightspeed advisor service on [console.redhat.com](https://console.redhat.com/).
+The Insights Operator gathers OpenShift Container Platform configuration data and sends it to Red Hat.
+
+The data is used to produce proactive insights recommendations about potential issues that a cluster might be exposed to. These insights are communicated to cluster administrators through the Red Hat Lightspeed advisor service on [console.redhat.com](https://console.redhat.com/).
 
 Notes
 Insights Operator complements OpenShift Container Platform Telemetry.
@@ -457,7 +463,9 @@ Additional resources
 
 The Node Tuning Operator provides features for the `NodeTuning` capability.
 
-The Node Tuning Operator helps you manage node-level tuning by orchestrating the TuneD daemon and achieves low latency performance by using the Performance Profile controller. The majority of high-performance applications require some level of kernel tuning. The Node Tuning Operator provides a unified management interface to users of node-level sysctls and more flexibility to add custom tuning specified by user needs.
+The Node Tuning Operator helps you manage node-level tuning by orchestrating the TuneD daemon and achieves low latency performance by using the Performance Profile controller.
+
+The majority of high-performance applications require some level of kernel tuning. The Node Tuning Operator provides a unified management interface to users of node-level sysctls and more flexibility to add custom tuning specified by user needs.
 
 If you disable the NodeTuning capability, some default tuning settings will not be applied to the control-plane nodes. This might limit the scalability and performance of large clusters with over 900 nodes or 900 routes.
 
@@ -591,7 +599,7 @@ Additional resources
 
 </div>
 
-# Viewing the cluster capabilities
+# View the cluster capabilities
 
 As a cluster administrator, you can view the capabilities by using the `clusterversion` resource status.
 
@@ -638,7 +646,7 @@ Procedure
 
 </div>
 
-# Enabling the cluster capabilities by setting baseline capability set
+# Enable the cluster capabilities by setting baseline capability set
 
 As a cluster administrator, you can enable cluster capabilities any time after a OpenShift Container Platform installation by setting the `baselineCapabilitySet` configuration parameter.
 
@@ -672,7 +680,7 @@ Procedure
 
 </div>
 
-# Enabling the cluster capabilities by setting additional enabled capabilities
+# Enable the cluster capabilities by setting additional enabled capabilities
 
 As a cluster administrator, you can enable cluster capabilities any time after a OpenShift Container Platform installation by setting the `additionalEnabledCapabilities` configuration parameter.
 

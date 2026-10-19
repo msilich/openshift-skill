@@ -1,6 +1,18 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Use the `roxctl central` command to manage and interact with the Central service. This reference covers command syntax, available subcommands, and configuration options.
+
+<a id="roxctl-central-overview_roxctl-central"></a>
+
+# roxctl central
+
 Commands related to the Central service.
+
+<a id="roxctl-central-overview-usage_roxctl-central"></a>
+
+## roxctl central usage
+
+Usage syntax for the `roxctl central` command.
 
 <div class="formalpara">
 
@@ -16,6 +28,12 @@ $ roxctl central [command] [flags]
 
 </div>
 
+<a id="roxctl-central-available-commands_roxctl-central"></a>
+
+## Available commands
+
+Available commands for the `roxctl central` command.
+
 | Command | Description |
 |----|----|
 | `backup` | Create a backup of the Red Hat Advanced Cluster Security for Kubernetes (RHACS) database and the certificates. |
@@ -28,8 +46,6 @@ $ roxctl central [command] [flags]
 | `login` | Log in to the Central instance to obtain a token. |
 | `userpki` | Manage the user certificate authorization providers. |
 | `whoami` | Display information about the current user and their authentication method. |
-
-Available commands
 
 <a id="options-inherited-from-the-parent-command_roxctl-central"></a>
 
@@ -60,6 +76,12 @@ The `roxctl central` command supports the following options inherited from the p
 
 Create a backup of the RHACS database and certificates.
 
+<a id="roxctl-central-backup-usage_roxctl-central"></a>
+
+## roxctl central backup usage
+
+Usage syntax for the `roxctl central backup` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -73,6 +95,12 @@ $ roxctl central backup [flags]
 ```
 
 </div>
+
+<a id="roxctl-central-backup-options_roxctl-central"></a>
+
+## Options
+
+Options for the `roxctl central backup` command.
 
 <table>
 <caption>Options</caption>
@@ -89,15 +117,15 @@ $ roxctl central backup [flags]
 <tbody>
 <tr>
 <td style="text-align: left;"><p><code>--certs-only</code></p></td>
-<td style="text-align: left;"><p>Specify to only back up the certificates. When using an external database, this option is used to generate a backup bundle with certificates. The default value is <code>false</code>.</p></td>
+<td style="text-align: left;"><p>Specify to only back up the certificates. When using an external database, the command uses this option to generate a backup bundle with certificates. The default value is <code>false</code>.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>--output string</code></p></td>
 <td style="text-align: left;"><p>Specify where you want to save the backup. The behavior depends on the specified path:</p>
 <ul>
-<li><p>If the path is a file path, the backup is written to the file and overwrites it if it already exists. The directory must exist.</p></li>
-<li><p>If the path is a directory, the backup is saved in this directory under the file name that the server specifies.</p></li>
-<li><p>If this argument is omitted, the backup is saved in the current working directory under the file name that the server specifies.</p></li>
+<li><p>If the path is a file path, the command writes the backup to the file and overwrites it if it already exists. The directory must exist.</p></li>
+<li><p>If the path is a directory, the command saves the backup in this directory under the file name that the server specifies.</p></li>
+<li><p>If you omit this argument, the command saves the backup in the current working directory under the file name that the server specifies.</p></li>
 </ul></td>
 </tr>
 <tr>
@@ -113,6 +141,12 @@ $ roxctl central backup [flags]
 
 Download the certificate chain for the Central service.
 
+<a id="roxctl-central-cert-usage_roxctl-central"></a>
+
+## roxctl central cert usage
+
+Usage syntax for the `roxctl central cert` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -127,10 +161,16 @@ $ roxctl central cert [flags]
 
 </div>
 
+<a id="roxctl-central-cert-options_roxctl-central"></a>
+
+## Options
+
+Options for the `roxctl central cert` command.
+
 | Option | Description |
 |----|----|
 | `--output string` | Specify the file name to which you want to save the PEM certificate. Use `-` to produce output to the standard output stream (`stdout`). The default value is `-`. |
-| `--retry-timeout duration` | Specify the timeout after which API requests are retried. A value of zero means that the entire request duration is waited for without retrying. The default value is `20s`. |
+| `--retry-timeout duration` | Specify the timeout after which the command retries API requests. A value of zero means that the command waits for the entire request duration without retrying. The default value is `20s`. |
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `1m0s`. |
 
 Options
@@ -140,6 +180,12 @@ Options
 # roxctl central crs
 
 Manage cluster registration secrets that allow communication between Central and secured clusters for the initial setup.
+
+<a id="roxctl-central-crs-usage_roxctl-central"></a>
+
+## roxctl central crs usage
+
+Usage syntax for the `roxctl central crs` command.
 
 <div class="formalpara">
 
@@ -163,6 +209,12 @@ For available flags, see "roxctl central command options inherited from the pare
 
 Generate a cluster registration secret (CRS) that allows communication between Central and secured clusters for the initial setup.
 
+<a id="roxctl-central-crs-generate-usage_roxctl-central"></a>
+
+### roxctl central crs generate usage
+
+Usage syntax for the `roxctl central crs generate` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -177,15 +229,21 @@ $ roxctl central crs generate <crs name> [flags]
 
 </div>
 
-| Flag | Description |
+<a id="roxctl-central-crs-generate-flags_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central crs generate` command.
+
+| Option | Description |
 |----|----|
-| -o, --output | File to be used for storing the newly generated CRS. Use `-` for `stdout`. |
+| -o, --output | File that the command uses to store the newly generated CRS. Use `-` for `stdout`. |
 | --valid-for | Specify the validity duration for the new CRS, for example, `10m`, `1d`. |
 | --valid-until | Specify the validity as an RFC 3339 timestamp for the new CRS. |
 
-Flags
+Options
 
-If you do not specify the validity for the new CRS, `24h` is selected as a default value.
+If you do not specify the validity for the new CRS, the command selects `24h` as a default value.
 
 For information about additional flags, see "roxctl central command options inherited from the parent command".
 
@@ -194,6 +252,12 @@ For information about additional flags, see "roxctl central command options inhe
 ## roxctl central crs list
 
 Generate a list of previously generated cluster registration secrets that allow communication between Central and secured clusters for the initial setup.
+
+<a id="roxctl-central-crs-list-usage_roxctl-central"></a>
+
+### roxctl central crs list usage
+
+Usage syntax for the `roxctl central crs list` command.
 
 <div class="formalpara">
 
@@ -217,6 +281,12 @@ For available flags, see "roxctl central command options inherited from the pare
 
 Revoke a cluster registration secret (CRS) that allows communication between Central and secured clusters for the initial setup.
 
+<a id="roxctl-central-crs-revoke-usage_roxctl-central"></a>
+
+### roxctl central crs revoke usage
+
+Usage syntax for the `roxctl central crs revoke` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -239,6 +309,12 @@ For available flags, see "roxctl central command options inherited from the pare
 
 Login to the Central instance to obtain a token.
 
+<a id="roxctl-central-login-usage_roxctl-central"></a>
+
+## roxctl central login usage
+
+Usage syntax for the `roxctl central login` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -253,6 +329,12 @@ $ roxctl central login [flags]
 
 </div>
 
+<a id="roxctl-central-login-options_roxctl-central"></a>
+
+## Options
+
+Options for the `roxctl central login` command.
+
 | Option | Description |
 |----|----|
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `5m0s`. |
@@ -264,6 +346,12 @@ Options
 # roxctl central whoami
 
 Display information about the current user and their authentication method.
+
+<a id="roxctl-central-whoami-usage_roxctl-central"></a>
+
+## roxctl central whoami usage
+
+Usage syntax for the `roxctl central whoami` command.
 
 <div class="formalpara">
 
@@ -279,9 +367,15 @@ $ roxctl central whoami [flags]
 
 </div>
 
+<a id="roxctl-central-whoami-options_roxctl-central"></a>
+
+## Options
+
+Options for the `roxctl central whoami` command.
+
 | Option | Description |
 |----|----|
-| `--retry-timeout duration` | Specify the timeout after which API requests are retried. A value of zero means that the entire request duration is waited for without retrying. The default value is `20s`. |
+| `--retry-timeout duration` | Specify the timeout after which the command retries API requests. A value of zero means that the command waits for the entire request duration without retrying. The default value is `20s`. |
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `1m0s`. |
 
 Options
@@ -291,6 +385,12 @@ Options
 # roxctl central db
 
 Control the database operations.
+
+<a id="roxctl-central-db-usage_roxctl-central"></a>
+
+## roxctl central db usage
+
+Usage syntax for the `roxctl central db` command.
 
 <div class="formalpara">
 
@@ -306,6 +406,12 @@ $ roxctl central db [flags]
 
 </div>
 
+<a id="roxctl-central-db-options_roxctl-central"></a>
+
+## Options
+
+Options for the `roxctl central db` command.
+
 | Option | Description |
 |----|----|
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `1h0m0s`. |
@@ -317,6 +423,12 @@ Options
 ## roxctl central db restore
 
 Restore the RHACS database from a previous backup.
+
+<a id="roxctl-central-db-restore-usage_roxctl-central"></a>
+
+### roxctl central db restore usage
+
+Usage syntax for the `roxctl central db restore` command.
 
 <div class="formalpara">
 
@@ -337,9 +449,15 @@ where:
 `<file>`  
 Specifies the database backup file that you want to restore.
 
+<a id="roxctl-central-db-restore-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db restore` command.
+
 | Option | Description |
 |----|----|
-| `-f`, `--force` | If set to `true`, the restoration is performed without confirmation. The default value is `false`. |
+| `-f`, `--force` | If set to `true`, the command performs the restoration without confirmation. The default value is `false`. |
 | `--interrupt` | If set to `true`, it interrupts the running restore process to allow it to continue. The default value is `false`. |
 
 Options
@@ -349,6 +467,12 @@ Options
 ## roxctl central db generate
 
 Generate a Central database bundle.
+
+<a id="roxctl-central-db-generate-usage_roxctl-central"></a>
+
+### roxctl central db generate usage
+
+Usage syntax for the `roxctl central db generate` command.
 
 <div class="formalpara">
 
@@ -364,11 +488,17 @@ $ roxctl central db generate [flags]
 
 </div>
 
+<a id="roxctl-central-db-generate-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db generate` command.
+
 | Option | Description |
 |----|----|
-| `--debug` | If set to `true`, templates are read from the local file system. The default value is `false`. |
+| `--debug` | If set to `true`, the command reads templates from the local file system. The default value is `false`. |
 | `--debug-path string` | Specify the path to the Helm templates in your local file system. For more details, run the `roxctl central db generate` command. |
-| `--enable-pod-security-policies` | If set to `true`, `PodSecurityPolicy` resources are created. The default value is `true`. |
+| `--enable-pod-security-policies` | If set to `true`, the command creates `PodSecurityPolicy` resources. The default value is `true`. |
 
 Options
 
@@ -377,6 +507,12 @@ Options
 ## roxctl central db generate k8s
 
 Generate Kubernetes YAML files for deploying Central’s database components.
+
+<a id="roxctl-central-db-generate-k8s-usage_roxctl-central"></a>
+
+### roxctl central db generate k8s usage
+
+Usage syntax for the `roxctl central db generate k8s` command.
 
 <div class="formalpara">
 
@@ -392,10 +528,16 @@ $ roxctl central db generate k8s [flags]
 
 </div>
 
+<a id="roxctl-central-db-generate-k8s-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db generate k8s` command.
+
 | Option | Description |
 |----|----|
-| `--central-db-image string` | Specify the Central database image that you want to use. If not specified, a default value corresponding to the `--image-defaults` is used. |
-| `--image-defaults string` | Specify the default settings for container images. It controls the repositories from which the images are downloaded, the image names and the format of the tags. The default value is `development_build`. |
+| `--central-db-image string` | Specify the Central database image that you want to use. If not specified, the command uses a default value corresponding to the `--image-defaults`. |
+| `--image-defaults string` | Specify the default settings for container images. It controls the repositories from which the command downloads the images, the image names and the format of the tags. The default value is `development_build`. |
 | `--output-dir output directory` | Specify the directory to which you want to save the deployment bundle. The default value is `central-db-bundle`. |
 
 Options
@@ -405,6 +547,12 @@ Options
 ## roxctl central db restore cancel
 
 Cancel the ongoing Central database restore process.
+
+<a id="roxctl-central-db-restore-cancel-usage_roxctl-central"></a>
+
+### roxctl central db restore cancel usage
+
+Usage syntax for the `roxctl central db restore cancel` command.
 
 <div class="formalpara">
 
@@ -420,6 +568,12 @@ $ roxctl central db restore cancel [flags]
 
 </div>
 
+<a id="roxctl-central-db-restore-cancel-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db restore cancel` command.
+
 | Option | Description |
 |----|----|
 | `f`, `--force` | If set to `true`, proceed with the cancellation without confirmation. The default value is `false`. |
@@ -431,6 +585,12 @@ Options
 ## roxctl central db restore status
 
 Display information about the ongoing database restore process.
+
+<a id="roxctl-central-db-restore-status-usage_roxctl-central"></a>
+
+### roxctl central db restore status usage
+
+Usage syntax for the `roxctl central db restore status` command.
 
 <div class="formalpara">
 
@@ -452,6 +612,12 @@ $ roxctl central db restore status [flags]
 
 Generate Kubernetes YAML files for persistent volume claims (PVCs) in Central.
 
+<a id="roxctl-central-db-generate-k8s-pvc-usage_roxctl-central"></a>
+
+### roxctl central db generate k8s pvc usage
+
+Usage syntax for the `roxctl central db generate k8s pvc` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -465,6 +631,12 @@ $ roxctl central db generate k8s pvc [flags]
 ```
 
 </div>
+
+<a id="roxctl-central-db-generate-k8s-pvc-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db generate k8s pvc` command.
 
 | Option | Description |
 |----|----|
@@ -480,6 +652,12 @@ Options
 
 Generate an OpenShift YAML manifest for deploying a Central database instance on a Red Hat OpenShift cluster.
 
+<a id="roxctl-central-db-generate-openshift-usage_roxctl-central"></a>
+
+### roxctl central db generate openshift usage
+
+Usage syntax for the `roxctl central db generate openshift` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -494,10 +672,16 @@ $ roxctl central db generate openshift [flags]
 
 </div>
 
+<a id="roxctl-central-db-generate-openshift-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db generate openshift` command.
+
 | Option | Description |
 |----|----|
-| `--central-db-image string` | Specify the Central database image that you want to use. If not specified, a default value corresponding to the `--image-defaults` is used. |
-| `--image-defaults string` | Specify the default settings for container images. It controls the repositories from which the images are downloaded, the image names and the format of the tags. The default value is `development_build`. |
+| `--central-db-image string` | Specify the Central database image that you want to use. If not specified, the command uses a default value corresponding to the `--image-defaults`. |
+| `--image-defaults string` | Specify the default settings for container images. It controls the repositories from which the command downloads the images, the image names and the format of the tags. The default value is `development_build`. |
 | `--openshift-version int` | Specify the Red Hat OpenShift major version 3 or 4 for the deployment. The default value is `3`. |
 | `--output-dir output-directory` | Specify the directory to which you want to save the deployment bundle. The default value is `central-db-bundle`. |
 
@@ -508,6 +692,12 @@ Options
 ## roxctl central db generate k8s hostpath
 
 Generate a Kubernetes YAML manifest for a database deployment with a hostpath volume type in Central.
+
+<a id="roxctl-central-db-generate-k8s-hostpath-usage_roxctl-central"></a>
+
+### roxctl central db generate k8s hostpath usage
+
+Usage syntax for the `roxctl central db generate k8s hostpath` command.
 
 <div class="formalpara">
 
@@ -523,6 +713,12 @@ $ roxctl central db generate k8s hostpath [flags]
 
 </div>
 
+<a id="roxctl-central-db-generate-k8s-hostpath-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db generate k8s hostpath` command.
+
 | Option | Description |
 |----|----|
 | `--hostpath string` | Specify the path on the host. The default value is `/var/lib/stackrox-central-db`. |
@@ -536,6 +732,12 @@ Options
 ## roxctl central db generate openshift pvc
 
 Generate an OpenShift YAML manifest for a database deployment with a persistent volume claim (PVC) in Central.
+
+<a id="roxctl-central-db-generate-openshift-pvc-usage_roxctl-central"></a>
+
+### roxctl central db generate openshift pvc usage
+
+Usage syntax for the `roxctl central db generate openshift pvc` command.
 
 <div class="formalpara">
 
@@ -551,6 +753,12 @@ $ roxctl central db generate openshift pvc [flags]
 
 </div>
 
+<a id="roxctl-central-db-generate-openshift-pvc-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db generate openshift pvc` command.
+
 | Option | Description |
 |----|----|
 | --name string | Specify the external volume name for the Central database. The default value is `central-db`. |
@@ -564,6 +772,12 @@ Options
 ## roxctl central db generate openshift hostpath
 
 Add a hostpath external volume to the Central database.
+
+<a id="roxctl-central-db-generate-openshift-hostpath-usage_roxctl-central"></a>
+
+### roxctl central db generate openshift hostpath usage
+
+Usage syntax for the `roxctl central db generate openshift hostpath` command.
 
 <div class="formalpara">
 
@@ -579,6 +793,12 @@ $ roxctl central db generate openshift hostpath [flags]
 
 </div>
 
+<a id="roxctl-central-db-generate-openshift-hostpath-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central db generate openshift hostpath` command.
+
 | Option | Description |
 |----|----|
 | `--hostpath string` | Specify the path on the host. The default value is `/var/lib/stackrox-central-db`. |
@@ -592,6 +812,12 @@ Options
 # roxctl central debug
 
 Debug the Central service.
+
+<a id="roxctl-central-debug-usage_roxctl-central"></a>
+
+## roxctl central debug usage
+
+Usage syntax for the `roxctl central debug` command.
 
 <div class="formalpara">
 
@@ -613,6 +839,12 @@ $ roxctl central debug [flags]
 
 Control the debugging of the database.
 
+<a id="roxctl-central-debug-db-usage_roxctl-central"></a>
+
+### roxctl central debug db usage
+
+Usage syntax for the `roxctl central debug db` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -627,6 +859,12 @@ $ roxctl central debug db [flags]
 
 </div>
 
+<a id="roxctl-central-debug-db-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central debug db` command.
+
 | Option | Description |
 |----|----|
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `1m0s`. |
@@ -638,6 +876,12 @@ Options
 ## roxctl central debug log
 
 Retrieve the current log level.
+
+<a id="roxctl-central-debug-log-usage_roxctl-central"></a>
+
+### roxctl central debug log usage
+
+Usage syntax for the `roxctl central debug log` command.
 
 <div class="formalpara">
 
@@ -653,11 +897,17 @@ $ roxctl central debug log [flags]
 
 </div>
 
+<a id="roxctl-central-debug-log-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central debug log` command.
+
 | Option | Description |
 |----|----|
 | `-l`, `--level string` | Specify the log level to which you want to set the modules. Valid values include `Debug`, `Info`, `Warn`, `Error`, `Panic`, and `Fatal`. |
 | `-m`, `--modules strings` | Specify the modules to which you want to apply the command. |
-| `--retry-timeout duration` | Specify the timeout after which API requests are retried. A value of zero means that the entire request duration is waited for without retrying. The default value is `20s`. |
+| `--retry-timeout duration` | Specify the timeout after which the command retries API requests. A value of zero means that the command waits for the entire request duration without retrying. The default value is `20s`. |
 | `-t`, `--timeout duration` | Specify the timeout for API requests, which is the maximum duration of a request. The default value is `1m0s`. |
 
 Options
@@ -667,6 +917,12 @@ Options
 ## roxctl central debug dump
 
 Download a bundle containing the debug information for Central.
+
+<a id="roxctl-central-debug-dump-usage_roxctl-central"></a>
+
+### roxctl central debug dump usage
+
+Usage syntax for the `roxctl central debug dump` command.
 
 <div class="formalpara">
 
@@ -682,9 +938,15 @@ $ roxctl central debug dump [flags]
 
 </div>
 
+<a id="roxctl-central-debug-dump-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central debug dump` command.
+
 | Option | Description |
 |----|----|
-| `--logs` | If set to `true`, logs are included in the Central dump. The default value is `false`. |
+| `--logs` | If set to `true`, the command includes logs in the Central dump. The default value is `false`. |
 | `--output-dir string` | Specify the output directory for the bundle content. The default value is an automatically generated directory name within the current directory. |
 | `-t`, `--timeout duration` | Specify the timeout for API requests, which is the maximum duration of a request. The default value is `5m0s`. |
 
@@ -695,6 +957,12 @@ Options
 ## roxctl central debug db stats
 
 Control the statistics of the Central database.
+
+<a id="roxctl-central-debug-db-stats-usage_roxctl-central"></a>
+
+### roxctl central debug db stats usage
+
+Usage syntax for the `roxctl central debug db stats` command.
 
 <div class="formalpara">
 
@@ -716,6 +984,12 @@ $ roxctl central debug db stats [flags]
 
 Enable or disable authorization tracing in Central for debugging purposes.
 
+<a id="roxctl-central-debug-authz-trace-usage_roxctl-central"></a>
+
+### roxctl central debug authz-trace usage
+
+Usage syntax for the `roxctl central debug authz-trace` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -730,6 +1004,12 @@ $ roxctl central debug authz-trace [flags]
 
 </div>
 
+<a id="roxctl-central-debug-authz-trace-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central debug authz-trace` command.
+
 | Option | Description |
 |----|----|
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `20m0s`. |
@@ -741,6 +1021,12 @@ Options
 ## roxctl central debug db stats reset
 
 Reset the statistics of the Central database.
+
+<a id="roxctl-central-debug-db-stats-reset-usage_roxctl-central"></a>
+
+### roxctl central debug db stats reset usage
+
+Usage syntax for the `roxctl central debug db stats reset` command.
 
 <div class="formalpara">
 
@@ -762,6 +1048,12 @@ $ roxctl central debug db stats reset [flags]
 
 Download a bundle containing a snapshot of diagnostic information about the platform.
 
+<a id="roxctl-central-debug-download-diagnostics-usage_roxctl-central"></a>
+
+### roxctl central debug download-diagnostics usage
+
+Usage syntax for the `roxctl central debug download-diagnostics` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -775,6 +1067,12 @@ $ roxctl central debug download-diagnostics [flags]
 ```
 
 </div>
+
+<a id="roxctl-central-debug-download-diagnostics-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central debug download-diagnostics` command.
 
 | Option | Description |
 |----|----|
@@ -791,6 +1089,12 @@ Options
 
 Generate the required YAML configuration files that contain the orchestrator objects to deploy Central.
 
+<a id="roxctl-central-generate-usage_roxctl-central"></a>
+
+## roxctl central generate usage
+
+Usage syntax for the `roxctl central generate` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -805,14 +1109,20 @@ $ roxctl central generate [flags]
 
 </div>
 
+<a id="roxctl-central-generate-options_roxctl-central"></a>
+
+## Options
+
+Options for the `roxctl central generate` command.
+
 | Option | Description |
 |----|----|
 | `--backup-bundle string` | Specify the path to the backup bundle from which you want to restore the keys and certificates. |
-| `--debug` | If set to `true`, templates are read from the local file system. The default value is `false`. |
+| `--debug` | If set to `true`, the command reads templates from the local file system. The default value is `false`. |
 | `--debug-path string` | Specify the path to Helm templates on your local file system. For more details, run the `roxctl central generate --help` command. |
 | `--default-tls-certfile` | Specify the PEM certificate bundle file that you want to use as the default. |
 | `--default-tls-keyfile` | Specify the PEM private key file that you want to use as the default. |
-| `--enable-pod-security-policies` | If set to `true`, `PodSecurityPolicy` resources are created. The default value is `true`. |
+| `--enable-pod-security-policies` | If set to `true`, the command creates `PodSecurityPolicy` resources. The default value is `true`. |
 | `-p`, `--password string` | Specify the administrator password. The default value is automatically generated. |
 | `--plaintext-endpoints string` | Specify the ports or endpoints you want to use for unencrypted exposure as a comma-separated list. |
 
@@ -823,6 +1133,12 @@ Options
 ## roxctl central generate k8s
 
 Generate the required YAML configuration files to deploy Central into a Kubernetes cluster.
+
+<a id="roxctl-central-generate-k8s-usage_roxctl-central"></a>
+
+### roxctl central generate k8s usage
+
+Usage syntax for the `roxctl central generate k8s` command.
 
 <div class="formalpara">
 
@@ -838,21 +1154,27 @@ $ roxctl central generate k8s [flags]
 
 </div>
 
+<a id="roxctl-central-generate-k8s-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central generate k8s` command.
+
 | Option | Description |
 |----|----|
-| `--central-db-image string` | Specify the Central database image you want to use. If not specified, a default value corresponding to the `--image-defaults` is used. |
+| `--central-db-image string` | Specify the Central database image you want to use. If not specified, the command uses a default value corresponding to the `--image-defaults`. |
 | `--declarative-config-config-maps strings` | Specify a list of configuration maps that you want to add as declarative configuration mounts in Central. |
 | `--declarative-config-secrets strings` | Specify a list of secrets that you want to add as declarative configuration mounts in Central. |
 | `--enable-telemetry` | Specify whether you want to enable telemetry. The default value is `false`. |
-| `--image-defaults string` | Specify the default settings for container images. The specified settings control the repositories from which the images are downloaded, the image names and the format of the tags. The default value is `development_build`. |
+| `--image-defaults string` | Specify the default settings for container images. The specified settings control the repositories from which the command downloads the images, the image names and the format of the tags. The default value is `development_build`. |
 | `--istio-support version` | Generate deployment files that support the specified Istio version. Valid values include `1.0`, `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `1.6`, and `1.7`. |
 | `--lb-type load balancer type` | Specify the method in which you want to suspend Central. Valid values include `lb`, `np` and `none`. The default value is `none`. |
-| `-i`, `--main-image string` | Specify the main image that you want to use. If not specified, a default value corresponding to the `--image-defaults` is used. |
+| `-i`, `--main-image string` | Specify the main image that you want to use. If not specified, the command uses a default value corresponding to the `--image-defaults`. |
 | `--offline` | Specify whether you want to run RHACS in offline mode, avoiding a connection to the Internet. The default value is `false`. |
 | `--output-dir output directory` | Specify the directory to which you want to save the deployment bundle. The default value is `central-bundle`. |
 | `--output-format output format` | Specify the deployment tool that you want to use. Valid values include `kubectl`, `helm`, and `helm-values`. The default value is `kubectl`. |
-| `--scanner-db-image string` | Specify the Scanner database image that you want to use. If not specified, a default value corresponding to the `--image-defaults` is used. |
-| `--scanner-image string` | Specify the Scanner image that you want to use. If not specified, a default value corresponding to the \`--image-defaults" is used. |
+| `--scanner-db-image string` | Specify the Scanner database image that you want to use. If not specified, the command uses a default value corresponding to the `--image-defaults`. |
+| `--scanner-image string` | Specify the Scanner image that you want to use. If not specified, the command uses a default value corresponding to the `--image-defaults`. |
 
 Options
 
@@ -861,6 +1183,12 @@ Options
 ## roxctl central generate k8s pvc
 
 Generate Kubernetes YAML files for persistent volume claims (PVCs) in Central.
+
+<a id="roxctl-central-generate-k8s-pvc-usage_roxctl-central"></a>
+
+### roxctl central generate k8s pvc usage
+
+Usage syntax for the `roxctl central generate k8s pvc` command.
 
 <div class="formalpara">
 
@@ -876,6 +1204,12 @@ $ roxctl central generate k8s pvc [flags]
 
 </div>
 
+<a id="roxctl-central-generate-k8s-pvc-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central generate k8s pvc` command.
+
 | Option | Description |
 |----|----|
 | `--db-name string` | Specify the external volume name for the Central database. The default value is `central-db`. |
@@ -889,6 +1223,12 @@ Options
 ## roxctl central generate openshift
 
 Generate the required YAML configuration files to deploy Central in a Red Hat OpenShift cluster.
+
+<a id="roxctl-central-generate-openshift-usage_roxctl-central"></a>
+
+### roxctl central generate openshift usage
+
+Usage syntax for the `roxctl central generate openshift` command.
 
 <div class="formalpara">
 
@@ -904,23 +1244,29 @@ $ roxctl central generate openshift [flags]
 
 </div>
 
+<a id="roxctl-central-generate-openshift-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central generate openshift` command.
+
 | Option | Description |
 |----|----|
-| `--central-db-image string` | Specify the Central database image that you want to use. If not specified, a default value is created corresponding to the `--image-defaults`. |
+| `--central-db-image string` | Specify the Central database image that you want to use. If not specified, the command creates a default value corresponding to the `--image-defaults`. |
 | `--declarative-config-config-maps strings` | Specify a list of configuration maps that you want to add as declarative configuration mounts in Central. |
 | `--declarative-config-secrets strings` | Specify a list of secrets that you want to add as declarative configuration mounts in Central. |
 | `--enable-telemetry` | Specify whether you want to enable telemetry. The default value is `false`. |
-| `--image-defaults string` | Specify the default settings for container images. It controls the repositories from which the images are downloaded, the image names and the format of the tags. The default value is `development_build`. |
+| `--image-defaults string` | Specify the default settings for container images. It controls the repositories from which the command downloads the images, the image names and the format of the tags. The default value is `development_build`. |
 | `--istio-support version` | Generate deployment files that support the specified Istio version. Valid values include `1.0`, `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `1.6`, and `1.7`. |
 | `--lb-type load balancer type` | Specify the method of exposing Central. Valid values include `route`, `lb`, `np` and `none`. The default value is `none`. |
-| `-i`, `--main-image string` | Specify the main image that you want to use. If not specified, a default value corresponding to `--image-defaults` is used. |
+| `-i`, `--main-image string` | Specify the main image that you want to use. If not specified, the command uses a default value corresponding to `--image-defaults`. |
 | `--offline` | Specify whether you want to run RHACS in offline mode, avoiding a connection to the Internet. The default value is `false`. |
 | `--openshift-monitoring false\|true\|auto[=true]` | Specify integration with Red Hat OpenShift 4 monitoring. The default value is `auto`. |
 | `--openshift-version int` | Specify the Red Hat OpenShift major version 3 or 4 for the deployment. |
 | `--output-dir output directory` | Specify the directory to which you want to save the deployment bundle. The default value is `central-bundle`. |
 | `--output-format output format` | Specify the deployment tool that you want to use. Valid values include `kubectl`, `helm` and `helm-values`. The default value is `kubectl`. |
-| `--scanner-db-image string` | Specify the Scanner database image that you want to use. If not specified, a default value corresponding to the `--image-defaults` is used. |
-| `--scanner-image string` | Specify the Scanner image that you want to use. If not specified, a default value corresponding to `--image-defaults` is used. |
+| `--scanner-db-image string` | Specify the Scanner database image that you want to use. If not specified, the command uses a default value corresponding to the `--image-defaults`. |
+| `--scanner-image string` | Specify the Scanner image that you want to use. If not specified, the command uses a default value corresponding to `--image-defaults`. |
 
 Options
 
@@ -929,6 +1275,12 @@ Options
 ## roxctl central generate interactive
 
 Generate interactive resources in Central.
+
+<a id="roxctl-central-generate-interactive-usage_roxctl-central"></a>
+
+### roxctl central generate interactive usage
+
+Usage syntax for the `roxctl central generate interactive` command.
 
 <div class="formalpara">
 
@@ -950,6 +1302,12 @@ $ roxctl central generate interactive [flags]
 
 Generate a Kubernetes YAML manifest for deploying a Central instance by using the hostpath volume type.
 
+<a id="roxctl-central-generate-k8s-hostpath-usage_roxctl-central"></a>
+
+### roxctl central generate k8s hostpath usage
+
+Usage syntax for the `roxctl central generate k8s hostpath` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -963,6 +1321,12 @@ $ roxctl central generate k8s hostpath [flags]
 ```
 
 </div>
+
+<a id="roxctl-central-generate-k8s-hostpath-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central generate k8s hostpath` command.
 
 | Option | Description |
 |----|----|
@@ -978,6 +1342,12 @@ Options
 
 Generate a OpenShift YAML manifest for deploying a persistent volume claim (PVC) in Central.
 
+<a id="roxctl-central-generate-openshift-pvc-usage_roxctl-central"></a>
+
+### roxctl central generate openshift pvc usage
+
+Usage syntax for the `roxctl central generate openshift pvc` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -991,6 +1361,12 @@ $ roxctl central generate openshift pvc [flags]
 ```
 
 </div>
+
+<a id="roxctl-central-generate-openshift-pvc-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central generate openshift pvc` command.
 
 | Option | Description |
 |----|----|
@@ -1006,6 +1382,12 @@ Options
 
 Add a hostpath external volume to the deployment definition in Red Hat OpenShift.
 
+<a id="roxctl-central-generate-openshift-hostpath-usage_roxctl-central"></a>
+
+### roxctl central generate openshift hostpath usage
+
+Usage syntax for the `roxctl central generate openshift hostpath` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -1019,6 +1401,12 @@ $ roxctl central generate openshift hostpath [flags]
 ```
 
 </div>
+
+<a id="roxctl-central-generate-openshift-hostpath-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central generate openshift hostpath` command.
 
 | Option | Description |
 |----|----|
@@ -1034,6 +1422,12 @@ Options
 
 Initialize bundles in Central.
 
+<a id="roxctl-central-init-bundles-usage_roxctl-central"></a>
+
+## roxctl central init-bundles usage
+
+Usage syntax for the `roxctl central init-bundles` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -1048,9 +1442,15 @@ $ roxctl central init-bundles [flag]
 
 </div>
 
+<a id="roxctl-central-init-bundles-options_roxctl-central"></a>
+
+## Options
+
+Options for the `roxctl central init-bundles` command.
+
 | Option | Description |
 |----|----|
-| `--retry-timeout duration` | Specify the timeout after which API requests are retried. A value of `0s` means that the entire request duration is waited for without retrying. The default value is `20s`. |
+| `--retry-timeout duration` | Specify the timeout after which the command retries API requests. A value of `0s` means that the command waits for the entire request duration without retrying. The default value is `20s`. |
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `1m0s`. |
 
 Options
@@ -1060,6 +1460,12 @@ Options
 ## roxctl central init-bundles list
 
 List the available initialization bundles in Central.
+
+<a id="roxctl-central-init-bundles-list-usage_roxctl-central"></a>
+
+### roxctl central init-bundles list usage
+
+Usage syntax for the `roxctl central init-bundles list` command.
 
 <div class="formalpara">
 
@@ -1080,6 +1486,12 @@ $ roxctl central init-bundles list [flags]
 ## roxctl central init-bundles revoke
 
 Revoke one or more cluster initialization bundles in Central.
+
+<a id="roxctl-central-init-bundles-revoke-usage_roxctl-central"></a>
+
+### roxctl central init-bundles revoke usage
+
+Usage syntax for the `roxctl central init-bundles revoke` command.
 
 <div class="formalpara">
 
@@ -1106,6 +1518,12 @@ Specifies the ID or the name of the initialization bundle that you want to revok
 
 Fetch the certificate authority (CA) bundle from Central.
 
+<a id="roxctl-central-init-bundles-fetch-ca-usage_roxctl-central"></a>
+
+### roxctl central init-bundles fetch-ca usage
+
+Usage syntax for the `roxctl central init-bundles fetch-ca` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -1120,6 +1538,12 @@ $ roxctl central init-bundles fetch-ca [flags]
 
 </div>
 
+<a id="roxctl-central-init-bundles-fetch-ca-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central init-bundles fetch-ca` command.
+
 | Option | Description |
 |----|----|
 | `--output string` | Specify the file that you want to use for storing the CA configuration. |
@@ -1131,6 +1555,12 @@ Options
 ## roxctl central init-bundles generate
 
 Generate a new cluster initialization bundle.
+
+<a id="roxctl-central-init-bundles-generate-usage_roxctl-central"></a>
+
+### roxctl central init-bundles generate usage
+
+Usage syntax for the `roxctl central init-bundles generate` command.
 
 <div class="formalpara">
 
@@ -1151,6 +1581,12 @@ where:
 `<init_bundle_name>`  
 Specifies the name for the initialization bundle you want to generate.
 
+<a id="roxctl-central-init-bundles-generate-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central init-bundles generate` command.
+
 | Option | Description |
 |----|----|
 | `--output string` | Specify the file you want to use for storing the newly generated initialization bundle in the Helm configuration form. Use `-` to produce output to the standard output stream (`stdout`). |
@@ -1163,6 +1599,12 @@ Options
 # roxctl central userpki
 
 Manage the user certificate authorization providers.
+
+<a id="roxctl-central-userpki-usage_roxctl-central"></a>
+
+## roxctl central userpki usage
+
+Usage syntax for the `roxctl central userpki` command.
 
 <div class="formalpara">
 
@@ -1184,6 +1626,12 @@ $ roxctl central userpki [flags]
 
 Display all the user certificate authentication providers.
 
+<a id="roxctl-central-userpki-list-usage_roxctl-central"></a>
+
+### roxctl central userpki list usage
+
+Usage syntax for the `roxctl central userpki list` command.
+
 <div class="formalpara">
 
 <div class="title">
@@ -1198,10 +1646,16 @@ $ roxctl central userpki list [flags]
 
 </div>
 
+<a id="roxctl-central-userpki-list-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central userpki list` command.
+
 | Option | Description |
 |----|----|
 | `-j`, `--json` | Enable the JSON output. The default value is `false`. |
-| `--retry-timeout duration` | Specify the timeout after which API requests are retried. A value of zero means that the entire request duration is waited for without retrying. The default value is `20s`. |
+| `--retry-timeout duration` | Specify the timeout after which the command retries API requests. A value of zero means that the command waits for the entire request duration without retrying. The default value is `20s`. |
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `1m0s`. |
 
 Options
@@ -1211,6 +1665,12 @@ Options
 ## roxctl central userpki create
 
 Create a new user certificate authentication provider.
+
+<a id="roxctl-central-userpki-create-usage_roxctl-central"></a>
+
+### roxctl central userpki create usage
+
+Usage syntax for the `roxctl central userpki create` command.
 
 <div class="formalpara">
 
@@ -1226,10 +1686,16 @@ $ roxctl central userpki create name [flags]
 
 </div>
 
+<a id="roxctl-central-userpki-create-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central userpki create` command.
+
 | Option | Description |
 |----|----|
 | `-c`, `--cert strings` | Specify the PEM files of the root CA certificates. You can specify several certificate files. |
-| `--retry-timeout duration` | Specify the timeout after which API requests are retried. A value of zero means that the entire request duration is waited for without retrying. The default value is `20s`. |
+| `--retry-timeout duration` | Specify the timeout after which the command retries API requests. A value of zero means that the command waits for the entire request duration without retrying. The default value is `20s`. |
 | `-r`, `--role string` | Specify the minimum access role for users of this provider. |
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `1m0s`. |
 
@@ -1240,6 +1706,12 @@ Options
 ## roxctl central userpki delete
 
 Delete a user certificate authentication provider.
+
+<a id="roxctl-central-userpki-delete-usage_roxctl-central"></a>
+
+### roxctl central userpki delete usage
+
+Usage syntax for the `roxctl central userpki delete` command.
 
 <div class="formalpara">
 
@@ -1255,10 +1727,16 @@ $ roxctl central userpki delete id|name [flags]
 
 </div>
 
+<a id="roxctl-central-userpki-delete-options_roxctl-central"></a>
+
+### Options
+
+Options for the `roxctl central userpki delete` command.
+
 | Option | Description |
 |----|----|
 | `-f`, `--force` | If set to `true`, proceed with the deletion without confirmation. The default value is `false`. |
-| `--retry-timeout duration` | Specify the timeout after which API requests are retried. A value of zero means that the entire request duration is waited for without retrying. The default value is `20s`. |
+| `--retry-timeout duration` | Specify the timeout after which the command retries API requests. A value of zero means that the command waits for the entire request duration without retrying. The default value is `20s`. |
 | `-t`, `--timeout duration` | Specify the timeout for API requests representing the maximum duration of a request. The default value is `1m0s`. |
 
 Options

@@ -2,7 +2,7 @@
 
 Service serving certificates provide automatic TLS encryption for service-to-service communication. Configure certificates for services, ConfigMaps, APIServices, CRDs, and webhooks to secure internal cluster traffic.
 
-# Understanding service serving certificates
+# Understand service serving certificates
 
 Service serving certificates are TLS web server certificates that OpenShift Container Platform issues for middleware applications that require encryption. The `service-ca` controller stores the certificate and key in a secret and automatically replaces them near expiration.
 
@@ -259,7 +259,9 @@ Procedure
 
 # Add the service CA bundle to a custom resource definition
 
-You can annotate a `CustomResourceDefinition` (CRD) object with `service.beta.openshift.io/inject-cabundle=true` to have its `spec.conversion.webhook.clientConfig.caBundle` field populated with the service Certificate Authority (CA) bundle. This allows the Kubernetes API server to validate the service CA certificate used to secure the targeted endpoint.
+You can annotate a `CustomResourceDefinition` (CRD) object with `service.beta.openshift.io/inject-cabundle=true` to have its `spec.conversion.webhook.clientConfig.caBundle` field populated with the service Certificate Authority (CA) bundle.
+
+This allows the Kubernetes API server to validate the service CA certificate used to secure the targeted endpoint.
 
 > [!NOTE]
 > The service CA bundle will only be injected into the CRD if the CRD is configured to use a webhook for conversion. It is only useful to inject the service CA bundle if a CRD’s webhook is secured with a service CA certificate.

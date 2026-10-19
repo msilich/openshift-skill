@@ -17,7 +17,7 @@
     "build_tools": {
       "asciidoctor": "2.0.23",
       "pandoc": "3.7.0.2",
-      "python": "3.12.14",
+      "python": "3.12.15",
       "pyyaml": "6.0.3"
     },
     "failed_topics": 0,
@@ -51,14 +51,14 @@
       "images/network-graph-20-overview-updated.png": "0b0a61a953dcee412270426b1d88564976fcca1240b54433aecce3af40b1c385",
       "images/network-graph-internal-entities.png": "ea8e6717eac4c8358c63c1a5f9e53466dd80009373da74eee1bed225a29b7c8e"
     },
-    "conversion_report_sha256": "a550fef620bef2d514b51469e4f4da9e031072350138bbba0cfcc511fa50761c",
+    "conversion_report_sha256": "8511e56f05b841cc7fb3b90db25f18bf0ffbe73e1c6bd39d8e35436c074fc6e4",
     "markdown_manifest_algorithm": "SHA-256 of sorted UTF-8 lines: '<file-sha256>  <relative-path>\\n'",
-    "markdown_manifest_sha256": "03a692e64d3e3c171e17f969ca685b0adb5f9f00b7548f6424435849d3033e6e",
+    "markdown_manifest_sha256": "ebeac42a754f81a24c68cf93c3642a67c699cc4de51d012e3565c396e6fe48af",
     "openshift_docs_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
   },
   "runtime_network_required": false,
   "schema_version": 1,
-  "source_commit_time_utc": "2026-09-09T14:55:17Z",
+  "source_commit_time_utc": "2026-10-13T12:59:33Z",
   "sources": {
     "agentic_skills_converter": {
       "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
@@ -74,7 +74,7 @@
     },
     "openshift_docs": {
       "branch_hint": "rhacs-docs-4.11",
-      "commit": "e516555e0cb6bcc6ba88c423e88c8dd054532425",
+      "commit": "2a3d16703701f239724204bfcc0ec745c35b065c",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"

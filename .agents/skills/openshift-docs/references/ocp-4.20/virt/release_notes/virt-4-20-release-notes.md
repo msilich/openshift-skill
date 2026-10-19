@@ -22,7 +22,7 @@ Learn more about [OpenShift Virtualization architecture and deployments](../abou
 
 OpenShift Virtualization 4.20 is supported for use on OpenShift Container Platform 4.20 clusters. To use the latest z-stream release of OpenShift Virtualization, you must first upgrade to the latest version of OpenShift Container Platform.
 
-The latest stable release of OpenShift Virtualization 4.20 is 4.20.24.
+The latest stable release of OpenShift Virtualization 4.20 is 4.20.27.
 
 ## Supported guest operating systems
 
@@ -232,6 +232,12 @@ Some features in this release are currently in Technology Preview. These experim
   - As a workaround, use the Migration Toolkit for Containers (MTC) web console or create the `MigPlan` resource manually by using the CLI to perform the migration.
 
 ## Virtualization
+
+- When you detach a disk from a virtual machine (VM), the `DataVolume` object retains a stale owner reference to the original VM. If you then delete the original VM, garbage collection deletes the `DataVolume` object and its underlying persistent volume claim (PVC), even if the disk is attached to a different VM. As a consequence, data loss can occur.
+
+  - As a workaround, after detaching a disk from a VM, manually remove the `ownerReference` entry from the `DataVolume` object before deleting the original VM. As a result, the disk is not deleted when the original VM is removed. ([**CNV-71659**](https://redhat.atlassian.net/browse/CNV-71659))
+
+<!-- -->
 
 - Live migration fails if the VM name exceeds 47 characters. ([**CNV-61066**](https://issues.redhat.com/browse/CNV-61066))
 

@@ -15,7 +15,7 @@ The following limitations apply when modifying the cluster network IP address ra
 > [!IMPORTANT]
 > You cannot expand the service network CIDR range after installing the cluster, either directly or through the ServiceCIDR API. You must configure the service network CIDR during installation using the `install-config.yaml` file. To avoid service IP address exhaustion, ensure that your initial service network range is large enough to accommodate future growth.
 
-# Expanding the cluster network IP address range
+# Expand the cluster network IP address range
 
 To expand the cluster network IP address range in OpenShift Container Platform to support more nodes, you can modify the cluster network CIDR mask using the `oc patch` command.
 

@@ -52,7 +52,7 @@ Although the `MultiNetworkPolicy` API implements the `NetworkPolicy` API, ensure
   `<network_name>`
   Specifies the name of a network attachment definition.
 
-# Enabling multi-network policy for the cluster
+# Enable multi-network policy for the cluster
 
 As a cluster administrator, you can enable multi-network policy support on your cluster.
 
@@ -98,7 +98,7 @@ Procedure
 
 </div>
 
-# Supporting multi-network policies in IPv6 networks
+# Support multi-network policies in IPv6 networks
 
 The ICMPv6 Neighbor Discovery Protocol (NDP) is a set of messages and processes that enable devices to discover and maintain information about neighboring nodes. NDP plays a crucial role in IPv6 networks, facilitating the interaction between devices on the same link.
 
@@ -142,7 +142,7 @@ This rule allows incoming ICMPv6 router advertisement messages, which give confi
 
 The rules collectively enable essential ICMPv6 traffic for correct network functioning, including address resolution and router communication in an IPv6 environment. With these rules in place and a multi-network policy denying traffic, applications are not expected to experience connectivity issues.
 
-# Working with multi-network policy
+# Work with multi-network policy
 
 To manage network traffic isolation and security for pods on secondary networks, you can create, edit, view, and delete multi-network policies. Before you work with multi-network policies, you must enable multi-network policy support for your cluster.
 
@@ -461,7 +461,7 @@ Procedure
 
 ## Delete a multi-network policy using the CLI
 
-You can delete a multi-network policy in a namespace.
+You can delete a multi-network policy in a namespace by using the CLI.
 
 > [!NOTE]
 > If you log in with `cluster-admin` privileges, you can delete network policies in any namespace in the cluster. In the web console, you can delete policies directly in YAML or by using the **Actions** menu.

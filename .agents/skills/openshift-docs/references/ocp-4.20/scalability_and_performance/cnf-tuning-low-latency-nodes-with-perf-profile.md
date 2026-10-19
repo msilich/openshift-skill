@@ -48,7 +48,7 @@ You can run the PPC by using one of the following methods:
 > [!NOTE]
 > Using the wrapper script abstracts some of the more granular Podman tasks into an executable script. For example, the wrapper script handles tasks such as pulling and running the required container image, mounting directories into the container, and providing parameters directly to the container through Podman. Both methods achieve the same result.
 
-## Creating a machine config pool to target nodes for performance tuning
+## Create a machine config pool to target nodes for performance tuning
 
 For multi-node clusters, you can define a machine config pool (MCP) to identify the target nodes that you want to configure with a performance profile.
 
@@ -185,7 +185,7 @@ Verification
 
 </div>
 
-## Gathering data about your cluster for the PPC
+## Gather data about your cluster for the PPC
 
 The Performance Profile Creator (PPC) tool requires `must-gather` data. As a cluster administrator, run the `must-gather` command to capture information about your cluster.
 
@@ -250,7 +250,7 @@ Additional resources
 
 </div>
 
-## Running the Performance Profile Creator using Podman
+## Run the Performance Profile Creator using Podman
 
 As a cluster administrator, you can use Podman with the Performance Profile Creator (PPC) to create a performance profile.
 
@@ -477,9 +477,11 @@ Procedure
 
 </div>
 
-## Running the Performance Profile Creator wrapper script
+## Run the Performance Profile Creator wrapper script
 
-The wrapper script simplifies the process of creating a performance profile with the Performance Profile Creator (PPC) tool. The script handles tasks such as pulling and running the required container image, mounting directories into the container, and providing parameters directly to the container through Podman.
+The wrapper script simplifies the process of creating a performance profile with the Performance Profile Creator (PPC) tool.
+
+The script handles tasks such as pulling and running the required container image, mounting directories into the container, and providing parameters directly to the container through Podman.
 
 For more information about the Performance Profile Creator arguments, see the section "Performance Profile Creator arguments".
 
@@ -1191,7 +1193,7 @@ Additional resources
 
 </div>
 
-# Configuring power saving for nodes that run colocated high and low priority workloads
+# Configure power saving for nodes that run colocated high and low priority workloads
 
 You can enable power savings for a node that has low priority workloads that are colocated with high priority workloads without impacting the latency or throughput of the high priority workloads. Power saving is possible without modifications to the workloads themselves.
 
@@ -1340,16 +1342,19 @@ The exact partitioning pattern to use depends on many factors like hardware, wor
 
 The decision regarding which specific CPUs should be used for reserved and isolated partitions requires detailed analysis and measurements. Factors like NUMA affinity of devices and memory play a role. The selection also depends on the workload architecture and the specific use case.
 
+To ensure that housekeeping tasks and workloads do not interfere with each other, specify two groups of CPUs in the `spec` section of the performance profile.
+
 > [!IMPORTANT]
 > The reserved and isolated CPU pools must not overlap and together must span all available cores in the worker node.
 
-To ensure that housekeeping tasks and workloads do not interfere with each other, specify two groups of CPUs in the `spec` section of the performance profile.
+| Partition type | Description |
+|----|----|
+| `reserved` | Specifies the CPUs for cluster and operating system housekeeping duties. Kernel processes and operating system services are pinned to these CPUs. When workload partitioning is enabled, platform pods are also pinned to these CPUs. Threads in the `reserved` group are often busy. The kubelet does not place `Guaranteed` pods that request exclusive CPUs on these CPUs. Do not run latency-sensitive applications in the `reserved` group. |
+| `isolated` | Specifies the CPUs for application container workloads. These CPUs have the lowest latency. Device interrupts can still be processed on this set unless you disable IRQ load balancing. The kubelet places `Guaranteed` pods that request exclusive CPUs on this set. |
 
-- `isolated` - Specifies the CPUs for the application container workloads. These CPUs have the lowest latency. Processes in this group have no interruptions and can, for example, reach much higher DPDK zero packet loss bandwidth.
+CPU partition types
 
-- `reserved` - Specifies the CPUs for the cluster and operating system housekeeping duties. Threads in the `reserved` group are often busy. Do not run latency-sensitive applications in the `reserved` group. Latency-sensitive applications run in the `isolated` group.
-
-# Partitioning CPUs for infra and application containers
+# Partition CPUs for infra and application containers
 
 By partitioning CPUs, you can prevent noisy processes from interfering with latency-sensitive processes by separating the processes from each other.
 
@@ -1390,7 +1395,7 @@ Procedure
 
 </div>
 
-# Configuring Hyper-Threading for a cluster
+# Configure Hyper-Threading for a cluster
 
 To configure Hyper-Threading for an OpenShift Container Platform cluster, set the CPU threads in the performance profile to the same cores that are configured for the reserved or isolated CPU pools.
 
@@ -1492,7 +1497,7 @@ Procedure
 
 </div>
 
-# Disabling Hyper-Threading for low latency applications
+# Disable Hyper-Threading for low latency applications
 
 When configuring clusters for low latency processing, consider whether you want to disable Hyper-Threading before you deploy the cluster.
 
@@ -1554,7 +1559,9 @@ Procedure
 
 # Managing device interrupt processing for guaranteed pod isolated CPUs
 
-The Node Tuning Operator can manage host CPUs by dividing them into reserved CPUs for cluster and operating system housekeeping duties, including pod infra containers, and isolated CPUs for application containers to run the workloads. By completing these tasks, you can set CPUs for low-latency workloads as isolated workloads.
+The Node Tuning Operator can manage host CPUs by dividing them into reserved CPUs for cluster and operating system housekeeping duties, including pod infra containers, and isolated CPUs for application containers to run the workloads.
+
+By completing these tasks, you can set CPUs for low-latency workloads as isolated workloads.
 
 Device interrupts are load balanced between all isolated and reserved CPUs to avoid CPUs being overloaded, with the exception of CPUs where there is a guaranteed pod running. Guaranteed pod CPUs are prevented from processing device interrupts when the relevant annotations are set for the pod.
 
@@ -1637,7 +1644,7 @@ Additional resources
 
 </div>
 
-## Configuring node interrupt affinity
+## Configure node interrupt affinity
 
 Configure a cluster node for IRQ dynamic load balancing to control which cores can receive device interrupt requests (IRQ).
 
@@ -1690,7 +1697,7 @@ Procedure
 
 By configuring memory page sizes, system administrators can implement more efficient memory management on a specific node to suit workload requirements. The Node Tuning Operator provides a method for configuring huge pages and kernel page sizes by using a performance profile.
 
-## Configuring kernel page sizes
+## Configure kernel page sizes
 
 Use the `kernelPageSize` specification in a performance profile to configure the kernel page size on a specific node. Specify larger kernel page sizes for memory-intensive, high-performance workloads.
 
@@ -1812,7 +1819,7 @@ Verification
 
 </div>
 
-## Configuring huge pages
+## Configure huge pages
 
 Because nodes must pre-allocate huge pages used in an OpenShift Container Platform cluster, use the Node Tuning Operator to allocate huge pages on a specific node.
 
@@ -1923,7 +1930,7 @@ Verification
 
 </div>
 
-## Allocating multiple huge page sizes
+## Allocate multiple huge page sizes
 
 You can request huge pages with different sizes under the same container. By doing this task, you can define more complicated pods consisting of containers with different huge page size needs.
 
@@ -1964,7 +1971,7 @@ Procedure
 
 The Node Tuning Operator facilitates reducing NIC queues for enhanced performance. Adjustments are made using the performance profile, allowing customization of queues for different network devices.
 
-## Adjusting the NIC queues with the performance profile
+## Adjust the NIC queues with the performance profile
 
 You can use a performance profile to adjust the queue count for each network device. By using the Node Tuning Operator, you can reduce NIC queues for enhanced performance.
 

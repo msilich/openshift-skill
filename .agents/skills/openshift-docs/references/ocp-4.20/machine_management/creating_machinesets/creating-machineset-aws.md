@@ -126,7 +126,7 @@ Optional: Specifies custom tag data for your cluster. For example, you might add
 >     get machineset/<infrastructure_id>-<role>-<zone>
 > ```
 
-# Creating a compute machine set
+# Create a compute machine set
 
 To dynamically manage machine compute resources, you can create your own compute machine sets in addition to the compute machine sets created by the installation program. Use the OpenShift Container Platform CLI to automate node provisioning.
 
@@ -268,7 +268,7 @@ Verification
 
 </div>
 
-# Labeling GPU machine sets for the cluster autoscaler
+# Label GPU machine sets for the cluster autoscaler
 
 Label your machine sets to indicate which machines the cluster autoscaler can use for GPU-enabled nodes. Applying the accelerator label helps ensure that the autoscaler deploys the correct resources for your GPU workloads.
 
@@ -593,7 +593,7 @@ Procedure
 
 </div>
 
-# Configuring Capacity Reservations by using machine sets
+# Configure Capacity Reservations by using machine sets
 
 You can configure a machine set to deploy machines on any available resources that match the parameters of a capacity request that you define by using Capacity Reservations on Amazon Web Services clusters, including On-Demand Capacity Reservations and Capacity Blocks for ML.
 
@@ -698,7 +698,7 @@ Verification
 
 </div>
 
-# Adding a GPU node to an existing OpenShift Container Platform cluster
+# Add a GPU node to an existing OpenShift Container Platform cluster
 
 You can copy and modify a default compute machine set configuration to create a GPU-enabled machine set and machines for the AWS EC2 cloud provider.
 
@@ -934,7 +934,7 @@ Verification
 
 Note that there is no need to specify a namespace for the node. The node definition is cluster scoped.
 
-# Deploying the Node Feature Discovery Operator
+# Deploy the Node Feature Discovery Operator
 
 After the GPU-enabled node is created, you need to discover the GPU-enabled node so it can be scheduled. To do this, install the Node Feature Discovery (NFD) Operator.
 

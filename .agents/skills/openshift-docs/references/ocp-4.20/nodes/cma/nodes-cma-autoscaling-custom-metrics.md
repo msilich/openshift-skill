@@ -2,7 +2,7 @@
 
 The Custom Metrics Autoscaler Operator exposes ready-to-use metrics that it pulls from the on-cluster monitoring component. You can query the metrics by using the Prometheus Query Language (PromQL) to analyze and diagnose issues. All metrics are reset when the controller pod restarts.
 
-# Accessing performance metrics
+# Access performance metrics
 
 You can access the metrics and run queries by using the OpenShift Container Platform web console.
 
@@ -41,19 +41,11 @@ The Custom Metrics Autoscaler Operator exposes the following metrics, which you 
 
 Custom Metric Autoscaler Operator metrics
 
-<div class="formalpara">
-
-<div class="title">
-
-Custom Metrics Autoscaler Admission webhook metrics
-
-</div>
-
 The Custom Metrics Autoscaler Admission webhook also exposes the following Prometheus metrics.
-
-</div>
 
 | Metric name | Description |
 |----|----|
 | `keda_scaled_object_validation_total` | The number of scaled object validations. |
 | `keda_scaled_object_validation_errors` | The number of validation errors. |
+
+Custom Metrics Autoscaler Admission webhook metrics

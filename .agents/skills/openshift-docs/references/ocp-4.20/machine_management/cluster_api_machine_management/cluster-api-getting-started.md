@@ -31,7 +31,7 @@ For clusters that do not support migrating Machine API resources to Cluster API 
 
 - One or more compute machine sets that manage three compute machines.
 
-## Creating a Cluster API machine template
+## Create a Cluster API machine template
 
 You can create a provider-specific machine template resource by creating a YAML manifest file and applying it with the OpenShift CLI (`oc`).
 
@@ -161,7 +161,7 @@ Additional resources
 
 </div>
 
-## Creating a Cluster API compute machine set
+## Create a Cluster API compute machine set
 
 You can create compute machine sets that use the Cluster API to dynamically manage the machine compute resources for specific workloads of your choice.
 

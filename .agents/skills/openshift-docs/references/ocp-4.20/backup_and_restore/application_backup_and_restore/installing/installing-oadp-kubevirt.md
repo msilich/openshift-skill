@@ -25,7 +25,7 @@ To install the OADP Operator in a restricted network environment, you must first
 >
 > OADP versions before 1.3.0 are not supported for back up and restore of OpenShift Virtualization.
 
-# Installing and configuring OADP with OpenShift Virtualization
+# Install and configure OADP with OpenShift Virtualization
 
 As a cluster administrator, you can install the OpenShift API for Data Protection (OADP) with OpenShift Virtualization by installing the OADP Operator and configuring a backup location. You can then install the Data Protection Application.
 
@@ -83,7 +83,7 @@ Procedure
 
 </div>
 
-# Installing the Data Protection Application
+# Install the Data Protection Application
 
 You install the Data Protection Application (DPA) by creating an instance of the `DataProtectionApplication` API.
 
@@ -266,7 +266,7 @@ Verification
 > [!WARNING]
 > If you run a backup of a Microsoft Windows virtual machine (VM) immediately after the VM reboots, the backup might fail with a `PartiallyFailed` error. This is because, immediately after a VM boots, the Microsoft Windows Volume Shadow Copy Service (VSS) and Guest Agent (GA) service are not ready. The VSS and GA service being unready causes the backup to fail. In such a case, retry the backup a few minutes after the VM boots.
 
-# Backing up a single VM
+# Back up a single VM
 
 If you have a namespace with multiple virtual machines (VMs), and want to back up only one of them, you can use the label selector to filter the VM that needs to be included in the backup. You can filter the VM by using the `app: vmname` label.
 
@@ -348,7 +348,7 @@ Procedure
 
 </div>
 
-# Restoring a single VM
+# Restore a single VM
 
 After you have backed up a single virtual machine (VM) by using the label selector in the `Backup` custom resource (CR), you can create a `Restore` CR and point it to the backup. This restore operation restores a single VM.
 
@@ -420,7 +420,7 @@ Procedure
 
 </div>
 
-# Restoring a single VM from a backup of multiple VMs
+# Restore a single VM from a backup of multiple VMs
 
 If you have a backup containing multiple virtual machines (VMs), and you want to restore only one VM, you can use the `LabelSelectors` section in the `Restore` CR to select the VM to restore. To ensure that the persistent volume claim (PVC) attached to the VM is correctly restored, and the restored VM is not stuck in a `Provisioning` status, use both the `app: <vm_name>` and the `kubevirt.io/created-by` labels. To match the `kubevirt.io/created-by` label, use the UID of `DataVolume` of the VM.
 
@@ -503,7 +503,7 @@ Procedure
 
 </div>
 
-# Configuring the DPA with client burst and QPS settings
+# Configure the DPA with client burst and QPS settings
 
 The burst setting determines how many requests can be sent to the `velero` server before the limit is applied. After the burst limit is reached, the queries per second (QPS) setting determines how many additional requests can be sent per second.
 
@@ -588,7 +588,7 @@ Procedure
 
 </div>
 
-# Configuring the node agent as a non-root and non-privileged user
+# Configure the node agent as a non-root and non-privileged user
 
 To enhance the node agent security, you can configure the OADP Operator node agent daemonset to run as a non-root and non-privileged user by using the `spec.configuration.velero.disableFsBackup` setting in the `DataProtectionApplication` (DPA) custom resource (CR).
 
@@ -731,7 +731,7 @@ Verification
 
 </div>
 
-# Configuring node agents and node labels
+# Configure node agents and node labels
 
 The Data Protection Application (DPA) uses the `nodeSelector` field to select which nodes can run the node agent. The `nodeSelector` field is the recommended form of node selection constraint.
 
@@ -777,7 +777,7 @@ Procedure
 
 </div>
 
-# Configuring node agent load affinity
+# Configure node agent load affinity
 
 You can schedule the node agent pods on specific nodes by using the `spec.podConfig.nodeSelector` object of the `DataProtectionApplication` (DPA) custom resource (CR).
 
@@ -887,7 +887,7 @@ Use the following guidelines to configure the node agent `loadAffinity` object i
             label.io/gpu: 'no'
   ```
 
-# Configuring node agent load concurrency
+# Configure node agent load concurrency
 
 You can control the maximum number of node agent operations that can run simultaneously on each node within your cluster.
 
@@ -952,7 +952,7 @@ Procedure
 
 </div>
 
-# Configuring repository maintenance
+# Configure repository maintenance
 
 OADP repository maintenance is a background job, you can configure it independently of the node agent pods. This means that you can schedule the repository maintenance pod on a node where the node agent is or is not running.
 
@@ -1040,7 +1040,7 @@ Procedure
 
 </div>
 
-# Configuring Velero load affinity
+# Configure Velero load affinity
 
 With each OADP deployment, there is one Velero pod and its main purpose is to schedule Velero workloads. To schedule the Velero pod, you can use the `velero.podConfig.nodeSelector` and the `velero.loadAffinity` objects in the `DataProtectionApplication` (DPA) custom resource (CR) spec.
 
@@ -1107,7 +1107,7 @@ Procedure
 
 </div>
 
-# Overriding the imagePullPolicy setting in the DPA
+# Override the imagePullPolicy setting in the DPA
 
 In OADP 1.4.0 or earlier, the Operator sets the `imagePullPolicy` field of the Velero and node agent pods to `Always` for all images.
 

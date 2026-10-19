@@ -150,7 +150,7 @@ By default, only a cluster administrator can enable Argo CD to manage a namespac
 
 The namespace management feature in GitOps introduces a new `NamespaceManagement` custom resource (CR) that allows tenants to delegate control of their own namespaces to Argo CD instances without requiring direct cluster administrator action. For security reasons, this feature is disabled by default and must be explicitly enabled by a cluster administrator.
 
-When enabled, Argo CD administrators can configure namespace management by using glob patterns to match one or more namespaces, such as `/*` or `tenant-/\*`. Tenants then create a `NamespaceManagement` custom resource (CR) in their target namespace. The Red Hat OpenShift GitOps Operator automatically provisions the required role-based access control (RBAC) resources and updates the Argo CD cluster secret, ensuring that the namespace is managed correctly.
+When enabled, Argo CD administrators can configure namespace management by using glob patterns to match one or more namespaces, such as `*` or `tenant-*`. Tenants then create a `NamespaceManagement` custom resource (CR) in their target namespace. The Red Hat OpenShift GitOps Operator automatically provisions the required role-based access control (RBAC) resources and updates the Argo CD cluster secret, ensuring that the namespace is managed correctly.
 
 *Effects of `NamespaceManagement` CR*
 
@@ -239,7 +239,7 @@ Procedure
     Specifies the `<argocd_ns>` with the Argo CD instance namespace.
 
     `<spec.namespaceManagement.name>`
-    Specifies the `<tenant_ns>` with the namespace that you want Argo CD to manage. You can also use a glob pattern, for example, use asterisks as wildcards for pattern matching.
+    Specifies the `<tenant_ns>` with the namespace that you want Argo CD to manage. You can also use a glob pattern with wildcards such as `*` and `?` for pattern matching. For example, specifying `dev-*` matches any namespace with the `dev-` prefix.
 
 3.  Create a `NamespaceManagement` CR.
 

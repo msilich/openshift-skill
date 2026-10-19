@@ -4,9 +4,13 @@ Learn about the Node Tuning Operator and how you can use it to manage node-level
 
 # Node Tuning Operator
 
-The Node Tuning Operator helps you manage node-level tuning by orchestrating the TuneD daemon and achieves low latency performance by using the Performance Profile controller. The majority of high-performance applications require some level of kernel tuning. The Node Tuning Operator provides a unified management interface to users of node-level sysctls and more flexibility to add custom tuning specified by user needs.
+The Node Tuning Operator helps you manage node-level tuning by orchestrating the TuneD daemon and achieves low latency performance by using the Performance Profile controller.
 
-The Operator manages the containerized TuneD daemon for OpenShift Container Platform as a Kubernetes daemon set. It ensures the custom tuning specification is passed to all containerized TuneD daemons running in the cluster in the format that the daemons understand. The daemons run on all nodes in the cluster, one per node.
+The majority of high-performance applications require some level of kernel tuning. The Node Tuning Operator provides a unified management interface to users of node-level sysctls and more flexibility to add custom tuning specified by user needs.
+
+The Operator manages the containerized TuneD daemon for OpenShift Container Platform as a Kubernetes daemon set. It ensures the custom tuning specification is passed to all containerized TuneD daemons running in the cluster in the format that the daemons understand.
+
+The daemons run on all nodes in the cluster, one per node.
 
 Node-level settings applied by the containerized TuneD daemon are rolled back on an event that triggers a profile change or when the containerized TuneD daemon is terminated gracefully by receiving and handling a termination signal.
 
@@ -25,7 +29,7 @@ The Node Tuning Operator is part of a standard OpenShift Container Platform inst
 > [!NOTE]
 > In earlier versions of OpenShift Container Platform, the Performance Addon Operator was used to implement automatic tuning to achieve low latency performance for OpenShift applications. In OpenShift Container Platform 4.11 and later, this functionality is part of the Node Tuning Operator.
 
-# Accessing an example Node Tuning Operator specification
+# Access an example Node Tuning Operator specification
 
 Use this process to access an example Node Tuning Operator specification.
 
@@ -83,7 +87,7 @@ Starting with OpenShift Container Platform 4.9, all OpenShift TuneD profiles are
 $ oc exec $tuned_pod -n openshift-cluster-node-tuning-operator -- find /usr/lib/tuned/openshift{,-control-plane,-node} -name tuned.conf -exec grep -H ^ {} \;
 ```
 
-# Verifying that the TuneD profiles are applied
+# Verify that the TuneD profiles are applied
 
 Verify the TuneD profiles that are applied to your cluster node.
 
@@ -528,7 +532,9 @@ spec:
 
 # Deferring application of tuning changes
 
-As an administrator, use the Node Tuning Operator (NTO) to update custom resources (CRs) on a running system and make tuning changes. For example, they can update or add a sysctl parameter to the \[sysctl\] section of the tuned object. When administrators apply a tuning change, the NTO prompts TuneD to reprocess all configurations, causing the tuned process to roll back all tuning and then reapply it.
+As an administrator, use the Node Tuning Operator (NTO) to update custom resources (CRs) on a running system and make tuning changes.
+
+For example, they can update or add a sysctl parameter to the \[sysctl\] section of the tuned object. When administrators apply a tuning change, the NTO prompts TuneD to reprocess all configurations, causing the tuned process to roll back all tuning and then reapply it.
 
 Latency-sensitive applications may not tolerate the removal and reapplication of the tuned profile, as it can briefly disrupt performance. This is particularly critical for configurations that partition CPUs and manage process or interrupt affinity using the performance profile. To avoid this issue, OpenShift Container Platform introduced new methods for applying tuning changes. Before OpenShift Container Platform 4.17, the only available method, immediate, applied changes instantly, often triggering a tuned restart.
 
@@ -605,7 +611,7 @@ Additional resources
 
 </div>
 
-## Deferring application of tuning changes: An example
+## Defer application of tuning changes: An example
 
 The following worked example describes how to defer the application of tuning changes by using the Node Tuning Operator.
 
@@ -960,7 +966,7 @@ Additional resources
 
 </div>
 
-# Configuring node tuning in a hosted cluster
+# Configure node tuning in a hosted cluster
 
 To set node-level tuning on the nodes in your hosted cluster, you can use the Node Tuning Operator. In hosted control planes, you can configure node tuning by creating config maps that contain `Tuned` objects and referencing those config maps in your node pools.
 

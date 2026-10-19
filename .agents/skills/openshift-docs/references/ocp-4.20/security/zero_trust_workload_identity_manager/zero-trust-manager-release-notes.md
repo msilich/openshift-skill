@@ -4,6 +4,56 @@ The Zero Trust Workload Identity Manager leverages Secure Production Identity Fr
 
 These release notes track the development of Zero Trust Workload Identity Manager.
 
+# Zero Trust Workload Identity Manager 1.1.2
+
+Issued: 14 October 2026
+
+This release has no Common Vulnerabilities and Exposures (CVEs). The following advisory is available for the Zero Trust Workload Identity Manager 1.1.2:
+
+- [RHBA-2026:80937](https://access.redhat.com/errata/RHBA-2026:80937)
+
+## CVEs
+
+The following CVEs are available for this release:
+
+- [CVE-2026-25680](https://access.redhat.com/security/cve/CVE-2026-25680)
+
+- [CVE-2026-25681](https://access.redhat.com/security/cve/CVE-2026-25681)
+
+- [CVE-2026-27136](https://access.redhat.com/security/cve/CVE-2026-27136)
+
+- [CVE-2026-39821](https://access.redhat.com/security/cve/CVE-2026-39821)
+
+- [CVE-2026-42502](https://access.redhat.com/security/cve/CVE-2026-42502)
+
+- [CVE-2026-42506](https://access.redhat.com/security/cve/CVE-2026-42506)
+
+- [CVE-2026-39827](https://access.redhat.com/security/cve/CVE-2026-39827)
+
+- [CVE-2026-39828](https://access.redhat.com/security/cve/CVE-2026-39828)
+
+- [CVE-2026-39829](https://access.redhat.com/security/cve/CVE-2026-39829)
+
+- [CVE-2026-39830](https://access.redhat.com/security/cve/CVE-2026-39830)
+
+- [CVE-2026-39831](https://access.redhat.com/security/cve/CVE-2026-39831)
+
+- [CVE-2026-39832](https://access.redhat.com/security/cve/CVE-2026-39832)
+
+- [CVE-2026-39833](https://access.redhat.com/security/cve/CVE-2026-39833)
+
+- [CVE-2026-39834](https://access.redhat.com/security/cve/CVE-2026-39834)
+
+- [CVE-2026-39835](https://access.redhat.com/security/cve/CVE-2026-39835)
+
+- [CVE-2026-42508](https://access.redhat.com/security/cve/CVE-2026-42508)
+
+- [CVE-2026-46595](https://access.redhat.com/security/cve/CVE-2026-46595)
+
+- [CVE-2026-46597](https://access.redhat.com/security/cve/CVE-2026-46597)
+
+- [CVE-2026-46598](https://access.redhat.com/security/cve/CVE-2026-46598)
+
 # Zero Trust Workload Identity Manager 1.1.1
 
 Issued: 26 August 2026
@@ -147,6 +197,46 @@ Create-only mode status updates reconcile reliably
 - Before this update, Zero Trust Workload Identity Manager controllers wrote the custom resource (CR) status twice during each reconciliation cycle. The CR status was written at the start through the `SetInitialReconciliationStatus` cycle and again at the end through the status manager. Because the informer cache could return a stale `ResourceVersion` after the first write, the deferred status update was rejected with `HTTP 409 Conflict`. Status conditions, including `CreateOnlyMode`, could fail to transition to the expected state even after you changed configuration in the Operator subscription. With this release, controllers apply the status in a single update at the end of reconciliation, and status update retry logic now complies with the `RetryOnConflict` contract. CR status updates, including create-only mode transitions, are now completed.
 
   ([SPIRE-506](https://issues.redhat.com/browse/SPIRE-506))
+
+# Zero Trust Workload Identity Manager 1.0.2
+
+Issued: 3 September 2026
+
+This release fixes some Common Vulnerabilities and Exposures (CVEs).
+
+The following advisories are available for the Zero Trust Workload Identity Manager:
+
+- [RHBA-2026:62762](https://access.redhat.com/errata/RHBA-2026:62762)
+
+- [RHBA-2026:62764](https://access.redhat.com/errata/RHBA-2026:62764)
+
+- [RHBA-2026:62766](https://access.redhat.com/errata/RHBA-2026:62766)
+
+- [RHBA-2026:62768](https://access.redhat.com/errata/RHBA-2026:62768)
+
+- [RHBA-2026:62769](https://access.redhat.com/errata/RHBA-2026:62769)
+
+- [RHBA-2026:62770](https://access.redhat.com/errata/RHBA-2026:62770)
+
+- [RHBA-2026:63118](https://access.redhat.com/errata/RHBA-2026:63118)
+
+## CVEs
+
+- [CVE-2026-32283](https://access.redhat.com/security/cve/cve-2026-32283)
+
+- [CVE-2026-33811](https://access.redhat.com/security/cve/cve-2026-33811)
+
+- [CVE-2026-39829](https://access.redhat.com/security/cve/cve-2026-39829)
+
+- [CVE-2026-39831](https://access.redhat.com/security/cve/cve-2026-39831)
+
+- [CVE-2026-42502](https://access.redhat.com/security/cve/cve-2026-42502)
+
+- [CVE-2026-46597](https://access.redhat.com/security/cve/cve-2026-46597)
+
+- [CVE-2026-68121](https://access.redhat.com/security/cve/cve-2026-68121)
+
+- [CVE-2026-71235](https://access.redhat.com/security/cve/cve-2026-71235)
 
 # Zero Trust Workload Identity Manager 1.0.1
 

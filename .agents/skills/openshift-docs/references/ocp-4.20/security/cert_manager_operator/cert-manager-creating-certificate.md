@@ -2,7 +2,7 @@
 
 By using the cert-manager Operator for Red Hat OpenShift, you can manage certificates, handling tasks such as renewal and issuance, for workloads within the cluster, as well as components interacting externally to the cluster.
 
-# Creating certificates for user workloads
+# Create certificates for user workloads
 
 To secure communications for your applications, create and manage TLS certificates for your workloads by using the cert-manager Operator for Red Hat OpenShift
 
@@ -97,7 +97,7 @@ Verification
 
 </div>
 
-# Creating certificates for the API server
+# Create certificates for the API server
 
 To secure interactions with the cluster control plane, create TLS certificates for the API server by using the cert-manager Operator for Red Hat OpenShift.
 
@@ -191,7 +191,7 @@ Verification
 
 </div>
 
-# Creating certificates for the Ingress Controller
+# Create certificates for the Ingress Controller
 
 You can create a certificate for the Ingress Controller and then replace bootstrapped default self-signed certificates with cert-manager-managed external certificates.
 

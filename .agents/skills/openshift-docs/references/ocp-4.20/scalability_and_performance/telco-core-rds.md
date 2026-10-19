@@ -4,11 +4,15 @@ The telco core reference design specifications (RDS) configures an OpenShift Con
 
 # Telco core RDS 4.20 use model overview
 
-The Telco core reference design specification (RDS) describes a platform that supports large-scale telco applications including control plane functions such as signaling and aggregation. It also includes some centralized data plane functions, for example, user plane functions (UPF). These functions generally require scalability, complex networking support, resilient software-defined storage, and support performance requirements that are less stringent and constrained than far-edge deployments such as RAN.
+The Telco core reference design specification (RDS) describes a platform that supports large-scale telco applications including control plane and centralized data plane functions such as user plane functions (UPF).
+
+These functions generally require scalability, complex networking support, resilient software-defined storage, and performance requirements that are less stringent than far-edge deployments such as RAN.
 
 # About the telco core cluster use model
 
-The telco core cluster use model is designed for clusters running on commodity hardware. Telco core clusters support large scale telco applications including control plane functions like signaling, aggregation, session border controller (SBC), and centralized data plane functions such as 5G user plane functions (UPF). Telco core cluster functions require scalability, complex networking support, resilient software-defined storage, and support performance requirements that are less stringent and constrained than far-edge RAN deployments.
+The telco core cluster use model supports large-scale telco applications on commodity hardware, including control plane functions and centralized data plane functions such as 5G user plane functions (UPF).
+
+Control plane functions include signaling, aggregation, and session border controller (SBC). These functions require scalability, complex networking support, resilient software-defined storage, and performance requirements that are less stringent than far-edge RAN deployments.
 
 Networking requirements for telco core functions vary widely across a range of networking features and performance points. IPv6 is a requirement and dual-stack is common. Some functions need maximum throughput and transaction rate and require support for user-plane DPDK networking. Other functions use typical cloud-native patterns and can rely on OVN-Kubernetes, kernel networking, and load balancing.
 
@@ -138,7 +142,9 @@ Plan your MCP labeling with an appropriate strategy to split your worker nodes d
 
 # Zones
 
-Designing the cluster to support disruption of multiple nodes simultaneously is critical for high availability (HA) and reduced upgrade times. OpenShift Container Platform and Kubernetes use the well known label `topology.kubernetes.io/zone` to create pools of nodes that are subject to a common failure domain. Annotating nodes for topology (availability) zones allows high-availability workloads to spread such that each zone holds only one replica from a set of HA replicated pods. With this spread the loss of a single zone will not violate HA constraints and minimum service availability will be maintained. OpenShift Container Platform and Kubernetes applies a default `TopologySpreadConstraint` to all replica constructs (`Service`, `ReplicaSet`, `StatefulSet` or `ReplicationController`) that spreads the replicas based on the `topology.kubernetes.io/zone` label. This default allows zone based spread to apply without any change to your workload pod specs.
+OpenShift Container Platform uses the `topology.kubernetes.io/zone` label to spread replicas across failure domains so that the loss of a single zone does not violate high-availability constraints.
+
+Annotating nodes for topology zones allows high-availability workloads to spread so that each zone holds only one replica from a set of replicated pods. OpenShift Container Platform applies a default `TopologySpreadConstraint` to all replica constructs, such as `Service`, `ReplicaSet`, `StatefulSet`, or `ReplicationController` resources.
 
 Cluster upgrades typically result in node disruption as the underlying OS is updated. In large clusters it is necessary to update multiple nodes concurrently to complete upgrades quickly and in as few maintenance windows as possible. By using zones to ensure pod spread, an upgrade can be applied to all nodes in a zone simultaneously (assuming sufficient spare capacity) while maintaining high availability and service availability. The recommended cluster design is to partition nodes into multiple MCPs based on the considerations earlier and label all nodes in a single MCP as a single zone which is distinct from zones attached to other MCPs. Using this strategy all nodes in an MCP can be updated simultaneously.
 
@@ -198,7 +204,7 @@ The following engineering considerations apply to the telco core cluster common 
 
   - Intel Sierra Forest CPUs when supported by the OpenShift Container Platform.
 
-  - IRQ balancing is enabled on worker nodes. The `PerformanceProfile` CR sets the `globallyDisableIrqLoadBalancing` parameter to a value of `false`. Guaranteed QoS pods are annotated to ensure isolation as described in "CPU partitioning and performance tuning".
+  - IRQ balancing is enabled on worker nodes. The `PerformanceProfile` CR sets the `globallyDisableIrqLoadBalancing` parameter to a value of `false`. Guaranteed QoS pods are annotated to ensure isolation as described in "Application workloads".
 
 - All cluster nodes should have the following features:
 
@@ -229,6 +235,18 @@ The following engineering considerations apply to the telco core cluster common 
     > [!NOTE]
     > Variations in OpenShift Container Platform configuration, workload size, and workload characteristics require additional analysis to determine the effect on the number of required CPUs for the OpenShift platform.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Application workloads](telco-core-rds.md#telco-core-application-workloads_telco-core)
+
+</div>
+
 ## Application workloads
 
 Application workloads running on telco core clusters can include a mix of high performance cloud-native network functions (CNFs) and traditional best-effort or burstable pod workloads.
@@ -246,9 +264,15 @@ Plan telco core workloads and cluster resources by using the following informati
 
 - Use a mix of best-effort and burstable QoS pods as required by your applications.
 
-  - Use guaranteed QoS pods with proper configuration of reserved or isolated CPUs in the `PerformanceProfile` CR that configures the node.
+- Low latency workloads require special configuration to avoid being affected by interrupts, kernel scheduler, or other parts of the platform.
 
-  - Guaranteed QoS Pods must include annotations for fully isolating CPUs.
+  - Use guaranteed QoS pods with proper configuration of reserved or isolated CPUs in the `PerformanceProfile` CR that configures the `MachineConfigPool` CR where the application runs.
+
+  - Guaranteed QoS Pods must include annotations for fully isolating CPUs:
+
+    - `cpu-load-balancing.crio.io: "disable"`
+
+    - `irq-load-balancing.crio.io: "disable"`
 
   - Best effort and burstable pods are not guaranteed exclusive CPU use. Workloads can be preempted by other workloads, operating system daemons, or kernel tasks.
 
@@ -262,9 +286,25 @@ Plan telco core workloads and cluster resources by using the following informati
 
 - Use pre-stop hooks to allow the application workload to perform required actions before pod disruption, such as during an upgrade or node maintenance. The hooks enable a pod to save state to persistent storage, offload traffic from a Service, or signal other Pods.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Disabling CPU load balancing in a Pod](cnf-provisioning-low-latency-workloads.md#cnf-node-tuning-operator-disabling-cpu-load-balancing-for-dpdk_cnf-provisioning-low-latency)
+
+- [Disabling interrupt processing for CPUs where pinned containers are running](cnf-provisioning-low-latency-workloads.md#cnf-disabling-interrupt-processing-for-individual-pods_cnf-provisioning-low-latency)
+
+</div>
+
 ## Signaling workloads
 
-Signaling workloads typically use SCTP, REST, gRPC, or similar TCP or UDP protocols. Signaling workloads support hundreds of thousands of transactions per second (TPS) by using a secondary multus CNI configured as MACVLAN or SR-IOV interface. These workloads can run in pods with either guaranteed or burstable QoS.
+Signaling workloads typically use SCTP, REST, gRPC, or similar TCP or UDP protocols and support hundreds of thousands of transactions per second (TPS) by using a secondary multus CNI configured as MACVLAN or SR-IOV.
+
+These workloads can run in pods with either guaranteed or burstable QoS.
 
 # Telco core RDS components
 
@@ -296,8 +336,6 @@ Limits and requirements
 - The set of reserved and isolated cores must include all CPU cores.
 
 - Core 0 of each NUMA node must be included in the reserved CPU set.
-
-- Low latency workloads require special configuration to avoid being affected by interrupts, kernel scheduler, or other parts of the platform.
 
 For more information, see "Creating a performance profile".
 
@@ -949,7 +987,7 @@ Limits and requirements
 - All machine config pools must have consistent hardware configuration. For example, all nodes are expected to have the same NUMA zone count.
 
 Engineering considerations
-- Pods might require annotations for correct scheduling and isolation. For more information about annotations, see "CPU partitioning and performance tuning".
+- Pods might require annotations for correct scheduling and isolation. For more information about annotations, see "Application workloads".
 
 - You can configure SR-IOV virtual function NUMA affinity to be ignored during scheduling by using the excludeTopology field in `SriovNetworkNodePolicy` CR.
 
@@ -1219,7 +1257,7 @@ Limits and requirements
 
 Use the following custom resources (CRs) to configure and deploy OpenShift Container Platform clusters with the telco core profile. Use the CRs to form the common baseline used in all the specific use models unless otherwise indicated.
 
-## Extracting the telco core reference design configuration CRs
+## Extract the telco core reference design configuration CRs
 
 You can extract the complete set of custom resources (CRs) for the telco core profile from the `telco-core-rds-rhel9` container image. The container image has both the required CRs, and the optional CRs, for the telco core profile.
 
@@ -1348,9 +1386,9 @@ Verification
 
 </div>
 
-## Comparing a cluster with the telco core reference configuration
+## Compare a cluster with the telco core reference configuration
 
-After you deploy a telco core cluster, you can use the `cluster-compare` plugin to assess the cluster’s compliance with the telco core reference design specifications (RDS). The `cluster-compare` plugin is an OpenShift CLI (`oc`) plugin. The plugin uses a telco core reference configuration to validate the cluster with the telco core custom resources (CRs).
+After you deploy a telco core cluster, you can use the `cluster-compare` OpenShift CLI (`oc`) plugin to assess compliance with the telco core reference design specifications (RDS).
 
 The plugin-specific reference configuration for telco core is packaged in a container image with the telco core CRs.
 

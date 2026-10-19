@@ -4,6 +4,27 @@ You can review the following release notes to learn about changes in previous ve
 
 For the current version, see [Custom Metrics Autoscaler Operator release notes](nodes-cma-autoscaling-custom-rn.md#nodes-cma-autoscaling-custom-rn).
 
+# Custom Metrics Autoscaler Operator 2.19.0-3 release notes
+
+Issued: 03 September 2026
+
+You can review the following release notes to learn about the bug fixes provided in this release of the Custom Metrics Autoscaler Operator.
+
+The following advisory is available for the Custom Metrics Autoscaler Operator:
+
+- [RHSA-2026:62866](https://access.redhat.com/errata/RHSA-2026:62866)
+
+> [!IMPORTANT]
+> Before installing this version of the Custom Metrics Autoscaler Operator, remove any previously installed Technology Preview versions or the community-supported version of Kubernetes-based Event Driven Autoscaler (KEDA).
+
+Bug fixes
+- Before this update, the `default` scaling strategy for scaled jobs was missing. With this fix, the `default` strategy has been added back to the `scaledjobs` custom resource. As a result, you can select the default strategy with scaled jobs. ([OCPBUGS-98657](https://redhat.atlassian.net/browse/OCPBUGS-98657))
+
+  > [!NOTE]
+  > After the release of Custom Metrics Autoscaler 2.19.0-3, it was determined that this fix does not fully resolve the issue. For the full fix, update to the [Custom Metrics Autoscaler Operator 2.19.0-4 release](nodes-cma-autoscaling-custom-rn.md#nodes-pods-autoscaling-custom-rn-2190-4_nodes-cma-autoscaling-custom-rn).
+
+- Before this update, the `installAdmissionWebhooks` function was incorrectly using `Operator.Volumes` and `Operator.VolumeMounts` parameters instead of the `AdmissionWebhooks.Volumes` and `AdmissionWebhooks.VolumeMounts` parameters. This caused user-configured volumes for admission webhooks to not be applied correctly, because the Operator’s volumes were used instead. With the fix, the Custom Metrics Autoscaler Operator correctly configures admission webhooks, ensuring the proper deployment of user-defined volumes and volume mounts. ([OCPBUGS-84045](https://redhat.atlassian.net/browse/OCPBUGS-84045))
+
 # Custom Metrics Autoscaler Operator 2.19.0-2 release notes
 
 Issued: 09 July 2026

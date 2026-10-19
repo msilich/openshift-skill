@@ -23,7 +23,7 @@ A service is a networking object that provides a single, stable virtual IP addre
 
 When a request is sent to a the ClusterIP of the service, OpenShift Container Platform automatically load balances the traffic to one of the healthy pods backing that service. OpenShift Container Platform uses Kubernetes labels and selectors to keep track of which pods belong to which service. This abstraction makes your applications resilient because individual pods can be created or destroyed without affecting the applications trying to reach them.
 
-# Managing traffic within the cluster
+# Manage traffic within the cluster
 
 Your applications need to communicate with each other inside the cluster. OpenShift Container Platform provides two primary mechanisms that you can use to handle internal traffic: direct pod-to-pod communication for simple exchanges and robust service discovery for reliable connections.
 
@@ -35,7 +35,7 @@ Pods need a reliable way to find each other because pod IP addresses are ephemer
 
 Every service you create automatically receives a stable DNS name. A pod can use this DNS name to connect to the service. The DNS system resolves the name to the service’s stable `ClusterIP` address. This process ensures reliable communication even when individual pod IPs change.
 
-# Managing traffic entering and leaving the cluster
+# Manage traffic entering and leaving the cluster
 
 You need a way for external users to access your applications and for your applications to securely access external services. OpenShift Container Platform provides several tools to manage this flow of traffic into and out of your cluster.
 
@@ -58,7 +58,7 @@ Egress refers to outbound traffic that originates from a pod inside the cluster 
 
 - Egress Firewall: This acts as a cluster-level firewall for all outbound traffic. The Egress Firewall enhances your security posture so that you can create rules that explicitly allow or deny connections from pods to specific external destinations.
 
-# Securing network traffic
+# Secure network traffic
 
 OpenShift Container Platform provides tools to secure your network by creating rules that control which components are allowed to communicate. This is primarily managed through two types of policy resources: network policies and administrative network policies.
 

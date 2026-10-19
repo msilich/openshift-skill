@@ -2,7 +2,7 @@
 
 In OpenShift Container Platform with OVN-Kubernetes, you can disable IP multicast on a per-project basis so pods no longer receive multicast traffic.
 
-# Disabling multicast between pods
+# Disable multicast between pods
 
 To disable multicast between pods in a project, you can remove the `k8s.ovn.org/multicast-enabled` annotation from the namespace by using the `oc annotate` command or a namespace manifest.
 

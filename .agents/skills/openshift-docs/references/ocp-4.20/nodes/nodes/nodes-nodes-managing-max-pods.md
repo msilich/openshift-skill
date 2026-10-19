@@ -36,9 +36,9 @@ The `maxPods` parameter sets the number of pods that the node can run to a fixed
     maxPods: 250
 ```
 
-# Configuring the maximum number of pods per node
+# Configure the maximum number of pods per node
 
-You can use the `podsPerCore` and `maxPods` parameters in a kubelet configuration to control the maximum number of pods that can be scheduled to a node. If you use both options, the lower of the two limits the number of pods on a node. Setting an appropriate maximum can help ensure your nodes run efficiently.
+You can use the `podsPerCore` and `maxPods` parameters in a kubelet configuration to control the maximum number of pods scheduled to a node. If you use both options, the lower of the two limits the number of pods on a node.
 
 For example, if `podsPerCore` is set to `10` on a node with 4 processor cores, the maximum number of pods allowed on the node will be 40.
 

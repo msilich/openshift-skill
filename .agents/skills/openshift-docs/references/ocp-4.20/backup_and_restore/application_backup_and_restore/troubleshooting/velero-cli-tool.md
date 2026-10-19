@@ -2,7 +2,7 @@
 
 Download the `velero` CLI tool or access the `velero` binary in your cluster to debug `Backup` and `Restore` custom resources (CRs) and retrieve logs. This helps you to troubleshoot failed backup and restore operations.
 
-# Downloading the Velero CLI tool
+# Download the Velero CLI tool
 
 Download and install the `velero` CLI tool from the Velero documentation page, which provides instructions for macOS by using Homebrew, GitHub, and Windows by using Chocolatey. This helps you to access the `velero` CLI for debugging backup and restore operations.
 
@@ -54,13 +54,21 @@ Review the version relationship between OADP, Velero, and OpenShift Container Pl
 | 1.4.3        | 1.14           | 4.14-4.18                            |
 | 1.5.0        | 1.16           | 4.19                                 |
 
-### Additional resources
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
 
 - [Velero 1.12 documentation](https://velero.io/docs/v1.12/)
 
 - [Velero 1.14 documentation](https://velero.io/docs/v1.14/)
 
 - [Velero 1.16 documentation](https://velero.io/docs/v1.16/)
+
+</div>
 
 # Accessing the Velero binary in the Velero deployment in the cluster
 
@@ -94,7 +102,7 @@ Procedure
 
 </div>
 
-# Debugging Velero resources with the OpenShift CLI tool
+# Debug Velero resources with the OpenShift CLI tool
 
 Debug a failed backup or restore by checking Velero custom resources (CRs) and the `Velero` pod log with the OpenShift CLI tool.
 
@@ -154,7 +162,7 @@ Procedure
 
 </div>
 
-# Debugging Velero resources with the Velero CLI tool
+# Debug Velero resources with the Velero CLI tool
 
 Debug `Backup` and `Restore` custom resources (CRs) and retrieve logs with the Velero CLI tool. The Velero CLI tool provides more detailed information than the OpenShift CLI tool.
 

@@ -17,17 +17,21 @@ Procedure
 
 </div>
 
-1.  Download the latest version of the CLI tool from the [content gateway](https://developers.redhat.com/content-gateway/rest/browse/pub/openshift-v4/clients/openshift-gitops/latest/) for your operating system and architecture.
+1.  Download the GitOps `argocd` CLI for your operating system and architecture from one of the following locations:
 
-    | Operating system | Architecture | Tarball |
-    |----|----|----|
-    | Linux | x86_64, amd64 | `argocd-linux-amd64.tar.gz` |
-    | Linux on IBM zSystems and IBM® LinuxONE | s390x | `argocd-linux-s390x.tar.gz` |
-    | Linux on IBM Power | ppc64le | `argocd-linux-ppc64le.tar.gz` |
-    | Linux on ARM | aarch64, arm64 | `argocd-linux-arm64.tar.gz` |
+    - [Red Hat Developer content gateway](https://developers.redhat.com/content-gateway/rest/browse/pub/cgw/openshift-gitops/latest/)
 
-    > [!NOTE]
-    > Newer versions of the CLI tool are compatible with the older versions of Red Hat OpenShift GitOps server, but not vice versa.
+    - [Red Hat OpenShift mirror site](https://mirror.openshift.com/pub/cgw/openshift-gitops/)
+
+      | Operating system | Architecture | Tarball |
+      |----|----|----|
+      | Linux | x86_64, amd64 | `argocd-linux-amd64.tar.gz` |
+      | Linux on IBM zSystems and IBM® LinuxONE | s390x | `argocd-linux-s390x.tar.gz` |
+      | Linux on IBM Power | ppc64le | `argocd-linux-ppc64le.tar.gz` |
+      | Linux on ARM | aarch64, arm64 | `argocd-linux-arm64.tar.gz` |
+
+      > [!NOTE]
+      > Newer versions of the CLI tool are compatible with the older versions of Red Hat OpenShift GitOps server, but not vice versa.
 
 2.  Extract the archive by running the following command:
 
@@ -217,14 +221,18 @@ Procedure
 
 </div>
 
-1.  Download the latest version of the CLI tool from the [content gateway](https://developers.redhat.com/content-gateway/rest/browse/pub/openshift-v4/clients/openshift-gitops/latest/) for your operating system and architecture.
+1.  Download the GitOps `argocd` CLI for your operating system and architecture from one of the following locations:
 
-    | Operating system | Architecture | Archive                    |
-    |------------------|--------------|----------------------------|
-    | Windows          | x86_64       | `argocd-windows-amd64.zip` |
+    - [Red Hat Developer content gateway](https://developers.redhat.com/content-gateway/rest/browse/pub/cgw/openshift-gitops/latest/)
 
-    > [!NOTE]
-    > Newer versions of the CLI tool are compatible with the older versions of Red Hat OpenShift GitOps server, but not vice versa.
+    - [Red Hat OpenShift mirror site](https://mirror.openshift.com/pub/cgw/openshift-gitops/)
+
+      | Operating system | Architecture | Archive                    |
+      |------------------|--------------|----------------------------|
+      | Windows          | x86_64       | `argocd-windows-amd64.zip` |
+
+      > [!NOTE]
+      > Newer versions of the CLI tool are compatible with the older versions of Red Hat OpenShift GitOps server, but not vice versa.
 
 2.  Extract the archive with a ZIP program.
 
@@ -272,15 +280,19 @@ Procedure
 
 </div>
 
-1.  Download the latest version of the CLI tool from the [content gateway](https://developers.redhat.com/content-gateway/rest/browse/pub/openshift-v4/clients/openshift-gitops/latest/) for your operating system and architecture.
+1.  Download the GitOps `argocd` CLI for your operating system and architecture from one of the following locations:
 
-    | Operating system | Architecture | Tarball                     |
-    |------------------|--------------|-----------------------------|
-    | macOS on Intel   | x86_64       | `argocd-macos-amd64.tar.gz` |
-    | macOS on ARM     | arm64        | `argocd-macos-arm64.tar.gz` |
+    - [Red Hat Developer content gateway](https://developers.redhat.com/content-gateway/rest/browse/pub/cgw/openshift-gitops/latest/)
 
-    > [!NOTE]
-    > Newer versions of the CLI tool are compatible with the older versions of Red Hat OpenShift GitOps server, but not vice versa.
+    - [Red Hat OpenShift mirror site](https://mirror.openshift.com/pub/cgw/openshift-gitops/)
+
+      | Operating system | Architecture | Tarball                      |
+      |------------------|--------------|------------------------------|
+      | macOS on Intel   | x86_64       | `argocd-darwin-amd64.tar.gz` |
+      | macOS on ARM     | arm64        | `argocd-darwin-arm64.tar.gz` |
+
+      > [!NOTE]
+      > Newer versions of the CLI tool are compatible with the older versions of Red Hat OpenShift GitOps server, but not vice versa.
 
 2.  Extract the archive by running the following command:
 

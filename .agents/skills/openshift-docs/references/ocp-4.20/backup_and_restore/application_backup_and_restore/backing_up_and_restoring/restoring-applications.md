@@ -2,7 +2,7 @@
 
 Restore application backups by previewing resources before running the restore, creating a `Restore` custom resource (CR), and configuring restore hooks to run commands in restored pods. This helps you to recover your application data and configuration while controlling the restore process.
 
-# Previewing resources before running backup and restore
+# Preview resources before running backup and restore
 
 Preview the backup and restore resources in advance by doing a dry run of the backup and restore operations. This helps you to verify which resources will be included before committing to a full backup or restore.
 
@@ -65,7 +65,7 @@ Procedure
 
 </div>
 
-# Creating a Restore CR
+# Create a Restore CR
 
 Restore a `Backup` custom resource (CR) by creating a `Restore` CR.
 
@@ -204,7 +204,7 @@ Procedure
 
 </div>
 
-# Creating restore hooks
+# Create restore hooks
 
 Create restore hooks to run commands in a container in a pod by editing the `Restore` custom resource (CR).
 

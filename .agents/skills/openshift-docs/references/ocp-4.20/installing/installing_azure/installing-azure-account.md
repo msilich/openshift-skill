@@ -400,9 +400,9 @@ The following options are available to you:
 
   If you set `identity.type` to `None` in the `install-config.yaml` file, you do not need to assign the `User Access Administrator` role to the service principal.
 
-  For more information about assigning roles, see the Azure documentation for [managing access to Azure resources using the Azure portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal).
+  For more information about assigning roles, see the Azure documentation for "managing access to Azure resources using the Azure portal".
 
-- If the security policies of your organization require a more restrictive set of permissions, you can create a [custom role](https://learn.microsoft.com/en-us/azure/role-based-access-control/custom-roles) with the necessary permissions.
+- If the security policies of your organization require a more restrictive set of permissions, you can create a "custom role" with the necessary permissions.
 
 The following permissions are required for creating an OpenShift Container Platform cluster on Microsoft Azure.
 
@@ -797,6 +797,20 @@ Required permissions for deleting storage resources
 > To install OpenShift Container Platform on Azure, you must scope the permissions to your subscription. You can re-scope these permissions to the resource group created by installation program. If the public DNS zone is present in a different resource group, then the network DNS zone related permissions must always be applied to your subscription. By default, the OpenShift Container Platform installation program assigns the Azure identity the `Contributor` role.
 >
 > You can scope all the permissions to your subscription when deleting an OpenShift Container Platform cluster.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Managing access to Azure resources using the Azure portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal)
+
+- [Custom roles](https://learn.microsoft.com/en-us/azure/role-based-access-control/custom-roles)
+
+</div>
 
 <div>
 

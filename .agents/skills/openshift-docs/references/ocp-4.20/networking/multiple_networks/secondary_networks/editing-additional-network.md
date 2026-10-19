@@ -2,7 +2,7 @@
 
 To update network settings or change network parameters for a secondary network in OpenShift Container Platform, you can modify the configuration for an existing secondary network. Edit the `NetworkAttachmentDefinition` custom resource to apply your changes.
 
-# Modifying a NetworkAttachmentDefinition custom resource
+# Modify a NetworkAttachmentDefinition custom resource
 
 To update network settings or change network parameters for a secondary network in OpenShift Container Platform, you can modify the `NetworkAttachmentDefinition` custom resource. Edit the Cluster Network Operator CR to apply your changes.
 
@@ -58,7 +58,7 @@ Procedure
 
 </div>
 
-# Using an OVN-Kubernetes localnet topology to map VLANs to a secondary interface
+# Use an OVN-Kubernetes localnet topology to map VLANs to a secondary interface
 
 You can use OVN-Kubernetes localnet topology in a `NetworkAttachmentDefinition` (NAD) to map a specific VLAN ID from the physical network to the secondary interface of a pod.
 

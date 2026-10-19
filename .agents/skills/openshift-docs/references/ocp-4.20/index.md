@@ -200,7 +200,7 @@
     - [Troubleshooting the installation](installing/installing_bare_metal/ipi/ipi-install-troubleshooting.md)
   - [Postinstallation configuration](installing/installing_bare_metal/bare-metal-postinstallation-configuration.md)
   - [Expanding the cluster](installing/installing_bare_metal/bare-metal-expanding-the-cluster.md)
-  - [Using Red Hat Bare Metal as a Service for OpenShift](installing/installing_bare_metal/bare-metal-using-bare-metal-as-a-service.md)
+  - [Using Red Hat Bare-Metal-as-a-Service for OpenShift](installing/installing_bare_metal/bare-metal-using-bare-metal-as-a-service.md)
 - **Installing IBM Cloud Bare Metal (Classic)**
   - [Prerequisites for IBM Cloud (Classic)](installing/installing_ibm_cloud_classic/install-ibm-cloud-prerequisites.md)
   - [Installation workflow for IBM Cloud Bare Metal (Classic)](installing/installing_ibm_cloud_classic/install-ibm-cloud-installation-workflow.md)
@@ -771,6 +771,7 @@
     - [Patching existing ingress objects](networking/ingress_load_balancing/configuring_ingress_cluster_traffic/configuring-ingress-cluster-patch-fields.md)
     - [Configuring the Ingress Controller for manual DNS management](networking/ingress_load_balancing/configuring_ingress_cluster_traffic/ingress-controller-dnsmgt.md)
     - [Gateway API with OpenShift Container Platform networking](networking/ingress_load_balancing/configuring_ingress_cluster_traffic/ingress-gateway-api.md)
+    - [Configure DNS for gateways](networking/ingress_load_balancing/configuring_ingress_cluster_traffic/configure-dns-for-gateways.md)
   - [Load balancing on OpenStack](networking/ingress_load_balancing/load-balancing-openstack.md)
   - **Load balancing with MetalLB**
     - [Configuring MetalLB address pools](networking/ingress_load_balancing/metallb/metallb-configure-address-pools.md)

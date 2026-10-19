@@ -6,7 +6,7 @@ After a pod is defined, it is assigned to run on a node until its containers exi
 
 The first thing to check when pod issues arise is the pod’s status. If an explicit pod failure has occurred, observe the pod’s error state to identify specific image, container, or pod network issues. Focus diagnostic data collection according to the error state. Review pod event messages, as well as pod and container log information. Diagnose issues dynamically by accessing running Pods on the command line, or start a debug pod with root access based on a problematic pod’s deployment configuration.
 
-# Understanding pod error states
+# Understand pod error states
 
 Pod failures return explicit error states that can be observed in the `status` field in the output of `oc get pods`. Pod error states cover image, container, and container network related failures.
 
@@ -34,7 +34,7 @@ The following table provides a list of pod error states along with their descrip
 
 Pod error states
 
-# Reviewing pod status
+# Review pod status
 
 You can query pod status and error states. You can also query a pod’s associated deployment configuration and review base image availability.
 
@@ -108,7 +108,7 @@ Procedure
 
 </div>
 
-# Inspecting pod and container logs
+# Inspect pod and container logs
 
 You can inspect pod and container logs for warnings and error messages related to explicit pod failures. Depending on policy and exit code, pod and container logs remain available after pods have been terminated.
 
@@ -224,7 +224,7 @@ Procedure
 
 </div>
 
-# Accessing running pods
+# Access running pods
 
 You can review running pods dynamically by opening a shell inside a pod or by gaining network access through port forwarding.
 
@@ -288,7 +288,7 @@ Procedure
 
 </div>
 
-# Starting debug pods with root access
+# Start debug pods with root access
 
 You can start a debug pod with root access, based on a problematic pod’s deployment or deployment configuration.
 
@@ -351,7 +351,7 @@ Procedure
 
 </div>
 
-# Copying files to and from pods and containers
+# Copy files to and from pods and containers
 
 You can copy files to and from a pod to test configuration changes or gather diagnostic information.
 

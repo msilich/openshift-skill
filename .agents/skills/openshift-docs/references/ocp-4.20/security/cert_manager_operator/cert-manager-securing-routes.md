@@ -2,7 +2,7 @@
 
 In the OpenShift Container Platform, the route API is extended to provide a configurable option to reference TLS certificates via secrets. With [externally managed certificates](../../networking/ingress_load_balancing/routes/creating-advanced-routes.md#nw-ingress-route-secret-load-external-cert_secured-routes) enabled, you can minimize errors from manual intervention, streamline the certificate management process, and enable the OpenShift Container Platform router to promptly serve the referenced certificate.
 
-# Configuring certificates to secure routes in your cluster
+# Configure certificates to secure routes in your cluster
 
 To encrypt traffic between external clients and your applications, configure certificates for routes in your OpenShift Container Platform cluster. You can secure your routes by defining TLS termination types, such as edge, passthrough, or re-encrypt, to match your specific security policies.
 

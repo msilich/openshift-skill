@@ -618,7 +618,7 @@ The following table describes BANP annotation:
 </tbody>
 </table>
 
-# Configuring egress firewall and network policy auditing for a cluster
+# Configure egress firewall and network policy auditing for a cluster
 
 To customize egress firewall and network policy audit logging in OpenShift Container Platform, you can configure the `policyAuditConfig` section in the cluster `Network` custom resource. Adjust log destination, file size, and rate limits to control how ACL events are recorded.
 
@@ -873,7 +873,7 @@ Verification
 
 </div>
 
-# Enabling egress firewall and network policy audit logging for a namespace
+# Enable egress firewall and network policy audit logging for a namespace
 
 To enable egress firewall and network policy audit logging for a namespace in OpenShift Container Platform, you can add the `k8s.ovn.org/acl-logging` annotation with the `oc annotate` command. You can also apply a namespace YAML file that sets `Allow` and `Deny` log severity levels.
 
@@ -966,7 +966,7 @@ Verification
 
 </div>
 
-# Disabling egress firewall and network policy audit logging for a namespace
+# Disable egress firewall and network policy audit logging for a namespace
 
 To disable egress firewall and network policy audit logging for a namespace in OpenShift Container Platform, you can remove the `k8s.ovn.org/acl-logging` annotation with the `oc annotate` command. You can also apply a namespace YAML file that sets the annotation to `null`.
 

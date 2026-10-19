@@ -2,9 +2,15 @@
 
 Red Hat Advanced Cluster Security for Kubernetes (RHACS) integrates with a variety of continuous integration (CI) products. Before you deploy images, you can use RHACS to apply build-time and deploy-time security rules to your images.
 
-After images are built and pushed to a registry, RHACS integrates into CI pipelines. Pushing the image first allows developers to continue testing their artifacts while dealing with any policy violations alongside any other CI test failures, linter violations, or other problems.
+<a id="ci-integration-overview_integrate-with-ci-systems"></a>
 
-If possible, configure the version control system to block pull or merge requests from being merged if the build stage, which includes RHACS checks, fails.
+# CI integration overview
+
+Red Hat Advanced Cluster Security for Kubernetes (RHACS) integrates with a variety of continuous integration (CI) products to apply build-time and deploy-time security rules to your images before deployment.
+
+After you build and push images to a registry, RHACS integrates into CI pipelines. Pushing the image first allows developers to continue testing their artifacts while dealing with any policy violations alongside any other CI test failures, linter violations, or other problems.
+
+If possible, configure the version control system to block pull or merge requests if the build stage, which includes RHACS checks, fails.
 
 The integration with your CI product functions by contacting your RHACS installation to check whether the image complies with build-time policies you have configured. If there are policy violations, a detailed message is displayed on the console log, including the policy description, rationale, and remediation instructions.
 
@@ -12,15 +18,33 @@ Each policy includes an optional enforcement setting. If you mark a policy for b
 
 To integrate Red Hat Advanced Cluster Security for Kubernetes with your CI system, follow these steps:
 
-1.  [Configure build policies](integrate-with-ci-systems.md#configure-build-policies).
+1.  Configure build policies.
 
-2.  [Configure a registry integration](integrate-with-ci-systems.md#configure-registry-integration).
+2.  Configure a registry integration.
 
-3.  [Configure access](integrate-with-ci-systems.md#configure-access) to your RHACS instance.
+3.  Configure access to your RHACS instance.
 
-4.  [Integrate with your CI pipeline](integrate-with-ci-systems.md#integrate-with-your-ci-pipeline).
+4.  Integrate with your CI pipeline.
 
-<a id="configure-build-policies"></a>
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Configuring build policies](integrate-with-ci-systems.md#configure-build-policies_integrate-with-ci-systems)
+
+- [Configuring registry integration](integrate-with-ci-systems.md#configure-registry-integration_integrate-with-ci-systems)
+
+- [Configuring access](integrate-with-ci-systems.md#configure-access_integrate-with-ci-systems)
+
+- [Integrating with your CI pipeline](integrate-with-ci-systems.md#integrate-with-your-ci-pipeline_integrate-with-ci-systems)
+
+</div>
+
+<a id="configure-build-policies_integrate-with-ci-systems"></a>
 
 # Configuring build policies
 
@@ -36,7 +60,7 @@ Procedure
 
 1.  Configure policies that apply to the build stage of the container lifecycle.
 
-2.  Integrate with the registry that images are pushed to during the build.
+2.  Integrate with the registry where you push images during the build.
 
 </div>
 
@@ -78,7 +102,9 @@ Procedure
 
 ### Deploy stage enforcement
 
-Red Hat Advanced Cluster Security for Kubernetes supports two forms of security policy enforcement for deploy-time policies: hard enforcement through the admission controller and soft enforcement by RHACS Sensor. The admission controller blocks creation or updating of deployments that violate policy. If the admission controller is disabled or unavailable, Sensor can perform enforcement by scaling down replicas for deployments that violate policy to 0.
+RHACS supports two forms of security policy enforcement for deploy-time policies: hard enforcement through the admission controller and soft enforcement by RHACS Sensor.
+
+The admission controller blocks creation or updating of deployments that violate policy. If you disable the admission controller or it is unavailable, Sensor can perform enforcement by scaling down replicas for deployments that violate policy to 0.
 
 > [!WARNING]
 > Policy enforcement can impact running applications or development processes. Before you enable enforcement options, inform all stakeholders and plan how to respond to the automated enforcement actions.
@@ -95,11 +121,11 @@ Additional resources
 
 </div>
 
-<a id="configure-registry-integration"></a>
+<a id="configure-registry-integration_integrate-with-ci-systems"></a>
 
 # Configuring registry integration
 
-To scan images, you must provide Red Hat Advanced Cluster Security for Kubernetes with access to the image registry you are using in your build pipeline.
+To scan images, you must give Red Hat Advanced Cluster Security for Kubernetes access to the image registry you use in your build pipeline.
 
 <a id="check-for-existing-registry-integration_integrate-with-ci-systems"></a>
 
@@ -117,23 +143,31 @@ Procedure
 
 1.  In the RHACS portal, go to **Platform Configuration** → **Integrations**.
 
-2.  Under the **Image Integration** section, look for highlighted **Registry** tiles. The tiles also list the number of items already configured for that tile.
+2.  Under the **Image Integration** section, look for **Registry** tiles that have highlights.
+
+    The tiles also list the number of items already configured for that tile.
+
+    If none of the Registry tiles have highlights, you must first integrate with an image registry.
 
 </div>
 
-If none of the Registry tiles are highlighted, you must first integrate with an image registry.
+<div>
 
-<a id="_additional_resources"></a>
+<div class="title">
 
-## Additional resources
+Additional resources
+
+</div>
 
 - [Integrating with image registries](integrate-with-image-registries.md)
 
-<a id="configure-access"></a>
+</div>
+
+<a id="configure-access_integrate-with-ci-systems"></a>
 
 # Configuring access
 
-RHACS provides the `roxctl` command-line interface (CLI) to make it easy to integrate RHACS policies into your build pipeline. The `roxctl` CLI prints detailed information about problems and how to fix them so that developers can maintain high standards in the early phases of the container lifecycle.
+RHACS provides the `roxctl` command-line interface (CLI) to make it easy to integrate RHACS policies into your build pipeline. The `roxctl` CLI prints detailed information about problems and how to fix them so that developers can keep high standards in the early phases of the container lifecycle.
 
 To securely authenticate to the Red Hat Advanced Cluster Security for Kubernetes API server, you must create an API token.
 
@@ -173,11 +207,11 @@ Procedure
 
 </div>
 
-<a id="install-roxctl-cli-binary"></a>
+<a id="installing-the-roxctl-cli-by-downloading-the-binary_integrate-with-ci-systems"></a>
 
 ## Installing the roxctl CLI by downloading the binary
 
-You can install the `roxctl` CLI to interact with Red Hat Advanced Cluster Security for Kubernetes from a command-line interface. You can install `roxctl` on Linux, Windows, or macOS.
+You can install the `roxctl` CLI to interact with RHACS from a command-line interface. You can install `roxctl` on Linux, Windows, or macOS.
 
 <a id="installing-cli-on-linux_integrate-with-ci-systems"></a>
 
@@ -205,7 +239,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Linux/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Linux/roxctl${arch}"
     ```
 
 3.  Make the `roxctl` binary executable:
@@ -266,7 +300,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Darwin/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Darwin/roxctl${arch}"
     ```
 
 3.  Remove all extended attributes from the binary:
@@ -327,7 +361,7 @@ Procedure
 - Download the `roxctl` CLI:
 
   ``` terminal
-  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.3/bin/Windows/roxctl.exe
+  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Windows/roxctl.exe
   ```
 
 </div>
@@ -352,7 +386,7 @@ Verification
 
 ## Running the roxctl CLI from a container
 
-The `roxctl` client is the default entry point in the RHACS `roxctl` image. To run the `roxctl` client in a container image:
+The `roxctl` client is the default entry point in the RHACS `roxctl` image. You can run the `roxctl` client in a container image.
 
 <div>
 
@@ -383,14 +417,14 @@ Procedure
 2.  Pull the latest container image for the `roxctl` CLI.
 
     ``` terminal
-    $ docker pull registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.3
+    $ docker pull registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.5
     ```
 
     After you install the CLI, you can run it by using the following command:
 
     ``` terminal
     $ docker run -e ROX_API_TOKEN=$ROX_API_TOKEN \
-      -it registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.3 \
+      -it registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.5 \
       -e $ROX_CENTRAL_ADDRESS <command>
     ```
 
@@ -413,24 +447,34 @@ Verification
 - Verify the `roxctl` version you have installed.
 
   ``` terminal
-  $ docker run -it registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.3 version
+  $ docker run -it registry.redhat.io/advanced-cluster-security/rhacs-roxctl-rhel9:4.11.5 version
   ```
 
 </div>
 
-<a id="integrate-with-your-ci-pipeline"></a>
+<a id="integrate-with-your-ci-pipeline_integrate-with-ci-systems"></a>
 
 # Integrating with your CI pipeline
 
-After you have finished these procedures, the next step is to integrate with your CI pipeline.
+After you have finished these procedures, the next step is to integrate with your CI pipeline. Each CI system might require a slightly different configuration.
 
-Each CI system might require a slightly different configuration.
-
-<a id="using-jenkins"></a>
+<a id="using-jenkins_integrate-with-ci-systems"></a>
 
 ## Using Jenkins
 
-Use the [StackRox Container Image Scanner](https://plugins.jenkins.io/stackrox-container-image-scanner) Jenkins plugin for integrating with Jenkins. You can use this plugin in both Jenkins freestyle projects and pipelines.
+Use the "StackRox Container Image Scanner" Jenkins plugin for integrating with Jenkins. You can use this plugin in both Jenkins freestyle projects and pipelines.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [StackRox Container Image Scanner Jenkins plugin](https://plugins.jenkins.io/stackrox-container-image-scanner)
+
+</div>
 
 <a id="integrate-circle-ci_integrate-with-ci-systems"></a>
 

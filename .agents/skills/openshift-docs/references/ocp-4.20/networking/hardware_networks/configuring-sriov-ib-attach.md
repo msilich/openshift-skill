@@ -48,7 +48,7 @@ Optional parameter. The link state of virtual function (VF). Allowed values are 
 `capabilities`
 Optional parameter. The capabilities to configure for this network. You can specify `'{ "ips": true }'` to enable IP address support or `'{ "infinibandGUID": true }'` to enable IB Global Unique Identifier (GUID) support.
 
-## Creating a configuration for assignment of dual-stack IP addresses dynamically
+## Create a configuration for assignment of dual-stack IP addresses dynamically
 
 You can dynamically assign dual-stack IP addresses to a secondary network so that pods can communicate over both IPv4 and IPv6 addresses.
 
@@ -353,7 +353,7 @@ where:
 `network_name`
 Optional parameter. If set, must match the `network_name` of `NetworkAttachmentDefinition 1`.
 
-# Configuring SR-IOV additional network
+# Configure SR-IOV additional network
 
 You can configure an additional network that uses SR-IOV hardware by creating an `SriovIBNetwork` object. When you create an `SriovIBNetwork` object, the SR-IOV Network Operator automatically creates a `NetworkAttachmentDefinition` object.
 
@@ -473,7 +473,7 @@ spec:
     command: ["sleep", "infinity"]
 ```
 
-# Adding a pod to a secondary network
+# Add a pod to a secondary network
 
 To enable a pod to use additional network interfaces in OpenShift Container Platform, you can attach the pod to a secondary network. The pod continues to send normal cluster-related network traffic over the default network.
 
@@ -600,7 +600,7 @@ Procedure
 
 </div>
 
-## Exposing MTU for vfio-pci SR-IOV devices to pod
+## Expose MTU for vfio-pci SR-IOV devices to pod
 
 After adding a pod to an additional network, you can check that the MTU is available for the SR-IOV network.
 

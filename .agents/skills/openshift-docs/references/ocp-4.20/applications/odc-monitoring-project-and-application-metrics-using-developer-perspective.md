@@ -108,7 +108,7 @@ Procedure
 
 </div>
 
-# Monitoring your application metrics
+# Monitor your application metrics
 
 After you create applications in your project and deploy them, you can use the **Topology** view in the **Developer** perspective to see the alerts and metrics for your application. Critical and warning alerts for your application are indicated on the workload node in the **Topology** view.
 

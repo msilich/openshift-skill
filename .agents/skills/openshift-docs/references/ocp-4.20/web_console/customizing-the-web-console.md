@@ -2,7 +2,7 @@
 
 You can customize the OpenShift Container Platform web console to set a custom logo, product name, links, notifications, and command-line downloads. This is especially helpful if you need to tailor the web console to meet specific corporate or government requirements.
 
-# Adding a custom logo and product name
+# Add a custom logo and product name
 
 You can create custom branding by adding a custom logo or custom product name. You can set both or one without the other, as these settings are independent of each other.
 
@@ -86,7 +86,7 @@ Procedure
 
 </div>
 
-# Creating custom links in the web console
+# Create custom links in the web console
 
 You can create a `ConsoleLink` custom resource to add a link to the help menu, user menu, application menu, or namespace dashboard in the web console.
 
@@ -189,7 +189,7 @@ You can customize the `console` and `downloads` routes by using the `ingress` co
 
 If the `console` custom route is configured in both the `ingress` config and the `console-operator` config, the `ingress` config custom route configuration takes precedence. Configuring custom routes through the `console-operator` config is deprecated.
 
-# Customizing the console route
+# Customize the console route
 
 You can customize the console route by setting the custom hostname and TLS certificate in the `spec.componentRoutes` field of the cluster `Ingress` configuration.
 
@@ -249,7 +249,7 @@ Procedure
 
 </div>
 
-# Customizing the download route
+# Customize the download route
 
 You can customize the download route by setting the custom hostname and TLS certificate in the `spec.componentRoutes` field of the cluster `Ingress` configuration.
 
@@ -309,7 +309,7 @@ Procedure
 
 </div>
 
-# Customizing the login page
+# Customize the login page
 
 You can customize the login page to display Terms of Service information or apply custom branding for third-party login providers.
 
@@ -394,7 +394,7 @@ Procedure
 
 </div>
 
-# Defining a template for an external log link
+# Define a template for an external log link
 
 If you are connected to a service that helps you browse your logs, but you need to generate URLs in a particular way, then you can define a template for your link.
 
@@ -437,7 +437,7 @@ Procedure
 
 </div>
 
-# Creating custom notification banners
+# Create custom notification banners
 
 You can create a `ConsoleNotification` custom resource to display a banner at the top or bottom of every page in the web console.
 
@@ -488,7 +488,7 @@ Procedure
 
 </div>
 
-# Customizing CLI downloads
+# Customize CLI downloads
 
 You can configure links for downloading the CLI with custom link text and URLs, which can point directly to file packages or to an external page that provides the packages.
 
@@ -540,7 +540,7 @@ Procedure
 
 </div>
 
-# Adding YAML examples to Kubernetes resources
+# Add YAML examples to Kubernetes resources
 
 You can dynamically add YAML examples to any Kubernetes resources at any time.
 
@@ -605,7 +605,7 @@ Procedure
 
 </div>
 
-# Customizing user perspectives
+# Customize user perspectives
 
 As a cluster administrator, you can show or hide web console perspectives for all users or for a specific user role, ensuring users see only the perspectives relevant to their role and tasks. For example, you can hide the **Administrator** perspective from users without administrative access.
 
@@ -622,7 +622,7 @@ Each perspective includes the following mandatory parameters, which you can edit
 > [!NOTE]
 > By default, all perspectives are enabled. When you customize the user perspective, your changes are applicable to the entire cluster.
 
-## Customizing a perspective using YAML view
+## Customize a perspective using YAML view
 
 You can customize a perspective by editing the console resource YAML content.
 
@@ -718,7 +718,7 @@ Procedure
 
 </div>
 
-## Customizing a perspective using form view
+## Customize a perspective using form view
 
 You can customize a perspective by using the form view of the console resource.
 
@@ -795,7 +795,7 @@ You can enable or disable the following developer catalog types (sub-catalogs) u
 
 - `Operator Backed`
 
-## Customizing a developer catalog or its sub-catalogs using the YAML view
+## Customize a developer catalog or its sub-catalogs using the YAML view
 
 You can customize a developer catalog by editing the YAML content in the YAML view.
 
@@ -910,7 +910,7 @@ spec:
           - ...
 ```
 
-## Customizing a developer catalog or its sub-catalogs using the form view
+## Customize a developer catalog or its sub-catalogs using the form view
 
 You can customize a developer catalog by using the form view in the Web Console.
 

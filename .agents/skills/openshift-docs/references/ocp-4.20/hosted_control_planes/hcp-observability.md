@@ -2,7 +2,7 @@
 
 You can gather metrics for hosted control planes by configuring metrics sets. Monitoring dashboards are created in the management cluster for each hosted cluster that it manages.
 
-# Configuring metrics sets for hosted control planes
+# Configure metrics sets for hosted control planes
 
 Hosted control planes creates `ServiceMonitor` resources in each control plane namespace that allow a Prometheus stack to gather metrics from the control planes.
 
@@ -229,7 +229,7 @@ Additional resources
 
 </div>
 
-# Enabling monitoring dashboards in a hosted cluster
+# Enable monitoring dashboards in a hosted cluster
 
 You can enable monitoring dashboards in a hosted cluster by creating a config map.
 

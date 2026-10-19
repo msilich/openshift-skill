@@ -34,7 +34,7 @@ Additional resources
 
 </div>
 
-# Downloading the Agent-based Installer
+# Download the Agent-based Installer
 
 Begin the installation process by downloading the Agent-based Installer and the CLI needed for your installation.
 
@@ -141,7 +141,7 @@ Procedure
 
 </div>
 
-# Creating the preferred configuration inputs
+# Create the preferred configuration inputs
 
 Create the preferred configuration inputs used to create the agent image.
 
@@ -392,7 +392,9 @@ As an optional task, you can create additional manifests to further configure yo
 
 ## Creating a directory to contain additional manifests
 
-If you create additional manifests to configure your Agent-based installation beyond the `install-config.yaml` and `agent-config.yaml` files, you must create an `openshift` subdirectory within your installation directory. All of your additional machine configurations must be located within this subdirectory.
+If you create additional manifests to configure your Agent-based installation beyond the `install-config.yaml` and `agent-config.yaml` files, you must create an `openshift` subdirectory within your installation directory.
+
+All of your additional machine configurations must be located within this subdirectory.
 
 > [!NOTE]
 > The most common type of additional manifest you can add is a `MachineConfig` object. For examples of `MachineConfig` objects you can add during the Agent-based installation, see "Using MachineConfig objects to configure nodes" in the "Additional resources" section.
@@ -433,6 +435,9 @@ By default, OpenShift Container Platform automatically configures the Open vSwit
 > Customizations to the cluster made by additional manifests are not validated and not guaranteed to work. These manifests might result in a nonfunctional cluster.
 >
 > For more information about an additional manifest file, see "Creating a directory to contain additional manifests".
+
+> [!NOTE]
+> You can use Butane to create machine configs. For more information, see "Creating a MachineConfig object by using Butane".
 
 Consider using the customized `br-ex` bridge configuration for any of the following tasks:
 
@@ -660,6 +665,18 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Creating a MachineConfig object by using Butane](../install_config/installing-customizing.md#installation-special-config-butane-create_installing-customizing)
+
+</div>
+
 ## Creating disk partitions
 
 In general, you must use the default disk partitioning that is created during the RHCOS installation. However, there are cases where you might want to create a separate partition for a directory that you expect to grow.
@@ -751,7 +768,7 @@ Procedure
 
 </div>
 
-## Using ZTP manifests
+## Use ZTP manifests
 
 As an optional task, you can use GitOps Zero Touch Provisioning (ZTP) manifests to configure your installation beyond the options available through the `install-config.yaml` and `agent-config.yaml` files.
 
@@ -1061,7 +1078,7 @@ Verification
 
 </div>
 
-# Creating and booting the agent image
+# Create and boot the agent image
 
 After you have prepared the configuration inputs for your installation, create the ISO image and boot it on your machines.
 
@@ -1120,9 +1137,7 @@ Procedure
 
 # Adding IBM Z agents with RHEL KVM
 
-You can manually add IBM Z® agents with RHEL KVM.
-
-Only use this procedure for IBM Z® clusters with RHEL KVM.
+You can manually add IBM Z® agents with RHEL KVM. Only use this procedure for IBM Z® clusters with RHEL KVM.
 
 > [!NOTE]
 > The `nmstateconfig` parameter must be configured for the KVM boot.
@@ -1288,7 +1303,7 @@ Procedure
 
 </div>
 
-# Tracking and verifying installation progress
+# Track and verify installation progress
 
 After the installation has started, you can track installation progress and verify a successful installation.
 
@@ -1620,7 +1635,7 @@ Additional resources
 
 </div>
 
-# Gathering log data from a failed Agent-based installation
+# Gather log data from a failed Agent-based installation
 
 If you encounter a failed Agent-based installation, you can gather log data to provide for a support case.
 

@@ -45,56 +45,56 @@ Create a ConfigMap for the dashboard definition in the `openshift-config-managed
 2.  Go to **Dashboard** **Che Server JVM** and verify that the dashboard panels contain data.
     <figure>
     <br />
-    <img src="assets/4b94d2fa32d3f919229b.png" alt="The *JVM quick facts* panel" /><br />
+    <img src="assets/8598942b5aae02e30170.png" alt="The *JVM quick facts* panel" /><br />
 
     <figcaption>Figure 1. Quick Facts</figcaption>
     </figure>
 
     <figure>
     <br />
-    <img src="assets/fd9e7284d4fdabd1f0c4.png" alt="The *JVM Memory* panel" /><br />
+    <img src="assets/78ac43ee55b21eea9255.png" alt="The *JVM Memory* panel" /><br />
 
     <figcaption>Figure 2. JVM Memory</figcaption>
     </figure>
 
     <figure>
     <br />
-    <img src="assets/031f98440cbbfa6dbfee.png" alt="The *JVM Misc* panel" /><br />
+    <img src="assets/06e9df7e24e9f05fcd1d.png" alt="The *JVM Misc* panel" /><br />
 
     <figcaption>Figure 3. JVM Misc</figcaption>
     </figure>
 
     <figure>
     <br />
-    <img src="assets/c16fceb2e2e13d9db1b3.png" alt="The *JVM Memory Pools (heap)* panel" /><br />
+    <img src="assets/78ff31440acc66a257be.png" alt="The *JVM Memory Pools (heap)* panel" /><br />
 
     <figcaption>Figure 4. JVM Memory Pools (heap)</figcaption>
     </figure>
 
     <figure>
     <br />
-    <img src="assets/7e6d5a1b10d9a6c4fbd2.png" alt="The *JVM Memory Pools (non-heap)* panel" /><br />
+    <img src="assets/31ac2cfea6d153a85bfc.png" alt="The *JVM Memory Pools (non-heap)* panel" /><br />
 
     <figcaption>Figure 5. JVM Memory Pools (Non-Heap)</figcaption>
     </figure>
 
     <figure>
     <br />
-    <img src="assets/dc8be9166a15aaadd5e5.png" alt="The *JVM garbage collection* panel" /><br />
+    <img src="assets/f80f7bdaebe443d687ea.png" alt="The *JVM garbage collection* panel" /><br />
 
     <figcaption>Figure 6. Garbage Collection</figcaption>
     </figure>
 
     <figure>
     <br />
-    <img src="assets/3c36e2cc72f1d3c8dea9.png" alt="The *JVM class loading* panel" /><br />
+    <img src="assets/cab15bf2905247fb375c.png" alt="The *JVM class loading* panel" /><br />
 
     <figcaption>Figure 7. Class loading</figcaption>
     </figure>
 
     <figure>
     <br />
-    <img src="assets/c53ed2ea59d4d2343bc3.png" alt="The *JVM buffer pools* panel" /><br />
+    <img src="assets/65df54aabc0642b8d3de.png" alt="The *JVM buffer pools* panel" /><br />
 
     <figcaption>Figure 8. Buffer Pools</figcaption>
     </figure>

@@ -33,7 +33,7 @@ For example, if the tools container image contains `.config` and `.config-folder
 
 <figure>
 <br />
-<img src="assets/2508814e654e0892b8ac.png" alt="Persistent user home example scenario" /><br />
+<img src="assets/740d191f68979c07d7f7.png" alt="Persistent user home example scenario" /><br />
 
 <figcaption>Figure 1. Tools container with <code>persistUserHome</code> enabled</figcaption>
 </figure>

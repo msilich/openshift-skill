@@ -26,6 +26,8 @@ In hosted clusters, you can configure internal IPv4 subnets that the OVN-Kuberne
 
 # Fixed issues
 
+This section lists the fixed issues in the Hosted Control Plane release.
+
 The following issues are fixed for this release:
 
 - Before this update, the SAN validation for custom certificates in `hc.spec.configuration.apiServer.servingCerts.namedCertificates` did not properly handle wildcard DNS patterns, such as `*.example.com`. As a consequence, the wildcard DNS patterns in custom certificates could conflict with internal Kubernetes API server certificate SANs without being detected, leading to certificate validation failures and potential deployment issues. This release provides enhanced DNS SAN conflict detection to include RFC-compliant wildcard support, implementing bidirectional conflict validation that properly handles wildcard patterns such as `*.example.com` matching `sub.example.com`. As a result, wildcard DNS patterns are now properly validated, preventing certificate conflicts and ensuring more reliable hosted cluster deployments with wildcard certificate support. ([OCPBUGS-60381](https://issues.redhat.com/browse/OCPBUGS-60381))

@@ -10,7 +10,7 @@ Use these procedures if the following issues occur:
 
 - The `KubePersistentVolumeFillingUp` alert is firing for Prometheus.
 
-# Investigating why user-defined project metrics are unavailable
+# Investigate why user-defined project metrics are unavailable
 
 `ServiceMonitor` resources enable you to determine how to use the metrics exposed by a service in user-defined projects.
 
@@ -276,7 +276,7 @@ Procedure
 
 - [Getting detailed information about a metrics target](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/accessing_metrics/accessing-metrics-as-an-administrator#getting-detailed-information-about-a-target_accessing-metrics-as-an-administrator)
 
-# Determining why Prometheus is consuming a lot of disk space
+# Determine why Prometheus is consuming a lot of disk space
 
 Developers can create labels to define attributes for metrics in the form of key-value pairs. The number of potential key-value pairs corresponds to the number of possible values for an attribute.
 
@@ -386,7 +386,7 @@ Procedure
 
 - [Setting scrape intervals, evaluation intervals, and enforced limits for user-defined projects](https://docs.redhat.com/en/documentation/monitoring_stack_for_red_hat_openshift/latest/html/configuring_user_workload_monitoring/configuring-performance-and-scalability-uwm#setting-scrape-and-evaluation-intervals-limits-for-user-defined-projects_configuring-performance-and-scalability-uwm)
 
-# Resolving the KubePersistentVolumeFillingUp alert firing for Prometheus
+# Resolve the KubePersistentVolumeFillingUp alert firing for Prometheus
 
 As a cluster administrator, you can resolve the `KubePersistentVolumeFillingUp` alert being triggered for Prometheus.
 

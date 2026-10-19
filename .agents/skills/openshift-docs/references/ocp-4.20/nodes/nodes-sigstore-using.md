@@ -130,7 +130,7 @@ You can create multiple policies for a cluster or namespace. This allows you to 
 
 You can remove a policy by deleting the `ClusterImagePolicy` and `ImagePolicy` objects.
 
-# Creating a cluster image policy CR
+# Create a cluster image policy CR
 
 A cluster administrator can use a `ClusterImagePolicy` custom resource (CR) to configure a sigstore signature verification policy for the entire cluster.
 
@@ -548,7 +548,7 @@ Verification
 
 </div>
 
-# Creating an image policy CR
+# Create an image policy CR
 
 A cluster administrator or application developer can use an `ImagePolicy` custom resource (CR) to configure a sigstore signature verification policy for a specific namespace.
 

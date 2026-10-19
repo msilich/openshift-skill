@@ -97,7 +97,9 @@ Additional resources
 
 ## About edge compute pools
 
-The edge compute pool configuration is common between Amazon Web Services (AWS) Local Zones or Wavelength Zones locations. You can use the edge compute pool to create new labels to deploy applications onto Amazon Web Services (AWS) Local Zones or Wavelength Zones nodes. Edge compute nodes are tainted compute nodes that run in AWS Local Zones or Wavelength Zones locations.
+The edge compute pool configuration is common between Amazon Web Services (AWS) Local Zones or Wavelength Zones locations.
+
+You can use the edge compute pool to create new labels to deploy applications onto Amazon Web Services (AWS) Local Zones or Wavelength Zones nodes. Edge compute nodes are tainted compute nodes that run in AWS Local Zones or Wavelength Zones locations.
 
 When deploying a cluster that uses Local Zones or Wavelength Zones, consider the following points:
 
@@ -251,7 +253,7 @@ Ensure that the following conditions are met before you begin:
 
 - If your nodes are virtual machines (VMs), ensure that the hypervisor and the connected network switches support jumbo frames.
 
-### Checking the current cluster MTU value
+### Check the current cluster MTU value
 
 To ensure network stability and performance in a hybrid environment where part of your cluster is in the cloud and part is an on-premise environment, you can obtain the current maximum transmission unit (MTU) for the cluster network.
 
@@ -294,7 +296,7 @@ Procedure
 
 </div>
 
-### Beginning the MTU migration
+### Begin the MTU migration
 
 Start the maximum transmission unit (MTU) migration by specifying the migration configuration for the cluster network and machine interfaces. The Machine Config Operator performs a rolling reboot of the nodes to prepare the cluster for the MTU change.
 
@@ -342,7 +344,7 @@ Procedure
 
 </div>
 
-### Verifying the machine configuration
+### Verify the machine configuration
 
 Verify the machine configuration on your hosts to confirm that the maximum transmission unit (MTU) migration applied successfully. Checking the configuration state and system settings help ensures that the nodes use the correct migration script.
 
@@ -405,7 +407,7 @@ Procedure
 
 </div>
 
-### Finalizing the MTU migration
+### Finalize the MTU migration
 
 Finalize the MTU migration to apply the new maximum transmission unit (MTU) settings to the OVN-Kubernetes network plugin. This updates the cluster configuration and triggers a rolling reboot of the nodes to complete the process.
 
@@ -693,7 +695,9 @@ Verification
 
 ## Wavelength Zones only: CloudFormation template for the VPC Carrier Gateway
 
-Use the CloudFormation template to deploy the Carrier Gateway on Amazon Web Services (AWS) Wavelength infrastructure. The template automates the creation of an AWS Carrier Gateway for OpenShift Container Platform. The template provisions an `AWS::EC2::CarrierGateway` and associates it with the cluster VPC to enable traffic routing to provide direct internet connectivity for resources in Wavelength Zones that use carrier networks.
+Use the CloudFormation template to deploy the Carrier Gateway on Amazon Web Services (AWS) Wavelength infrastructure. The template automates the creation of an AWS Carrier Gateway for OpenShift Container Platform.
+
+The template provisions an `AWS::EC2::CarrierGateway` and associates it with the cluster VPC to enable traffic routing to provide direct internet connectivity for resources in Wavelength Zones that use carrier networks.
 
 <div class="formalpara">
 
@@ -1221,7 +1225,7 @@ Optional: Specifies custom tag data for your cluster. For example, you might add
 >     get machineset/<infrastructure_id>-<role>-<zone>
 > ```
 
-### Creating a compute machine set
+### Create a compute machine set
 
 To dynamically manage machine compute resources, you can create your own compute machine sets in addition to the compute machine sets created by the installation program. Use the OpenShift Container Platform CLI to automate node provisioning.
 

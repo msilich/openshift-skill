@@ -16,7 +16,7 @@ Setting up SPIRE federation involves the following high-level steps:
 
 5.  Configure automatic synchronization: The SPIRE Controller Manager automatically keeps trust bundles synchronized after initial setup.
 
-# Understanding bundle endpoint profiles
+# Understand bundle endpoint profiles
 
 The bundle endpoint profile determines how your cluster exposes its trust bundle to other SPIRE deployments and how it authenticates remote clusters accessing the bundle. Choose the profile that best matches your security requirements and infrastructure.
 
@@ -177,9 +177,9 @@ spec:
 
 - The `bundleEndpointProfile` field cluster exposes its bundle using `https_spiffe` profile.
 
-# Configuring SPIRE federation with the https_spiffe profile
+# Configure SPIRE federation with the https_spiffe profile
 
-The Zero Trust Workload Identity Manager includes SPIRE Federation support, allowing multiple independent SPIRE deployments to establish trust relationships. This procedure demonstrates how to configure federation using the `https_spiffe` profile, which uses SPIFFE-based TLS authentication between SPIRE servers.
+The Zero Trust Workload Identity Manager includes SPIRE federation support, allowing multiple independent SPIRE deployments to establish trust relationships by using the `https_spiffe` profile with SPIFFE-based TLS authentication.
 
 <div>
 
@@ -446,7 +446,7 @@ Verification
 
 </div>
 
-# Using SPIRE federation with Automatic Certificate Management Environment protocol
+# Use SPIRE federation with Automatic Certificate Management Environment protocol
 
 Using SPIRE federation with Automatic Certificate Management Environment (ACME) protocol provides automatic certificate provisioning from Let’s Encrypt. ACME also enables automatic certificate renewal before expiration, eliminating manual certificate management overhead.
 
@@ -760,9 +760,9 @@ Verification
 
 </div>
 
-# Using SPIRE federation with manual certificate management
+# Use SPIRE federation with manual certificate management
 
-You can use SPIRE federation with custom certificate management using cert-manager or other certificate providers. This approach provides flexibility for organizations that require control over certificate issuance, support for internal certificate authorities (CAs), or integration with existing certificate management infrastructure.
+You can use SPIRE federation with custom certificate management by using cert-manager or other certificate providers for control over certificate issuance and integration with internal certificate authorities (CAs).
 
 <div>
 

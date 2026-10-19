@@ -1,5 +1,9 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
+Red Hat build of Kueue is a job queuing system that decides when workloads start, wait, or are preempted on a shared cluster. Review the following topics to learn what Red Hat build of Kueue does, which personas interact with it, and how a job moves through the queuing workflow.
+
+# Red Hat build of Kueue overview
+
 You can use Red Hat build of Kueue to manage when jobs in your Kubernetes cluster start, get preempted, or wait for resources. Red Hat build of Kueue optimizes resource utilization by enforcing quotas and scheduling policies across your workloads.
 
 Red Hat build of Kueue can determine when a job waits, is admitted to start by creating pods, or should be *preempted*, meaning that active pods for that job are deleted.
@@ -15,9 +19,9 @@ Red Hat build of Kueue does not replace any existing components in a Kubernetes
 
 Red Hat build of Kueue supports all-or-nothing semantics, where either an entire job with all of its components is admitted to the cluster, or the entire job is rejected if it does not fit on the cluster.
 
-# Personas
+# Red Hat build of Kueue personas
 
-Different personas exist in a Red Hat build of Kueue workflow.
+Different personas exist in a Red Hat build of Kueue workflow. Identifying which persona matches your role tells you which quota configuration and job submission tasks apply to you.
 
 Batch administrators
 Batch administrators manage the cluster infrastructure and establish quotas and queues.
@@ -31,7 +35,9 @@ Serving users run jobs on the cluster. For example, to expose a trained AI/ML mo
 Platform developers
 Platform developers integrate Red Hat build of Kueue with other software. They might also contribute to the Kueue open source project.
 
-# Workflow overview
+# Red Hat build of Kueue workflow overview
+
+A Red Hat build of Kueue workflow coordinates batch administrators, user personas, and existing Kubernetes components so that jobs are admitted only when quota is available.
 
 The Red Hat build of Kueue workflow can be described at a high level as follows:
 

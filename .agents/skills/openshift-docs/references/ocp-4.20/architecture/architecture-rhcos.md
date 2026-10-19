@@ -149,7 +149,7 @@ Additional resources
 
 </div>
 
-# Viewing Ignition configuration files
+# View Ignition configuration files
 
 You can view Ignition configuration files to inspect how cluster nodes are initialized, verify early-stage manifests and credentials, and troubleshoot bootstrapping issues.
 
@@ -267,7 +267,7 @@ Procedure
 
 </div>
 
-# Changing Ignition configs after installation
+# Change Ignition configs after installation
 
 Inspect machine config pools and individual machine configs to audit node configurations, verify rendered system settings, and identify managed files across your OpenShift Container Platform cluster.
 

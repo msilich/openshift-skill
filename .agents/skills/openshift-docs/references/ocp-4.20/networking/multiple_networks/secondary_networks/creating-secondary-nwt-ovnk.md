@@ -358,7 +358,7 @@ The following JSON example configures a switched secondary network:
 }
 ```
 
-## Configuring pods for secondary networks
+## Configure pods for secondary networks
 
 You must specify the secondary network attachments through the `k8s.v1.cni.cncf.io/networks` annotation.
 
@@ -381,7 +381,7 @@ spec:
     name: agnhost-container
 ```
 
-## Configuring pods with a static IP address
+## Configure pods with a static IP address
 
 You can configure pods with a static IP address. The example in the procedure provisions a pod with a static IP address.
 

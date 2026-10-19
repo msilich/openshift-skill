@@ -359,7 +359,7 @@ Verification
 
 </div>
 
-# Importing manifest lists in image streams on your multi-architecture compute machines
+# Import manifest lists in image streams on your multi-architecture compute machines
 
 On an OpenShift Container Platform 4.20 cluster with multi-architecture compute machines, the image streams in the cluster do not import manifest lists automatically. You must manually change the default `importMode` option to the `PreserveOriginal` option to import the manifest list.
 

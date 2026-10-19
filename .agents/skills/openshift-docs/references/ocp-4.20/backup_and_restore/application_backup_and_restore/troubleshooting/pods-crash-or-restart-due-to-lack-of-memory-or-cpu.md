@@ -24,7 +24,7 @@ Additional resources
 
 </div>
 
-# Setting resource requests for a Velero pod
+# Set resource requests for a Velero pod
 
 Use the `configuration.velero.podConfig.resourceAllocations` specification field in the `oadp_v1alpha1_dpa.yaml` file to set specific resource requests for a `Velero` pod.
 
@@ -55,7 +55,7 @@ Procedure
 
 </div>
 
-# Setting resource requests for a Restic pod
+# Set resource requests for a Restic pod
 
 Use the `configuration.restic.podConfig.resourceAllocations` specification field to set specific resource requests for a `Restic` pod.
 
@@ -89,7 +89,7 @@ Procedure
 
 </div>
 
-# Setting resource requests for a nodeAgent pod
+# Set resource requests for a nodeAgent pod
 
 Use the `configuration.nodeAgent.podConfig.resourceAllocations` specification field to set specific resource requests for a `nodeAgent` pod.
 

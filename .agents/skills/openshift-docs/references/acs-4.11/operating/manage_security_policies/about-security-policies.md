@@ -1,8 +1,14 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Red Hat Advanced Cluster Security for Kubernetes (RHACS) helps you secure your container infrastructure by using a robust policy engine and an admission controller. With RHACS, you can establish appropriate security guardrails, inform about policy violations, and selectively enforce policies to prevent insecure situations.
+Use Red Hat Advanced Cluster Security for Kubernetes (RHACS) policies to secure your container infrastructure through enforcement at build, deploy, and runtime stages.
 
-Specifically, RHACS can help you fail the CI pipeline in the build stage, reject deployments from being deployed in the deployment stage, and shut down running deployments that violate runtime policies. RHACS also provides policy management and violation management tools described in the following sections.
+<a id="about-security-policies-overview_about-security-policies"></a>
+
+# Policy enforcement overview
+
+RHACS helps you secure your container infrastructure by establishing security guardrails, informing about policy violations, and selectively enforcing policies to prevent insecure situations.
+
+Specifically, RHACS can help you fail the CI pipeline in the build stage, reject deployments in the deployment stage, and shut down running deployments that violate runtime policies. RHACS also offers policy management and violation management tools described in the following sections.
 
 <a id="policy-evaluation-engine_about-security-policies"></a>
 
@@ -12,11 +18,11 @@ The RHACS policy engine evaluates policies that you have created based on policy
 
 Build stage  
 
-RHACS can evaluate policy rules upon request by using the `roxctl` CLI. When a policy is violated during the build stage, the violation text and error code let developers know what failed and how to fix it. You can configure the error code to fail the pipeline. During this stage, RHACS can evaluate both standalone images and deployments against applicable policies. Violations from the build stage are not stored or routed using notifiers.
+When a policy is violated during the build stage, the violation text and error code let developers know what failed and how to fix it. You can configure the error code to fail the pipeline. During this stage, RHACS can evaluate both standalone images and deployments against applicable policies. Violations from the build stage are not stored or routed using notifiers.
 
 Deploy stage  
 
-RHACS uses deploy stage policies when inspecting workloads during a deployment attempt. These policies are composed of workload criteria, such as the following criteria:
+RHACS uses deploy stage policies when inspecting workloads during a deployment attempt. These policies compose of workload criteria, such as the following criteria:
 
 - Container configuration, including environment variables and privileges
 
@@ -34,23 +40,23 @@ RHACS prevents Kubernetes or OpenShift Container Platform from creating or updat
 
 Runtime stage  
 
-RHACS continuously evaluates deployments against applicable policies after a deployment is running. Runtime policies are used to monitor running pods within a Kubernetes cluster and report or prevent unauthorized workload activity, baseline deviations, or prohibited Kubernetes resource operations. RHACS can monitor unsafe Kubernetes requests and selectively block them by using the API. F example, RHACS can block attempted access to config maps or secrets.
+RHACS continuously evaluates deployments against applicable policies after a deployment is running. Runtime policies monitor running pods within a Kubernetes cluster and report or prevent unauthorized workload activity, baseline deviations, or prohibited Kubernetes resource operations. RHACS can monitor unsafe Kubernetes requests and selectively block them by using the API. For example, RHACS can block attempted access to config maps or secrets.
 
 Runtime policies can inspect the following two event sources:
 
 - Deployment events: Real-time events such as running pods, process activity inside pods, deviations from networking or process baselines, or user-pod interaction such as port forwarding or port exec actions
 
-- Audit log events: Logs that can be inspected for actions such as access to sensitive Kubernetes resources
+- Audit log events: Logs that runtime policies can inspect for actions such as access to sensitive Kubernetes resources
 
 Runtime policies can also include build and deploy stage criteria for the following reasons:
 
-- These criteria can be used to identify high-risk situations combining runtime and workload/image criteria.
+- You can use these criteria to identify high-risk situations combining runtime and workload/image criteria.
 
-- These criteria can ensure that the build and deploy stage requirements are met during runtime, for example, when a new vulnerability is discovered, or a new requirement has been introduced.
+- These criteria can ensure that runtime meets the build and deploy stage requirements, for example, when you discover a new vulnerability, or introduce a new requirement.
 
-Audit log policies are used to inspect the Kubernetes audit log for actions related to sensitive Kubernetes resources, such as secrets and `ClusterRoleBinding`. They have the following characteristics:
+Audit log policies inspect the Kubernetes audit log for actions related to sensitive Kubernetes resources, such as secrets and `ClusterRoleBinding`. They have the following characteristics:
 
-- Audit log policies are only composed of the audit log criteria.
+- Audit log policies compose only of the audit log criteria.
 
 - They are not associated with images or deployments. For this reason, audit log policies can only be associated with the runtime lifecycle stage.
 
@@ -64,7 +70,7 @@ When you configure policies in RHACS, you can configure how RHACS responds when 
 
 RHACS allows you to enforce security policies during all phases of the development lifecycle: build, deploy, and runtime.
 
-RHACS provides two types of policy enforcement:
+RHACS offers two types of policy enforcement:
 
 - Sensor enforcement: Also known as *soft* enforcement, if a workload is examined and violates a policy, Sensor scales down pods by using the Kubernetes API.
 
@@ -88,17 +94,19 @@ Additional resources
 
 ## Build stage enforcement
 
-RHACS uses build stage policies to discover and respond to security violations before code is deployed. Build stage policies are composed entirely of image criteria, such as image registry, image content, and CVE data, including scan results and status.
+RHACS uses build stage policies to discover and respond to security violations before you deploy code. Build stage policies compose entirely of image criteria, such as image registry, image content, and CVE data, including scan results and status.
 
-RHACS checks the build by using the `roxctl image check` and `roxctl deployment check` commands. You can configure RHACS to fail your continuous integration (CI) builds when images match the criteria of the policy. This means that when there is a condition in the build that violates the policy, for example, if there is a fixable CVE of a severity level and you have configured a policy for that condition, the build fails.
+RHACS checks the build with the `roxctl image check` and `roxctl deployment check` commands. You can configure RHACS to fail your continuous integration (CI) builds when images match the criteria of the policy. This means that when there is a condition in the build that violates the policy, for example, if there is a fixable CVE of a severity level and you have configured a policy for that condition, the build fails.
 
-As an example, you can configure RHACS to check an image or deployment and integrate that check into a continuous integration/continuous development (CI/CD) pipeline. Then, if RHACS detects a condition that means a policy should fail, the RHACS API returns a non-zero exit code. These violations are not collected or acted on by RHACS, but are used with a CI/CD tool. You configure your CI/CD tool to act on those results, for example, to fail the build process if a violation is reported.
+As an example, you can configure RHACS to check an image or deployment and integrate that check into a continuous integration and continuous development (CI/CD) pipeline. Then, if RHACS detects a condition that means a policy should fail, the RHACS API returns a nonzero exit code. Your CI/CD tool uses these violations. You configure your CI/CD tool to act on those results, for example, to fail the build process if RHACS reports a violation.
 
 <a id="policy-enforcement-deploy_about-security-policies"></a>
 
 ## Deploy stage enforcement
 
-Red Hat Advanced Cluster Security for Kubernetes supports two forms of security policy enforcement for deploy-time policies: hard enforcement through the admission controller and soft enforcement by RHACS Sensor. The admission controller blocks creation or updating of deployments that violate policy. If the admission controller is disabled or unavailable, Sensor can perform enforcement by scaling down replicas for deployments that violate policy to 0.
+RHACS supports two forms of security policy enforcement for deploy-time policies: hard enforcement through the admission controller and soft enforcement by RHACS Sensor.
+
+The admission controller blocks creation or updating of deployments that violate policy. If you disable the admission controller or it is unavailable, Sensor can perform enforcement by scaling down replicas for deployments that violate policy to 0.
 
 > [!WARNING]
 > Policy enforcement can impact running applications or development processes. Before you enable enforcement options, inform all stakeholders and plan how to respond to the automated enforcement actions.
@@ -107,28 +115,28 @@ Red Hat Advanced Cluster Security for Kubernetes supports two forms of security 
 
 ### Hard enforcement
 
-Hard enforcement is performed by the RHACS admission controller. In clusters with admission controller enforcement, the Kubernetes or OpenShift Container Platform API server blocks all noncompliant deployments. The admission controller blocks `CREATE`, `UPDATE`, and `SCALE` operations. Any pod create, update, or scale request that satisfies a policy configured with deploy-time enforcement enabled will fail. The admission controller also blocks user-initiated container commands such as `pod exec` and `port forward` for policies configured with runtime enforcement.
+The RHACS admission controller performs hard enforcement. In clusters with admission controller enforcement, the Kubernetes or OpenShift Container Platform API server blocks all noncompliant deployments. The admission controller blocks `CREATE`, `UPDATE`, and `SCALE` operations. Any pod create, update, or scale request that satisfies a policy you configured with deploy-time enforcement enabled will fail. The admission controller also blocks user-initiated container commands such as `pod exec` and `port forward` for policies you configured with runtime enforcement.
 
 > [!NOTE]
 > Kubernetes admission webhooks support only `CREATE`, `UPDATE`, `DELETE`, and `CONNECT` operations. The RHACS admission controller supports only `CREATE`, `UPDATE`, and `SCALE` operations. Operations such as `kubectl patch`, `kubectl set`, and `kubectl scale` are `PATCH` operations, not `UPDATE` operations. Because `PATCH` operations are not supported in Kubernetes, RHACS cannot perform enforcement on PATCH operations. However, enforcement against `SCALE` operations is supported.
 
-For hard enforcement, enable the enforcement settings for the cluster in RHACS. To verify that enforcement is enabled, in the **Static configuration** section, in the **Admission controller enforcement behavior** field, ensure that **Enforce policies** is selected. Additionally, for each policy that you want to enforce, select **Inform and enforce** when configuring the policy.
+For hard enforcement, enable the enforcement settings for the cluster in RHACS. To verify that you enabled enforcement, in the **Static configuration** section, in the **Admission controller enforcement behavior** field, ensure that you selected **Enforce policies**. Additionally, for each policy that you want to enforce, select **Inform and enforce** when configuring the policy.
 
 > [!NOTE]
-> Because admission controller enforcement is a static configuration option, changing this setting for clusters that are installed by using the manifest or `roxctl` method requires you to download the updated YAML bundle and redeploy it to the cluster.
+> Because admission controller enforcement is a static configuration option, changing this setting for clusters you installed by using the manifest or `roxctl` method requires you to download the updated YAML bundle and redeploy it to the cluster.
 
 <a id="namespace-exclusions_about-security-policies"></a>
 
 ### Namespace exclusions from admission controller enforcement
 
-By default, Red Hat Advanced Cluster Security for Kubernetes (RHACS) excludes certain administrative namespaces from from the validating webhook configurations in the admission controller. Policy evaluation and enforcement is not performed on review requests originating from these administrative namespaces. Some items in these namespaces must be deployed for RHACS to work correctly so they are excluded.
+By default, Red Hat Advanced Cluster Security for Kubernetes (RHACS) excludes certain administrative namespaces from the validating webhook configurations in the admission controller. RHACS does not perform policy evaluation and enforcement on review requests originating from these administrative namespaces. You must deploy some items in these namespaces for RHACS to work correctly so RHACS excludes them.
 
-In addition to excluding namespaces, the RHACS admission controller bypasses requests that originate from from a Kubernetes `ServiceAccount` in a system namespace.
+In addition to excluding namespaces, the RHACS admission controller bypasses requests that originate from a Kubernetes `ServiceAccount` in a system namespace.
 
 > [!NOTE]
 > Consider this factor when choosing the namespace to deploy your continuous deployment tool of choice.
 
-The following namespaces are excluded by default:
+RHACS excludes the following namespaces by default:
 
 - `stackrox`
 
@@ -138,7 +146,7 @@ The following namespaces are excluded by default:
 
 - `istio-system`
 
-For Helm installations on Kubernetes secured clusters, you can customize the namespaces that are excluded from the validating webhook configuration by configuring the `values-public.yaml` file. In the `admissionControl.namespaceSelector` field, you can specify the namespaces that you want to exclude. See the following example:
+For Helm installations on Kubernetes secured clusters, you can customize the namespaces that RHACS excludes from the validating webhook configuration by configuring the `values-public.yaml` file. In the `admissionControl.namespaceSelector` field, you can specify the namespaces that you want to exclude. See the following example:
 
 ``` yaml
 ...
@@ -165,23 +173,27 @@ Signifies the namespace that you want to exclude.
 
 ### Enforcement on existing deployments
 
-For existing deployments, policy changes only result in enforcement at the next detection of the criteria, when a Kubernetes event occurs. If you make changes to a policy, you must reassess policies by selecting **Policy Management** and clicking **Reassess All**. This action applies deploy policies on all existing deployments regardless of whether there are any new incoming Kubernetes events. If a policy is violated, then RHACS performs enforcement.
+For existing deployments, policy changes only result in enforcement when a Kubernetes event occurs or when you manually reassess all policies.
+
+If you make changes to a policy, you must reassess policies by selecting **Policy Management** and clicking **Reassess All**. This action applies deploy policies on all existing deployments regardless of whether there are any new incoming Kubernetes events. If a deployment violates a policy, then RHACS performs enforcement.
 
 <a id="policy-enforcement-soft_about-security-policies"></a>
 
 ### Soft enforcement
 
-Soft enforcement is performed by RHACS Sensor. This enforcement prevents an operation from being initiated. With soft enforcement, Sensor scales the replicas to 0, and prevents pods from being scheduled. In this enforcement, a non-ready deployment is available in the cluster.
+RHACS Sensor performs soft enforcement, which scales replicas to 0 and prevents the system from scheduling pods when a deployment violates a policy.
+
+With soft enforcement, Sensor scales the replicas to 0, and prevents the system from scheduling pods. In this enforcement, a non-ready deployment is available in the cluster.
 
 By design, Sensor only performs this soft enforcement once, to prevent trapping of update requests to scale the deployment back down again.
 
-If soft enforcement is configured, and Sensor is down, then RHACS cannot perform enforcement.
+If you configure soft enforcement, and Sensor is down, then RHACS cannot perform enforcement.
 
 <a id="policy-enforcement-runtime_about-security-policies"></a>
 
 ## Runtime enforcement
 
-You can configure policies that are enforced during runtime to terminate a pod that violates the policy or, in the case of audit log inspection, notify you of events that violate the policy but have already occurred and have been logged.
+You can configure policies that are enforced during runtime to stop a pod that violates the policy or, in the case of audit log inspection, tell you of events that violate the policy but have already occurred and the system logged.
 
 When enforced, a policy violation results in one or more of the following actions:
 
@@ -190,7 +202,7 @@ When enforced, a policy violation results in one or more of the following action
 - RHACS intercepting and preventing certain Kubernetes API calls
 
 > [!IMPORTANT]
-> When a violation is triggered by an image or workload rule, a violation alert is generated, but the pod is *not* disrupted.
+> When an image or workload rule triggers a violation, RHACS generates a violation alert, but does *not* disrupt the pod.
 
 <a id="policy-structure_about-security-policies"></a>
 
@@ -198,7 +210,7 @@ When enforced, a policy violation results in one or more of the following action
 
 RHACS policies are structured text objects that define security rules and the action RHACS performs when these rules are broken.
 
-An RHACS policy contains the following parts:
+An RHACS policy has the following parts:
 
 <a id="policy-definition_about-security-policies"></a>
 
@@ -245,19 +257,19 @@ Determines if a policy is active, for example, whether it is enabled or disabled
 
 # Policy and violation management
 
-*Policy management* encompasses the set of activities that security teams undertake to establish the appropriate guardrails. All of these activities happen **before** the policy is evaluated. *Violation management* is the set of activities that security and developer teams take to assist in addressing security incidents to remediate policy violations. All of these activities happen after a policy has been violated.
+*Policy management* encompasses the set of activities that security teams undertake to establish the appropriate guardrails. All of these activities happen **before** RHACS evaluates the policy. *Violation management* is the set of activities that security and developer teams take to assist in addressing security incidents to remediate policy violations. All of these activities happen after a deployment violates a policy.
 
 <a id="setting-policy-rules_about-security-policies"></a>
 
 ## Setting policy rules
 
-With policy as code, RHACS supports both internal and external sources for policies. When using external policies, RHACS defines a Kubernetes native Custom Resource (CR) to streamline policy as code by using tools like OpenShift Pipelines and Argo CD.
+With policy as code, RHACS supports both internal and external sources for policies. When using external policies, RHACS defines a Kubernetes native Custom Resource (CR) to streamline policy as code by using tools such as OpenShift Pipelines and Argo CD.
 
 You can use RHACS to perform the following actions:
 
-- Define policy rules: Whether teams manage their policies as code or by using the RHACS internal database, authoring policies can be technically challenging. RHACS provides an intuitive user interface, or portal, that simplifies this task. You can focus on controls while hiding the specification complexity. You can author policies by using the portal and then exported them as YAML to be stored as code or be stored locally.
+- Define policy rules: Whether teams manage their policies as code or by using the RHACS internal database, authoring policies can be technically challenging. RHACS offers an intuitive user interface, or portal, that simplifies this task. You can focus on controls while hiding the specification complexity. You can author policies by using the portal and then export them as YAML to store as code or store locally.
 
-- Choose the lifecycle to which the policy applies: For internal policies, RHACS offers Create, Read, Update, Delete (CRUD) actions. For external policies, these actions are handled by users on their own, and the results are presented to RHACS using the CR. For internal policies, RHACS also offers role-based access control and tracks changes to policies in its audit log.
+- Choose the lifecycle to which the policy applies: For internal policies, RHACS offers Create, Read, Update, Delete (CRUD) actions. For external policies, users handle these actions on their own, and the CR presents the results to RHACS. For internal policies, RHACS also offers role-based access control and tracks changes to policies in its audit log.
 
 - Configure policy behavior: RHACS provides users with multi-cluster governance in a centralized manner. When configuring policies, you can configure the following:
 
@@ -277,7 +289,7 @@ You can use RHACS to perform the following actions:
 
 # Default security policies
 
-The default security policies in Red Hat Advanced Cluster Security for Kubernetes provide broad coverage to identify security issues and ensure best practices for security in your environment. By configuring those policies, you can automatically prevent high-risk service deployments in your environment and respond to runtime security incidents.
+The default security policies in Red Hat Advanced Cluster Security for Kubernetes give broad coverage to identify security issues and ensure best practices for security in your environment. By configuring those policies, you can automatically prevent high-risk service deployments in your environment and respond to runtime security incidents.
 
 For a list of default security policies categorized by severity, see "Security policy reference".
 
@@ -307,7 +319,7 @@ Procedure
 
 </div>
 
-- In the RHACS portal, go to **Platform Configuration** → **Policy Management**. Default policies are indicated by the **System** label in the **Origin** column.
+- In the RHACS portal, go to **Platform Configuration** → **Policy Management**. The **System** label in the **Origin** column indicates default policies.
 
   > [!NOTE]
   > You cannot delete default policies or edit policy criteria for default policies.
@@ -318,9 +330,9 @@ Procedure
 
 # Custom security policies
 
-With RHACS, you can create custom security policies to provide security during the build, deploy, and run phases of development. You can create custom security policies by the following methods:
+With RHACS, you can create custom security policies to give security during the build, deploy, and run phases of development. You can create custom security policies by the following methods:
 
-- You can clone a default policy and then modify it to configure specific information for your environment
+- You can clone a default policy and then change it to configure specific information for your environment
 
 - You can use the RHACS portal to create and save a new policy.
 
@@ -329,7 +341,7 @@ With RHACS, you can create custom security policies to provide security during t
 For more information, see "Creating and modifying security policies".
 
 > [!IMPORTANT]
-> Use caution when enforcing custom policies in the `openshift-*` namespaces and for default OpenShift Container Platform pods. For example, a custom policy with enforcement configured can terminate pods with possible data loss if the policy is violated.
+> Use caution when enforcing custom policies in the `openshift-*` namespaces and for default OpenShift Container Platform pods. For example, a custom policy with enforcement configured can stop pods with possible data loss if the pod violates the policy.
 
 <a id="sharing-security-policies_about-security-policies"></a>
 

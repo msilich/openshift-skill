@@ -19,7 +19,7 @@ The installation process also creates the `KedaController` custom resource (CR).
 > [!NOTE]
 > If you are installing a Custom Metrics Autoscaler Operator version lower than 2.17.2, you must manually create the Keda Controller CR. You can use the procedure described in "Editing the Keda Controller CR" to create the CR.
 
-# Installing the custom metrics autoscaler
+# Install the custom metrics autoscaler
 
 You can use the following procedure to install the Custom Metrics Autoscaler Operator.
 
@@ -110,7 +110,7 @@ Procedure
 
 </div>
 
-# Editing the Keda Controller CR
+# Edit the Keda Controller CR
 
 You can use the following procedure to modify the `KedaController` custom resource (CR), which is automatically installed during the installation of the Custom Metrics Autoscaler Operator.
 
@@ -168,21 +168,31 @@ Procedure
       serviceAccount: {}
     ```
 
-    - Specifies a single namespace in which the Custom Metrics Autoscaler Operator scales applications. Leave it blank or leave it empty to scale applications in all namespaces. This field should have a namespace or be empty. The default value is empty.
+    where:
 
-    - Specifies the level of verbosity for the Custom Metrics Autoscaler Operator log messages. The allowed values are `debug`, `info`, `error`. The default is `info`.
+    `spec.watchNamespace`
+    Specifies a single namespace in which the Custom Metrics Autoscaler Operator scales applications. Leave it blank or leave it empty to scale applications in all namespaces. This field should have a namespace or be empty. The default value is empty.
 
-    - Specifies the logging format for the Custom Metrics Autoscaler Operator log messages. The allowed values are `console` or `json`. The default is `console`.
+    `spec.operator.logLevel`
+    Specifies the level of verbosity for the Custom Metrics Autoscaler Operator log messages. The allowed values are `debug`, `info`, `error`. The default is `info`.
 
-    - Optional: Specifies one or more config maps with CA certificates, which the Custom Metrics Autoscaler Operator can use to connect securely to TLS-enabled metrics sources.
+    `spec.operator.logEncoder`
+    Specifies the logging format for the Custom Metrics Autoscaler Operator log messages. The allowed values are `console` or `json`. The default is `console`.
 
-    - Optional: Add the container mount path.
+    `spec.operator.caConfigMaps`
+    Specifies one or more config maps with CA certificates, which the Custom Metrics Autoscaler Operator can use to connect securely to TLS-enabled metrics sources. This field is optional.
 
-    - Optional: Add a `volumes` block to list each projected volume source.
+    `spec.operator.volumeMounts`
+    Specifies the container mount path. This field is optional.
 
-    - Specifies the logging level for the Custom Metrics Autoscaler Metrics Server. The allowed values are `0` for `info` and `4` for `debug`. The default is `0`.
+    `spec.operator.volumes`
+    Specifies a `volumes` block to list each projected volume source. This field is optional.
 
-    - Activates audit logging for the Custom Metrics Autoscaler Operator and specifies the audit policy to use, as described in the "Configuring audit logging" section.
+    `spec.metricsServer.logLevel`
+    Specifies the logging level for the Custom Metrics Autoscaler Metrics Server. The allowed values are `0` for `info` and `4` for `debug`. The default is `0`.
+
+    `spec.metricsServer.auditConfig`
+    Specifies the audit logging configuration for the Custom Metrics Autoscaler Operator and the audit policy to use, as described in the "Configuring audit logging" section.
 
 5.  Click **Save** to save the changes.
 

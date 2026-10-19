@@ -8,7 +8,7 @@ You can use the Node Feature Discovery Operator (NFD) to detect hardware feature
 
 The NFD Operator can be found on the OperatorHub by searching for “Node Feature Discovery”.
 
-# Installing the Node Feature Discovery Operator
+# Install the Node Feature Discovery Operator
 
 As a cluster administrator, you can install the NFD Operator by using the OpenShift Container Platform CLI or the web console. The Node Feature Discovery (NFD) Operator orchestrates all resources needed to run the NFD daemon set.
 
@@ -185,7 +185,7 @@ As a cluster administrator, you can create a `NodeFeatureDiscovery` CR by using 
 > [!NOTE]
 > Starting with version 4.12, the `operand.image` field in the `NodeFeatureDiscovery` CR is mandatory. If the NFD Operator is deployed by using Operator Lifecycle Manager (OLM), OLM automatically sets the `operand.image` field. If you create the `NodeFeatureDiscovery` CR by using the OpenShift Container Platform CLI or the OpenShift Container Platform web console, you must set the `operand.image` field explicitly.
 
-## Creating a NodeFeatureDiscovery CR by using the CLI
+## Create a NodeFeatureDiscovery CR by using the CLI
 
 Create a `NodeFeatureDiscovery` CR instance by using the OpenShift CLI (`oc`) to deploy the NFD operand and enable hardware feature detection on your cluster nodes.
 
@@ -589,7 +589,7 @@ Verification
 
 </div>
 
-## Creating a NodeFeatureDiscovery CR by using the web console
+## Create a NodeFeatureDiscovery CR by using the web console
 
 Create a `NodeFeatureDiscovery` CR by using the OpenShift Container Platform web console to deploy the NFD operand and enable hardware feature detection on your cluster nodes.
 
@@ -936,6 +936,128 @@ sources:
 
 </div>
 
+# Configure Node Feature Discovery worker and controller pod scheduling
+
+You can control where Node Feature Discovery (NFD) worker and controller pods are scheduled by configuring node selectors and tolerations in the `NodeFeatureDiscovery` custom resource.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have access to an OpenShift Container Platform cluster.
+
+- You have installed the OpenShift CLI (`oc`).
+
+- You have logged in as a user with `cluster-admin` privileges.
+
+- You have installed the NFD Operator.
+
+</div>
+
+> [!NOTE]
+> If you specify `workerNodeSelector` without the required `workerTolerations`, NFD worker pods are not scheduled on tainted nodes, even when the nodes match the configured node selector.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Label the target node with the label you use in the `workerNodeSelector` field by entering the following command:
+
+    ``` terminal
+    $ oc label node <node_name> special-node=true
+    ```
+
+2.  Edit the `NodeFeatureDiscovery` custom resource by entering the following command:
+
+    ``` terminal
+    $ oc edit NodeFeatureDiscovery nfd-instance -n openshift-nfd
+    ```
+
+3.  Configure the scheduling options:
+
+    ``` yaml
+    apiVersion: nfd.openshift.io/v1
+    kind: NodeFeatureDiscovery
+    metadata:
+      name: nfd-instance
+      namespace: openshift-nfd
+    spec:
+      enableTaints: false
+      instance: ""
+      operand:
+        imagePullPolicy: IfNotPresent
+        servicePort: 12000
+        workerNodeSelector:
+          special-node: "true"
+        workerTolerations:
+          - key: "node-role.kubernetes.io/ai"
+            operator: "Exists"
+            effect: "NoSchedule"
+          - key: "node-role.kubernetes.io/ai"
+            operator: "Exists"
+            effect: "NoExecute"
+        masterTolerations:
+          - key: "node-role.kubernetes.io/master"
+            operator: "Exists"
+            effect: "NoSchedule"
+          - key: "node-role.kubernetes.io/control-plane"
+            operator: "Exists"
+            effect: "NoSchedule"
+      prunerOnDelete: false
+      topologyUpdater: false
+    ```
+
+    where:
+
+    `spec.operand.workerNodeSelector`
+    Controls where the NFD worker DaemonSet is scheduled. Configure this field under `spec.operand`.
+
+    `spec.operand.workerTolerations`
+    Allows the NFD worker pods to tolerate taints applied to the selected nodes. Configure this field under `spec.operand`.
+
+    `spec.operand.masterTolerations`
+    Allows NFD controller pods to tolerate taints on control plane nodes. The tolerations must match the node taints for the controller pods to schedule successfully.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Verify that the NFD worker pods are scheduled on the expected nodes by entering the following command:
+
+    ``` terminal
+    $ oc get pods -n openshift-nfd -o wide
+    ```
+
+2.  Verify the node labels by entering the following command:
+
+    ``` terminal
+    $ oc get nodes --show-labels
+    ```
+
+3.  Verify the node taints by entering the following command:
+
+    ``` terminal
+    $ oc get node <node_name> -o jsonpath='{.spec.taints}'
+    ```
+
+    After verification, NFD worker pods should appear on nodes with the `special-node=true` label, or with the label you configured in `workerNodeSelector`. Controller pods should remain `Running` in the `openshift-nfd` namespace.
+
+</div>
+
 # About the NodeFeatureRule custom resource
 
 A `NodeFeatureRule` custom resource provides a flexible, rule-based method to create vendor- or application-specific labels and optionally taints on nodes based on detected hardware features and system configuration.
@@ -991,7 +1113,7 @@ Procedure
 
 </div>
 
-# Using the NFD Topology Updater
+# Use the NFD Topology Updater
 
 Enable the NFD Topology Updater to detect allocated resources on worker nodes and report per-zone resource availability. This information helps the scheduler make topology-aware placement decisions for workloads that require specific NUMA node configurations.
 

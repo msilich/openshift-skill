@@ -10,7 +10,7 @@ The volume backup artifacts are deleted at different times depending on the back
 
 - Kopia: The artifacts are deleted after three full maintenance cycles of the Kopia repository, after the backup is deleted.
 
-# Deleting a backup by creating a DeleteBackupRequest CR
+# Delete a backup by creating a DeleteBackupRequest CR
 
 Delete a backup by creating a `DeleteBackupRequest` custom resource (CR). This helps you to remove specific backups and their associated volume artifacts from storage.
 
@@ -56,7 +56,7 @@ Procedure
 
 </div>
 
-# Deleting a backup by using the Velero CLI
+# Delete a backup by using the Velero CLI
 
 Delete a backup by using the Velero CLI to run the `velero backup delete` command. This helps you to quickly remove backups and their associated volume artifacts from storage.
 
@@ -127,7 +127,7 @@ not due for full maintenance cycle until 2024-00-00 18:29:4
 > [!IMPORTANT]
 > Three successful executions of a full maintenance cycle are required for the objects to be deleted from the backup object storage. This means you can expect up to 72 hours for all the artifacts in the backup object storage to be deleted.
 
-# Deleting a backup repository
+# Delete a backup repository
 
 Delete the `backuprepository` custom resource (CR) to complete the backup deletion process. This helps you to ensure that all backup metadata and artifacts are fully removed from storage.
 

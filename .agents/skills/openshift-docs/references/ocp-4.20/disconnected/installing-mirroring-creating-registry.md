@@ -9,7 +9,7 @@ For more information, see "Red Hat Quay".
 > [!IMPORTANT]
 > The *mirror registry for Red Hat OpenShift* is not intended to be a substitute for a production deployment of Red Hat Quay.
 
-# Prerequisites
+# Prerequisites for creating a mirror registry
 
 There are several prerequisites that you must meet before you can create a mirror registry.
 
@@ -43,7 +43,9 @@ The following prerequisites must be met:
 
 # Mirror registry for Red Hat OpenShift introduction
 
-For disconnected deployments of OpenShift Container Platform, a container registry is required to carry out the installation of the clusters. To run a production-grade registry service on such a cluster, you must create a separate registry deployment to install the first cluster. The *mirror registry for Red Hat OpenShift* addresses this need and is included in every OpenShift Container Platform subscription. It is available for download on the "OpenShift console Downloads" page.
+For disconnected deployments of OpenShift Container Platform, a container registry is required to carry out the installation of the clusters.
+
+To run a production-grade registry service on such a cluster, you must create a separate registry deployment to install the first cluster. The *mirror registry for Red Hat OpenShift* addresses this need and is included in every OpenShift Container Platform subscription. It is available for download on the "OpenShift console Downloads" page.
 
 The *mirror registry for Red Hat OpenShift* allows users to install a small-scale version of Red Hat Quay and its required components by using the `mirror-registry` command-line interface (CLI) tool. The *mirror registry for Red Hat OpenShift* is deployed automatically with pre-configured local storage and a local database. It also includes auto-generated user credentials and access permissions with a single set of inputs and no additional configuration choices to get started.
 
@@ -84,7 +86,7 @@ Additional resources
 
 </div>
 
-# Configuring rootless Podman networking
+# Configure rootless Podman networking
 
 To restore rootless Podman networking when the default `pasta` stack fails on OpenShift Container Platform mirror or install hosts, you can set the default rootless network back to `slirp4netns` in the `/etc/containers/containers.conf` file, or in the user’s `~/.config/containers/container.conf` file.
 
@@ -146,7 +148,7 @@ Procedure
 
 </div>
 
-# Mirroring on a local host with mirror registry for Red Hat OpenShift
+# Mirror on a local host with mirror registry for Red Hat OpenShift
 
 You can install the *mirror registry for Red Hat OpenShift* on a local host by using the `mirror-registry` installer tool. By doing so, users can create a local host registry running on port 443 for the purpose of storing a mirror of OpenShift Container Platform images.
 
@@ -315,7 +317,7 @@ Verification
 
 </div>
 
-# Mirroring on a remote host with mirror registry for Red Hat OpenShift
+# Mirror on a remote host with mirror registry for Red Hat OpenShift
 
 You can install the *mirror registry for Red Hat OpenShift* on a remote host by using the `mirror-registry` tool. By doing so, users can create a registry to hold a mirror of OpenShift Container Platform images.
 

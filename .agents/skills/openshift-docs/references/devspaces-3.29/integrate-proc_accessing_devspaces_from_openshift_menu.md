@@ -18,7 +18,7 @@ Access OpenShift Dev Spaces directly from the **Red Hat Applications** menu on O
     The drop-down menu displays the available applications.
 
       
-    ![Applications in the drop-down menu](assets/53e30a96b31ef3829416.png)  
+    ![Applications in the drop-down menu](assets/5f82319687babaa91d2f.png)  
 
 2.  Click the **OpenShift Dev Spaces** link to open the Red Hat OpenShift Dev Spaces Dashboard.
 

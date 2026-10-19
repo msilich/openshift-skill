@@ -16,7 +16,7 @@ Add a badge with a link to your OpenShift Dev Spaces instance to enable first-ti
 
 <figure>
 <br />
-<img src="assets/98236222890cf3182590.svg" alt="Factory badge" /><br />
+<img src="assets/dcb37ce48fdefa6d4111.svg" alt="Factory badge" /><br />
 
 <figcaption>Figure 1. Factory badge</figcaption>
 </figure>
@@ -31,7 +31,7 @@ Substitute your OpenShift Dev Spaces URL (`https://`*`<openshift_dev_spaces_fqdn
 
 ## Results
 
-- The `README.md` file in your Git provider web interface displays the ![Factory badge](assets/98236222890cf3182590.svg) factory badge. Click the badge to open a workspace with your project in your OpenShift Dev Spaces instance.
+- The `README.md` file in your Git provider web interface displays the ![Factory badge](assets/dcb37ce48fdefa6d4111.svg) factory badge. Click the badge to open a workspace with your project in your OpenShift Dev Spaces instance.
 
 **Related concepts**  
 

@@ -41,7 +41,7 @@ Use the following principles to determine which images you need to mirror for yo
 
 - Then set the Cluster Samples Operator to `Managed` to install the image streams you have mirrored.
 
-## Using Cluster Samples Operator image streams with alternate or mirrored registries
+## Use Cluster Samples Operator image streams with alternate or mirrored registries
 
 You can use an alternate or mirror registry to host your images streams instead of using the Red Hat registry.
 

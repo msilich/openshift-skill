@@ -2,6 +2,12 @@
 
 You can configure Red Hat Advanced Cluster Security for Kubernetes to send events to QRadar by configuring a generic webhook integration in RHACS.
 
+<a id="qradar-integration-workflow-overview_integrate-with-qradar"></a>
+
+# QRadar integration workflow overview
+
+The integration workflow involves configuring a generic webhook in RHACS and adding an RHACS log source in QRadar.
+
 The following steps represent a high-level workflow for integrating RHACS with QRadar:
 
 1.  In RHACS:
@@ -13,7 +19,19 @@ The following steps represent a high-level workflow for integrating RHACS with Q
 
     2.  Identify policies for which you want to send notifications, and update the notification settings for those policies.
 
-2.  If QRadar does not automatically detect the log source, add an RHACS log source on the QRadar Console. For more information on configuring QRadar and RHACS, see the [Red Hat Advanced Cluster Security for Kubernetes](https://www.ibm.com/docs/en/dsm?topic=configuration-red-hat-advanced-cluster-security-kubernetes) IBM resource.
+2.  If QRadar does not automatically detect the log source, add an RHACS log source on the QRadar Console. For more information on configuring QRadar and RHACS, see the "Red Hat Advanced Cluster Security for Kubernetes IBM documentation".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Advanced Cluster Security for Kubernetes IBM documentation](https://www.ibm.com/docs/en/dsm?topic=configuration-red-hat-advanced-cluster-security-kubernetes)
+
+</div>
 
 <a id="webhook-configuring-acs_integrate-with-qradar"></a>
 
@@ -42,7 +60,7 @@ Procedure
 6.  If your webhook receiver uses an untrusted certificate, enter a CA certificate in the **CA certificate** field. Otherwise, leave it blank.
 
     > [!NOTE]
-    > The server certificate used by the webhook receiver must be valid for the endpoint DNS name. You can click **Skip TLS verification** to ignore this validation. Red Hat does not suggest turning off TLS verification. Without TLS verification, data could be intercepted by an unintended recipient.
+    > The server certificate used by the webhook receiver must be valid for the endpoint DNS name. You can click **Skip TLS verification** to ignore this validation. Red Hat does not suggest turning off TLS verification. Without TLS verification, an unintended recipient could intercept data.
 
 7.  Optional: Click **Enable audit logging** to receive alerts about all the changes made in Red Hat Advanced Cluster Security for Kubernetes.
 
@@ -55,7 +73,7 @@ Procedure
 
     - Custom **Header**, for example: `Authorization: Bearer <access_token>`
 
-9.  Use **Extra fields** to include additional key-value pairs in the JSON object that Red Hat Advanced Cluster Security for Kubernetes sends. For example, if your webhook receiver accepts objects from multiple sources, you can add `"source": "rhacs"` as an extra field and filter on this value to identify all alerts from Red Hat Advanced Cluster Security for Kubernetes.
+9.  Use **Extra fields** to include additional key-value pairs in the JSON object that Red Hat Advanced Cluster Security for Kubernetes sends. For example, if your webhook receiver accepts objects from many sources, you can add `"source": "rhacs"` as an extra field and filter on this value to identify all alerts from Red Hat Advanced Cluster Security for Kubernetes.
 
 10. Select **Test** to send a test message to verify that the integration with your generic webhook is working.
 
@@ -86,7 +104,7 @@ Procedure
 4.  In the **Enable notification** window, select the **webhook** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 

@@ -6,7 +6,7 @@ The Red Hat Advanced Cluster Security for Kubernetes (RHACS) system health dash
 
 # Analyzing and managing the system health information
 
-You can view all the health-related information associated with the Red Hat Advanced Cluster Security for Kubernetes (RHACS) components on the **System Health** page.
+You can view and manage health-related information for Red Hat Advanced Cluster Security for Kubernetes (RHACS) components, including downloading diagnostic bundles, administration usage data, and updating component certificates.
 
 <div>
 
@@ -25,9 +25,9 @@ Procedure
         > [!NOTE]
         > The **Administration usage** page displays the administration usage data you have collected, including the number of secured Kubernetes nodes and CPU units. The current usage reflects the last metrics received from Sensors, with a delay of about 5 minutes.
         >
-        > Maximum usage is aggregated hourly and only includes clusters that are still connected. The date range is inclusive and matches your time zone. This data is not sent to Red Hat or displayed as Prometheus metrics.
+        > RHACS aggregates maximum usage hourly and only includes clusters that are still connected. The date range is inclusive and matches your time zone. This data is not sent to Red Hat or displayed as Prometheus metrics.
 
-    2.  Enter the start and end date in `YYYY-MM-DD` format. If you do not specify the start and end date, the first and last day of the month is selected automatically.
+    2.  Enter the start and end date in `YYYY-MM-DD` format. If you do not specify the start and end date, RHACS automatically selects the first and last day of the month.
 
     3.  To download the administration usage data, click **Download CSV**.
 
@@ -37,7 +37,7 @@ Procedure
 
     2.  Optional: Choose the appropriate method to filter the platform data that you want to include in the compressed file:
 
-        - To filter the platform data based on specific clusters, select one or more clusters from the **Filter by clusters** drop-down list. If you do not select a cluster, all clusters are selected automatically.
+        - To filter the platform data based on specific clusters, select one or more clusters from the **Filter by clusters** drop-down list. If you do not select a cluster, RHACS automatically selects all clusters.
 
         - To filter the platform data according to the start time, enter a time in coordinated universal time (UTC) format, `yyyy-mm-ddThh:mmZ`. If you do not specify a start time, the diagnostic bundle includes the platform data for the last 20 minutes.
 
@@ -47,7 +47,7 @@ Procedure
 
     1.  Click **View clusters**.
 
-    2.  To display further details on a cluster, click on the cluster name.
+    2.  To display further details on a cluster, click the cluster name.
 
     3.  You can find all the status information associated with the selected cluster in the **Cluster summary** section.
 
@@ -135,9 +135,11 @@ Indicates the timestamp of the last health check or status update for the integr
 
 # Administration usage page overview
 
-When you click **Show administration usage** in the **System Health** page, you can view the product usage data for the number of secured Kubernetes nodes and CPU units for secured clusters based on metrics collected from Sensors. You can use this information to estimate Red Hat Advanced Cluster Security for Kubernetes (RHACS) consumption data for reporting.
+The **Administration usage** page displays product usage data for secured Kubernetes nodes and CPU units based on metrics collected from Sensors.
 
-For more information on how CPU units are defined in Kubernetes, see [CPU resource units](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu) (Kubernetes documentation).
+When you click **Show administration usage** in the **System Health** page, you can view the product usage data for the number of secured Kubernetes nodes and CPU units for secured clusters. You can use this information to estimate Red Hat Advanced Cluster Security for Kubernetes (RHACS) consumption data for reporting.
+
+For more information about how Kubernetes defines CPU units, see [CPU resource units](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu) in the Kubernetes documentation.
 
 > [!NOTE]
 > OpenShift Container Platform provides its own usage reports. You can use this information with self-managed Kubernetes systems.
@@ -159,7 +161,7 @@ Node count
 Indicates the maximum number of Kubernetes nodes that RHACS secures, measured hourly and aggregated for the time period that you specified.
 
 CPU units observation date  
-Indicates the date on which the maximum secured CPU units data was collected.
+Indicates the date on which RHACS collected the maximum secured CPU units data.
 
 Node count observation date  
-Indicates the date on which the maximum secured node count data was collected.
+Indicates the date on which RHACS collected the maximum secured node count data.

@@ -1,14 +1,30 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-If you are using [Google Cloud Security Command Center](https://cloud.google.com/security-command-center/) (Cloud SCC), you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to Cloud SCC. This guide explains how to integrate Red Hat Advanced Cluster Security for Kubernetes with Cloud SCC.
+If you are using Google Cloud Security Command Center (Cloud SCC), you can forward alerts from Red Hat Advanced Cluster Security for Kubernetes to Cloud SCC. This guide explains how to integrate Red Hat Advanced Cluster Security for Kubernetes with Cloud SCC.
+
+<a id="google-cloud-scc-integration-workflow-overview_integrate-with-google-cloud-scc"></a>
+
+# Integration workflow
 
 The following steps represent a high-level workflow for integrating Red Hat Advanced Cluster Security for Kubernetes with Cloud SCC.
 
 1.  Register a new security source with Google Cloud.
 
-2.  Provide the source ID and service account key to Red Hat Advanced Cluster Security for Kubernetes.
+2.  Give the source ID and service account key to Red Hat Advanced Cluster Security for Kubernetes.
 
 3.  Identify the policies you want to send notifications for, and update the notification settings for those policies.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Google Cloud Security Command Center](https://cloud.google.com/security-command-center/)
+
+</div>
 
 <a id="configure-google-cloud-scc_integrate-with-google-cloud-scc"></a>
 
@@ -24,9 +40,25 @@ Procedure
 
 </div>
 
-1.  Follow the [Adding vulnerability and threat sources to Cloud Security Command Center](https://cloud.google.com/security-command-center/docs/how-to-security-sources) guide and add Red Hat Advanced Cluster Security for Kubernetes as a trusted Cloud SCC source. Make a note of the **Source ID** that Google Cloud creates for your Red Hat Advanced Cluster Security for Kubernetes integration. If you do not see a source ID after registering, you can find it on the [Cloud SCC Security Sources page](https://console.cloud.google.com/security/command-center/settings/source-management).
+1.  Follow the "Adding vulnerability and threat sources to Cloud Security Command Center" guide and add Red Hat Advanced Cluster Security for Kubernetes as a trusted Cloud SCC source. Make a note of the **Source ID** that Google Cloud creates for your Red Hat Advanced Cluster Security for Kubernetes integration. If you do not see a source ID after registering, you can find it on the "Cloud SCC Security Sources page".
 
-2.  Create a key for the service account you created, or the existing account you used, in the previous step. See Google Cloud’s guide to [creating and managing service account keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) for details.
+2.  Create a key for the service account you created, or the existing account you used, in the earlier step. See "Creating and managing service account keys" for details.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Adding vulnerability and threat sources to Cloud Security Command Center](https://cloud.google.com/security-command-center/docs/how-to-security-sources)
+
+- [Cloud SCC Security Sources page](https://console.cloud.google.com/security/command-center/settings/source-management)
+
+- [Creating and managing service account keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
 
 </div>
 
@@ -44,9 +76,9 @@ Prerequisites
 
 </div>
 
-- A **service account** with the `Security Center Findings Editor` IAM role on the organization level. See [Access control with IAM](https://cloud.google.com/security-command-center/docs/access-control) for more information.
+- A **service account** with the `Security Center Findings Editor` IAM role on the organization level.
 
-- Either a [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) or a **Service account key (JSON)** for the service account. See [Creating a service account](https://cloud.google.com/iam/docs/creating-managing-service-accounts#creating) and [Creating service account keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys) for more information.
+- Either a workload identity or a **Service account key (JSON)** for the service account.
 
 </div>
 
@@ -74,6 +106,24 @@ Procedure
 
 </div>
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Access control with IAM](https://cloud.google.com/security-command-center/docs/access-control)
+
+- [Workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
+
+- [Creating a service account](https://cloud.google.com/iam/docs/creating-managing-service-accounts#creating)
+
+- [Creating service account keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys)
+
+</div>
+
 <a id="configure-policy-notifications_integrate-with-google-cloud-scc"></a>
 
 # Configuring policy notifications
@@ -97,7 +147,7 @@ Procedure
 4.  In the **Enable notification** window, select the **Google Cloud SCC** notifier.
 
     > [!NOTE]
-    > If you have not configured any other integrations, the system displays a message that no notifiers exist.
+    > If you have not configured any other integrations, the system displays a message that you have no configured notifiers.
 
 5.  Click **Enable**.
 

@@ -93,7 +93,9 @@ Additional resources
 
 # Pausing a MachineHealthCheck resource
 
-During the update process, nodes in the cluster might become temporarily unavailable. For worker nodes, the `MachineHealthCheck` resources might identify such nodes as unhealthy and reboot them. To avoid rebooting worker nodes, you must pause all the `MachineHealthCheck` resources before updating the cluster.
+During the update process, nodes in the cluster might become temporarily unavailable.
+
+For worker nodes, the `MachineHealthCheck` resources might identify such nodes as unhealthy and reboot them. To avoid rebooting worker nodes, you must pause all the `MachineHealthCheck` resources before updating the cluster.
 
 > [!NOTE]
 > Some `MachineHealthCheck` resources might not need to be paused. If your `MachineHealthCheck` resource relies on unrecoverable conditions, pausing that MHC is unnecessary.
@@ -371,7 +373,7 @@ Additional resources
 
 # Cluster update status using oc adm upgrade status
 
-When updating your cluster, the `oc adm upgrade` command returns limited information about the status of your update. The cluster administrator can use the `oc adm upgrade status` command to return specific information regarding a cluster update, including the status of the control plane and worker node updates. Worker is also known as compute.
+You can use the `oc adm upgrade status` command to get detailed cluster update information, including control plane and worker node status, beyond what the standard `oc adm upgrade` command provides.
 
 The `oc adm upgrade status` command is read-only and does not alter any state in your cluster.
 

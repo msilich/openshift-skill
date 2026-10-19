@@ -13,7 +13,7 @@ To meet your cluster node port requirements in OpenShift Container Platform, you
 >
 > If you expand the node port range and OpenShift CLI (`oc`) stops working because of a port conflict with the OpenShift Container Platform API server, you must create a new cluster.
 
-# Expanding the node port range
+# Expand the node port range
 
 To expand the node port range for your OpenShift Container Platform cluster after installation, you can use the `oc patch` command to update the `serviceNodePortRange` parameter. You can expand the range on either side, but you cannot shrink it after installation.
 

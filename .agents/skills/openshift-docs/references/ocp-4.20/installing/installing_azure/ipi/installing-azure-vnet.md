@@ -10,7 +10,9 @@ By deploying OpenShift Container Platform into an existing Azure VNet, you might
 
 ## Requirements for using your VNet
 
-When you deploy a cluster by using an existing VNet, you must perform additional network configuration before you install the cluster. In installer-provisioned infrastructure clusters, the installation program usually creates the following components, but it does not create them when you install into an existing VNet:
+When you deploy a cluster by using an existing VNet, you must perform additional network configuration before you install the cluster.
+
+In installer-provisioned infrastructure clusters, the installation program usually creates the following components, but it does not create them when you install into an existing VNet:
 
 - Subnets
 
@@ -98,7 +100,9 @@ Ports used for control plane machine to control plane machine communications
 
 ## Division of permissions
 
-Starting with OpenShift Container Platform 4.3, you do not need all of the permissions that are required for an installation program-provisioned infrastructure cluster to deploy a cluster. This change mimics the division of permissions that you might have at your company: some individuals can create different resources in your clouds than others. For example, you might be able to create application-specific items, like instances, storage, and load balancers, but not networking-related components such as VNets, subnet, or ingress rules.
+You do not need all of the permissions that are required for an installer-provisioned infrastructure cluster to deploy a cluster. This change mimics the division of permissions that you might have at your company: some individuals can create different resources in your clouds than others.
+
+For example, you might be able to create application-specific items, like instances, storage, and load balancers, but not networking-related components such as VNets, subnet, or ingress rules.
 
 The Azure credentials that you use when you create your cluster do not need the networking permissions that are required to make VNets and core networking components within the VNet, such as subnets, routing tables, internet gateways, NAT, and VPN. You still need permission to make the application resources that the machines within the cluster require, such as load balancers, security groups, storage accounts, and nodes.
 
@@ -417,7 +421,7 @@ Procedure
 
 </div>
 
-## Enabling confidential VMs
+## Enable confidential VMs
 
 To enable confidential VMs on Azure for your OpenShift Container Platform cluster, you can configure the `install-config.yaml` file before deployment. Apply the settings to control plane nodes, compute nodes, or all nodes as needed.
 

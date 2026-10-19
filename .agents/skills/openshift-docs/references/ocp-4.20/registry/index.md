@@ -50,7 +50,7 @@ A service exposes a running application on a set of pods.
 
 # Integrated OpenShift image registry
 
-OpenShift Container Platform provides a built-in container image registry that runs as a standard workload on the cluster. The registry is configured and managed by an infrastructure Operator. The registry provides an out-of-the-box solution that runs on top of existing cluster infrastructure, so that you can manage the images that run workloads.
+OpenShift Container Platform provides a built-in container image registry that runs as a standard workload on the cluster. An infrastructure Operator configures and manages the registry on top of existing cluster infrastructure.
 
 You can scale the registry up or down like any other cluster workload and the registry does not require specific infrastructure provisioning. The registry also integrates into the cluster user authentication and authorization system, which means that defining user permissions on image resources controls access to create and retrieve images.
 
@@ -191,9 +191,9 @@ Procedure
 
 </div>
 
-# Creating containers by using images from third-party registries
+# Create containers by using images from third-party registries
 
-Some container image registries require access authorization. Podman is an open source tool for managing containers and container images and interacting with image registries. You can use Podman to authenticate your credentials, pull the registry image, and store local images in a local file system. The procedure provides a generic example of authenticating the registry with Podman.
+Some container image registries require access authorization. You can use Podman to authenticate your credentials, pull registry images, and store local images in a local file system.
 
 OpenShift Container Platform can communicate with registries to access private image repositories by using credentials supplied by the user. This allows OpenShift Container Platform to push and pull images to and from private repositories.
 
@@ -232,7 +232,9 @@ Procedure
 
 # Red Hat Quay registries
 
-If you need an enterprise-quality container image registry, Red Hat Quay is available both as a hosted service and as software that you can install in your own data center or cloud environment. Advanced features in Red Hat Quay include geo-replication, image scanning, and the ability to roll back images.
+If you need an enterprise-quality container image registry, Red Hat Quay is available both as a hosted service and as software that you can install in your own data center or cloud environment.
+
+Advanced features in Red Hat Quay include geo-replication, image scanning, and the ability to roll back images.
 
 Visit the Quay.io site to set up your own hosted Quay registry account. After that, follow the Quay Tutorial to log in to the Quay registry and start managing your images.
 

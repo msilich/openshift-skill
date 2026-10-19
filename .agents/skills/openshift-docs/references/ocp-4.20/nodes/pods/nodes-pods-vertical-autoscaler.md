@@ -55,7 +55,7 @@ Administrators can use the VPA to better use cluster resources, such as preventi
 > [!NOTE]
 > If you stop running the VPA or delete a specific VPA CR in your cluster, the resource requests for the pods already modified by the VPA do not change. However, any new pods get the resources defined in the workload object, not the previous recommendations made by the VPA.
 
-# Installing the Vertical Pod Autoscaler Operator
+# Install the Vertical Pod Autoscaler Operator
 
 You can install the Vertical Pod Autoscaler Operator (VPA) by using the OpenShift Container Platform web console.
 
@@ -136,7 +136,7 @@ Verification
 
 </div>
 
-# Moving the Vertical Pod Autoscaler Operator components
+# Move the Vertical Pod Autoscaler Operator components
 
 You can move the VPA Operator and component pods to infrastructure or worker nodes by adding a node selector to the VPA subscription and the `VerticalPodAutoscalerController` CR.
 
@@ -1162,7 +1162,7 @@ spec:
 
 </div>
 
-## Using an alternative recommender
+## Use an alternative recommender
 
 You can use your own recommender to autoscale based on your own algorithms. If you do not specify an alternative recommender, OpenShift Container Platform uses the default recommender, which suggests CPU and memory requests based on historical usage.
 
@@ -1356,7 +1356,7 @@ Procedure
 
 </div>
 
-# Using the Vertical Pod Autoscaler Operator
+# Use the Vertical Pod Autoscaler Operator
 
 You can use the Vertical Pod Autoscaler Operator (VPA) to help you maintain the optimal CPU and memory usage for your pods by creating a VPA custom resource (CR). The CR indicates the pods to analyze and determines the actions for the VPA to take with those pods.
 
@@ -1634,7 +1634,7 @@ spec:
 
 </div>
 
-# Uninstalling the Vertical Pod Autoscaler Operator
+# Uninstall the Vertical Pod Autoscaler Operator
 
 You can remove the Vertical Pod Autoscaler Operator (VPA) from your OpenShift Container Platform cluster.
 

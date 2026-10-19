@@ -2,7 +2,7 @@
 
 If you no longer need the Leader Worker Set Operator in your cluster, you can uninstall the Operator and remove its related resources.
 
-# Uninstalling the Leader Worker Set Operator
+# Uninstall the Leader Worker Set Operator
 
 You can use the web console to uninstall the Leader Worker Set Operator if you no longer need the Operator in your cluster.
 
@@ -54,7 +54,7 @@ Procedure
 
 </div>
 
-# Uninstalling Leader Worker Set Operator resources
+# Uninstall Leader Worker Set Operator resources
 
 Optionally, remove custom resources (CRs) and the associated namespace after the Leader Worker Set Operator is uninstalled. This cleans up all remaining Leader Worker Set artifacts.
 

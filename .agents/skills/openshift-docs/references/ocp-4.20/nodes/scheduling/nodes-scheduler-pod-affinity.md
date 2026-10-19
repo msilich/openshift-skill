@@ -154,7 +154,7 @@ Specifies the relationship between the label on the existing pod and the set of 
 > [!NOTE]
 > If labels on a node change at runtime such that the affinity rules on a pod are no longer met, the pod continues to run on the node.
 
-# Configuring a pod affinity rule
+# Configure a pod affinity rule
 
 You can use the following example pod specifications to create a pod with a label and a pod that uses affinity to allow scheduling with that pod.
 
@@ -254,7 +254,7 @@ Procedure
 
 </div>
 
-# Configuring a pod anti-affinity rule
+# Configure a pod anti-affinity rule
 
 To specify a preference to prevent a pod from being scheduling with another pod, you can create a pod with a label and a pod that uses an anti-affinity preferred rule.
 

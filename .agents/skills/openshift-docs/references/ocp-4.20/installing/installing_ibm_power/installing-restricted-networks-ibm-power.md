@@ -49,7 +49,7 @@ Additional resources
 
 # About installations in restricted networks
 
-You can install OpenShift Container Platform 4.20 in a restricted network without an active internet connection to obtain software components. Restricted network installations can use installer-provisioned or user-provisioned infrastructure, depending on the cloud platform to which you are installing the cluster.
+You can install OpenShift Container Platform 4.20 in a restricted network that lacks an active internet connection. These restricted installations use installer-provisioned or user-provisioned infrastructure, depending on your cloud platform.
 
 To complete a restricted network installation, you must create a registry that mirrors the contents of the OpenShift image registry and contains the installation media. You can create this registry on a mirror host, which can access both the internet and your closed network, or by using other methods that meet your restrictions.
 
@@ -279,8 +279,8 @@ This section provides details about the ports that are required.
 | `500` | IPsec IKE packets |  |
 | `4500` | IPsec NAT-T packets |  |
 | `123` | Network Time Protocol (NTP) on UDP port `123`. If an external NTP time server is configured, you must open UDP port `123`. |  |
-| TCP/UDP | `30000`-`32767` |  |
-| Kubernetes node port | ESP | N/A |
+| TCP/UDP | `30000`-`32767` | Kubernetes node port |
+| ESP | N/A | IPsec Encapsulating Security Payload (ESP) |
 
 Ports used for all-machine to all-machine communications
 
@@ -506,7 +506,7 @@ Provides reverse DNS resolution for the Kubernetes API. The PTR record refers to
 Provides reverse DNS resolution for the bootstrap machine.
 
 `control-plane0.ocp4.example.com.`
-Provides rebootstrap.ocp4.example.com.verse DNS resolution for the control plane machines.
+Provides reverse DNS resolution for the control plane machines.
 
 `compute0.ocp4.example.com.`
 Provides reverse DNS resolution for the compute machines.
@@ -933,7 +933,7 @@ Procedure
 
 # Generating a key pair for cluster node SSH access
 
-During an OpenShift Container Platform installation, you can provide an SSH public key to the installation program. The key is passed to the Red Hat Enterprise Linux CoreOS (RHCOS) nodes through their Ignition config files and is used to authenticate SSH access to the nodes. The key is added to the `~/.ssh/authorized_keys` list for the `core` user on each node, which enables password-less authentication.
+During an OpenShift Container Platform installation, you can provide an SSH public key to the installation program. The key is passed to Red Hat Enterprise Linux CoreOS (RHCOS) nodes through their Ignition config files and is added to `~/.ssh/authorized_keys` for the `core` user on each node.
 
 The key is added to the `~/.ssh/authorized_keys` list for the `core` user on each node, which enables password-less authentication. After the key is passed to the nodes, you can use the key pair to SSH in to the RHCOS nodes as the user `core`. To access the nodes through SSH, the private key identity must be managed by SSH for your local user.
 
@@ -1364,7 +1364,9 @@ For three-node cluster installations, follow these next steps:
 
 # Cluster Network Operator configuration
 
-To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity. Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
+To manage cluster networking, configure the Cluster Network Operator (CNO) `Network` custom resource (CR) named `cluster` so the cluster uses the correct IP ranges and network plugin settings for reliable pod and service connectivity.
+
+Some settings and fields are inherited at the time of install or by the `default.Network.type` plugin, OVN-Kubernetes.
 
 The CNO configuration inherits the following fields during cluster installation from the `Network` API in the `Network.config.openshift.io` API group:
 
@@ -2602,21 +2604,19 @@ Procedure
 
       You can now continue on to create the cluster.
 
-</div>
+      > [!IMPORTANT]
+      > Additional postinstallation steps are required to fully enable multipathing. For more information, see "Enabling multipathing with kernel arguments on RHCOS" in *Postinstallation machine configuration tasks*.
 
-> [!IMPORTANT]
-> Additional postinstallation steps are required to fully enable multipathing. For more information, see "Enabling multipathing with kernel arguments on RHCOS" in *Postinstallation machine configuration tasks*.
+    In case of MPIO failure, use the `bootlist` command to update the boot device list with alternate logical device names. The command displays a boot list and designates the possible boot devices for when the system is booted in normal mode.
 
-In case of MPIO failure, use the `bootlist` command to update the boot device list with alternate logical device names. The command displays a boot list and designates the possible boot devices for when the system is booted in normal mode.
-
-1.  To display a boot list and specify the possible boot devices if the system is booted in normal mode, enter the following command:
+4.  To display a boot list and specify the possible boot devices if the system is booted in normal mode, enter the following command:
 
     ``` terminal
     $ bootlist -m normal -o
     sda
     ```
 
-2.  To update the boot list for normal mode and add alternate device names, enter the following command:
+5.  To update the boot list for normal mode and add alternate device names, enter the following command:
 
     ``` terminal
     $ bootlist -m normal -o /dev/sdc /dev/sdd /dev/sde
@@ -2627,9 +2627,13 @@ In case of MPIO failure, use the `bootlist` command to update the boot device li
 
     If the original boot disk path is down, the node reboots from the alternate device registered in the normal boot device list.
 
+</div>
+
 # Waiting for the bootstrap process to complete
 
-The OpenShift Container Platform bootstrap process begins after the cluster nodes first boot into the persistent RHCOS environment that has been installed to disk. The configuration information provided through the Ignition config files is used to initialize the bootstrap process and install OpenShift Container Platform on the machines. You must wait for the bootstrap process to complete.
+After your cluster nodes first boot into the persistent RHCOS environment installed to disk, wait for the OpenShift Container Platform bootstrap process to complete.
+
+The configuration information provided through the Ignition config files is used to initialize the bootstrap process and install OpenShift Container Platform on the machines.
 
 <div>
 
@@ -2775,7 +2779,7 @@ Next steps
 
 </div>
 
-# Approving the certificate signing requests for your machines
+# Approve the certificate signing requests for your machines
 
 To allow newly added machines to join your OpenShift Container Platform cluster, confirm that the cluster approves pending certificate signing requests (CSRs), or approve them yourself. Approve client requests first, then server requests.
 
@@ -3063,7 +3067,7 @@ Configure a persistent volume, which is required for production clusters. Where 
 
 You can also allow the image registry to use block storage types by using the `Recreate` rollout strategy during upgrades.
 
-### Changing the image registry’s management state
+### Change the image registry’s management state
 
 To start the image registry, you must change the Image Registry Operator configuration’s `managementState` from `Removed` to `Managed`.
 
@@ -3083,7 +3087,7 @@ Procedure
 
 </div>
 
-### Configuring registry storage for IBM Power
+### Configure registry storage for IBM Power
 
 As a cluster administrator, following installation you must configure your registry to use storage.
 
@@ -3205,7 +3209,7 @@ Procedure
 
 </div>
 
-### Configuring storage for the image registry in non-production clusters
+### Configure storage for the image registry in non-production clusters
 
 You must configure storage for the Image Registry Operator. For non-production clusters, you can set the image registry to an empty directory, but you lose all images if you restart the registry.
 

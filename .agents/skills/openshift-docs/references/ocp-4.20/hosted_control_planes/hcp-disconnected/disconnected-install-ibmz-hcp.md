@@ -208,7 +208,7 @@ Procedure
 
 # Adding the registry certificate authority to the hosted cluster
 
-When you are deploying hosted control planes on IBM Z in a disconnected environment, include the `additional-trust-bundle` and `image-content-sources` resources. The hosted cluster uses those resources to inject the certificate authority into the data plane compute nodes so that the images are pulled from the registry.
+When you deploy hosted control planes on IBM Z in a disconnected environment, include the `additional-trust-bundle` and `image-content-sources` resources. The hosted cluster uses these resources to inject certificate authorities into data plane compute nodes so that images pull from the registry.
 
 <div>
 

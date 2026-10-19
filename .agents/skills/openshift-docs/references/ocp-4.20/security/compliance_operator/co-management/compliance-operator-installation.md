@@ -14,7 +14,7 @@ Before you can use the Compliance Operator, you must ensure it is deployed in th
 > [!IMPORTANT]
 > If the `restricted` Security Context Constraints (SCC) have been modified to contain the `system:authenticated` group or has added `requiredDropCapabilities`, the Compliance Operator might not function properly due to permissions issues. You can create a custom SCC for the Compliance Operator scanner pod service account. For more information, see Additional resources.
 
-# Installing the Compliance Operator through the web console
+# Install the Compliance Operator through the web console
 
 You can install the Compliance Operator through the OpenShift Container Platform web console by using the OperatorHub interface.
 
@@ -72,7 +72,7 @@ If the Operator is not installed successfully:
 
 2.  Navigate to the **Workloads** → **Pods** page and check the logs in any pods in the `openshift-compliance` project that are reporting issues.
 
-# Installing the Compliance Operator using the CLI
+# Install the Compliance Operator using the CLI
 
 You can install the Compliance Operator by using the OpenShift CLI by creating the required namespace, Operator group, and subscription objects.
 
@@ -219,7 +219,7 @@ Verification
 
 </div>
 
-# Installing the Compliance Operator on ROSA hosted control planes (HCP)
+# Install the Compliance Operator on ROSA hosted control planes (HCP)
 
 You can install the Compliance Operator on Red Hat OpenShift Service on AWS by using the OpenShift CLI by creating the required namespace, Operator group, and subscription objects.
 
@@ -372,7 +372,7 @@ Verification
 
 </div>
 
-# Installing the Compliance Operator on hosted control planes
+# Install the Compliance Operator on hosted control planes
 
 Install the Compliance Operator on hosted control planes by creating a `Subscription` file in the software catalog so you can run compliance scans in a hosted control plane environment.
 

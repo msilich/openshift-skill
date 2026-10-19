@@ -61,7 +61,7 @@ When creating your plugin, follow these guidelines for using PatternFly:
 
 - The console application is responsible for loading base styles for all supported PatternFly versions.
 
-## Translating messages with react-i18next
+## Translate messages with react-i18next
 
 The `console-plugin-template` plugin template demonstrates how you can translate messages with react-i18next.
 
