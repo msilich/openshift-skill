@@ -1,0 +1,20 @@
+name: Pinned documentation toolchain
+description: Install the build-only dependencies from the documentation locks
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      with:
+        python-version: '3.12'
+    - shell: bash
+      run: |
+        set -euo pipefail
+        python -m pip install -r tools/docs/requirements.lock.txt -r tools/docs/requirements-devspaces.lock.txt
+        gem install --user-install asciidoctor --version 2.0.23 --no-document
+        ruby -r rubygems -e 'puts Gem.user_dir + "/bin"' >> "$GITHUB_PATH"
+        curl --fail --location --retry 3 --output "$RUNNER_TEMP/pandoc.tar.gz" \
+          https://github.com/jgm/pandoc/releases/download/3.7.0.2/pandoc-3.7.0.2-linux-amd64.tar.gz
+        printf '8f8f67fdd540b6519326b0ac49d5c55c5d5d15e43920e80a086e02c8aff83268  %s\n' \
+          "$RUNNER_TEMP/pandoc.tar.gz" | sha256sum --check
+        tar -xzf "$RUNNER_TEMP/pandoc.tar.gz" -C "$RUNNER_TEMP"
+        printf '%s\n' "$RUNNER_TEMP/pandoc-3.7.0.2/bin" >> "$GITHUB_PATH"

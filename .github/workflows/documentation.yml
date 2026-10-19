@@ -1,0 +1,81 @@
+name: Documentation maintenance
+
+on:
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+  pull_request:
+    branches: [main, v4.22]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/docs-toolchain
+      - name: Validate offline bundle and update tooling
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s tests -v
+
+  update:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: write
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: [main, v4.22]
+    concurrency:
+      group: docs-update-${{ matrix.branch }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ matrix.branch }}
+          persist-credentials: false
+      - uses: ./.github/actions/docs-toolchain
+      - name: Refresh fixed-version documentation and compare repeated builds
+        run: |
+          python tools/docs/update.py --report "$RUNNER_TEMP/docs-report.md"
+          cat "$RUNNER_TEMP/docs-report.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Validate candidate offline bundle
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s tests -v
+      - name: Create or update the documentation PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_BRANCH: ${{ matrix.branch }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --quiet && exit 0
+          docs_branch="automation/docs-$BASE_BRANCH"
+          gh auth setup-git
+          docs_expected=$(git ls-remote origin "refs/heads/$docs_branch" | cut -f1)
+          git switch -c "$docs_branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .agents/skills tools/docs sources.lock.json README.md THIRD_PARTY_NOTICES.md
+          git commit -m "docs: refresh pinned documentation for $BASE_BRANCH"
+          git push --force-with-lease="refs/heads/$docs_branch:$docs_expected" origin "HEAD:refs/heads/$docs_branch"
+          docs_pr=$(gh pr list --base "$BASE_BRANCH" --head "$docs_branch" --state open --json number --jq '.[0].number // empty')
+          if [[ -n "$docs_pr" ]]; then
+            gh pr edit "$docs_pr" --body-file "$RUNNER_TEMP/docs-report.md"
+          else
+            gh pr create --base "$BASE_BRANCH" --head "$docs_branch" \
+              --title "docs: refresh offline documentation ($BASE_BRANCH)" \
+              --body-file "$RUNNER_TEMP/docs-report.md"
+          fi

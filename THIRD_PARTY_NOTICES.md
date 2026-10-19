@@ -71,7 +71,7 @@ and the referenced `SOURCE.json` file.
 - License: Creative Commons Attribution-ShareAlike 3.0 Unported (CC-BY-SA-3.0),
   with Red Hat's Section 4d waiver retained in the legal notice.
 - This snapshot is sourced from official HTML, not a claimed public Git revision.
-  All 302 TOC topics and 46 illustrations are bundled. Exact response/fragment
+  The full TOC inventory and referenced illustrations are bundled. Exact response/fragment
   hashes, retrieval dates, exclusions and link adjustments are in the snapshot's
   `SOURCE.json`; the archive is pinned by `tools/docs/devspaces.lock.json`.
 - HTML source fragments and illustrations: `tools/docs/snapshots/devspaces-3.29.zip`.
