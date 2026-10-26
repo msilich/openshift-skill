@@ -9,9 +9,9 @@ Alternatively, you can use the `virtctl vmexport` command to create a `VirtualMa
 > [!NOTE]
 > You can migrate virtual machines between OpenShift Virtualization clusters by using the Migration Toolkit for Virtualization.
 
-# Creating a VirtualMachineExport custom resource
+# Create a VirtualMachineExport custom resource
 
-You can create a `VirtualMachineExport` custom resource (CR) to export persistent volume claims (PVCs) from a `VirtualMachine`, `VirtualMachineSnapshot`, or `PersistentVolumeClaim` CR.
+You can create a `VirtualMachineExport` custom resource (CR) to export the persistent volume claims (PVCs) of a virtual machine (VM), a VM snapshot, or a single PVC. The export provides links for downloading the volume.
 
 You can export the following objects:
 
@@ -165,9 +165,9 @@ Procedure
 
 </div>
 
-# Accessing exported virtual machine manifests
+# Access exported VM manifests
 
-After you export a virtual machine (VM) or snapshot, you can get the `VirtualMachine` manifest and related information from the export server.
+You can retrieve the `VirtualMachine` manifest from the export server after you export a virtual machine (VM) or a VM snapshot. Use the manifest to create the VM on a target cluster.
 
 <div>
 

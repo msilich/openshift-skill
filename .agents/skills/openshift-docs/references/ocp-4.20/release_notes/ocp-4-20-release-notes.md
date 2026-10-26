@@ -1722,6 +1722,56 @@ This section will continue to be updated over time to provide notes on enhanceme
 > [!IMPORTANT]
 > For any OpenShift Container Platform release, always review the instructions on [updating your cluster](../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console) properly.
 
+## RHSA-2026:83502 - OpenShift Container Platform 4.20.43 bug fix and security update
+
+Issued: 20 October 2026
+
+OpenShift Container Platform release 4.20.43 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:83502](https://access.redhat.com/errata/RHSA-2026:83502) advisory. There are no RPM packages for this release.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.43 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, in dual-stack hosted clusters, mismatched IP SAN (storage area network) byte lengths such as 4-byte versus 16-byte IPv4-mapped addresses caused false validation failures. As a consequence, the Control Plane Operator was forced to continuously regenerate `kas-server-crt`, which caused generation churn that could stall installations. With this release, IP SANs are normalized using net.IP.To16() before comparison. As a result, unnecessary certificate regeneration and continuous `kube-apiserver` rolling updates do not occur. ([OCPBUGS-112733](https://issues.redhat.com/browse/OCPBUGS-112733))
+
+- Before this update, hosted clusters in non-commercial Amazon Web Services (AWS) regions (ISO or classified) defaulted to an unsupported 9001 maximum transmission unit (MTU), causing networking failures. With this release, an optional immutable MTU field in the `OVNKubernetesConfig` parameter and an `--ovn-kubernetes-mtu` CLI flag to configure a compatible MTU are added. ([OCPBUGS-129370](https://issues.redhat.com/browse/OCPBUGS-129370))
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:79320 - OpenShift Container Platform 4.20.42 bug fix and security update
+
+Issued: 13 October 2026
+
+OpenShift Container Platform release 4.20.42 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:79320](https://access.redhat.com/errata/RHSA-2026:79320) advisory. The RPM packages that are included in the update are provided by the [RHBA-2026:79315](https://access.redhat.com/errata/RHBA-2026:79315) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.42 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, the Berkeley Packet Filter (BPF) filesystem did not allow dots (".") in filenames. As a consequence, the Ingress Node Firewall could not attach rules to virtual LAN (VLAN) subinterfaces such as `bond0.12`. Attempting to pin a link for an interface containing a dot failed with an `operation not permitted` error. With this release, the Ingress Node Firewall sanitizes pin filenames by converting dots to a placeholder string. For example, `vlan.100` becomes `vlan_dot_100` before writing to the BPF filesystem. As a result, firewall rules can be successfully applied to subinterfaces such as VLANs on top of bonded interfaces. ([OCPBUGS-31495](https://issues.redhat.com/browse/OCPBUGS-31495))
+
+- Before this update, when you removed a `MachineConfig` object that required a reversion to a `MachineOSBuild` custom resource in a terminal state, the digested image push configuration was not changed. As a consequence, removing a `MachineConfig` object in image mode failed and left the associated `MachineConfigPool` custom resource in an `Updating` state indefinitely. With this release, terminal builds update correctly when the digested image push configuration changes, enabling image reuse for a new build. As a result, you can successfully delete `MachineConfig` objects in an image mode cluster. ([OCPBUGS-128460](https://issues.redhat.com/browse/OCPBUGS-128460))
+
+- Before this update, when a node with an assigned `EgressIP` object was rebooted, the cluster manager immediately reassigned the `EgressIP` object to a new node without waiting for the old node to remove it. As a consequence, both the old and new nodes responded to ARP requests for the same `EgressIP` object with different MAC addresses, causing MAC address flapping. This could overload network switches, trigger port blocking, or disrupt network infrastructure depending on the configuration. With this release, the `EgressIP` object removal process on the old node is prioritized to complete before the new node announces the IP address. As a result, MAC address flapping and associated network disruptions are prevented. ([OCPBUGS-128980](https://issues.redhat.com/browse/OCPBUGS-128980))
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
 ## RHSA-2026:74380 - OpenShift Container Platform 4.20.41 bug fix and security update
 
 Issued: 06 October 2026

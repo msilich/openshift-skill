@@ -24,6 +24,10 @@ Visualizes encrypted network traffic with lock icons in the topology view and id
 Remediation prioritization
 Targets workloads using deprecated protocols for updates by filtering and analyzing TLS fields to isolate problematic connections requiring immediate attention.
 
+## TLS Tracking feature view
+
+When TLS tracking is enabled, you can select the **TLS Tracking** preconfigured feature view from the view selector in the **Network Traffic** page. This view automatically displays TLS-specific panels and columns, providing faster access to TLS monitoring metrics without manual configuration.
+
 ## TLS traffic monitoring workflow phases
 
 To monitor TLS traffic effectively, complete the following phases:
@@ -192,7 +196,7 @@ Procedure
 
 3.  Filter traffic by message type to view complete TLS metadata:
 
-    1.  In the filter bar, select **TLS Types** and choose **ServerHello** from the dropdown menu.
+    1.  In the filter bar, select **TLS Types** and select **ServerHello** from the dropdown menu.
 
         `ServerHello` messages contain negotiated TLS metadata such as cipher suite and cryptographic group information.
 
@@ -216,7 +220,7 @@ Procedure
 
     1.  Click the **Overview** tab.
 
-    2.  Review the default TLS panels, which include **TLS usage (network flows per second)** and **TLS per version (network flows per second)**.
+    2.  Select the **TLS Tracking** feature view from the view selector to display preconfigured TLS panels and columns, or review the default TLS panels, which include **TLS usage (network flows per second)** and **TLS per version (network flows per second)**.
 
     3.  Optional: To view additional TLS metrics, click **Manage panels** to select and display additional panels, such as **TLS per group (network flows per second)** or **TLS per cipher suite (network flows per second)**.
 
@@ -247,6 +251,143 @@ Procedure
         - **Flows rate per TLS version**: Displays traffic trends by TLS version over time.
 
         - **Flows rate per TLS group**: Displays traffic by TLS group over time.
+
+</div>
+
+# Configure TLS security alerts
+
+The Network Observability Operator `TLSInsecureVersion` health rule alerts when network traffic uses deprecated or insecure TLS versions.
+
+When TLS tracking is enabled, this rule alerts when traffic uses deprecated TLS protocols (TLS 1.0, TLS 1.1, or SSL variants).
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- Network Observability Operator is installed and running.
+
+- TLS tracking is enabled in the `FlowCollector` resource.
+
+- You have `cluster-admin` privileges.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Edit the `FlowCollector` custom resource by running the following command:
+
+    ``` terminal
+    $ oc edit flowcollector cluster
+    ```
+
+2.  Configure the `TLSInsecureVersion` health rule in the `spec.processor.metrics.healthRules` field:
+
+    ``` yaml
+    apiVersion: flows.netobserv.io/v1beta2
+    kind: FlowCollector
+    metadata:
+      name: cluster
+    spec:
+      processor:
+        metrics:
+          healthRules:
+          - template: TLSInsecureVersion
+            mode: Alert
+            variants:
+            - thresholds:
+                warning: "5"
+              groupBy: Namespace
+    # ...
+    ```
+
+    where:
+
+    `mode`
+    Set to `Alert` to generate Prometheus alerts, or `Recording` to display violations in the **Network Health** dashboard without triggering alerts.
+
+    `thresholds.warning`
+    Threshold percentage. Alert fires when more than 5% of TLS traffic uses insecure versions (TLS 1.0, TLS 1.1, or SSL).
+
+    `groupBy`
+    Group alerts by `Namespace`, `Node`, or `Workload`. Omit `groupBy` for cluster-wide aggregation.
+
+    > [!NOTE]
+    > Customizing a health rule replaces the default configuration. To retain default settings, manually include them in the custom resource.
+
+3.  Optional: To disable the `TLSInsecureVersion` alert entirely, add it to the `disableAlerts` list:
+
+    ``` yaml
+    apiVersion: flows.netobserv.io/v1beta2
+    kind: FlowCollector
+    metadata:
+      name: cluster
+    spec:
+      processor:
+        metrics:
+          disableAlerts:
+          - TLSInsecureVersion
+    ```
+
+4.  Save and exit your editor.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Verification
+
+</div>
+
+1.  Verify the Network Observability Operator created the alerting rule by running the following command:
+
+    ``` terminal
+    $ oc get prometheusrule -n netobserv
+    ```
+
+    <div class="formalpara">
+
+    <div class="title">
+
+    Example output
+
+    </div>
+
+    ``` terminal
+    NAME                               AGE
+    netobserv-health-alerts            5m
+    ```
+
+    </div>
+
+2.  In the OpenShift Container Platform web console, go to **Observe** → **Alerting**.
+
+3.  Select the **Alerting Rules** tab.
+
+4.  Filter on `TLSInsecureVersion` to view the generated alert variants (for example, `TLSInsecureVersion_PerNamespaceWarning`).
+
+5.  When network observability detects insecure TLS traffic exceeding the configured threshold, alerts are triggered and are displayed in the **Alerts** view.
+
+6.  Verify that TLS security violations are displayed in the **Network Health** dashboard:
+
+    1.  Go to **Observe** → **Network Traffic**.
+
+    2.  Click the **Health** tab.
+
+    3.  Select the **Namespaces**, **Nodes**, or **Workloads** tab based on your `groupBy` configuration.
+
+    4.  TLS security violations appear in the health dashboard with links to investigate the affected traffic.
 
 </div>
 

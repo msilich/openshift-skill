@@ -2,7 +2,7 @@
 
 Configure the Network Observability Operator by updating the cluster-wide `FlowCollector` API resource (cluster) to manage component configurations and flow collection settings.
 
-The `FlowCollector` is explicitly created during installation. Since this resource operates cluster-wide, only a single `FlowCollector` is allowed, and it must be named `cluster`. For more information, see the "FlowCollector API reference".
+The `FlowCollector` is explicitly created during installation. Since this resource operates cluster-wide, only a single `FlowCollector` is allowed, and it must be named `cluster`. For more information, see the "\`FlowCollector\` API reference".
 
 # View the FlowCollector resource
 
@@ -97,11 +97,39 @@ Additional resources
 
 </div>
 
-- [FlowCollector API reference](flowcollector-api.md#network-observability-flowcollector-api-specifications_network_observability)
+- [`FlowCollector` API reference](network-observability-api-reference.md#flowcollector-api_network_observability)
 
 - [Working with conversation tracking](observing-network-traffic.md#network-observability-working-with-conversations_nw-observe-network-traffic)
 
 </div>
+
+# OpenShift TLS security profile support
+
+The Network Observability Operator automatically inherits the cluster-wide TLS security profile configuration from OpenShift Container Platform, applying consistent encryption standards to managed components when TLS is enabled.
+
+The Network Observability Operator reads the TLS security profile from the `APIServer` configuration and applies the profile’s minimum TLS version, cipher suites, and cryptographic curve preferences to its internal servers and managed components when TLS is enabled for those components.
+
+This feature does not enable TLS. This feature ensures that components with TLS enabled use the cluster’s security profile. No manual configuration is required. The Network Observability Operator manages this automatically.
+
+## Affected components
+
+The TLS security profile applies to the following network observability components:
+
+- Operator metrics and webhook servers
+
+- eBPF agent
+
+- `flowlogs-pipeline`
+
+- Console plugin
+
+When the TLS security profile changes, the Network Observability Operator automatically restarts to load the updated settings and reconciles the affected managed workloads. These workloads might undergo a rolling update to apply the new TLS configuration.
+
+## Expected behavior during TLS profile changes
+
+When the cluster TLS security profile changes, the API server rolls out the new configuration across the control plane. During this rollout, network observability components might temporarily report a degraded status, and flow collection or access to flows might be interrupted.
+
+This occurs because the Network Observability Operator and its managed components restart to apply the updated TLS settings while the cluster reconciles the new security profile. Normal operation resumes after the rollout completes and all components have restarted with the new TLS configuration.
 
 # Grant permissions for custom namespace and secret access
 
@@ -576,7 +604,7 @@ Additional resources
 
 </div>
 
-- [Network flows format reference](json-flows-format-reference.md#network-observability-flows-format_json_reference)
+- [Network flows format reference](network-observability-api-reference.md#network-flows-format_network_observability)
 
 </div>
 
@@ -806,6 +834,6 @@ Additional resources
 
 - [Network observability without Loki](installing-operators.md#network-observability-without-loki_network_observability)
 
-- [Network Flows format reference](json-flows-format-reference.md#network-observability-flows-format_json_reference)
+- [Network Flows format reference](network-observability-api-reference.md#network-flows-format_network_observability)
 
 </div>

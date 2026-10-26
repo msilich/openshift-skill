@@ -4,9 +4,9 @@ You can create a service for a virtual machine (VM) and connect to the IP addres
 
 After you create a service with `virtctl`, you must add `special: key` to the `spec.template.metadata.labels` stanza of the `VirtualMachine` manifest. If the cluster network cannot handle the traffic load, consider using a secondary network for VM access.
 
-# About services
+# Service types for VM network access
 
-A Kubernetes service exposes network access for clients to an application running on a set of pods. Services offer abstraction, load balancing, and, in the case of the `NodePort` and `LoadBalancer` types, exposure to the outside world.
+A Kubernetes service exposes an application running on a set of pods to network clients. Services provide abstraction and load balancing, and the `NodePort` and `LoadBalancer` types also expose the application outside the cluster.
 
 `ClusterIP`
 Exposes the service on an internal IP address and as a DNS name to other applications within the cluster. A single service can map to multiple virtual machines. When a client tries to connect to the service, the client’s request is load balanced among available backends. `ClusterIP` is the default service type.
@@ -20,9 +20,9 @@ Creates an external load balancer in the current cloud (if supported) and assign
 > [!NOTE]
 > For on-premise clusters, you can configure a load balancing service by deploying the MetalLB Operator.
 
-# Enabling load balancer service creation by using the web console
+# Enable load balancer services by using the web console
 
-You can enable the creation of load balancer services for a virtual machine (VM) by using the OpenShift Container Platform web console.
+You can enable the creation of load balancer services for a virtual machine (VM) from the OpenShift Container Platform web console. This setting must be on before you can create a load balancer service for SSH access.
 
 <div>
 
@@ -58,9 +58,9 @@ Procedure
 
 </div>
 
-# Create a service with the web console
+# Create a service by using the web console
 
-You can create a node port or load balancer service for a virtual machine (VM) by using the OpenShift Container Platform web console.
+You can create a node port or load balancer service for a virtual machine (VM) from the OpenShift Container Platform web console. A service gives clients outside the cluster a way to reach the VM over SSH.
 
 <div>
 
@@ -104,9 +104,9 @@ Verification
 
 </div>
 
-# Create a service with virtctl
+# Create a service by using virtctl
 
-You can create a service for a virtual machine (VM) by using the `virtctl` command-line tool.
+You can create a service for a virtual machine (VM) with a single `virtctl` command. Choose the service type and the port to expose, such as port 22 for SSH access.
 
 <div>
 
@@ -176,9 +176,9 @@ Verification
 
 </div>
 
-# Creating a service by using the CLI
+# Create a service by using the command line
 
-You can create a service and associate it with a virtual machine (VM) by using the command line.
+You can use the command line to create a service and associate it with a virtual machine (VM). You must create a label on the VM that matches the selector in the `Service` manifest.
 
 <div>
 
@@ -278,7 +278,7 @@ Verification
 
 </div>
 
-# Connecting to a VM exposed by a service by using SSH
+# Connect to a VM through a service
 
 You can connect to a virtual machine (VM) that a service exposes by using SSH.
 

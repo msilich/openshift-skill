@@ -12,7 +12,7 @@ OpenShift Virtualization provides built-in security features and authorization p
 
 - TLS certificates for OpenShift Virtualization components are renewed and rotated automatically.
 
-# About workload security
+# Workload security
 
 By default, virtual machine (VM) workloads do not run with root privileges in OpenShift Virtualization, and there are no supported OpenShift Virtualization features that require root privileges.
 

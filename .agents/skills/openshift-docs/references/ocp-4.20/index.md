@@ -493,8 +493,8 @@
   - [Compliance Operator release notes](security/compliance_operator/compliance-operator-release-notes.md)
   - [Compliance Operator support](security/compliance_operator/co-support.md)
   - **Compliance Operator concepts**
-    - [Understanding the Compliance Operator](security/compliance_operator/co-concepts/compliance-operator-understanding.md)
-    - [Understanding the Custom Resource Definitions](security/compliance_operator/co-concepts/compliance-operator-crd.md)
+    - [About the Compliance Operator](security/compliance_operator/co-concepts/compliance-operator-understanding.md)
+    - [About the Compliance Operator custom resource definitions](security/compliance_operator/co-concepts/compliance-operator-crd.md)
   - **Compliance Operator management**
     - [Installing the Compliance Operator](security/compliance_operator/co-management/compliance-operator-installation.md)
     - [Updating the Compliance Operator](security/compliance_operator/co-management/compliance-operator-updating.md)
@@ -752,6 +752,7 @@
   - [Disabling multicast for a project](networking/ovn_kubernetes_network_provider/disabling-multicast.md)
   - [Tracking network flows](networking/ovn_kubernetes_network_provider/tracking-network-flows.md)
   - [Configuring hybrid networking](networking/ovn_kubernetes_network_provider/configuring-hybrid-networking.md)
+  - [Increasing cluster network hostPrefix](networking/ovn_kubernetes_network_provider/increasing-cluster-network-hostprefix.md)
 - **Ingress and load balancing**
   - **Routes**
     - [Creating basic routes](networking/ingress_load_balancing/routes/creating-basic-routes.md)
@@ -1345,6 +1346,7 @@
   - [Network observability per-tenant model](observability/network_observability/network-observability-per-tenant-model.md)
   - [Network Policy](observability/network_observability/network-observability-network-policy.md)
   - [Network observability DNS resolution analysis](observability/network_observability/network-observability-dns-resolution-analysis.md)
+  - [Optimizing Flow-logs Pipeline](observability/network_observability/network-observability-optimizing-flowlogs-pipeline.md)
   - [Observing the network traffic](observability/network_observability/observing-network-traffic.md)
   - [Network observability health rules](observability/network_observability/network-observability-health-rules.md)
   - [Monitoring TLS traffic](observability/network_observability/network-observability-monitoring-tls-traffic.md)
@@ -1355,10 +1357,9 @@
   - **Network Observability CLI**
     - [Installing the Network Observability CLI](observability/network_observability/netobserv_cli/netobserv-cli-install.md)
     - [Using the Network Observability CLI](observability/network_observability/netobserv_cli/netobserv-cli-using.md)
+    - [Capture plain text from encrypted network traffic](observability/network_observability/netobserv_cli/netobserv-cli-plaintext-capture.md)
     - [Network Observability CLI reference](observability/network_observability/netobserv_cli/netobserv-cli-reference.md)
-  - [FlowCollector API reference](observability/network_observability/flowcollector-api.md)
-  - [FlowMetric API reference](observability/network_observability/flowmetric-api.md)
-  - [Flows format reference](observability/network_observability/json-flows-format-reference.md)
+  - [Network Observability API reference](observability/network_observability/network-observability-api-reference.md)
   - [Troubleshooting network observability](observability/network_observability/troubleshooting-network-observability.md)
 - **Power Monitoring**
   - [About power monitoring](observability/power_monitoring/about-power-monitoring.md)

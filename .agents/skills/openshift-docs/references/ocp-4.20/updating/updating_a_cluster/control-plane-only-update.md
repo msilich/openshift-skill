@@ -367,6 +367,6 @@ Additional resources
 
 - [Performing a Control Plane Only update using the CLI](control-plane-only-update.md#updating-control-plane-only-update-cli_control-plane-only-update)
 
-- [Preventing workload updates during a Control Plane Only update](../../virt/updating/upgrading-virt.md#virt-preventing-workload-updates-during-control-plane-only-update_upgrading-virt)
+- [Prevent workload updates during a Control Plane Only update](../../virt/updating/upgrading-virt.md#virt-preventing-workload-updates-during-control-plane-only-update_upgrading-virt)
 
 </div>

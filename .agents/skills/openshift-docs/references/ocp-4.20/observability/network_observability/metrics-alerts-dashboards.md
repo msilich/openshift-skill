@@ -427,7 +427,7 @@ Additional resources
 
 </div>
 
-- [Network Flows format reference](json-flows-format-reference.md#network-observability-flows-format_json_reference)
+- [Network Flows format reference](network-observability-api-reference.md#network-flows-format_network_observability)
 
 </div>
 

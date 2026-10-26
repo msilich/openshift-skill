@@ -14,7 +14,7 @@ Monitor the consumption of cluster infrastructure resources using the metrics pr
 
 </div>
 
-# Querying metrics for all projects with the OpenShift Container Platform web console
+# Query metrics for all projects by using the OpenShift Container Platform web console
 
 Monitor the state of a cluster and any user-defined workloads by using the OpenShift Container Platform metrics query browser. The query browser uses Prometheus Query Language (PromQL) queries to examine metrics visualized on a plot.
 
@@ -145,7 +145,7 @@ Procedure
 
 </div>
 
-# Querying metrics for user-defined projects with the OpenShift Container Platform web console
+# Query metrics for user-defined projects by using the OpenShift Container Platform web console
 
 Monitor user-defined workloads by using the OpenShift Container Platform metrics query browser. The query browser uses Prometheus Query Language (PromQL) queries to examine metrics visualized on a plot.
 

@@ -1,8 +1,8 @@
 {
   "artifact": {
-    "converted_topics": 1750,
+    "converted_topics": 1751,
     "format": "GitHub-Flavored Markdown",
-    "markdown_files": 1752,
+    "markdown_files": 1753,
     "product": "OpenShift Container Platform",
     "scope": "Complete openshift-enterprise topic map at the pinned revision",
     "version": "4.20"
@@ -30,18 +30,18 @@
       "Rewrote DocBook .xml cross-references to bundled Markdown targets.",
       "Verified local Markdown links; set navigation titles to the selected product."
     ],
-    "successful_topics": 1750
+    "successful_topics": 1751
   },
   "integrity": {
     "agentic_skills_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
     "algorithm": "sha256",
     "markdown_manifest_algorithm": "SHA-256 of sorted UTF-8 lines: '<file-sha256>  <relative-path>\\n'",
-    "markdown_manifest_sha256": "793b638a4742724d8a9855cf0687f43967dae515d366ecbc0165c3d9d1f9aeb1",
+    "markdown_manifest_sha256": "82ff8949d248343a267162b0705066e81cdeeb7f8fee1645c1196c008bdbba15",
     "openshift_docs_license_sha256": "e1855c6f04f2435df62fe754d9621de265e3fa77717d3910f5a5500cf1e651ad"
   },
   "runtime_network_required": false,
   "schema_version": 1,
-  "source_commit_time_utc": "2026-10-19T10:48:49Z",
+  "source_commit_time_utc": "2026-10-26T10:43:00Z",
   "sources": {
     "agentic_skills_converter": {
       "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
@@ -57,7 +57,7 @@
     },
     "openshift_docs": {
       "branch_hint": "enterprise-4.20",
-      "commit": "6ff714db2ffb20cfd17363876e48c27586899e05",
+      "commit": "773aa10f325eb2095681d9a3aee7243d6accf8a5",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"

@@ -2,7 +2,7 @@
 
 You can configure live migration settings to ensure that the migration processes do not overwhelm the cluster. You can configure live migration policies to apply different migration configurations to groups of virtual machines (VMs).
 
-# Configuring live migration limits and timeouts
+# Configure live migration limits and timeouts
 
 Configure live migration limits and timeouts for the cluster by updating the `HyperConverged` custom resource (CR), which is located in the `openshift-cnv` namespace.
 
@@ -159,7 +159,7 @@ You can create live migration policies to apply different migration configuratio
 > [!TIP]
 > You can create live migration policies by using the OpenShift Container Platform web console.
 
-# Creating a live migration policy by using the CLI
+# Create a live migration policy by using the CLI
 
 You can create a live migration policy by using the command line.
 

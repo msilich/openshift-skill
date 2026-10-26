@@ -58,7 +58,7 @@ Storage I/O latency thresholds for Windows VMs
 > [!NOTE]
 > If storage I/O latency exceeds 100 ms multiple times a day, prioritize identifying the root cause of the latency. Troubleshooting the affected workload is a secondary concern until you resolve the underlying latency issue.
 
-## About volume and access modes for virtual machine disks
+## Volume and access modes for VM disks
 
 If you use the storage API with known storage providers, the volume and access modes are selected automatically. However, if you use a storage class that does not have a storage profile, you must configure the volume and access mode.
 
@@ -153,9 +153,9 @@ Storage overhead per virtual machine depends on specific requests for resource a
 Example
 As a cluster administrator, if you plan to host 10 virtual machines in the cluster, each with 1 GiB of RAM and 2 vCPUs, the memory impact across the cluster is 11.68 GiB. The estimated on-disk storage impact for each node in the cluster is 10 GiB and the CPU impact for worker nodes that host virtual machine workloads is a minimum of 2 cores.
 
-# Single-node OpenShift differences
+# Single-node OpenShift feature support
 
-You can install OpenShift Virtualization on single-node OpenShift.
+You can install OpenShift Virtualization on single-node OpenShift. The topology does not support high availability, pod disruption, live migration, or eviction strategies.
 
 However, you should be aware that Single-node OpenShift does not support the following features:
 

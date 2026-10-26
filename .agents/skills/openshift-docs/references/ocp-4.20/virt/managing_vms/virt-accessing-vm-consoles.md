@@ -5,9 +5,9 @@ By using VNC, serial, or desktop viewer consoles, you can access the console of 
 > [!NOTE]
 > Connecting to a guest VM through the VNC or serial console does not provide a full set of access features and cannot replace the Virtual Desktop Infrastructure (VDI) access. However, these consoles are useful for troubleshooting, as they allow access even if the guest VM has no network.
 
-# Considerations for accessing the VNC console
+# VNC console access requirements and limits
 
-You can connect to the VNC console of a VM by using the OpenShift Container Platform web console or the `virtctl` command-line tool.
+Use a VNC connection to troubleshoot a virtual machine (VM) that has lost network connectivity. You can reach the VNC console from the OpenShift Container Platform web console or with the `virtctl` command-line tool, but only one connection to a VM is possible at a time.
 
 Take into account the following considerations:
 
@@ -27,7 +27,7 @@ Take into account the following considerations:
 
 # Connect to the VNC console by using the web console
 
-You can connect to the VNC console of a virtual machine (VM) by using the OpenShift Container Platform web console.
+You can open the VNC console of a virtual machine (VM) from the OpenShift Container Platform web console without installing a local client. If the VM runs Windows with a vGPU assigned as a mediated device, you can switch between the default display and the vGPU display.
 
 > [!NOTE]
 > If you connect to a Windows VM with a vGPU assigned as a mediated device, you can switch between the default display and the vGPU display.
@@ -59,7 +59,7 @@ Procedure
 
 # Connect to the VNC console by using virtctl
 
-You can use the `virtctl` command-line tool to connect to the VNC console of a running virtual machine.
+You can use the `virtctl` command-line tool to open the VNC console of a running virtual machine from your terminal, and preserve an existing console session when a new connection starts.
 
 > [!NOTE]
 > If you run the `virtctl vnc` command on a remote machine over an SSH connection, you must forward the X session to your local machine by running the `ssh` command with the `-X` or `-Y` flags.
@@ -112,9 +112,9 @@ Procedure
 
 </div>
 
-# Grant token generation permission for the VNC console by using the cluster role
+# Grant permission to generate VNC console tokens
 
-As a cluster administrator, you can install a cluster role and bind it to a user or service account to allow access to the endpoint that generates tokens for the VNC console.
+You can install a cluster role and bind it to a user or a service account to allow access to the endpoint that generates tokens for the VNC console.
 
 <div>
 
@@ -142,7 +142,7 @@ Procedure
 
 # Generate a temporary token for the VNC console
 
-To access the VNC of a virtual machine (VM), generate a temporary authentication bearer token for the Kubernetes API.
+You can generate a temporary authentication bearer token for the Kubernetes API to access the VNC console of a virtual machine (VM). The token expires after a duration that you set, with a minimum of 10 minutes.
 
 > [!NOTE]
 > Kubernetes also supports authentication using client certificates, instead of a bearer token, by modifying the curl command.
@@ -231,9 +231,9 @@ Verification
 > $ virtctl delete serviceaccount --namespace "<namespace>" "<vm_name>-vnc-access"
 > ```
 
-# Considerations for accessing the serial console
+# Serial console access requirements and limits
 
-You can connect to the serial console of a virtual machine (VM) by using the OpenShift Container Platform web console or the `virtctl` command-line tool.
+Use a serial connection to troubleshoot a virtual machine (VM) that has lost network connectivity. You can reach the serial console from the OpenShift Container Platform web console or with the `virtctl` command-line tool, but only one connection to a VM is possible at a time.
 
 Take into account the following considerations:
 
@@ -249,7 +249,7 @@ Take into account the following considerations:
 
 # Connect to the serial console by using the web console
 
-You can connect to the serial console of a virtual machine (VM) by using the OpenShift Container Platform web console. If you connect to a Windows VM with a vGPU assigned as a mediated device, you can switch between the default display and the vGPU display.
+You can open the serial console of a virtual machine (VM) from the OpenShift Container Platform web console without installing a local client.
 
 > [!NOTE]
 > Running concurrent VNC connections to a single virtual machine is not currently supported.
@@ -285,7 +285,7 @@ Procedure
 
 # Connect to the serial console by using virtctl
 
-You can use the `virtctl` command-line tool to connect to the serial console of a running virtual machine.
+You can use the `virtctl` command-line tool to open the serial console of a running virtual machine from your terminal.
 
 > [!NOTE]
 > If you run the `virtctl vnc` command on a remote machine over an SSH connection, you must forward the X session to your local machine by running the `ssh` command with the `-X` or `-Y` flags.
@@ -322,7 +322,7 @@ Procedure
 
 # Connect to the desktop viewer by using the web console
 
-You can connect to the desktop viewer of a Windows virtual machine (VM) by using the OpenShift Container Platform web console.
+You can connect to the desktop viewer of a Windows virtual machine (VM) from the OpenShift Container Platform web console. The desktop viewer uses RDP, which gives a fuller desktop experience than the VNC console.
 
 <div>
 
@@ -375,7 +375,7 @@ Procedure
 
 # Additional resources
 
-- [About the Scheduling, Scale, and Performance (SSP) Operator](../about_virt/virt-architecture.md#virt-about-ssp-operator_virt-architecture)
+- [Scheduling, Scale, and Performance (SSP) Operator](../about_virt/virt-architecture.md#virt-about-ssp-operator_virt-architecture)
 
 - [Connect to the serial console by using the web console](virt-accessing-vm-consoles.md#virt-connecting-serial-console-virtctl_virt-accessing-vm-consoles)
 

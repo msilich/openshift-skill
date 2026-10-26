@@ -74,7 +74,7 @@ The Network Observability Operator includes a rule-based system to detect networ
 The Network Observability Operator displays network status in the following views:
 
 **Alerting** UI
-Specific alerts appear in **Observe** → **Alerting**. Notifications are managed through the Prometheus `Alertmanager`.
+Specific alerts are displayed in **Observe** → **Alerting**. Notifications are managed through the Prometheus `Alertmanager`.
 
 **Network Health** dashboard
 A specialized dashboard in **Observe** → **Network Health** provides a summary of cluster network status.
@@ -88,6 +88,24 @@ The **Network Health** dashboard categorizes violations into tabs to isolate the
 - **Namespaces**: Violations specific to individual namespaces.
 
 - **Workloads**: Violations specific to resources, such as `Deployments` or `DaemonSets`.
+
+### Network health context tabs
+
+The **Network Health** dashboard organizes alerts and recording rules into separate context tabs. You can view network health from different perspectives, such as Network Observability metrics, OVN-Kubernetes platform alerts, or third-party service mesh monitoring.
+
+Context tabs include:
+
+**NetObserv**
+Default context for Network Observability Operator health rules. Rules in this context contribute to the 0-10 health score calculation.
+
+**External contexts**
+Read-only contexts for external monitoring sources, such as OpenShift OVN-Kubernetes platform alerts or Kiali service mesh health alerts. These contexts are displayed when external alerts are labeled for Network Health integration. External alerts provide additional visibility but do not affect the network observability health score.
+
+Rules are routed to a context tab based on the following priority order:
+
+1.  Annotation `netobserv_io_network_health` JSON field `contextTab` on the alert or recording rule.
+
+2.  Default: `netobserv` context for all rules with the `netobserv: "true"` label.
 
 ### Predefined health rules
 
@@ -113,6 +131,9 @@ Reports a significant increase in TCP latency. This rule requires the `FlowRTT` 
 `DNSErrors`
 Reports DNS errors. This rule requires the `DNSTracking` agent feature.
 
+`TLSInsecureVersion`
+Reports a high percentage of TLS traffic using insecure protocol versions (TLS 1.0, TLS 1.1, or SSL variants). This rule requires the `TLSTracking` agent feature.
+
 The following operational alerts apply to the Network Observability Operator:
 
 `NetObservNoFlows`
@@ -123,7 +144,7 @@ Reports when flows are dropped because of Loki errors.
 
 For a complete list of rules and runbooks, see the [Network Observability Operator runbooks](https://github.com/openshift/runbooks/tree/master/alerts/network-observability-operator).
 
-### Enabling features for health monitoring
+### Enable features for health monitoring
 
 The Network Observability Operator creates rules based on the features enabled in the `FlowCollector` CR.
 
@@ -187,7 +208,7 @@ The `PrometheusRule` resource in the `netobserv` namespace can be viewed by runn
 $ oc get prometheusrules -n netobserv -o yaml
 ```
 
-### Customizing alert logic with PromQL: Incoming traffic surge
+### Customize alert logic with PromQL: Incoming traffic surge
 
 The following PromQL query calculates the byte rate from the `openshift-ingress` namespace to any workload namespace over a 30-minute interval:
 
@@ -208,10 +229,10 @@ Appending `> 1000` to the query removes rates lower than `1 KB/s` to filter low-
 Time comparison
 The `offset` modifier compares data across different time periods. For example, `offset 1d` retrieves data from the previous day.
 
-`sum(rate(netobserv_workload_ingress_bytes_total{SrcK8S_Namespace="openshift-ingress"}[30m] offset 1d)) by (DstK8S_Namespace))`
+`sum(rate(netobserv_workload_ingress_bytes_total{SrcK8S_Namespace="openshift-ingress"}[30m] offset 1d)) by (DstK8S_Namespace)`
 
 Threshold application
-A final threshold filters increases below a specific percentage. For example, `> 100` removes increases lower than 100%.
+A final threshold filters increases of less than a specific percentage. For example, `> 100` removes increases lower than 100%.
 
 The following example shows a complete PromQL expression for a `PrometheusRule`:
 
@@ -261,15 +282,18 @@ Specifies that the **Network Health** dashboard must detect the alert when set t
 `spec.groups.rules.alert.labels.severity`
 Specifies the alert severity. Valid values are `critical`, `warning`, or `info`.
 
-### netobserv_io_network_health annotation fields
+### The netobserv_io_network_health annotation fields
 
 The optional `netobserv_io_network_health` annotation is a JSON string that controls how the alert renders on the **Network Health** page.
 
 | Field | Type | Description |
 |----|----|----|
-| `namespaceLabels` | List of strings | One or more labels containing namespaces. Alerts appear under the **Namespaces** tab. |
-| `nodeLabels` | List of strings | One or more labels containing node names. Alerts appear under the **Nodes** tab. |
-| `workloadLabels` | List of strings | One or more labels containing owner or workload names. Alerts appear under the **Owners** tab when `kindLabels` is also provided. |
+| `contextTab` | String | The context tab in which the alert is displayed. Valid values include `netobserv`, `ovn`, `kiali`, or other third-party context identifiers. If not specified, the alert is displayed in the default NetObserv tab. |
+| `displayName` | String | A custom display name for the alert shown in the **Network Health** UI. If not specified, the alert uses the default naming convention. |
+| `namespaceLabels` | List of strings | One or more labels containing namespaces. Alerts are displayed under the **Namespaces** tab. |
+| `nodeLabels` | List of strings | One or more labels containing node names. Alerts are displayed under the **Nodes** tab. |
+| `workloadLabels` | List of strings | One or more labels containing owner or workload names. Alerts are displayed under the **Owners** tab when `kindLabels` is also provided. |
+| `kindLabels` | List of strings | One or more labels containing owner or workload kinds. Must be provided alongside `workloadLabels` for the alert to be displayed under the **Owners** tab. |
 | `threshold` | String | The alert threshold. This value should match the threshold in the PromQL expression. |
 | `unit` | String | The data unit for display purposes. |
 | `upperBound` | String | An upper bound value used to calculate scores on a closed scale. Metric values exceeding this bound are clamped. |
@@ -277,7 +301,7 @@ The optional `netobserv_io_network_health` annotation is a JSON string that cont
 Fields for the `netobserv_io_network_health` annotation
 
 > [!NOTE]
-> The `namespaceLabels` and `nodeLabels` fields are mutually exclusive. If neither is provided, the alert appears under the **Global** tab.
+> If both `namespaceLabels` and `nodeLabels` are provided, `namespaceLabels` takes priority. If neither is provided, the alert is displayed under the **Global** tab.
 
 ## Configure custom health rules
 
@@ -346,7 +370,7 @@ Verification
 
 # Performance optimization with recording rules
 
-In large-scale clusters, recording rules optimize how Prometheus handles network data. Recording rules improve dashboard responsiveness and reduce the computational overhead of complex queries.
+In large-scale clusters, recording rules optimize how Prometheus handles network data. Recording rules improve dashboard responsiveness and reduce the processing time for complex queries.
 
 ## Optimization benefits
 
@@ -374,7 +398,7 @@ The following table compares rule modes based on the expected outcome:
 | UI visibility | **Alerting** and **Network Health** views. | **Metrics Explorer** and **Network Health** views. |
 | Notifications | Triggers `Alertmanager` notifications. | Does not trigger notifications. |
 
-## Integrating recording rules with the health dashboard
+## Integrate recording rules with the health dashboard
 
 Custom recording rules that contribute to the **Network Health** dashboard must meet specific metadata requirements.
 
@@ -382,13 +406,30 @@ Label requirements
 Include the `netobserv: "true"` label in the `labels` field of the rule and the `PrometheusRule` metadata. The Network Observability Operator identifies `PrometheusRule` resources cluster-wide by using this label.
 
 Annotation requirements
-Include the `netobserv.io/network-health` annotation in the `PrometheusRule` metadata. This annotation is required for recording rules to appear in the **Network Health** dashboard. The value is a JSON object where keys are the metric names (the `record` field of each rule). Each value consists of the following fields:
+Include the `netobserv.io/network-health` annotation in the `PrometheusRule` metadata. This annotation is required for recording rules to be displayed in the **Network Health** dashboard. The value is a JSON object where keys are the metric names (the `record` field of each rule). Each value consists of the following fields:
 
 - `summary`: An optional short title. This field supports Prometheus template syntax, such as `{{ $labels.namespace }}`.
 
 - `description`: An optional description. This field supports Prometheus template syntax.
 
-- `netobserv_io_network_health`: A required JSON string. For recording rules, use the `recordingThresholds` field instead of `threshold`. This field determines the health score and UI coloring, such as `{"info":"10","warning":"25","critical":"50"}`.
+- `netobserv_io_network_health`: A required JSON string that determines the health score and UI behavior. For recording rules, this JSON object supports the following fields:
+
+  | Field | Type | Description |
+  |----|----|----|
+  | `recordingThresholds` | JSON object | Required. Defines the thresholds for health score calculation. Contains `info`, `warning`, and `critical` severity levels with numeric string values, such as `{"info":"10","warning":"25","critical":"50"}`. |
+  | `contextTab` | String | The context tab in which the recording rule is displayed. Valid values include `netobserv`, `ovn`, `kiali`, or other third-party context identifiers. If not specified, the recording rule is displayed in the default NetObserv tab. |
+  | `displayName` | String | A custom display name for the recording rule shown in the **Network Health** UI. If not specified, the recording rule uses the default naming convention. |
+  | `namespaceLabels` | List of strings | One or more labels containing namespaces. Recording rules are displayed under the **Namespaces** tab. |
+  | `nodeLabels` | List of strings | One or more labels containing node names. Recording rules are displayed under the **Nodes** tab. |
+  | `workloadLabels` | List of strings | One or more labels containing owner or workload names. Recording rules are displayed under the **Workloads** tab when `namespaceLabels` and `kindLabels` are also provided. |
+  | `kindLabels` | List of strings | One or more labels containing owner or workload kinds. Must be provided alongside `workloadLabels` and `namespaceLabels` for the recording rule to be displayed under the **Workloads** tab. |
+  | `unit` | String | The data unit for display purposes. |
+  | `upperBound` | String | An upper bound value used to calculate scores on a closed scale. Metric values exceeding this bound are clamped. |
+
+  Fields for the `netobserv_io_network_health` annotation in recording rules
+
+  > [!NOTE]
+  > If both `namespaceLabels` and `nodeLabels` are provided, `namespaceLabels` takes priority. If neither is provided, the recording rule is displayed under the **Global** tab.
 
 ## Optimize dashboard metrics with recording rules
 
@@ -439,7 +480,7 @@ Procedure
             "my_metric_per_namespace": {
               "summary": "Custom metric is {{ $value }} in the namespace {{ $labels.namespace }}",
               "description": "Custom metric is {{ $value }} in the namespace {{ $labels.namespace }}",
-              "netobserv_io_network_health": "{\"unit\":\"%\",\"upperBound\":\"100\",\"namespaceLabels\":[\"namespace\"],\"recordingThresholds\":{\"info\":\"10\",\"warning\":\"25\",\"critical\":\"50\"}}"
+              "netobserv_io_network_health": "{\"unit\":\"%\",\"upperBound\":\"100\",\"namespaceLabels\":[\"namespace\"],\"recordingThresholds\":{\"info\":\"10\",\"warning\":\"25\",\"critical\":\"50\"},\"contextTab\":\"netobserv\",\"displayName\":\"Custom Namespace Metric\"}"
             }
           }
     spec:
@@ -475,7 +516,7 @@ Verification
     $ oc get prometheusrules my-recording-rules -n openshift-monitoring -o yaml
     ```
 
-2.  Confirm the recording rule appears in the OpenShift Container Platform web console by navigating to **Observe** → **Network Health**.
+2.  Confirm the recording rule is displayed in the OpenShift Container Platform web console by navigating to **Observe** → **Network Health**.
 
 </div>
 

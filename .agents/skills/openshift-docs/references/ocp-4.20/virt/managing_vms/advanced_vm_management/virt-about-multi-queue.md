@@ -13,9 +13,9 @@ By default, the `queueCount` value, which is derived from the domain XML, is det
 
 - Each `virtio-net` queue consumes 64 KiB of kernel memory for the `vhost` driver.
 
-# Enabling multi-queue functionality
+# Enable multi-queue for VirtIO network interfaces
 
-You can enable multi-queue functionality for interfaces configured with a VirtIO model.
+You can enable multi-queue functionality for network interfaces that use a VirtIO model, so that network traffic is processed across multiple vCPUs instead of one.
 
 <div>
 

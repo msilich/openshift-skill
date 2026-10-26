@@ -2,7 +2,7 @@
 
 If you have graphics processing unit (GPU) cards, OpenShift Virtualization can automatically create virtual GPUs (vGPUs) that you can assign to virtual machines (VMs).
 
-# About using virtual GPUs with OpenShift Virtualization
+# Virtual GPUs in OpenShift Virtualization
 
 You can create vGPUs for your virtual machines (VMs) using supported GPU cards. Refer to your hardware vendor’s documentation for functionality and support details.
 
@@ -10,7 +10,7 @@ You can use the NVIDIA GPU Operator to manage vGPUs for your virtual machines (V
 
 A mediated device is a physical device that is divided into one or more virtual devices. vGPUs are a type of mediated device (mdev) where the performance of the physical GPU is divided among the virtual devices. You can assign mediated devices to one or more virtual machines (VMs), but the number of guests must be compatible with your GPU. Some GPUs do not support multiple guests.
 
-## Adding kernel arguments to enable the IOMMU driver
+## Add kernel arguments to enable the IOMMU driver
 
 You must enable the Input-Output Memory Management Unit (IOMMU) driver before you can configure mediated devices. To enable the IOMMU driver in the kernel, create the `MachineConfig` object and add the kernel arguments.
 
@@ -207,7 +207,7 @@ When using the OpenShift Virtualization method, you still configure the GPU Oper
 
   - `spec.vfioManager.enabled` is set to `false` to prevent loading the `vfio-pci` driver. Instead, follow the OpenShift Virtualization documentation to configure PCI passthrough.
 
-# Creating and exposing mediated devices
+# Create and expose mediated devices
 
 As an administrator, you can create mediated devices and expose them to the cluster by editing the `HyperConverged` custom resource (CR). Before you edit the CR, explore a worker node to find the configuration values that are specific to your hardware devices.
 
@@ -369,7 +369,7 @@ Verification
 
 </div>
 
-# Removing mediated devices from the cluster
+# Remove mediated devices from the cluster
 
 To remove a mediated device from the cluster, delete the information for that device from the `HyperConverged` custom resource (CR).
 
@@ -477,9 +477,9 @@ mediatedDevicesConfiguration:
 
 In this example, OpenShift Virtualization uses the `nvidia-223` type.
 
-# Assigning a vGPU to a VM by using the CLI
+# Assign a vGPU to a VM by using the CLI
 
-Assign mediated devices such as virtual GPUs (vGPUs) to virtual machines (VMs).
+After mediated devices are configured in the cluster, you can assign them to individual VMs so that VMs can access shared GPU resources.
 
 <div>
 
@@ -542,7 +542,7 @@ Verification
 
 </div>
 
-# Assigning a vGPU to a VM by using the web console
+# Assign a vGPU to a VM by using the web console
 
 You can assign virtual GPUs to virtual machines by using the OpenShift Container Platform web console.
 

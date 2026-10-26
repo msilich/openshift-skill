@@ -147,7 +147,7 @@ Additional resources
 
 </div>
 
-- [Network flows format reference](json-flows-format-reference.md#network-observability-flows-format_json_reference)
+- [Network flows format reference](network-observability-api-reference.md#network-flows-format_network_observability)
 
 - [Network Observability Operator runbooks](https://github.com/openshift/runbooks/tree/master/alerts/network-observability-operator)
 

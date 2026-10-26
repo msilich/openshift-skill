@@ -524,4 +524,4 @@ Procedure
 
 # Additional resources
 
-- [Understanding the Compliance Operator](../co-concepts/compliance-operator-understanding.md#understanding-compliance-operator)
+- [About the Compliance Operator](../co-concepts/compliance-operator-understanding.md#understanding-compliance-operator)

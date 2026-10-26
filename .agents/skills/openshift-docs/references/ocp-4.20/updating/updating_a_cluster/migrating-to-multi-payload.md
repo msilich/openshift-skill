@@ -565,7 +565,7 @@ Procedure
 7.  Set the storage account name environment variable by running the following command:
 
     ``` terminal
-    $ STORAGE_ACCOUNT_NAME=$(az storage account list --resource-group ${RESOURCE_GROUP} --query "[?ends_with(name, 'sa')].name" -o tsv)
+    $ STORAGE_ACCOUNT_NAME=$(az storage account list --resource-group ${RESOURCE_GROUP} --query "[?starts_with(name, 'imageregistry')].name" -o tsv)
     ```
 
 8.  Set the gallery name environment variable by running the following command:
@@ -605,7 +605,16 @@ Procedure
       --query "[0].value" -o tsv)
     ```
 
-13. Copy the `arm64` RHCOS VHD to the cluster’s storage account by running the following command:
+13. Create the `vhd` storage container by running the following command:
+
+    ``` terminal
+    $ az storage container create \
+      --name vhd \
+      --account-name ${STORAGE_ACCOUNT_NAME} \
+      --account-key "${ACCOUNT_KEY}"
+    ```
+
+14. Copy the `arm64` RHCOS VHD to the cluster’s storage account by running the following command:
 
     ``` terminal
     $ az storage blob copy start \
@@ -616,7 +625,7 @@ Procedure
       --destination-container vhd
     ```
 
-14. Monitor the copy progress by running the following command:
+15. Monitor the copy progress by running the following command:
 
     ``` terminal
     $ az storage blob show \
@@ -629,17 +638,13 @@ Procedure
 
     Wait until the status shows `success`. The VHD is approximately 17 GB and the copy typically takes about 5 minutes.
 
-15. Set the image definition name environment variable by running the following command:
+16. Set the image definition name environment variable by running the following command:
 
     ``` terminal
-    $ IMAGE_DEFINITION_NAME=$(az sig image-definition list \
-      --resource-group ${RESOURCE_GROUP} \
-      --gallery-name ${GALLERY_NAME} \
-      --query "[?contains(name,'-gen2')].name" -o tsv \
-      | sed 's/-gen2/-aarch64-gen2/')
+    $ IMAGE_DEFINITION_NAME="${INFRA_ID}-aarch64-gen2"
     ```
 
-16. Create an `arm64` image definition in the cluster’s shared image gallery by running the following command:
+17. Create an `arm64` image definition in the cluster’s shared image gallery by running the following command:
 
     ``` terminal
     $ az sig image-definition create \
@@ -655,7 +660,7 @@ Procedure
       -l ${REGION}
     ```
 
-17. Set the RHCOS VHD URL environment variable for the copied blob by running the following command:
+18. Set the RHCOS VHD URL environment variable for the copied blob by running the following command:
 
     ``` terminal
     $ RHCOS_VHD_URL=$(az storage blob url \
@@ -663,7 +668,7 @@ Procedure
       -c vhd -n "${BLOB_NAME}" -o tsv)
     ```
 
-18. Create a gallery image version from the copied VHD by running the following command:
+19. Create a gallery image version from the copied VHD by running the following command:
 
     ``` terminal
     $ az sig image-version create \
@@ -676,7 +681,7 @@ Procedure
       -l ${REGION}
     ```
 
-19. Set the resource ID environment variable for the newly created image version by running the following command:
+20. Set the resource ID environment variable for the newly created image version by running the following command:
 
     ``` terminal
     $ RESOURCE_ID="/$(az sig image-version show \
@@ -687,13 +692,13 @@ Procedure
       --query id -o tsv | cut -d'/' -f4-)"
     ```
 
-20. Update the control plane machine set to use the `arm64` image and an ARM-compatible VM size by running the following command:
+21. Update the control plane machine set to use the `arm64` image and an ARM-compatible VM size by running the following command:
 
     ``` terminal
     $ oc patch controlplanemachineset.machine.openshift.io cluster \
       --type=json \
       -p "[
-        {\"op\": \"replace\", \"path\": \"/spec/template/machines_v1beta1_machine_openshift_io/spec/providerSpec/value/image/resourceID\", \"value\": \"${RESOURCE_ID}\"},
+        {\"op\": \"replace\", \"path\": \"/spec/template/machines_v1beta1_machine_openshift_io/spec/providerSpec/value/image\", \"value\": {\"resourceID\": \"${RESOURCE_ID}\"}},
         {\"op\": \"replace\", \"path\": \"/spec/template/machines_v1beta1_machine_openshift_io/spec/providerSpec/value/vmSize\", \"value\": \"<arm64_vm_size>\"}
       ]" \
       -n openshift-machine-api

@@ -2,11 +2,11 @@
 
 PXE booting, or network booting, allows a computer to boot and load an operating system or other program without requiring a locally attached storage device. For example, you can use it to choose your desired OS image from a PXE server when deploying a new host.
 
-# PXE booting with a specified MAC address
+# PXE boot a VM with a specified MAC address
 
-As an administrator, you can boot a client over the network by first creating a `NetworkAttachmentDefinition` object for your PXE network. Then, reference the network attachment definition in your virtual machine instance configuration file before you start the virtual machine instance.
+You can boot a virtual machine (VM) over the network by creating a `NetworkAttachmentDefinition` object for your PXE network. Then, reference the `NetworkAttachmentDefinition` in your VM instance configuration file, `VirtualMachine`, before you start the VM instance.
 
-You can also specify a MAC address in the virtual machine instance configuration file, if required by the PXE server.
+You can also specify a MAC address in the `VirtualMachine` configuration, if required by the PXE server.
 
 <div>
 

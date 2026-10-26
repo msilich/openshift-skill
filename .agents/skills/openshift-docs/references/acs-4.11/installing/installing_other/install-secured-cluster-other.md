@@ -822,7 +822,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Linux/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.6/bin/Linux/roxctl${arch}"
     ```
 
 3.  Make the `roxctl` binary executable:
@@ -883,7 +883,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Darwin/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.6/bin/Darwin/roxctl${arch}"
     ```
 
 3.  Remove all extended attributes from the binary:
@@ -944,7 +944,7 @@ Procedure
 - Download the `roxctl` CLI:
 
   ``` terminal
-  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Windows/roxctl.exe
+  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.6/bin/Windows/roxctl.exe
   ```
 
 </div>

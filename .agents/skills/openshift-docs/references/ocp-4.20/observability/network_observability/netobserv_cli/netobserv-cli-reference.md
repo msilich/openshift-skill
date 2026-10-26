@@ -118,7 +118,7 @@ $ oc netobserv flows --enable_pkt_drop  --enable_rtt --action=Accept --cidr=0.0.
 
 ## Packets capture options
 
-You can filter packets capture data the as same as flows capture by using the filters. Certain features, such as packets drop, DNS, RTT, and network events, are only available for flows and metrics capture.
+You can filter packets capture data the as same as flows capture by using the filters. Certain features, such as packets drop, DNS, RTT, and network events, are only available for flows and metrics capture. To capture plaintext from dynamically linked OpenSSL applications, use `--enable_openssl` with a peer or port filter. The option requires a privileged agent and adds plaintext records to the packet capture output.
 
 <div class="formalpara">
 
@@ -134,34 +134,39 @@ $ oc netobserv packets [<option>]
 
 </div>
 
-| Option          | Description                               | Default         |
-|-----------------|-------------------------------------------|-----------------|
-| --background    | run in background                         | false           |
-| --copy          | copy the output files locally             | prompt          |
-| --log-level     | components logs                           | info            |
-| --max-time      | maximum capture time                      | 5m              |
-| --max-bytes     | maximum capture bytes                     | 50000000 = 50MB |
-| --action        | filter action                             | Accept          |
-| --cidr          | filter CIDR                               | 0.0.0.0/0       |
-| --direction     | filter direction                          | \-              |
-| --dport         | filter destination port                   | \-              |
-| --dport_range   | filter destination port range             | \-              |
-| --dports        | filter on either of two destination ports | \-              |
-| --drops         | filter flows with only dropped packets    | false           |
-| --icmp_code     | filter ICMP code                          | \-              |
-| --icmp_type     | filter ICMP type                          | \-              |
-| --node-selector | capture on specific nodes                 | \-              |
-| --peer_ip       | filter peer IP                            | \-              |
-| --peer_cidr     | filter peer CIDR                          | \-              |
-| --port_range    | filter port range                         | \-              |
-| --port          | filter port                               | \-              |
-| --ports         | filter on either of two ports             | \-              |
-| --protocol      | filter protocol                           | \-              |
-| --query         | filter flows using a custom query         | \-              |
-| --sport_range   | filter source port range                  | \-              |
-| --sport         | filter source port                        | \-              |
-| --sports        | filter on either of two source ports      | \-              |
-| --tcp_flags     | filter TCP flags                          | \-              |
+| Option | Description | Default |
+|----|----|----|
+| --background | run in background | false |
+| --copy | copy the output files locally | prompt |
+| --log-level | components logs | info |
+| --max-time | maximum capture time | 5m |
+| --max-bytes | maximum capture bytes | 50000000 = 50MB |
+| --enable_openssl | capture TLS plaintext via OpenSSL uprobes | false; privileged agent; recommended: --peer_ip --port |
+| --tls_process_allowlist | restrict TLS uprobes to comma-separated process names | all non-infra; e.g. nginx,envoy |
+| --tls_plaintext_min_bytes | drop TLS plaintext events shorter than N bytes | 0; agent env TLS_PLAINTEXT_MIN_BYTES |
+| --tls_plaintext_preview_bytes | PlaintextPreview length; zero means full payload | 256 |
+| --tls-keylog | path to SSLKEYLOGFILE for pcapng decryption | collector setting |
+| --action | filter action | Accept |
+| --cidr | filter CIDR | 0.0.0.0/0 |
+| --direction | filter direction | \- |
+| --dport | filter destination port | \- |
+| --dport_range | filter destination port range | \- |
+| --dports | filter on either of two destination ports | \- |
+| --drops | filter flows with only dropped packets | false |
+| --icmp_code | filter ICMP code | \- |
+| --icmp_type | filter ICMP type | \- |
+| --node-selector | capture on specific nodes | \- |
+| --peer_ip | filter peer IP | \- |
+| --peer_cidr | filter peer CIDR | \- |
+| --port_range | filter port range | \- |
+| --port | filter port | \- |
+| --ports | filter on either of two ports | \- |
+| --protocol | filter protocol | \- |
+| --query | filter flows using a custom query | \- |
+| --sport_range | filter source port range | \- |
+| --sport | filter source port | \- |
+| --sports | filter on either of two source ports | \- |
+| --tcp_flags | filter TCP flags | \- |
 
 <div class="formalpara">
 

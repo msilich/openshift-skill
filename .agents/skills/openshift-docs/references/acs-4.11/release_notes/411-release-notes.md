@@ -18,6 +18,7 @@ Review the official release dates and update schedule for RHACS 4.11.
 | `4.11.3`      | 25 August 2026    |
 | `4.11.4`      | 15 September 2026 |
 | `4.11.5`      | 12 October 2026   |
+| `4.11.6`      | 20 October 2026   |
 
 Release dates
 
@@ -784,6 +785,49 @@ This release also addresses the following security vulnerabilities:
 
 - gRPC-Go: Denial of Service through malformed RPC requests ([CVE-2026-84445](https://access.redhat.com/security/cve/CVE-2026-84445))
 
+<a id="about-this-release-4116_release-notes-411"></a>
+
+# About release 4.11.6
+
+<a id="bug-fixes-in-version-4116_release-notes-411"></a>
+
+## Bug fixes and security updates in version 4.11.6
+
+This release includes the following enhancements and bug fixes:
+
+- With this release, Red Hat improved vulnerability reporting accuracy for Red Hat container images. Scanner V4 now prioritizes vulnerability data from Red Hat Vulnerability Exploitability eXchange (VEX) over OSV.dev data when both sources report the same vulnerability. As a result, you receive severity assessments and CVSS scores that reflect Red Hat’s product-specific security analysis.
+
+<!-- -->
+
+- With this release, Red Hat improved the behavior of the `ROX_SCANNER_V4_RED_HAT_LAYERS_RED_HAT_VULNS_ONLY` flag that you can set to `true` to limit vulnerability reporting for Red Hat images to Red Hat security data only. Previously, users who configured this variable set it on the Scanner V4 matcher deployment, and that is still supported. However, to take advantage of the improvements, you must now set the flag on the Central deployment. Note that configuring this flag can lead to unintended results, such as false negatives, and Red Hat recommends configuring it only for specific situations. See the guidance in the following documentation:
+
+  - [Discrepancy in CVE reported in RHACS and RedHat catalog Image](https://access.redhat.com/solutions/7141930)
+
+  - [Why does RHACS give OSV or NVD’s CVSS scores instead of Red Hat’s?](https://access.redhat.com/solutions/7129189)
+
+<!-- -->
+
+- With this release, Red Hat added transparency to vulnerability reporting. The vulnerability details now include a **CVE Origin** field. This field identifies the source of the vulnerability data. As a result, you can distinguish between Red Hat-authoritative assessments and community-sourced vulnerability data.
+
+  > [!NOTE]
+  > The origin field will be set to "Other" for all existing scans. After upgrading to this release, as images are re-scanned by Scanner V4, the origin field will be updated.
+
+<!-- -->
+
+- Fixed a bug that caused suppression of OSV.dev data for Red Hat content to intermittently not work as expected.
+
+<!-- -->
+
+- Before this update, some nodes displayed stale scan timestamps even though Central continued to update the node regularly. This occurred when users created the default Scanner V4 integration before node scanning was available and it lacked the NODE_SCANNER category. With this release, Red Hat fixed the integration reconciliation logic. As a result, node scan timestamps update correctly.
+
+<!-- -->
+
+- With this release, Red Hat updated the RHACS Operator metadata in OperatorHub. The documentation link now points to the correct version, and the Console Plugin is no longer labeled as Technology Preview. As a result, users installing from OperatorHub receive accurate product information.
+
+This release also addresses the following security vulnerabilities:
+
+- Central issues new authentication tokens in case of SAML response replay ([CVE-2026-103314](https://access.redhat.com/security/cve/CVE-2026-103314))
+
 <a id="image-versions_release-notes-411"></a>
 
 # Image versions
@@ -808,40 +852,40 @@ You can manually pull, retag, and push Red Hat Advanced Cluster Security for Ku
 <tr>
 <td style="text-align: left;"><p>Main</p></td>
 <td style="text-align: left;"><p>Includes Central, Sensor, Admission controller, and Compliance components. Also includes <code>roxctl</code> for use in continuous integration (CI) systems.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Central DB</p></td>
 <td style="text-align: left;"><p>PostgreSQL instance that provides the database storage for Central.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner</p></td>
 <td style="text-align: left;"><p>Scans images and nodes.</p></td>
 <td style="text-align: left;"><ul>
-<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.5</code></p></li>
-<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.5</code></p></li>
+<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.6</code></p></li>
+<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.6</code></p></li>
 </ul></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner DB</p></td>
 <td style="text-align: left;"><p>Stores image scan results and vulnerability definitions.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner V4</p></td>
 <td style="text-align: left;"><p>Scans images.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner V4 DB</p></td>
 <td style="text-align: left;"><p>Stores image scan results and vulnerability definitions for Scanner V4.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-db-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-db-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Collector</p></td>
 <td style="text-align: left;"><p>Collects runtime activity in Kubernetes or OpenShift Container Platform clusters.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.6</code></p></td>
 </tr>
 </tbody>
 </table>
