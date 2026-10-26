@@ -16,7 +16,7 @@ To uninstall OpenShift Virtualization, perform the following tasks:
 
 - Delete all virtual machine instances. You cannot uninstall OpenShift Virtualization while its workloads remain on the cluster.
 
-# Deleting the HyperConverged custom resource
+# Delete the HyperConverged custom resource
 
 To uninstall OpenShift Virtualization, you first delete the `HyperConverged` custom resource (CR).
 
@@ -56,6 +56,11 @@ Procedure
 
 Cluster administrators can delete installed Operators from a selected namespace by using the web console.
 
+> [!WARNING]
+> Failed Operator installations do not automatically remove created permissions. Audit and remove remaining permissions to secure the namespace.
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
+
 <div>
 
 <div class="title">
@@ -91,7 +96,7 @@ Procedure
 
 </div>
 
-# Deleting a namespace using the web console
+# Delete a namespace using the web console
 
 You can delete a namespace by using the OpenShift Container Platform web console.
 
@@ -127,7 +132,7 @@ Procedure
 
 </div>
 
-# Deleting OpenShift Virtualization custom resource definitions
+# Delete OpenShift Virtualization custom resource definitions
 
 You can delete the OpenShift Virtualization custom resource definitions (CRDs) by using the web console.
 
@@ -159,7 +164,7 @@ Procedure
 
 </div>
 
-# Uninstalling OpenShift Virtualization by using the CLI
+# Uninstall OpenShift Virtualization by using the CLI
 
 You can uninstall OpenShift Virtualization by using the OpenShift CLI (`oc`).
 

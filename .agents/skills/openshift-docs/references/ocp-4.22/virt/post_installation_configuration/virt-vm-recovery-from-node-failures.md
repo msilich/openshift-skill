@@ -16,7 +16,7 @@ Without the Node Health Check Operator and a remediation Operator such as Self N
 
 - Plan node capacity to ensure that enough resources are available to host VMs that migrate from failed nodes.
 
-## Configuring a VM run strategy by using the CLI
+## Configure VM run strategy
 
 You can configure a run strategy for a virtual machine (VM) by using the command line. The run strategy controls whether a VM automatically restarts after disruptions such as node failures or maintenance events.
 

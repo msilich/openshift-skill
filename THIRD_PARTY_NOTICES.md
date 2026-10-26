@@ -3,7 +3,7 @@
 ## RHACS 4.11 and optional StackRox MCP
 
 - RHACS source: `openshift/openshift-docs`, branch `rhacs-docs-4.11`, commit
-  `2a3d16703701f239724204bfcc0ec745c35b065c`, distribution `openshift-acs`.
+  `9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7`, distribution `openshift-acs`.
 - License: Apache-2.0. The complete topic-map conversion, original source license,
   converter license, SOURCE.json, TOPIC_MAP.yml and CONVERSION.json are under
   `.agents/skills/openshift-docs/references/acs-4.11/`.
@@ -27,7 +27,7 @@ and the referenced `SOURCE.json` file.
 ## OpenShift Container Platform documentation
 
 - Project: `openshift/openshift-docs`
-- Source revision: `19b2087c4f9d9b4b56524c07cb56f2dc56ca4c93`
+- Source revision: `75eff7691c1e4e9b478121696fd38bdb84316855`
 - License: Apache License 2.0
 - Bundled license:
   `.agents/skills/openshift-docs/references/ocp-4.22/LICENSE.openshift-docs`

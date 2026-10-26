@@ -15,7 +15,7 @@
     },
     "openshift_docs": {
       "branch_hint": "enterprise-4.22",
-      "commit": "19b2087c4f9d9b4b56524c07cb56f2dc56ca4c93",
+      "commit": "75eff7691c1e4e9b478121696fd38bdb84316855",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"
@@ -28,9 +28,9 @@
     "pyyaml": "6.0.3"
   },
   "expected_output": {
-    "converted_topics": 1802,
-    "markdown_files": 1804,
-    "markdown_manifest_sha256": "1b343e283b50e72e67ad8606814f0d40d7fe20a26f00cd89eae14af51b0ed6f6"
+    "converted_topics": 1804,
+    "markdown_files": 1806,
+    "markdown_manifest_sha256": "4b8b09b9f0151ee748f9ad914938c402675ed9ed3ad41d3a79e3396393a36eba"
   },
   "document": {
     "product": "OpenShift Container Platform",

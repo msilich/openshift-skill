@@ -2,7 +2,7 @@
 
 To diagnose and resolve issues with virtual machine (VM) and cluster components, you can troubleshoot OpenShift Virtualization by using the web console or the OpenShift CLI (`oc`). These practices help ensure your virtualized infrastructure remains healthy.
 
-# Events
+# View VM and resource events
 
 To monitor and troubleshoot virtual machine (VM), namespace, and resource issues, you can review OpenShift Container Platform events. Tracking this life-cycle information helps ensure you maintain a healthy cluster environment.
 
@@ -30,11 +30,13 @@ Procedure
 
 </div>
 
-# Pod logs
+# OpenShift Virtualization pod logs
 
-To diagnose issues and monitor OpenShift Virtualization pods, you can view logs using the web console or the CLI. You can also view aggregated logs using the LokiStack in the web console.
+To diagnose issues and monitor OpenShift Virtualization pods, you can view logs by using the web console or the CLI.
 
-## Configuring OpenShift Virtualization pod log verbosity
+Pod logs exist only while the pod exists. If a container restarts within a pod, you can still retrieve the logs of the earlier container, but the cluster discards the logs when it replaces the pod itself. For evidence that must survive pod replacement, or that spans several virtual machines (VMs) or nodes, use aggregated logs instead.
+
+## Configure OpenShift Virtualization pod log verbosity
 
 To gather more detailed diagnostic information for troubleshooting, you can configure the verbosity level of OpenShift Virtualization pod logs. Edit the `HyperConverged` custom resource (CR) to configure this setting.
 
@@ -87,7 +89,7 @@ Procedure
 
 </div>
 
-## Viewing virt-launcher pod logs with the web console
+## View virt-launcher pod logs with the web console
 
 To diagnose and troubleshoot virtual machine issues, you can view the `virt-launcher` pod logs by using the OpenShift Container Platform web console.
 
@@ -109,7 +111,7 @@ Procedure
 
 </div>
 
-## Viewing OpenShift Virtualization pod logs with the CLI
+## View OpenShift Virtualization pod logs with the CLI
 
 To diagnose issues and monitor OpenShift Virtualization pods, you can view logs by using the OpenShift CLI (`oc`).
 
@@ -190,7 +192,7 @@ This feature is disabled by default. If a VM does not explicitly have this setti
 > [!IMPORTANT]
 > If sensitive information such as credentials or other personally identifiable information (PII) is written to the serial console, it is logged with all other visible text. Use SSH to send sensitive data.
 
-## Enabling default access to guest system logs with the web console
+## Enable default access to guest system logs with the web console
 
 To troubleshoot issues more easily, you can enable default access to virtual machine (VM) guest system logs by using the web console.
 
@@ -212,7 +214,7 @@ Procedure
 
 </div>
 
-## Enabling default access to guest system logs with the CLI
+## Enable default access to guest system logs with the CLI
 
 To troubleshoot issues more easily, you can enable default access to virtual machine (VM) guest system logs by editing the `HyperConverged` custom resource (CR).
 
@@ -258,7 +260,7 @@ Procedure
 
 </div>
 
-## Setting guest system log access for a single VM with the web console
+## Set per-VM guest system log access with the web console
 
 To troubleshoot a specific virtual machine (VM) without changing global settings, you can configure the guest system log access by using the web console.
 
@@ -280,7 +282,7 @@ Procedure
 
 </div>
 
-## Setting guest system log access for a single VM with the CLI
+## Set per-VM guest system log access with the CLI
 
 To troubleshoot a specific virtual machine (VM) without changing global settings, you can configure the guest system log access by editing the `VirtualMachine` CR.
 
@@ -342,7 +344,7 @@ Procedure
 
 </div>
 
-## Viewing guest system logs with the web console
+## View guest system logs with the web console
 
 To diagnose and troubleshoot issues with a virtual machine (VM) guest operating system, you can view the guest system logs by using the web console.
 
@@ -378,7 +380,7 @@ Procedure
 
 </div>
 
-## Viewing guest system logs with the CLI
+## View guest system logs with the CLI
 
 To diagnose and troubleshoot issues with a virtual machine (VM) guest operating system, you can view the guest system logs by running the `oc logs` command.
 
@@ -414,11 +416,11 @@ Procedure
 
 </div>
 
-# Log aggregation
+# Log aggregation with Loki
 
 To more easily diagnose and troubleshoot issues, you can aggregate and filter your logs.
 
-## Viewing aggregated OpenShift Virtualization logs with Loki
+## View aggregated OpenShift Virtualization logs with Loki
 
 You can use the Loki logging component to view aggregated logs for OpenShift Virtualization pods and containers in the web console. This is useful for troubleshooting issues and monitoring your OpenShift Virtualization environment.
 
@@ -566,11 +568,11 @@ Troubleshoot OpenShift Virtualization by reviewing common error messages found i
 `ErrImagePull` or `ImagePullBackOff`
 Indicates an incorrect deployment configuration or problems with the images that are referenced.
 
-# Troubleshooting data volumes
+# Data volume troubleshooting
 
 To analyze and resolve issues, you can check the `Conditions` and `Events` sections of the `DataVolume` object.
 
-## About data volume conditions and events
+## Data volume conditions and events
 
 To diagnose data volume issues, you can examine the `Conditions` and `Events` sections of the `oc describe` command output.
 
@@ -604,7 +606,7 @@ An event is generated when the `Status`, `Reason`, or `Message` changes. Both co
 
 For example, if you misspell the URL during an import operation, the import generates a 404 message. That message change generates an event with a reason. The output in the `Conditions` section is updated as well.
 
-## Analyzing data volume conditions and events
+## Data volume condition and event analysis
 
 To determine the state of a data volume in relation to a Persistent Volume Claim (PVC) and whether or not an operation is actively running on the data volume, inspect the `Conditions` and `Events` section of the `oc describe` command output.
 
@@ -686,8 +688,12 @@ Examples of various combinations follow.
 
 - [List of events](../../nodes/clusters/nodes-containers-events.md#nodes-containers-events-list_nodes-containers-events)
 
-- [Aggregated logs](virt-troubleshooting.md#virt-viewing-logs-loki_virt-troubleshooting)
+- [View aggregated OpenShift Virtualization logs with Loki](virt-troubleshooting.md#virt-viewing-logs-loki_virt-troubleshooting)
 
 - [Connecting to virtual machine consoles](../managing_vms/virt-accessing-vm-consoles.md#virt-accessing-vm-consoles)
+
+- [List of known Windows BSOD issues on OpenShift Virtualization and RHEL KVM](https://access.redhat.com/articles/7141237)
+
+- [Recommendations when investigating Windows BSOD issues](https://access.redhat.com/articles/7129390)
 
 - [LogQL log queries](https://grafana.com/docs/loki/latest/logql/log_queries/)

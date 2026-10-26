@@ -5,7 +5,7 @@ Explore OpenShift Virtualization by taking guided tours, installing the Operator
 > [!NOTE]
 > Cluster configuration procedures require `cluster-admin` privileges.
 
-# Getting started tour
+# Take the Getting started tour
 
 The **Getting started** tour introduces several key aspects of using OpenShift Virtualization. There are two ways to start the tour.
 
@@ -35,7 +35,7 @@ Procedure
 
 </div>
 
-# Quick start tours
+# Take a quick start tour
 
 You can explore several OpenShift Virtualization capabilities by taking quick start tours in the web console.
 
@@ -95,19 +95,11 @@ To run a self-service review, upload your cluster’s `must-gather` data to the 
 
 The self-service TSR provides a solid baseline for cluster health. If you need additional guidance or a more comprehensive review, contact your Red Hat account team to arrange an assisted review through a Technical Account Manager (TAM) or Red Hat consultant. An assisted review includes human analysis, deeper coverage, and access to checks that are updated more frequently than the self-service version.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+## Additional resources
 
 - [Technical Supportability Review with AI tool](https://access.redhat.com/support/cases/#/analyze)
 
 - [Red Hat Technical Supportability Review with AI: Proactive AI-Driven Cluster Assessments for OpenShift Container Platform](https://access.redhat.com/solutions/7141255)
-
-</div>
 
 # Additional resources
 

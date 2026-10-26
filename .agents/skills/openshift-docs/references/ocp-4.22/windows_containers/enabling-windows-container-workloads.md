@@ -33,7 +33,7 @@ You can install the Windows Machine Config Operator using either the web console
 > [!NOTE]
 > Due to a limitation within the Windows operating system, `clusterNetwork` CIDR addresses of class E, such as `240.0.0.0`, are not compatible with Windows nodes.
 
-## Installing the Windows Machine Config Operator using the web console
+## Install the Windows Machine Config Operator by using the web console
 
 You can use the OpenShift Container Platform web console to install the Windows Machine Config Operator (WMCO).
 
@@ -79,7 +79,7 @@ Procedure
 
 </div>
 
-## Installing the Windows Machine Config Operator using the CLI
+## Install the Windows Machine Config Operator by using the CLI
 
 You can use the OpenShift CLI (`oc`) to install the Windows Machine Config Operator (WMCO).
 
@@ -223,7 +223,7 @@ Procedure
 
 </div>
 
-# Configuring a secret for the Windows Machine Config Operator
+# Configure a secret for the Windows Machine Config Operator
 
 Before you can use the Windows Machine Config Operator (WMCO), you must create a secret in the same WMCO namespace as your private key.
 
@@ -276,7 +276,7 @@ Procedure
 
 </div>
 
-# Configuring debug-level logging for the Windows Machine Config Operator
+# Configure debug-level logging for the Windows Machine Config Operator
 
 You can edit the WMCO `Subscription` object to change the Windows Machine Config Operator (WMCO) log level to `debug`, if you need more verbose output.
 
@@ -325,7 +325,7 @@ Procedure
 
 </div>
 
-# Using Windows containers in a proxy-enabled cluster
+# Windows containers in a proxy-enabled cluster
 
 You can add Windows nodes and run workloads in a proxy-enabled cluster because Windows Machine Config Operator (WMCO) can consume and use the cluster-wide egress proxy when making external requests outside the cluster’s internal network.
 
@@ -340,7 +340,7 @@ Windows workloads created on Windows nodes in proxy-enabled clusters do not inhe
 
 For more information on the cluster-wide proxy, see "Configuring the cluster-wide proxy".
 
-# Using Windows containers with a mirror registry
+# Mirror registry support for Windows containers
 
 When using the Windows Machine Config Operator (WMCO), your Windows workloads can pull images from a registry mirror rather than from a public registry by using an `ImageDigestMirrorSet` (IDMS) or `ImageTagMirrorSet` (ITMS) object to configure your cluster to pull images from the mirror registry.
 
@@ -798,7 +798,7 @@ Procedure
 
 - [About disconnected installation mirroring](../disconnected/index.md#installing-mirroring-disconnected-about)
 
-- [Using Windows containers with a mirror registry](enabling-windows-container-workloads.md#wmco-disconnected-cluster_enabling-windows-container-workloads)
+- [Mirror registry support for Windows containers](enabling-windows-container-workloads.md#wmco-disconnected-cluster_enabling-windows-container-workloads)
 
 - [Rebooting a OpenShift Container Platform node gracefully](../nodes/nodes/nodes-nodes-rebooting.md#nodes-nodes-rebooting-gracefully_nodes-nodes-rebooting)
 

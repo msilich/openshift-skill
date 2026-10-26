@@ -7,7 +7,7 @@ You can access a virtual machine (VM) that is attached to a secondary network in
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
-# Configuring a DNS server for secondary networks
+# Configure a DNS server for secondary networks
 
 The Cluster Network Addons Operator (CNAO) deploys a Domain Name Server (DNS) server and monitoring components when you enable the `deployKubeSecondaryDNS` feature gate in the `HyperConverged` custom resource (CR).
 
@@ -128,7 +128,7 @@ Procedure
 
 </div>
 
-# Connecting to a VM on a secondary network by using the cluster FQDN
+# Connect to a secondary network VM by using the FQDN
 
 You can access a running virtual machine (VM) attached to a secondary network interface by using the fully qualified domain name (FQDN) of the cluster.
 

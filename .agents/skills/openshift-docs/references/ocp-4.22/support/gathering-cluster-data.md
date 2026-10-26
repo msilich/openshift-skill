@@ -199,7 +199,7 @@ The flags listed in the following table are available to use with the `oc adm mu
 | `--since-time` | `oc adm must-gather --since-time='<date_and_time>'` | Only return logs after a specific date and time, expressed in ([RFC3339](https://www.rfc-editor.org/rfc/rfc3339)) format. Defaults to all logs. Plugins are encouraged but not required to support this. Only one `since-time` or `since` may be used. |
 | `--source-dir` | `oc adm must-gather --source-dir='/<directory_name>/'` | Set the specific directory on the pod where you copy the gathered data from. |
 | `--timeout` | `oc adm must-gather --timeout='<time>'` | The length of time to gather data before timing out, expressed as seconds, minutes, or hours, for example, 3s, 5m, or 2h. Time specified must be higher than zero. Defaults to 10 minutes if not specified. |
-| `--volume-percentage` | `oc adm must-gather --volume-percentage=<percent>` | Specify maximum percentage of pod’s allocated volume that can be used for `must-gather`. If this limit is exceeded, `must-gather` stops gathering, but still copies gathered data. Defaults to 30% if not specified. |
+| `--volume-percentage` | `oc adm must-gather --volume-percentage=<percent>` | Specifies the maximum percentage of the allocated volume of a pod that can be used for `must-gather`. If this limit is exceeded, `must-gather` stops gathering, but still copies gathered data. Defaults to 70% if not specified. |
 
 OpenShift Container Platform flags for `oc adm must-gather`
 
@@ -638,19 +638,11 @@ To run a self-service review, upload your cluster’s `must-gather` data to the 
 
 The self-service TSR provides a solid baseline for cluster health. If you need additional guidance or a more comprehensive review, contact your Red Hat account team to arrange an assisted review through a Technical Account Manager (TAM) or Red Hat consultant. An assisted review includes human analysis, deeper coverage, and access to checks that are updated more frequently than the self-service version.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+## Additional resources
 
 - [Technical Supportability Review with AI tool](https://access.redhat.com/support/cases/#/analyze)
 
 - [Red Hat Technical Supportability Review with AI: Proactive AI-Driven Cluster Assessments for OpenShift Container Platform](https://access.redhat.com/solutions/7141255)
-
-</div>
 
 # About Support Log Gather
 

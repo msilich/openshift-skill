@@ -2,7 +2,7 @@
 
 To migrate a virtual machine (VM) across OpenShift Container Platform clusters, you must configure an OpenShift Container Platform provider for each cluster that you are including in the migration. If MTV is already installed on a cluster, a local provider already exists.
 
-# Configuring the root certificate authority for providers
+# Configure the root certificate authority for providers
 
 You must configure an OpenShift Container Platform provider for each cluster that you are including in a migration, and each provider requires a certificate authority (CA) for the cluster. Configure the root CA for the entire cluster to avoid CA expiration, which causes the provider to fail.
 
@@ -34,9 +34,9 @@ Procedure
 
 </div>
 
-# Creating the long-lived service account and token to use with MTV providers
+# Create a service account and token for MTV providers
 
-When you register an OpenShift Virtualization provider in the Migration Toolkit for Virtualization (MTV) web console, you must create a service account and cluster role binding, which gives MTV persistent permissions to read and create virtual machine resources during migration.
+When you register an OpenShift Virtualization provider in the Migration Toolkit for Virtualization (MTV) web console, you must create a service account and cluster role binding. This gives MTV persistent permissions to read and create virtual machine resources during migration.
 
 <div>
 

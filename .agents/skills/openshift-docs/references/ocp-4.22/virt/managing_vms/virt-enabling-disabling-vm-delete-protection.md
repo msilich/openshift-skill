@@ -6,9 +6,9 @@ You enable or disable delete protection from either the command line or the VMâ€
 
 You can also choose to remove availability of the delete protection option for any VMs in a cluster you administer. In this case, VMs with the feature already enabled retain the protection, while the option is unavailable for any newly created VMs.
 
-# Enabling or disabling virtual machine delete protection by using the web console
+# Enable or disable VM delete protection by using the web console
 
-To prevent the inadvertent deletion of a virtual machine (VM), you can enable VM delete protection by using the OpenShift Container Platform web console. You can also disable delete protection for a VM.
+You can enable or disable delete protection on a virtual machine (VM), which prevents inadvertent deletion. The default is disabled.
 
 By default, delete protection is not enabled for VMs. You must set the option for each individual VM.
 
@@ -46,9 +46,9 @@ Procedure
 
 </div>
 
-# Enabling or disabling VM delete protection by using the CLI
+# Enable or disable VM delete protection by using the CLI
 
-To prevent the inadvertent deletion of a virtual machine (VM), you can enable VM delete protection by using the command line. You can also disable delete protection for a VM.
+You can enable or disable delete protection on a virtual machine (VM) by using the command line. Delete protection prevents inadvertent deletion.
 
 By default, delete protection is not enabled for VMs. You must set the option for each individual VM.
 
@@ -86,9 +86,9 @@ Procedure
 
 </div>
 
-# Removing the VM delete protection option
+# Remove the VM delete protection option from the cluster
 
-When you enable delete protection on a virtual machine (VM), you ensure that the VM cannot be inadvertently deleted. You can also disable the protection for a VM.
+You can make the delete protection option unavailable on your cluster by applying a `ValidatingAdmissionPolicy`. A virtual machine (VM) that already has delete protection keeps the setting, but you cannot enable protection on a new VM.
 
 As a cluster administrator, you can choose not to make the VM delete protection option available. VMs with delete protection already enabled retain that setting; for any new VMs that are created, enabling the option is not allowed.
 

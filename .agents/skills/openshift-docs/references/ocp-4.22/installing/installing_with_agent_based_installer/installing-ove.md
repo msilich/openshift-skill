@@ -4,11 +4,6 @@ You can deploy an OpenShift Container Platform cluster without the need for an e
 
 Although the method supports general clusters, the downloaded media contains an Operator bundle that is curated specifically for Red Hat OpenShift Virtualization Engine, meaning additional Operators must be retrieved separately if required for other use cases.
 
-> [!IMPORTANT]
-> Installing a cluster without an external registry is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
->
-> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
-
 # Installation method advantages
 
 This method has several advantages for users who want to install a cluster primarily to run virtualized workloads using OpenShift Virtualization.
@@ -52,9 +47,21 @@ Procedure
 
 6.  In the **Cluster details** page, select the toggle for "I’m installing on a disconnected/air-gapped/secured environment".
 
-7.  Click **Next**.
+7.  Select a version from the **OpenShift version** dropdown menu.
 
-8.  Click **Download ISO**.
+8.  Click **Next**.
+
+9.  Optional: Preconfigure the ISO on the **Optional configurations** page:
+
+    1.  Enter the Rendezvous IP in the **Rendezvous IP** field.
+
+    2.  Upload a SSH public key in the **SSH public key** field.
+
+    3.  Click **Replace default NTP sources** and add any NTP pools or servers in the **NTP sources** field.
+
+10. Click **Next**.
+
+11. Click **Download ISO**.
 
 </div>
 
@@ -301,3 +308,5 @@ Procedure
 - [Migrating virtual machines from VMware vSphere (Migration Toolkit for Virtualization documentation)](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.8/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-vmware)
 
 - [Migrating virtual machines from Red Hat Virtualization (Migration Toolkit for Virtualization documentation)](https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.8/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-rhv_rhv)
+
+- [Configuring your cluster to use an external registry](../../disconnected/configuring-registry-external.md#configuring-registry-external)

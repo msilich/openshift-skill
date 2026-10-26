@@ -18,10 +18,12 @@ When working with the Compliance Operator (CO), you can use the profiles provide
 
 | Profile | Profile title | Application | Industry compliance benchmark | Supported architectures | Supported platforms |
 |----|----|----|----|----|----|
-| ocp4-cis <sup>\[1\]</sup> | CIS Red Hat OpenShift Container Platform Benchmark v1.9.0 | Platform | [CIS Benchmarks ™](https://www.cisecurity.org/cis-benchmarks/) <sup>\[4\]</sup> | `x86_64` `ppc64le` `s390x` `aarch64` |  |
+| ocp4-cis <sup>\[1\]</sup> | CIS Red Hat OpenShift Container Platform Benchmark v2.0.0 | Platform | [CIS Benchmarks ™](https://www.cisecurity.org/cis-benchmarks/) <sup>\[4\]</sup> | `x86_64` `ppc64le` `s390x` `aarch64` |  |
 | ocp4-cis-1-9<sup>\[3\]</sup> | CIS Red Hat OpenShift Container Platform Benchmark v1.9.0 | Platform | [CIS Benchmarks ™](https://www.cisecurity.org/cis-benchmarks/) <sup>\[4\]</sup> | `x86_64` `ppc64le` `s390x` `aarch64` |  |
-| ocp4-cis-node <sup>\[1\]</sup> | CIS Red Hat OpenShift Container Platform Benchmark v1.9.0 | Node <sup>\[2\]</sup> | [CIS Benchmarks ™](https://www.cisecurity.org/cis-benchmarks/) <sup>\[4\]</sup> | `x86_64` `ppc64le` `s390x` `aarch64` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
+| ocp4-cis-node <sup>\[1\]</sup> | CIS Red Hat OpenShift Container Platform Benchmark v2.0.0 | Node <sup>\[2\]</sup> | [CIS Benchmarks ™](https://www.cisecurity.org/cis-benchmarks/) <sup>\[4\]</sup> | `x86_64` `ppc64le` `s390x` `aarch64` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
 | ocp4-cis-node-1-9<sup>\[3\]</sup> | CIS Red Hat OpenShift Container Platform Benchmark v1.9.0 | Node <sup>\[2\]</sup> | [CIS Benchmarks ™](https://www.cisecurity.org/cis-benchmarks/) <sup>\[4\]</sup> | `x86_64` `ppc64le` `s390x` `aarch64` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
+| ocp4-cis-vm-extension | CIS Red Hat OpenShift Virtual Machine Extension Benchmark v1.0.0 | Platform | [CIS Benchmarks ™](https://www.cisecurity.org/cis-benchmarks/) <sup>\[4\]</sup> | `x86_64` `ppc64le` `s390x` `aarch64` |  |
+| ocp4-cis-vm-extension-node | CIS Red Hat OpenShift Virtual Machine Extension Benchmark v1.0.0 | Node <sup>\[2\]</sup> | [CIS Benchmarks ™](https://www.cisecurity.org/cis-benchmarks/) <sup>\[4\]</sup> | `x86_64` `ppc64le` `s390x` `aarch64` |  |
 
 Supported CIS compliance profiles
 
@@ -29,7 +31,7 @@ Supported CIS compliance profiles
 
 2.  Node profiles must be used with the relevant Platform profile. For more information, see *Compliance Operator profile types*.
 
-3.  All earlier CIS profiles are superceded by CIS v1.9.0. It is recommended to apply the latest profile to your environment.
+3.  CIS v1.9.0 is superceded by CIS v2.0.0. It is recommended to apply the latest profile to your environment.
 
 4.  To locate the CIS OpenShift Container Platform v4 Benchmark, go to [CIS Benchmarks](https://www.cisecurity.org/benchmark/kubernetes) and click **Download Latest CIS Benchmark**, where you can then register to download the benchmark.
 
@@ -138,11 +140,12 @@ Supported PCI-DSS compliance profiles
 
 | Profile | Profile title | Application | Industry compliance benchmark | Supported architectures | Supported platforms |
 |----|----|----|----|----|----|
-| ocp4-stig <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift<sup>\[3\]</sup> | Platform | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
-| ocp4-stig-node <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift<sup>\[3\]</sup> | Node <sup>\[2\]</sup> | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
+| ocp4-stig <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R6<sup>\[3\]</sup> | Platform | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
+| ocp4-stig-node <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R6<sup>\[3\]</sup> | Node <sup>\[2\]</sup> | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
+| ocp4-stig-vm-extension | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R6 - OpenShift Virtualization | Platform | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
 | ocp4-stig-v2r3 | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R3 | Platform | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
 | ocp4-stig-node-v2r3 <sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R3 | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` |  |
-| rhcos4-stig<sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift<sup>\[3\]</sup> | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
+| rhcos4-stig<sup>\[1\]</sup> | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R6<sup>\[3\]</sup> | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
 | rhcos4-stig-v2r3 | Defense Information Systems Agency Security Technical Implementation Guide (DISA STIG) for Red Hat OpenShift V2R3 | Node | [DISA-STIG](https://public.cyber.mil/stigs/downloads/) | `x86_64` `ppc64le` | Red Hat OpenShift Service on AWS with hosted control planes (ROSA HCP) |
 
 Supported STIG compliance profiles
@@ -151,7 +154,7 @@ Supported STIG compliance profiles
 
 2.  Node profiles must be used with the relevant Platform profile. For more information, see *Compliance Operator profile types*.
 
-3.  DISA-STIG V1R2 is superceded by DISA-STIG V2R3. It is recommended to apply the latest profile to your environment.
+3.  DISA-STIG V2R3 is superceded by DISA-STIG V2R6. It is recommended to apply the latest profile to your environment.
 
 ## About extended compliance profiles
 

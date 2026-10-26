@@ -474,7 +474,6 @@ metadata:
   namespace: mynamespace
   annotations:
     cpu-load-balancing.crio.io: "disable"
-    cpu-quota.crio.io: "disable"
 # ...
 spec:
   containers:

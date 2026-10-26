@@ -2,7 +2,7 @@
 
 OpenShift Virtualization provides a comprehensive virtualization solution that allows you to run and manage virtual machine workloads alongside container workloads in your OpenShift Container Platform cluster.
 
-# What you can do with OpenShift Virtualization
+# OpenShift Virtualization capabilities
 
 OpenShift Virtualization provides scalable, enterprise-grade virtualization functionality for your cluster. You can use it to manage virtual machines (VMs) exclusively or alongside container workloads.
 
@@ -39,9 +39,9 @@ You can check your OpenShift Virtualization cluster for compliance issues by ins
 
 For information about partnering with Independent Software Vendors (ISVs) and Services partners for specialized storage, networking, backup, and additional functionality, see the Red Hat Ecosystem Catalog.
 
-# Comparing OpenShift Virtualization to VMware vSphere
+# VMware vSphere to OpenShift Virtualization concept mapping
 
-If you are familiar with VMware vSphere, the following table lists OpenShift Virtualization components that you can use to accomplish similar tasks.
+If you are familiar with VMware vSphere, you can map its concepts to the OpenShift Virtualization components that accomplish similar tasks.
 
 However, because OpenShift Virtualization is conceptually different from vSphere, and much of its functionality comes from the underlying OpenShift Container Platform, OpenShift Virtualization does not have direct alternatives for all vSphere concepts or components.
 
@@ -110,7 +110,7 @@ OpenShift Virtualization 4.22 is supported for use on OpenShift Container Platfo
 
 The latest stable release of OpenShift Virtualization 4.22 is 4.22.9.
 
-# About volume and access modes for virtual machine disks
+# Volume and access modes for VM disks
 
 If you use the storage API with known storage providers, the volume and access modes are selected automatically. However, if you use a storage class that does not have a storage profile, you must configure the volume and access mode.
 
@@ -133,9 +133,9 @@ For best results, use the `ReadWriteMany` (RWX) access mode and the `Block` volu
 >
 > Set the `evictionStrategy` field to `None` for these virtual machines. The `None` strategy powers down VMs during node reboots.
 
-# Single-node OpenShift differences
+# Single-node OpenShift feature support
 
-You can install OpenShift Virtualization on single-node OpenShift.
+You can install OpenShift Virtualization on single-node OpenShift. The topology does not support high availability, pod disruption, live migration, or eviction strategies.
 
 However, you should be aware that Single-node OpenShift does not support the following features:
 

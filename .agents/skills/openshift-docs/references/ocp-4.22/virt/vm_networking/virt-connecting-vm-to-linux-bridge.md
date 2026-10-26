@@ -13,11 +13,9 @@ To create a Linux bridge network and attach a VM to the network, perform the fol
 > [!NOTE]
 > OpenShift Virtualization does not support Linux bridge bonding modes 0, 5, and 6. For more information, see "Additional resources".
 
-# Creating a Linux bridge NNCP
+# Create a Linux bridge node network configuration policy
 
-After you install the Kubernetes NMState Operator, you can configure a Linux bridge network for live migration or external access to virtual machines (VMs).
-
-You can create a `NodeNetworkConfigurationPolicy` (NNCP) manifest for a Linux bridge network.
+You can configure a Linux bridge network for live migration or external access to virtual machines (VMs) by creating a `NodeNetworkConfigurationPolicy` (NNCP) manifest.
 
 <div>
 
@@ -39,60 +37,64 @@ Procedure
 
 </div>
 
-- Create the `NodeNetworkConfigurationPolicy` manifest. This example includes sample values that you must replace with your own information.
+1.  Configure the `NNCP` manifest. This example includes sample values that you must replace with your own information.
 
-  ``` yaml
-  apiVersion: nmstate.io/v1
-  kind: NodeNetworkConfigurationPolicy
-  metadata:
-    name: br1-eth1-policy
-  spec:
-    desiredState:
-      interfaces:
-        - name: br1
-          description: Linux bridge with eth1 as a port
-          type: linux-bridge
-          state: up
-          ipv4:
-            enabled: false
-          bridge:
-            options:
-              stp:
-                enabled: false
-            port:
-              - name: eth1
-  ```
+    ``` yaml
+    apiVersion: nmstate.io/v1
+    kind: NodeNetworkConfigurationPolicy
+    metadata:
+      name: br1-eth1-policy
+    spec:
+      desiredState:
+        interfaces:
+          - name: br1
+            description: Linux bridge with eth1 as a port
+            type: linux-bridge
+            state: up
+            ipv4:
+              enabled: false
+            bridge:
+              options:
+                stp:
+                  enabled: false
+              port:
+                - name: eth1
+    ```
 
-  - `metadata.name` defines the name of the node network configuration policy.
+    - `metadata.name`: Defines the name of the node network configuration policy.
 
-  - `spec.desiredState.interfaces.name` defines the name of the new Linux bridge.
+    - `spec.desiredState.interfaces.name`: Defines the name of the new Linux bridge.
 
-  - `spec.desiredState.interfaces.description` is an optional field that can be used to define a human-readable description for the bridge.
+    - `spec.desiredState.interfaces.description`: Optional field that can be used to define a human-readable description for the bridge.
 
-  - `spec.desiredState.interfaces.type` defines the interface type. In this example, the type is a Linux bridge.
+    - `spec.desiredState.interfaces.type`: Defines the interface type. In this example, the type is a Linux bridge.
 
-  - `spec.desiredState.interfaces.state` defines the requested state for the interface after creation.
+    - `spec.desiredState.interfaces.state`: Defines the requested state for the interface after creation.
 
-  - `spec.desiredState.interfaces.ipv4.enabled` defines whether the ipv4 protocol is active. Setting this to `false` disables IPv4 addressing on this bridge.
+    - `spec.desiredState.interfaces.ipv4.enabled`: Defines whether the ipv4 protocol is active. Setting this to `false` disables IPv4 addressing on this bridge.
 
-  - `spec.desiredState.interfaces.bridge.options.stp.enabled` defines whether Spanning Tree Protocol (STP) is active. Setting this to `false` disables STP on this bridge.
+    - `spec.desiredState.interfaces.bridge.options.stp.enabled`: Defines whether Spanning Tree Protocol (STP) is active. Setting this to `false` disables STP on this bridge.
 
-  - `spec.desiredState.interfaces.bridge.port.name` defines the node NIC that the bridge is attached to.
+    - `spec.desiredState.interfaces.bridge.port.name`: Defines the node NIC that the bridge is attached to.
 
-    > [!NOTE]
-    > To create the NNCP manifest for a Linux bridge using Open Systems Adapter (OSA) with IBM Z®, you must disable VLAN filtering by the setting the `rx-vlan-filter` to `false` in the `NodeNetworkConfigurationPolicy` manifest.
-    >
-    > Alternatively, if you have SSH access to the node, you can disable VLAN filtering by running the following command:
-    >
-    > ``` terminal
-    > $ sudo ethtool -K <osa-interface-name> rx-vlan-filter off
-    > ```
+      > [!NOTE]
+      > To create the NNCP manifest for a Linux bridge using Open Systems Adapter (OSA) with IBM Z®, you must disable VLAN filtering by the setting the `rx-vlan-filter` to `false` in the `NodeNetworkConfigurationPolicy` manifest.
+      >
+      > Alternatively, if you have SSH access to the node, you can disable VLAN filtering by running the following command:
+      >
+      > ``` terminal
+      > $ sudo ethtool -K <osa-interface-name> rx-vlan-filter off
+      > ```
+
+2.  Create the `NNCP` manifest:
+
+        $ oc apply -f linux-bridge-nncp.yaml
 
 </div>
 
-# Creating a Linux bridge NAD by using the web console
+# Create a Linux bridge NAD by using the web console
 
-Use the OpenShift Container Platform web console to create a network attachment definition (NAD) that connects pods and virtual machines to a layer-2 network.
+Use the OpenShift Container Platform web console to create a `NetworkAttachmentDefinition` (`net-attach-def`) that connects pods and virtual machines to a layer-2 network.
 
 > [!WARNING]
 > Configuring IP address management (IPAM) in a network attachment definition for virtual machines is not supported.
@@ -121,7 +123,7 @@ Procedure
 6.  Optional: If the resource has VLAN IDs configured, enter the ID numbers in the **VLAN Tag Number** field.
 
     > [!NOTE]
-    > Open Systems Adapter (OSA) interfaces on IBM Z® do not support VLAN filtering and drop VLAN-tagged traffic. Avoid using VLAN-tagged NADs with OSA interfaces.
+    > Open Systems Adapter (OSA) interfaces on IBM Z® do not support VLAN filtering and drop VLAN-tagged traffic. Avoid using VLAN-tagged `NetworkAttachmentDefinitions` with OSA interfaces.
 
 7.  Optional: Select **MAC Spoof Check** to enable MAC spoof filtering. This feature provides security against a MAC spoofing attack by allowing only a single MAC address to exit the pod.
 
@@ -149,7 +151,7 @@ Procedure
 
 </div>
 
-# Creating a Linux bridge NAD by using the CLI
+# Create a Linux bridge NAD by using the CLI
 
 You can create a network attachment definition (NAD) to provide layer-2 networking to pods and virtual machines (VMs) by using the command line.
 
@@ -272,7 +274,7 @@ Verification
 
 </div>
 
-## Enabling port isolation for a Linux bridge NAD
+## Enable port isolation for a Linux bridge NAD
 
 You can enable port isolation for a Linux bridge network attachment definition (NAD) so that virtual machines (VMs) or pods that run on the same virtual LAN (VLAN) can operate in isolation from one another.
 
@@ -346,9 +348,9 @@ Procedure
 
 </div>
 
-# Configuring a VM network interface by using the web console
+# Add a VM network interface in the web console
 
-You can configure a network interface for a virtual machine (VM) by using the OpenShift Container Platform web console.
+You can add a network interface to a virtual machine (VM) from the OpenShift Container Platform web console and attach it to an existing network attachment definition. Restart or live migrate the VM to apply the change.
 
 <div>
 
@@ -432,7 +434,7 @@ Information about networking fields in the virtual machine wizard.
 </tbody>
 </table>
 
-# Configuring a VM network interface by using the CLI
+# Configure a VM network interface by using the CLI
 
 You can configure a virtual machine (VM) network interface for a bridge network by using the command line.
 

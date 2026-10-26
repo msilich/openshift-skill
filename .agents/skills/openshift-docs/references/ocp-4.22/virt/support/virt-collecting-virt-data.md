@@ -95,7 +95,7 @@ Procedure
 
 </div>
 
-# Using the must-gather tool for OpenShift Virtualization
+# Use the must-gather tool for OpenShift Virtualization
 
 You can collect data about OpenShift Virtualization resources by running the `must-gather` command with the OpenShift Virtualization image.
 
@@ -280,9 +280,9 @@ $ oc adm must-gather \
 </tbody>
 </table>
 
-# Generating a VM memory dump
+# Generate a VM memory dump
 
-When a virtual machine (VM) terminates unexpectedly, you can use the `virtctl memory-dump` to generate a memory dump command to output a VM memory dump and save it on a persistent volume claim (PVC). Afterwards, you can analyze the memory dump to diagnose and troubleshoot issues on the VM.
+When a virtual machine (VM) terminates unexpectedly, you can run the `virtctl memory-dump` command to output a VM memory dump and save it on a persistent volume claim (PVC). Afterward, you can analyze the memory dump to diagnose and troubleshoot issues on the VM.
 
 <div>
 
@@ -362,19 +362,11 @@ To run a self-service review, upload your cluster’s `must-gather` data to the 
 
 The self-service TSR provides a solid baseline for cluster health. If you need additional guidance or a more comprehensive review, contact your Red Hat account team to arrange an assisted review through a Technical Account Manager (TAM) or Red Hat consultant. An assisted review includes human analysis, deeper coverage, and access to checks that are updated more frequently than the self-service version.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+## Additional resources
 
 - [Technical Supportability Review with AI tool](https://access.redhat.com/support/cases/#/analyze)
 
 - [Red Hat Technical Supportability Review with AI: Proactive AI-Driven Cluster Assessments for OpenShift Container Platform](https://access.redhat.com/solutions/7141255)
-
-</div>
 
 # Additional resources
 
@@ -390,7 +382,7 @@ Additional resources
 
 - [Connect to the desktop viewer by using the web console](../managing_vms/virt-accessing-vm-consoles.md#virt-connecting-desktop-viewer-web_virt-accessing-vm-consoles)
 
-- [Collect memory dumps from VMs](virt-collecting-virt-data.md#virt-generating-a-vm-memory-dump_virt-collecting-virt-data)
+- [Generate a VM memory dump](virt-collecting-virt-data.md#virt-generating-a-vm-memory-dump_virt-collecting-virt-data)
 
 - [Submitting a support case](../../support/getting-support.md#support-submitting-a-case_getting-support)
 

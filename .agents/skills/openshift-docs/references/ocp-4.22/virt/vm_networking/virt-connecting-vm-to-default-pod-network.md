@@ -5,7 +5,7 @@ You can connect a virtual machine to the default internal pod network by configu
 > [!NOTE]
 > Traffic passing through network interfaces to the default pod network is interrupted during live migration.
 
-# Configuring masquerade mode from the CLI
+# Configure masquerade mode by using the CLI
 
 You can use masquerade mode to hide a virtual machine’s outgoing traffic behind the pod IP address. Masquerade mode uses Network Address Translation (NAT) to connect virtual machines to the pod network backend through a Linux bridge.
 
@@ -71,7 +71,7 @@ Procedure
 
 </div>
 
-# Configuring masquerade mode with dual-stack (IPv4 and IPv6)
+# Configure masquerade mode with dual-stack networking
 
 You can configure a new virtual machine (VM) to use both IPv6 and IPv4 on the default pod network by using cloud-init.
 
@@ -165,7 +165,7 @@ Verification
 $ oc get vmi <vmi-name> -o jsonpath="{.status.interfaces[*].ipAddresses}"
 ```
 
-# About jumbo frames support
+# Jumbo frames support
 
 When using the OVN-Kubernetes CNI plugin, you can send unfragmented jumbo frame packets between two virtual machines (VMs) that are connected on the default pod network. Jumbo frames have a maximum transmission unit (MTU) value greater than 1500 bytes.
 

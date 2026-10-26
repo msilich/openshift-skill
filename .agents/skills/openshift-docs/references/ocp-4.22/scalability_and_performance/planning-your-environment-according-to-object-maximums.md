@@ -9,7 +9,7 @@ The example guidelines are based on the largest possible cluster. For smaller cl
 
 # OpenShift Container Platform tested cluster maximums for major releases
 
-To ensure your deployment remains supported, plan your cluster configuration by using tested cluster maximums. OpenShift Container Platform validates these specific limits for major releases rather than theoretical absolute cluster maximums, ensuring stability for your environment.
+Plan your cluster configuration by using tested cluster maximums as a scale guide. OpenShift Container Platform validates these specific limits for major releases rather than theoretical absolute cluster maximums. Exceeding a tested maximum is not a loss of support, though Red Hat has not validated that scale.
 
 > [!NOTE]
 > Red Hat does not provide direct guidance on sizing your OpenShift Container Platform cluster. This is because determining whether your cluster is within the supported bounds of OpenShift Container Platform requires careful consideration of all the multidimensional factors that limit the cluster scale.
@@ -20,7 +20,7 @@ OpenShift Container Platform supports tested cluster maximums rather than absolu
 |----|----|----|
 | Number of nodes | 2,000 | Pause pods were deployed to stress the control plane components of OpenShift Container Platform at 2000 node scale. The ability to scale to similar numbers will vary depending upon specific deployment and workload parameters. |
 | Number of pods | 150,000 | The pod count displayed here is the number of test pods. The actual number of pods depends on the application’s memory, CPU, and storage requirements. |
-| Number of pods per node | 2,500 | This was tested on a cluster with 31 servers: 3 control planes, 2 infrastructure nodes, and 26 compute nodes. If you need 2,500 user pods, you need both a `hostPrefix` of `20`, which allocates a network large enough for each node to contain more than 2000 pods, and a custom kubelet config with `maxPods` set to `2500`. For more information, see [Running 2500 pods per node on OCP 4.13](https://cloud.redhat.com/blog/running-2500-pods-per-node-on-ocp-4.13). |
+| Number of pods per node | 500 | The default `maxPods` value is 250. To run 500 pods per node, configure a custom kubelet config with `maxPods` set to `500`. |
 | Number of namespaces | 10,000 | When there are a large number of active projects, etcd might suffer from poor performance if the keyspace grows excessively large and exceeds the space quota. Periodic maintenance of etcd, including defragmentation, is highly recommended to free etcd storage. |
 | Number of builds | 10,000 (Default pod RAM 512 Mi) - Source-to-Image (S2I) build strategy | \- |
 | Number of pods per namespace | 25,000 | There are several control loops in the system that must iterate over all objects in a given namespace as a reaction to some changes in state. Having a large number of objects of a given type in a single namespace can make those loops expensive and slow down processing given state changes. The limit assumes that the system has enough CPU, memory, and disk to satisfy the application requirements. |
@@ -169,7 +169,7 @@ Total physical memory used is 512 GiB.
 
 # How to plan your environment according to tested cluster maximums
 
-To ensure your infrastructure meets operational requirements, plan your OpenShift Container Platform environment according to tested cluster maximums. Designing your cluster within these validated limits ensures that you can maintain stability and ensures your deployment remains supported
+Plan your OpenShift Container Platform environment by using tested cluster maximums as a scale guide. Designing your cluster within these validated limits helps you maintain stability. Exceeding a tested maximum is not a loss of support, though Red Hat has not validated that scale.
 
 > [!IMPORTANT]
 > Oversubscribing the physical resources on a node affects resource guarantees the Kubernetes scheduler makes during pod placement. Learn what measures you can take to avoid memory swapping.

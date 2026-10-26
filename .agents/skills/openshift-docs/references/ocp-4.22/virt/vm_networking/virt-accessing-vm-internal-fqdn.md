@@ -5,7 +5,7 @@ You can access a virtual machine on a stable, fully qualified domain name (FQDN)
 > [!IMPORTANT]
 > If you created a VM by using the OpenShift Container Platform web console, you can find its internal FQDN listed in the **Network** tile on the **Overview** tab of the **VirtualMachine details** page.
 
-# Creating a headless service in a project by using the CLI
+# Create a headless service by using the CLI
 
 To create a headless service in a namespace, add the `clusterIP: None` parameter to the service YAML definition.
 
@@ -64,7 +64,7 @@ Procedure
 
 </div>
 
-# Mapping a virtual machine to a headless service by using the CLI
+# Map a VM to a headless service by using the CLI
 
 To connect to a virtual machine (VM) from within the cluster by using its internal fully qualified domain name (FQDN), you must first map the VM to a headless service. Set the `spec.hostname` and `spec.subdomain` parameters in the VM configuration file.
 
@@ -126,7 +126,7 @@ Procedure
 
 </div>
 
-# Connecting to a virtual machine by using its internal FQDN
+# Connect to a VM by using its internal FQDN
 
 You can connect to a virtual machine (VM) by using its internal fully qualified domain name (FQDN).
 

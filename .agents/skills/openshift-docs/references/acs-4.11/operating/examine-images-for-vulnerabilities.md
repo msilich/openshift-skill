@@ -984,7 +984,7 @@ Procedure
     Where:
 
     \<rhacs_version\>  
-    The version of your RHACS deployment, for example, 4.11.5.
+    The version of your RHACS deployment, for example, 4.11.6.
 
 7.  If you have SELinux enabled, restore the SELinux contexts by entering the following commands:
 

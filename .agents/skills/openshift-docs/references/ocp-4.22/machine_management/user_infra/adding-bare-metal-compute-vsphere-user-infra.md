@@ -27,7 +27,9 @@ Before you add bare-metal compute machines to your VMware vSphere cluster, you m
 - You have obtained the Red Hat Enterprise Linux CoreOS (RHCOS) ISO image that matches your cluster version. You can download this from the **Cluster Details** page on the Red Hat Hybrid Cloud Console or extract it from the cluster payload.
 
 > [!WARNING]
-> To use this feature, you must explicitly disable the native vSphere Container Storage Interface (CSI) driver for the entire cluster. This means existing vSphere virtual machines will lose the ability to provision or attach vSphere volumes. You must ensure that all workloads (virtual and physical) are migrated to an alternative storage solution before proceeding.
+> Setting `spec.managementState` to `Removed` in the `ClusterCSIDriver/csi.vsphere.vmware.com` custom resource (CR) explicitly disables the native vSphere Container Storage Interface (CSI) driver across the entire cluster. This action triggers the CSI Operator to remove all vSphere `StorageClasses`, including `thin-csi`.
+>
+> Before proceeding, you must migrate all existing vSphere-backed workloads to an alternative storage solution. Removing the driver does not delete existing PersistentVolumes (PVs) or PersistentVolumeClaims (PVCs), but they cannot attach or support new pods after the CSI driver is removed.
 
 <div>
 

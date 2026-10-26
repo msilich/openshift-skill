@@ -1175,9 +1175,9 @@ The following configuration is commonly used in a telco RAN DU deployment:
 Specifies to disable some debugging and monitoring features that can affect system latency.
 
 > [!NOTE]
-> When the `realTime` workload hint flag is set to `true` in a performance profile, add the `cpu-quota.crio.io: disable` annotation to every guaranteed pod with pinned CPUs. This annotation is necessary to prevent the degradation of the process performance within the pod. If the `realTime` workload hint is not explicitly set, it defaults to `true`.
+> If you do not set the `realTime` workload hint, the hint defaults to `true`.
 
-For more information how combinations of power consumption and real-time settings impact latency, see "Understanding workload hints".
+For more information about how combinations of power consumption and real-time settings impact latency, see "Understanding workload hints".
 
 <div>
 

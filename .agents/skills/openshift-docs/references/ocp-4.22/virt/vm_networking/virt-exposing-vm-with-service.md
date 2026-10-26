@@ -2,9 +2,9 @@
 
 You can expose a virtual machine (VM) within or outside the cluster by exposing a VM as a Kubernetes service. You can leverage native load balancing and observability tools that provide unified traffic management, consistent SSL termination, and centralized security policies across hybrid workloads.
 
-# About services
+# Service types for VM network access
 
-A Kubernetes service exposes network access for clients to an application running on a set of pods. Services offer abstraction, load balancing, and, in the case of the `NodePort` and `LoadBalancer` types, exposure to the outside world.
+A Kubernetes service exposes an application running on a set of pods to network clients. Services provide abstraction and load balancing, and the `NodePort` and `LoadBalancer` types also expose the application outside the cluster.
 
 `ClusterIP`
 Exposes the service on an internal IP address and as a DNS name to other applications within the cluster. A single service can map to multiple virtual machines. When a client tries to connect to the service, the client’s request is load balanced among available backends. `ClusterIP` is the default service type.
@@ -18,7 +18,7 @@ Creates an external load balancer in the current cloud (if supported) and assign
 > [!NOTE]
 > For on-premise clusters, you can configure a load balancing service by deploying the MetalLB Operator.
 
-# Dual-stack support
+# Dual-stack support for services
 
 If IPv4 and IPv6 dual-stack networking is enabled for your cluster, you can create a service that uses IPv4, IPv6, or both, by defining the `spec.ipFamilyPolicy` and the `spec.ipFamilies` fields in the `Service` object.
 
@@ -46,9 +46,9 @@ You can define which IP family to use for single-stack or define the order of IP
 > [!NOTE]
 > IPv6 single stack and the `[IPv6, IPv4]` array are not supported in IBM Z® and IBM® LinuxONE.
 
-# Creating a service by using the CLI
+# Expose a VM as a service by using the CLI
 
-You can create a service and associate it with a virtual machine (VM) by using the command line.
+You can use the command line to create a service and associate it with a virtual machine (VM). You must create a label on the VM that matches the selector in the `Service` manifest.
 
 <div>
 

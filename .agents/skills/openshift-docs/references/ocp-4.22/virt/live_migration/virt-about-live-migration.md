@@ -23,7 +23,7 @@ Live migration requirements
 > [!NOTE]
 > A dedicated Multus network for live migration is highly recommended. For more information, see "Using a dedicated network for live migration" in the Additional resources section. A dedicated network minimizes the effects of network saturation on tenant workloads during migration.
 
-# About live migration permissions
+# Live migration permissions
 
 In OpenShift Virtualization 4.19 and later, live migration operations are restricted to users who are explicitly granted the `kubevirt.io:migrate` cluster role. Users with this role can create, delete, and update virtual machine (VM) live migration requests.
 
@@ -33,7 +33,7 @@ Before OpenShift Virtualization 4.19, namespace administrators had live migratio
 
 As a cluster administrator, you can preserve the old behavior by creating a temporary cluster role before updating. After assigning the new role to users, delete the temporary role to enforce the more restrictive permissions. If you have already updated, you can still revert to the old behavior by aggregating the `kubevirt.io:migrate` role into the `admin` cluster role.
 
-# Preserving pre-4.19 live migration permissions during update
+# Preserve pre-4.19 live migration permissions during update
 
 Before you update to OpenShift Virtualization 4.22, you can create a temporary cluster role to preserve the previous live migration permissions until you are ready for the more restrictive default permissions to take effect.
 
@@ -124,7 +124,7 @@ Procedure
 
 </div>
 
-# Granting live migration permissions
+# Grant live migration permissions
 
 You can grant trusted users or groups the ability to create, delete, and update live migration instances.
 
