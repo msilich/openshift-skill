@@ -93,7 +93,7 @@ token="$(oc --kubeconfig "$admin_kubeconfig" --request-timeout=30s \
 
 temporary_kubeconfig="$(mktemp "$(dirname -- "$target_kubeconfig")/.read-all.kubeconfig.XXXXXX")"
 cp -- "$target_kubeconfig" "$temporary_kubeconfig"
-chmod 600 -- "$temporary_kubeconfig"
+chmod -- 600 "$temporary_kubeconfig"
 oc config set-credentials "$service_account" \
   --token="$token" \
   --kubeconfig="$temporary_kubeconfig" >/dev/null
@@ -116,7 +116,7 @@ can_delete="$(oc --kubeconfig "$temporary_kubeconfig" --request-timeout=8s \
 
 mv -- "$temporary_kubeconfig" "$target_kubeconfig"
 temporary_kubeconfig=""
-chmod 600 -- "$target_kubeconfig"
+chmod -- 600 "$target_kubeconfig"
 
 printf 'Kubeconfig: %s\n' "$target_kubeconfig"
 printf 'API server: %s\n' "$actual_server"

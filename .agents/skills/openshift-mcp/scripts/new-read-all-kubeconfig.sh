@@ -109,7 +109,7 @@ token="$(oc --kubeconfig "$admin_kubeconfig" --request-timeout=30s \
 
 mkdir -p -- "$(dirname -- "$output_kubeconfig")"
 working_kubeconfig="$(mktemp "$(dirname -- "$output_kubeconfig")/.read-all.kubeconfig.XXXXXX")"
-chmod 600 -- "$working_kubeconfig"
+chmod -- 600 "$working_kubeconfig"
 oc config set-cluster openshift-mcp-cluster \
   --server="$api_server" \
   --certificate-authority="$cluster_ca" \
@@ -161,7 +161,7 @@ can_delete="$(oc --kubeconfig "$working_kubeconfig" --request-timeout=8s \
 
 mv -- "$working_kubeconfig" "$output_kubeconfig"
 working_kubeconfig=""
-chmod 600 -- "$output_kubeconfig"
+chmod -- 600 "$output_kubeconfig"
 
 printf 'Kubeconfig: %s\n' "$output_kubeconfig"
 printf 'API server: %s\n' "$actual_server"
