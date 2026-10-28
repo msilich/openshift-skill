@@ -2,7 +2,7 @@
   "artifact": {
     "converted_topics": 1804,
     "format": "GitHub-Flavored Markdown",
-    "markdown_files": 1806,
+    "markdown_files": 1815,
     "product": "OpenShift Container Platform",
     "scope": "Complete openshift-enterprise topic map at the pinned revision",
     "version": "4.22"
@@ -28,7 +28,8 @@
       "Replaced the rolling weekly-update statement with pinned-snapshot provenance.",
       "Added a format-modification notice to every Markdown file.",
       "Rewrote DocBook .xml cross-references to bundled Markdown targets.",
-      "Verified local Markdown links; set navigation titles to the selected product."
+      "Verified local Markdown links; set navigation titles to the selected product.",
+      "Bundled pinned Network Observability API, flow-format and CLI references; rewrote upstream links to local files. See offline-references/netobserv/SOURCE.json."
     ],
     "successful_topics": 1804
   },
@@ -36,8 +37,11 @@
     "agentic_skills_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
     "algorithm": "sha256",
     "markdown_manifest_algorithm": "SHA-256 of sorted UTF-8 lines: '<file-sha256>  <relative-path>\\n'",
-    "markdown_manifest_sha256": "4b8b09b9f0151ee748f9ad914938c402675ed9ed3ad41d3a79e3396393a36eba",
+    "markdown_manifest_sha256": "36d2a68856ea4e333fc877ae52184cf2221cfea0f4b159f91919e5edf332c4ef",
     "openshift_docs_license_sha256": "e1855c6f04f2435df62fe754d9621de265e3fa77717d3910f5a5500cf1e651ad"
+  },
+  "offline_references": {
+    "netobserv_manifest_sha256": "7dd0cf4fce20978ccc2dee3c2c546affc83026a8a721941f28c338de70e8d34e"
   },
   "runtime_network_required": false,
   "schema_version": 1,

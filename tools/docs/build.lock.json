@@ -21,6 +21,13 @@
       "url": "https://github.com/openshift/openshift-docs"
     }
   },
+  "offline_references": {
+    "netobserv_manifest_sha256": "7dd0cf4fce20978ccc2dee3c2c546affc83026a8a721941f28c338de70e8d34e"
+  },
+  "local_build_helpers": {
+    "netobserv.py": "a650c70af64e3cede463ecd3123140308f2b7d4afd280ca9636b79fe9510fd51",
+    "acs.py": "0d6838be708ed4f0600354dd91d52fd1d2abb8885245be38daf3288b73ab7a6c"
+  },
   "dependencies": {
     "asciidoctor": "2.0.23",
     "pandoc": "3.7.0.2",
@@ -29,8 +36,8 @@
   },
   "expected_output": {
     "converted_topics": 1804,
-    "markdown_files": 1806,
-    "markdown_manifest_sha256": "4b8b09b9f0151ee748f9ad914938c402675ed9ed3ad41d3a79e3396393a36eba"
+    "markdown_files": 1815,
+    "markdown_manifest_sha256": "36d2a68856ea4e333fc877ae52184cf2221cfea0f4b159f91919e5edf332c4ef"
   },
   "document": {
     "product": "OpenShift Container Platform",

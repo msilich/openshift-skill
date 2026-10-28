@@ -2205,3 +2205,17 @@
 - **MCP server**
   - [MCP server overview](ai_applications/mcp_server/mcp-server-overview.md)
 
+
+## Bundled Network Observability references
+
+Match the installed Operator/CLI version, not the OCP version. Sources and licenses are pinned in `offline-references/netobserv/SOURCE.json`.
+
+- [1.12/FlowCollectorSlice.md](offline-references/netobserv/1.12/FlowCollectorSlice.md)
+- [1.12/flowcollector-flows-netobserv-io-v1beta2.md](offline-references/netobserv/1.12/flowcollector-flows-netobserv-io-v1beta2.md)
+- [1.12/flowmetric-flows-netobserv-io-v1alpha1.md](offline-references/netobserv/1.12/flowmetric-flows-netobserv-io-v1alpha1.md)
+- [1.12/flows-format.md](offline-references/netobserv/1.12/flows-format.md)
+- [2.0/FlowCollectorSlice.md](offline-references/netobserv/2.0/FlowCollectorSlice.md)
+- [2.0/flowcollector-flows-netobserv-io-v1beta2.md](offline-references/netobserv/2.0/flowcollector-flows-netobserv-io-v1beta2.md)
+- [2.0/flowmetric-flows-netobserv-io-v1alpha1.md](offline-references/netobserv/2.0/flowmetric-flows-netobserv-io-v1alpha1.md)
+- [2.0/flows-format.md](offline-references/netobserv/2.0/flows-format.md)
+- [cli/netobserv_cli.md](offline-references/netobserv/cli/netobserv_cli.md)
