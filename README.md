@@ -731,6 +731,21 @@ python3 tools/docs/build.py \
 The build checks the source revision, converter checksum, topic count, and
 complete Markdown content manifest against `tools/docs/build.lock.json`.
 
+## Network Observability offline references
+
+The OCP snapshot also bundles the nine Network Observability references moved
+upstream to GitHub: the FlowCollector, FlowMetric, FlowCollectorSlice and flow
+format references for Operator 1.12 and 2.0, plus CLI usage at a pinned commit.
+They are under `offline-references/netobserv/` inside the OCP snapshot. The local
+API catalog and documentation indexes link to these copies. Match the installed
+Operator/CLI version; the OCP version does not select it.
+
+Builds use the vendored, checksummed sources in `tools/docs/netobserv/`; no extra
+downloads are needed. The bundle's `SOURCE.json` records exact source revisions,
+licenses, conversion checks, a CLI table correction and remaining external
+citations. A new upstream catalog link not covered by the bundle stops the build
+for review. Repeated-build tests check reproducibility and installed content.
+
 ## Offline GitOps documentation and procedure sources
 
 Both OCP branches additionally bundle the complete GitOps 1.21 topic map
