@@ -16,7 +16,7 @@ Cluster eviction strategies
 
 3.  Default eviction strategy for single-node OpenShift.
 
-# Configuring a VM eviction strategy using the CLI
+# Configure VM eviction strategy
 
 You can configure an eviction strategy for a virtual machine (VM) by using the command line.
 
@@ -75,7 +75,7 @@ Procedure
 
 </div>
 
-# Configuring a cluster eviction strategy by using the CLI
+# Configure cluster eviction strategy
 
 You can configure an eviction strategy for a cluster by using the command line.
 
@@ -156,7 +156,7 @@ Run strategy before and after `virtctl` commands
 > [!NOTE]
 > If a node in a cluster installed by using installer-provisioned infrastructure fails the machine health check and is unavailable, VMs with `runStrategy: Always` or `runStrategy: RerunOnFailure` are rescheduled on a new node.
 
-# Configuring a VM run strategy by using the CLI
+# Configure VM run strategy
 
 You can configure a run strategy for a virtual machine (VM) by using the command line. The run strategy controls whether a VM automatically restarts after disruptions such as node failures or maintenance events.
 
@@ -198,7 +198,7 @@ Procedure
 
 </div>
 
-# Delete a failed node to trigger virtual machine failover
+# Trigger VM failover by deleting the failed node
 
 If a node fails and machine health checks are not deployed on your cluster, virtual machines (VMs) with `runStrategy: Always` configured are not automatically relocated to healthy nodes. To trigger VM failover, you must manually delete the `Node` object.
 

@@ -2,7 +2,7 @@
 
 Use `skip-node` annotation to prevent the `node-labeller` from reconciling a node.
 
-# Using skip-node annotation
+# Skip node labeling reconciliation
 
 If you want the `node-labeller` to skip a node, annotate that node by using the OpenShift CLI (`oc`).
 

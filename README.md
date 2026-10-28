@@ -91,12 +91,12 @@ equal cluster names are insufficient. The existing four-choice Secret policy is
 unchanged. Denied access is not retried through another tool or identity.
 
 Documentation source is `openshift/openshift-docs`, `rhacs-docs-4.11`, commit
-`2a3d16703701f239724204bfcc0ec745c35b065c`. On a connected preparation machine,
+`9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7`. On a connected preparation machine,
 obtain that exact clean checkout and the existing pinned conversion dependencies:
 
 ```bash
 git clone --branch rhacs-docs-4.11 https://github.com/openshift/openshift-docs.git rhacs-docs
-git -C rhacs-docs checkout --detach 2a3d16703701f239724204bfcc0ec745c35b065c
+git -C rhacs-docs checkout --detach 9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7
 python3 tools/docs/build.py --lock tools/docs/acs.lock.json \
   --source-dir rhacs-docs --output-dir /path/to/new-acs-docs
 ```
@@ -712,7 +712,7 @@ details, and the content manifest are recorded in
 `.agents/skills/openshift-docs/references/ocp-4.22/SOURCE.json`.
 
 The snapshot is pinned to `openshift/openshift-docs` branch `enterprise-4.22`,
-commit `19b2087c4f9d9b4b56524c07cb56f2dc56ca4c93`.
+commit `75eff7691c1e4e9b478121696fd38bdb84316855`.
 The converter includes a small local correction: this source revision's distro
 map lacks a 4.22 entry, so the product version is derived from the explicit
 `enterprise-4.22` branch instead of silently using the upstream 4.17 fallback.
@@ -722,7 +722,7 @@ Asciidoctor 2.0.23, and Pandoc 3.7.0.2 installed:
 
 ```bash
 git clone --branch enterprise-4.22 --single-branch https://github.com/openshift/openshift-docs.git /path/to/openshift-docs
-git -C /path/to/openshift-docs checkout --detach 19b2087c4f9d9b4b56524c07cb56f2dc56ca4c93
+git -C /path/to/openshift-docs checkout --detach 75eff7691c1e4e9b478121696fd38bdb84316855
 python3 tools/docs/build.py \
   --source-dir /path/to/openshift-docs \
   --output-dir .agents/skills/openshift-docs/references/ocp-4.22
@@ -730,6 +730,21 @@ python3 tools/docs/build.py \
 
 The build checks the source revision, converter checksum, topic count, and
 complete Markdown content manifest against `tools/docs/build.lock.json`.
+
+## Network Observability offline references
+
+The OCP snapshot also bundles the nine Network Observability references moved
+upstream to GitHub: the FlowCollector, FlowMetric, FlowCollectorSlice and flow
+format references for Operator 1.12 and 2.0, plus CLI usage at a pinned commit.
+They are under `offline-references/netobserv/` inside the OCP snapshot. The local
+API catalog and documentation indexes link to these copies. Match the installed
+Operator/CLI version; the OCP version does not select it.
+
+Builds use the vendored, checksummed sources in `tools/docs/netobserv/`; no extra
+downloads are needed. The bundle's `SOURCE.json` records exact source revisions,
+licenses, conversion checks, a CLI table correction and remaining external
+citations. A new upstream catalog link not covered by the bundle stops the build
+for review. Repeated-build tests check reproducibility and installed content.
 
 ## Offline GitOps documentation and procedure sources
 

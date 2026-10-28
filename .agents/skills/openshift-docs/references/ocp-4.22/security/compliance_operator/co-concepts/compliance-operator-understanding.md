@@ -4,6 +4,8 @@ The Compliance Operator evaluates your OpenShift Container Platform cluster agai
 
 The Compliance Operator lets OpenShift Container Platform administrators describe the required compliance state of a cluster and provides them with an overview of gaps and ways to remediate them. The Compliance Operator assesses compliance of both the Kubernetes API resources of OpenShift Container Platform, and the nodes running the cluster. The Compliance Operator uses OpenSCAP, a NIST-certified tool, to scan and enforce security policies provided by the content.
 
+As of Compliance Operator 1.10.0, Common Expression Language (CEL) `Rule` and `CustomRule` objects are generally available (GA). CEL works alongside OpenSCAP as a scanning engine and does not replace Extensible Configuration Checklist Description Format (XCCDF) profiles.
+
 > [!IMPORTANT]
 > The Compliance Operator is available for Red Hat Enterprise Linux CoreOS (RHCOS) deployments only.
 

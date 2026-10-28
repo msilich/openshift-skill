@@ -11,10 +11,16 @@
     "notes": "Skills are text assets; adapt paths and revalidate binaries on other supported OpenCode platforms."
   },
   "sources": {
+    "netobserv_offline_references": {
+      "manifest": "tools/docs/netobserv/manifest.json",
+      "manifest_sha256": "7dd0cf4fce20978ccc2dee3c2c546affc83026a8a721941f28c338de70e8d34e",
+      "license": "Apache-2.0",
+      "source_type": "Vendored Operator 1.12/2.0 API and CLI documents; exact source revisions and file hashes in manifest"
+    },
     "openshift_acs_docs": {
       "version": "4.11",
       "branch": "rhacs-docs-4.11",
-      "commit": "2a3d16703701f239724204bfcc0ec745c35b065c",
+      "commit": "9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0",
       "build_lock": "tools/docs/acs.lock.json"
@@ -63,7 +69,7 @@
     },
     "openshift_docs": {
       "branch": "enterprise-4.22",
-      "commit": "19b2087c4f9d9b4b56524c07cb56f2dc56ca4c93",
+      "commit": "75eff7691c1e4e9b478121696fd38bdb84316855",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0"
     },

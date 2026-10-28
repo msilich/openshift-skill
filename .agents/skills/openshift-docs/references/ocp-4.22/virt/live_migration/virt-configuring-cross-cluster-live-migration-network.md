@@ -57,11 +57,9 @@ The following example configures a secondary network named `bridge-net`:
 }
 ```
 
-# Configuring a dedicated secondary network for live migration
+# Configure a dedicated secondary network for live migration
 
-After you have configured a Linux bridge network, you can configure a dedicated network for live migration. A dedicated network minimizes the effects of network saturation on tenant workloads during live migration.
-
-To configure a dedicated secondary network for live migration, you must first create a bridge network attachment definition (NAD) by using the CLI. You can then add the name of the `NetworkAttachmentDefinition` object to the `HyperConverged` custom resource (CR).
+Configure a dedicated secondary network for live migration to minimize the effects of network saturation on tenant workloads during live migration.
 
 <div>
 
@@ -78,6 +76,8 @@ Prerequisites
 - Each node has at least two Network Interface Cards (NICs).
 
 - The NICs for live migration are connected to the same VLAN.
+
+- You have configured a Linux bridge network.
 
 </div>
 
@@ -111,13 +111,13 @@ Procedure
       }'
     ```
 
-    - `metadata.name` defines the name of the `NetworkAttachmentDefinition` object.
+    - `metadata.name`: Defines the name of the `NetworkAttachmentDefinition` object.
 
-    - `config.master` defines the name of the NIC to be used for live migration.
+    - `config.master`: Defines the name of the NIC to be used for live migration.
 
-    - `config.type` defines the name of the CNI plugin that provides the network for the NAD.
+    - `config.type`: Defines the name of the CNI plugin that provides the network for the `NetworkAttachmentDefinition`.
 
-    - `config.range` defines an IP address range for the secondary network. This range must not overlap the IP addresses of the main network.
+    - `config.range`: Defines an IP address range for the secondary network. This range must not overlap the IP addresses of the main network.
 
 2.  Open the `HyperConverged` CR in your default editor by running the following command:
 
@@ -125,27 +125,28 @@ Procedure
     $ oc edit hyperconvergeds.v1beta1.hco.kubevirt.io kubevirt-hyperconverged -n openshift-cnv
     ```
 
-3.  Add the name of the `NetworkAttachmentDefinition` object to the `spec.liveMigrationConfig` stanza of the `HyperConverged` CR.
+3.  Add the name of the `NetworkAttachmentDefinition` object to the `spec.virtualization.liveMigrationConfig` stanza of the `HyperConverged` CR.
 
     Example `HyperConverged` manifest:
 
     ``` yaml
-    apiVersion: hco.kubevirt.io/v1beta1
+    apiVersion: hco.kubevirt.io/v1
     kind: HyperConverged
     metadata:
       name: kubevirt-hyperconverged
       namespace: openshift-cnv
     spec:
-      liveMigrationConfig:
-        completionTimeoutPerGiB: 800
-        network: <network>
-        parallelMigrationsPerCluster: 5
-        parallelOutboundMigrationsPerNode: 2
-        progressTimeout: 150
+      virtualization:
+        liveMigrationConfig:
+          completionTimeoutPerGiB: 800
+          network: <network>
+          parallelMigrationsPerCluster: 5
+          parallelOutboundMigrationsPerNode: 2
+          progressTimeout: 150
     # ...
     ```
 
-    - `spec.liveMigrationConfig.network` defines the name of the Multus `NetworkAttachmentDefinition` object to be used for live migrations.
+    - `spec.virtualization.liveMigrationConfig.network`: Defines the name of the Multus `NetworkAttachmentDefinition` object to be used for live migrations.
 
 4.  Save your changes and exit the editor. The `virt-handler` pods restart and connect to the secondary network.
 

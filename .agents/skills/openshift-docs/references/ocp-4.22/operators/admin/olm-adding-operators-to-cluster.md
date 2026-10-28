@@ -2,12 +2,39 @@
 
 You can install OLM-based Operators on your OpenShift Container Platform cluster by using Operator Lifecycle Manager (OLM).
 
-> [!NOTE]
-> For information on how OLM handles updates for installed Operators colocated in the same namespace, as well as an alternative method for installing Operators with custom global Operator groups, see "Multitenancy and Operator colocation".
+> [!WARNING]
+> Do not install Operators that require cluster-scoped permissions in namespaces where non-administrator users have any of the following permissions:
+>
+> - Default `edit` cluster role
+>
+> - Service account token creation
+>
+> - Workload creation, for example:
+>
+>   - Pods
+>
+>   - Replica sets
+>
+>   - Deployments
+>
+>   - Jobs
+>
+>   - Cron jobs
+>
+>   - Daemon sets
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
+
+For information on how OLM handles updates for installed Operators colocated in the same namespace, as well as an alternative method for installing Operators with custom global Operator groups, see "Multitenancy and Operator colocation".
 
 # About Operator installation from the software catalog
 
 The software catalog in OpenShift Container Platform is the interface for discovering Operators that Operator Lifecycle Manager (OLM) installs and manages on your cluster. You can choose installation settings such as install mode, namespace, and approval strategy during subscription.
+
+> [!WARNING]
+> Failed Operator installations do not automatically remove created permissions. Audit and remove remaining permissions to secure the namespace.
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
 
 As a cluster administrator, you can install an Operator from the software catalog by using the OpenShift Container Platform web console or CLI. Subscribing an Operator to one or more namespaces makes the Operator available to developers on your cluster.
 
@@ -41,6 +68,11 @@ Additional resources
 # Install from the software catalog by using the web console
 
 To install and subscribe to an Operator from the software catalog, you can use the OpenShift Container Platform web console. The console guides you through selecting an install mode, namespace, and approval strategy.
+
+> [!WARNING]
+> Failed Operator installations do not automatically remove created permissions. Audit and remove remaining permissions to secure the namespace.
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
 
 <div>
 
@@ -157,8 +189,12 @@ To install an Operator from the software catalog without using the web console, 
 
 For `SingleNamespace` install mode, you must also ensure an appropriate Operator group exists in the related namespace. An Operator group, defined by an `OperatorGroup` object, selects target namespaces in which to generate required RBAC access for all Operators in the same namespace as the Operator group.
 
-> [!TIP]
-> In most cases, the web console method of this procedure is preferred because it automates tasks in the background, such as handling the creation of `OperatorGroup` and `Subscription` objects automatically when choosing `SingleNamespace` mode.
+In most cases, the web console method of this procedure is preferred because it automates tasks in the background, such as handling the creation of `OperatorGroup` and `Subscription` objects automatically when choosing `SingleNamespace` mode.
+
+> [!WARNING]
+> Failed Operator installations do not automatically remove created permissions. Audit and remove remaining permissions to secure the namespace.
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
 
 <div>
 
@@ -715,6 +751,11 @@ Additional resources
 To avoid installing global Operators in the default `openshift-operators` namespace, you can create a custom global namespace in OpenShift Container Platform and install Operators there instead.
 
 When installing Operators with the OpenShift Container Platform web console, the default behavior installs Operators that support the **All namespaces** install mode into the default `openshift-operators` global namespace. This can cause issues related to shared install plans and update policies between all Operators in the namespace. For more details on these limitations, see "Multitenancy and Operator colocation".
+
+> [!WARNING]
+> Failed Operator installations do not automatically remove created permissions. Audit and remove remaining permissions to secure the namespace.
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
 
 <div>
 

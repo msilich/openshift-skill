@@ -142,7 +142,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Linux/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.6/bin/Linux/roxctl${arch}"
     ```
 
 3.  Make the `roxctl` binary executable:
@@ -203,7 +203,7 @@ Procedure
 2.  Download the `roxctl` CLI:
 
     ``` terminal
-    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Darwin/roxctl${arch}"
+    $ curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.11.6/bin/Darwin/roxctl${arch}"
     ```
 
 3.  Remove all extended attributes from the binary:
@@ -264,7 +264,7 @@ Procedure
 - Download the `roxctl` CLI:
 
   ``` terminal
-  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.5/bin/Windows/roxctl.exe
+  $ curl -f -O https://mirror.openshift.com/pub/rhacs/assets/4.11.6/bin/Windows/roxctl.exe
   ```
 
 </div>
@@ -351,22 +351,22 @@ Procedure
 
     ``` terminal
     $ oc -n stackrox set image deploy/central \
-    central=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5
+    central=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6
     ```
 
 2.  To update the Central-db image, run the following command:
 
     ``` terminal
     $ oc -n stackrox set image deploy/central-db \
-    central-db=registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.5 \
-    init-db=registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.5
+    central-db=registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.6 \
+    init-db=registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.6
     ```
 
 3.  To update the config controller image, run the following command:
 
     ``` terminal
     $ oc -n stackrox set image deploy/config-controller \
-    manager=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5
+    manager=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6
     ```
 
 </div>
@@ -432,15 +432,15 @@ Procedure
 
     ``` terminal
     $ oc -n stackrox set image deploy/scanner \
-    scanner=registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.5
+    scanner=registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.6
     ```
 
 3.  To update the Scanner database image, run the following command:
 
     ``` terminal
     $ oc -n stackrox set image deploy/scanner-db \
-    db=registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.5 \
-    init-db=registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.5
+    db=registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.6 \
+    init-db=registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.6
     ```
 
 </div>
@@ -553,25 +553,25 @@ Procedure
 1.  Update the Sensor image:
 
     ``` terminal
-    $ oc -n stackrox set image deploy/sensor sensor=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5
+    $ oc -n stackrox set image deploy/sensor sensor=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6
     ```
 
 2.  Update the Compliance image:
 
     ``` terminal
-    $ oc -n stackrox set image ds/collector compliance=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5
+    $ oc -n stackrox set image ds/collector compliance=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6
     ```
 
 3.  Update the Collector image:
 
     ``` terminal
-    $ oc -n stackrox set image ds/collector collector=registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.5
+    $ oc -n stackrox set image ds/collector collector=registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.6
     ```
 
 4.  Update the admission control image:
 
     ``` terminal
-    $ oc -n stackrox set image deploy/admission-control admission-control=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5
+    $ oc -n stackrox set image deploy/admission-control admission-control=registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6
     ```
 
     > [!IMPORTANT]
@@ -1074,7 +1074,7 @@ Procedure
     2.  Add the new `NodeScanner` container by running the following command:
 
         ``` terminal
-        $ oc -n stackrox patch daemonset/collector -p '{"spec":{"template":{"spec":{"containers":[{"command":["/scanner","--nodeinventory","--config=",""],"env":[{"name":"ROX_NODE_NAME","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"spec.nodeName"}}},{"name":"ROX_CLAIR_V4_SCANNING","value":"true"},{"name":"ROX_COMPLIANCE_OPERATOR_INTEGRATION","value":"true"},{"name":"ROX_CSV_EXPORT","value":"false"},{"name":"ROX_DECLARATIVE_CONFIGURATION","value":"false"},{"name":"ROX_INTEGRATIONS_AS_CONFIG","value":"false"},{"name":"ROX_NETPOL_FIELDS","value":"true"},{"name":"ROX_NETWORK_DETECTION_BASELINE_SIMULATION","value":"true"},{"name":"ROX_NETWORK_GRAPH_PATTERNFLY","value":"true"},{"name":"ROX_NODE_SCANNING_CACHE_TIME","value":"3h36m"},{"name":"ROX_NODE_SCANNING_INITIAL_BACKOFF","value":"30s"},{"name":"ROX_NODE_SCANNING_MAX_BACKOFF","value":"5m"},{"name":"ROX_PROCESSES_LISTENING_ON_PORT","value":"false"},{"name":"ROX_QUAY_ROBOT_ACCOUNTS","value":"true"},{"name":"ROX_ROXCTL_NETPOL_GENERATE","value":"true"},{"name":"ROX_SOURCED_AUTOGENERATED_INTEGRATIONS","value":"false"},{"name":"ROX_SYSLOG_EXTRA_FIELDS","value":"true"},{"name":"ROX_SYSTEM_HEALTH_PF","value":"false"},{"name":"ROX_VULN_MGMT_WORKLOAD_CVES","value":"false"}],"image":"registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.5","imagePullPolicy":"IfNotPresent","name":"node-inventory","ports":[{"containerPort":8444,"name":"grpc","protocol":"TCP"}],"volumeMounts":[{"mountPath":"/host","name":"host-root-ro","readOnly":true},{"mountPath":"/tmp/","name":"tmp-volume"},{"mountPath":"/cache","name":"cache-volume"}]}]}}}}'
+        $ oc -n stackrox patch daemonset/collector -p '{"spec":{"template":{"spec":{"containers":[{"command":["/scanner","--nodeinventory","--config=",""],"env":[{"name":"ROX_NODE_NAME","valueFrom":{"fieldRef":{"apiVersion":"v1","fieldPath":"spec.nodeName"}}},{"name":"ROX_CLAIR_V4_SCANNING","value":"true"},{"name":"ROX_COMPLIANCE_OPERATOR_INTEGRATION","value":"true"},{"name":"ROX_CSV_EXPORT","value":"false"},{"name":"ROX_DECLARATIVE_CONFIGURATION","value":"false"},{"name":"ROX_INTEGRATIONS_AS_CONFIG","value":"false"},{"name":"ROX_NETPOL_FIELDS","value":"true"},{"name":"ROX_NETWORK_DETECTION_BASELINE_SIMULATION","value":"true"},{"name":"ROX_NETWORK_GRAPH_PATTERNFLY","value":"true"},{"name":"ROX_NODE_SCANNING_CACHE_TIME","value":"3h36m"},{"name":"ROX_NODE_SCANNING_INITIAL_BACKOFF","value":"30s"},{"name":"ROX_NODE_SCANNING_MAX_BACKOFF","value":"5m"},{"name":"ROX_PROCESSES_LISTENING_ON_PORT","value":"false"},{"name":"ROX_QUAY_ROBOT_ACCOUNTS","value":"true"},{"name":"ROX_ROXCTL_NETPOL_GENERATE","value":"true"},{"name":"ROX_SOURCED_AUTOGENERATED_INTEGRATIONS","value":"false"},{"name":"ROX_SYSLOG_EXTRA_FIELDS","value":"true"},{"name":"ROX_SYSTEM_HEALTH_PF","value":"false"},{"name":"ROX_VULN_MGMT_WORKLOAD_CVES","value":"false"}],"image":"registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.6","imagePullPolicy":"IfNotPresent","name":"node-inventory","ports":[{"containerPort":8444,"name":"grpc","protocol":"TCP"}],"volumeMounts":[{"mountPath":"/host","name":"host-root-ro","readOnly":true},{"mountPath":"/tmp/","name":"tmp-volume"},{"mountPath":"/cache","name":"cache-volume"}]}]}}}}'
         ```
 
 </div>

@@ -4,7 +4,7 @@ You can enable passthrough of USB devices to allow a virtual machine (VM) to con
 
 To expose a USB device, first enable host passthrough and then configure the VM to use the USB device.
 
-# Enabling USB host passthrough
+# Enable USB host passthrough
 
 To attach a USB device to a virtual machine (VM), you must first enable USB host passthrough at the cluster level.
 
@@ -104,7 +104,7 @@ Procedure
 
 </div>
 
-# Connecting a USB device to a virtual machine
+# Connect a USB device to a virtual machine
 
 You can configure virtual machine (VM) access to a USB device. This configuration enables the VM to connect to USB hardware that is attached to an OpenShift Container Platform node, as if the hardware and the VM are physically connected.
 

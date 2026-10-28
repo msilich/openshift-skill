@@ -2,7 +2,7 @@
 
 Monitor core platform components by using the OpenShift Container Platform monitoring stack based on the Prometheus monitoring system. Additionally, enable monitoring for user-defined projects by using the CLI and query custom metrics exposed for virtual machines through the `node-exporter` service.
 
-# Configuring the node exporter service
+# Configure the node exporter service
 
 The node-exporter agent is deployed on every virtual machine in the cluster from which you want to collect metrics. Configure the node-exporter agent as a service to expose internal metrics and processes that are associated with virtual machines.
 
@@ -75,7 +75,7 @@ Procedure
 
 </div>
 
-# Configuring a virtual machine with the node exporter service
+# Configure a virtual machine with the node exporter service
 
 Download the `node-exporter` file on to the virtual machine. Then, create a `systemd` service that runs the node-exporter service when the virtual machine boots.
 
@@ -171,7 +171,7 @@ Verification
 
 </div>
 
-# Creating a custom monitoring label for virtual machines
+# Create a custom monitoring label for virtual machines
 
 To enable queries to multiple virtual machines from a single service, you can add a custom label in the virtual machine’s YAML file.
 
@@ -213,7 +213,7 @@ Procedure
 
 </div>
 
-## Querying the node-exporter service for metrics
+## Query the node-exporter service for metrics
 
 Metrics are exposed for virtual machines through an HTTP service endpoint under the `/metrics` canonical name. When you query for metrics, Prometheus directly scrapes the metrics from the metrics endpoint exposed by the virtual machines and presents these metrics for viewing.
 
@@ -307,7 +307,7 @@ Procedure
 
 </div>
 
-# Creating a ServiceMonitor resource for the node exporter service
+# Create a ServiceMonitor resource for the node exporter service
 
 You can use a Prometheus client library and scrape metrics from the `/metrics` endpoint to access and view the metrics exposed by the node-exporter service. Use a `ServiceMonitor` custom resource definition (CRD) to monitor the node exporter service.
 
@@ -371,7 +371,7 @@ Procedure
 
 </div>
 
-## Accessing the node exporter service outside the cluster
+## Access the node exporter service outside the cluster
 
 You can access the node-exporter service outside the cluster and view the exposed metrics.
 

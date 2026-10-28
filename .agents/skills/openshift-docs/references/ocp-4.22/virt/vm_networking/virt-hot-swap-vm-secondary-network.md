@@ -26,7 +26,7 @@ Consider the following limitations before hot swapping a VM secondary network:
 
 - If the new network requires a different IP configuration, such as a different subnet or gateway, you must reconfigure the guest operating system network settings. The hot swap does not automatically update the guest network configuration.
 
-# Hot swapping a virtual machine secondary network by using the command line
+# Hot swap a VM secondary network by using the CLI
 
 You can hot swap a virtual machine (VM) secondary network by using the command line.
 
@@ -142,7 +142,7 @@ Verification
 
 - [About live migration](../live_migration/virt-about-live-migration.md#virt-about-live-migration-permissions_virt-about-live-migration)
 
-- [Connecting a virtual machine to a secondary localnet user-defined network](virt-connecting-vm-to-secondary-udn.md#virt-connecting-vm-to-secondary-udn)
+- [Connect a virtual machine to a physical network by using an Open vSwitch bridge](virt-connecting-vm-to-physical-network-ovs-bridge.md#virt-connecting-vm-to-physical-network-ovs-bridge)
 
 - [Creating a Linux bridge network attachment definition](virt-connecting-vm-to-linux-bridge.md#virt-connecting-vm-to-linux-bridge)
 

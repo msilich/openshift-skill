@@ -68,7 +68,6 @@ Procedure
     metadata:
       name: dynamic-low-latency-pod
       annotations:
-        cpu-quota.crio.io: "disable"
         cpu-load-balancing.crio.io: "disable"
         irq-load-balancing.crio.io: "disable"
     spec:
@@ -100,9 +99,6 @@ Procedure
     </div>
 
     where
-
-    `metadata.annotations.cpu-quota.crio.io`
-    Disables the CPU completely fair scheduler (CFS) quota at the pod run time.
 
     `metadata.annotations.cpu-load-balancing.crio.io`
     Disables CPU load balancing.
@@ -586,45 +582,19 @@ Additional resources
 
 </div>
 
-# Disable CPU CFS quota
+# CPU quota annotation for pods
 
-To eliminate CPU throttling for pinned pods, create a pod with the `cpu-quota.crio.io: "disable"` annotation. This annotation disables the CPU completely fair scheduler (CFS) quota when the pod runs.
+On OpenShift Container Platform, you do not need the `cpu-quota.crio.io` annotation to disable the CPU completely fair scheduler (CFS) quota for pods.
 
-<div>
+Starting in OpenShift Container Platform 4.20, the kubelet automatically disables the CPU CFS quota (which prevents CPU throttling) for pods that meet all of the following:
 
-<div class="title">
+- The pod has a `Guaranteed` quality of service (`QoS`) class.
 
-Procedure
+- The pod requests whole CPUs.
 
-</div>
+- The CPU manager static policy is enabled, for example by a performance profile.
 
-- To eliminate CPU throttling for pinned pods, create a pod with the `cpu-quota.crio.io: "disable"` annotation. This annotation disables the CPU completely fair scheduler (CFS) quota when the pod runs.
-
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example pod specification with `cpu-quota.crio.io` disabled
-
-  </div>
-
-  ``` yaml
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    annotations:
-        cpu-quota.crio.io: "disable"
-  spec:
-      runtimeClassName: performance-<profile_name>
-  #...
-  ```
-
-  </div>
-
-  > [!NOTE]
-  > Only disable CPU CFS quota when the CPU manager static policy is enabled and for pods with guaranteed QoS that use whole CPUs. For example, pods that contain CPU-pinned containers. Otherwise, disabling CPU CFS quota can affect the performance of other containers in the cluster.
-
-</div>
+If your workloads already include the `cpu-quota.crio.io: "disable"` annotation, you can leave it in place. The annotation has no effect because the kubelet provides this functionality automatically.
 
 <div>
 

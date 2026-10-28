@@ -2,7 +2,7 @@
 
 The Data Plane Development Kit (DPDK) provides a set of libraries and drivers for fast packet processing. You can configure clusters and virtual machines (VMs) to run ultra-low latency packet processing workloads by using DPDK drivers with SR-IOV hardware.
 
-# Configuring a cluster for DPDK workloads
+# Prepare a cluster for DPDK workloads
 
 You can configure an OpenShift Container Platform cluster to run Data Plane Development Kit (DPDK) workloads for improved network performance.
 
@@ -152,7 +152,7 @@ Procedure
 
 </div>
 
-# Removing a custom machine config pool for high-availability clusters
+# Remove a custom machine config pool for high-availability clusters
 
 You can delete a custom machine config pool that you previously created for your high-availability cluster.
 
@@ -194,7 +194,7 @@ Procedure
 
 </div>
 
-# Configuring a project for DPDK workloads
+# Configure a project for DPDK workloads
 
 You can configure the project to run DPDK workloads on SR-IOV hardware.
 
@@ -261,9 +261,9 @@ Procedure
 
 </div>
 
-# Configuring a virtual machine for DPDK workloads
+# Configure a VM for DPDK workloads
 
-You can run Data Packet Development Kit (DPDK) workloads on virtual machines (VMs) to achieve lower latency and higher throughput for faster packet processing in the user space. DPDK uses the SR-IOV network for hardware-based I/O sharing.
+You can run Data Plane Development Kit (DPDK) workloads on virtual machines (VMs) to achieve lower latency and higher throughput for faster packet processing in the user space. DPDK uses the SR-IOV network for hardware-based I/O sharing.
 
 <div>
 

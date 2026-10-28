@@ -333,6 +333,11 @@ You can configure a Precision Time Protocol (PTP) Telecom Grandmaster (T-GM) on 
 
 For more information, see [Telecom Grandmaster clocks on Intel Granite Rapids-D hardware](../networking/advanced_networking/ptp/configuring-ptp.md#nw-ptp-granite-rapids-telecom-grandmaster-clock-overview_configuring-ptp).
 
+Dynamic Configuration Manager General Availability
+With this update, the HAProxy Dynamic Configuration Manager (DCM) feature is now Generally Available. You can use DCM as an alternative update mechanism that configures a running HAProxy process through a domain socket.
+
+For more information, see [HAProxy Dynamic Configuration Manager (DCM)](../networking/networking_operators/ingress-operator.md#about-haproxy-dynamic-configuration-manager_ingress-operator).
+
 ## Nodes
 
 Image pull credential verification in multi-tenant clusters
@@ -1158,7 +1163,7 @@ Multi-Architecture Technology Preview tracker
 | VRF specification in `BGPPeer` custom resource | Technology Preview | Technology Preview |  |
 | OVN-Kubernetes customized `br-ex` bridge on vSphere and RHOSP | Technology Preview | Technology Preview | Technology Preview |
 | Live migration to OVN-Kubernetes from OpenShift Container Platform SDN | Not Available | Not Available |  |
-| Dynamic configuration manager | Technology Preview | Technology Preview |  |
+| Dynamic Configuration Manager (DCM) | Technology Preview | Technology Preview | General Availability |
 | SR-IOV Network Operator support for Intel C741 Emmitsburg Chipset | Technology Preview | Technology Preview | General Availability |
 | Dual-port NIC for PTP ordinary clock | General Availability | General Availability |  |
 | DPU Operator | Technology Preview | Technology Preview | Technology Preview |
@@ -1299,6 +1304,42 @@ This section will continue to be updated over time to provide notes on enhanceme
 
 > [!IMPORTANT]
 > For any OpenShift Container Platform release, always review the instructions on [updating your cluster](../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console) properly.
+
+## RHSA-2026:79154 - OpenShift Container Platform 4.22.18 bug fix and security update
+
+Issued: 19 October 2026
+
+OpenShift Container Platform release 4.22.18 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:79154](https://access.redhat.com/errata/RHSA-2026:79154) advisory. The RPM packages that are included in the update are provided by the [RHSA-2026:79150](https://access.redhat.com/errata/RHSA-2026:79150) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.22.18 --pullspecs
+```
+
+### Enhancements
+
+- As a General Availability feature, you can deploy a 4.22 cluster without an external registry, using self-contained installation media that also provides a simplified user interface similar to the Assisted Installer during on-premise installations. The installation media also contains Operators you can install that are required to run OpenShift Virtualization Engine. As a postinstallation task, you can also configure your cluster to use an external registry and use the registry for cluster updates.
+
+  For more information, see [Installing a cluster without an external registry](../installing/installing_with_agent_based_installer/installing-ove.md#installing-ove) and [Configuring your cluster to use an external registry](../disconnected/configuring-registry-external.md#configuring-registry-external).
+
+### Fixed issues
+
+- Before this update, the Berkeley Packet Filter (BPF) file system did not allow dots (".") in file names. As a consequence, the Ingress Node Firewall could not attach rules to virtual LAN (VLAN) sub-interfaces such as `bond0.12`. Attempting to pin a link for an interface containing a dot failed with an `operation not permitted` error. With this release, the Ingress Node Firewall sanitizes pin file names by converting dots to a placeholder string. For example, `vlan.100` becomes `vlan_dot_100` before writing to the BPF file system. As a result, firewall rules can be successfully applied to sub-interfaces such as VLANs on top of bonded interfaces. ([OCPBUGS-31495](https://issues.redhat.com/browse/OCPBUGS-31495))
+
+- Before this update, the OpenShift Container Platform Router performed synchronous and sequential `SubjectAccessReview` (SAR) API calls to validate each externally-managed certificate for a route during startup. As a consequence for a cluster with a high amount of external certificate routes, the kubelet stopped any router pod that exceeded the `120` second startup probe timeout value. With this release, a SAR caching mechanism, `sarCache`, and a semaphore throttles concurrent SAR API calls in the router. This process happens alongside any increasing route status that has a writer-lease concurrency. As a result, the initialization time of an OpenShift Container Platform Router is dramatically reduced. This change allows thousands of routes with external certificates to load within the startup probe window and prevents router pods from entering a `CrashLoopBackOff` loop. ([OCPBUGS-99286](https://issues.redhat.com/browse/OCPBUGS-99286))
+
+- Before this update, installing a Helm chart by using the Chart URL option in the OpenShift Container Platform web console with an Open Container Initiative (OCI) URL that included a version number, for example, `oci://registry-1.docker.io/bitnamicharts/nginx:22.6.12` failed with an error indicating that the chart was not available or could not be found. As a consequence, users could not install Helm charts from OCI registries when specifying the version number directly in the URL. With this release, the Helm chart installation process correctly handles OCI URLs that include version numbers. As a result, users can successfully install Helm charts from OCI registries by providing the complete URL with the version number in the web console Chart URL field. ([OCPBUGS-122042](https://issues.redhat.com/browse/OCPBUGS-122042))
+
+- Before this update, when a node with an EgressIP was rebooted, the `ovnkube-cluster-manager` plugin reassigned the EgressIP to a new node but did not immediately remove it from the rebooting node. Both the old and new nodes responded to ARP requests for the same IP address. As a consequence, this MAC address flapping could cause network switches, firewalls, or other devices to malfunction or block EgressIP traffic. With this release, nftables rules block ARP responses from the old node after EgressIP migration. As a result, EgressIP failover completes without MAC address conflicts during node reboots. ([OCPBUGS-128643](https://issues.redhat.com/browse/OCPBUGS-128643))
+
+- Before this update, the Google Cloud platform quota check of the installation program did not retry transient HTTP errors from the Service Usage API. When the Service Usage API returned HTTP 503 `backendError` or HTTP 429 responses, the installation program exited. As a consequence, installations failed due to temporary Google Cloud API issues. With this release, the installation program retries Google Cloud Service Usage quota reads after HTTP 429 and 5xx responses, stopping after five attempts. As a result, installations proceed successfully despite transient Google Cloud Service Usage API errors. ([OCPBUGS-128831](https://issues.redhat.com/browse/OCPBUGS-128831))
+
+### Updating
+
+To update an OpenShift Container Platform 4.22 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
 
 ## RHSA-2026:74429 - OpenShift Container Platform 4.22.17 bug fix and security update
 

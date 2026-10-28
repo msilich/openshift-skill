@@ -14,9 +14,9 @@ Time-slicing allows multiple virtual CPUs (vCPUs) to share a single physical CPU
 
 Configure CPU overcommitment to prioritize VM density over performance when assigning CPUs to VMs. With a higher CPU over-commitment of vCPUs, more VMs fit onto a given node.
 
-# Setting the CPU allocation ratio
+# Overcommit CPUs to raise VM density
 
-The CPU Allocation Ratio specifies the degree of overcommitment by mapping vCPUs to time slices of physical CPUs.
+Set the CPU allocation ratio to control how many virtual CPUs map to each physical CPU. A higher ratio increases overcommitment, so each virtual machine (VM) pod requests fewer physical CPUs.
 
 For example, a mapping or ratio of 10:1 maps 10 virtual CPUs to 1 physical CPU by using time slices.
 

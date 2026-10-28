@@ -1,8 +1,8 @@
 {
   "artifact": {
-    "converted_topics": 1802,
+    "converted_topics": 1804,
     "format": "GitHub-Flavored Markdown",
-    "markdown_files": 1804,
+    "markdown_files": 1815,
     "product": "OpenShift Container Platform",
     "scope": "Complete openshift-enterprise topic map at the pinned revision",
     "version": "4.22"
@@ -28,20 +28,24 @@
       "Replaced the rolling weekly-update statement with pinned-snapshot provenance.",
       "Added a format-modification notice to every Markdown file.",
       "Rewrote DocBook .xml cross-references to bundled Markdown targets.",
-      "Verified local Markdown links; set navigation titles to the selected product."
+      "Verified local Markdown links; set navigation titles to the selected product.",
+      "Bundled pinned Network Observability API, flow-format and CLI references; rewrote upstream links to local files. See offline-references/netobserv/SOURCE.json."
     ],
-    "successful_topics": 1802
+    "successful_topics": 1804
   },
   "integrity": {
     "agentic_skills_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
     "algorithm": "sha256",
     "markdown_manifest_algorithm": "SHA-256 of sorted UTF-8 lines: '<file-sha256>  <relative-path>\\n'",
-    "markdown_manifest_sha256": "1b343e283b50e72e67ad8606814f0d40d7fe20a26f00cd89eae14af51b0ed6f6",
+    "markdown_manifest_sha256": "36d2a68856ea4e333fc877ae52184cf2221cfea0f4b159f91919e5edf332c4ef",
     "openshift_docs_license_sha256": "e1855c6f04f2435df62fe754d9621de265e3fa77717d3910f5a5500cf1e651ad"
+  },
+  "offline_references": {
+    "netobserv_manifest_sha256": "7dd0cf4fce20978ccc2dee3c2c546affc83026a8a721941f28c338de70e8d34e"
   },
   "runtime_network_required": false,
   "schema_version": 1,
-  "source_commit_time_utc": "2026-10-19T10:48:41Z",
+  "source_commit_time_utc": "2026-10-26T10:43:17Z",
   "sources": {
     "agentic_skills_converter": {
       "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
@@ -57,7 +61,7 @@
     },
     "openshift_docs": {
       "branch_hint": "enterprise-4.22",
-      "commit": "19b2087c4f9d9b4b56524c07cb56f2dc56ca4c93",
+      "commit": "75eff7691c1e4e9b478121696fd38bdb84316855",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"

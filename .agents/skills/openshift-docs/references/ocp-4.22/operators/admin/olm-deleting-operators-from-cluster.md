@@ -11,6 +11,11 @@ You can delete Operators that were previously installed with Operator Lifecycle 
 
 Cluster administrators can delete installed Operators from a selected namespace by using the web console.
 
+> [!WARNING]
+> Failed Operator installations do not automatically remove created permissions. Audit and remove remaining permissions to secure the namespace.
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
+
 <div>
 
 <div class="title">
@@ -49,6 +54,11 @@ Procedure
 # Deleting Operators from a cluster using the CLI
 
 To remove an installed Operator from a namespace, cluster administrators can delete its subscription and cluster service version (CSV) by using the CLI.
+
+> [!WARNING]
+> Failed Operator installations do not automatically remove created permissions. Audit and remove remaining permissions to secure the namespace.
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
 
 <div>
 

@@ -2,7 +2,7 @@
 
 You can schedule a virtual machine (VM) on a node if the VM CPU model and policy are supported by the node.
 
-# About node labeling for obsolete CPU models
+# Node labeling for obsolete CPU models
 
 The OpenShift Virtualization Operator uses a predefined list of obsolete CPU models to ensure that a node supports only valid CPU models for scheduled VMs.
 
@@ -36,7 +36,7 @@ Obsolete CPU models
 
 This predefined list is not visible in the `HyperConverged` CR. You cannot *remove* CPU models from this list, but you can add to the list by editing the `spec.obsoleteCPUs.cpuModels` field of the `HyperConverged` CR.
 
-# Configuring obsolete CPU models
+# Configure obsolete CPU models
 
 You can configure a list of obsolete CPU models by editing the `HyperConverged` custom resource (CR).
 

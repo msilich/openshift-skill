@@ -18,7 +18,7 @@ OpenShift Virtualization reserves up to six slots for hot plugging interfaces.
 
 If you restart the VM after hot plugging an interface, that interface becomes part of the standard network interfaces.
 
-# Hot plugging a secondary network interface by using the CLI
+# Hot plug a secondary network interface by using the CLI
 
 You can hot plug a secondary network interface to a virtual machine (VM) while the VM is running.
 
@@ -156,7 +156,7 @@ Verification
 
 </div>
 
-# Hot unplugging a secondary network interface by using the CLI
+# Hot unplug a secondary network interface by using the CLI
 
 You can remove a secondary network interface from a running virtual machine (VM).
 
@@ -245,4 +245,4 @@ Procedure
 
 - [Creating an SR-IOV network attachment definition](virt-connecting-vm-to-sriov.md#nw-sriov-additional-network_virt-connecting-vm-to-sriov)
 
-- [Connecting a virtual machine to an SR-IOV network](virt-connecting-vm-to-sriov.md#virt-attaching-vm-to-sriov-network_virt-connecting-vm-to-sriov)
+- [Connect a VM to an SR-IOV network by using the CLI](virt-connecting-vm-to-sriov.md#virt-attaching-vm-to-sriov-network_virt-connecting-vm-to-sriov)

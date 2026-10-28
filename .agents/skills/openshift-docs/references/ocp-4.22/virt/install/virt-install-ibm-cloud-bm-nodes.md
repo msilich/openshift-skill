@@ -10,7 +10,7 @@ Install OpenShift Virtualization on IBM Cloud bare-metal nodes using Assisted In
 
 - Install the OpenShift CLI (`oc`).
 
-# Configuring IBM Cloud for the new cluster
+# Configure IBM Cloud for the new cluster
 
 Configure and provision the IBM Cloud environment to establish the operational framework and nodes for your OpenShift Virtualization cluster.
 
@@ -165,7 +165,7 @@ Procedure
 
 </div>
 
-# Initializing the new cluster configuration
+# Initialize the new cluster configuration
 
 Initialize the new cluster configuration using the OpenShift Virtualization Assisted Installer service and Samba on the Bastion virtual server instance.
 
@@ -230,7 +230,7 @@ Procedure
 
 </div>
 
-# Configuring cluster networking and access
+# Configure cluster networking and access
 
 Configure networking and access to allow for remote management of the cluster.
 
@@ -321,7 +321,7 @@ Procedure
 
 </div>
 
-# Completing the cluster configuration
+# Complete the cluster configuration
 
 Complete the cluster configuration by installing software on the control plane and compute nodes and configuring DNS for external access.
 

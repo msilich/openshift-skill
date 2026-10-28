@@ -2,11 +2,9 @@
 
 You can remove virtual machines (VMs) from your cluster to free up resources using either the web console or CLI. Deleting a VM removes the virtual machine definition and optionally its associated storage resources.
 
-# Deleting a virtual machine using the web console
+# Delete a VM by using the web console
 
-Deleting a virtual machine (VM) permanently removes it from the cluster.
-
-If the VM is delete protected, the **Delete** action is disabled in the VM’s **Actions** menu.
+You can permanently remove a virtual machine (VM) from the cluster by using the OpenShift Container Platform web console. The **Delete** action is disabled while the VM is delete protected.
 
 <div>
 
@@ -48,9 +46,9 @@ Procedure
 
 </div>
 
-# Deleting a virtual machine by using the CLI
+# Delete a VM by using the CLI
 
-You can delete a virtual machine (VM) by using the `oc` command-line interface (CLI). The `oc` client enables you to perform actions on multiple VMs.
+You can delete a virtual machine (VM) by using the OpenShift CLI (`oc`). The command deletes a VM in the current project unless you specify another namespace.
 
 <div>
 

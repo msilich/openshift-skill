@@ -3,7 +3,7 @@
 ## RHACS 4.11 and optional StackRox MCP
 
 - RHACS source: `openshift/openshift-docs`, branch `rhacs-docs-4.11`, commit
-  `2a3d16703701f239724204bfcc0ec745c35b065c`, distribution `openshift-acs`.
+  `9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7`, distribution `openshift-acs`.
 - License: Apache-2.0. The complete topic-map conversion, original source license,
   converter license, SOURCE.json, TOPIC_MAP.yml and CONVERSION.json are under
   `.agents/skills/openshift-docs/references/acs-4.11/`.
@@ -26,8 +26,24 @@ and the referenced `SOURCE.json` file.
 
 ## OpenShift Container Platform documentation
 
+### Additional Network Observability references
+
+- `openshift/network-observability-operator`: `release-1.12` at
+  `4b7965c39d2a9bbb88b98aaa12bc21a3dbe81ea7` and `release-2.0` at
+  `d8b8a3ce00182203b7e79863b6be7b9243aa6b28`.
+- `netobserv/netobserv-cli`: `main` at
+  `f2439054be17cd57b012642e5f73ec9351e6a9e9`.
+- Apache-2.0; unchanged source documents and licenses are in
+  `tools/docs/netobserv/`. Markdown copies, licenses and full provenance are
+  bundled in each OCP snapshot under `offline-references/netobserv/`.
+- Changes: AsciiDoc-to-Markdown conversion, explicit anchors, offline link
+  replacement, provenance notices, and insertion of a missing table-cell
+  separator in the CLI's `--tls-keylog` row. The source bytes remain unchanged.
+
+### OCP source snapshot
+
 - Project: `openshift/openshift-docs`
-- Source revision: `19b2087c4f9d9b4b56524c07cb56f2dc56ca4c93`
+- Source revision: `75eff7691c1e4e9b478121696fd38bdb84316855`
 - License: Apache License 2.0
 - Bundled license:
   `.agents/skills/openshift-docs/references/ocp-4.22/LICENSE.openshift-docs`

@@ -70,40 +70,40 @@ You can manually pull, retag, and push Red Hat Advanced Cluster Security for Ku
 <tr>
 <td style="text-align: left;"><p>Main</p></td>
 <td style="text-align: left;"><p>Includes Central, Sensor, Admission controller, and Compliance components. Also includes <code>roxctl</code> for use in continuous integration (CI) systems.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Central DB</p></td>
 <td style="text-align: left;"><p>PostgreSQL instance that provides the database storage for Central.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner</p></td>
 <td style="text-align: left;"><p>Scans images and nodes.</p></td>
 <td style="text-align: left;"><ul>
-<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.5</code></p></li>
-<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.5</code></p></li>
+<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.6</code></p></li>
+<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.6</code></p></li>
 </ul></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner DB</p></td>
 <td style="text-align: left;"><p>Stores image scan results and vulnerability definitions.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner V4</p></td>
 <td style="text-align: left;"><p>Scans images.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner V4 DB</p></td>
 <td style="text-align: left;"><p>Stores image scan results and vulnerability definitions for Scanner V4.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-db-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-db-rhel9:4.11.6</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Collector</p></td>
 <td style="text-align: left;"><p>Collects runtime activity in Kubernetes or OpenShift Container Platform clusters.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.5</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.6</code></p></td>
 </tr>
 </tbody>
 </table>
@@ -118,13 +118,13 @@ You can download and retag images using the Docker command-line interface.
 > When you retag an image, you must maintain the name of the image and the tag. For example, use:
 >
 > ``` terminal
-> $ docker tag registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5 <your_registry>/rhacs-main-rhel9:4.11.5
+> $ docker tag registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6 <your_registry>/rhacs-main-rhel9:4.11.6
 > ```
 >
 > and do not retag like the following example:
 >
 > ``` terminal
-> $ docker tag registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5 <your_registry>/other-name:latest
+> $ docker tag registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6 <your_registry>/other-name:latest
 > ```
 
 <div>
@@ -286,18 +286,18 @@ Procedure
 1.  If you are using a registry other than the default internet-connected registry (`registry.redhat.io`), provide the locations where you have pushed the Red Hat Advanced Cluster Security for Kubernetes images when answering the `image to use` prompts:
 
     ``` terminal
-    Enter main image to use (if unset, the default will be used): <your_registry>/rhacs-main-rhel9:4.11.5
+    Enter main image to use (if unset, the default will be used): <your_registry>/rhacs-main-rhel9:4.11.6
     ```
 
     > [!NOTE]
-    > The default image depends on your answer for the prompt `Enter default container images settings:`. If you entered `rhacs`, the default option, the default image will be `registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.5`.
+    > The default image depends on your answer for the prompt `Enter default container images settings:`. If you entered `rhacs`, the default option, the default image will be `registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6`.
 
     ``` terminal
-    Enter Scanner DB image to use (if unset, the default will be used): <your_registry>/rhacs-scanner-db-rhel9:4.11.5
+    Enter Scanner DB image to use (if unset, the default will be used): <your_registry>/rhacs-scanner-db-rhel9:4.11.6
     ```
 
     ``` terminal
-    Enter Scanner image to use (if unset, the default will be used): <your_registry>/rhacs-scanner-rhel9:4.11.5
+    Enter Scanner image to use (if unset, the default will be used): <your_registry>/rhacs-scanner-rhel9:4.11.6
     ```
 
 2.  To enable the offline mode, enter `true` when answering the `Enter whether to run StackRox in offline mode` prompt:

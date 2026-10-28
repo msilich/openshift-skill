@@ -5,9 +5,9 @@ As an OpenShift Container Platform administrator, you can create or configure a 
 > [!NOTE]
 > The **Physical networks** page is available when the NMState console plugin is installed. When you use the **Physical networks** page in the web console, the NNCP is generated automatically. If you need more flexibility or require complex settings, use the NNCP page.
 
-# Creating a physical network by using the OpenShift Container Platform web console
+# Create a physical network in the web console
 
-You can create physical networks for OpenShift Virtualization using the OpenShift Container Platform web console to create a network with direct layer 2 connectivity to your data center.
+You can create physical networks for OpenShift Virtualization using the OpenShift Container Platform web console for direct layer 2 connectivity to your data center.
 
 <div>
 
@@ -84,7 +84,7 @@ Verification
 
 </div>
 
-# Expanding a OpenShift Container Platform physical network to include new nodes
+# Expand a physical network to include new nodes
 
 You can add one or more OpenShift Container Platform worker nodes to an existing physical network if you want to expand access to that network. Expanding a physical network creates a new configuration under the same logical physical network.
 
@@ -155,7 +155,7 @@ Procedure
 
 </div>
 
-# Creating a virtual machine network from a physical network
+# Create a VM network from a physical network
 
 If your use case does not permit the use of network address translation (NAT), you can give VMs direct layer 2 access by creating a VM network that uses a physical network.
 

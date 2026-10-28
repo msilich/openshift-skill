@@ -55,6 +55,7 @@
 - [Mirroring images for a disconnected installation by using the oc adm command](disconnected/installing-mirroring-installation-images.md)
 - [Installing a cluster in a disconnected environment](disconnected/installing.md)
 - [Using OLM in disconnected environments](disconnected/using-olm.md)
+- [Configuring your cluster to use an external registry](disconnected/configuring-registry-external.md)
 - **Updating a cluster in a disconnected environment**
   - [About cluster updates in a disconnected environment](disconnected/updating/index.md)
   - [Mirroring OpenShift Container Platform images](disconnected/updating/mirroring-image-repository.md)
@@ -503,8 +504,8 @@
   - [Compliance Operator release notes](security/compliance_operator/compliance-operator-release-notes.md)
   - [Compliance Operator support](security/compliance_operator/co-support.md)
   - **Compliance Operator concepts**
-    - [Understanding the Compliance Operator](security/compliance_operator/co-concepts/compliance-operator-understanding.md)
-    - [Understanding the Custom Resource Definitions](security/compliance_operator/co-concepts/compliance-operator-crd.md)
+    - [About the Compliance Operator](security/compliance_operator/co-concepts/compliance-operator-understanding.md)
+    - [About the Compliance Operator custom resource definitions](security/compliance_operator/co-concepts/compliance-operator-crd.md)
   - **Compliance Operator management**
     - [Installing the Compliance Operator](security/compliance_operator/co-management/compliance-operator-installation.md)
     - [Updating the Compliance Operator](security/compliance_operator/co-management/compliance-operator-updating.md)
@@ -781,6 +782,7 @@
   - [Disabling multicast for a project](networking/ovn_kubernetes_network_provider/disabling-multicast.md)
   - [Tracking network flows](networking/ovn_kubernetes_network_provider/tracking-network-flows.md)
   - [Configuring hybrid networking](networking/ovn_kubernetes_network_provider/configuring-hybrid-networking.md)
+  - [Increasing cluster network hostPrefix](networking/ovn_kubernetes_network_provider/increasing-cluster-network-hostprefix.md)
 - **Ingress and load balancing**
   - **Routes**
     - [Creating basic routes](networking/ingress_load_balancing/routes/creating-basic-routes.md)
@@ -1406,6 +1408,7 @@
   - [Network observability per-tenant model](observability/network_observability/network-observability-per-tenant-model.md)
   - [Network Policy](observability/network_observability/network-observability-network-policy.md)
   - [Network observability DNS resolution analysis](observability/network_observability/network-observability-dns-resolution-analysis.md)
+  - [Optimizing Flow-logs Pipeline](observability/network_observability/network-observability-optimizing-flowlogs-pipeline.md)
   - [Observing the network traffic](observability/network_observability/observing-network-traffic.md)
   - [Network observability health rules](observability/network_observability/network-observability-health-rules.md)
   - [Monitoring TLS traffic](observability/network_observability/network-observability-monitoring-tls-traffic.md)
@@ -1416,10 +1419,9 @@
   - **Network Observability CLI**
     - [Installing the Network Observability CLI](observability/network_observability/netobserv_cli/netobserv-cli-install.md)
     - [Using the Network Observability CLI](observability/network_observability/netobserv_cli/netobserv-cli-using.md)
+    - [Capture plain text from encrypted network traffic](observability/network_observability/netobserv_cli/netobserv-cli-plaintext-capture.md)
     - [Network Observability CLI reference](observability/network_observability/netobserv_cli/netobserv-cli-reference.md)
-  - [FlowCollector API reference](observability/network_observability/flowcollector-api.md)
-  - [FlowMetric API reference](observability/network_observability/flowmetric-api.md)
-  - [Flows format reference](observability/network_observability/json-flows-format-reference.md)
+  - [Network Observability API reference](observability/network_observability/network-observability-api-reference.md)
   - [Troubleshooting network observability](observability/network_observability/troubleshooting-network-observability.md)
 - **Power Monitoring**
   - [About power monitoring](observability/power_monitoring/about-power-monitoring.md)
@@ -2060,7 +2062,7 @@
   - [Hardware, software, and operational requirements](virt/install/virt-requirements.md)
   - [Installing OpenShift Virtualization](virt/install/installing-virt.md)
   - [Uninstalling OpenShift Virtualization](virt/install/uninstalling-virt.md)
-  - [Installing OpenShift Virtualization on IBM Cloud bare-metal nodes](virt/install/virt-install-ibm-cloud-bm-nodes.md)
+  - [Install OpenShift Virtualization on IBM Cloud bare-metal nodes](virt/install/virt-install-ibm-cloud-bm-nodes.md)
 - **Postinstallation configuration**
   - [Postinstallation configuration](virt/post_installation_configuration/virt-post-install-config.md)
   - [Node placement rules](virt/post_installation_configuration/virt-node-placement-virt-components.md)
@@ -2137,7 +2139,7 @@
   - [Networking configuration overview](virt/vm_networking/virt-networking-overview.md)
   - [Connecting a VM to the default pod network](virt/vm_networking/virt-connecting-vm-to-default-pod-network.md)
   - [Connecting a VM to a primary user-defined network](virt/vm_networking/virt-connecting-vm-to-primary-udn.md)
-  - [Connecting a VM to a secondary localnet user-defined network](virt/vm_networking/virt-connecting-vm-to-secondary-udn.md)
+  - [Connect a VM to a physical network by using an Open vSwitch bridge](virt/vm_networking/virt-connecting-vm-to-physical-network-ovs-bridge.md)
   - [Exposing a VM by using a service](virt/vm_networking/virt-exposing-vm-with-service.md)
   - [Accessing a VM by using its internal FQDN](virt/vm_networking/virt-accessing-vm-internal-fqdn.md)
   - [Connecting a VM to a Linux bridge network](virt/vm_networking/virt-connecting-vm-to-linux-bridge.md)
@@ -2203,3 +2205,17 @@
 - **MCP server**
   - [MCP server overview](ai_applications/mcp_server/mcp-server-overview.md)
 
+
+## Bundled Network Observability references
+
+Match the installed Operator/CLI version, not the OCP version. Sources and licenses are pinned in `offline-references/netobserv/SOURCE.json`.
+
+- [1.12/FlowCollectorSlice.md](offline-references/netobserv/1.12/FlowCollectorSlice.md)
+- [1.12/flowcollector-flows-netobserv-io-v1beta2.md](offline-references/netobserv/1.12/flowcollector-flows-netobserv-io-v1beta2.md)
+- [1.12/flowmetric-flows-netobserv-io-v1alpha1.md](offline-references/netobserv/1.12/flowmetric-flows-netobserv-io-v1alpha1.md)
+- [1.12/flows-format.md](offline-references/netobserv/1.12/flows-format.md)
+- [2.0/FlowCollectorSlice.md](offline-references/netobserv/2.0/FlowCollectorSlice.md)
+- [2.0/flowcollector-flows-netobserv-io-v1beta2.md](offline-references/netobserv/2.0/flowcollector-flows-netobserv-io-v1beta2.md)
+- [2.0/flowmetric-flows-netobserv-io-v1alpha1.md](offline-references/netobserv/2.0/flowmetric-flows-netobserv-io-v1alpha1.md)
+- [2.0/flows-format.md](offline-references/netobserv/2.0/flows-format.md)
+- [cli/netobserv_cli.md](offline-references/netobserv/cli/netobserv_cli.md)

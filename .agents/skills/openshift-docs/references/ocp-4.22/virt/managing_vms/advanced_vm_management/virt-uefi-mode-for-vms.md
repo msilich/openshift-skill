@@ -8,7 +8,7 @@ Unified Extensible Firmware Interface (UEFI), like legacy BIOS, initializes hard
 
 It stores all the information about initialization and startup in a file with a `.efi` extension, which is stored on a special partition called EFI System Partition (ESP). The ESP also contains the boot loader programs for the operating system that is installed on the computer.
 
-# Booting virtual machines in UEFI mode
+# Boot virtual machines in UEFI mode
 
 You can configure a virtual machine to boot in UEFI mode by editing the `VirtualMachine` manifest.
 
@@ -76,7 +76,7 @@ Procedure
 
 </div>
 
-# Configuring VMs with persistent EFI
+# Configure VMs with persistent EFI
 
 You can configure a VM to have EFI persistence enabled by editing its manifest file.
 

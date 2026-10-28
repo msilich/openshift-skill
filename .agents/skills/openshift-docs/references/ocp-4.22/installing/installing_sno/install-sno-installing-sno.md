@@ -74,7 +74,7 @@ Additional resources
 
 - [Persistent storage using logical volume manager storage](../../storage/persistent_storage_local/persistent-storage-using-lvms.md#persistent-storage-using-lvms_logical-volume-manager-storage)
 
-- [What you can do with OpenShift Virtualization](../../virt/about_virt/about-virt.md#virt-what-you-can-do-with-virt_about-virt)
+- [OpenShift Virtualization capabilities](../../virt/about_virt/about-virt.md#virt-what-you-can-do-with-virt_about-virt)
 
 </div>
 

@@ -226,7 +226,7 @@ Procedure
 
 </div>
 
-# Connecting a virtual machine to an SR-IOV network by using the CLI
+# Connect a VM to an SR-IOV network by using the CLI
 
 You can connect the virtual machine (VM) to the SR-IOV network by including the network details in the VM configuration.
 
@@ -289,7 +289,7 @@ Procedure
 
 </div>
 
-# Connecting a VM to an SR-IOV network by using the web console
+# Attach a VM to an SR-IOV network in the web console
 
 You can connect a VM to the SR-IOV network by including the network details in the VM configuration.
 
