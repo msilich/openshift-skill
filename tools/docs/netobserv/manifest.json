@@ -1,0 +1,74 @@
+{
+  "sources": {
+    "1.12": {
+      "url": "https://github.com/openshift/network-observability-operator",
+      "branch": "release-1.12",
+      "commit": "4b7965c39d2a9bbb88b98aaa12bc21a3dbe81ea7",
+      "license": "Apache-2.0"
+    },
+    "2.0": {
+      "url": "https://github.com/openshift/network-observability-operator",
+      "branch": "release-2.0",
+      "commit": "d8b8a3ce00182203b7e79863b6be7b9243aa6b28",
+      "license": "Apache-2.0"
+    },
+    "cli": {
+      "url": "https://github.com/netobserv/netobserv-cli",
+      "branch": "main",
+      "commit": "f2439054be17cd57b012642e5f73ec9351e6a9e9",
+      "license": "Apache-2.0"
+    }
+  },
+  "files": {
+    "1.12/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "1.12/docs/FlowCollectorSlice.md": "6bb55489bec4ae0a85065c12ca3c633df3ab291d3171e6abce486aabe38ada60",
+    "1.12/docs/flowcollector-flows-netobserv-io-v1beta2.adoc": "52bfced7ae1ad3c719ac53935521ae5e9157283a06f6864beef87bc9e9a4745a",
+    "1.12/docs/flowmetric-flows-netobserv-io-v1alpha1.adoc": "9acd3fdbdf2124ff02f9014f5514adaf4aead1c6c7513b667c3ba7b7f513fc38",
+    "1.12/docs/flows-format.adoc": "babe31e4e1b439450cfaadb2839eabedef421712baf1ec8332ea308760f4db31",
+    "2.0/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "2.0/docs/FlowCollectorSlice.md": "6bb55489bec4ae0a85065c12ca3c633df3ab291d3171e6abce486aabe38ada60",
+    "2.0/docs/flowcollector-flows-netobserv-io-v1beta2.adoc": "f27731552836d597d5c46d0c44fdefdcd74996e75c63e3de90606e655530a39c",
+    "2.0/docs/flowmetric-flows-netobserv-io-v1alpha1.adoc": "7b3e634b8e0b8a0ae73dd955fd7129320508923d7762f26bf25e777126a0c8c9",
+    "2.0/docs/flows-format.adoc": "b5a35ae4b18bd6374ad136670a055378843d55e54c451a979596d4022ce81d48",
+    "cli/LICENSE": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+    "cli/docs/netobserv_cli.adoc": "46bab2f953a7771bf41ed49674478daba944086cc6a137ef278dda2dda7660b0"
+  },
+  "documents": {
+    "https://github.com/openshift/network-observability-operator/blob/release-1.12/docs/FlowCollectorSlice.md": {
+      "source": "1.12/docs/FlowCollectorSlice.md",
+      "output": "1.12/FlowCollectorSlice.md"
+    },
+    "https://github.com/openshift/network-observability-operator/blob/release-1.12/docs/flowcollector-flows-netobserv-io-v1beta2.adoc": {
+      "source": "1.12/docs/flowcollector-flows-netobserv-io-v1beta2.adoc",
+      "output": "1.12/flowcollector-flows-netobserv-io-v1beta2.md"
+    },
+    "https://github.com/openshift/network-observability-operator/blob/release-1.12/docs/flowmetric-flows-netobserv-io-v1alpha1.adoc": {
+      "source": "1.12/docs/flowmetric-flows-netobserv-io-v1alpha1.adoc",
+      "output": "1.12/flowmetric-flows-netobserv-io-v1alpha1.md"
+    },
+    "https://github.com/openshift/network-observability-operator/blob/release-1.12/docs/flows-format.adoc": {
+      "source": "1.12/docs/flows-format.adoc",
+      "output": "1.12/flows-format.md"
+    },
+    "https://github.com/openshift/network-observability-operator/blob/release-2.0/docs/FlowCollectorSlice.md": {
+      "source": "2.0/docs/FlowCollectorSlice.md",
+      "output": "2.0/FlowCollectorSlice.md"
+    },
+    "https://github.com/openshift/network-observability-operator/blob/release-2.0/docs/flowcollector-flows-netobserv-io-v1beta2.adoc": {
+      "source": "2.0/docs/flowcollector-flows-netobserv-io-v1beta2.adoc",
+      "output": "2.0/flowcollector-flows-netobserv-io-v1beta2.md"
+    },
+    "https://github.com/openshift/network-observability-operator/blob/release-2.0/docs/flowmetric-flows-netobserv-io-v1alpha1.adoc": {
+      "source": "2.0/docs/flowmetric-flows-netobserv-io-v1alpha1.adoc",
+      "output": "2.0/flowmetric-flows-netobserv-io-v1alpha1.md"
+    },
+    "https://github.com/openshift/network-observability-operator/blob/release-2.0/docs/flows-format.adoc": {
+      "source": "2.0/docs/flows-format.adoc",
+      "output": "2.0/flows-format.md"
+    },
+    "https://github.com/netobserv/netobserv-cli/blob/main/docs/netobserv_cli.adoc": {
+      "source": "cli/docs/netobserv_cli.adoc",
+      "output": "cli/netobserv_cli.md"
+    }
+  }
+}

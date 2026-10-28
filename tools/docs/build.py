@@ -275,6 +275,12 @@ def write_source_metadata(
         "source_commit_time_utc": source_time.isoformat().replace("+00:00", "Z"),
         "runtime_network_required": False,
     }
+    if "offline_references" in lock:
+        metadata["offline_references"] = lock["offline_references"]
+        metadata["conversion"]["modifications"].append(
+            "Bundled pinned Network Observability API, flow-format and CLI references; "
+            "rewrote upstream links to local files. See offline-references/netobserv/SOURCE.json."
+        )
     (output_dir / "SOURCE.json").write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
@@ -363,6 +369,10 @@ def main() -> int:
         if definition["distro"] == "openshift-acs":
             from acs import finish_snapshot
             finish_snapshot(staged_output, source_dir)
+        extra_markdown = 0
+        if "offline_references" in lock:
+            from netobserv import finish_snapshot as finish_netobserv
+            extra_markdown = finish_netobserv(staged_output, lock["offline_references"]["netobserv_manifest_sha256"])
         print(f"Verified {verify_local_links(staged_output)} local Markdown links")
         shutil.copy2(source_dir / "LICENSE", staged_output / "LICENSE.openshift-docs")
         shutil.copy2(CONVERTER_LICENSE_PATH, staged_output / "LICENSE.agentic-skills")
@@ -370,7 +380,7 @@ def main() -> int:
 
         measured = {"converted_topics": successful_topics, "markdown_files": markdown_files,
                     "markdown_manifest_sha256": manifest_sha256}
-        expected_files = expected_topics + 2 if args.refresh_lock else int(lock["expected_output"]["markdown_files"])
+        expected_files = expected_topics + 2 + extra_markdown if args.refresh_lock else int(lock["expected_output"]["markdown_files"])
         expected_manifest = manifest_sha256 if args.refresh_lock else str(lock["expected_output"]["markdown_manifest_sha256"])
         if markdown_files != expected_files:
             raise RuntimeError(

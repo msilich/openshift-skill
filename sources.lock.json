@@ -11,6 +11,12 @@
     "notes": "Skills are text assets; adapt paths and revalidate binaries on other supported OpenCode platforms."
   },
   "sources": {
+    "netobserv_offline_references": {
+      "manifest": "tools/docs/netobserv/manifest.json",
+      "manifest_sha256": "7dd0cf4fce20978ccc2dee3c2c546affc83026a8a721941f28c338de70e8d34e",
+      "license": "Apache-2.0",
+      "source_type": "Vendored Operator 1.12/2.0 API and CLI documents; exact source revisions and file hashes in manifest"
+    },
     "openshift_acs_docs": {
       "version": "4.11",
       "branch": "rhacs-docs-4.11",
