@@ -1035,7 +1035,6 @@ metadata:
    ]'
     irq-load-balancing.crio.io: "disable"
     cpu-load-balancing.crio.io: "disable"
-    cpu-quota.crio.io: "disable"
   labels:
     app: dpdk
   name: testpmd
@@ -1300,7 +1299,6 @@ metadata:
   namespace: mynamespace
   annotations:
     cpu-load-balancing.crio.io: "disable"
-    cpu-quota.crio.io: "disable"
 # ...
 spec:
   containers:

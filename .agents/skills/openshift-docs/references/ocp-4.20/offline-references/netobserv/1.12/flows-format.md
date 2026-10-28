@@ -1,8 +1,6 @@
-<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+<!-- Modified: bundled offline; AsciiDoc converted to Markdown. See ../SOURCE.json for provenance. -->
 
-Review the specifications for the network flow format, which is used internally and for exporting flow data to Kafka.
-
-# Network Flows format reference
+> Source: [1.12 at 4b7965c39d2a9bbb88b98aaa12bc21a3dbe81ea7](https://github.com/openshift/network-observability-operator/blob/4b7965c39d2a9bbb88b98aaa12bc21a3dbe81ea7/docs/flows-format.adoc). Match the installed Operator/CLI version; OCP does not select it.
 
 This is the specification of the network flows format. That format is used when a Kafka exporter is configured, for Prometheus metrics labels as well as internally for the Loki store.
 
@@ -95,7 +93,7 @@ The "Cardinality" column gives information about the implied metric cardinality 
 <td style="text-align: left;"><p><code>dns_name</code></p></td>
 <td style="text-align: left;"><p>no</p></td>
 <td style="text-align: left;"><p>careful</p></td>
-<td style="text-align: left;"><p>dns.name</p></td>
+<td style="text-align: left;"><p>n/a</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>Dscp</code></p></td>
@@ -158,7 +156,7 @@ The "Cardinality" column gives information about the implied metric cardinality 
 <td style="text-align: left;"><p><code>dst_network</code></p></td>
 <td style="text-align: left;"><p>no</p></td>
 <td style="text-align: left;"><p>fine</p></td>
-<td style="text-align: left;"><p>destination.network.name</p></td>
+<td style="text-align: left;"><p>n/a</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>DstK8S_OwnerName</code></p></td>
@@ -254,7 +252,7 @@ The "Cardinality" column gives information about the implied metric cardinality 
 <td style="text-align: left;"><p><code>ipsec_status</code></p></td>
 <td style="text-align: left;"><p>no</p></td>
 <td style="text-align: left;"><p>fine</p></td>
-<td style="text-align: left;"><p>ipsec.status</p></td>
+<td style="text-align: left;"><p>n/a</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>IcmpCode</code></p></td>
@@ -451,7 +449,7 @@ The "Cardinality" column gives information about the implied metric cardinality 
 <td style="text-align: left;"><p><code>src_network</code></p></td>
 <td style="text-align: left;"><p>no</p></td>
 <td style="text-align: left;"><p>fine</p></td>
-<td style="text-align: left;"><p>source.network.name</p></td>
+<td style="text-align: left;"><p>n/a</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>SrcK8S_OwnerName</code></p></td>
@@ -515,42 +513,6 @@ The "Cardinality" column gives information about the implied metric cardinality 
 <td style="text-align: left;"><p>no</p></td>
 <td style="text-align: left;"><p>fine</p></td>
 <td style="text-align: left;"><p>source.subnet.label</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>TLSCipherSuite</code></p></td>
-<td style="text-align: left;"><p>string</p></td>
-<td style="text-align: left;"><p>TLS cipher suite</p></td>
-<td style="text-align: left;"><p><code>tls_cipher_suite</code></p></td>
-<td style="text-align: left;"><p>no</p></td>
-<td style="text-align: left;"><p>fine</p></td>
-<td style="text-align: left;"><p>tls.ciphersuite</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>TLSGroup</code></p></td>
-<td style="text-align: left;"><p>string</p></td>
-<td style="text-align: left;"><p>TLS group name</p></td>
-<td style="text-align: left;"><p><code>tls_group</code></p></td>
-<td style="text-align: left;"><p>no</p></td>
-<td style="text-align: left;"><p>fine</p></td>
-<td style="text-align: left;"><p>tls.group</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>TLSTypes</code></p></td>
-<td style="text-align: left;"><p>string[]</p></td>
-<td style="text-align: left;"><p>TLS message types (bitfield)</p></td>
-<td style="text-align: left;"><p><code>tls_types</code></p></td>
-<td style="text-align: left;"><p>no</p></td>
-<td style="text-align: left;"><p>careful</p></td>
-<td style="text-align: left;"><p>tls.types</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>TLSVersion</code></p></td>
-<td style="text-align: left;"><p>string</p></td>
-<td style="text-align: left;"><p>TLS version</p></td>
-<td style="text-align: left;"><p><code>tls_version</code></p></td>
-<td style="text-align: left;"><p>no</p></td>
-<td style="text-align: left;"><p>fine</p></td>
-<td style="text-align: left;"><p>tls.version</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>TimeFlowEndMs</code></p></td>

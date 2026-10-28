@@ -2,7 +2,7 @@
 
 Refer to tested object maximums when planning your environment for your specific use case, and consider all factors that can impact cluster scaling. For information options that impact performance, see the "OpenShift Virtualization - Tuning & Scaling Guide" in the Red Hat Knowledgebase.
 
-# Tested maximums for OpenShift Virtualization
+# Tested resource limits
 
 Maximums are based on a single cluster of the largest possible size for a OpenShift Virtualization 4.x environment. Approaching the maximum values can reduce performance and increase latency. Consider using multiple smaller clusters if possible to improve performance.
 

@@ -2,7 +2,7 @@
 
 Learn how to keep OpenShift Virtualization updated and compatible with OpenShift Container Platform.
 
-# About updating OpenShift Virtualization
+# OpenShift Virtualization update behavior
 
 When you install OpenShift Virtualization, you select an update channel and an approval strategy. Both settings affect supportability.
 
@@ -46,7 +46,7 @@ Learn how Operator Lifecycle Manager (OLM) updates the OpenShift Virtualization 
 
 - OLM provides z-stream and minor version updates for OpenShift Virtualization. Minor version updates become available when you update OpenShift Container Platform to the next minor version. You cannot update OpenShift Virtualization to the next minor version without first updating OpenShift Container Platform.
 
-## Changing update settings
+## Change update settings
 
 You can control how and when updates are installed by changing the update channel and approval strategy for the OpenShift Virtualization Operator subscription.
 
@@ -145,7 +145,7 @@ Updating OpenShift Virtualization does not change the `machineType` value of any
 > [!IMPORTANT]
 > Before you change a VM’s `machineType` value, you must shut down the VM.
 
-# Monitoring update status
+# Monitor update status
 
 To monitor the status of a OpenShift Virtualization Operator update, watch the cluster service version (CSV) `PHASE`. You can also monitor the CSV conditions in the web console or by using the CLI.
 
@@ -247,7 +247,7 @@ When a VMI fails to migrate, the `virt-controller` tries to migrate it again. It
 > [!NOTE]
 > Each attempt corresponds to a migration object. Only the five most recent attempts are held in a buffer. This prevents migration objects from accumulating on the system while retaining information for debugging.
 
-## Configuring workload update methods
+## Configure workload update methods
 
 You can configure how virtual machine workloads are updated during cluster upgrades by editing the `HyperConverged` custom resource (CR).
 
@@ -316,7 +316,7 @@ Procedure
 
 </div>
 
-## Viewing outdated VM workloads
+## View outdated VM workloads
 
 You can view a list of outdated virtual machine (VM) workloads by using the CLI.
 
@@ -364,7 +364,7 @@ To move between EUS versions, first update OpenShift Virtualization to the lates
 
 For more information about EUS versions, see the "OpenShift Container Platform Life Cycle Policy".
 
-## Preventing workload updates during a Control Plane Only update
+## Prevent workload updates during a Control Plane Only update
 
 When updating between Extended Update Support (EUS) versions, temporarily disable automatic workload updates. This prevents OpenShift Virtualization from migrating or evicting virtual machines during the upgrade.
 

@@ -21,6 +21,7 @@
     "https://access.redhat.com/errata/RHSA-2024:9102",
     "https://access.redhat.com/knowledgebase",
     "https://access.redhat.com/security/cve",
+    "https://access.redhat.com/security/cve/CVE-2026-103314",
     "https://access.redhat.com/security/cve/CVE-2026-13149",
     "https://access.redhat.com/security/cve/CVE-2026-25681",
     "https://access.redhat.com/security/cve/CVE-2026-27136",
@@ -61,6 +62,8 @@
     "https://access.redhat.com/security/team/key",
     "https://access.redhat.com/security/updates/classification",
     "https://access.redhat.com/security_testing_sdl_practice",
+    "https://access.redhat.com/solutions/7129189",
+    "https://access.redhat.com/solutions/7141930",
     "https://access.redhat.com/support",
     "https://access.redhat.com/support/offerings/techpreview/",
     "https://access.redhat.com/support/policy/updates/rhacs",
@@ -1700,7 +1703,7 @@
         "run-roxctl-from-container_installing-roxctl-cli"
       ],
       "code_blocks": 17,
-      "code_sha256": "208a0cf24af0905b63d66b455d50fbb222a8a3bd090c9fe0a7875619a8b4dfa6",
+      "code_sha256": "59123741575750bd31b2e863882f1a164093b571348aaf49f564052e2807ea46",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -1919,7 +1922,7 @@
         "next-steps_install-secured-cluster-cloud-ocp"
       ],
       "code_blocks": 23,
-      "code_sha256": "db28e91bb7d53bc4880860433cc13f54a147939f47c518d673ed61ad9d555abc",
+      "code_sha256": "c3383504f840cf2ea975782250907ab2fabac5095ebd54b043968e6c6476d36d",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
@@ -1998,7 +2001,7 @@
         "install-sensor-roxctl_install-secured-cluster-cloud-other"
       ],
       "code_blocks": 23,
-      "code_sha256": "db28e91bb7d53bc4880860433cc13f54a147939f47c518d673ed61ad9d555abc",
+      "code_sha256": "c3383504f840cf2ea975782250907ab2fabac5095ebd54b043968e6c6476d36d",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
@@ -2098,7 +2101,7 @@
         "rhcos-enable-node-scan_upgrade-cloudsvc-roxctl"
       ],
       "code_blocks": 30,
-      "code_sha256": "33a152d43eb25587cb1a88f97745d6326bba7efe21ae10702df19ea3810a1884",
+      "code_sha256": "90ec8562a4d5c2fa2199e6565495f61bc91445fdf879dc7bfca7d6edb4e2e75f",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "e50bfb29446ee0bfa4dd454896cd71a126002bf08829a2ee9ed1551ee329e36d",
@@ -2330,10 +2333,10 @@
         "upload-kernel-support-package-to-central_enable-offline-mode"
       ],
       "code_blocks": 19,
-      "code_sha256": "b7fd6b7690f5a9d7a7b85d89f81bbf19b33ac8e7003b3aa786537d932db39e6d",
+      "code_sha256": "6b4a86116676589d0fa72a3e89c77e062f0e9557515bceb8aaefa3ead31e5f16",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "150314d7d617e10ad1e704e026cfbf0302542d27120746265e3536621c493fcd",
+      "table_text_sha256": "1def0e8db028c6c37644e566be1f99f6df1c0e90966a3918d2b28663fc35755f",
       "tables": 1
     },
     "configuration/expose-portal-over-http.md": {
@@ -2656,7 +2659,7 @@
         "install-central-roxctl_install-central-ocp"
       ],
       "code_blocks": 49,
-      "code_sha256": "3021ca46dfcd7af8d1209f468a8f87caba831d064c033c22f17fe912f4d16eeb",
+      "code_sha256": "00d953d34d5b0739b5ee23db1858a13ab80f35b555c5297f826557ab251e552e",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4a232be30719f61a3ef773bcece0a05342b226c5f27420b1fd95691b192fbc46",
@@ -2705,7 +2708,7 @@
         "install-sensor-roxctl_install-secured-cluster-ocp"
       ],
       "code_blocks": 21,
-      "code_sha256": "7a0253550fe173aca6c770dbe454e922ea4e5f07a37bd2145ec1f49d7f6d21da",
+      "code_sha256": "87883b24e11227d3996537df55b3fe49d1f2f741405b018258132a0344c7c976",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
@@ -2781,7 +2784,7 @@
         "install-central-roxctl_install-central-other"
       ],
       "code_blocks": 33,
-      "code_sha256": "1896e6164f9c9098df1de20e305413976110cf0b855fc9f4419e531440f7d289",
+      "code_sha256": "c4dad710851f95bac03be0f67f69434880b89842458f6274845d09cd48a39725",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "ec89c44ca26d8cca602639c8c1624563ac27a9b4c0b778ee61e4f417d28c050b",
@@ -2820,7 +2823,7 @@
         "manifest-roxctl_install-secured-cluster-other"
       ],
       "code_blocks": 30,
-      "code_sha256": "9b0cf9c78a1c99bdbe9b279f22265495e44efe7cdc22d7ed855a68cb0e72f70a",
+      "code_sha256": "f0d622de7e9196db08622b694984622d5d0beb6d96abd1c962fb24444488791f",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
@@ -2930,7 +2933,7 @@
         "integrate-circle-ci_integrate-with-ci-systems"
       ],
       "code_blocks": 20,
-      "code_sha256": "d3fe964b6c9da067a27365d5ec9ceb71308ed19c96a91ac31345e21f6328cd44",
+      "code_sha256": "cdb42a5b2729819fc57ff42ad79143feeac5df1aae81df5515a9a743f078a6d4",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -3608,7 +3611,7 @@
         "verifying-the-status-of-vulnerabilities_scan-rhcos-node-host"
       ],
       "code_blocks": 9,
-      "code_sha256": "a9ffb2530759b77990c3008ad5c3de23b456905f46cd017aabd3898b4020776c",
+      "code_sha256": "6174df7a161a384f91a228f2ab78c7f504b4824e9d75b01682efc6ffb85a6066",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "9361fa4aad6414156a31a5afbed69ab0b170ff268b92031a8f85307a97b0bc35",
@@ -4042,13 +4045,15 @@
         "bug-fixes-in-version-4114_release-notes-411",
         "about-this-release-4115_release-notes-411",
         "bug-fixes-in-version-4115_release-notes-411",
+        "about-this-release-4116_release-notes-411",
+        "bug-fixes-in-version-4116_release-notes-411",
         "image-versions_release-notes-411"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "cb2ca3019695227fa4ca4efe8fba90f64760a3faf7e2fa7dd54224bb8ee343b0",
+      "table_text_sha256": "39c05e0428dc3db5129976eeddf32f3e1ead7a69b6cda82cc1a0c9fc3de08dff",
       "tables": 3
     },
     "rest_api/APITokenService/APITokenService.md": {
@@ -8859,7 +8864,7 @@
         "getting-upgrader-logs_upgrade-roxctl"
       ],
       "code_blocks": 59,
-      "code_sha256": "ddb3902539128d6245fc68a6547aec51c6c39037a206efb6a7768fd035210847",
+      "code_sha256": "6052ec1304d3bb2b36fc082096b8bc8bcc4bc119940cb7285ac8049742ac904e",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "e50bfb29446ee0bfa4dd454896cd71a126002bf08829a2ee9ed1551ee329e36d",

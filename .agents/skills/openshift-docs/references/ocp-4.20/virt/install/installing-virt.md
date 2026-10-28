@@ -7,7 +7,7 @@ Install OpenShift Virtualization to add virtualization functionality to your Ope
 >
 > If you have limited internet connectivity, you can configure proxy support in OLM to access the software catalog.
 
-# About installation methods for OpenShift Virtualization
+# Installation methods for OpenShift Virtualization
 
 You can install OpenShift Virtualization on your OpenShift Container Platform cluster by using Operator Lifecycle Manager (OLM), agent-based installation, or the Assisted Installer.
 
@@ -39,7 +39,7 @@ Consider the following factors when choosing an installation method:
 
 - Customization needs: For maximum flexibility in cluster configuration, use the standard OLM installation method.
 
-# Installing the OpenShift Virtualization Operator by using the web console
+# Install the OpenShift Virtualization Operator by using the web console
 
 You can deploy the OpenShift Virtualization Operator by using the OpenShift Container Platform web console.
 
@@ -111,7 +111,7 @@ Verification
 
 </div>
 
-# Subscribing to the OpenShift Virtualization catalog by using the CLI
+# Subscribe to the OpenShift Virtualization catalog by using the CLI
 
 Before you install OpenShift Virtualization, you must subscribe to the OpenShift Virtualization catalog. Subscribing gives the `openshift-cnv` namespace access to the OpenShift Virtualization Operators.
 
@@ -125,11 +125,11 @@ Prerequisites
 
 </div>
 
-- Install OpenShift Container Platform 4.20 on your cluster.
+- You have installed OpenShift Container Platform 4.20 on your cluster.
 
-- Install the OpenShift CLI (`oc`).
+- You have installed the OpenShift CLI (`oc`).
 
-- Log in as a user with `cluster-admin` privileges.
+- You have logged in as a user with `cluster-admin` privileges.
 
 </div>
 
@@ -256,7 +256,7 @@ You must verify that the subscription creation was successful before you can pro
     }
     ```
 
-# Deploying the OpenShift Virtualization Operator by using the CLI
+# Deploy the OpenShift Virtualization Operator by using the CLI
 
 You can deploy the OpenShift Virtualization Operator by using the `oc` CLI.
 
@@ -268,11 +268,11 @@ Prerequisites
 
 </div>
 
-- Install the OpenShift CLI (`oc`).
+- You have installed the OpenShift CLI (`oc`).
 
-- Subscribe to the OpenShift Virtualization catalog in the `openshift-cnv` namespace.
+- You have logged in as a user with `cluster-admin` privileges.
 
-- Log in as a user with `cluster-admin` privileges.
+- You have subscribed to the OpenShift Virtualization catalog in the `openshift-cnv` namespace.
 
 </div>
 

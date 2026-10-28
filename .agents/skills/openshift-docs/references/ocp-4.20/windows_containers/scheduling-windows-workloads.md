@@ -27,7 +27,7 @@ Also, it is recommended that you set the `spec.os.name.windows` parameter in you
 >
 > Also, if you upgrade the Windows nodes from one version to another, for example going from 20H2 to 2022, you must upgrade your container base image to match the new version. For more information, see "Windows container version compatibility" in the Microsoft Windows documentation.
 
-# Creating a RuntimeClass object to encapsulate scheduling mechanisms
+# Create a RuntimeClass object for Windows scheduling
 
 To deploy Windows workloads, you must create a `RuntimeClass` object to map your Windows pods to a base Windows OS variant.
 

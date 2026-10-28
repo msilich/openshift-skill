@@ -8,6 +8,29 @@ An Operator group defines multitenant configuration for OLM-installed Operators 
 
 The set of target namespaces is provided by a comma-delimited string stored in the `olm.targetNamespaces` annotation of a cluster service version (CSV). This annotation is applied to the CSV instances of member Operators and is projected into their deployments.
 
+> [!WARNING]
+> Do not install Operators that require cluster-scoped permissions in namespaces where non-administrator users have any of the following permissions:
+>
+> - Default `edit` cluster role
+>
+> - Service account token creation
+>
+> - Workload creation, for example:
+>
+>   - Pods
+>
+>   - Replica sets
+>
+>   - Deployments
+>
+>   - Jobs
+>
+>   - Cron jobs
+>
+>   - Daemon sets
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
+
 # Operator group membership
 
 An Operator becomes a member of an Operator group when its cluster service version (CSV) is in the same namespace and its install modes support the group’s target namespaces.
@@ -125,6 +148,13 @@ status:
 # Role-based access control
 
 When an Operator group is created, three cluster roles are generated. When the cluster roles are generated, they are automatically suffixed with a hash value to ensure that each cluster role is unique.
+
+> [!WARNING]
+> To prevent privilege escalation, assign a service account with minimum required permissions to the Operator group.
+>
+> If no service account is specified, Operator Lifecycle Manager (OLM) Classic installs the Operator using the default cluster-scoped permissions.
+>
+> For more information, see [Audit and secure delegated Operator installations (Red Hat Knowledgebase)](https://access.redhat.com/articles/7149230).
 
 Each Operator group contains a single aggregation rule with a cluster role selector set to match a label, as shown in the following table:
 

@@ -14,7 +14,7 @@ For example, you might create infrastructure Windows machine sets and related ma
 
 - You must enable communication with the internal API server for the WMCO. See "Enabling communication with the internal API server for the WMCO on vSphere" in this section.
 
-# Creating the vSphere Windows VM golden image
+# Create a Windows VM golden image for vSphere
 
 You must prepare your vSphere environment for Windows container workloads by creating the vSphere Windows VM golden image.
 
@@ -197,7 +197,7 @@ Procedure
 
 </div>
 
-# Enabling communication with the internal API server for the WMCO on vSphere
+# Enable internal API server communication for the WMCO on vSphere
 
 You must enable communication with the internal API server so that your Windows virtual machine (VM) can download the Ignition config files, and the kubelet on the configured VM can only communicate with the internal API server.
 
@@ -487,7 +487,7 @@ Verification
 
 # Additional resources
 
-- [Configuring a secret for the Windows Machine Config Operator](../enabling-windows-container-workloads.md#configuring-secret-for-wmco_enabling-windows-container-workloads)
+- [Configure a secret for the Windows Machine Config Operator](../enabling-windows-container-workloads.md#configuring-secret-for-wmco_enabling-windows-container-workloads)
 
 - [VMware vSphere infrastructure requirements](../../installing/installing_vsphere/ipi/ipi-vsphere-installation-reqs.md#installation-vsphere-infrastructure_ipi-vsphere-installation-reqs)
 

@@ -2,9 +2,9 @@
 
 You can schedule a virtual machine (VM) on a node by ensuring that the VM’s CPU model and policy attribute are matched for compatibility with the CPU models and policy attributes supported by the node.
 
-# Policy attributes
+# CPU feature policy attributes
 
-You can schedule a virtual machine (VM) by specifying a policy attribute and a CPU feature that is matched for compatibility when the VM is scheduled on a node. A policy attribute specified for a VM determines how that VM is scheduled on a node.
+A policy attribute controls how strictly the scheduler enforces a CPU feature that you set on a virtual machine (VM). Use a policy attribute to require a feature, treat it as optional, or forbid it.
 
 | Policy attribute | Description |
 |----|----|
@@ -14,9 +14,9 @@ You can schedule a virtual machine (VM) by specifying a policy attribute and a C
 | disable | The VM cannot be scheduled with CPU node discovery. |
 | forbid | The VM is not scheduled even if the feature is supported by the host CPU and CPU node discovery is enabled. |
 
-# Setting a policy attribute and CPU feature
+# Set a policy attribute and CPU feature
 
-You can set a policy attribute and CPU feature for each virtual machine (VM) to ensure that it is scheduled on a node according to policy and feature. The CPU feature that you set is verified to ensure that it is supported by the host CPU or emulated by the hypervisor.
+Set a CPU feature and a policy attribute on a virtual machine (VM) so that the VM runs only where the feature is available. The feature must be supported by the host CPU or emulated by the hypervisor.
 
 <div>
 
@@ -49,9 +49,9 @@ Procedure
 
 </div>
 
-# Scheduling virtual machines with the supported CPU model
+# Set a VM to run only on nodes with a named CPU model
 
-You can configure a CPU model for a virtual machine (VM) to schedule it on a node where its CPU model is supported.
+Set a named CPU model on a virtual machine (VM) so that the scheduler places the VM only on nodes that support that model.
 
 <div>
 
@@ -81,9 +81,9 @@ Procedure
 
 </div>
 
-# Scheduling virtual machines with the host model
+# Set a VM to inherit the node CPU model
 
-When the CPU model for a virtual machine (VM) is set to `host-model`, the VM inherits the CPU model of the node where it is scheduled.
+Set the CPU model of a virtual machine (VM) to `host-model` so that the VM inherits the CPU model of the node where it is scheduled, and can use the CPU features that the node provides.
 
 <div>
 
@@ -112,9 +112,9 @@ Procedure
 
 </div>
 
-# Scheduling virtual machines with a custom scheduler
+# Schedule VMs with a custom scheduler
 
-You can use a custom scheduler to schedule a virtual machine (VM) on a node.
+You can run a virtual machine (VM) under a custom scheduler instead of the default scheduler, so that your own scheduling logic decides which node runs the VM.
 
 <div>
 

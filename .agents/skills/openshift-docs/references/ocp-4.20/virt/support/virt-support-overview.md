@@ -30,7 +30,7 @@ Submit a support case to resolve a cluster issue that is affecting the ability o
 
 You can submit a support case to Red Hat Support by using the Customer Support page. Include data that you collected about your issue with your support request.
 
-# Creating a Jira issue
+# Report a bug in OpenShift Virtualization
 
 To report a bug, use the Red Hat Issue Router (RHIR), which is available in the Customer Portal Labs.
 
@@ -64,7 +64,7 @@ Procedure
 
 </div>
 
-# Provide feedback on OpenShift Virtualization documentation
+# Report a OpenShift Virtualization documentation issue
 
 To report an error or request an enhancement in the documentation, log in to your Red Hat Jira account and submit an issue. If you do not have a Red Hat Jira account, you are prompted to create an account.
 
@@ -111,7 +111,7 @@ Web console pages for monitoring and troubleshooting
 
 - [Collecting data about your environment](virt-collecting-virt-data.md#virt-collecting-data-about-your-environment_virt-collecting-virt-data)
 
-- [Using the `must-gather` tool for OpenShift Virtualization](virt-collecting-virt-data.md#virt-using-virt-must-gather_virt-collecting-virt-data)
+- [Use the `must-gather` tool for OpenShift Virtualization](virt-collecting-virt-data.md#virt-using-virt-must-gather_virt-collecting-virt-data)
 
 - [Red Hat Issue Router](https://access.redhat.com/labs/rhir/?product=cnv)
 

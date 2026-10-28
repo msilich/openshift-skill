@@ -356,7 +356,7 @@ Engineering considerations
 
 - The real-time workload hint should be enabled for real-time capable workloads.
 
-  - Applying the real-time `workloadHint` setting results in the `nohz_full` kernel command line parameter being applied to improve performance of high performance applications. When you apply the `workloadHint` setting, any isolated or burstable pods that do not have the `cpu-quota.crio.io: "disable"` annotation and a proper `runtimeClassName` value, are subject to CRI-O rate limiting. When you set the `workloadHint` parameter, be aware of the tradeoff between increased performance and the potential impact of CRI-O rate limiting. Ensure that required pods are correctly annotated.
+  - Applying the real-time `workloadHint` setting results in the `nohz_full` kernel command line parameter being applied to improve performance of high performance applications.
 
 - Hardware without IRQ affinity support affects isolated CPUs. All server hardware must support IRQ affinity to ensure that pods with guaranteed CPU QoS can fully use allocated CPUs.
 

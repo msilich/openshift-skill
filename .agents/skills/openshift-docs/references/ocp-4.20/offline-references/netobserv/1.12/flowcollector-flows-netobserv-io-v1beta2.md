@@ -1,15 +1,11 @@
-<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+<!-- Modified: bundled offline; AsciiDoc converted to Markdown. See ../SOURCE.json for provenance. -->
 
-The `FlowCollector` API is the underlying schema used to pilot and configure the deployments for collecting network flows. This reference guide helps you manage those critical settings.
+> Source: [1.12 at 4b7965c39d2a9bbb88b98aaa12bc21a3dbe81ea7](https://github.com/openshift/network-observability-operator/blob/4b7965c39d2a9bbb88b98aaa12bc21a3dbe81ea7/docs/flowcollector-flows-netobserv-io-v1beta2.adoc). Match the installed Operator/CLI version; OCP does not select it.
 
-# FlowCollector API specifications
-
+Description  
 `FlowCollector` is the schema for the network flows collection API, which pilots and configures the underlying deployments.
 
-Description
-`FlowCollector` is the schema for the network flows collection API, which pilots and configures the underlying deployments.
-
-Type
+Type  
 `object`
 
 <table>
@@ -52,23 +48,27 @@ Type
 </tbody>
 </table>
 
-## .metadata
+<a id="_metadata"></a>
 
-Description
+# .metadata
+
+Description  
 Standard object’s metadata. More info: <https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata>
 
-Type
+Type  
 `object`
 
-## .spec
+<a id="_spec"></a>
 
-Description
-Defines the desired state of the FlowCollector resource.
+# .spec
 
+Description  
+Defines the desired state of the FlowCollector resource.  
+  
 
 \*: the mention of "unsupported" or "deprecated" for a feature throughout this document means that this feature is not officially supported by Red Hat. It might have been, for example, contributed by the community and accepted without a formal agreement for maintenance. The product maintainers might provide some support for these features as a best effort only.
 
-Type
+Type  
 `object`
 
 <table>
@@ -93,7 +93,7 @@ Type
 <tr>
 <td style="text-align: left;"><p><code>consolePlugin</code></p></td>
 <td style="text-align: left;"><p><code>object</code></p></td>
-<td style="text-align: left;"><p><code>consolePlugin</code> defines the settings related to the OpenShift Container Platform Console plugin, when available.</p></td>
+<td style="text-align: left;"><p><code>consolePlugin</code> defines the settings related to the {product-title} Console plugin, when available.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>deploymentModel</code></p></td>
@@ -133,7 +133,7 @@ Type
 <tr>
 <td style="text-align: left;"><p><code>namespace</code></p></td>
 <td style="text-align: left;"><p><code>string</code></p></td>
-<td style="text-align: left;"><p>Namespace where Network Observability pods are deployed. Those pods require various cluster role bindings in order to operate. Those bindings are preinstalled for service accounts located in the default namespace. If you configured a different namespace, you must update (or recreate) the cluster role bindings accordingly. You can see the list of preinstalled bindings here: <a href="https://github.com/openshift/network-observability-operator/blob/release-1.12/helm/templates/component_role_bindings.yaml">https://github.com/openshift/network-observability-operator/blob/release-1.12/helm/templates/component_role_bindings.yaml</a></p></td>
+<td style="text-align: left;"><p>Namespace where Network Observability pods are deployed. Those pods require various cluster role bindings is order to operate. Those bindings are preinstalled for service accounts located in the default namespace. If you configured a different namespace, you must update (or recreate) the cluster role bindings accordingly. You can see the list of preinstalled bindings here: <a href="https://github.com/netobserv/netobserv-operator/blob/main/helm/templates/component_role_bindings.yaml">https://github.com/netobserv/netobserv-operator/blob/main/helm/templates/component_role_bindings.yaml</a></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>networkPolicy</code></p></td>
@@ -153,12 +153,14 @@ Type
 </tbody>
 </table>
 
-## .spec.agent
+<a id="_spec_agent"></a>
 
-Description
+# .spec.agent
+
+Description  
 Agent configuration for flows extraction.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -166,12 +168,14 @@ Type
 | `ebpf` | `object` | `ebpf` describes the settings related to the eBPF-based flow reporter when `spec.agent.type` is set to `eBPF`. |
 | `type` | `string` | `type` \[deprecated (\*)\] selects the flows tracing agent. Previously, this field allowed to select between `eBPF` or `IPFIX`. Only `eBPF` is allowed now, so this field is deprecated and is planned for removal in a future version of the API. |
 
-## .spec.agent.ebpf
+<a id="_spec_agent_ebpf"></a>
 
-Description
+# .spec.agent.ebpf
+
+Description  
 `ebpf` describes the settings related to the eBPF-based flow reporter when `spec.agent.type` is set to `eBPF`.
 
-Type
+Type  
 `object`
 
 <table>
@@ -282,12 +286,14 @@ Type
 </tbody>
 </table>
 
-## .spec.agent.ebpf.advanced
+<a id="_spec_agent_ebpf_advanced"></a>
 
-Description
+# .spec.agent.ebpf.advanced
+
+Description  
 `advanced` allows setting some aspects of the internal configuration of the eBPF agent. This section is aimed mostly for debugging and fine-grained performance optimizations, such as `GOGC` and `GOMAXPROCS` environment variables. Set these values at your own risk. You can also override the default Linux capabilities from there.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -296,12 +302,14 @@ Type
 | `env` | `object (string)` | `env` allows passing custom environment variables to underlying components. Useful for passing some very concrete performance-tuning options, such as `GOGC` and `GOMAXPROCS`, that should not be publicly exposed as part of the FlowCollector descriptor, as they are only useful in edge debug or support scenarios. |
 | `scheduling` | `object` | scheduling controls how the pods are scheduled on nodes. |
 
-## .spec.agent.ebpf.advanced.scheduling
+<a id="_spec_agent_ebpf_advanced_scheduling"></a>
 
-Description
+# .spec.agent.ebpf.advanced.scheduling
+
+Description  
 scheduling controls how the pods are scheduled on nodes.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -311,28 +319,34 @@ Type
 | `priorityClassName` | `string` | If specified, indicates the pod’s priority. For documentation, refer to <https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#how-to-use-priority-and-preemption>. If not specified, default priority is used, or zero if there is no default. |
 | `tolerations` | `array` | `tolerations` is a list of tolerations that allow the pod to schedule onto nodes with matching taints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>. |
 
-## .spec.agent.ebpf.advanced.scheduling.affinity
+<a id="_spec_agent_ebpf_advanced_scheduling_affinity"></a>
 
-Description
+# .spec.agent.ebpf.advanced.scheduling.affinity
+
+Description  
 If specified, the pod’s scheduling constraints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>.
 
-Type
+Type  
 `object`
 
-## .spec.agent.ebpf.advanced.scheduling.tolerations
+<a id="_spec_agent_ebpf_advanced_scheduling_tolerations"></a>
 
-Description
+# .spec.agent.ebpf.advanced.scheduling.tolerations
+
+Description  
 `tolerations` is a list of tolerations that allow the pod to schedule onto nodes with matching taints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>.
 
-Type
+Type  
 `array`
 
-## .spec.agent.ebpf.flowFilter
+<a id="_spec_agent_ebpf_flowfilter"></a>
 
-Description
+# .spec.agent.ebpf.flowFilter
+
+Description  
 `flowFilter` defines the eBPF agent configuration regarding flow filtering.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -354,20 +368,24 @@ Type
 | `sourcePorts` | `integer-or-string` | `sourcePorts` optionally defines the source ports to filter flows by. To filter a single port, set a single port as an integer value. For example, `sourcePorts: 80`. To filter a range of ports, use a "start-end" range in string format. For example, `sourcePorts: "80-100"`. To filter two ports, use a "port1,port2" in string format. For example, `ports: "80,100"`. |
 | `tcpFlags` | `string` | `tcpFlags` optionally defines TCP flags to filter flows by. In addition to the standard flags (RFC-9293), you can also filter by one of the three following combinations: `SYN-ACK`, `FIN-ACK`, and `RST-ACK`. |
 
-## .spec.agent.ebpf.flowFilter.rules
+<a id="_spec_agent_ebpf_flowfilter_rules"></a>
 
-Description
+# .spec.agent.ebpf.flowFilter.rules
+
+Description  
 `rules` defines a list of filtering rules on the eBPF Agents. When filtering is enabled, by default, flows that don’t match any rule are rejected. To change the default, you can define a rule that accepts everything: `{ action: "Accept", cidr: "0.0.0.0/0" }`, and then refine with rejecting rules.
 
-Type
+Type  
 `array`
 
-## .spec.agent.ebpf.flowFilter.rules\[\]
+<a id="_spec_agent_ebpf_flowfilter_rules_2"></a>
 
-Description
+# .spec.agent.ebpf.flowFilter.rules\[\]
+
+Description  
 `EBPFFlowFilterRule` defines the desired eBPF agent configuration regarding flow filtering rule.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -387,12 +405,14 @@ Type
 | `sourcePorts` | `integer-or-string` | `sourcePorts` optionally defines the source ports to filter flows by. To filter a single port, set a single port as an integer value. For example, `sourcePorts: 80`. To filter a range of ports, use a "start-end" range in string format. For example, `sourcePorts: "80-100"`. To filter two ports, use a "port1,port2" in string format. For example, `ports: "80,100"`. |
 | `tcpFlags` | `string` | `tcpFlags` optionally defines TCP flags to filter flows by. In addition to the standard flags (RFC-9293), you can also filter by one of the three following combinations: `SYN-ACK`, `FIN-ACK`, and `RST-ACK`. |
 
-## .spec.agent.ebpf.metrics
+<a id="_spec_agent_ebpf_metrics"></a>
 
-Description
+# .spec.agent.ebpf.metrics
+
+Description  
 `metrics` defines the eBPF agent configuration regarding metrics.
 
-Type
+Type  
 `object`
 
 <table>
@@ -430,12 +450,14 @@ Type
 </tbody>
 </table>
 
-## .spec.agent.ebpf.metrics.server
+<a id="_spec_agent_ebpf_metrics_server"></a>
 
-Description
+# .spec.agent.ebpf.metrics.server
+
+Description  
 Metrics server endpoint configuration for the Prometheus scraper.
 
-Type
+Type  
 `object`
 
 | Property | Type      | Description                   |
@@ -443,15 +465,17 @@ Type
 | `port`   | `integer` | The metrics server HTTP port. |
 | `tls`    | `object`  | TLS configuration.            |
 
-## .spec.agent.ebpf.metrics.server.tls
+<a id="_spec_agent_ebpf_metrics_server_tls"></a>
 
-Description
+# .spec.agent.ebpf.metrics.server.tls
+
+Description  
 TLS configuration.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `type`
 
 <table>
@@ -488,17 +512,19 @@ Required
 <td style="text-align: left;"><p><code>string</code></p></td>
 <td style="text-align: left;"><p>Select the type of TLS configuration:<br />
 </p>
-<p>- <code>Disabled</code> (default) to not configure TLS for the endpoint. - <code>Provided</code> to manually provide cert file and a key file. [Unsupported (*)]. - <code>Auto</code> to use OpenShift Container Platform auto generated certificate using annotations.</p></td>
+<p>- <code>Disabled</code> (default) to not configure TLS for the endpoint. - <code>Provided</code> to manually provide cert file and a key file. [Unsupported (*)]. - <code>Auto</code> to use {product-title} auto generated certificate using annotations.</p></td>
 </tr>
 </tbody>
 </table>
 
-## .spec.agent.ebpf.metrics.server.tls.provided
+<a id="_spec_agent_ebpf_metrics_server_tls_provided"></a>
 
-Description
+# .spec.agent.ebpf.metrics.server.tls.provided
+
+Description  
 TLS configuration when `type` is set to `Provided`.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -509,12 +535,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.agent.ebpf.metrics.server.tls.providedCaFile
+<a id="_spec_agent_ebpf_metrics_server_tls_providedcafile"></a>
 
-Description
+# .spec.agent.ebpf.metrics.server.tls.providedCaFile
+
+Description  
 Reference to the CA file when `type` is set to `Provided`.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -524,12 +552,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing the file. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the file reference: `configmap` or `secret`. |
 
-## .spec.agent.ebpf.resources
+<a id="_spec_agent_ebpf_resources"></a>
 
-Description
+# .spec.agent.ebpf.resources
+
+Description  
 `resources` are the compute resources required by this container. For more information, see <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -537,12 +567,14 @@ Type
 | `limits` | `integer-or-string` | Limits describes the maximum amount of compute resources allowed. More info: <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/> |
 | `requests` | `integer-or-string` | Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/> |
 
-## .spec.consolePlugin
+<a id="_spec_consoleplugin"></a>
 
-Description
-`consolePlugin` defines the settings related to the OpenShift Container Platform Console plugin, when available.
+# .spec.consolePlugin
 
-Type
+Description  
+`consolePlugin` defines the settings related to the {product-title} Console plugin, when available.
+
+Type  
 `object`
 
 | Property | Type | Description |
@@ -556,15 +588,17 @@ Type
 | `quickFilters` | `array` | `quickFilters` configures quick filter presets for the Console plugin. Filters for external traffic assume the subnet labels are configured to distinguish internal and external traffic (see `spec.processor.subnetLabels`). |
 | `replicas` | `integer` | `replicas` defines the number of replicas (pods) to start. |
 | `resources` | `object` | `resources`, in terms of compute resources, required by this container. For more information, see <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>. |
-| `standalone` | `boolean` | Deploy as a standalone console, instead of a plugin of the OpenShift Container Platform Console. This is not recommended when using with OpenShift Container Platform, as it doesn’t provide an integrated experience. \[Unsupported (\*)\]. |
+| `standalone` | `boolean` | Deploy as a standalone console, instead of a plugin of the {product-title} Console. This is not recommended when using with {product-title}, as it doesn’t provide an integrated experience. \[Unsupported (\*)\]. |
 | `unmanagedReplicas` | `boolean` | If `unmanagedReplicas` is `true`, the operator will not reconcile `replicas`. This is useful when using a pod autoscaler. |
 
-## .spec.consolePlugin.advanced
+<a id="_spec_consoleplugin_advanced"></a>
 
-Description
+# .spec.consolePlugin.advanced
+
+Description  
 `advanced` allows setting some aspects of the internal configuration of the console plugin. This section is aimed mostly for debugging and fine-grained performance optimizations, such as `GOGC` and `GOMAXPROCS` environment variables. Set these values at your own risk.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -572,15 +606,17 @@ Type
 | `args` | `array (string)` | `args` allows passing custom arguments to underlying components. Useful for overriding some parameters, such as a URL or a configuration path, that should not be publicly exposed as part of the FlowCollector descriptor, as they are only useful in edge debug or support scenarios. |
 | `env` | `object (string)` | `env` allows passing custom environment variables to underlying components. Useful for passing some very concrete performance-tuning options, such as `GOGC` and `GOMAXPROCS`, that should not be publicly exposed as part of the FlowCollector descriptor, as they are only useful in edge debug or support scenarios. |
 | `port` | `integer` | `port` is the plugin service port. Do not use 9002, which is reserved for metrics. |
-| `register` | `boolean` | `register` allows, when set to `true`, to automatically register the provided console plugin with the OpenShift Container Platform Console operator. When set to `false`, you can still register it manually by editing console.operator.openshift.io/cluster with the following command: `oc patch console.operator.openshift.io cluster --type='json' -p '[{"op": "add", "path": "/spec/plugins/-", "value": "netobserv-plugin"}]'` |
+| `register` | `boolean` | `register` allows, when set to `true`, to automatically register the provided console plugin with the {product-title} Console operator. When set to `false`, you can still register it manually by editing console.operator.openshift.io/cluster with the following command: `oc patch console.operator.openshift.io cluster --type='json' -p '[{"op": "add", "path": "/spec/plugins/-", "value": "netobserv-plugin"}]'` |
 | `scheduling` | `object` | `scheduling` controls how the pods are scheduled on nodes. |
 
-## .spec.consolePlugin.advanced.scheduling
+<a id="_spec_consoleplugin_advanced_scheduling"></a>
 
-Description
+# .spec.consolePlugin.advanced.scheduling
+
+Description  
 `scheduling` controls how the pods are scheduled on nodes.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -590,36 +626,44 @@ Type
 | `priorityClassName` | `string` | If specified, indicates the pod’s priority. For documentation, refer to <https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#how-to-use-priority-and-preemption>. If not specified, default priority is used, or zero if there is no default. |
 | `tolerations` | `array` | `tolerations` is a list of tolerations that allow the pod to schedule onto nodes with matching taints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>. |
 
-## .spec.consolePlugin.advanced.scheduling.affinity
+<a id="_spec_consoleplugin_advanced_scheduling_affinity"></a>
 
-Description
+# .spec.consolePlugin.advanced.scheduling.affinity
+
+Description  
 If specified, the pod’s scheduling constraints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>.
 
-Type
+Type  
 `object`
 
-## .spec.consolePlugin.advanced.scheduling.tolerations
+<a id="_spec_consoleplugin_advanced_scheduling_tolerations"></a>
 
-Description
+# .spec.consolePlugin.advanced.scheduling.tolerations
+
+Description  
 `tolerations` is a list of tolerations that allow the pod to schedule onto nodes with matching taints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>.
 
-Type
+Type  
 `array`
 
-## .spec.consolePlugin.autoscaler
+<a id="_spec_consoleplugin_autoscaler"></a>
 
-Description
+# .spec.consolePlugin.autoscaler
+
+Description  
 `autoscaler` \[deprecated (\*)\] spec of a horizontal pod autoscaler to set up for the plugin Deployment. Deprecation notice: managed autoscaler will be removed in a future version. You might configure instead an autoscaler of your choice, and set `spec.consolePlugin.unmanagedReplicas` to `true`. Refer to HorizontalPodAutoscaler documentation (autoscaling/v2).
 
-Type
+Type  
 `object`
 
-## .spec.consolePlugin.portNaming
+<a id="_spec_consoleplugin_portnaming"></a>
 
-Description
+# .spec.consolePlugin.portNaming
+
+Description  
 `portNaming` defines the configuration of the port-to-service name translation.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -627,23 +671,27 @@ Type
 | `enable` | `boolean` | Enable the console plugin port-to-service name translation |
 | `portNames` | `object (string)` | `portNames` defines additional port names to use in the console, for example, `portNames: {"3100": "loki"}`. |
 
-## .spec.consolePlugin.quickFilters
+<a id="_spec_consoleplugin_quickfilters"></a>
 
-Description
+# .spec.consolePlugin.quickFilters
+
+Description  
 `quickFilters` configures quick filter presets for the Console plugin. Filters for external traffic assume the subnet labels are configured to distinguish internal and external traffic (see `spec.processor.subnetLabels`).
 
-Type
+Type  
 `array`
 
-## .spec.consolePlugin.quickFilters\[\]
+<a id="_spec_consoleplugin_quickfilters_2"></a>
 
-Description
+# .spec.consolePlugin.quickFilters\[\]
+
+Description  
 `QuickFilter` defines preset configuration for Console’s quick filters
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `filter`
 
 - `name`
@@ -654,12 +702,14 @@ Required
 | `filter` | `object (string)` | `filter` is a set of keys and values to be set when this filter is selected. Each key can relate to a list of values using a coma-separated string, for example, `filter: {"src_namespace": "namespace1,namespace2"}`. |
 | `name` | `string` | Name of the filter, that is displayed in the Console |
 
-## .spec.consolePlugin.resources
+<a id="_spec_consoleplugin_resources"></a>
 
-Description
+# .spec.consolePlugin.resources
+
+Description  
 `resources`, in terms of compute resources, required by this container. For more information, see <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -667,35 +717,41 @@ Type
 | `limits` | `integer-or-string` | Limits describes the maximum amount of compute resources allowed. More info: <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/> |
 | `requests` | `integer-or-string` | Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/> |
 
-## .spec.execution
+<a id="_spec_execution"></a>
 
-Description
+# .spec.execution
+
+Description  
 `execution` defines configuration related to the execution of the flow collection process.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
 |----|----|----|
 | `mode` | `string` | `mode` is the flow collection process execution desired mode: `Running` or `OnHold`. When `OnHold`, the operator deletes all managed services and workloads, with the exception of the static console plugin, and the operator itself. It allows to use minimal cluster resources without losing configuration. |
 
-## .spec.exporters
+<a id="_spec_exporters"></a>
 
-Description
+# .spec.exporters
+
+Description  
 `exporters` defines additional optional exporters for custom consumption or storage.
 
-Type
+Type  
 `array`
 
-## .spec.exporters\[\]
+<a id="_spec_exporters_2"></a>
 
-Description
+# .spec.exporters\[\]
+
+Description  
 `FlowCollectorExporter` defines an additional exporter to send enriched flows to.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `type`
 
 | Property | Type | Description |
@@ -705,15 +761,17 @@ Required
 | `openTelemetry` | `object` | OpenTelemetry configuration, such as the IP address and port to send enriched logs or metrics to. |
 | `type` | `string` | `type` selects the type of exporters. The available options are `Kafka`, `IPFIX`, and `OpenTelemetry`. |
 
-## .spec.exporters\[\].ipfix
+<a id="_spec_exporters_ipfix"></a>
 
-Description
+# .spec.exporters\[\].ipfix
+
+Description  
 IPFIX configuration, such as the IP address and port to send enriched IPFIX flows to.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `enterpriseID`
 
 - `targetHost`
@@ -727,15 +785,17 @@ Required
 | `targetPort` | `integer` | Port for the IPFIX external receiver. |
 | `transport` | `string` | Transport protocol (`TCP` or `UDP`) to be used for the IPFIX connection, defaults to `TCP`. |
 
-## .spec.exporters\[\].kafka
+<a id="_spec_exporters_kafka"></a>
 
-Description
+# .spec.exporters\[\].kafka
+
+Description  
 Kafka configuration, such as the address and topic, to send enriched flows to.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `address`
 
 - `topic`
@@ -748,12 +808,14 @@ Required
 | `tls` | `object` | TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. When configuring TLS, the operator watches the certificate secret and copies it to both the netobserv and netobserv-privileged namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Kafka configuration documentation for more information. |
 | `topic` | `string` | Kafka topic to use. It must exist. Network Observability does not create it. |
 
-## .spec.exporters\[\].kafka.sasl
+<a id="_spec_exporters_kafka_sasl"></a>
 
-Description
+# .spec.exporters\[\].kafka.sasl
+
+Description  
 SASL authentication configuration. \[Unsupported (\*)\].
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -762,12 +824,14 @@ Type
 | `clientSecretReference` | `object` | Reference to the secret or config map containing the client secret |
 | `type` | `string` | Type of SASL authentication to use, or `Disabled` if SASL is not used |
 
-## .spec.exporters\[\].kafka.sasl.clientIDReference
+<a id="_spec_exporters_kafka_sasl_clientidreference"></a>
 
-Description
+# .spec.exporters\[\].kafka.sasl.clientIDReference
+
+Description  
 Reference to the secret or config map containing the client ID
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -777,12 +841,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing the file. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the file reference: `configmap` or `secret`. |
 
-## .spec.exporters\[\].kafka.sasl.clientSecretReference
+<a id="_spec_exporters_kafka_sasl_clientsecretreference"></a>
 
-Description
+# .spec.exporters\[\].kafka.sasl.clientSecretReference
+
+Description  
 Reference to the secret or config map containing the client secret
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -792,12 +858,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing the file. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the file reference: `configmap` or `secret`. |
 
-## .spec.exporters\[\].kafka.tls
+<a id="_spec_exporters_kafka_tls"></a>
 
-Description
+# .spec.exporters\[\].kafka.tls
+
+Description  
 TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. When configuring TLS, the operator watches the certificate secret and copies it to both the netobserv and netobserv-privileged namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Kafka configuration documentation for more information.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -807,12 +875,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.exporters\[\].kafka.tls.caCert
+<a id="_spec_exporters_kafka_tls_cacert"></a>
 
-Description
+# .spec.exporters\[\].kafka.tls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -823,12 +893,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.exporters\[\].kafka.tls.userCert
+<a id="_spec_exporters_kafka_tls_usercert"></a>
 
-Description
+# .spec.exporters\[\].kafka.tls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -839,15 +911,17 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.exporters\[\].openTelemetry
+<a id="_spec_exporters_opentelemetry"></a>
 
-Description
+# .spec.exporters\[\].openTelemetry
+
+Description  
 OpenTelemetry configuration, such as the IP address and port to send enriched logs or metrics to.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `targetHost`
 
 - `targetPort`
@@ -863,19 +937,23 @@ Required
 | `targetPort` | `integer` | Port for the OpenTelemetry receiver. |
 | `tls` | `object` | TLS client configuration. |
 
-## .spec.exporters\[\].openTelemetry.fieldsMapping
+<a id="_spec_exporters_opentelemetry_fieldsmapping"></a>
 
-Description
+# .spec.exporters\[\].openTelemetry.fieldsMapping
+
+Description  
 Custom fields mapping to an OpenTelemetry conformant format. By default, Network Observability format proposal is used: <https://github.com/rhobs/observability-data-model/blob/main/network-observability.md#format-proposal> . As there is currently no accepted standard for L3 or L4 enriched network logs, you can freely override it with your own.
 
-Type
+Type  
 `array`
 
-## .spec.exporters\[\].openTelemetry.fieldsMapping\[\]
+<a id="_spec_exporters_opentelemetry_fieldsmapping_2"></a>
 
-Description
+# .spec.exporters\[\].openTelemetry.fieldsMapping\[\]
 
-Type
+Description  
+
+Type  
 `object`
 
 | Property     | Type      | Description |
@@ -884,24 +962,28 @@ Type
 | `multiplier` | `integer` |             |
 | `output`     | `string`  |             |
 
-## .spec.exporters\[\].openTelemetry.logs
+<a id="_spec_exporters_opentelemetry_logs"></a>
 
-Description
+# .spec.exporters\[\].openTelemetry.logs
+
+Description  
 OpenTelemetry configuration for logs.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
 |----|----|----|
 | `enable` | `boolean` | Set `enable` to `true` to send logs to an OpenTelemetry receiver. |
 
-## .spec.exporters\[\].openTelemetry.metrics
+<a id="_spec_exporters_opentelemetry_metrics"></a>
 
-Description
+# .spec.exporters\[\].openTelemetry.metrics
+
+Description  
 OpenTelemetry configuration for metrics.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -909,12 +991,14 @@ Type
 | `enable` | `boolean` | Set `enable` to `true` to send metrics to an OpenTelemetry receiver. |
 | `pushTimeInterval` | `string` | Specify how often metrics are sent to a collector. |
 
-## .spec.exporters\[\].openTelemetry.tls
+<a id="_spec_exporters_opentelemetry_tls"></a>
 
-Description
+# .spec.exporters\[\].openTelemetry.tls
+
+Description  
 TLS client configuration.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -924,12 +1008,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.exporters\[\].openTelemetry.tls.caCert
+<a id="_spec_exporters_opentelemetry_tls_cacert"></a>
 
-Description
+# .spec.exporters\[\].openTelemetry.tls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -940,12 +1026,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.exporters\[\].openTelemetry.tls.userCert
+<a id="_spec_exporters_opentelemetry_tls_usercert"></a>
 
-Description
+# .spec.exporters\[\].openTelemetry.tls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -956,15 +1044,17 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.kafka
+<a id="_spec_kafka"></a>
 
-Description
+# .spec.kafka
+
+Description  
 Kafka configuration, allowing to use Kafka as a broker as part of the flow collection pipeline. Available when the `spec.deploymentModel` is `Kafka`.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `address`
 
 - `topic`
@@ -977,12 +1067,14 @@ Required
 | `tls` | `object` | TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. When configuring TLS, the operator watches the certificate secret and copies it to both the netobserv and netobserv-privileged namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Kafka configuration documentation for more information. |
 | `topic` | `string` | Kafka topic to use. It must exist. Network Observability does not create it. |
 
-## .spec.kafka.sasl
+<a id="_spec_kafka_sasl"></a>
 
-Description
+# .spec.kafka.sasl
+
+Description  
 SASL authentication configuration. \[Unsupported (\*)\].
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -991,12 +1083,14 @@ Type
 | `clientSecretReference` | `object` | Reference to the secret or config map containing the client secret |
 | `type` | `string` | Type of SASL authentication to use, or `Disabled` if SASL is not used |
 
-## .spec.kafka.sasl.clientIDReference
+<a id="_spec_kafka_sasl_clientidreference"></a>
 
-Description
+# .spec.kafka.sasl.clientIDReference
+
+Description  
 Reference to the secret or config map containing the client ID
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1006,12 +1100,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing the file. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the file reference: `configmap` or `secret`. |
 
-## .spec.kafka.sasl.clientSecretReference
+<a id="_spec_kafka_sasl_clientsecretreference"></a>
 
-Description
+# .spec.kafka.sasl.clientSecretReference
+
+Description  
 Reference to the secret or config map containing the client secret
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1021,12 +1117,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing the file. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the file reference: `configmap` or `secret`. |
 
-## .spec.kafka.tls
+<a id="_spec_kafka_tls"></a>
 
-Description
+# .spec.kafka.tls
+
+Description  
 TLS and mTLS client configuration. When using TLS, verify that the address matches the Kafka port used for TLS, generally 9093. We recommend the use of mTLS for higher security standards. When configuring TLS, the operator watches the certificate secret and copies it to both the netobserv and netobserv-privileged namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Kafka configuration documentation for more information.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1036,12 +1134,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.kafka.tls.caCert
+<a id="_spec_kafka_tls_cacert"></a>
 
-Description
+# .spec.kafka.tls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1052,12 +1152,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.kafka.tls.userCert
+<a id="_spec_kafka_tls_usercert"></a>
 
-Description
+# .spec.kafka.tls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1068,15 +1170,17 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.loki
+<a id="_spec_loki"></a>
 
-Description
+# .spec.loki
+
+Description  
 `loki`, the flow store, client settings.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `mode`
 
 <table>
@@ -1160,12 +1264,14 @@ Required
 </tbody>
 </table>
 
-## .spec.loki.advanced
+<a id="_spec_loki_advanced"></a>
 
-Description
+# .spec.loki.advanced
+
+Description  
 `advanced` allows setting some aspects of the internal configuration of the Loki clients. This section is aimed mostly for debugging and fine-grained performance optimizations.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1176,15 +1282,17 @@ Type
 | `writeMaxRetries` | `integer` | `writeMaxRetries` is the maximum number of retries for Loki client connections. |
 | `writeMinBackoff` | `string` | `writeMinBackoff` is the initial backoff time for Loki client connection between retries. |
 
-## .spec.loki.lokiStack
+<a id="_spec_loki_lokistack"></a>
 
-Description
+# .spec.loki.lokiStack
+
+Description  
 Loki configuration for `LokiStack` mode. This is useful for an easy Loki Operator configuration. It is ignored for other modes.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `name`
 
 | Property | Type | Description |
@@ -1192,12 +1300,14 @@ Required
 | `name` | `string` | Name of an existing LokiStack resource to use. |
 | `namespace` | `string` | Namespace where this `LokiStack` resource is located. If omitted, it is assumed to be the same as `spec.namespace`. When configuring a different namespace, the operator watches certificate secret and copies it to the netobserv main namespaces. In order to do so, you must grant it permissions to the `netobserv-secret-watcher` and `netobserv-secret-creator` roles in the corresponding namespaces. Refer to the Loki configuration documentation for more information. |
 
-## .spec.loki.manual
+<a id="_spec_loki_manual"></a>
 
-Description
+# .spec.loki.manual
+
+Description  
 Loki configuration for `Manual` mode. This is the most flexible configuration. It is ignored for other modes.
 
-Type
+Type  
 `object`
 
 <table>
@@ -1260,12 +1370,14 @@ Type
 </tbody>
 </table>
 
-## .spec.loki.manual.statusTls
+<a id="_spec_loki_manual_statustls"></a>
 
-Description
+# .spec.loki.manual.statusTls
+
+Description  
 TLS client configuration for Loki status URL.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1275,12 +1387,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.loki.manual.statusTls.caCert
+<a id="_spec_loki_manual_statustls_cacert"></a>
 
-Description
+# .spec.loki.manual.statusTls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1291,12 +1405,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.loki.manual.statusTls.userCert
+<a id="_spec_loki_manual_statustls_usercert"></a>
 
-Description
+# .spec.loki.manual.statusTls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1307,12 +1423,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.loki.manual.tls
+<a id="_spec_loki_manual_tls"></a>
 
-Description
+# .spec.loki.manual.tls
+
+Description  
 TLS client configuration for Loki URL.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1322,12 +1440,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.loki.manual.tls.caCert
+<a id="_spec_loki_manual_tls_cacert"></a>
 
-Description
+# .spec.loki.manual.tls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1338,12 +1458,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.loki.manual.tls.userCert
+<a id="_spec_loki_manual_tls_usercert"></a>
 
-Description
+# .spec.loki.manual.tls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1354,12 +1476,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.loki.microservices
+<a id="_spec_loki_microservices"></a>
 
-Description
+# .spec.loki.microservices
+
+Description  
 Loki configuration for `Microservices` mode. Use this option when Loki is installed using the microservices deployment mode (<https://grafana.com/docs/loki/latest/fundamentals/architecture/deployment-modes/#microservices-mode>). It is ignored for other modes.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1369,12 +1493,14 @@ Type
 | `tenantID` | `string` | `tenantID` is the Loki `X-Scope-OrgID` header that identifies the tenant for each request. |
 | `tls` | `object` | TLS client configuration for Loki URL. |
 
-## .spec.loki.microservices.tls
+<a id="_spec_loki_microservices_tls"></a>
 
-Description
+# .spec.loki.microservices.tls
+
+Description  
 TLS client configuration for Loki URL.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1384,12 +1510,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.loki.microservices.tls.caCert
+<a id="_spec_loki_microservices_tls_cacert"></a>
 
-Description
+# .spec.loki.microservices.tls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1400,12 +1528,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.loki.microservices.tls.userCert
+<a id="_spec_loki_microservices_tls_usercert"></a>
 
-Description
+# .spec.loki.microservices.tls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1416,12 +1546,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.loki.monolithic
+<a id="_spec_loki_monolithic"></a>
 
-Description
+# .spec.loki.monolithic
+
+Description  
 Loki configuration for `Monolithic` mode. Use this option when Loki is installed using the monolithic deployment mode (<https://grafana.com/docs/loki/latest/fundamentals/architecture/deployment-modes/#monolithic-mode>). It is ignored for other modes.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1431,12 +1563,14 @@ Type
 | `tls` | `object` | TLS client configuration for Loki URL. |
 | `url` | `string` | `url` is the unique address of an existing Loki service that points to both the ingester and the querier. |
 
-## .spec.loki.monolithic.tls
+<a id="_spec_loki_monolithic_tls"></a>
 
-Description
+# .spec.loki.monolithic.tls
+
+Description  
 TLS client configuration for Loki URL.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1446,12 +1580,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.loki.monolithic.tls.caCert
+<a id="_spec_loki_monolithic_tls_cacert"></a>
 
-Description
+# .spec.loki.monolithic.tls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1462,12 +1598,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.loki.monolithic.tls.userCert
+<a id="_spec_loki_monolithic_tls_usercert"></a>
 
-Description
+# .spec.loki.monolithic.tls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1478,12 +1616,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.networkPolicy
+<a id="_spec_networkpolicy"></a>
 
-Description
+# .spec.networkPolicy
+
+Description  
 `networkPolicy` defines network policy settings for Network Observability components isolation.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1491,12 +1631,14 @@ Type
 | `additionalNamespaces` | `array (string)` | `additionalNamespaces` contains additional namespaces allowed to connect to the Network Observability namespace. It provides flexibility in the network policy configuration, but if you need a more specific configuration, you can disable it and install your own instead. |
 | `enable` | `boolean` | Deploys network policies on the namespaces used by Network Observability (main and privileged). These network policies better isolate the Network Observability components to prevent undesired connections from and to them. Because it cannot be tested with all CNIs, this option is only enabled by default when Network Observability runs in a known supported environment, and it is disabled by default otherwise. When disabled, it is highly recommended to create network policies manually, to prevent undesired accesses. More information: <https://github.com/netobserv/netobserv-operator/blob/main/docs/NetworkPolicy.md>. |
 
-## .spec.processor
+<a id="_spec_processor"></a>
 
-Description
+# .spec.processor
+
+Description  
 `processor` defines the settings of the component that receives the flows from the agent, enriches them, generates metrics, and forwards them to the Loki persistence layer and/or any available exporter.
 
-Type
+Type  
 `object`
 
 <table>
@@ -1526,7 +1668,7 @@ Type
 <tr>
 <td style="text-align: left;"><p><code>clusterName</code></p></td>
 <td style="text-align: left;"><p><code>string</code></p></td>
-<td style="text-align: left;"><p><code>clusterName</code> is the name of the cluster to appear in the flows data. This is useful in a multi-cluster context. When using OpenShift Container Platform, leave empty to make it automatically determined.</p></td>
+<td style="text-align: left;"><p><code>clusterName</code> is the name of the cluster to appear in the flows data. This is useful in a multi-cluster context. When using {product-title}, leave empty to make it automatically determined.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>consumerReplicas</code></p></td>
@@ -1615,7 +1757,7 @@ Type
 <tr>
 <td style="text-align: left;"><p><code>subnetLabels</code></p></td>
 <td style="text-align: left;"><p><code>object</code></p></td>
-<td style="text-align: left;"><p><code>subnetLabels</code> allows to define custom labels on subnets and IPs or to enable automatic labeling of recognized subnets in OpenShift Container Platform, which is used to identify cluster external traffic. When a subnet matches the source or destination IP of a flow, a corresponding field is added: <code>SrcSubnetLabel</code> or <code>DstSubnetLabel</code>.</p></td>
+<td style="text-align: left;"><p><code>subnetLabels</code> allows to define custom labels on subnets and IPs or to enable automatic labeling of recognized subnets in {product-title}, which is used to identify cluster external traffic. When a subnet matches the source or destination IP of a flow, a corresponding field is added: <code>SrcSubnetLabel</code> or <code>DstSubnetLabel</code>.</p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p><code>unmanagedReplicas</code></p></td>
@@ -1625,12 +1767,14 @@ Type
 </tbody>
 </table>
 
-## .spec.processor.advanced
+<a id="_spec_processor_advanced"></a>
 
-Description
+# .spec.processor.advanced
+
+Description  
 `advanced` allows setting some aspects of the internal configuration of the flow processor. This section is aimed mostly for debugging and fine-grained performance optimizations, such as `GOGC` and `GOMAXPROCS` environment variables. Set these values at your own risk.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1647,12 +1791,14 @@ Type
 | `scheduling` | `object` | scheduling controls how the pods are scheduled on nodes. |
 | `secondaryNetworks` | `array` | Defines secondary networks to be checked for resources identification. To guarantee a correct identification, indexed values must form an unique identifier across the cluster. If the same index is used by several resources, those resources might be incorrectly labeled. If not provided and `spec.agent.ebpf.privileged` is `true`, secondary networks are detected automatically. |
 
-## .spec.processor.advanced.scheduling
+<a id="_spec_processor_advanced_scheduling"></a>
 
-Description
+# .spec.processor.advanced.scheduling
+
+Description  
 scheduling controls how the pods are scheduled on nodes.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1662,38 +1808,46 @@ Type
 | `priorityClassName` | `string` | If specified, indicates the pod’s priority. For documentation, refer to <https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#how-to-use-priority-and-preemption>. If not specified, default priority is used, or zero if there is no default. |
 | `tolerations` | `array` | `tolerations` is a list of tolerations that allow the pod to schedule onto nodes with matching taints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>. |
 
-## .spec.processor.advanced.scheduling.affinity
+<a id="_spec_processor_advanced_scheduling_affinity"></a>
 
-Description
+# .spec.processor.advanced.scheduling.affinity
+
+Description  
 If specified, the pod’s scheduling constraints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>.
 
-Type
+Type  
 `object`
 
-## .spec.processor.advanced.scheduling.tolerations
+<a id="_spec_processor_advanced_scheduling_tolerations"></a>
 
-Description
+# .spec.processor.advanced.scheduling.tolerations
+
+Description  
 `tolerations` is a list of tolerations that allow the pod to schedule onto nodes with matching taints. For documentation, refer to <https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#scheduling>.
 
-Type
+Type  
 `array`
 
-## .spec.processor.advanced.secondaryNetworks
+<a id="_spec_processor_advanced_secondarynetworks"></a>
 
-Description
-Defines secondary networks to be checked for resources identification. To guarantee a correct identification, indexed values must form an unique identifier across the cluster. If the same index is used by several resources, those resources might be incorrectly labeled.
+# .spec.processor.advanced.secondaryNetworks
 
-Type
+Description  
+Defines secondary networks to be checked for resources identification. To guarantee a correct identification, indexed values must form an unique identifier across the cluster. If the same index is used by several resources, those resources might be incorrectly labeled. If not provided and `spec.agent.ebpf.privileged` is `true`, secondary networks are detected automatically.
+
+Type  
 `array`
 
-## .spec.processor.advanced.secondaryNetworks\[\]
+<a id="_spec_processor_advanced_secondarynetworks_2"></a>
 
-Description
+# .spec.processor.advanced.secondaryNetworks\[\]
 
-Type
+Description  
+
+Type  
 `object`
 
-Required
+Required  
 - `index`
 
 | Property | Type | Description |
@@ -1701,12 +1855,14 @@ Required
 | `index` | `array (string)` | `index` is a list of fields to use for indexing the pods. They should form a unique Pod identifier across the cluster. Can be any of: `MAC`, `IP`, `Interface`. Fields absent from the 'k8s.v1.cni.cncf.io/network-status' annotation must not be added to the index. |
 | `name` | `string` | Deprecated: `name` is unused. |
 
-## .spec.processor.deduper
+<a id="_spec_processor_deduper"></a>
 
-Description
+# .spec.processor.deduper
+
+Description  
 `deduper` allows you to sample or drop flows identified as duplicates, in order to save on resource usage.
 
-Type
+Type  
 `object`
 
 <table>
@@ -1743,20 +1899,24 @@ Type
 </tbody>
 </table>
 
-## .spec.processor.filters
+<a id="_spec_processor_filters"></a>
 
-Description
+# .spec.processor.filters
+
+Description  
 `filters` lets you define custom filters to limit the amount of generated flows. These filters provide more flexibility than the eBPF Agent filters (in `spec.agent.ebpf.flowFilter`), such as allowing to filter by Kubernetes namespace, but with a lesser improvement in performance.
 
-Type
+Type  
 `array`
 
-## .spec.processor.filters\[\]
+<a id="_spec_processor_filters_2"></a>
 
-Description
+# .spec.processor.filters\[\]
+
+Description  
 `FLPFilterSet` defines the desired configuration for FLP-based filtering satisfying all conditions.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1765,46 +1925,54 @@ Type
 | `query` | `string` | A query that selects the network flows to keep. More information about this query language in <https://github.com/netobserv/flowlogs-pipeline/blob/main/docs/filtering.md>. |
 | `sampling` | `integer` | `sampling` is an optional sampling interval to apply to this filter. For example, a value of `50` means that 1 matching flow in 50 is sampled. |
 
-## .spec.processor.kafkaConsumerAutoscaler
+<a id="_spec_processor_kafkaconsumerautoscaler"></a>
 
-Description
+# .spec.processor.kafkaConsumerAutoscaler
+
+Description  
 `kafkaConsumerAutoscaler` \[deprecated (\*)\] is the spec of a horizontal pod autoscaler to set up for `flowlogs-pipeline-transformer`, which consumes Kafka messages. This setting is ignored when Kafka is disabled. Deprecation notice: managed autoscaler will be removed in a future version. You might configure instead an autoscaler of your choice, and set `spec.processor.unmanagedReplicas` to `true`. Refer to HorizontalPodAutoscaler documentation (autoscaling/v2).
 
-Type
+Type  
 `object`
 
-## .spec.processor.metrics
+<a id="_spec_processor_metrics"></a>
 
-Description
+# .spec.processor.metrics
+
+Description  
 `Metrics` define the processor configuration regarding metrics
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
 |----|----|----|
-| `additionalIncludeList` | `array (string)` | `additionalIncludeList` is a list of metric names to include in addition to the default metrics. Unlike `includeList`, this appends to the default list rather than replacing it. This field is mutually exclusive with `includeList`. If `includeList` is set, `additionalIncludeList` is ignored. The names correspond to the names in Prometheus without the prefix. For example, `namespace_egress_packets_total` shows up as `netobserv_namespace_egress_packets_total` in Prometheus. Note that the more metrics you add, the bigger is the impact on Prometheus workload resources. More information, with full list of available metrics: <https://github.com/netobserv/network-observability-operator/blob/main/docs/Metrics.md> |
-| `disableAlerts` | `array (string)` | `disableAlerts` is a list of alert groups that should be disabled from the default set of alerts. Possible values are: `NetObservNoFlows`, `NetObservLokiError`, `PacketDropsByKernel`, `PacketDropsByDevice`, `IPsecErrors`, `NetpolDenied`, `LatencyHighTrend`, `DNSErrors`, `DNSNxDomain`, `ExternalEgressHighTrend`, `ExternalIngressHighTrend`, `Ingress5xxErrors`, `IngressHTTPLatencyTrend`. More information on alerts: <https://github.com/netobserv/network-observability-operator/blob/main/docs/HealthRules.md> |
-| `healthRules` | `array` | `healthRules` is a list of health rules to be created for Prometheus, organized by templates and variants. Each health rule can be configured to generate either alerts or recording rules based on the mode field. More information on health rules: <https://github.com/netobserv/network-observability-operator/blob/main/docs/HealthRules.md> |
-| `includeList` | `array (string)` | `includeList` is a list of metric names to specify which ones to generate. The names correspond to the names in Prometheus without the prefix. For example, `namespace_egress_packets_total` shows up as `netobserv_namespace_egress_packets_total` in Prometheus. Note that the more metrics you add, the bigger is the impact on Prometheus workload resources. Metrics enabled by default are: `namespace_flows_total`, `node_ingress_bytes_total`, `node_egress_bytes_total`, `workload_ingress_bytes_total`, `workload_egress_bytes_total`, `namespace_drop_packets_total` (when `PacketDrop` feature is enabled), `namespace_rtt_seconds` (when `FlowRTT` feature is enabled), `namespace_dns_latency_seconds` (when `DNSTracking` feature is enabled), `namespace_network_policy_events_total` (when `NetworkEvents` feature is enabled). More information, with full list of available metrics: <https://github.com/netobserv/network-observability-operator/blob/main/docs/Metrics.md> |
+| `additionalIncludeList` | `array (string)` | `additionalIncludeList` is a list of metric names to include in addition to the default metrics. Unlike `includeList`, this appends to the default list rather than replacing it. This field is mutually exclusive with `includeList`. If `includeList` is set, `additionalIncludeList` is ignored. The names correspond to the names in Prometheus without the prefix. For example, `namespace_egress_packets_total` shows up as `netobserv_namespace_egress_packets_total` in Prometheus. Note that the more metrics you add, the bigger is the impact on Prometheus workload resources. More information, with full list of available metrics: <https://github.com/netobserv/netobserv-operator/blob/main/docs/Metrics.md> |
+| `disableAlerts` | `array (string)` | `disableAlerts` is a list of alert groups that should be disabled from the default set of alerts. Possible values are: `NetObservNoFlows`, `NetObservLokiError`, `PacketDropsByKernel`, `PacketDropsByDevice`, `IPsecErrors`, `NetpolDenied`, `LatencyHighTrend`, `DNSErrors`, `DNSNxDomain`, `ExternalEgressHighTrend`, `ExternalIngressHighTrend`, `Ingress5xxErrors`, `IngressHTTPLatencyTrend`. More information on alerts: <https://github.com/netobserv/netobserv-operator/blob/main/docs/HealthRules.md> |
+| `healthRules` | `array` | `healthRules` is a list of health rules to be created for Prometheus, organized by templates and variants. Each health rule can be configured to generate either alerts or recording rules based on the mode field. More information on health rules: <https://github.com/netobserv/netobserv-operator/blob/main/docs/HealthRules.md> |
+| `includeList` | `array (string)` | `includeList` is a list of metric names to specify which ones to generate. The names correspond to the names in Prometheus without the prefix. For example, `namespace_egress_packets_total` shows up as `netobserv_namespace_egress_packets_total` in Prometheus. Note that the more metrics you add, the bigger is the impact on Prometheus workload resources. Metrics enabled by default are: `namespace_flows_total`, `node_ingress_bytes_total`, `node_egress_bytes_total`, `workload_ingress_bytes_total`, `workload_egress_bytes_total`, `namespace_drop_packets_total` (when `PacketDrop` feature is enabled), `namespace_rtt_seconds` (when `FlowRTT` feature is enabled), `namespace_dns_latency_seconds` (when `DNSTracking` feature is enabled), `namespace_network_policy_events_total` (when `NetworkEvents` feature is enabled). More information, with full list of available metrics: <https://github.com/netobserv/netobserv-operator/blob/main/docs/Metrics.md> |
 | `server` | `object` | Metrics server endpoint configuration for Prometheus scraper |
 
-## .spec.processor.metrics.healthRules
+<a id="_spec_processor_metrics_healthrules"></a>
 
-Description
-`healthRules` is a list of health rules to be created for Prometheus, organized by templates and variants. Each health rule can be configured to generate either alerts or recording rules based on the mode field. More information on health rules: <https://github.com/netobserv/network-observability-operator/blob/main/docs/HealthRules.md>
+# .spec.processor.metrics.healthRules
 
-Type
+Description  
+`healthRules` is a list of health rules to be created for Prometheus, organized by templates and variants. Each health rule can be configured to generate either alerts or recording rules based on the mode field. More information on health rules: <https://github.com/netobserv/netobserv-operator/blob/main/docs/HealthRules.md>
+
+Type  
 `array`
 
-## .spec.processor.metrics.healthRules\[\]
+<a id="_spec_processor_metrics_healthrules_2"></a>
 
-Description
+# .spec.processor.metrics.healthRules\[\]
 
-Type
+Description  
+
+Type  
 `object`
 
-Required
+Required  
 - `template`
 
 - `variants`
@@ -1812,25 +1980,29 @@ Required
 | Property | Type | Description |
 |----|----|----|
 | `mode` | `string` | Mode defines whether this health rule should be generated as an alert or a recording rule. Possible values are: `Alert` (default), `Recording`. Recording rules violations are visible in the Network Health dashboard without generating any Prometheus alert. This provides an alternative way of getting Health information for SRE and cluster admins who might find many new alerts burdensome. |
-| `template` | `string` | Health rule template name. Possible values are: `PacketDropsByKernel`, `PacketDropsByDevice`, `IPsecErrors`, `NetpolDenied`, `LatencyHighTrend`, `DNSErrors`, `DNSNxDomain`, `ExternalEgressHighTrend`, `ExternalIngressHighTrend`, `Ingress5xxErrors`, `IngressHTTPLatencyTrend`. Note: `NetObservNoFlows` and `NetObservLokiError` are alert-only and cannot be used as health rules. More information on health rules: <https://github.com/netobserv/network-observability-operator/blob/main/docs/HealthRules.md> |
+| `template` | `string` | Health rule template name. Possible values are: `PacketDropsByKernel`, `PacketDropsByDevice`, `IPsecErrors`, `NetpolDenied`, `LatencyHighTrend`, `DNSErrors`, `DNSNxDomain`, `ExternalEgressHighTrend`, `ExternalIngressHighTrend`, `Ingress5xxErrors`, `IngressHTTPLatencyTrend`. Note: `NetObservNoFlows` and `NetObservLokiError` are alert-only and cannot be used as health rules. More information on health rules: <https://github.com/netobserv/netobserv-operator/blob/main/docs/HealthRules.md> |
 | `variants` | `array` | A list of variants for this template |
 
-## .spec.processor.metrics.healthRules\[\].variants
+<a id="_spec_processor_metrics_healthrules_variants"></a>
 
-Description
+# .spec.processor.metrics.healthRules\[\].variants
+
+Description  
 A list of variants for this template
 
-Type
+Type  
 `array`
 
-## .spec.processor.metrics.healthRules\[\].variants\[\]
+<a id="_spec_processor_metrics_healthrules_variants_2"></a>
 
-Description
+# .spec.processor.metrics.healthRules\[\].variants\[\]
 
-Type
+Description  
+
+Type  
 `object`
 
-Required
+Required  
 - `thresholds`
 
 | Property | Type | Description |
@@ -1842,12 +2014,14 @@ Required
 | `trendDuration` | `string` | For trending health rules, the duration interval for baseline comparison. For example, "2h" means comparing against a 2-hours average. Defaults to 2h. |
 | `trendOffset` | `string` | For trending health rules, the time offset for baseline comparison. For example, "1d" means comparing against yesterday. Defaults to 1d. |
 
-## .spec.processor.metrics.healthRules\[\].variants\[\].thresholds
+<a id="_spec_processor_metrics_healthrules_variants_thresholds"></a>
 
-Description
+# .spec.processor.metrics.healthRules\[\].variants\[\].thresholds
+
+Description  
 Thresholds of the health rule per severity. They are expressed as a percentage of errors above which the alert is triggered. They must be parsable as floats. Required for both alert and recording modes
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1856,12 +2030,14 @@ Type
 | `info` | `string` | Threshold for severity `info`. Leave empty to not generate an Info alert. |
 | `warning` | `string` | Threshold for severity `warning`. Leave empty to not generate a Warning alert. |
 
-## .spec.processor.metrics.server
+<a id="_spec_processor_metrics_server"></a>
 
-Description
+# .spec.processor.metrics.server
+
+Description  
 Metrics server endpoint configuration for Prometheus scraper
 
-Type
+Type  
 `object`
 
 | Property | Type      | Description                   |
@@ -1869,15 +2045,17 @@ Type
 | `port`   | `integer` | The metrics server HTTP port. |
 | `tls`    | `object`  | TLS configuration.            |
 
-## .spec.processor.metrics.server.tls
+<a id="_spec_processor_metrics_server_tls"></a>
 
-Description
+# .spec.processor.metrics.server.tls
+
+Description  
 TLS configuration.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `type`
 
 <table>
@@ -1914,17 +2092,19 @@ Required
 <td style="text-align: left;"><p><code>string</code></p></td>
 <td style="text-align: left;"><p>Select the type of TLS configuration:<br />
 </p>
-<p>- <code>Disabled</code> (default) to not configure TLS for the endpoint. - <code>Provided</code> to manually provide cert file and a key file. [Unsupported (*)]. - <code>Auto</code> to use OpenShift Container Platform auto generated certificate using annotations.</p></td>
+<p>- <code>Disabled</code> (default) to not configure TLS for the endpoint. - <code>Provided</code> to manually provide cert file and a key file. [Unsupported (*)]. - <code>Auto</code> to use {product-title} auto generated certificate using annotations.</p></td>
 </tr>
 </tbody>
 </table>
 
-## .spec.processor.metrics.server.tls.provided
+<a id="_spec_processor_metrics_server_tls_provided"></a>
 
-Description
+# .spec.processor.metrics.server.tls.provided
+
+Description  
 TLS configuration when `type` is set to `Provided`.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1935,12 +2115,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.processor.metrics.server.tls.providedCaFile
+<a id="_spec_processor_metrics_server_tls_providedcafile"></a>
 
-Description
+# .spec.processor.metrics.server.tls.providedCaFile
+
+Description  
 Reference to the CA file when `type` is set to `Provided`.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1950,12 +2132,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing the file. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the file reference: `configmap` or `secret`. |
 
-## .spec.processor.resources
+<a id="_spec_processor_resources"></a>
 
-Description
+# .spec.processor.resources
+
+Description  
 `resources` are the compute resources required by this container. For more information, see <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -1963,15 +2147,17 @@ Type
 | `limits` | `integer-or-string` | Limits describes the maximum amount of compute resources allowed. More info: <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/> |
 | `requests` | `integer-or-string` | Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. Requests cannot exceed Limits. More info: <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/> |
 
-## .spec.processor.service
+<a id="_spec_processor_service"></a>
 
-Description
+# .spec.processor.service
+
+Description  
 Service configuration, only used when `spec.deploymentModel` is `Service`.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `tlsType`
 
 <table>
@@ -2011,12 +2197,14 @@ Required
 </tbody>
 </table>
 
-## .spec.processor.service.providedCertificates
+<a id="_spec_processor_service_providedcertificates"></a>
 
-Description
+# .spec.processor.service.providedCertificates
+
+Description  
 TLS or mTLS configuration when `type` is set to `Provided`.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2025,12 +2213,14 @@ Type
 | `clientCert` | `object` | TLS client certificate reference, used for mTLS. Leave unset for simple TLS. |
 | `serverCert` | `object` | TLS server certificate reference. |
 
-## .spec.processor.service.providedCertificates.caFile
+<a id="_spec_processor_service_providedcertificates_cafile"></a>
 
-Description
+# .spec.processor.service.providedCertificates.caFile
+
+Description  
 Reference to the CA file.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2040,12 +2230,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing the file. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the file reference: `configmap` or `secret`. |
 
-## .spec.processor.service.providedCertificates.clientCert
+<a id="_spec_processor_service_providedcertificates_clientcert"></a>
 
-Description
+# .spec.processor.service.providedCertificates.clientCert
+
+Description  
 TLS client certificate reference, used for mTLS. Leave unset for simple TLS.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2056,12 +2248,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.processor.service.providedCertificates.serverCert
+<a id="_spec_processor_service_providedcertificates_servercert"></a>
 
-Description
+# .spec.processor.service.providedCertificates.serverCert
+
+Description  
 TLS server certificate reference.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2072,15 +2266,17 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.processor.slicesConfig
+<a id="_spec_processor_slicesconfig"></a>
 
-Description
+# .spec.processor.slicesConfig
+
+Description  
 Global configuration managing FlowCollectorSlices custom resources.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `enable`
 
 <table>
@@ -2120,12 +2316,14 @@ Required
 </tbody>
 </table>
 
-## .spec.processor.subnetLabels
+<a id="_spec_processor_subnetlabels"></a>
 
-Description
-`subnetLabels` allows to define custom labels on subnets and IPs or to enable automatic labeling of recognized subnets in OpenShift Container Platform, which is used to identify cluster external traffic. When a subnet matches the source or destination IP of a flow, a corresponding field is added: `SrcSubnetLabel` or `DstSubnetLabel`.
+# .spec.processor.subnetLabels
 
-Type
+Description  
+`subnetLabels` allows to define custom labels on subnets and IPs or to enable automatic labeling of recognized subnets in {product-title}, which is used to identify cluster external traffic. When a subnet matches the source or destination IP of a flow, a corresponding field is added: `SrcSubnetLabel` or `DstSubnetLabel`.
+
+Type  
 `object`
 
 <table>
@@ -2147,7 +2345,7 @@ Type
 <td style="text-align: left;"><p><code>array</code></p></td>
 <td style="text-align: left;"><p><code>customLabels</code> allows you to customize subnets and IPs labeling, such as to identify cluster external workloads or web services. External subnets must be labeled with the prefix <code>EXT:</code>, or not labeled at all, in order to work with default quick filters and some metrics examples provided.<br />
 </p>
-<p>If <code>openShiftAutoDetect</code> is disabled or you are not using OpenShift Container Platform, it is recommended to manually configure labels for the cluster subnets, to distinguish internal traffic from external traffic.<br />
+<p>If <code>openShiftAutoDetect</code> is disabled or you are not using {product-title}, it is recommended to manually configure labels for the cluster subnets, to distinguish internal traffic from external traffic.<br />
 </p>
 <p>If <code>openShiftAutoDetect</code> is enabled, <code>customLabels</code> overrides the detected subnets when they overlap.<br />
 </p></td>
@@ -2155,32 +2353,36 @@ Type
 <tr>
 <td style="text-align: left;"><p><code>openShiftAutoDetect</code></p></td>
 <td style="text-align: left;"><p><code>boolean</code></p></td>
-<td style="text-align: left;"><p><code>openShiftAutoDetect</code> allows, when set to <code>true</code>, to detect automatically the machines, pods and services subnets based on the OpenShift Container Platform install configuration and the Cluster Network Operator configuration. Indirectly, this is a way to accurately detect external traffic: flows that are not labeled for those subnets are external to the cluster. Enabled by default on OpenShift Container Platform.</p></td>
+<td style="text-align: left;"><p><code>openShiftAutoDetect</code> allows, when set to <code>true</code>, to detect automatically the machines, pods and services subnets based on the {product-title} install configuration and the Cluster Network Operator configuration. Indirectly, this is a way to accurately detect external traffic: flows that are not labeled for those subnets are external to the cluster. Enabled by default on {product-title}.</p></td>
 </tr>
 </tbody>
 </table>
 
-## .spec.processor.subnetLabels.customLabels
+<a id="_spec_processor_subnetlabels_customlabels"></a>
 
-Description
-`customLabels` allows you to customize subnets and IPs labeling, such as to identify cluster external workloads or web services. External subnets must be labeled with the prefix `EXT:`, or not labeled at all, in order to work with default quick filters and some metrics examples provided.
+# .spec.processor.subnetLabels.customLabels
 
-If `openShiftAutoDetect` is disabled or you are not using OpenShift Container Platform, it is recommended to manually configure labels for the cluster subnets, to distinguish internal traffic from external traffic.
+Description  
+`customLabels` allows you to customize subnets and IPs labeling, such as to identify cluster external workloads or web services. External subnets must be labeled with the prefix `EXT:`, or not labeled at all, in order to work with default quick filters and some metrics examples provided.  
 
-If `openShiftAutoDetect` is enabled, `customLabels` overrides the detected subnets when they overlap.
+If `openShiftAutoDetect` is disabled or you are not using {product-title}, it is recommended to manually configure labels for the cluster subnets, to distinguish internal traffic from external traffic.  
 
-Type
+If `openShiftAutoDetect` is enabled, `customLabels` overrides the detected subnets when they overlap.  
+
+Type  
 `array`
 
-## .spec.processor.subnetLabels.customLabels\[\]
+<a id="_spec_processor_subnetlabels_customlabels_2"></a>
 
-Description
+# .spec.processor.subnetLabels.customLabels\[\]
+
+Description  
 SubnetLabel allows to label subnets and IPs, such as to identify cluster-external workloads or web services.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `cidrs`
 
 - `name`
@@ -2213,27 +2415,31 @@ Required
 </tbody>
 </table>
 
-## .spec.prometheus
+<a id="_spec_prometheus"></a>
 
-Description
+# .spec.prometheus
+
+Description  
 `prometheus` defines Prometheus settings, such as querier configuration used to fetch metrics from the Console plugin.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
 |----|----|----|
 | `querier` | `object` | Prometheus querying configuration, such as client settings, used in the Console plugin. |
 
-## .spec.prometheus.querier
+<a id="_spec_prometheus_querier"></a>
 
-Description
+# .spec.prometheus.querier
+
+Description  
 Prometheus querying configuration, such as client settings, used in the Console plugin.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `mode`
 
 <table>
@@ -2265,7 +2471,7 @@ Required
 <td style="text-align: left;"><p><code>string</code></p></td>
 <td style="text-align: left;"><p><code>mode</code> must be set according to the type of Prometheus installation that stores Network Observability metrics:<br />
 </p>
-<p>- Use <code>Auto</code> to try configuring automatically. In OpenShift Container Platform, it uses the Thanos querier from OpenShift Container Platform Cluster Monitoring.<br />
+<p>- Use <code>Auto</code> to try configuring automatically. In {product-title}, it uses the Thanos querier from {product-title} Cluster Monitoring.<br />
 </p>
 <p>- Use <code>Manual</code> for a manual setup.<br />
 </p></td>
@@ -2278,27 +2484,31 @@ Required
 </tbody>
 </table>
 
-## .spec.prometheus.querier.manual
+<a id="_spec_prometheus_querier_manual"></a>
 
-Description
+# .spec.prometheus.querier.manual
+
+Description  
 Prometheus configuration for `Manual` mode.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
 |----|----|----|
-| `alertManager` | `object` | AlertManager configuration. This is used in the console to query silenced alerts, for displaying health information. When used in OpenShift Container Platform it can be left empty to use the Console API instead. \[Unsupported (\*)\]. |
+| `alertManager` | `object` | AlertManager configuration. This is used in the console to query silenced alerts, for displaying health information. When used in {product-title} it can be left empty to use the Console API instead. \[Unsupported (\*)\]. |
 | `forwardUserToken` | `boolean` | Set `true` to forward logged in user token in queries to Prometheus |
 | `tls` | `object` | TLS client configuration for Prometheus URL. |
 | `url` | `string` | `url` is the address of an existing Prometheus service to use for querying metrics. |
 
-## .spec.prometheus.querier.manual.alertManager
+<a id="_spec_prometheus_querier_manual_alertmanager"></a>
 
-Description
-AlertManager configuration. This is used in the console to query silenced alerts, for displaying health information. When used in OpenShift Container Platform it can be left empty to use the Console API instead. \[Unsupported (\*)\].
+# .spec.prometheus.querier.manual.alertManager
 
-Type
+Description  
+AlertManager configuration. This is used in the console to query silenced alerts, for displaying health information. When used in {product-title} it can be left empty to use the Console API instead. \[Unsupported (\*)\].
+
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2306,12 +2516,14 @@ Type
 | `tls` | `object` | TLS client configuration for Prometheus AlertManager URL. |
 | `url` | `string` | `url` is the address of an existing Prometheus AlertManager service to use for querying alerts. |
 
-## .spec.prometheus.querier.manual.alertManager.tls
+<a id="_spec_prometheus_querier_manual_alertmanager_tls"></a>
 
-Description
+# .spec.prometheus.querier.manual.alertManager.tls
+
+Description  
 TLS client configuration for Prometheus AlertManager URL.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2321,12 +2533,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.prometheus.querier.manual.alertManager.tls.caCert
+<a id="_spec_prometheus_querier_manual_alertmanager_tls_cacert"></a>
 
-Description
+# .spec.prometheus.querier.manual.alertManager.tls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2337,12 +2551,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.prometheus.querier.manual.alertManager.tls.userCert
+<a id="_spec_prometheus_querier_manual_alertmanager_tls_usercert"></a>
 
-Description
+# .spec.prometheus.querier.manual.alertManager.tls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2353,12 +2569,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.prometheus.querier.manual.tls
+<a id="_spec_prometheus_querier_manual_tls"></a>
 
-Description
+# .spec.prometheus.querier.manual.tls
+
+Description  
 TLS client configuration for Prometheus URL.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2368,12 +2586,14 @@ Type
 | `insecureSkipVerify` | `boolean` | `insecureSkipVerify` allows skipping client-side verification of the server certificate. If set to `true`, the `caCert` field is ignored. |
 | `userCert` | `object` | `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property. |
 
-## .spec.prometheus.querier.manual.tls.caCert
+<a id="_spec_prometheus_querier_manual_tls_cacert"></a>
 
-Description
+# .spec.prometheus.querier.manual.tls.caCert
+
+Description  
 `caCert` defines the reference of the certificate for the Certificate Authority.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |
@@ -2384,12 +2604,14 @@ Type
 | `namespace` | `string` | Namespace of the config map or secret containing certificates. If omitted, the default is to use the same namespace as where Network Observability is deployed. If the namespace is different, the config map or the secret is copied so that it can be mounted as required. |
 | `type` | `string` | Type for the certificate reference: `configmap` or `secret`. |
 
-## .spec.prometheus.querier.manual.tls.userCert
+<a id="_spec_prometheus_querier_manual_tls_usercert"></a>
 
-Description
+# .spec.prometheus.querier.manual.tls.userCert
+
+Description  
 `userCert` defines the user certificate reference and is used for mTLS. When you use one-way TLS, you can ignore this property.
 
-Type
+Type  
 `object`
 
 | Property | Type | Description |

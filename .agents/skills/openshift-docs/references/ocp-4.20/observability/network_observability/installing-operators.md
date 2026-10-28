@@ -330,7 +330,7 @@ Additional resources
 
 - [LokiStack API reference](https://loki-operator.dev/docs/api.md/#loki-grafana-com-v1-IngestionLimitSpec)
 
-- [Flow Collector API Reference](flowcollector-api.md#network-observability-flowcollector-api-specifications_network_observability)
+- [Flow Collector API Reference](network-observability-api-reference.md#flowcollector-api_network_observability)
 
 - [Flow Collector sample resource](configuring-operator.md#network-observability-flowcollector-view_network_observability)
 
@@ -432,7 +432,7 @@ Additional resources
 
 - [Working with packet drops](observing-network-traffic.md#network-observability-packet-drops_nw-observe-network-traffic)
 
-- [Flow Collector API Reference](flowcollector-api.md#network-observability-flowcollector-api-specifications_network_observability)
+- [Flow Collector API Reference](network-observability-api-reference.md#flowcollector-api_network_observability)
 
 - [Flow Collector sample resource](configuring-operator.md#network-observability-flowcollector-view_network_observability)
 

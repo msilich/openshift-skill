@@ -6,7 +6,7 @@ The factory-precaching-cli tool does the following:
 
 - Downloads the RHCOS rootfs image that is required by the minimal ISO to boot.
 
-- Creates a partition from the installation disk labelled as `data`.
+- Creates a partition from the installation disk labeled as `data`.
 
 - Formats the disk in xfs.
 

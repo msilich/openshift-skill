@@ -95,7 +95,7 @@ Procedure
 
 </div>
 
-# Using the must-gather tool for OpenShift Virtualization
+# Use the must-gather tool for OpenShift Virtualization
 
 You can collect data about OpenShift Virtualization resources by running the `must-gather` command with the OpenShift Virtualization image.
 
@@ -280,9 +280,9 @@ $ oc adm must-gather \
 </tbody>
 </table>
 
-# Generating a VM memory dump
+# Generate a VM memory dump
 
-When a virtual machine (VM) terminates unexpectedly, you can use the `virtctl memory-dump` to generate a memory dump command to output a VM memory dump and save it on a persistent volume claim (PVC). Afterwards, you can analyze the memory dump to diagnose and troubleshoot issues on the VM.
+When a virtual machine (VM) terminates unexpectedly, you can run the `virtctl memory-dump` command to output a VM memory dump and save it on a persistent volume claim (PVC). Afterward, you can analyze the memory dump to diagnose and troubleshoot issues on the VM.
 
 <div>
 
@@ -346,7 +346,7 @@ Procedure
 
 - [Connect to the desktop viewer by using the web console](../managing_vms/virt-accessing-vm-consoles.md#virt-connecting-desktop-viewer-web_virt-accessing-vm-consoles)
 
-- [Collect memory dumps from VMs](virt-collecting-virt-data.md#virt-generating-a-vm-memory-dump_virt-collecting-virt-data)
+- [Generate a VM memory dump](virt-collecting-virt-data.md#virt-generating-a-vm-memory-dump_virt-collecting-virt-data)
 
 - [Submitting a support case](../../support/getting-support.md#support-submitting-a-case_getting-support)
 

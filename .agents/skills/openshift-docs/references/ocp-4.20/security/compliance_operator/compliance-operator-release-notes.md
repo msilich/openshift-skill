@@ -873,7 +873,7 @@ The following Red Hat Bug Fix Advisory (RHBA) is available for the OpenShift Com
 
 # Additional resources
 
-- [Understanding the Compliance Operator](co-concepts/compliance-operator-understanding.md#understanding-compliance-operator)
+- [About the Compliance Operator](co-concepts/compliance-operator-understanding.md#understanding-compliance-operator)
 
 - [Updating the Compliance Operator](co-management/compliance-operator-updating.md#olm-preparing-upgrade_compliance-operator-updating)
 

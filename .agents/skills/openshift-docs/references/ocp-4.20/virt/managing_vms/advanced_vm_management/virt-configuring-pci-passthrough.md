@@ -38,9 +38,11 @@ spec:
 
 You can prevent GPU operands from deploying on worker nodes that you designated for GPU passthrough.
 
-## Preventing NVIDIA GPU operands from deploying on nodes
+## Prevent NVIDIA GPU operand deployment on nodes
 
-If you use the [NVIDIA GPU Operator](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/openshift/contents.html) in your cluster, you can apply the `nvidia.com/gpu.deploy.operands=false` label to nodes that you do not want to configure for GPU or vGPU operands. This prevents the creation of the pods that configure GPU or vGPU operands and terminates existing pods.
+If you use the NVIDIA GPU Operator in your cluster, you can apply the `nvidia.com/gpu.deploy.operands=false` label to nodes that you do not want to configure for GPU or vGPU operands.
+
+This prevents the creation of the pods that configure GPU or vGPU operands and terminates existing pods.
 
 <div>
 
@@ -131,7 +133,7 @@ Verification
 
 # Preparing host devices for PCI passthrough
 
-## About preparing a host device for PCI passthrough
+## Host device preparation for PCI passthrough
 
 To prepare a host device for PCI passthrough by using the CLI, create a `MachineConfig` object and add kernel arguments to enable the Input-Output Memory Management Unit (IOMMU).
 
@@ -139,7 +141,7 @@ Bind the PCI device to the Virtual Function I/O (VFIO) driver and then expose it
 
 To remove a PCI host device from the cluster by using the CLI, delete the PCI device information from the `HyperConverged` CR.
 
-## Adding kernel arguments to enable the IOMMU driver
+## Add kernel arguments to enable the IOMMU driver
 
 You must enable the Input-Output Memory Management Unit (IOMMU) driver before you can configure mediated devices. To enable the IOMMU driver in the kernel, create the `MachineConfig` object and add the kernel arguments.
 
@@ -248,7 +250,7 @@ Verification
 
 </div>
 
-## Binding PCI devices to the VFIO driver
+## Bind PCI devices to the VFIO driver
 
 To bind PCI devices to the VFIO (Virtual Function I/O) driver, obtain the values for `vendor-ID` and `device-ID` from each device and create a list with the values. Add this list to the `MachineConfig` object.
 
@@ -382,7 +384,7 @@ Verification
 
 </div>
 
-## Exposing PCI host devices in the cluster using the CLI
+## Expose PCI host devices in the cluster
 
 To expose PCI host devices in the cluster, add details about the PCI devices to the `spec.permittedHostDevices.pciHostDevices` array of the `HyperConverged` custom resource (CR).
 
@@ -499,7 +501,7 @@ Verification
 
 </div>
 
-## Removing PCI host devices from the cluster using the CLI
+## Remove PCI host devices from the cluster
 
 To remove a PCI host device from the cluster, delete the information for that device from the `HyperConverged` custom resource (CR).
 
@@ -604,7 +606,7 @@ Verification
 
 After the PCI devices have been added to the cluster, you can assign them to virtual machines. The PCI devices are now available as if they are physically connected to the virtual machines.
 
-## Assigning a PCI device to a virtual machine
+## Assign a PCI device to a virtual machine
 
 When a PCI device is available in a cluster, you can assign it to a virtual machine and enable PCI passthrough.
 

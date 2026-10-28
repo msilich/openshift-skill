@@ -5,7 +5,7 @@ Explore OpenShift Virtualization by taking guided tours, installing the Operator
 > [!NOTE]
 > Cluster configuration procedures require `cluster-admin` privileges.
 
-# Getting started tour
+# Take the Getting started tour
 
 The **Getting started** tour introduces several key aspects of using OpenShift Virtualization. There are two ways to start the tour.
 
@@ -35,7 +35,7 @@ Procedure
 
 </div>
 
-# Quick start tours
+# Take a quick start tour
 
 You can explore several OpenShift Virtualization capabilities by taking quick start tours in the web console.
 

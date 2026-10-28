@@ -1,13 +1,11 @@
-<!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
+<!-- Modified: bundled offline; AsciiDoc converted to Markdown. See ../SOURCE.json for provenance. -->
 
-The `FlowMetric` API is used to generate custom observability metrics from collected network flow logs.
+> Source: [1.12 at 4b7965c39d2a9bbb88b98aaa12bc21a3dbe81ea7](https://github.com/openshift/network-observability-operator/blob/4b7965c39d2a9bbb88b98aaa12bc21a3dbe81ea7/docs/flowmetric-flows-netobserv-io-v1alpha1.adoc). Match the installed Operator/CLI version; OCP does not select it.
 
-# FlowMetric \[flows.netobserv.io/v1alpha1\]
-
-Description
+Description  
 FlowMetric is the API allowing to create custom metrics from the collected flow logs.
 
-Type
+Type  
 `object`
 
 <table>
@@ -51,34 +49,38 @@ Type
 </tbody>
 </table>
 
-## .metadata
+<a id="_metadata"></a>
 
-Description
+# .metadata
+
+Description  
 Standard object’s metadata. More info: <https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata>
 
-Type
+Type  
 `object`
 
-## .spec
+<a id="_spec"></a>
 
-Description
-FlowMetricSpec defines the desired state of FlowMetric The provided API allows you to customize these metrics according to your needs.
+# .spec
 
-When adding new metrics or modifying existing labels, you must carefully monitor the memory usage of Prometheus workloads as this could potentially have a high impact. Cf <https://rhobs-handbook.netlify.app/products/openshiftmonitoring/telemetry.md/#what-is-the-cardinality-of-a-metric>
+Description  
+FlowMetricSpec defines the desired state of FlowMetric The provided API allows you to customize these metrics according to your needs.  
+
+When adding new metrics or modifying existing labels, you must carefully monitor the memory usage of Prometheus workloads as this could potentially have a high impact. Cf <https://rhobs-handbook.netlify.app/products/openshiftmonitoring/telemetry.md/#what-is-the-cardinality-of-a-metric>  
 
 To check the cardinality of all Network Observability metrics, run as `promql`: `count({name=~"netobserv.*"}) by (name)`.
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `type`
 
 | Property | Type | Description |
 |----|----|----|
 | `buckets` | `array (string)` | A list of buckets to use when `type` is "Histogram". The list must be parsable as floats. When not set, Prometheus default buckets are used. |
-| `charts` | `array` | Charts configuration, for the OpenShift Container Platform Console in the administrator view, Dashboards menu. |
-| `direction` | `string` | Filter for ingress, egress or any direction flows. When set to `Ingress`, it is equivalent to adding the regular expression filter on `FlowDirection`: `0|2`. When set to `Egress`, it is equivalent to adding the regular expression filter on `FlowDirection`: `1|2`. |
+| `charts` | `array` | Charts configuration, for the {product-title} Console in the administrator view, Dashboards menu. |
+| `direction` | `string` | Filter for ingress, egress or any direction flows. When set to `Ingress`, it is equivalent to adding the regular expression filter on `FlowDirection`: `0\|2`. When set to `Egress`, it is equivalent to adding the regular expression filter on `FlowDirection`: `1\|2`. |
 | `divider` | `string` | When nonzero, scale factor (divider) of the value. Metric value = Flow value / Divider. |
 | `filters` | `array` | `filters` is a list of fields and values used to restrict which flows are taken into account. Refer to the documentation for the list of available fields: <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/json-flows-format-reference>. |
 | `flatten` | `array (string)` | `flatten` is a list of array-type fields that must be flattened, such as Interfaces or NetworkEvents. Flattened fields generate one metric per item in that field. For instance, when flattening `Interfaces` on a bytes counter, a flow having Interfaces \[br-ex, ens5\] increases one counter for `br-ex` and another for `ens5`. |
@@ -89,23 +91,27 @@ Required
 | `type` | `string` | Metric type: "Counter", "Histogram" or "Gauge". Use "Counter" for any value that increases over time and on which you can compute a rate, such as Bytes or Packets. Use "Histogram" for any value that must be sampled independently, such as latencies. Use "Gauge" for other values that don’t necessitate accuracy over time (gauges are sampled only every N seconds when Prometheus fetches the metric). |
 | `valueField` | `string` | `valueField` is the flow field that must be used as a value for this metric (for example: `Bytes`). This field must hold numeric values. Leave empty to count flows rather than a specific value per flow. Refer to the documentation for the list of available fields: <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/json-flows-format-reference>. |
 
-## .spec.charts
+<a id="_spec_charts"></a>
 
-Description
-Charts configuration, for the OpenShift Container Platform Console in the administrator view, Dashboards menu.
+# .spec.charts
 
-Type
+Description  
+Charts configuration, for the {product-title} Console in the administrator view, Dashboards menu.
+
+Type  
 `array`
 
-## .spec.charts\[\]
+<a id="_spec_charts_2"></a>
 
-Description
+# .spec.charts\[\]
+
+Description  
 Configures charts / dashboard generation associated to a metric
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `dashboardName`
 
 - `queries`
@@ -123,23 +129,27 @@ Required
 | `type` | `string` | Type of the chart. |
 | `unit` | `string` | Unit of this chart. Only a few units are currently supported. Leave empty to use generic number. |
 
-## .spec.charts\[\].queries
+<a id="_spec_charts_queries"></a>
 
-Description
+# .spec.charts\[\].queries
+
+Description  
 List of queries to be displayed on this chart. If `type` is `SingleStat` and multiple queries are provided, this chart is automatically expanded in several panels (one per query).
 
-Type
+Type  
 `array`
 
-## .spec.charts\[\].queries\[\]
+<a id="_spec_charts_queries_2"></a>
 
-Description
+# .spec.charts\[\].queries\[\]
+
+Description  
 Configures PromQL queries
 
-Type
+Type  
 `object`
 
-Required
+Required  
 - `legend`
 
 - `promQL`
@@ -152,22 +162,26 @@ Required
 | `promQL` | `string` | The `promQL` query to be run against Prometheus. If the chart `type` is `SingleStat`, this query should only return a single timeseries. For other types, a top 7 is displayed. You can use `$METRIC` to refer to the metric defined in this resource. For example: `sum(rate($METRIC[2m]))`. To learn more about `promQL`, refer to the Prometheus documentation: <https://prometheus.io/docs/prometheus/latest/querying/basics/> |
 | `top` | `integer` | Top N series to display per timestamp. Does not apply to `SingleStat` chart type. |
 
-## .spec.filters
+<a id="_spec_filters"></a>
 
-Description
+# .spec.filters
+
+Description  
 `filters` is a list of fields and values used to restrict which flows are taken into account. Refer to the documentation for the list of available fields: <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/json-flows-format-reference>.
 
-Type
+Type  
 `array`
 
-## .spec.filters\[\]
+<a id="_spec_filters_2"></a>
 
-Description
+# .spec.filters\[\]
 
-Type
+Description  
+
+Type  
 `object`
 
-Required
+Required  
 - `field`
 
 - `matchType`

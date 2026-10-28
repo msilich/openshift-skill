@@ -4,7 +4,7 @@ Use the web console or OpenShift CLI (`oc`) to list your virtual machines (VMs).
 
 # List virtual machines by using the CLI
 
-You can either list all of the virtual machines (VMs) in your cluster or limit the list to VMs in a specified namespace by using the OpenShift CLI (`oc`).
+You can list all of the virtual machines (VMs) in your cluster by using the OpenShift CLI (`oc`), or limit the list to a single namespace.
 
 <div>
 
@@ -42,7 +42,7 @@ Procedure
 
 # List virtual machines by using the web console
 
-You can list all of the virtual machines (VMs) in your cluster by using the web console.
+You can list all the virtual machines (VMs) in your cluster by using the OpenShift Container Platform web console. Search and filter options narrow the list.
 
 <div>
 
@@ -62,7 +62,7 @@ Procedure
 
 # Organize virtual machines by using the web console
 
-In addition to creating virtual machines (VMs) in different projects, you can use the tree view to further organize them in folders.
+You can move virtual machines (VMs) into folders in the tree view of the OpenShift Container Platform web console. Folders give you finer organization than projects alone.
 
 > [!IMPORTANT]
 > Enabling folders in the virtual machine tree is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.

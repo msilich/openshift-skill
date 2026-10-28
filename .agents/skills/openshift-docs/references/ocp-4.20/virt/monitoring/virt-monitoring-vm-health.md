@@ -4,7 +4,7 @@ Define probes and watchdogs in the `VirtualMachine` resource to configure virtua
 
 You can configure VM health checks by defining readiness and liveness probes in the `VirtualMachine` resource.
 
-# About readiness and liveness probes
+# Readiness and liveness probes for VM health
 
 Use readiness and liveness probes to detect and handle unhealthy virtual machines (VMs). You can include one or more probes in the specification of the VM to ensure that traffic does not reach a VM that is not ready for it and that a new VM is created when a VM becomes unresponsive.
 
@@ -23,7 +23,7 @@ The probe attempts to open a socket to the VM. The VM is only considered healthy
 Guest agent ping
 The probe uses the `guest-ping` command to determine if the QEMU guest agent is running on the virtual machine.
 
-## Defining an HTTP readiness probe
+## Define an HTTP readiness probe
 
 You can define an HTTP readiness probe by setting the `spec.readinessProbe.httpGet` field of the virtual machine (VM) configuration.
 
@@ -101,7 +101,7 @@ Procedure
 
 </div>
 
-## Defining a TCP readiness probe
+## Define a TCP readiness probe
 
 You can define a TCP readiness probe by setting the `spec.readinessProbe.tcpSocket` field of the virtual machine (VM) configuration.
 
@@ -167,7 +167,7 @@ Procedure
 
 </div>
 
-## Defining an HTTP liveness probe
+## Define an HTTP liveness probe
 
 Define an HTTP liveness probe by setting the `spec.livenessProbe.httpGet` field of the virtual machine (VM) configuration. You can define both HTTP and TCP tests for liveness probes in the same way as readiness probes. This procedure configures a sample liveness probe with an HTTP GET test.
 
@@ -239,7 +239,7 @@ Procedure
 
 </div>
 
-# About watchdogs
+# Watchdog devices and recovery actions
 
 Watchdog devices monitor guest operating system responsiveness and trigger recovery actions when a virtual machine becomes unresponsive.
 
@@ -256,7 +256,7 @@ The `shutdown` action initiates a graceful shutdown by stopping all services bef
 
 To implement watchdog functionality, you must configure the watchdog device for the VM and install the watchdog agent on the guest operating system.
 
-## Configuring a watchdog device for the virtual machine
+## Configure a watchdog device for a virtual machine
 
 You configure a watchdog device for the virtual machine (VM).
 
@@ -356,7 +356,7 @@ Verification
 
 </div>
 
-## Installing the watchdog agent on the guest
+## Install the watchdog agent on the guest
 
 You can install the watchdog agent on the guest and start the `watchdog` service.
 
@@ -402,7 +402,7 @@ Procedure
 
 </div>
 
-# Defining a guest agent ping probe
+# Define a guest agent ping probe
 
 You can define a guest agent ping probe by setting the `spec.readinessProbe.guestAgentPing` field of the virtual machine (VM) configuration.
 

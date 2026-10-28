@@ -145,6 +145,6 @@ Verification
 
 - [Performing a Control Plane Only update](../updating/updating_a_cluster/control-plane-only-update.md#control-plane-only-update)
 
-- [Installing the Windows Machine Config Operator using the CLI](enabling-windows-container-workloads.md#installing-wmco-using-cli_enabling-windows-container-workloads)
+- [Install the Windows Machine Config Operator by using the CLI](enabling-windows-container-workloads.md#installing-wmco-using-cli_enabling-windows-container-workloads)
 
 - [Deleting Operators from a cluster using the CLI](../operators/admin/olm-deleting-operators-from-cluster.md#olm-deleting-operator-from-a-cluster-using-cli_olm-deleting-operators-from-a-cluster)

@@ -16,9 +16,11 @@ The virtual machine (VM) CPU model depends on the availability of CPU models wit
 
   - The host-model is automatically set using the CPU model defined at the host level.
 
-# Configuring the default CPU model
+# Configure the default CPU model
 
-You can configure the `defaultCPUModel` by updating the `HyperConverged` custom resource (CR). You can change the `defaultCPUModel` while OpenShift Virtualization is running.
+Define a cluster-wide default CPU model. Every new virtual machine (VM) that does not specify its own CPU model uses the default, and runs only on nodes that support it.
+
+You configure the `defaultCPUModel` by updating the `HyperConverged` custom resource (CR). You can change the `defaultCPUModel` while OpenShift Virtualization is running.
 
 > [!NOTE]
 > The `defaultCPUModel` is case sensitive.

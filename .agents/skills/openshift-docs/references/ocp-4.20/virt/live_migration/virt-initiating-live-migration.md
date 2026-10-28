@@ -9,7 +9,7 @@ You can cancel a live migration by using the web console or the command line. Th
 > [!TIP]
 > You can also initiate and cancel live migration by using the `virtctl migrate <vm_name>` and `virtctl migrate-cancel <vm_name>` commands.
 
-# Initiating live migration by using the web console
+# Start live migration by using the web console
 
 You can live migrate a running virtual machine (VM) to a different node in the cluster by using the OpenShift Container Platform web console.
 
@@ -56,7 +56,7 @@ Procedure
 
 </div>
 
-# Initiating live migration by using the CLI
+# Start live migration by using the CLI
 
 You can initiate the live migration of a running virtual machine (VM) by using the command line to create a `VirtualMachineInstanceMigration` object for the VM.
 
@@ -141,7 +141,7 @@ Verification
 
 </div>
 
-# Canceling live migration by using the web console
+# Cancel live migration by using the web console
 
 You can cancel the live migration of a virtual machine (VM) by using the OpenShift Container Platform web console.
 
@@ -171,7 +171,7 @@ Procedure
 
 </div>
 
-# Canceling live migration by using the CLI
+# Cancel live migration by using the CLI
 
 Cancel the live migration of a virtual machine by deleting the `VirtualMachineInstanceMigration` object associated with the migration.
 

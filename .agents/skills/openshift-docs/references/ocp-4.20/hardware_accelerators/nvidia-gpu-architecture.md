@@ -33,7 +33,19 @@ The following diagram shows how the GPU architecture is enabled for OpenShift:
 </figure>
 
 > [!NOTE]
-> MIG is supported on GPUs starting with the NVIDIA Ampere generation. For a list of GPUs that support MIG, see the [NVIDIA MIG User Guide](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/#supported-gpus).
+> MIG is supported on GPUs starting with the NVIDIA Ampere generation. For a list of GPUs that support MIG, see "NVIDIA MIG User Guide".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [NVIDIA MIG User Guide](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/#supported-gpus)
+
+</div>
 
 ## GPUs and bare metal
 
