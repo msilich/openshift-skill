@@ -2,7 +2,7 @@
 
 You can simplify virtual machine (VM) creation by using instance types, which define a reusable set of resources, such as CPU and memory. You can create instance types or change the VMs that use them.
 
-# About instance types
+# Instance types
 
 An instance type is a reusable object where you can define resources and characteristics to apply to new VMs. You can define custom instance types or use the variety that are included when you install OpenShift Virtualization.
 
@@ -95,7 +95,7 @@ When you create a VM by using an instance type, a `ControllerRevision` object re
 
 This snapshot is essential for versioning, and ensures that the VM instance created when starting a VM does not change if the underlying instance type object is updated while the VM is running.
 
-# Using flags to specify instance types and preferences
+# Specify instance types and preferences with flags
 
 You can specify instance types and preferences by using flags.
 
@@ -133,7 +133,7 @@ Procedure
 
 </div>
 
-# Inferring an instance type or preference
+# Infer instance types from volumes
 
 Inferring instance types, preferences, or both is enabled by default, and the `inferFromVolumeFailure` policy of the `inferFromVolume` attribute is set to `Ignore`. When inferring from the boot volume, errors are ignored, and the VM is created with the instance type and preference left unset.
 
@@ -179,7 +179,7 @@ Procedure
 
 </div>
 
-# Setting the inferFromVolume labels
+# Set volume inference labels
 
 Use the following labels on your PVC, data source, or data volume to instruct the inference mechanism which instance type, preference, or both to use when trying to boot from a volume.
 
@@ -231,7 +231,7 @@ Different instance types are optimized for specific use cases, so switching to a
 
 You can change the instance type for an existing VM using either the OpenShift Container Platform web console or the OpenShift CLI (`oc`).
 
-## Changing the instance type of a VM by using the web console
+## Change a VM instance type in the web console
 
 You can change the instance type associated with a running virtual machine (VM) by using the web console. The change takes effect immediately.
 
@@ -289,7 +289,7 @@ Verification
 
 </div>
 
-## Changing the instance type of a VM by using the CLI
+## Change a VM instance type from the CLI
 
 To change the instance type of a VM, change the `name` field in the VM spec. This triggers the update logic, which ensures that a new, immutable controller revision snapshot is taken of the new resource configuration.
 

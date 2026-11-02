@@ -5,6 +5,171 @@ Review new features, resolved issues, known issues, Technology Preview features,
 > [!NOTE]
 > For additional information about OADP, see *OpenShift API for Data Protection (OADP) FAQ*.
 
+# OADP 1.6.2 release notes
+
+OpenShift API for Data Protection (OADP) 1.6.2 release notes list new features, resolved and known issues, and Technology Preview features.
+
+The following Red Hat Security Advisory (RHSA) is available for OADP 1.6.2:
+
+- [RHSA-2026:91613 - New version of Red Hat OpenShift API for Data Protection](https://access.redhat.com/errata/RHSA-2026:91613)
+
+## New features
+
+OADP backs up the trusted CA `ConfigMap` with cluster Proxy resources
+When a backup includes a cluster Proxy resource, OADP also includes the `ConfigMap` referenced by its `spec.trustedCA` field in the `openshift-config` namespace. This preserves the Proxy’s trusted Certificate Authority (CA) configuration for restore, even when namespace or resource filters exclude the `ConfigMap`.
+
+[OADP-8792](https://redhat.atlassian.net/browse/OADP-8792)
+
+Secret-backed CA certificates support rotation without editing the backup storage location
+You can reference a Certificate Authority (CA) certificate in a Kubernetes secret by using `caCertRef`. When you provide a CA certificate inline in a `CloudStorage` configuration, OADP creates and manages a secret and configures the resulting backup storage location to use that reference. You can rotate the certificate by updating the secret, without editing the `DataProtectionApplication` (DPA) custom resource or backup storage location. If you provide `caCertRef` directly, OADP passes the reference through so that you can manage the secret yourself.
+
+[OADP-8056](https://redhat.atlassian.net/browse/OADP-8056)
+
+OADP network policies isolate its components without blocking unrelated workloads
+The OADP Operator creates and reconciles network policies for OADP-managed workloads in the installation namespace. These component-specific policies restrict ingress and egress while allowing traffic required for backup and restore, including access to configured backup storage locations. Unlike a namespace-wide default-deny policy, they do not isolate unrelated workloads, such as the Red Hat Advanced Cluster Management cluster-backup controller, which can retain its required network access.
+
+[OADP-6074](https://redhat.atlassian.net/browse/OADP-6074), [OADP-8926](https://redhat.atlassian.net/browse/OADP-8926)
+
+## Resolved issues
+
+`VolumeGroupSnapshot` backups no longer fail when snapshots are deleted too early
+Before this update, OADP deleted a `VolumeGroupSnapshot` (VGS) and its bound `VolumeGroupSnapshotContent` (VGSC) while it was still processing the group’s member `VolumeSnapshots`. The Container Storage Interface (CSI) snapshot controller could then remove `VolumeSnapshot` resources that OADP still needed to complete the backup. As a consequence, the backup could fail partially with a `VolumeSnapshot not found` error. With this release, OADP defers VGS and VGSC cleanup until the backup reaches a terminal state. As a result, OADP can finish processing the group members before cleanup, and the backup can complete successfully.
+
+[OADP-8861](https://redhat.atlassian.net/browse/OADP-8861)
+
+Backup queues continue processing after a backup fails validation
+Before this update, a race could leave a stale queue-tracker entry when a dequeued backup failed validation immediately, such as when its `BackupStorageLocation` was temporarily unavailable. The stale entry could prevent the queue from dequeuing later backups, even after the location recovered. With this update, the tracker is updated before the backup is made visible to the backup reconciler, preventing the queue from becoming permanently stuck.
+
+[OADP-8846](https://redhat.atlassian.net/browse/OADP-8846)
+
+Backups to S3-compatible storage no longer fail when no object tags are configured
+Before this update, the Amazon Web Services (AWS) plugin sent an empty x-amz-tagging header when the backup storage location did not configure object tags. As a consequence, some S3-compatible storage providers rejected the request to write the `velero-backup.json` file, and the backup failed. With this release, the AWS plugin omits the x-amz-tagging header when no tags are configured. As a result, backups to affected S3-compatible storage providers complete successfully.
+
+[OADP-8791](https://redhat.atlassian.net/browse/OADP-8791)
+
+Google Cloud WIF backup locations remain available when `CloudStorage` specifies a region
+Before this update, when a `CloudStorage` custom resource (CR) for Google Cloud Workload Identity Federation (WIF) specified a region, OADP also copied that value into the `BackupStorageLocation` (BSL) configuration. The Google Cloud plugin does not support a region setting in this BSL configuration. As a consequence, BSL became unavailable with an invalid configuration error. With this release, OADP adds the region to BSL configuration only for AWS STS providers and removes the unsupported `spec.config.region` entries from `CloudStorage`-backed BSLs during reconciliation for other providers. As a result, Google Cloud WIF BSLs remain available when the `CloudStorage` CR specifies a region.
+
+[OADP-8704](https://redhat.atlassian.net/browse/OADP-8704)
+
+OADP containers include liveness, readiness, and startup probes
+Before this update, the OADP command-line interface (CLI) and virtual machine data protection (VMDP) containers did not have configured Kubernetes health probes (liveness, readiness, and startup). As a consequence, workloads could not automatically recover from common failures, such as pod, host, or network issues. With this release, the OADP Operator adds liveness, readiness, and startup probes to the deployed containers. As a result, workloads can use native Kubernetes health-checking mechanisms to self-recover from failures and ensure reliable application traffic routing.
+
+[OADP-8483](https://redhat.atlassian.net/browse/OADP-8483), [OADP-8445](https://redhat.atlassian.net/browse/OADP-8445)
+
+OADP workload pods use dedicated service accounts
+Before this update, the `oadp-cli-server` workload pods in the `openshift-adp` namespace used the default service account instead of dedicated, workload-specific service accounts. As a consequence, access control validation checks failed during deployment verification. With this release, dedicated and valid service accounts are properly assigned to these workload pods. As a result, all OADP workload pods comply with access control verification and adhere to cluster security standards.
+
+[OADP-8448](https://redhat.atlassian.net/browse/OADP-8448), [OADP-8447](https://redhat.atlassian.net/browse/OADP-8447)
+
+OADP no longer panics when a repository-maintenance job is evicted
+Before this update, an evicted repository-maintenance job could leave incomplete maintenance history without a last-maintenance timestamp. During reconciliation, OADP dereferenced the missing timestamp and panicked. As a consequence, the OADP pod restarted while processing the `BackupRepository` custom resource. With this release, OADP checks that maintenance timestamps are present before using them. As a result, OADP reconciles `BackupRepository` without panicking.
+
+[OADP-8444](https://redhat.atlassian.net/browse/OADP-8444)
+
+Label-selected VM backups run guest freeze and thaw hooks
+Before this update, a backup that used a label selector to include a VM but not its `virt-launcher` pod could include the pod as an additional item without running its pre- and post-backup hooks. As a consequence, the `virt-freezer` hooks did not freeze and thaw the guest file system, and the backup was crash-consistent rather than application-consistent. With this release, the `KubeVirt` plugin groups the VM with its related resources during backup processing. As a result, configured guest freeze and thaw hooks run even when a label selector selects only the VM.
+
+[OADP-8333](https://redhat.atlassian.net/browse/OADP-8333)
+
+`KubeVirt` VM backups include referenced `NetworkAttachmentDefinitions`
+Before this update, the `KubeVirt` Velero plugin did not include `NetworkAttachmentDefinitions` (NADs) referenced by a virtual machine in its backup dependency graph. With this update, the plugin includes these NADs in VM backup and restore processing, so the referenced network resources are included with the VM.
+
+[OADP-8146](https://redhat.atlassian.net/browse/OADP-8146)
+
+`CloudStorage` bucket creation succeeds with Google Cloud WIF
+Before this update, the `CloudStorage` resource failed to detect when a Google Cloud bucket did not exist when using Workload Identity Federation (WIF) authentication. As a consequence, it reported a `BucketCheckError` condition and did not create the bucket. With this release, OADP correctly identifies bucket-not-found errors, including wrapped errors returned by the Google Cloud Storage client. As a result, the Operator creates the bucket during reconciliation.
+
+[OADP-8085](https://redhat.atlassian.net/browse/OADP-8085)
+
+PVC backups complete when the KubeVirt DataMover plugin is enabled without OpenShift Virtualization
+Before this update, when the `kubevirt-datamover` plugin was enabled on a cluster without OpenShift Virtualization, the persistent volume claim (PVC) backup action attempted to list virtual machines (VMs). The missing `KubeVirt` API caused backups to finish with the `PartiallyFailed` status. With this release, the plugin checks if the `kubevirt.io` API group is present and skips VM ownership lookup when it is absent. PVC backup processing continues, and the backup reports a warning.
+
+[OADP-7996](https://redhat.atlassian.net/browse/OADP-7996)
+
+Node agent data mover pods use the configured priority class
+Before this update, OADP applied the `priorityClassName` from `spec.configuration.nodeAgent.podConfig` to the node agent `DaemonSet` but did not include it in the node agent `ConfigMap`. As a consequence, data mover pods launched by node agent used the default priority and could be preempted under resource pressure. With this release, OADP includes the configured priority class in the node agent `ConfigMap`. As a result, node agent data mover pods use the priority class configured in the `DataProtectionApplication` custom resource.
+
+[OADP-7984](https://redhat.atlassian.net/browse/OADP-7984)
+
+Node agent restarts no longer cancel data uploads on other nodes
+Before this update, restarting one node agent caused OADP to cancel all accepted data uploads, including uploads handled by other node agent pods. As a consequence, backups could fail and the backup queue could remain blocked for extended periods. With this release, OADP handles a node agent restart without canceling uploads managed by other node agent pods. As a result, unaffected uploads can complete and backup processing can continue.
+
+[OADP-7953](https://redhat.atlassian.net/browse/OADP-7953)
+
+DPA annotation and `ConfigMap` changes trigger reconciliation without an Operator restart
+Before this update, changes to the `oadp.openshift.io/unsupported-velero-server-args` or `oadp.openshift.io/unsupported-node-agent-server-args` annotations on a `DataProtectionApplication` (DPA), or to a `ConfigMap` referenced by those annotations, did not trigger reconciliation. As a result, updated server arguments might not be applied until the OADP Operator restarted. With this release, the Operator detects changes to these annotations and watches their referenced `ConfigMaps`, so it reconciles the DPA and applies the updated configuration without requiring an Operator restart.
+
+[OADP-7943](https://redhat.atlassian.net/browse/OADP-7943)
+
+Non-admin backup descriptions report completed pod volume backups
+Before this update, the `oc oadp nonadmin backup describe` command could report that no pod volume backups were included even when file system backups completed successfully. With this update, the command reports completed pod volume backups, and the `--details` option displays volume-level information.
+
+[OADP-7895](https://redhat.atlassian.net/browse/OADP-7895)
+
+CSI `VolumeGroupSnapshot` restore no longer fails with Ceph RBD storage class
+Before this update, restoring a `VolumeGroupSnapshot` (VGS) backed up from Ceph RBD storage failed with a `cannot find the group snapshot for VolumeSnapshot` error message. This error occurred because Velero deleted the `VolumeGroupSnapshotContent` after backup, leaving no matching resource during restore. Also the `VolumeSnapshotClassName` was deleted from restored `VolumeSnapshotContent`, preventing the Container Storage Interface (CSI) controller from authenticating to verify snapshots. With this update, Velero preserves the group snapshot handle as an annotation during backup, recreates a stub `VolumeGroupSnapshotContent` during restores, and restores the correct `VolumeSnapshotClass` reference. As a result, VGS restores with Ceph RBD complete successfully. Note that VGS is a Technology Preview feature.
+
+[OADP-7892](https://redhat.atlassian.net/browse/OADP-7892)
+
+VM file restores complete in a user-specified namespace
+Before this update, when a VM file restore specified `spec.restoreNamespace`, the VM File Restore controller did not create the file server’s service account and privileged security context constraint (SCC) role binding in that namespace. As a consequence, file-server pod creation failed because the service account was missing, and the restore failed. With this release, the controller creates the required access resources in the specified namespace and has permission to remove restored persistent volume claims (PVCs) during cleanup. As a result, the file restore completes and the controller can clean up its resources without deleting the user-provided namespace.
+
+[OADP-7467](https://redhat.atlassian.net/browse/OADP-7467)
+
+`ImageStream` backups fail when a promoted image’s source tag is pruned
+Before this update, when you backed up an `ImageStream` containing an image promoted from another namespace, OADP used the source namespace’s image repository to copy the image. If a retention policy had removed the source tag, that repository no longer served the image digest. As a consequence, the backup failed with a manifest unknown error. With this release, OADP copies the image from the repository for the `ImageStream` being backed up. As a result, the backup can complete even after the source tag is pruned.
+
+[OADP-7384](https://redhat.atlassian.net/browse/OADP-7384)
+
+AWS S3 bucket region is auto-detected in `CloudStorage`-backed `BackupStorageLocation` configuration
+Before this update, an Amazon Web Services (AWS) S3 backup storage location without an explicitly configured bucket region could cause Kopia repository initialization and Container Storage Interface (CSI) snapshot data movement backups to fail. With this release, the OADP Operator automatically detects and populates the AWS S3 bucket region for `CloudStorage`-backed `BackupStorageLocation` when no region is explicitly configured. This prevents backup-time region-discovery failures. Note that this automatic detection applies to AWS S3 rather than custom S3-compatible endpoints.
+
+[OADP-6065](https://redhat.atlassian.net/browse/OADP-6065)
+
+Backups fail promptly when the built-in data mover has no running node-agent
+Before this update, a backup using Container Storage Interface (CSI) snapshot data movement could remain in `WaitingForPluginOperations` until it timed out when no node agent pods were running. With this update, OADP checks for a running node agent before starting snapshot data movement and reports the backup failure promptly. The check applies to the built-in OADP data mover.
+
+[OADP-2938](https://redhat.atlassian.net/browse/OADP-2938)
+
+## Known issues
+
+Volume group snapshot backups time out with ODF
+When using OADP with Red Hat OpenShift Data Foundation (ODF), volume group snapshot backups can time out if the Ceph Container Storage Interface (CSI) driver resource has `spec.snapshotPolicy` set to its default `volumeSnapshot`. In this configuration, the CSI snapshot controller does not process `VolumeGroupSnapshotContent` resources, which can remain not ready while OADP waits for the CSI snapshot timeout. Standard `VolumeSnapshot` backups are not affected.
+
+To work around this problem, set `spec.snapshotPolicy` to `volumeGroupSnapshot` on the affected driver resource. For example, for the CephFS driver, enter:
+
+``` terminal
+$ oc -n openshift-storage patch driver openshift-storage.cephfs.csi.ceph.com \
+   --type merge \
+   -p '{"spec":{"snapshotPolicy":"volumeGroupSnapshot"}}'
+```
+
+[OADP-8896](https://redhat.atlassian.net/browse/OADP-8896)
+
+`ImageStream` backups fail on Azure STS
+When OADP is deployed on Microsoft Azure with Security Token Service (STS), `ImageStream` backups fail with an error such as `azure: DefaultAzureCredential: failed to acquire a token`.
+
+No known workaround exists.
+
+[OADP-8337](https://redhat.atlassian.net/browse/OADP-8337)
+
+`VolumeGroupSnapshot` backups might fail when labels match PVCs excluded by volume policies
+When Velero creates a `VolumeGroupSnapshot` (VGS), it uses the label key specified by `spec.volumeGroupSnapshotLabelKey` to select persistent volume claims (PVCs). The Container Storage Interface (CSI) snapshot controller can also select PVCs with that label even when a volume policy excludes them from backup. If the selected PVCs use a non-CSI storage driver or different CSI drivers, VGS creation can fail and the backup can be partially failed.
+
+To work around this problem, use a dedicated VGS label and apply it only to the CSI-backed PVCs that you want to snapshot together. Set `spec.volumeGroupSnapshotLabelKey` to that label. This prevents the VGS selector from matching PVCs excluded by volume policies. As a result, the group snapshot includes only the intended PVCs.
+
+[OADP-6880](https://redhat.atlassian.net/browse/OADP-6880)
+
+## Technology Preview features
+
+Incremental QCOW2 backups for `KubeVirt` VMs (Technology Preview)
+OADP introduces storage agnostic QCOW2 incremental backup for `KubeVirt` virtual machines (VMs) as a Technology Preview feature. This feature provides a lightweight alternative to traditional `VolumeSnapshot`-based backups by using `libvirt` tools to perform incremental QCOW2 backups. After an initial full backup, later backups capture only changed blocks, improving backup performance and reducing resource usage compared to Container Storage Interface (CSI) snapshot methods. This enables more frequent backup schedules with minimal impact on running VM performance.
+
+To use this feature, enable QEMU backup on VM disks (`CBT = true`) and set up the volume policy to `virt` for target volumes.
+
+[OADP-7978](https://redhat.atlassian.net/browse/OADP-7978)
+
 # OADP 1.6.1 release notes
 
 OpenShift API for Data Protection (OADP) 1.6.1 release notes list resolved and known issues.

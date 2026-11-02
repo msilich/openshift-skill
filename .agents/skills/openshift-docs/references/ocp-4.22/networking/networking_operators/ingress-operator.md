@@ -546,12 +546,12 @@ Procedure
 
     ``` terminal
     $ oc create configmap \
-       router-ca-certs-default \
-       --from-file=ca-bundle.pem=client-ca.crt \
-       -n openshift-config
+      router-ca-certs-default \
+      --from-file=ca-bundle.pem=client-ca.crt \//
+      -n openshift-config
     ```
 
-    - The config map data key must be `ca-bundle.pem`, and the data value must be a CA certificate in PEM format.
+    The config map data key must be `ca-bundle.pem`, and the data value must be a CA certificate in PEM format.
 
 2.  Edit the `IngressController` resource in the `openshift-ingress-operator` project:
 
@@ -637,7 +637,7 @@ Procedure
 
 # View Ingress Controller logs
 
-You can view your Ingress Controller logs.
+You can view your Ingress Controller logs by using the `oc logs` command.
 
 <div>
 

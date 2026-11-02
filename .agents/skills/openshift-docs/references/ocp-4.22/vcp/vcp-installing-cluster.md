@@ -9,7 +9,9 @@ After preparing your environment, install the virtualized control plane cluster 
 
 # Deploying a virtualized control plane with the Agent-based installer
 
-Use the Agent-based Installer to deploy a virtualized control plane cluster. This method generates a bootable ISO containing all required configuration. You must mount the ISO to both the virtualized control plane nodes, by using KubeVirt Redfish, and the baremetal worker nodes, by using the Redfish API.
+Use the Agent-based Installer to deploy a virtualized control plane cluster. This method generates a bootable ISO containing all required configuration.
+
+You must mount the ISO to both the virtualized control plane nodes, by using KubeVirt Redfish, and the baremetal worker nodes, by using the Redfish API.
 
 > [!IMPORTANT]
 > When configuring the Agent-based Installer, the `platform` parameter in `install-config.yaml` determines the level of hardware management:

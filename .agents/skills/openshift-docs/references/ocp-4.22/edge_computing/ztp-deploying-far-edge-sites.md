@@ -646,7 +646,9 @@ Additional resources
 
 ## Configuring IPsec encryption for single-node OpenShift clusters using GitOps ZTP and ClusterInstance resources
 
-You can enable IPsec encryption in managed single-node OpenShift clusters that you install using GitOps ZTP and Red Hat Advanced Cluster Management (RHACM). You can encrypt traffic between the managed cluster and IPsec endpoints external to the managed cluster. All network traffic between nodes on the OVN-Kubernetes cluster network is encrypted with IPsec in Transport mode.
+You can enable IPsec encryption in managed single-node OpenShift clusters that you install using GitOps ZTP and Red Hat Advanced Cluster Management (RHACM).
+
+You can encrypt traffic between the managed cluster and IPsec endpoints external to the managed cluster. All network traffic between nodes on the OVN-Kubernetes cluster network is encrypted with IPsec in Transport mode.
 
 > [!IMPORTANT]
 > You can also configure IPsec encryption for single-node OpenShift clusters with an additional worker node by following this procedure. It is recommended to use the `MachineConfig` custom resource (CR) to configure IPsec encryption for single-node OpenShift clusters and single-node OpenShift clusters with an additional worker node because of their low resource availability.
@@ -847,7 +849,9 @@ Additional resources
 
 ## Configuring IPsec encryption for multi-node clusters using GitOps ZTP and ClusterInstance resources
 
-You can enable IPsec encryption in managed multi-node clusters that you install using GitOps ZTP and Red Hat Advanced Cluster Management (RHACM). You can encrypt traffic between the managed cluster and IPsec endpoints external to the managed cluster. All network traffic between nodes on the OVN-Kubernetes cluster network is encrypted with IPsec in Transport mode.
+You can enable IPsec encryption in managed multi-node clusters that you install using GitOps ZTP and Red Hat Advanced Cluster Management (RHACM).
+
+You can encrypt traffic between the managed cluster and IPsec endpoints external to the managed cluster. All network traffic between nodes on the OVN-Kubernetes cluster network is encrypted with IPsec in Transport mode.
 
 <div>
 
@@ -1705,7 +1709,9 @@ Procedure
 
 # Troubleshooting GitOps ZTP virtual media booting on SuperMicro servers
 
-SuperMicro X11 servers do not support virtual media installations when the image is served using the `https` protocol. As a result, single-node OpenShift deployments for this environment fail to boot on the target node. To avoid this issue, log in to the hub cluster and disable Transport Layer Security (TLS) in the `Provisioning` resource. This ensures the image is not served with TLS even though the image address uses the `https` scheme.
+SuperMicro X11 servers do not support virtual media installations when the image is served using the `https` protocol.
+
+As a result, single-node OpenShift deployments for this environment fail to boot on the target node. To avoid this issue, log in to the hub cluster and disable Transport Layer Security (TLS) in the `Provisioning` resource. This ensures the image is not served with TLS even though the image address uses the `https` scheme.
 
 <div>
 

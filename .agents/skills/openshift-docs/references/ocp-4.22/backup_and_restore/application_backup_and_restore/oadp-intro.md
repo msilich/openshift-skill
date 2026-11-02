@@ -40,16 +40,18 @@ Review the OADP support matrix for version compatibility with OpenShift Containe
 <col style="width: 20%" />
 <col style="width: 20%" />
 </colgroup>
-<tbody>
+<thead>
 <tr>
-<td style="text-align: left;"><p>Version</p></td>
-<td style="text-align: left;"><p>OpenShift Container Platform version</p></td>
-<td style="text-align: left;"><p>General availability</p></td>
-<td style="text-align: left;"><p>Full support ends</p></td>
-<td style="text-align: left;"><p>Maintenance ends</p></td>
-<td style="text-align: left;"><p>Extended Update Support (EUS)</p></td>
-<td style="text-align: left;"><p>Extended Update Support Term 2 (EUS Term 2)</p></td>
+<th style="text-align: left;">Version</th>
+<th style="text-align: left;">OpenShift Container Platform version</th>
+<th style="text-align: left;">General availability</th>
+<th style="text-align: left;">Full support ends</th>
+<th style="text-align: left;">Maintenance ends</th>
+<th style="text-align: left;">Extended Update Support (EUS)</th>
+<th style="text-align: left;">Extended Update Support Term 2 (EUS Term 2)</th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td style="text-align: left;"><p>1.6</p></td>
 <td style="text-align: left;"><ul>
@@ -71,12 +73,12 @@ Review the OADP support matrix for version compatibility with OpenShift Containe
 <td style="text-align: left;"><p>17 June 2025</p></td>
 <td style="text-align: left;"><p>Release of 1.6</p></td>
 <td style="text-align: left;"><p>Release of 1.7</p></td>
-<td style="text-align: left;"><p>30 Jun 2028</p></td>
-<td style="text-align: left;"><p>30 Jun 2029</p>
+<td style="text-align: left;"><p>30 Jun 2028</p>
 <p>EUS must be on OpenShift Container Platform 4.21</p></td>
+<td style="text-align: left;"><p>30 Jun 2029</p>
+<p>EUS Term 2 must be on OpenShift Container Platform 4.21</p></td>
 </tr>
 <tr>
-<td style="text-align: left;"><p>EUS Term 2 must be on OpenShift Container Platform 4.21</p></td>
 <td style="text-align: left;"><p>1.4</p></td>
 <td style="text-align: left;"><ul>
 <li><p>4.14</p></li>
@@ -90,10 +92,10 @@ Review the OADP support matrix for version compatibility with OpenShift Containe
 <td style="text-align: left;"><p>Release of 1.6</p></td>
 <td style="text-align: left;"><p>27 Jun 2026</p>
 <p>EUS must be on OpenShift Container Platform 4.16</p></td>
-</tr>
-<tr>
 <td style="text-align: left;"><p>27 Jun 2027</p>
 <p>EUS Term 2 must be on OpenShift Container Platform 4.16</p></td>
+</tr>
+<tr>
 <td style="text-align: left;"><p>1.3</p></td>
 <td style="text-align: left;"><ul>
 <li><p>4.12</p></li>
@@ -106,15 +108,16 @@ Review the OADP support matrix for version compatibility with OpenShift Containe
 <td style="text-align: left;"><p>Release of 1.5</p></td>
 <td style="text-align: left;"><p>31 Oct 2025</p>
 <p>EUS must be on OpenShift Container Platform 4.14</p></td>
+<td style="text-align: left;"><p>31 Oct 2026</p>
+<p>EUS Term 2 must be on OpenShift Container Platform 4.14</p></td>
 </tr>
 </tbody>
 </table>
 
 ### Unsupported versions of the OADP Operator
 
-|         |                      |                    |                   |
-|---------|----------------------|--------------------|-------------------|
 | Version | General availability | Full support ended | Maintenance ended |
+|---------|----------------------|--------------------|-------------------|
 | 1.2     | 14 Jun 2023          | 29 Nov 2023        | 10 Jul 2024       |
 | 1.1     | 01 Sep 2022          | 14 Jun 2023        | 29 Nov 2023       |
 | 1.0     | 09 Feb 2022          | 01 Sep 2022        | 14 Jun 2023       |

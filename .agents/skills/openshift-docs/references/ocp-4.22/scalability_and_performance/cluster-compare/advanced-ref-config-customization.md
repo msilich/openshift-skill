@@ -90,7 +90,7 @@ You can create a patch file in two ways:
 
 - Create your own patch file.
 
-## Using the cluster-compare plugin to generate a patch
+# Using the cluster-compare plugin to generate a patch
 
 You can use the `cluster-compare` plugin to generate a patch for specific template files. The plugin adjusts the template to ensure it matches with the cluster custom resource (CR). Any previously valid differences in the patched template are not reported. The plugin highlights the patched files in the output.
 
@@ -123,13 +123,7 @@ Procedure
 
 2.  Optional: Review the patch file before applying to the reference configuration:
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example `patch-config` file
-
-    </div>
+    Example `patch-config` file:
 
     ``` yaml
     - apiVersion: storage.k8s.io/v1
@@ -140,8 +134,6 @@ Procedure
       templatePath: optional/local-storage-operator/StorageClass.yaml
       type: mergepatch
     ```
-
-    </div>
 
     where:
 
@@ -164,29 +156,29 @@ Procedure
 
     - `-p` specifies the path to the patch file.
 
+      The following is example output:
+
+      ``` terminal
+      ...
+
+      Cluster CR: storage.k8s.io/v1_StorageClass_crc-csi-hostpath-provisioner
+      Reference File: optional/local-storage-operator/StorageClass.yaml
+      Description: Component description
+      Diff Output: None
+      Patched with patch
+      Patch Reasons:
+      - A valid reason for the override
+
+      ...
+
+      No CRs are unmatched to reference CRs
+      Metadata Hash: bb2165004c496b32e0c8509428fb99c653c3cf4fba41196ea6821bd05c3083ab
+      Cluster CRs with patches applied: 1
+      ```
+
 </div>
 
-The following is example output:
-
-``` terminal
-...
-
-Cluster CR: storage.k8s.io/v1_StorageClass_crc-csi-hostpath-provisioner
-Reference File: optional/local-storage-operator/StorageClass.yaml
-Description: Component description
-Diff Output: None
-Patched with patch
-Patch Reasons:
-- A valid reason for the override
-
-...
-
-No CRs are unmatched to reference CRs
-Metadata Hash: bb2165004c496b32e0c8509428fb99c653c3cf4fba41196ea6821bd05c3083ab
-Cluster CRs with patches applied: 1
-```
-
-## Creating a patch file manually
+# Creating a patch file manually
 
 You can write a patch file to handle expected deviations in a cluster configuration.
 
@@ -211,13 +203,7 @@ Procedure
 
 1.  Create a patch file to match your use case. Use the following structure as an example:
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example `patch-config`
-
-    </div>
+    Example `patch-config`:
 
     ``` yaml
     - apiVersion: v1
@@ -277,8 +263,6 @@ Procedure
         }
     ```
 
-    </div>
-
     The patches use the `kind`, `apiVersion`, `name`, and `namespace` fields to match the patch with the correct cluster CR.
 
 2.  Apply the patch to the reference configuration by running the following command:
@@ -291,26 +275,26 @@ Procedure
 
     - `p` specifies the path to the patch file.
 
+      The following is example output:
+
+      ``` terminal
+      ...
+
+      Cluster CR: storage.k8s.io/v1_StorageClass_crc-csi-hostpath-provisioner
+      Reference File: namespace.yaml
+      Description: Component description
+      Diff Output: None
+      Patched with patch
+      Patch Reasons:
+      - known deviation
+      - known deviation
+      - known deviation
+
+      ...
+
+      No CRs are unmatched to reference CRs
+      Metadata Hash: bb2165004c496b32e0c8509428fb99c653c3cf4fba41196ea6821bd05c3083ab
+      Cluster CRs with patches applied: 1
+      ```
+
 </div>
-
-The following is example output:
-
-``` terminal
-...
-
-Cluster CR: storage.k8s.io/v1_StorageClass_crc-csi-hostpath-provisioner
-Reference File: namespace.yaml
-Description: Component description
-Diff Output: None
-Patched with patch
-Patch Reasons:
-- known deviation
-- known deviation
-- known deviation
-
-...
-
-No CRs are unmatched to reference CRs
-Metadata Hash: bb2165004c496b32e0c8509428fb99c653c3cf4fba41196ea6821bd05c3083ab
-Cluster CRs with patches applied: 1
-```

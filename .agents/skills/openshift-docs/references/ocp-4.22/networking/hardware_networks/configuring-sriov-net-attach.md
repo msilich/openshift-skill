@@ -499,6 +499,10 @@ Prerequisites
 
 - Log in to the OpenShift Container Platform cluster as a user with cluster-admin privileges.
 
+- The SR-IOV Network Operator is installed.
+
+- The SR-IOV network devices are configured for the `resourceName` you specify.
+
 </div>
 
 <div>
@@ -1345,7 +1349,9 @@ Procedure
 
 # Excluding the SR-IOV network topology for NUMA-aware scheduling
 
-To exclude advertising the SR-IOV network resource’s Non-Uniform Memory Access (NUMA) node to the Topology Manager, you can configure the `excludeTopology` specification in the `SriovNetworkNodePolicy` custom resource. Use this configuration for more flexible SR-IOV network deployments during NUMA-aware pod scheduling.
+To exclude advertising the SR-IOV network resource’s Non-Uniform Memory Access (NUMA) node to the Topology Manager, you can configure the `excludeTopology` specification in the `SriovNetworkNodePolicy` custom resource.
+
+Use this configuration for more flexible SR-IOV network deployments during NUMA-aware pod scheduling.
 
 <div>
 

@@ -92,6 +92,25 @@ Technology Preview tracker
 > [!NOTE]
 > The `ApplicationSet Progressive Sync Strategy` feature name aligns with the upstream naming convention and replaces the earlier name, `ApplicationSet Progressive Rollout Strategy`, used in previous Red Hat OpenShift GitOps versions. The functionality remains unchanged.
 
+# Release notes for Red Hat OpenShift GitOps 1.21.6
+
+Red Hat OpenShift GitOps 1.21.6 is available. This release includes security updates.
+
+## Errata updates
+
+RHSA-2026:90337 - Red Hat OpenShift GitOps 1.21.6 security update advisory
+Issued: 2026-10-26
+
+The following advisory documents the security fixes and enhancements in this release:
+
+- [RHSA-2026:90337](https://access.redhat.com/errata/RHSA-2026:90337)
+
+If you have installed the Red Hat OpenShift GitOps Operator in the default namespace, run the following command to view the container images in this release:
+
+``` terminal
+$ oc describe deployment gitops-operator-controller-manager -n openshift-gitops-operator
+```
+
 # Release notes for Red Hat OpenShift GitOps 1.21.5
 
 Red Hat OpenShift GitOps 1.21.5 is now available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.

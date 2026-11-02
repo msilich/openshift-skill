@@ -37,7 +37,7 @@
     "agentic_skills_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
     "algorithm": "sha256",
     "markdown_manifest_algorithm": "SHA-256 of sorted UTF-8 lines: '<file-sha256>  <relative-path>\\n'",
-    "markdown_manifest_sha256": "36d2a68856ea4e333fc877ae52184cf2221cfea0f4b159f91919e5edf332c4ef",
+    "markdown_manifest_sha256": "fc8900ef9a9e4e1b1fae469d7f9f58c4f23d3dc1c3d018aaaf124ceab1c0a3c8",
     "openshift_docs_license_sha256": "e1855c6f04f2435df62fe754d9621de265e3fa77717d3910f5a5500cf1e651ad"
   },
   "offline_references": {
@@ -45,7 +45,7 @@
   },
   "runtime_network_required": false,
   "schema_version": 1,
-  "source_commit_time_utc": "2026-10-26T10:43:17Z",
+  "source_commit_time_utc": "2026-10-30T17:42:29Z",
   "sources": {
     "agentic_skills_converter": {
       "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
@@ -61,7 +61,7 @@
     },
     "openshift_docs": {
       "branch_hint": "enterprise-4.22",
-      "commit": "75eff7691c1e4e9b478121696fd38bdb84316855",
+      "commit": "ddc507039aa71e6c2a878208d5792e1534460261",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"

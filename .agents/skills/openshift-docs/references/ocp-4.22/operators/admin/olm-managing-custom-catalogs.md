@@ -492,11 +492,16 @@ Procedure
         [--binary-image <registry_base_image>]
     ```
 
-    - Comma-separated list of bundle images to add to the index.
+    where:
 
-    - The image tag that you want the index image to have.
+    `--bundles`
+    Specifies a comma-separated list of bundle images to add to the index.
 
-    - Optional: An alternative registry base image to use for serving the catalog.
+    `--tag`
+    Specifies the image tag that you want the index image to have.
+
+    `--binary-image`
+    Optional: Specifies an alternative registry base image to use for serving the catalog.
 
 2.  Push the index image to a registry.
 
@@ -556,54 +561,58 @@ Procedure
         --pull-tool podman
     ```
 
-    - The `--bundles` flag specifies a comma-separated list of additional bundle images to add to the index.
+    where:
 
-    - The `--from-index` flag specifies the previously pushed index.
+    `--bundles`
+    Specifies a comma-separated list of additional bundle images to add to the index.
 
-    - The `--tag` flag specifies the image tag to apply to the updated index image.
+    `--from-index`
+    Specifies the previously pushed index.
 
-    - The `--pull-tool` flag specifies the tool used to pull container images.
+    `--tag`
+    Specifies the image tag to apply to the updated index image.
 
-      where:
+    `--pull-tool`
+    Specifies the tool used to pull container images.
 
-      `<registry>`
-      Specifies the hostname of the registry, such as `quay.io` or `mirror.example.com`.
+    `<registry>`
+    Specifies the hostname of the registry, such as `quay.io` or `mirror.example.com`.
 
-      `<namespace>`
-      Specifies the namespace of the registry, such as `ocs-dev` or `abc`.
+    `<namespace>`
+    Specifies the namespace of the registry, such as `ocs-dev` or `abc`.
 
-      `<new_bundle_image>`
-      Specifies the new bundle image to add to the registry, such as `ocs-operator`.
+    `<new_bundle_image>`
+    Specifies the new bundle image to add to the registry, such as `ocs-operator`.
 
-      `<digest>`
-      Specifies the SHA image ID, or digest, of the bundle image, such as `c7f11097a628f092d8bad148406aa0e0951094a03445fd4bc0775431ef683a41`.
+    `<digest>`
+    Specifies the SHA image ID, or digest, of the bundle image, such as `c7f11097a628f092d8bad148406aa0e0951094a03445fd4bc0775431ef683a41`.
 
-      `<existing_index_image>`
-      Specifies the previously pushed image, such as `abc-redhat-operator-index`.
+    `<existing_index_image>`
+    Specifies the previously pushed image, such as `abc-redhat-operator-index`.
 
-      `<existing_tag>`
-      Specifies a previously pushed image tag, such as `4.22`.
+    `<existing_tag>`
+    Specifies a previously pushed image tag, such as `4.22`.
 
-      `<updated_tag>`
-      Specifies the image tag to apply to the updated index image, such as `4.22.1`.
+    `<updated_tag>`
+    Specifies the image tag to apply to the updated index image, such as `4.22.1`.
 
-      <div class="formalpara">
+    <div class="formalpara">
 
-      <div class="title">
+    <div class="title">
 
-      Example command
+    Example command
 
-      </div>
+    </div>
 
-      ``` terminal
-      $ opm index add \
-          --bundles quay.io/ocs-dev/ocs-operator@sha256:c7f11097a628f092d8bad148406aa0e0951094a03445fd4bc0775431ef683a41 \
-          --from-index mirror.example.com/abc/abc-redhat-operator-index:4.22 \
-          --tag mirror.example.com/abc/abc-redhat-operator-index:4.22.1 \
-          --pull-tool podman
-      ```
+    ``` terminal
+    $ opm index add \
+        --bundles quay.io/ocs-dev/ocs-operator@sha256:c7f11097a628f092d8bad148406aa0e0951094a03445fd4bc0775431ef683a41 \
+        --from-index mirror.example.com/abc/abc-redhat-operator-index:4.22 \
+        --tag mirror.example.com/abc/abc-redhat-operator-index:4.22.1 \
+        --pull-tool podman
+    ```
 
-      </div>
+    </div>
 
 2.  Push the updated index image:
 
@@ -729,13 +738,19 @@ Procedure
         -t <target_registry>:<port>/<namespace>/redhat-operator-index:v4.22
     ```
 
-    - Index to prune.
+    where:
 
-    - Comma-separated list of packages to keep.
+    `-f`
+    Specifies the index to prune.
 
-    - Required only for IBM Power® and IBM Z® images: Operator Registry base image with the tag that matches the target OpenShift Container Platform cluster major and minor version.
+    `-p`
+    Specifies a comma-separated list of packages to keep.
 
-    - Custom tag for new index image being built.
+    `-i`
+    Required only for IBM Power® and IBM Z® images: Specifies the Operator Registry base image with the tag that matches the target OpenShift Container Platform cluster major and minor version.
+
+    `-t`
+    Specifies the custom tag for the new index image being built.
 
 4.  Run the following command to push the new index image to your target registry:
 
@@ -977,9 +992,13 @@ Procedure
 
     </div>
 
-    - Turn off pod security label synchronization by adding the `security.openshift.io/scc.podSecurityLabelSync=false` label to the namespace.
+    where:
 
-    - Apply the pod security admission `pod-security.kubernetes.io/enforce` label. Set the label to `baseline` or `privileged`. Use the `baseline` pod security profile unless other workloads in the namespace require a `privileged` profile.
+    `metadata.labels.security.openshift.io/scc.podSecurityLabelSync`
+    Turns off pod security label synchronization when set to `"false"`.
+
+    `metadata.labels.pod-security.kubernetes.io/enforce`
+    Specifies the pod security admission enforcement level. Set to `baseline` or `privileged`. Use the `baseline` profile unless other workloads in the namespace require a `privileged` profile.
 
 </div>
 
@@ -1306,12 +1325,16 @@ Procedure
           interval: 30m
     ```
 
-    - Add a `spec.secrets` section and specify any required secrets.
+    \+ where:
 
-    - Specify the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
+    `spec.secrets`
+    Specifies required secrets. Add a `spec.secrets` section and specify any required secrets.
 
-      > [!NOTE]
-      > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
+    `spec.grpcPodConfig.securityContextConfig`
+    Specifies the security context value. Set to `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
+
+    > [!NOTE]
+    > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
 
 3.  If any Operator or Operand images that are referenced by a subscribed Operator require access to a private registry, you can either provide access to all namespaces in the cluster, or individual target tenant namespaces.
 
@@ -1334,7 +1357,13 @@ Procedure
               > new_dockerconfigjson
           ```
 
-          - Replace `<registry>:<port>/<namespace>` with the private registry details and `<token>` with your authentication credentials.
+          where:
+
+          `<registry>:<port>/<namespace>`
+          Specifies the private registry details.
+
+          `<token>`
+          Specifies your authentication credentials.
 
       3.  Update the global pull secret with the new file:
 
@@ -1360,15 +1389,10 @@ Procedure
           $ oc get sa -n <tenant_namespace>
           ```
 
-          - If the Operator was installed in an individual namespace, search that namespace. If the Operator was installed for all namespaces, search the `openshift-operators` namespace.
+          \+
 
-          <div class="formalpara">
-
-          <div class="title">
-
-          Example output
-
-          </div>
+          > [!NOTE]
+          > If the Operator was installed in an individual namespace, search that namespace. If the Operator was installed for all namespaces, search the `openshift-operators` namespace.
 
           ``` terminal
           NAME            SECRETS   AGE
@@ -1377,10 +1401,6 @@ Procedure
           deployer        2         6m1s
           etcd-operator   2         5m18s
           ```
-
-          </div>
-
-          - Service account for an installed etcd Operator.
 
       3.  Link the secret to the service account for the Operator:
 

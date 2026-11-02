@@ -1,6 +1,6 @@
 # Procedure sources
 
-Product: Red Hat OpenShift GitOps 1.21. Source: openshift/openshift-docs at commit `034a9d11f8031c9a18b32b67e5854eca0d6124c8`.
+Product: Red Hat OpenShift GitOps 1.21. Source: openshift/openshift-docs at commit `b5021228885fa8978f60a545a103ceb57590253f`.
 Read [snapshot provenance](../../openshift-docs/references/gitops-1.21/SOURCE.json) for the source, license and conversion details.
 
 | Procedure | Local chapter | Sections to read |

@@ -1350,7 +1350,9 @@ Verification
 
 ## Telecom Grandmaster clocks on Intel Granite Rapids-D hardware
 
-Intel Granite Rapids-D (GNR-D) server platforms support Telecom Grandmaster (T-GM) clock deployments that use onboard Network Acceleration Complex (NAC) ports and optional Carter Flat expansion network interface cards (NICs) to share timing across a single GNSS feed. Before you configure a T-GM profile on GNR-D hardware, verify that your qualified hardware layout, cabling, port counts, and interface naming align with your deployment requirements. The associated procedure provides an example `PtpConfig` CR, `linuxptp` plugin expectations, and verification steps for Granite Rapids-D nodes.
+Intel Granite Rapids-D (GNR-D) server platforms support Telecom Grandmaster (T-GM) clock deployments that use onboard Network Acceleration Complex (NAC) ports and optional Carter Flat expansion network interface cards (NICs) to share timing across a single GNSS feed.
+
+Before you configure a T-GM profile on GNR-D hardware, verify that your qualified hardware layout, cabling, port counts, and interface naming align with your deployment requirements. The associated procedure provides an example `PtpConfig` CR, `linuxptp` plugin expectations, and verification steps for Granite Rapids-D nodes.
 
 In addition to Telecom Grandmaster configurations, Intel Granite Rapids-D (GNR-D) hardware supports a Precision Time Protocol (PTP) boundary clock profile without holdover. For more information about boundary clock configuration on GNR-D hardware, see the Additional resources section.
 
@@ -1390,7 +1392,9 @@ Additional resources
 
 ## Configuring linuxptp services as a Telecom Grandmaster clock on Intel Granite Rapids-D hardware
 
-Use this procedure to configure the `linuxptp` services (`ptp4l`, `phc2sys`, `ts2phc`) as a Telecom Grandmaster (T-GM) on Intel Granite Rapids-D (GNR-D) hardware that uses onboard Network Acceleration Complex (NAC) ports and optional Carter Flat expansion network interface cards (NICs). In this deployment, GNSS input disciplines the platform clock and the example `PtpConfig` CR uses the `e830` and `e825` plugins for onboard NAC and optional Carter Flat ports.
+Use this procedure to configure the `linuxptp` services (`ptp4l`, `phc2sys`, `ts2phc`) as a Telecom Grandmaster (T-GM) on Intel Granite Rapids-D (GNR-D) hardware that uses onboard Network Acceleration Complex (NAC) ports and optional Carter Flat expansion network interface cards (NICs).
+
+In this deployment, GNSS input disciplines the platform clock and the example `PtpConfig` CR uses the `e830` and `e825` plugins for onboard NAC and optional Carter Flat ports.
 
 > [!IMPORTANT]
 > Telecom Grandmaster clock configuration on Intel Granite Rapids-D (GNR-D) hardware is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
@@ -4246,7 +4250,7 @@ Verification
 
 ## Boundary clocks without holdover on Intel Granite Rapids-D hardware
 
-Intel Granite Rapids-D (GNR-D) server platforms support Precision Time Protocol (PTP) boundary clock (BC) deployments without holdover for high-density Radio Access Network (RAN) sites that use onboard Network Acceleration Complex (NAC) ports and optional Carter Flat expansion network interface cards (NICs).
+Intel Granite Rapids-D (GNR-D) servers support Precision Time Protocol (PTP) boundary clock (BC) deployments without holdover for high-density Radio Access Network (RAN) sites using onboard Network Acceleration Complex (NAC) ports and optional Carter Flat NICs.
 
 In a BC deployment, one time receiver (TR) port synchronizes to an upstream timing source while time transmitter (TT) ports distribute synchronized time to downstream devices. GNR-D platforms use platform-specific `PtpConfig` plugin configurations and internal timing paths.
 
@@ -5192,7 +5196,9 @@ Additional resources
 
 # Configuring FIFO priority scheduling for PTP hardware
 
-In telco or other deployment types that require low latency performance, PTP daemon threads run in a constrained CPU footprint alongside the rest of the infrastructure components. By default, PTP threads run with the `SCHED_OTHER` policy. Under high load, these threads might not get the scheduling latency they require for error-free operation.
+In telco or other deployment types that require low latency performance, PTP daemon threads run in a constrained CPU footprint alongside the rest of the infrastructure components.
+
+By default, PTP threads run with the `SCHED_OTHER` policy. Under high load, these threads might not get the scheduling latency they require for error-free operation.
 
 To mitigate against potential scheduling latency errors, you can configure the PTP Operator `linuxptp` services to allow threads to run with a `SCHED_FIFO` policy. If `SCHED_FIFO` is set for a `PtpConfig` CR, then `ptp4l` and `phc2sys` will run in the parent container under `chrt` with a priority set by the `ptpSchedulingPriority` field of the `PtpConfig` CR.
 
@@ -5297,7 +5303,9 @@ Verification
 
 # Configuring PTP log reduction
 
-The `linuxptp-daemon` generates logs that you can use for debugging purposes. In telco or other deployment types that feature a limited storage capacity, these logs can add to the storage demand. Currently, the default logging rate is high, causing logs to rotate out in under 24 hours, which makes it difficult to track changes and identify problems.
+The `linuxptp-daemon` generates logs that you can use for debugging purposes.
+
+In telco or other deployment types that feature a limited storage capacity, these logs can add to the storage demand. Currently, the default logging rate is high, causing logs to rotate out in under 24 hours, which makes it difficult to track changes and identify problems.
 
 You can achieve basic log reduction by configuring the `PtpConfig` custom resource (CR) to exclude log messages that report the master offset value. The master offset log message reports the difference between the clock of the current node and the master clock in nanoseconds. However, with this method, there is no summary status of filtered logs. The enhanced log reduction feature allows you to configure the logging rate of PTP logs. You can set a specific logging rate, which can help reduce the volume of logs generated by the `linuxptp-daemon` while still retaining essential information for troubleshooting. With the enhanced log reduction feature, you can also specify a threshold that still displays the offset logs if the offset is higher than that threshold.
 

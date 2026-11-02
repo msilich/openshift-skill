@@ -4,6 +4,8 @@ If a control plane node on your bare-metal cluster has failed and cannot be reco
 
 # Prerequisites
 
+Before replacing a failed bare-metal control plane node without BMC credentials in OpenShift Container Platform, verify that you meet the access, backup, and tooling requirements. You must also confirm that no control plane `machineset` exists for your cluster.
+
 - You have identified the unhealthy bare metal etcd member.
 
 - You have verified that either the machine is not running or the node is not ready.

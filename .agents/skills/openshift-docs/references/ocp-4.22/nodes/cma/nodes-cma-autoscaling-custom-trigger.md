@@ -576,9 +576,9 @@ Specifies whether to use TSL client authentication for Kafka. The default is `di
 
 # Understanding the Cron trigger
 
-You can scale pods based on a time range.
+You can scale pods based on a time range. When the time range starts, the custom metrics autoscaler scales the pods associated with an object from the configured minimum number of pods to the specified number of desired pods.
 
-When the time range starts, the custom metrics autoscaler scales the pods associated with an object from the configured minimum number of pods to the specified number of desired pods. At the end of the time range, the pods are scaled back to the configured minimum. The time period must be configured in [cron format](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#writing-a-cronjob-spec).
+At the end of the time range, the pods are scaled back to the configured minimum. The time period must be configured in [cron format](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#writing-a-cronjob-spec).
 
 The following example scales the pods associated with this scaled object from `0` to `100` from 6:00 AM to 6:30 PM India Standard Time.
 

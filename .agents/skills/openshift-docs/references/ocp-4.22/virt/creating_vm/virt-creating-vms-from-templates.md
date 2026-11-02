@@ -2,7 +2,7 @@
 
 You can create, customize, and manage the virtual machine (VM) templates that you use to create VMs. To create a VM from a template, use the web console creation wizard.
 
-# About VM templates
+# VM templates
 
 VM templates define a reusable VM configuration. You can create a VM from a template to deploy a standardized VM quickly.
 
@@ -20,7 +20,7 @@ You can customize the disk source and VM parameters before you start the VM.
 Single-node OpenShift
 Due to differences in storage behavior, some templates are incompatible with single-node OpenShift. To ensure compatibility, do not set the `evictionStrategy` field for templates or VMs that use data volumes or storage profiles.
 
-# Creating a custom VM template in the web console
+# Create a custom VM template in the web console
 
 You can create a virtual machine template by editing a YAML file example in the OpenShift Container Platform web console.
 
@@ -48,7 +48,7 @@ Procedure
 
 </div>
 
-# Enabling dedicated resources for a virtual machine template
+# Enable dedicated resources for a VM template
 
 You can enable dedicated resources for a virtual machine (VM) template in the OpenShift Container Platform web console. VMs that are created from this template will be scheduled with dedicated resources.
 
@@ -72,7 +72,7 @@ Procedure
 
 </div>
 
-# Removing a deprecated designation from a customized VM template by using the web console
+# Undeprecate a customized VM template in the web console
 
 You can customize an existing virtual machine (VM) template before you start the VM, by modifying the VM or template parameters, such as data sources, cloud-init, or SSH keys.
 

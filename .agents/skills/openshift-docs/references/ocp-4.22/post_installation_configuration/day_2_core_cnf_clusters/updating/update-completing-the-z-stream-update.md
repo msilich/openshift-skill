@@ -61,7 +61,9 @@ Additional resources
 
 # Updating the worker nodes
 
-You upgrade the worker nodes after you have updated the control plane by unpausing the relevant `mcp` groups you created. Unpausing the `mcp` group starts the upgrade process for the worker nodes in that group. Each of the worker nodes in the cluster reboot to upgrade to the new EUS, y-stream or z-stream version as required.
+You upgrade the worker nodes after you have updated the control plane by unpausing the relevant `mcp` groups you created.
+
+Unpausing the `mcp` group starts the upgrade process for the worker nodes in that group. Each of the worker nodes in the cluster reboot to upgrade to the new EUS, y-stream or z-stream version as required.
 
 In the case of control plane only upgrades, note that when a worker node is updated it will only require one reboot and will jump \<y+2\>-release versions. This is a feature that was added to decrease the amount of time that it takes to upgrade large bare-metal clusters.
 

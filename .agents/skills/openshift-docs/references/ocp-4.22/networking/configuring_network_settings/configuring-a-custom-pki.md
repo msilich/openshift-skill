@@ -204,7 +204,9 @@ Procedure
 
 # Certificate injection using Operators
 
-In OpenShift Container Platform, certificate injection using Operators merges your custom Certificate Authorities (CAs) with system certificates and injects the merged bundle into Operators that request it. You can use this feature so your Operators trust custom certificates without requiring manual certificate bundle management.
+In OpenShift Container Platform, certificate injection using Operators merges your custom Certificate Authorities (CAs) with system certificates and injects the merged bundle into Operators that request it.
+
+You can use this feature so your Operators trust custom certificates without requiring manual certificate bundle management.
 
 > [!IMPORTANT]
 > After adding a `config.openshift.io/inject-trusted-cabundle="true"` label to the config map, existing data in it is deleted. The Cluster Network Operator takes ownership of a config map and only accepts `ca-bundle` as data. You must use a separate config map to store `service-ca.crt` by using the `service.beta.openshift.io/inject-cabundle=true` annotation or a similar configuration. Adding a `config.openshift.io/inject-trusted-cabundle="true"` label and `service.beta.openshift.io/inject-cabundle=true` annotation on the same config map can cause issues.

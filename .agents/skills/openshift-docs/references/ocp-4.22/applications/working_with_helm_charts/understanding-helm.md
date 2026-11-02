@@ -4,30 +4,38 @@ Helm is a software package manager that simplifies deployment of applications an
 
 Helm uses a packaging format called *charts*. A Helm chart is a collection of files that describes the OpenShift Container Platform resources.
 
-Creating a chart in a cluster creates a running instance of the chart known as a *release*.
+Installing a chart in a cluster creates a running instance of the chart, called a *release*.
 
-Each time a chart is created, or a release is upgraded or rolled back, an incremental revision is created.
+Each time you install a chart, or upgrade or roll back a release, Helm creates a revision of the release.
+
+OpenShift Container Platform supports the following ways to work with Helm:
+
+- The Helm CLI, a Red Hat build of the `helm` command-line tool that you install on your workstation.
+
+- The web console, where you can browse, install, and manage Helm charts and releases from your web browser.
 
 # Key features
 
-Helm provides the ability to:
+With Helm, you can:
 
-- Search through a large collection of charts stored in the chart repository.
+- Search for charts in chart repositories.
 
-- Modify existing charts.
+- Install a chart to create a release.
 
-- Create your own charts with OpenShift Container Platform or Kubernetes resources.
+- Upgrade a release, roll it back to an earlier revision, or delete it.
 
-- Package and share your applications as charts.
+- Create your own charts with OpenShift Container Platform or Kubernetes resources, and package and share them.
 
 # Red Hat Certification of Helm charts for OpenShift
 
-You can choose to verify and certify your Helm charts by Red Hat for all the components you will be deploying on the Red Hat OpenShift Container Platform. Charts go through an automated Red Hat OpenShift certification workflow that guarantees security compliance as well as best integration and experience with the platform. Certification assures the integrity of the chart and ensures that the Helm chart works seamlessly on Red Hat OpenShift clusters.
+You can have Red Hat certify your Helm charts for all components you deploy on OpenShift Container Platform. Charts go through an automated Red Hat OpenShift certification workflow that checks security compliance and integration with the platform. Certification assures chart integrity and confirms that your Helm chart works on Red Hat OpenShift clusters.
 
 # Additional resources
 
-- For more information on how to certify your Helm charts as a Red Hat partner, see [Red Hat Certification of Helm charts for OpenShift](https://redhat-connect.gitbook.io/partner-guide-for-red-hat-openshift-and-container/helm-chart-certification/overview).
+- [Installing Helm](installing-helm.md#installing-helm)
 
-- For more information on OpenShift and Container certification guides for Red Hat partners, see [Partner Guide for OpenShift and Container Certification](https://access.redhat.com/documentation/en-us/red_hat_software_certification/8.51/html-single/red_hat_software_certification_workflow_guide/index#con_container-certification_openshift-sw-cert-workflow-introduction-to-redhat-openshift-operator-certification).
+- [Helm CLI for Red Hat OpenShift compatibility matrix](https://access.redhat.com/articles/7145580)
 
-- For a list of the charts, see [the Red Hat `Helm index` file](https://charts.openshift.io/index.yaml).
+- [Red Hat Helm chart certification](https://docs.redhat.com/en/documentation/red_hat_software_certification/8.51/html-single/red_hat_software_certification_workflow_guide/index#con_helm-chart-certification_openshift-sw-cert-workflow-running-the-certification-suite-with-redhat-hosted-pipeline)
+
+- [Red Hat Helm index file](https://charts.openshift.io/index.yaml)

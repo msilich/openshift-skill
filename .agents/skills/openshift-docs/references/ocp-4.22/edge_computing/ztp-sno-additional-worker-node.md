@@ -62,7 +62,9 @@ Configuring the DU profile on the worker node is considered an upgrade. To initi
 
 # Ensuring PTP and SR-IOV daemon selector compatibility
 
-If the DU profile was deployed using the GitOps Zero Touch Provisioning (ZTP) plugin version 4.11 or earlier, the PTP and SR-IOV Operators might be configured to place the daemons only on nodes labeled as `master`. This configuration prevents the PTP and SR-IOV daemons from operating on the worker node. If the PTP and SR-IOV daemon node selectors are incorrectly configured on your system, you must change the daemons before proceeding with the worker DU profile configuration.
+If the DU profile was deployed using the GitOps Zero Touch Provisioning (ZTP) plugin version 4.11 or earlier, the PTP and SR-IOV Operators might be configured to place the daemons only on nodes labeled as `master`.
+
+This configuration prevents the PTP and SR-IOV daemons from operating on the worker node. If the PTP and SR-IOV daemon node selectors are incorrectly configured on your system, you must change the daemons before proceeding with the worker DU profile configuration.
 
 <div>
 
@@ -128,7 +130,9 @@ Procedure
 
 # PTP and SR-IOV node selector compatibility
 
-The PTP configuration resources and SR-IOV network node policies use `node-role.kubernetes.io/master: ""` as the node selector. If the additional worker node has the same NIC configuration as the control plane node, the policies used to configure the control plane node can be reused for the worker node. However, the node selector must be changed to select both node types, for example with the `"node-role.kubernetes.io/worker"` label.
+The PTP configuration resources and SR-IOV network node policies use `node-role.kubernetes.io/master: ""` as the node selector.
+
+If the additional worker node has the same NIC configuration as the control plane node, the policies used to configure the control plane node can be reused for the worker node. However, the node selector must be changed to select both node types, for example with the `"node-role.kubernetes.io/worker"` label.
 
 # Using PolicyGenerator CRs to apply worker node policies to the worker node
 

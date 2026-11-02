@@ -52,7 +52,7 @@ The Windows EFI installer pipeline installs Windows 10, Windows 11, or Windows S
 > [!NOTE]
 > The Windows EFI installer pipeline uses a config map file with `sysprep` predefined by OpenShift Container Platform and suitable for Microsoft ISO files. For ISO files pertaining to different Windows editions, it may be necessary to create a new config map file with a system-specific `sysprep` definition.
 
-## Running the example pipelines using the web console
+## Run the example pipelines in the web console
 
 You can run the example pipelines from the **Pipelines** menu in the web console.
 
@@ -74,7 +74,7 @@ Procedure
 
 </div>
 
-## Running the example pipelines using the CLI
+## Run the example pipelines by using the CLI
 
 Use a `PipelineRun` resource to run the example pipelines. A `PipelineRun` object is the running instance of a pipeline. It instantiates a pipeline for execution with specific inputs, outputs, and execution parameters on a cluster. It also creates a `TaskRun` object for each task in the pipeline.
 
@@ -146,7 +146,7 @@ Procedure
 
 </div>
 
-# Removing deprecated or unused resources
+# Remove deprecated or unused resources
 
 You can clean up deprecated or unused resources associated with the Red Hat OpenShift Pipelines Operator.
 
@@ -185,4 +185,4 @@ Procedure
 
 - [Creating CI/CD solutions for applications using Red Hat OpenShift Pipelines](https://docs.openshift.com/pipelines/latest/create/creating-applications-with-cicd-pipelines.html)
 
-- [Creating a Windows VM](../creating_vm/virt-creating-vms-from-cli.md#virt-creating-windows-vm_virt-creating-vms-cli)
+- [Create a Windows VM from an uploaded image](../creating_vm/virt-creating-vms-from-cli.md#virt-creating-windows-vm_virt-creating-vms-cli)

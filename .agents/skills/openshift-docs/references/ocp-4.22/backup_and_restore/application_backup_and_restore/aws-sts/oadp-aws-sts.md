@@ -1,6 +1,6 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-Install the OpenShift API for Data Protection (OADP) with Amazon Web Services (AWS) by installing the OADP Operator. The Operator installs [Velero 1.16](https://velero.io/docs/v1.16/).
+Install the OpenShift API for Data Protection (OADP) with Amazon Web Services (AWS) by installing the OADP Operator. The Operator installs Velero 1.18.
 
 You configure AWS for Velero, create a default `Secret`, and then install the Data Protection Application. For more details, see *Installing the OADP Operator*.
 
@@ -478,24 +478,6 @@ Procedure
 
 </div>
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Installing the OADP Operator](../installing/oadp-installing-operator.md#oadp-installing-operator-doc)
-
-- [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks)
-
-- [Installing from the software catalog using the web console](../../../operators/user/olm-installing-operators-in-namespace.md#olm-installing-from-software-catalog-using-web-console_olm-installing-operators-in-namespace)
-
-- [Backing up applications](../backing_up_and_restoring/backing-up-applications.md#backing-up-applications)
-
-</div>
-
 # Perform a backup with OADP and AWS STS
 
 Perform a backup by using OpenShift API for Data Protection (OADP) with Amazon Web Services (AWS) (AWS STS). The following `hello-world` example application has no persistent volumes (PVs) attached.
@@ -729,3 +711,15 @@ Procedure
     ```
 
 </div>
+
+# Additional resources
+
+- [Velero 1.18](https://velero.io/docs/)
+
+- [Installing the OADP Operator](../installing/oadp-installing-operator.md#oadp-installing-operator-doc)
+
+- [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks)
+
+- [Installing from the software catalog using the web console](../../../operators/user/olm-installing-operators-in-namespace.md#olm-installing-from-software-catalog-using-web-console_olm-installing-operators-in-namespace)
+
+- [Backing up applications](../backing_up_and_restoring/backing-up-applications.md#backing-up-applications)

@@ -56,7 +56,9 @@ With a GitOps workflow for cluster updates, you can do the following:
 
 # Cluster update scenarios
 
-You can perform z-stream, y-stream, and EUS-to-EUS updates on clusters managed by Red Hat Advanced Cluster Management (RHACM) and Topology Aware Lifecycle Manager (TALM). Each update scenario has different risk profiles, release cadences, and use cases that align with your operational requirements and maintenance windows.
+You can perform z-stream, y-stream, and EUS-to-EUS updates on clusters managed by Red Hat Advanced Cluster Management (RHACM) and Topology Aware Lifecycle Manager (TALM).
+
+Each update scenario has different risk profiles, release cadences, and use cases that align with your operational requirements and maintenance windows.
 
 ## Z-stream updates
 

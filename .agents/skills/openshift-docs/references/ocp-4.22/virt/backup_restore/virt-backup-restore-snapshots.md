@@ -21,7 +21,7 @@ The QEMU guest agent takes a consistent snapshot by attempting to quiesce the VM
 
 The conditions under which a snapshot is taken are reflected in the snapshot indications that are displayed in the web console or CLI. If these conditions do not meet your requirements, try creating the snapshot again or use an offline snapshot
 
-# About snapshots
+# VM snapshot concepts and components
 
 A *snapshot* represents the state and data of a virtual machine (VM) at a specific point in time. You can use a snapshot to restore an existing VM to a previous state (represented by the snapshot) for backup and disaster recovery or to rapidly roll back to a previous development version.
 
@@ -58,7 +58,7 @@ The VM snapshot feature introduces three new API objects defined as custom resou
 
 The VM snapshot controller binds a `VirtualMachineSnapshotContent` object with the `VirtualMachineSnapshot` object for which it was created, with a one-to-one mapping.
 
-# About application-consistent snapshots and backups
+# Application-consistent snapshots and backups
 
 You can configure application-consistent snapshots and backups for Linux or Windows virtual machines (VMs) through a cycle of freezing and thawing. For any application, you can configure a script on a Linux VM or register on a Windows VM to be notified when a snapshot or backup is due to begin.
 
@@ -69,7 +69,7 @@ The same cycle of freezing and thawing is available on a Windows VM. Application
 > [!IMPORTANT]
 > Immediately after a Windows VM starts, the QEMU GA and VSS might not yet be fully responsive, and CPU usage might not yet have stabilized. Starting a backup or snapshot before CPU usage is idle and the guest agent reports as ready can cause the freeze or thaw hook to exceed its timeout and fail.
 
-# Creating a snapshot by using the web console
+# Create a snapshot by using the web console
 
 You can create a snapshot of a virtual machine (VM) by using the OpenShift Container Platform web console.
 
@@ -119,7 +119,7 @@ Procedure
 
 </div>
 
-# Creating a snapshot by using the CLI
+# Create a snapshot by using the CLI
 
 You can create a virtual machine (VM) snapshot for an offline or online VM by creating a `VirtualMachineSnapshot` object.
 
@@ -301,9 +301,9 @@ Verification
 
 </div>
 
-# Verifying online snapshots by using snapshot indications
+# Verify online snapshots by using snapshot indications
 
-Snapshot indications are contextual information about online virtual machine (VM) snapshot operations. Indications are not available for offline virtual machine (VM) snapshot operations. Indications are helpful in describing details about the online snapshot creation.
+Snapshot indications are contextual information about online virtual machine (VM) snapshot operations. Indications are not available for offline VM snapshot operations. Indications are helpful in describing details about the online snapshot creation.
 
 <div>
 
@@ -343,7 +343,7 @@ Procedure
 
 </div>
 
-# Restoring a VM from a snapshot by using the web console
+# Restore a VM from a snapshot by using the web console
 
 You can restore a virtual machine (VM) to a previous configuration represented by a snapshot in the OpenShift Container Platform web console.
 
@@ -387,9 +387,9 @@ Procedure
 
 </div>
 
-# Restoring a VM from a snapshot by using the CLI
+# Restore a VM from a snapshot by using the CLI
 
-You can restore an existing virtual machine (VM) to a previous configuration by using the command line. You can only restore from an offline VM snapshot.
+You can restore an existing virtual machine (VM) to a previous configuration by using the CLI. You can only restore from an offline VM snapshot.
 
 <div>
 
@@ -399,9 +399,9 @@ Prerequisites
 
 </div>
 
-- Install the OpenShift CLI (`oc`).
+- You have installed the OpenShift CLI (`oc`).
 
-- Power down the VM you want to restore.
+- You have powered down the VM you want to restore.
 
 - Optional: Adjust what happens if the target VM is not fully stopped (*ready*). To do so, set the `targetReadinessPolicy` parameter in the `vmrestore` YAML configuration to one of the following values:
 
@@ -568,7 +568,7 @@ Verification
 
 </div>
 
-# Deleting a snapshot by using the web console
+# Delete a snapshot by using the web console
 
 You can delete an existing virtual machine (VM) snapshot by using the web console.
 
@@ -592,7 +592,7 @@ Procedure
 
 </div>
 
-# Deleting a virtual machine snapshot in the CLI
+# Delete a snapshot by using the CLI
 
 You can delete an existing virtual machine (VM) snapshot by deleting the appropriate `VirtualMachineSnapshot` object.
 

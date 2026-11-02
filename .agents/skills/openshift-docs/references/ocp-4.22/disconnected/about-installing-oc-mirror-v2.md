@@ -2214,7 +2214,7 @@ To remove images with the oc-mirror plugin v2, you must use a `DeleteImageSetCon
 <td style="text-align: left;"><p>The Operators configuration of the delete image set.</p></td>
 <td style="text-align: left;"><p>Array of objects Example:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">operators</span><span class="kw">:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">catalog</span><span class="kw">:</span><span class="at"> registry.redhat.io/redhat/redhat-operator-index:{product-version}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">catalog</span><span class="kw">:</span><span class="at"> registry.redhat.io/redhat/redhat-operator-index:4.22</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">packages</span><span class="kw">:</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> elasticsearch-operator</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">minVersion</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;2.4.0&#39;</span></span></code></pre></div></td>
@@ -2234,7 +2234,7 @@ To remove images with the oc-mirror plugin v2, you must use a `DeleteImageSetCon
 <td style="text-align: left;"><p>Operator packages configuration</p></td>
 <td style="text-align: left;"><p>Array of objects Example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">operators</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">catalog</span><span class="kw">:</span><span class="at"> registry.redhat.io/redhat/redhat-operator-index:{product-version}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">catalog</span><span class="kw">:</span><span class="at"> registry.redhat.io/redhat/redhat-operator-index:4.22</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">packages</span><span class="kw">:</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> elasticsearch-operator</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">minVersion</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;5.2.3-31&#39;</span></span></code></pre></div></td>

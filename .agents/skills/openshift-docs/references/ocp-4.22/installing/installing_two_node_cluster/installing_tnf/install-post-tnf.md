@@ -938,7 +938,9 @@ Procedure
 
 # Fencing validator script overview
 
-A two-node OpenShift Container Platform cluster with fencing (TNF) relies on the Shoot The Other Node In The Head (STONITH) mechanism to ensure data integrity during node failures. If the fencing subsystem is misconfigured, the cluster might fail to recover safely, resulting in data corruption or a split-brain scenario.
+A two-node OpenShift Container Platform cluster with fencing (TNF) relies on the Shoot The Other Node In The Head (STONITH) mechanism to ensure data integrity during node failures.
+
+If the fencing subsystem is misconfigured, the cluster might fail to recover safely, resulting in data corruption or a split-brain scenario.
 
 Before the introduction of this utility, administrators or support engineers had to manually verify several subsystems, including:
 
@@ -975,7 +977,9 @@ You can use the script for the following:
 
 ## Fencing validator script prerequisites
 
-Use the `fencing_validator` script to verify your fencing configuration on a two-node OpenShift Container Platform cluster. This script, deployed automatically by the Machine Config Operator, ensures that power management interfaces are correctly configured to prevent data corruption during a node failure. To run it, ensure the `jq` utility is installed, and you have both Kubernetes API access (`oc`) and SSH access to the control-plane nodes.
+Use the `fencing_validator` script to verify your fencing configuration on a two-node OpenShift Container Platform cluster.
+
+This script, deployed automatically by the Machine Config Operator, ensures that power management interfaces are correctly configured to prevent data corruption during a node failure. To run it, ensure the `jq` utility is installed, and you have both Kubernetes API access (`oc`) and SSH access to the control-plane nodes.
 
 You can see what the script would do without actually performing any validation for TNF by running the following command:
 
@@ -985,7 +989,9 @@ $ oc debug node/<node_name> --chroot /host /usr/local/bin/fencing_validator --dr
 
 ## Command-line options for fencing validator script
 
-To quickly verify a high-availability configuration of your two-node OpenShift Container Platform cluster with fencing (TNF), you can review the available command-line options and environment variables for the `fencing_validator` script. This reference helps you customize your connection methods, set execution timeouts, and safely test node reboots to ensure your fencing mechanism is reliable before moving to production.
+To quickly verify a high-availability configuration of your two-node OpenShift Container Platform cluster with fencing (TNF), you can review the available command-line options and environment variables for the `fencing_validator` script.
+
+This reference helps you customize your connection methods, set execution timeouts, and safely test node reboots to ensure your fencing mechanism is reliable before moving to production.
 
 You can see different command-line options for the `fencing_ validator` script by running the following command:
 
@@ -1021,7 +1027,9 @@ You can set all the flags by using the following environment variables:
 
 ## Fencing validator script for non-disruptive checks
 
-To ensure your two-node OpenShift Container Platform cluster with fencing (TNF) remains highly available without risking downtime, you can run the `fencing_validator` script in validation mode. This script performs a series of read-only health checks to verify cluster quorum, daemon health, and STONITH device status without disrupting active services.
+To ensure your two-node OpenShift Container Platform cluster with fencing (TNF) remains highly available without risking downtime, you can run the `fencing_validator` script in validation mode.
+
+This script performs a series of read-only health checks to verify cluster quorum, daemon health, and STONITH device status without disrupting active services.
 
 The simplest way to run the script is from a debug session on either control plane node by running the following command:
 

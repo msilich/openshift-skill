@@ -193,13 +193,13 @@ Procedure
 
     </div>
 
-</div>
+    The nodes will reboot and when the updating field returns to `false`, you can validate on the nodes by looking at the devices in a debug pod.
 
-The nodes will reboot and when the updating field returns to `false`, you can validate on the nodes by looking at the devices in a debug pod.
+</div>
 
 # Configuring the NFD Operator
 
-The Node Feature Discovery (NFD) Operator manages the detection of hardware features and configuration in an OpenShift Container Platform cluster by labeling the nodes with hardware-specific information. NFD labels the host with node-specific attributes, such as PCI cards, kernel, operating system version, and so on.
+The Node Feature Discovery (NFD) Operator manages the detection of hardware features and configuration in an OpenShift Container Platform cluster by labeling the nodes with hardware-specific information.
 
 <div>
 

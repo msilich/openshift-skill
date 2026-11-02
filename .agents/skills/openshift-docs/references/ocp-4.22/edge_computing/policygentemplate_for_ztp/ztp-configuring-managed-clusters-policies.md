@@ -27,14 +27,6 @@ The `PolicyGenTemplate` custom resource definition (CRD) tells the `PolicyGen` p
 
 The following example shows a `PolicyGenTemplate` CR (`common-du-ranGen.yaml`) extracted from the `ztp-site-generate` reference container. The `common-du-ranGen.yaml` file defines two Red Hat Advanced Cluster Management (RHACM) policies. The policies manage a collection of configuration CRs, one for each unique value of `policyName` in the CR. `common-du-ranGen.yaml` creates a single placement binding and a placement rule to bind the policies to clusters based on the labels listed in the `spec.bindingRules` section.
 
-<div class="formalpara">
-
-<div class="title">
-
-Example PolicyGenTemplate CR - common-ranGen.yaml
-
-</div>
-
 ``` yaml
 apiVersion: ran.openshift.io/v1
 kind: PolicyGenTemplate
@@ -93,8 +85,6 @@ spec:
           - registry.example.com:5000
           source: registry.redhat.io
 ```
-
-</div>
 
 where:
 
@@ -231,7 +221,9 @@ Additional resources
 
 # PolicyGenTemplate CRs for RAN deployments
 
-Use `PolicyGenTemplate` custom resources (CRs) to customize the configuration applied to the cluster by using the GitOps Zero Touch Provisioning (ZTP) pipeline. The `PolicyGenTemplate` CR allows you to generate one or more policies to manage the set of configuration CRs on your fleet of clusters. The `PolicyGenTemplate` CR identifies the set of managed CRs, bundles them into policies, builds the policy wrapping around those CRs, and associates the policies with clusters by using label binding rules.
+Use `PolicyGenTemplate` custom resources (CRs) to customize the configuration applied to the cluster by using the GitOps Zero Touch Provisioning (ZTP) pipeline. The `PolicyGenTemplate` CR allows you to generate one or more policies to manage the set of configuration CRs on your fleet of clusters.
+
+The `PolicyGenTemplate` CR identifies the set of managed CRs, bundles them into policies, builds the policy wrapping around those CRs, and associates the policies with clusters by using label binding rules.
 
 The reference configuration, obtained from the GitOps ZTP container, is designed to provide a set of critical features and node tuning settings that ensure the cluster can support the stringent performance and resource utilization constraints typical of RAN (Radio Access Network) Distributed Unit (DU) applications. Changes or omissions from the baseline configuration can affect feature availability, performance, and resource utilization. Use the reference `PolicyGenTemplate` CRs as the basis to create a hierarchy of configuration files tailored to your specific site requirements.
 
@@ -449,16 +441,18 @@ Procedure
 
         2.  Click on a cluster policy to check its status.
 
-</div>
+            > [!NOTE]
+            > When all of the cluster policies become compliant, GitOps ZTP installation and configuration for the cluster is complete. The `ztp-done` label is added to the cluster.
+            >
+            > In the reference configuration, the final policy that becomes compliant is the one defined in the `*-du-validator-policy` policy. This policy, when compliant on a cluster, ensures that all cluster configuration, Operator installation, and Operator configuration is complete.
 
-> [!NOTE]
-> When all of the cluster policies become compliant, GitOps ZTP installation and configuration for the cluster is complete. The `ztp-done` label is added to the cluster.
->
-> In the reference configuration, the final policy that becomes compliant is the one defined in the `*-du-validator-policy` policy. This policy, when compliant on a cluster, ensures that all cluster configuration, Operator installation, and Operator configuration is complete.
+</div>
 
 # Validating the generation of configuration policy CRs
 
-`Policy` custom resources (CRs) are generated in the same namespace as the `PolicyGenTemplate` from which they are created. The same troubleshooting flow applies to all policy CRs generated from a `PolicyGenTemplate` regardless of whether they are `ztp-common`, `ztp-group`, or `ztp-site` based, as shown using the following commands:
+`Policy` custom resources (CRs) are generated in the same namespace as the `PolicyGenTemplate` from which they are created.
+
+The same troubleshooting flow applies to all policy CRs generated from a `PolicyGenTemplate` regardless of whether they are `ztp-common`, `ztp-group`, or `ztp-site` based, as shown using the following commands:
 
 ``` terminal
 $ export NS=<namespace>
@@ -605,12 +599,12 @@ Procedure
     $ oc delete clustergroupupgrades -n ztp-install $CLUSTER
     ```
 
-</div>
+    > [!NOTE]
+    > When the `ClusterGroupUpgrade` CR completes with status `UpgradeCompleted` and the managed cluster has the label `ztp-done` applied, you can make additional configuration changes by using `PolicyGenTemplate`. Deleting the existing `ClusterGroupUpgrade` CR will not make the TALM generate a new CR.
+    >
+    > At this point, GitOps ZTP has completed its interaction with the cluster and any further interactions should be treated as an update and a new `ClusterGroupUpgrade` CR created for remediation of the policies.
 
-> [!NOTE]
-> When the `ClusterGroupUpgrade` CR completes with status `UpgradeCompleted` and the managed cluster has the label `ztp-done` applied, you can make additional configuration changes by using `PolicyGenTemplate`. Deleting the existing `ClusterGroupUpgrade` CR will not make the TALM generate a new CR.
->
-> At this point, GitOps ZTP has completed its interaction with the cluster and any further interactions should be treated as an update and a new `ClusterGroupUpgrade` CR created for remediation of the policies.
+</div>
 
 <div>
 

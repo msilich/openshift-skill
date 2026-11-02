@@ -13,6 +13,6 @@ For more information, see [External Secrets Operator overview](index.md#external
 
 # External Secrets Management Console Plug-in 0.1.0 (Technology Preview)
 
-Issued: 9 July 2026
-
 This initial release of External Secrets Management Console Plug-in is a Technology Preview.
+
+Issued: 9 July 2026

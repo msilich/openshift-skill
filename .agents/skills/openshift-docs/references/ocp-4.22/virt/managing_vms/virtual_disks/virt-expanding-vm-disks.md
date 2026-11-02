@@ -38,7 +38,7 @@ Procedure
 
 </div>
 
-# Expanding a VM disk PVC by using the CLI
+# Expand a VM disk PVC by using the CLI
 
 You can increase the size of a virtual machine (VM) disk by expanding the persistent volume claim (PVC) of the disk. To specify the increased PVC volume, you can edit the `PersistentVolumeClaim` manifest by using the OpenShift CLI (`oc`).
 
@@ -91,7 +91,7 @@ Procedure
 
 </div>
 
-# Expanding available virtual storage by adding blank data volumes
+# Expand VM storage by adding blank data volumes
 
 You can expand the available storage of a virtual machine (VM) by adding blank data volumes.
 

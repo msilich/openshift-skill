@@ -2,13 +2,13 @@
 
 The telco core reference design specifications (RDS) configures an OpenShift Container Platform cluster running on commodity hardware to host telco core workloads.
 
-# Telco core RDS use model overview
+# Review which core functions the reference design supports
 
 The Telco core reference design specification (RDS) describes a platform that supports large-scale telco applications including control plane and centralized data plane functions such as user plane functions (UPF).
 
 These functions generally require scalability, complex networking support, resilient software-defined storage, and performance requirements that are less stringent than far-edge deployments such as RAN.
 
-# About the telco core cluster use model
+# Check that your workloads fit the telco core use model
 
 The telco core cluster use model supports large-scale telco applications on commodity hardware, including control plane functions and centralized data plane functions such as 5G user plane functions (UPF).
 
@@ -50,28 +50,28 @@ Deviation from the RDS can have some or all of the following consequences:
 > [!NOTE]
 > Red Hat prioritizes the servicing of requests for deviations based on partner engagement priorities.
 
-# Telco core common baseline model
+# Review the baseline common to every telco core cluster
 
 The following configurations and use models are applicable to all telco core use cases. The telco core use cases build on this common baseline of features.
 
 Cluster topology
 The telco core reference design supports two distinct cluster configuration variants:
 
-- A non-schedulable control plane variant, where user workloads are strictly prohibited from running on master nodes.
+- A non-schedulable control plane variant, where user workloads are strictly prohibited from running on control plane nodes.
 
-- A schedulable control plane variant, which allows for user workloads to run on master nodes to optimize resource utilization. This variant is only applicable to bare-metal control plane nodes and must be configured at installation time.
+- A schedulable control plane variant, which allows for user workloads to run on control plane nodes to optimize resource utilization. This variant is only applicable to bare-metal control plane nodes and must be configured at installation time.
 
-  All clusters, regardless of the variant, must conform to the following requirements:
+All clusters, regardless of the variant, must conform to the following requirements:
 
 - A highly available control plane consisting of three or more nodes.
 
 - The use of multiple machine config pools.
 
-Storage
-Telco core use cases require highly available persistent storage as provided by an external storage solution. OpenShift Data Foundation might be used to manage access to the external storage.
+  Storage
+  Telco core use cases require highly available persistent storage as provided by an external storage solution. OpenShift Data Foundation might be used to manage access to the external storage.
 
-Networking
-Telco core cluster networking conforms to the following requirements:
+  Networking
+  Telco core cluster networking conforms to the following requirements:
 
 - Dual stack IPv4/IPv6 (IPv4 primary).
 
@@ -93,8 +93,8 @@ Telco core cluster networking conforms to the following requirements:
 
   - Application workload layer. User plane networking runs in cloud-native network functions (CNFs).
 
-Service Mesh
-Telco CNFs can use Service Mesh. Telco core clusters typically include a Service Mesh implementation. The choice of implementation and configuration is outside the scope of this specification.
+    Service Mesh
+    Telco CNFs can use Service Mesh. Telco core clusters typically include a Service Mesh implementation. The choice of implementation and configuration is outside the scope of this specification.
 
 # Deployment planning
 

@@ -38,7 +38,9 @@ Certain specialized hardware accelerators are designed to work within disconnect
 
 # Hardware accelerators
 
-Red Hat OpenShift Container Platform enables the following hardware accelerators:
+Red Hat OpenShift Container Platform enables multiple hardware accelerators.
+
+The following hardware accelerators are enabled by Red Hat OpenShift Container Platform:
 
 - NVIDIA GPU
 

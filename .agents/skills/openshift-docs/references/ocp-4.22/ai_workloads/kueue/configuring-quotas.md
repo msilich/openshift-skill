@@ -79,21 +79,27 @@ Procedure
 
     </div>
 
-    - Defines which namespaces can use the resources governed by this cluster queue. An empty `namespaceSelector` as shown in the example means that all namespaces can use these resources.
+    where:
 
-    - Defines the resource types governed by the cluster queue. This example `ClusterQueue` object governs CPU, memory, pod, and GPU resources.
+    `spec.namespaceSelector`
+    Specifies which namespaces can use the resources governed by this cluster queue. An empty `namespaceSelector` as shown in the example means that all namespaces can use these resources.
 
-    - Defines the resource flavor that is applied to the resource types listed. In this example, the `default-flavor` resource flavor is applied to CPU, memory, pod, and GPU resources.
+    `spec.resourceGroups[].coveredResources`
+    Specifies the resource types governed by the cluster queue. This example `ClusterQueue` object governs CPU, memory, pod, and GPU resources.
 
-    - Defines the resource requirements for admitting jobs. This example cluster queue only admits jobs if the following conditions are met:
+    `spec.resourceGroups[].flavors[].name`
+    Specifies the resource flavor that is applied to the resource types listed. In this example, the `default-flavor` resource flavor is applied to CPU, memory, pod, and GPU resources.
 
-      - The sum of the CPU requests is less than or equal to 9.
+    `spec.resourceGroups[].flavors[].resources`
+    Specifies the resource requirements for admitting jobs. This example cluster queue only admits jobs if the following conditions are met:
 
-      - The sum of the memory requests is less than or equal to 36Gi.
+    - The sum of the CPU requests is less than or equal to 9.
 
-      - The total number of pods is less than or equal to 5.
+    - The sum of the memory requests is less than or equal to 36Gi.
 
-      - The sum of the GPU requests is less than or equal to 100.
+    - The total number of pods is less than or equal to 5.
+
+    - The sum of the GPU requests is less than or equal to 100.
 
 2.  Apply the `ClusterQueue` object by running the following command:
 

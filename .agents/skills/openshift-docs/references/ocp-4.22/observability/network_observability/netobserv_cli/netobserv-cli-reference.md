@@ -24,7 +24,8 @@ $ oc netobserv [<command>] [<feature_option>] [<command_options>]
 
 </div>
 
-- Feature options can only be used with the `oc netobserv flows` command. They cannot be used with the `oc netobserv packets` command.
+> [!NOTE]
+> Feature options can only be used with the `oc netobserv flows` command. They cannot be used with the `oc netobserv packets` command.
 
 ## Basic commands
 

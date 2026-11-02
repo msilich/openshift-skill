@@ -231,7 +231,9 @@ When upgrading the `ztp-site-generate` container from an earlier release of GitO
 
 # Installing the new GitOps ZTP applications
 
-Using the extracted `argocd/deployment` directory, and after ensuring that the applications point to your site Git repository, apply the full contents of the deployment directory. Applying the full contents of the directory ensures that all necessary resources for the applications are correctly configured.
+Using the extracted `argocd/deployment` directory, and after ensuring that the applications point to your site Git repository, apply the full contents of the deployment directory.
+
+Applying the full contents of the directory ensures that all necessary resources for the applications are correctly configured.
 
 <div>
 
@@ -381,7 +383,9 @@ Additional resources
 
 # Rolling out the GitOps ZTP configuration changes
 
-If any configuration changes were included in the upgrade due to implementing recommended changes, the upgrade process results in a set of policy CRs on the hub cluster in the `Non-Compliant` state. With the GitOps Zero Touch Provisioning (ZTP) version 4.10 and later `ztp-site-generate` container, these policies are set to `inform` mode and are not pushed to the managed clusters without an additional step by the user. This ensures that potentially disruptive changes to the clusters can be managed in terms of when the changes are made, for example, during a maintenance window, and how many clusters are updated concurrently.
+If any configuration changes were included in the upgrade due to implementing recommended changes, the upgrade process results in a set of policy CRs on the hub cluster in the `Non-Compliant` state.
+
+With the GitOps Zero Touch Provisioning (ZTP) version 4.10 and later `ztp-site-generate` container, these policies are set to `inform` mode and are not pushed to the managed clusters without an additional step by the user. This ensures that potentially disruptive changes to the clusters can be managed in terms of when the changes are made, for example, during a maintenance window, and how many clusters are updated concurrently.
 
 To roll out the changes, create one or more `ClusterGroupUpgrade` CRs as detailed in the TALM documentation. The CR must contain the list of `Non-Compliant` policies that you want to push out to the managed clusters as well as a list or selector of which clusters should be included in the update.
 

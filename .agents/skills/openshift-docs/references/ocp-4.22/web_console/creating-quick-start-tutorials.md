@@ -56,7 +56,7 @@ When you interact with an existing quick start tutorial, this is the expected wo
 
 # Quick start components
 
-A quick start consists of the following sections:
+A quick start consists of various components, such as cards, introductions, task headings, and more.
 
 - **Card**: The catalog tile that provides the basic information of the quick start, including title, description, time commitment, and completion status
 

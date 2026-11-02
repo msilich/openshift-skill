@@ -61,7 +61,7 @@ Additional resources
 
 </div>
 
-- [Enable API Group Versions Feature](https://velero.io/docs/v1.9/enable-api-group-versions-feature/)
+- [Enable API Group Versions Feature](https://velero.io/docs/latest/enable-api-group-versions-feature/)
 
 </div>
 
@@ -103,6 +103,6 @@ Additional resources
 
 </div>
 
-- [Enable API Group Versions Feature](https://velero.io/docs/v1.9/enable-api-group-versions-feature/)
+- [Enable API Group Versions Feature](https://velero.io/docs/latest/enable-api-group-versions-feature/)
 
 </div>

@@ -97,7 +97,7 @@ Summary field value format
 
 ### Example annotation keys
 
-The following are example annotation keys:
+The following text shows you example of four annotation keys.
 
     quality.images.openshift.io/vulnerability.blackduck: {}
     quality.images.openshift.io/vulnerability.jfrog: {}
@@ -188,7 +188,7 @@ Use the `images.openshift.io/deny-execution` image policy to programmatically co
 
 ### Example annotation
 
-The following is an example annotation:
+The preceding YAML shows you an example annotation.
 
 ``` yaml
 annotations:
