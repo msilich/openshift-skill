@@ -4,7 +4,9 @@ Use the Lifecycle Agent to change the network configuration of a single-node Ope
 
 # Use cases for single-node OpenShift network reconfiguration
 
-At the network far edge, changing a single-node OpenShift cluster’s core networking is an essential operation in many scenarios. For example, during disaster recovery, mobile deployments, or network migrations, you might need to change node IP addresses, gateways, DNS servers, or VLAN settings. However, these operations are high-risk because a misconfiguration can make the cluster unreachable and require a full redeployment.
+At the network far edge, changing a single-node OpenShift cluster’s core networking is an essential operation in many scenarios.
+
+For example, during disaster recovery, mobile deployments, or network migrations, you might need to change node IP addresses, gateways, DNS servers, or VLAN settings. However, these operations are high-risk because a misconfiguration can make the cluster unreachable and require a full redeployment.
 
 The Lifecycle Agent uses the `IPConfig` custom resource (CR) to provide a declarative, stage-driven workflow that performs these changes safely and without a full cluster redeployment.
 

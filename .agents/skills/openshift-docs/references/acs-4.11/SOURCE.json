@@ -51,14 +51,14 @@
       "images/network-graph-20-overview-updated.png": "0b0a61a953dcee412270426b1d88564976fcca1240b54433aecce3af40b1c385",
       "images/network-graph-internal-entities.png": "ea8e6717eac4c8358c63c1a5f9e53466dd80009373da74eee1bed225a29b7c8e"
     },
-    "conversion_report_sha256": "1345b7b4640b26e0caab21a8fc4f7d3cd717ed636b93d2dc59ecd0023fa35510",
+    "conversion_report_sha256": "b9b844f24b98613d27991514e2f5ea20fd15c7172fd5acc5d95ecac1943e6a20",
     "markdown_manifest_algorithm": "SHA-256 of sorted UTF-8 lines: '<file-sha256>  <relative-path>\\n'",
-    "markdown_manifest_sha256": "f9f5f6cb021069de71e3ef712f24c143961bc1e954196992a009e3fd3eaa3e81",
+    "markdown_manifest_sha256": "905eda6592683dcadb03c9714f0e7fd148fd19b4b53845e45ac42ceb6637e463",
     "openshift_docs_license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
   },
   "runtime_network_required": false,
   "schema_version": 1,
-  "source_commit_time_utc": "2026-10-20T15:56:16Z",
+  "source_commit_time_utc": "2026-10-27T18:39:03Z",
   "sources": {
     "agentic_skills_converter": {
       "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
@@ -74,7 +74,7 @@
     },
     "openshift_docs": {
       "branch_hint": "rhacs-docs-4.11",
-      "commit": "9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7",
+      "commit": "a27d50427f722af95709d914fd36fea7de36142f",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"

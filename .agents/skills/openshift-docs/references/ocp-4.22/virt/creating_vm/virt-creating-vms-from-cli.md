@@ -8,7 +8,7 @@ You can create virtual machines (VMs) from the command line by editing or creati
 > [!IMPORTANT]
 > You must install the QEMU guest agent on VMs created from operating system images that are not provided by Red Hat.
 
-# Creating a VM from a VirtualMachine manifest
+# Create a VM from a manifest
 
 You can create a virtual machine (VM) from a `VirtualMachine` manifest. To simplify the creation of these manifests, you can use the `virtctl` command-line tool.
 
@@ -120,7 +120,7 @@ Procedure
 
 </div>
 
-# Creating a VM from an image on a web page by using the CLI
+# Create a VM from a web-hosted image
 
 You can create a virtual machine (VM) from an image on a web page by using the command line.
 
@@ -259,7 +259,7 @@ Verification
 
 </div>
 
-# Generalizing a VM image
+# Generalize a VM image
 
 You can generalize a Red Hat Enterprise Linux (RHEL) image to remove all system-specific configuration data before you use the image to create a boot source image, a preconfigured snapshot of a virtual machine (VM). You can use a boot source image to deploy new VMs.
 
@@ -377,7 +377,7 @@ The new volume appears in the **Select volume to boot from** list. This is your 
 
 </div>
 
-# Creating a Windows VM
+# Create a Windows VM from an uploaded image
 
 You can create a Windows virtual machine (VM) by uploading a Windows image to a persistent volume claim (PVC) and then cloning the PVC when you create a VM by using the OpenShift Container Platform web console.
 
@@ -450,7 +450,7 @@ Procedure
 
 </div>
 
-## Generalizing a Windows VM image
+## Generalize a Windows VM image
 
 You can generalize a Windows operating system image to remove all system-specific configuration data before you use the image to create a new virtual machine (VM).
 
@@ -510,7 +510,7 @@ You can now specialize the VM.
 
 </div>
 
-## Specializing a Windows VM image
+## Specialize a Windows VM image
 
 Specializing a Windows virtual machine (VM) configures the computer-specific information from a generalized Windows image onto the VM.
 
@@ -566,7 +566,7 @@ During the initial boot, Windows uses the `unattend.xml` answer file to speciali
 
 </div>
 
-# Uploading a virtual machine image by using the CLI
+# Upload a VM image by using the CLI
 
 You can upload an operating system image by using the `virtctl` command-line tool. You can use an existing data volume or create a new data volume for the image.
 
@@ -637,7 +637,7 @@ Procedure
 
 </div>
 
-# Building and uploading a container disk
+# Prepare a container disk for VMs
 
 You can build a virtual machine (VM) image into a container disk and upload it to a registry.
 
@@ -717,7 +717,7 @@ Procedure
 
 </div>
 
-# Disabling TLS for a container registry
+# Disable TLS for an insecure registry
 
 You can disable TLS (transport layer security) for one or more container registries by editing the `insecureRegistries` field of the `HyperConverged` custom resource.
 
@@ -768,7 +768,7 @@ Procedure
 
 </div>
 
-# Creating a VM from a container disk by using the CLI
+# Create a VM from a container disk by using the CLI
 
 You can create a virtual machine (VM) from a container disk by using the command line.
 
@@ -880,7 +880,7 @@ Verification
 
 </div>
 
-# About cloning
+# VM cloning methods
 
 When cloning a data volume, the Containerized Data Importer (CDI) chooses one of the Container Storage Interface (CSI) clone methods: CSI volume cloning or smart cloning. Both methods are efficient but have certain requirements. If the requirements are not met, the CDI uses host-assisted cloning.
 
@@ -941,7 +941,7 @@ NAMESPACE   LAST SEEN   TYPE      REASON                    OBJECT              
 test-ns     0s          Warning   IncompatibleVolumeModes   persistentvolumeclaim/test-target   The volume modes of source and target are incompatible
 ```
 
-# Creating a VM from a PVC by using the CLI
+# VM creation from a cloned PVC
 
 You can create a virtual machine (VM) by cloning the persistent volume claim (PVC) of an existing VM by using the command line.
 
@@ -955,7 +955,7 @@ You can clone a PVC by using one of the following options:
 
   This method creates a data volume whose lifecycle is dependent on the original VM. Deleting the original VM deletes the cloned data volume and its associated PVC.
 
-## Optimizing clone Performance at scale in OpenShift Data Foundation
+## Optimize clone performance at scale in OpenShift Data Foundation
 
 When you use OpenShift Data Foundation, the storage profile configures the default cloning strategy as `csi-clone`. However, this method has limitations, as shown in the following link.
 
@@ -997,7 +997,7 @@ Procedure
 
 </div>
 
-## Cloning a PVC to a data volume
+## Clone a PVC to a data volume
 
 You can clone the persistent volume claim (PVC) of an existing virtual machine (VM) disk to a data volume by using the command line.
 
@@ -1097,7 +1097,7 @@ Procedure
 
 </div>
 
-## Creating a VM from a cloned PVC by using a data volume template
+## Create a VM from a cloned PVC data volume template
 
 You can create a virtual machine (VM) that clones the persistent volume claim (PVC) of an existing VM by using a data volume template. This method creates a data volume whose lifecycle is independent on the original VM.
 

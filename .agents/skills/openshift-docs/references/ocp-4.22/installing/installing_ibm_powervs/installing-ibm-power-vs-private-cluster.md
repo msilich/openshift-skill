@@ -61,7 +61,7 @@ To deploy a private cluster, you must:
 
 # Private clusters in IBM Power Virtual Server
 
-To create a private cluster on IBM Power® Virtual Server, you must provide an existing private Virtual Private Cloud (VPC) and subnets to host the cluster. The installation program must also be able to resolve the DNS records that the cluster requires. The installation program configures the Ingress Operator and API server for only internal traffic.
+To create a private cluster on IBM Power® Virtual Server, you must provide an existing private Virtual Private Cloud (VPC) and subnets to host the cluster. The installation program configures the Ingress Operator and API server for only internal traffic.
 
 The cluster still requires access to internet to access the IBM Cloud® APIs.
 

@@ -638,6 +638,56 @@
       "target": "install-central-config-options-ocp.md#install-central-config-options-ocp"
     },
     {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-1"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-2"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-3"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-4"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-5"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-6"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-7"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-8"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-9"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-10"
+    },
+    {
       "document": "installing/installing_ocp/install-secured-cluster-ocp.md",
       "kind": "unresolved-output-fragment",
       "target": "init-bundle-ocp.md#init-bundle-ocp"
@@ -2668,7 +2718,13 @@
     "installing/installing_ocp/install-secured-cluster-config-options-ocp.md": {
       "anchors": [
         "secured-cluster-configuration-options-operator_install-secured-cluster-config-options-ocp",
+        "required-configuration-settings_install-secured-cluster-config-options-ocp",
         "admission-controller-settings_install-secured-cluster-config-options-ocp",
+        "scanner-configuration-settings_install-secured-cluster-config-options-ocp",
+        "image-configuration-settings_install-secured-cluster-config-options-ocp",
+        "per-node-settings_install-secured-cluster-config-options-ocp",
+        "sensor-configuration-settings_install-secured-cluster-config-options-ocp",
+        "general-and-miscellaneous-settings-secured-cluster_install-secured-cluster-config-options-ocp",
         "customize-installation-operator-overlays_install-secured-cluster-config-options-ocp",
         "overlays_install-secured-cluster-config-options-ocp",
         "adding-an-overlay_install-secured-cluster-config-options-ocp",
@@ -2679,12 +2735,12 @@
         "changing-configmap-data_install-secured-cluster-config-options-ocp",
         "adding-a-container-to-a-deployment_install-secured-cluster-config-options-ocp"
       ],
-      "code_blocks": 6,
-      "code_sha256": "8dea89ca6f1321927f2a2d5b81194525434da5bbfe05a25862ea8b92dd942222",
+      "code_blocks": 7,
+      "code_sha256": "023d477b57c93fdd346666b97281de789335d04db157411ebe98aded02562fc3",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "e85c5e646f11ef883b718e2556ecc0c6863b2190f81746107b72a987b2ea30f8",
-      "tables": 1
+      "table_text_sha256": "68c927ba8771db2c1fdb17ef9357f21948c1ab3f07a785a1d5b53f6c14d03658",
+      "tables": 7
     },
     "installing/installing_ocp/install-secured-cluster-ocp.md": {
       "anchors": [

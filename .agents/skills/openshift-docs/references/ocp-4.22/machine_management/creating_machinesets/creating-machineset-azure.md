@@ -1207,14 +1207,6 @@ Procedure
 
 2.  Edit the following section under the `providerSpec` field:
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Sample configuration
-
-    </div>
-
     ``` yaml
     apiVersion: machine.openshift.io/v1beta1
     kind: MachineSet
@@ -1266,8 +1258,6 @@ Procedure
 
     `spec.template.spec.providerSpec.value.vmSize`
     Specifies an instance type that supports confidential VMs.
-
-    </div>
 
 </div>
 

@@ -2,7 +2,7 @@
 
 To ensure that virtual machines (VMs) recover automatically when a node fails, configure node health checks, automated remediation, and capacity planning. These recommendations come from chaos testing results and help minimize VM downtime during node failure conditions.
 
-# How node health monitoring protects virtual machines
+# Node health monitoring for protection of virtual machines
 
 By default, virtual machines (VMs) are not automatically recovered to other available nodes when a node fails. To minimize VM downtime and ensure workload resilience, configure node health monitoring and automated remediation.
 
@@ -58,7 +58,7 @@ Procedure
 
 </div>
 
-# Configuring node health checks for virtual machines
+# Configure node health checks for virtual machines
 
 You can configure the Node Health Check Operator to monitor node status and trigger automated remediation when a node becomes unhealthy.
 
@@ -206,7 +206,7 @@ You must use FAR for hyperconverged storage configurations. For hyperconverged s
 
 </div>
 
-## Self Node Remediation configuration parameters
+## Self Node Remediation (SNR) configuration parameters
 
 You can tune the Self Node Remediation (SNR) Operator configuration to optimize recovery times and ensure availability of VM workloads.
 

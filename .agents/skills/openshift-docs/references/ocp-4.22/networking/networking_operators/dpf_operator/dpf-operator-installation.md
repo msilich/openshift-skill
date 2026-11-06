@@ -1501,7 +1501,9 @@ Verification
 
 # Create the DPUServiceNAD resource
 
-Create a `DPUServiceNAD` custom resource to define the network attachment available to DPU services on the hosted cluster. The `DPUServiceNAD` resource maps to an Open vSwitch (OVS) bridge on the DPU and specifies the resource type, IP address management (IPAM) mode, and maximum transmission unit (MTU) configuration:
+Create a `DPUServiceNAD` custom resource to define the network attachment available to DPU services on the hosted cluster.
+
+The `DPUServiceNAD` resource maps to an Open vSwitch (OVS) bridge on the DPU and specifies the resource type, IP address management (IPAM) mode, and maximum transmission unit (MTU) configuration:
 
 - `mybrhbn` maps to the `br-hbn` bridge, used by the HBN service. IPAM is disabled because IP allocation is handled by `DPUServiceIPAM`.
 

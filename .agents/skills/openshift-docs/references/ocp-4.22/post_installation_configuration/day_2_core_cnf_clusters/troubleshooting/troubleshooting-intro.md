@@ -11,7 +11,9 @@ To maintain and troubleshoot a bare-metal environment with high performance requ
 
 # Getting Support
 
-If you experience difficulty with a procedure, visit the [Red Hat Customer Portal](https://access.redhat.com/). From the Customer Portal, you can find help in various ways:
+If you experience difficulty with a procedure, visit the "Red Hat Customer Portal".
+
+From the Customer Portal, you can find help in various ways:
 
 - Search or browse through the Red Hat Knowledgebase of articles and solutions about Red Hat products.
 
@@ -20,6 +22,18 @@ If you experience difficulty with a procedure, visit the [Red Hat Customer Port
 - Access other product documentation.
 
 To identify issues with your deployment, you can use the debugging tool or check the health endpoint of your deployment. After you have debugged or obtained health information about your deployment, you can search the Red Hat Knowledgebase for a solution or file a support ticket.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Customer Portal](https://access.redhat.com/)
+
+</div>
 
 ## About the Red Hat Knowledgebase
 

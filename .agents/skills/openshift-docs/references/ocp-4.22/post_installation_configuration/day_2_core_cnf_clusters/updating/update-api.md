@@ -4,7 +4,9 @@ APIs change over time as components are updated. It is important to verify that 
 
 # OpenShift Container Platform API compatibility
 
-When considering what z-stream release to update to as part of a new y-stream update, you must be sure that all the patches that are in the z-stream version you are moving from are in the new z-stream version. If the version you update to does not have all the required patches, the built-in compatibility of Kubernetes is broken.
+When considering what z-stream release to update to as part of a new y-stream update, you must be sure that all the patches that are in the z-stream version you are moving from are in the new z-stream version.
+
+If the version you update to does not have all the required patches, the built-in compatibility of Kubernetes is broken.
 
 For example, if the cluster version is 4.15.32, you must update to 4.16 z-stream release that has all of the patches that are applied to 4.15.32.
 
@@ -26,7 +28,7 @@ Additional resources
 
 # Determining the cluster version update path
 
-Use the [Red Hat OpenShift Container Platform Update Graph](https://access.redhat.com/labs/ocpupgradegraph/update_path/) tool to determine if the path is valid for the z-stream release you want to update to.
+Use the Red Hat OpenShift Container Platform Update Graph tool to determine if the path is valid for the z-stream release you want to update to.
 
 > [!IMPORTANT]
 > The \<4.y+1.z\> or \<4.y+2.z\> version that you update to must have the same patch level as the \<4.y.z\> release you are updating from.
@@ -49,13 +51,25 @@ Additional resources
 
 </div>
 
+- [Red Hat OpenShift Container Platform Update Graph](https://access.redhat.com/labs/ocpupgradegraph/update_path/)
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
 - [Understanding update channels and releases](../../../updating/understanding_updates/understanding-update-channels-release.md#understanding-update-channels-releases)
 
 </div>
 
 # Selecting the target release
 
-Use the [Red Hat OpenShift Container Platform Update Graph](https://access.redhat.com/labs/ocpupgradegraph/update_path) or the [cincinnati-graph-data repository](https://github.com/openshift/cincinnati-graph-data/tree/master/channels) to determine what release to update to.
+Use the Red Hat OpenShift Container Platform Update Graph or the cincinnati-graph-data repository to determine what release to update to.
 
 ## Determining what z-stream updates are available
 
@@ -260,3 +274,17 @@ In a y-stream update you change the channel to the next release channel.
     ```
 
     </div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat OpenShift Container Platform Update Graph](https://access.redhat.com/labs/ocpupgradegraph/update_path)
+
+- [cincinnati-graph-data repository](https://github.com/openshift/cincinnati-graph-data/tree/master/channels)
+
+</div>

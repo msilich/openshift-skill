@@ -463,7 +463,9 @@ To avoid unwanted disruptions, you can modify the machine config pool (MCP) to p
 
 ## Disabling the Machine Config Operator from automatically rebooting by using the console
 
-To avoid unwanted disruptions from changes made by the Machine Config Operator (MCO), you can use the OpenShift Container Platform web console to modify the machine config pool (MCP) to prevent the MCO from making any changes to nodes in that pool. This prevents any reboots that would normally be part of the MCO update process.
+To avoid unwanted disruptions from changes made by the Machine Config Operator (MCO), you can use the OpenShift Container Platform web console to modify the machine config pool (MCP) to prevent the MCO from making any changes to nodes in that pool.
+
+This prevents any reboots that would normally be part of the MCO update process.
 
 <div>
 
@@ -573,7 +575,9 @@ Procedure
 
 ## Disabling the Machine Config Operator from automatically rebooting by using the CLI
 
-To avoid unwanted disruptions from changes made by the Machine Config Operator (MCO), you can modify the machine config pool (MCP) using the OpenShift CLI (oc) to prevent the MCO from making any changes to nodes in that pool. This prevents any reboots that would normally be part of the MCO update process.
+To avoid unwanted disruptions from changes made by the Machine Config Operator (MCO), you can modify the machine config pool (MCP) using the OpenShift CLI (oc) to prevent the MCO from making any changes to nodes in that pool.
+
+This prevents any reboots that would normally be part of the MCO update process.
 
 > [!NOTE]
 > See second `NOTE` in [Disabling the Machine Config Operator from automatically rebooting](troubleshooting-operator-issues.md#troubleshooting-disabling-autoreboot-mco_troubleshooting-operator-issues).
@@ -943,7 +947,9 @@ Verification
 
 # Reinstalling Operators after failed uninstallation
 
-You must successfully and completely uninstall an Operator prior to attempting to reinstall the same Operator. Failure to fully uninstall the Operator properly can leave resources, such as a project or namespace, stuck in a "Terminating" state and cause "error resolving resource" messages. For example:
+You must successfully and completely uninstall an Operator prior to attempting to reinstall the same Operator.
+
+Failure to fully uninstall the Operator properly can leave resources, such as a project or namespace, stuck in a "Terminating" state and cause "error resolving resource" messages. For example:
 
 **Example `Project` resource description**
 

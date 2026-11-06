@@ -35,7 +35,7 @@ Every template requires a boot source, which is a fully configured disk image in
 
 Provided boot sources are updated automatically to the latest version of the operating system. For auto-updated boot sources, persistent volume claims (PVCs) and volume snapshots are created with the cluster’s default storage class. If you select a different default storage class after configuration, you must delete the existing boot sources in the cluster namespace that are configured with the previous default storage class.
 
-# Configuring a custom namespace for boot source images by using the web console
+# Configure a boot source image namespace by using the web console
 
 You can configure a custom namespace for boot source images in your cluster by using the OpenShift Container Platform web console.
 
@@ -65,7 +65,7 @@ Procedure
 
 </div>
 
-# Configuring a custom namespace for boot source images by using the CLI
+# Configure a boot source image namespace by using the CLI
 
 You can configure a custom namespace for boot source images in your cluster by setting the `spec.commonBootImageNamespace` field in the `HyperConverged` custom resource (CR).
 

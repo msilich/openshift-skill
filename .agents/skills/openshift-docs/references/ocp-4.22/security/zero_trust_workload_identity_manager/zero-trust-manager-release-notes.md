@@ -89,7 +89,9 @@ The following advisories are available for Zero Trust Workload Identity Manager:
 
 Issued: 30 Jun 2026
 
-This release adds integration and operational capabilities for workloads that use external certificate authorities, service mesh deployments, or file-based Transport Layer Security (TLS) credentials. The release includes a supported SPIFFE Helper container image, SPIRE UpstreamAuthority plugins for cert-manager and HashiCorp Vault, and Red Hat OpenShift Service Mesh integration with SPIRE for single-cluster and federated multi-cluster mutual Transport Layer Security (mTLS).
+This release adds integration and operational capabilities for workloads that use external certificate authorities, service mesh deployments, or file-based Transport Layer Security (TLS) credentials.
+
+The release includes a supported SPIFFE Helper container image, SPIRE UpstreamAuthority plugins for cert-manager and HashiCorp Vault, and Red Hat OpenShift Service Mesh integration with SPIRE for single-cluster and federated multi-cluster mutual Transport Layer Security (mTLS).
 
 The following advisories are available for Zero Trust Workload Identity Manager:
 
@@ -418,6 +420,8 @@ Corrected update rollback for DaemonSets, Deployments, and StatefulSets
 
 # Zero Trust Workload Identity Manager 0.2.0 (General Availability)
 
+The Zero Trust Workload Identity Manager 0.2.0 General Availability release was issued on August 9, 2025. This release adds managed OIDC Discovery Provider Route support, custom certificate authority TTL settings, and manual user configuration capabilities.
+
 Issued: 09 August 2025
 
 The following advisories are available for the Zero Trust Workload Identity Manager:
@@ -467,6 +471,8 @@ JSON Web Token Issuer field now requires a valid URL
   ([SPIRE-117](https://issues.redhat.com/browse/SPIRE-117))
 
 # Zero Trust Workload Identity Manager 0.1.0 (General Availability)
+
+The Zero Trust Workload Identity Manager 0.1.0 General Availability release was issued on June 16, 2025. It includes multiple Red Hat advisory updates for OpenShift Container Platform.
 
 Issued: 16 June 2025
 

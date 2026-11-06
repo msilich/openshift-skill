@@ -4,6 +4,8 @@ With this release, hosted control planes for OpenShift Container Platform 4.22 i
 
 # New features and enhancements
 
+This release includes new features and enhancements to hosted control planes components, including connectivity monitoring, network segmentation, cloud infrastructure support, and cluster management capabilities.
+
 This release adds improvements related to the following components and concepts:
 
 Monitor connectivity from the data plane to the control plane
@@ -79,6 +81,8 @@ The following issues are fixed for this release:
 - Before this update, when you deployed a hosted cluster on OpenShift Virtualization with external infrastructure, the `virt-launcher` network policy was not created on the infrastructure cluster where the KubeVirt `virt-launcher` pods and virtual machines (VM)s run. As a consequence, the KubeVirt VMs had unrestricted network access to all pods and services on the infrastructure cluster, breaking tenant isolation. With this release, the `virt-launcher` network policy is created with CIDR-based egress restrictions. As a result, multitenant isolation is no longer compromised. ([OCPBUGS-78575](https://redhat.atlassian.net/browse/OCPBUGS-78575))
 
 # Technology Preview features status
+
+Some features in this release are currently in Technology Preview and are not intended for production use.
 
 Some features in this release are currently in Technology Preview. These experimental features are not intended for production use. Note the following scope of support on the Red Hat Customer Portal for these features:
 

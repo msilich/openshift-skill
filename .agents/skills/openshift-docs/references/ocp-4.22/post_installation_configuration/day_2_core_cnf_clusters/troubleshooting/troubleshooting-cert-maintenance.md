@@ -57,7 +57,9 @@ Additional resources
 
 ## User-provisioned API server certificates
 
-The API server is accessible by clients that are external to the cluster at `api.<cluster_name>.<base_domain>`. You might want clients to access the API server at a different hostname or without the need to distribute the cluster-managed certificate authority (CA) certificates to the clients. You must set a custom default certificate to be used by the API server when serving content.
+The API server is accessible by clients that are external to the cluster at `api.<cluster_name>.<base_domain>`.
+
+You might want clients to access the API server at a different hostname or without the need to distribute the cluster-managed certificate authority (CA) certificates to the clients. You must set a custom default certificate to be used by the API server when serving content.
 
 For more information, see "User-provided certificates for the API server" in *Security and compliance*
 

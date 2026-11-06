@@ -169,7 +169,9 @@ Procedure
 
 # Setting SELinux booleans
 
-OpenShift Container Platform allows you to enable and disable an SELinux boolean on a Red Hat Enterprise Linux CoreOS (RHCOS) node. The following procedure explains how to modify SELinux booleans on nodes using the Machine Config Operator (MCO). This procedure uses `container_manage_cgroup` as the example boolean. You can modify this value to whichever boolean you need.
+OpenShift Container Platform allows you to enable and disable an SELinux boolean on a Red Hat Enterprise Linux CoreOS (RHCOS) node.
+
+The following procedure explains how to modify SELinux booleans on nodes using the Machine Config Operator (MCO). This procedure uses `container_manage_cgroup` as the example boolean. You can modify this value to whichever boolean you need.
 
 <div>
 
@@ -683,7 +685,9 @@ Procedure
 
 # Enabling Pressure Stall Information (PSI) monitoring
 
-You can enable Linux Pressure Stall Information (PSI) monitoring by using a `MachineConfig` object. Enabling PSI monitoring makes PSI metrics for CPU, memory, and I/O available for your cluster. You can use the metrics to help identify disruptions caused by CPU, memory, and I/O resource issues for better scheduling and eviction decisions.
+You can enable Linux Pressure Stall Information (PSI) monitoring by using a `MachineConfig` object.
+
+Enabling PSI monitoring makes PSI metrics for CPU, memory, and I/O available for your cluster. You can use the metrics to help identify disruptions caused by CPU, memory, and I/O resource issues for better scheduling and eviction decisions.
 
 > [!IMPORTANT]
 > The performance impact of enabling PSI is negligible. However, for latency-sensitive environments, you can enable PSI in a test environment to determine its impact before enabling it on production clusters. Or, you can enable the PSI on one worker node and monitor for the performance impact. Then, gradually enable the feature on more worker nodes. Enabling PSI introduces new container metrics that can increase the RSS memory usage of `prometheus-k8s` pods. On a cluster with a large number of containers, monitor the memory usage of the `prometheus-k8s` pods and adjust resource as needed.

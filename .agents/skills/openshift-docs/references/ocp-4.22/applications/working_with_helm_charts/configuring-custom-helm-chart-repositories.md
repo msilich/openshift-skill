@@ -22,6 +22,8 @@ In the **Developer** perspective of the web console, you can use the **Helm** pa
 
 # Installing a Helm chart on an OpenShift Container Platform cluster
 
+You can install a Helm chart on an OpenShift Container Platform cluster using the Helm CLI.
+
 <div>
 
 <div class="title">
@@ -141,15 +143,11 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To create Helm releases from the Helm charts provided in the **Developer Catalog**:
 
 </div>
 
@@ -183,13 +181,17 @@ To create Helm releases from the Helm charts provided in the **Developer Catalog
 
     5.  View the newly created Helm release in the **Helm Releases** page.
 
-You can upgrade, rollback, or delete a Helm release by using the **Actions** button on the side panel or by right-clicking a Helm release.
+        You can upgrade, rollback, or delete a Helm release by using the **Actions** button on the side panel or by right-clicking a Helm release.
+
+</div>
 
 # Using Helm in the web terminal
 
 You can use Helm by [Accessing the web terminal](../../web_console/web_terminal/odc-using-web-terminal.md#odc-access-web-terminal_odc-using-web-terminal) in the **Developer** perspective of the web console.
 
 # Creating a custom Helm chart on OpenShift Container Platform
+
+You can create a custom Helm chart on OpenShift Container Platform to package and deploy application resources using the Helm CLI.
 
 <div>
 
@@ -227,15 +229,22 @@ Procedure
     version: 0.2.1
     ```
 
-    - The chart API version. It should be `v2` for Helm charts that require at least Helm 3.
+    where:
 
-    - The name of your chart.
+    `apiVersion`
+    Specifies the chart API version. It should be `v2` for Helm charts that require at least Helm 3.
 
-    - The description of your chart.
+    `name`
+    Specifies the name of your chart.
 
-    - The URL to an image to be used as an icon.
+    `description`
+    Specifies the description of your chart.
 
-    - The Version of your chart as per the Semantic Versioning (SemVer) 2.0.0 Specification.
+    `icon`
+    Specifies the URL to an image to be used as an icon.
+
+    `version`
+    Specifies the version of your chart as per the Semantic Versioning (SemVer) 2.0.0 Specification.
 
 5.  Verify that the chart is formatted properly:
 
@@ -482,15 +491,11 @@ Procedure
 
 Some Helm chart repositories need credentials and custom certificate authority (CA) certificates to connect to it. You can use the web console as well as the CLI to add credentials and certificates.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To configure the credentials and certificates, and then add a Helm chart repository using the CLI:
 
 </div>
 
@@ -569,6 +574,8 @@ To configure the credentials and certificates, and then add a Helm chart reposit
     EOF
     ```
 
+</div>
+
 # Filtering Helm Charts by their certification level
 
 You can filter Helm charts based on their certification level in the **Developer Catalog**.
@@ -591,12 +598,12 @@ Procedure
 
     - Use the **Source** filter to filter charts sourced from **Partners**, **Community**, or **Red Hat**. Certified charts are indicated with the (![odc verified icon](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAPCAYAAADtc08vAAAABHNCSVQICAgIfAhkiAAAABl0RVh0U29mdHdhcmUAZ25vbWUtc2NyZWVuc2hvdO8Dvz4AAAAtdEVYdENyZWF0aW9uIFRpbWUARnJpIDI1IEp1biAyMDIxIDA4OjM3OjIxIFBNIElTVHv+COAAAAIiSURBVCiRXZNLaxRBFIW/W10z3RkjTojkYUaIyBAMIRqICL4IqLhRceHKpSK6cCeu8if8BW7c+MCVG3URF4IPslEXSQwIJhpIyEzeTiYz3XVddNc4WFBNNX3PuafOPS3qVAEQAFAFyc7t76rgFEz2LQECwACof2jGoxnatZEJqCfKSpwn8EUKxKSFAK5NiQBWUgWi6TYC1nfz4I0YYlV+ruww0NVBV2gJA8gJCAqqGEnlCGB9h0RheVd58m6WasPyeqbKucEiR4sBE2MlRg8VCJGWWcakOOvbV+rKs+k1JqdWoW6BgJnfm5Brcms34sHlAYb3B7Q4MuXGu/t0epWHr75AA5AEjAVrweR4/OE7j55/pOGN/GcNRgzUYljacuBCcE2wCbDNWK/jxplByOVYbHSyVnM0AcVlM8imUF3f4fP0V6g7ho+UuH3yMJf6Eu5dHWFttQZ/hE/zi3yb+5FNO2ndwYDS293JxdPjEEb8qm5R7u/m5pVTvHw/z9TsEhBy9liZ0ZEygiJtZloFIguDB2KKUY2NTZh8M0epAAvVPdAAojrl/QWK+dR18SYIWHECBq6P91AXuPtilmQ3x8J2DJKHfJM7E0Pcv9BH5FGiWZgN1tPts8K1472sV5apNELezlSYGOqhv1M5f6LIQEeb/dKKD6LOZT+T4BSawJ5TFlZqlA5GFPIBRjPpPtNtS1RV+X8pqEtjK4FJQbEDf/bZB/4C9/DXN2Sq1nsAAAAASUVORK5CYII=)) icon.
 
+      > [!NOTE]
+      > The **Source** filter will not be visible when there is only one provider type.
+
+      You can now select the required chart and install it.
+
 </div>
-
-> [!NOTE]
-> The **Source** filter will not be visible when there is only one provider type.
-
-You can now select the required chart and install it.
 
 # Disabling Helm Chart repositories
 

@@ -21,6 +21,43 @@ The following prerequisites must be met:
 
 - If you use a firewall, you [configured it to allow the sites](../../install_config/configuring-firewall.md#configuring-firewall-module_configuring-firewall) that your cluster requires access to.
 
+## Subnet requirements for AWS dual-stack networking with IPv4 primary
+
+When deploying a dual-stack cluster into an existing VPC with IPv4 as the primary IP family (`ipFamily: DualStackIPv4Primary`), you must ensure that all subnets hosting cluster nodes have automatic IPv6 address assignment enabled (`AssignIpv6AddressOnCreation`).
+
+If IPv6 auto-assignment is disabled on these subnets, EC2 instances will not receive an IPv6 address at launch, causing network initialization and cluster bootstrapping to fail.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Verify the `AssignIpv6AddressOnCreation` attribute for your subnets by running the following command:
+
+    ``` terminal
+    $ aws ec2 describe-subnets \
+        --filters "Name=vpc-id,Values=<vpc_id>" \
+        --query "Subnets[*].[SubnetId, AssignIpv6AddressOnCreation]" \
+        --output table \
+        --region <aws_region>
+    ```
+
+    Replace `<vpc_id>` with your VPC ID and `<aws_region>` with your AWS region.
+
+2.  If any subnet where cluster instances reside returns `False`, enable IPv6 auto-assignment by running the following command:
+
+    ``` terminal
+    $ aws ec2 modify-subnet-attribute \
+        --subnet-id <subnet_id> \
+        --assign-ipv6-address-on-creation \
+        --region <aws_region>
+    ```
+
+</div>
+
 # About using a custom VPC
 
 You can deploy a cluster into existing subnets in an existing Amazon Virtual Private Cloud (VPC) in Amazon Web Services (AWS).

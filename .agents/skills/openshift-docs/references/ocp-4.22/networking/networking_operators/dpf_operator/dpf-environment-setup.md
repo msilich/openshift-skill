@@ -100,7 +100,9 @@ Verification
 
 # Configure worker nodes for DPU operation
 
-You must deploy the `dpu-worker-config` Helm chart to configure worker nodes with DPUs before adding those nodes to the management cluster. The `dpu-worker-config` Helm chart creates the `MachineConfigPool`, `dpu-worker-configuration` MachineConfig, and other required resources that configure the bridge, OVS services, and IP routing on worker nodes. The `MachineConfigPool` groups DPU-equipped worker nodes so that the Machine Config Operator can apply DPU-specific configurations to them.
+You must deploy the `dpu-worker-config` Helm chart to configure worker nodes with DPUs before adding those nodes to the management cluster.
+
+The `dpu-worker-config` Helm chart creates the `MachineConfigPool`, `dpu-worker-configuration` MachineConfig, and other required resources that configure the bridge, OVS services, and IP routing on worker nodes. The `MachineConfigPool` groups DPU-equipped worker nodes so that the Machine Config Operator can apply DPU-specific configurations to them.
 
 The MachineConfig resource performs several configuration tasks required by DPF:
 
@@ -275,7 +277,9 @@ The multicluster engine Operator and the Node Feature Discovery Operator can be 
 
 ## Install the multicluster engine Operator
 
-If you did not install the multicluster engine Operator by using the Assisted Installer, install it from the OpenShift CLI. You do not need to install Red Hat Advanced Cluster Management or create a `MultiClusterHub` resource to use the multicluster engine Operator. If the Assisted Installer already created a `MultiClusterEngine` resource, skip this procedure.
+If you did not install the multicluster engine Operator by using the Assisted Installer, install it from the OpenShift CLI.
+
+You do not need to install Red Hat Advanced Cluster Management or create a `MultiClusterHub` resource to use the multicluster engine Operator. If the Assisted Installer already created a `MultiClusterEngine` resource, skip this procedure.
 
 <div>
 

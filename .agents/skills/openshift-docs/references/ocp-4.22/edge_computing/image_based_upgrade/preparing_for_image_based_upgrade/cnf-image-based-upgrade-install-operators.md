@@ -579,18 +579,18 @@ Procedure
               policyName: "config-policy"
         ```
 
+        where:
+
+        `your_credentials`
+        Specifies your credentials for your S3 storage backend.
+
+        `OadpDataProtectionApplication.yaml`
+        If more than one `backupLocations` entries are defined in the `OadpDataProtectionApplication` CR, ensure that each location has a corresponding `OadpBackupStorageLocation` CR added for status tracking. Ensure that the name of each additional `OadpBackupStorageLocation` CR is overridden with the correct index as described in the example `OadpBackupStorageLocationStatus.yaml` file.
+
+        `your_S3_URL`
+        Specifies the URL for your S3-compatible bucket.
+
+        `bucket` and `prefix`
+        The `bucket` defines the bucket name that is created in S3 backend. The `prefix` defines the name of the subdirectory that will be automatically created in the `bucket`. The combination of `bucket` and `prefix` must be unique for each target cluster to avoid interference between them. To ensure a unique storage directory for each target cluster, you can use the Red Hat Advanced Cluster Management hub template function, for example, `prefix: {{hub .ManagedClusterName hub}}`.
+
 </div>
-
-where:
-
-`your_credentials`
-Specifies your credentials for your S3 storage backend.
-
-`OadpDataProtectionApplication.yaml`
-If more than one `backupLocations` entries are defined in the `OadpDataProtectionApplication` CR, ensure that each location has a corresponding `OadpBackupStorageLocation` CR added for status tracking. Ensure that the name of each additional `OadpBackupStorageLocation` CR is overridden with the correct index as described in the example `OadpBackupStorageLocationStatus.yaml` file.
-
-`your_S3_URL`
-Specifies the URL for your S3-compatible bucket.
-
-`bucket` and `prefix`
-The `bucket` defines the bucket name that is created in S3 backend. The `prefix` defines the name of the subdirectory that will be automatically created in the `bucket`. The combination of `bucket` and `prefix` must be unique for each target cluster to avoid interference between them. To ensure a unique storage directory for each target cluster, you can use the Red Hat Advanced Cluster Management hub template function, for example, `prefix: {{hub .ManagedClusterName hub}}`.

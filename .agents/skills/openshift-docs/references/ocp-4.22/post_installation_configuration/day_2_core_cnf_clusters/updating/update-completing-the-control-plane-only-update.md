@@ -278,7 +278,9 @@ worker-1       Ready    mcp-2,worker           5d    v1.28.13+2ca1a23
 
 # Updating the OLM Operators
 
-Software needs to vetted before it is loaded onto a production cluster. Production clusters are also quite often configured in disconnected network, which means that they are not always directly connected to the internet. Because the clusters are in a disconnected network, the OpenShift Container Platform Operators are configured for manual update during installation so that new versions can be managed on a cluster-by-cluster basis. Complete the following procedure to move the Operators to the newer versions.
+Software needs to vetted before it is loaded onto a production cluster.
+
+Production clusters are also quite often configured in disconnected network, which means that they are not always directly connected to the internet. Because the clusters are in a disconnected network, the OpenShift Container Platform Operators are configured for manual update during installation so that new versions can be managed on a cluster-by-cluster basis. Complete the following procedure to move the Operators to the newer versions.
 
 <div>
 
@@ -848,7 +850,9 @@ Additional resources
 
 # Updating the worker nodes
 
-You upgrade the worker nodes after you have updated the control plane by unpausing the relevant `mcp` groups you created. Unpausing the `mcp` group starts the upgrade process for the worker nodes in that group. Each of the worker nodes in the cluster reboot to upgrade to the new EUS, y-stream or z-stream version as required.
+You upgrade the worker nodes after you have updated the control plane by unpausing the relevant `mcp` groups you created.
+
+Unpausing the `mcp` group starts the upgrade process for the worker nodes in that group. Each of the worker nodes in the cluster reboot to upgrade to the new EUS, y-stream or z-stream version as required.
 
 In the case of control plane only upgrades, note that when a worker node is updated it will only require one reboot and will jump \<y+2\>-release versions. This is a feature that was added to decrease the amount of time that it takes to upgrade large bare-metal clusters.
 

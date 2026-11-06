@@ -34,11 +34,13 @@ OpenShift Container Platform installation proceeds through the following stages:
 
 # User-provisioned infrastructure installation considerations
 
-The default installation method uses installer-provisioned infrastructure. With installer-provisioned infrastructure clusters, OpenShift Container Platform manages all aspects of the cluster, including the operating system itself. If possible, use this feature to avoid having to provision and maintain the cluster infrastructure.
+The default installation method uses installer-provisioned infrastructure.
+
+With installer-provisioned infrastructure clusters, OpenShift Container Platform manages all aspects of the cluster, including the operating system itself. If possible, use this feature to avoid having to provision and maintain the cluster infrastructure.
 
 You can alternatively install OpenShift Container Platform 4.22 on infrastructure that you provide. If you use this installation method, follow user-provisioned infrastructure installation documentation carefully. Additionally, review the following considerations before the installation:
 
-- Check the [Red Hat Enterprise Linux (RHEL) Ecosystem](https://access.redhat.com/ecosystem/search/#/ecosystem/Red%20Hat%20Enterprise%20Linux) to determine the level of Red Hat Enterprise Linux CoreOS (RHCOS) support provided for your chosen server hardware or virtualization technology.
+- Check the "Red Hat Enterprise Linux (RHEL) Ecosystem" to determine the level of Red Hat Enterprise Linux CoreOS (RHCOS) support provided for your chosen server hardware or virtualization technology.
 
 - Many virtualization and cloud environments require agents to be installed on guest operating systems. Ensure that these agents are installed as a containerized workload deployed through a daemon set.
 
@@ -54,6 +56,18 @@ You can alternatively install OpenShift Container Platform 4.22 on infrastructur
 - Storage needs to be manually provisioned if you want to leverage optional framework components such as the embedded container registry, Elasticsearch, or Prometheus. Default storage classes are not defined in user-provisioned infrastructure installations unless explicitly configured.
 
 - A load balancer is required to distribute API requests across all control plane nodes in highly available OpenShift Container Platform environments. You can use any TCP-based load balancing solution that meets OpenShift Container Platform DNS routing and port requirements.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat Enterprise Linux (RHEL) Ecosystem](https://access.redhat.com/ecosystem/search/#/ecosystem/Red%20Hat%20Enterprise%20Linux)
+
+</div>
 
 # Checking a load balancer configuration before OpenShift Container Platform installation
 

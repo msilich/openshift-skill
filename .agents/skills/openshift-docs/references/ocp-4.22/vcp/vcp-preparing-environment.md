@@ -526,9 +526,9 @@ Procedure
     $ oc apply -f master-0.yaml
     ```
 
-</div>
+    If required, create further VMs for `master-1` and `master-2`, for example.
 
-If required, create further VMs for `master-1` and `master-2`, for example.
+</div>
 
 <div>
 

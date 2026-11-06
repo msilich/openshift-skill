@@ -55,7 +55,9 @@ Procedure
 
 ## Enabling kdump on day-1
 
-The `kdump` service is intended to be enabled per node to debug kernel problems. Because there are costs to having kdump enabled, and these costs accumulate with each additional kdump-enabled node, it is recommended that the `kdump` service only be enabled on each node as needed. Potential costs of enabling the `kdump` service on each node include:
+The `kdump` service is intended to be enabled per node to debug kernel problems.
+
+Because there are costs to having kdump enabled, and these costs accumulate with each additional kdump-enabled node, it is recommended that the `kdump` service only be enabled on each node as needed. Potential costs of enabling the `kdump` service on each node include:
 
 - Less available RAM due to memory being reserved for the crash kernel.
 

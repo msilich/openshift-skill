@@ -4,6 +4,8 @@ You can manage Operator conditions in OpenShift Container Platform by using Oper
 
 # Overriding Operator conditions
 
+You can override a supported Operator condition to allow Operator Lifecycle Manager (OLM) to complete an action that the condition would otherwise prevent.
+
 As a cluster administrator, you might want to ignore a supported Operator condition reported by an Operator. When present, Operator conditions in the `Spec.Overrides` array override the conditions in the `Spec.Conditions` array, allowing cluster administrators to deal with situations where an Operator is incorrectly reporting a state to Operator Lifecycle Manager (OLM).
 
 > [!NOTE]

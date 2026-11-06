@@ -9,7 +9,9 @@ Degraded operation is an intentional design state rather than a system failure. 
 
 # TNF cluster degradation causes
 
-A two-node OpenShift cluster with fencing (TNF) becomes degraded when one node fails or loses communication with the cluster. Identifying the specific cause of degradation is essential because it determines whether the cluster can automatically recover or if manual intervention, such as fencing or hardware repair, is required to prevent data corruption and maintain service availability.
+A two-node OpenShift cluster with fencing (TNF) becomes degraded when one node fails or loses communication with the cluster.
+
+Identifying the specific cause of degradation is essential because it determines whether the cluster can automatically recover or if manual intervention, such as fencing or hardware repair, is required to prevent data corruption and maintain service availability.
 
 Some common causes of cluster degradation include:
 
@@ -182,7 +184,9 @@ Do not bypass PDBs during degraded operation. Forcing evictions might remove the
 
 # Recovering a failed TNF node
 
-Recovery is automatic when the failed node is powered on and rejoins the network. Degraded operation is a temporary state. Restore the failed node as soon as possible to regain fault tolerance, fencing protection, and the ability to perform upgrades and maintenance. If the original node cannot be recovered, replace it.
+Recovery is automatic when the failed node is powered on and rejoins the network. Degraded operation is a temporary state.
+
+Restore the failed node as soon as possible to regain fault tolerance, fencing protection, and the ability to perform upgrades and maintenance. If the original node cannot be recovered, replace it.
 
 > [!IMPORTANT]
 > A two-node OpenShift cluster with fencing (TNF) running on a single node indefinitely is at risk of experiencing the following issues:

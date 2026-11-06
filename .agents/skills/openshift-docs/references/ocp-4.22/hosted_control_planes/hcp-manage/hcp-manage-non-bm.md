@@ -419,7 +419,7 @@ Procedure
 
 ## Disabling node auto-scaling for the hosted cluster
 
-If needed, you can disable node auto-scaling.
+If needed, you can disable node auto-scaling for the hosted cluster.
 
 <div>
 

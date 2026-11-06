@@ -104,10 +104,10 @@ Procedure
 
 4.  Click **Impersonate** to impersonate your selected user, groups, or both.
 
-</div>
+    > [!NOTE]
+    > Selecting one group uses the existing single-group impersonation behavior. Selecting no groups uses regular single-user impersonation.
 
-> [!NOTE]
-> Selecting one group uses the existing single-group impersonation behavior. Selecting no groups uses regular single-user impersonation.
+</div>
 
 # Start impersonation from the Users or Groups pages
 

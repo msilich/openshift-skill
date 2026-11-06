@@ -16,7 +16,7 @@ You can use infrastructure machine sets to create machines that host only infras
 > [!NOTE]
 > After adding the `NoSchedule` taint on the infrastructure node, existing DNS pods running on that node are marked as `misscheduled`. You must either delete or [add toleration on `misscheduled` DNS pods](https://access.redhat.com/solutions/6592171).
 
-# OpenShift Container Platform infrastructure components
+# Move components to infrastructure nodes to reduce costs
 
 To reduce subscription costs, you can review the following information to understand which components you can move to an infrastructure node. Components that you move to an infrastructure node do not need to be accounted for during sizing.
 
