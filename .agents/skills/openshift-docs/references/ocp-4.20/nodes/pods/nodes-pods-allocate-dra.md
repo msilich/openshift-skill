@@ -200,10 +200,13 @@ Prerequisites
 
   </div>
 
-  - Enables the required features.
+  where:
 
-    > [!WARNING]
-    > Enabling the `TechPreviewNoUpgrade` feature set on your cluster cannot be undone and prevents minor version updates. This feature set allows you to enable these Technology Preview features on test clusters, where you can fully test them. Do not enable this feature set on production clusters.
+  `spec.featureSet`
+  Specifies the feature set that enables the required features.
+
+  > [!WARNING]
+  > Enabling the `TechPreviewNoUpgrade` feature set on your cluster cannot be undone and prevents minor version updates. This feature set allows you to enable these Technology Preview features on test clusters, where you can fully test them. Do not enable this feature set on production clusters.
 
 </div>
 
@@ -263,9 +266,13 @@ Procedure
 
     </div>
 
-    - Specifies one or more resource claims to use with this container.
+    where:
 
-    - Specifies the resource claims that are required for the containers to start. Include an arbitrary name for the resource claim request and the resource claim and/or resource claim template.
+    `spec.containers[].resources.claims`
+    Specifies one or more resource claims to use with this container.
+
+    `spec.resourceClaims`
+    Specifies the resource claims that are required for the containers to start. Include an arbitrary name for the resource claim request and the resource claim and/or resource claim template.
 
 2.  Create the CRD object:
 
@@ -273,9 +280,9 @@ Procedure
     $ oc create -f <file_name>.yaml
     ```
 
-</div>
+    For more information on configuring pod resource requests, see ["Dynamic Resource Allocation"](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/) (Kubernetes documentation).
 
-For more information on configuring pod resource requests, see ["Dynamic Resource Allocation"](https://kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/) (Kubernetes documentation).
+</div>
 
 <div>
 

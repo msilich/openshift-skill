@@ -2,7 +2,7 @@
 
 The QEMU guest agent is a daemon that runs on the VM and passes information to the host about the VM, users, file systems, and secondary networks. You must install the QEMU guest agent on VMs created from operating system images that are not provided by Red Hat.
 
-# Installing the QEMU guest agent on a Linux VM
+# Install the QEMU guest agent on a Linux VM
 
 The `qemu-guest-agent` is available by default in Red Hat Enterprise Linux (RHEL) virtual machines (VMs). To create snapshots of a VM in the `Running` state with the highest integrity, install the QEMU guest agent.
 
@@ -62,7 +62,7 @@ Verification
 
 </div>
 
-# Installing the QEMU guest agent on a Windows VM
+# Install the QEMU guest agent on a Windows VM
 
 For Windows virtual machines (VMs), the QEMU guest agent is included in the VirtIO drivers. You can install the drivers during a Windows installation or on an existing Windows VM.
 

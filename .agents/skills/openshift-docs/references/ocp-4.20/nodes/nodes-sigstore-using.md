@@ -193,10 +193,13 @@ Prerequisites
 
   </div>
 
-  - Enables the required `SigstoreImageVerificationPKI` feature.
+  where:
 
-    > [!WARNING]
-    > Enabling the `TechPreviewNoUpgrade` feature set on your cluster cannot be undone and prevents minor version updates. This feature set allows you to enable these Technology Preview features on test clusters, where you can fully test them. Do not enable this feature set on production clusters.
+  `spec.featureSet`
+  Specifies the feature set that enables the required `SigstoreImageVerificationPKI` feature.
+
+  > [!WARNING]
+  > Enabling the `TechPreviewNoUpgrade` feature set on your cluster cannot be undone and prevents minor version updates. This feature set allows you to enable these Technology Preview features on test clusters, where you can fully test them. Do not enable this feature set on production clusters.
 
 </div>
 
@@ -598,10 +601,13 @@ Prerequisites
 
   </div>
 
-  - Enables the required `SigstoreImageVerification` feature.
+  where:
 
-    > [!WARNING]
-    > Enabling the `TechPreviewNoUpgrade` feature set on your cluster cannot be undone and prevents minor version updates. This feature set allows you to enable these Technology Preview features on test clusters, where you can fully test them. Do not enable this feature set on production clusters.
+  `spec.featureSet`
+  Specifies the feature set that enables the required `SigstoreImageVerification` feature.
+
+  > [!WARNING]
+  > Enabling the `TechPreviewNoUpgrade` feature set on your cluster cannot be undone and prevents minor version updates. This feature set allows you to enable these Technology Preview features on test clusters, where you can fully test them. Do not enable this feature set on production clusters.
 
 </div>
 

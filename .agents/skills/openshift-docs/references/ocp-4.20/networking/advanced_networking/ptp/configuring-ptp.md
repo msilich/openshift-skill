@@ -2075,29 +2075,39 @@ Procedure
         profile: 01-tbc-tr
     ```
 
-    - All TT ports have the `masterOnly` set to 1.
+    where:
 
-    - The `phc2sysOpts` setting in the TR profile specifies the upstream port `ens4f1` as the source of the node time synchronization.
+    `masterOnly`
+    Specifies that all time transmitter (TT) ports are set to `1`.
 
-    - The TR profile contains the hardware plugin section.
+    `spec.profile[].phc2sysOpts`
+    Specifies the upstream port `ens4f1` as the source of the node time synchronization in the TR profile.
 
-    - The interconnections section in the hardware plugin has three NICs: `ens4f0`, `ens1f0`, and `ens8f0`. The leading NIC, `ens4f0`, is the only one with the `gnnsInput` field, set to `false`, and the `upstreamPort` field that specifies the TR port. It also has a list of `phaseOutputConnectors`, `SMA1` and `SMA2`. The following NICs have the `inputConnector` field. Set the time receiver NIC `ens4f0` and the specific TR port. that is `upstreamPort: ens4f1`, for both T-BC and T-TSC configurations.
+    `spec.profile[].plugins`
+    Specifies the hardware plugin section of the TR profile.
 
-    - The `ts2phc` configuration contains the `domainNumber` of the upstream PTP domain.
+    `spec.profile[].plugins.e810.interconnections`
+    Specifies the interconnection section of the hardware plugin. The section has three NICs: `ens4f0`, `ens1f0`, and `ens8f0`. The leading NIC, `ens4f0`, is the only one with the `gnnsInput` field, set to `false`, and the `upstreamPort` field that specifies the TR port. It also has a list of `phaseOutputConnectors`, `SMA1` and `SMA2`. The following NICs have the `inputConnector` field. Set the time receiver NIC `ens4f0` and the specific TR port. that is `upstreamPort: ens4f1`, for both T-BC and T-TSC configurations.
 
-    - The `ts2phc` configuration contains the `uds_address`. Its value is not important because the daemon patches it with the correct address.
+    `domainNumber`
+    Specifies the domain number of the upstream PTP domain in the `ts2phc` configuration.
 
-    - The `ts2phc` configuration must include all NICs participating in this setup (`ens4f0`, `ens1f0`, and `ens8f0`).
+    `uds_address`
+    Specifies the socket address in the `ts2phc` configuration. Its value is not important because the daemon patches it with the correct address.
 
-    - `ts2phcOpts` sets the source as generic with `-s generic` and automatic with `-a`. The last option, `--ts2phc.rh_external_pps 1`, configures it to operate with external phase source, the digital phase-locked loop (DPLL).
+    `[<interface_name>]`
+    Specifies that the `ts2phc` configuration must include all NICs participating in this setup (`ens4f0`, `ens1f0`, and `ens8f0`).
 
-      > [!NOTE]
-      > In the single-NIC case, disable all pins or enable outputs if using for 1PPS measurements.
+    `spec.profile[].ts2phcOpts`
+    Specifies the source as generic with `-s generic` and automatic with `-a`. The last option, `--ts2phc.rh_external_pps 1`, configures it to operate with external phase source, the digital phase-locked loop (DPLL).
+
+    > [!NOTE]
+    > In the single-NIC case, disable all pins or enable outputs if using for 1PPS measurements.
+
+    > [!NOTE]
+    > To render this configuration for T-TSC operation, remove the `00-tbc-tt` profile and adjust the `ts2phcConf` section to list only the TR NIC.
 
 </div>
-
-> [!NOTE]
-> To render this configuration for T-TSC operation, remove the `00-tbc-tt` profile and adjust the `ts2phcConf` section to list only the TR NIC.
 
 <div class="formalpara">
 
@@ -2115,13 +2125,7 @@ To get the T-BC status, run the following command:
 $ oc -linuxptp-daemon-container logs ds/linuxptp-daemon --since=1s -f |grep T-BC
 ```
 
-<div class="formalpara">
-
-<div class="title">
-
-Example output
-
-</div>
+\+ .Example output
 
 ``` terminal
 T-BC[1760525446]:[ts2phc.1.config] ens4f0 offset 1 T-BC-STATUS s2
@@ -2129,9 +2133,7 @@ T-BC[1760525447]:[ts2phc.1.config] ens4f0 offset 1 T-BC-STATUS s2
 T-BC[1760525448]:[ts2phc.1.config] ens4f0 offset -1 T-BC-STATUS s2
 ```
 
-</div>
-
-This is reported every second, where `s2` indicates it is locked, `s1` indicates holdover is activated, and `s0`, unlocked.
+\+ This is reported every second, where `s2` indicates it is locked, `s1` indicates holdover is activated, and `s0`, unlocked.
 
 <div>
 
@@ -2943,7 +2945,7 @@ Verification
 
 ## Boundary clocks without holdover on Intel Granite Rapids-D hardware
 
-Intel Granite Rapids-D (GNR-D) server platforms support Precision Time Protocol (PTP) boundary clock (BC) deployments without holdover for high-density Radio Access Network (RAN) sites that use onboard Network Acceleration Complex (NAC) ports and optional Carter Flat expansion network interface cards (NICs).
+Intel Granite Rapids-D (GNR-D) servers support Precision Time Protocol (PTP) boundary clock (BC) deployments without holdover for high-density Radio Access Network (RAN) sites using onboard Network Acceleration Complex (NAC) ports and optional Carter Flat NICs.
 
 > [!NOTE]
 > Configuring a BC without holdover support on GNR-D hardware is a Technology Preview (TP) feature in OpenShift Container Platform 4.20.16 and is Generally Available (GA) in OpenShift Container Platform 4.20.24 and later versions.
@@ -3895,7 +3897,9 @@ Additional resources
 
 # Configuring FIFO priority scheduling for PTP hardware
 
-In telco or other deployment types that require low latency performance, PTP daemon threads run in a constrained CPU footprint alongside the rest of the infrastructure components. By default, PTP threads run with the `SCHED_OTHER` policy. Under high load, these threads might not get the scheduling latency they require for error-free operation.
+In telco or other deployment types that require low latency performance, PTP daemon threads run in a constrained CPU footprint alongside the rest of the infrastructure components.
+
+By default, PTP threads run with the `SCHED_OTHER` policy. Under high load, these threads might not get the scheduling latency they require for error-free operation.
 
 To mitigate against potential scheduling latency errors, you can configure the PTP Operator `linuxptp` services to allow threads to run with a `SCHED_FIFO` policy. If `SCHED_FIFO` is set for a `PtpConfig` CR, then `ptp4l` and `phc2sys` will run in the parent container under `chrt` with a priority set by the `ptpSchedulingPriority` field of the `PtpConfig` CR.
 
@@ -4000,7 +4004,9 @@ Verification
 
 # Configuring PTP log reduction
 
-The `linuxptp-daemon` generates logs that you can use for debugging purposes. In telco or other deployment types that feature a limited storage capacity, these logs can add to the storage demand. Currently, the default logging rate is high, causing logs to rotate out in under 24 hours, which makes it difficult to track changes and identify problems.
+The `linuxptp-daemon` generates logs that you can use for debugging purposes.
+
+In telco or other deployment types that feature a limited storage capacity, these logs can add to the storage demand. Currently, the default logging rate is high, causing logs to rotate out in under 24 hours, which makes it difficult to track changes and identify problems.
 
 You can achieve basic log reduction by configuring the `PtpConfig` custom resource (CR) to exclude log messages that report the master offset value. The master offset log message reports the difference between the clock of the current node and the master clock in nanoseconds. However, with this method, there is no summary status of filtered logs. The enhanced log reduction feature allows you to configure the logging rate of PTP logs. You can set a specific logging rate, which can help reduce the volume of logs generated by the `linuxptp-daemon` while still retaining essential information for troubleshooting. With the enhanced log reduction feature, you can also specify a threshold that still displays the offset logs if the offset is higher than that threshold.
 

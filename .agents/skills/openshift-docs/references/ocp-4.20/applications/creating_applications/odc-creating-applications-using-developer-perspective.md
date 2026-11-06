@@ -414,12 +414,12 @@ Procedure
 
 9.  Click **Create** to deploy the application. A toast notification is shown to notify you that the JAR file is being uploaded. The toast notification also includes a link to view the build logs.
 
+    > [!NOTE]
+    > If you attempt to close the browser tab while the build is running, a web alert is displayed.
+
+    After the JAR file is uploaded and the application is deployed, you can view the application in the **Topology** view.
+
 </div>
-
-> [!NOTE]
-> If you attempt to close the browser tab while the build is running, a web alert is displayed.
-
-After the JAR file is uploaded and the application is deployed, you can view the application in the **Topology** view.
 
 # Using the Devfile registry to access devfiles
 

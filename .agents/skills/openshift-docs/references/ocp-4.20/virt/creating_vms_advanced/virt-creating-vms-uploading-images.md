@@ -49,7 +49,7 @@ Procedure
 
 </div>
 
-## Generalizing a VM image
+## Generalize a VM image
 
 You can generalize a Red Hat Enterprise Linux (RHEL) image to remove all system-specific configuration data before you use the image to create a golden image, a preconfigured snapshot of a virtual machine (VM). You can use a golden image to deploy new VMs.
 
@@ -167,7 +167,7 @@ The new volume appears in the **Select volume to boot from** list. This is your 
 
 </div>
 
-# Creating a Windows VM
+# Create a Windows VM from an uploaded image
 
 You can create a Windows virtual machine (VM) by uploading a Windows image to a persistent volume claim (PVC) and then cloning the PVC when you create a VM by using the OpenShift Container Platform web console.
 
@@ -237,7 +237,7 @@ Procedure
 
 </div>
 
-## Generalizing a Windows VM image
+## Generalize a Windows VM image
 
 You can generalize a Windows operating system image to remove all system-specific configuration data before you use the image to create a new virtual machine (VM).
 
@@ -297,7 +297,7 @@ You can now specialize the VM.
 
 </div>
 
-## Specializing a Windows VM image
+## Specialize a Windows VM image
 
 Specializing a Windows virtual machine (VM) configures the computer-specific information from a generalized Windows image onto the VM.
 
@@ -353,7 +353,7 @@ During the initial boot, Windows uses the `unattend.xml` answer file to speciali
 
 </div>
 
-# Uploading a virtual machine image by using the CLI
+# Upload a VM image by using the CLI
 
 You can upload an operating system image by using the `virtctl` command-line tool. You can use an existing data volume or create a new data volume for the image.
 

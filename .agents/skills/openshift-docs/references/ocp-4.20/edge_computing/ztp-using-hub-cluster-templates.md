@@ -30,7 +30,9 @@ Additional resources
 
 # Specifying group and site configurations in group PolicyGenerator or PolicyGentemplate CRs
 
-You can manage the configuration of fleets of clusters with `ConfigMap` CRs by using hub templates to populate the group and site values in the generated policies that get applied to the managed clusters. Using hub templates in site `PolicyGenerator` or `PolicyGentemplate` CRs means that you do not need to create a policy CR for each site.
+You can manage the configuration of fleets of clusters with `ConfigMap` CRs by using hub templates to populate the group and site values in the generated policies that get applied to the managed clusters.
+
+Using hub templates in site `PolicyGenerator` or `PolicyGentemplate` CRs means that you do not need to create a policy CR for each site.
 
 You can group the clusters in a fleet in various categories, depending on the use case, for example hardware type or region. Each cluster should have a label corresponding to the group or groups that the cluster is in. If you manage the configuration values for each group in different `ConfigMap` CRs, then you require only one group policy CR to apply the changes to all the clusters in the group by using hub templates.
 

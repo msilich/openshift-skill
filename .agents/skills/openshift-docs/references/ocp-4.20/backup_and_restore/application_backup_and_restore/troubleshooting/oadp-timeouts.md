@@ -4,20 +4,6 @@ Configure OADP timeout parameters for Restic, Velero, Data Mover, CSI snapshots,
 
 Ensure that you balance timeout extensions in a logical manner so that you do not configure excessively long timeouts that might hide underlying issues in the process. Consider and monitor an appropriate timeout value that meets the needs of the process and the overall system performance.
 
-Review the following OADP timeout instructions:
-
-- [Restic timeout](oadp-timeouts.md#restic-timeout_oadp-timeouts)
-
-- [Velero resource timeout](oadp-timeouts.md#velero-timeout_oadp-timeouts)
-
-- [Data Mover timeout](oadp-timeouts.md#datamover-timeout_oadp-timeouts)
-
-- [CSI snapshot timeout](oadp-timeouts.md#csisnapshot-timeout_oadp-timeouts)
-
-- [Item operation timeout - backup](oadp-timeouts.md#item-operation-timeout-backup_oadp-timeouts)
-
-- [Item operation timeout - restore](oadp-timeouts.md#item-operation-timeout-restore_oadp-timeouts)
-
 # Implement restic timeout
 
 Configure the Restic timeout parameter to prevent backup failures for large persistent volumes or long-running backup operations. This helps you avoid timeout errors when backing up data greater than 500GB or when backups exceed the default one-hour limit.
@@ -100,7 +86,9 @@ Procedure
 
 ## Implement velero default item operation timeout
 
-Configure the `defaultItemOperationTimeout` parameter in the \`DataProtectionApplication\`ccustom resource (CR) to define how long Velero waits for backup and restore operations to finish. Adjusting this timeout helps you prevent errors during Container Storage Interface (CSI) Data Mover tasks.
+Configure the `defaultItemOperationTimeout` parameter in the `DataProtectionApplication` custom resource (CR) to define how long Velero waits for backup and restore operations to finish. Adjusting this timeout helps you prevent errors during Container Storage Interface (CSI) Data Mover tasks.
+
+Ensure that you balance timeout extensions in a logical manner so that you do not configure excessively long timeouts that might hide underlying issues in the process. Consider and monitor an appropriate timeout value that meets the needs of the process and the overall system performance.
 
 The default value is `1h`.
 
@@ -250,3 +238,17 @@ Procedure
   ```
 
 </div>
+
+# Additional resources
+
+- [Restic timeout](oadp-timeouts.md#restic-timeout_oadp-timeouts)
+
+- [Velero resource timeout](oadp-timeouts.md#velero-timeout_oadp-timeouts)
+
+- [Data Mover timeout](oadp-timeouts.md#datamover-timeout_oadp-timeouts)
+
+- [CSI snapshot timeout](oadp-timeouts.md#csisnapshot-timeout_oadp-timeouts)
+
+- [Item operation timeout - backup](oadp-timeouts.md#item-operation-timeout-backup_oadp-timeouts)
+
+- [Item operation timeout - restore](oadp-timeouts.md#item-operation-timeout-restore_oadp-timeouts)

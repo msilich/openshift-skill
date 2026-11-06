@@ -197,30 +197,33 @@ Procedure
             }}}}}'
     ```
 
-    - Specify `External` to encrypt traffic to external hosts or specify `Full` to encrypt pod-to-pod traffic and, optionally, traffic to external hosts. By default, IPsec is disabled.
+    where:
 
-      <div class="formalpara">
+    `spec.defaultNetwork.ovnKubernetesConfig.ipsecConfig.mode`
+    Specifies `External` to encrypt traffic to external hosts or `Full` to encrypt pod-to-pod traffic and, optionally, traffic to external hosts. By default, IPsec is disabled.
 
-      <div class="title">
+    <div class="formalpara">
 
-      Example configuration that has IPsec enabled in `Full` mode and `encapsulation` set to `Always`
+    <div class="title">
 
-      </div>
+    Example configuration that has IPsec enabled in `Full` mode and `encapsulation` set to `Always`
 
-      ``` terminal
-      $ oc patch networks.operator.openshift.io cluster --type=merge -p \
-        '{
-        "spec":{
-          "defaultNetwork":{
-            "ovnKubernetesConfig":{
-              "ipsecConfig":{
-                "mode":"Full",
-                "full":{
-                  "encapsulation": "Always"
-                }}}}}}'
-      ```
+    </div>
 
-      </div>
+    ``` terminal
+    $ oc patch networks.operator.openshift.io cluster --type=merge -p \
+      '{
+      "spec":{
+        "defaultNetwork":{
+          "ovnKubernetesConfig":{
+            "ipsecConfig":{
+              "mode":"Full",
+              "full":{
+                "encapsulation": "Always"
+              }}}}}}'
+    ```
+
+    </div>
 
 2.  Encrypt external traffic with IPsec by completing the "Configuring IPsec encryption for external traffic" procedure.
 
@@ -269,7 +272,10 @@ Verification
     $ oc -n openshift-ovn-kubernetes rsh ovnkube-node-<XXXXX> ovn-nbctl --no-leader-only get nb_global . ipsec
     ```
 
-    where: `<XXXXX>` specifies the random sequence of letters for a pod from an earlier step.
+    where:
+
+    `<XXXXX>`
+    Specifies the random sequence of letters for a pod from an earlier step.
 
     Successful output from the command shows the status as `true`.
 

@@ -188,9 +188,9 @@ Procedure
             name: cloudinitdisk
   ```
 
-  - The `downwardMetrics` device.
+  - `spec.domain.devices.downwardMetrics` defines the `downwardMetrics` device.
 
-  - The password for the `fedora` user.
+  - `spec.volumes.cloudInitNoCloud.userdata.password` defines the password for the `fedora` user.
 
 </div>
 

@@ -434,9 +434,9 @@ The following storage providers are supported:
 
 ## Retrieve Multicloud Object Gateway credentials
 
-Retrieve the Multicloud Object Gateway (MCG) credentials and S3 endpoint, which you need to configure MCG as a replication repository for the Migration Toolkit for Containers (MTC).
+Retrieve the Multicloud Object Gateway (MCG) credentials to create a `Secret` custom resource (CR) for your backup storage.
 
-Retrieve the Multicloud Object Gateway (MCG) credentials, which you need to create a `Secret` custom resource (CR) for MTC.
+You need the MCG credentials and S3 endpoint to configure MCG as a replication repository for the Migration Toolkit for Containers (MTC).
 
 > [!NOTE]
 > Although the MCG Operator is [deprecated](https://catalog.redhat.com/software/containers/ocs4/mcg-rhel8-operator/5ddbcefbdd19c71643b56ce9?architecture=amd64&image=64243f5dcd0eb61355af9abd), the MCG plugin is still available for OpenShift Data Foundation. To download the plugin, browse to [Download Red Hat OpenShift Data Foundation](https://access.redhat.com/downloads/content/547/ver=4/rhel---9/4.15.4/x86_64/product-software) and download the appropriate MCG plugin for your operating system.
@@ -469,7 +469,9 @@ Procedure
 
 ## Configure Amazon Web Services
 
-Configure Amazon Web Services (AWS) S3 storage and Identity and Access Management (IAM) credentials for backup storage with Migration Toolkit for Containers (MTC). This provides the necessary permissions and storage infrastructure for data protection operations.
+Configure Amazon Web Services (AWS) S3 storage and Identity and Access Management (IAM) credentials for backup storage.
+
+This provides the necessary permissions and storage infrastructure for data protection operations with Migration Toolkit for Containers (MTC).
 
 <div>
 
@@ -621,6 +623,8 @@ Procedure
 
 ## Configure Google Cloud
 
+Configure Google Cloud storage and service account credentials for backup storage.
+
 You configure a Google Cloud storage bucket as a replication repository for the Migration Toolkit for Containers (MTC).
 
 <div>
@@ -759,7 +763,9 @@ Procedure
 
 ## Configure Microsoft Azure
 
-Configure Microsoft Azure storage and service principal credentials for backup storage with Migration Toolkit for Containers (MTC). This provides the necessary authentication and storage infrastructure for data protection operations.
+Configure Microsoft Azure storage and service principal credentials for backup storage.
+
+This provides the necessary authentication and storage infrastructure for data protection operations with Migration Toolkit for Containers (MTC).
 
 <div>
 

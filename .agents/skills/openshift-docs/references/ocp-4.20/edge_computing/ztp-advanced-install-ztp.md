@@ -9,7 +9,9 @@ You can use `SiteConfig` custom resources (CRs) to deploy custom functionality a
 
 # Customizing extra installation manifests in the GitOps ZTP pipeline
 
-You can define a set of extra manifests for inclusion in the installation phase of the GitOps Zero Touch Provisioning (ZTP) pipeline. These manifests are linked to the `SiteConfig` custom resources (CRs) and are applied to the cluster during installation. Including `MachineConfig` CRs at install time makes the installation process more efficient.
+You can define a set of extra manifests for inclusion in the installation phase of the GitOps Zero Touch Provisioning (ZTP) pipeline.
+
+These manifests are linked to the `SiteConfig` custom resources (CRs) and are applied to the cluster during installation. Including `MachineConfig` CRs at install time makes the installation process more efficient.
 
 <div>
 
@@ -82,7 +84,9 @@ Procedure
 
 # Customizing the br-ex bridge at installation time in the GitOps ZTP pipeline
 
-By default, OpenShift Container Platform automatically configures the Open vSwitch (OVS) `br-ex` bridge on bare-metal nodes. For advanced networking requirements, you can override this default behavior by defining a customized `br-ex` bridge in an NMState configuration. When you configure the customized `br-ex` bridge as part of the GitOps Zero Touch Provisioning (ZTP) installation, the configuration is applied during cluster provisioning. This eliminates the need for the Day 2 migration procedure, which requires a node reboot.
+By default, OpenShift Container Platform automatically configures the Open vSwitch (OVS) `br-ex` bridge on bare-metal nodes.
+
+For advanced networking requirements, you can override this default behavior by defining a customized `br-ex` bridge in an NMState configuration. When you configure the customized `br-ex` bridge as part of the GitOps Zero Touch Provisioning (ZTP) installation, the configuration is applied during cluster provisioning. This eliminates the need for the Day 2 migration procedure, which requires a node reboot.
 
 To customize the `br-ex` bridge at installation time in the GitOps ZTP pipeline, you create a `MachineConfig` object that includes the customized `br-ex` bridge configuration, package it as a `ConfigMap`, and reference it in your `ClusterInstance` CR.
 

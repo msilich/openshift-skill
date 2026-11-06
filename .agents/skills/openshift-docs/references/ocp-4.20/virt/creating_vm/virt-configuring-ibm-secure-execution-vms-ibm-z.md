@@ -23,7 +23,7 @@ Additional resources
 
 </div>
 
-# Enabling VMs to run IBM Secure Execution on IBM Z and IBM LinuxONE
+# Enable Secure Execution for VMs on IBM Z
 
 To enable IBM® Secure Execution virtual machines (VMs) on IBM Z® and IBM® LinuxONE on the compute nodes of your cluster, you must ensure that you meet the prerequisites and complete the following steps.
 
@@ -103,7 +103,7 @@ Procedure
 
 </div>
 
-# Launching an IBM Secure Execution VM on IBM Z and IBM LinuxONE
+# IBM Secure Execution VM deployment
 
 Before launching an IBM® Secure Execution VM on IBM Z® and IBM® LinuxONE, you must add the `launchSecurity` parameter to the VM manifest. Otherwise, the VM does not boot correctly because it does not have access to the devices.
 

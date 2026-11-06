@@ -723,7 +723,21 @@ Recording of SELinux policies is implemented with a webhook that injects a speci
 
 To record a workload, the workload must use a service account that has permissions to use an SCC that allows the webhook to inject the permissive SELinux type. The `privileged` SCC contains `seLinuxContext: RunAsAny`.
 
-In addition, the namespace must be labeled with `pod-security.kubernetes.io/enforce: privileged` if your cluster enables the [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) because only the `privileged` [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#privileged) allows using a custom SELinux policy.
+In addition, the namespace must be labeled with `pod-security.kubernetes.io/enforce: privileged` if your cluster enables the Pod Security Admission because only the `privileged` Pod Security Standard allows using a custom SELinux policy.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/)
+
+- [Pod Security Standard](https://kubernetes.io/docs/concepts/security/pod-security-standards/#privileged)
+
+</div>
 
 # Additional resources
 

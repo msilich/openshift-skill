@@ -8,17 +8,35 @@ Built on Red Hat Enterprise Linux (RHEL) and Kubernetes, OpenShift Container Pl
 
 # About this release
 
-OpenShift Container Platform 4.20 release uses [Kubernetes 1.33](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.33.md) with CRI-O runtime. New features, changes, and known issues that pertain to OpenShift Container Platform 4.20 are included in this topic.
+OpenShift Container Platform 4.20 release uses Kubernetes 1.33 with CRI-O runtime. New features, changes, and known issues that pertain to OpenShift Container Platform 4.20 are included in this topic.
 
-OpenShift Container Platform 4.20 clusters are available at <https://console.redhat.com/openshift>. From the Red Hat Hybrid Cloud Console, you can deploy OpenShift Container Platform clusters to either on-premises or cloud environments.
+OpenShift Container Platform 4.20 clusters are available at OpenShift Container Platform web console. From the Red Hat Hybrid Cloud Console, you can deploy OpenShift Container Platform clusters to either on-premises or cloud environments.
 
 You must use RHCOS machines for the control plane and for the compute machines.
 
-Starting from OpenShift Container Platform 4.14, the Extended Update Support (EUS) phase for even-numbered releases increases the total available lifecycle to 24 months on all supported architectures, including `x86_64`, 64-bit ARM (`aarch64`), IBM Power® (`ppc64le`), and IBM Z® (`s390x`) architectures. Beyond this, Red Hat also offers a 12-month additional EUS add-on, denoted as *Additional EUS Term 2*, that extends the total available lifecycle from 24 months to 36 months. The Additional EUS Term 2 is available on all architecture variants of OpenShift Container Platform. For more information about support for all versions, see the [Red Hat OpenShift Container Platform Life Cycle Policy](https://access.redhat.com/support/policy/updates/openshift).
+Starting from OpenShift Container Platform 4.14, the Extended Update Support (EUS) phase for even-numbered releases increases the total available lifecycle to 24 months on all supported architectures, including `x86_64`, 64-bit ARM (`aarch64`), IBM Power® (`ppc64le`), and IBM Z® (`s390x`) architectures. Beyond this, Red Hat also offers a 12-month additional EUS add-on, denoted as *Additional EUS Term 2*, that extends the total available lifecycle from 24 months to 36 months. The Additional EUS Term 2 is available on all architecture variants of OpenShift Container Platform.
 
 OpenShift Container Platform is designed for FIPS. When running Red Hat Enterprise Linux (RHEL) or Red Hat Enterprise Linux CoreOS (RHCOS) booted in FIPS mode, OpenShift Container Platform core components use the RHEL cryptographic libraries that have been submitted to NIST for FIPS 140-2/140-3 Validation on only the `x86_64`, `ppc64le`, and `s390x` architectures.
 
-For more information about the NIST validation program, see [Cryptographic Module Validation Program](https://csrc.nist.gov/Projects/cryptographic-module-validation-program/validated-modules). For the latest NIST status for the individual versions of RHEL cryptographic libraries that have been submitted for validation, see [Compliance Activities and Government Standards](https://access.redhat.com/articles/2918071#fips-140-2-and-fips-140-3-2).
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Red Hat OpenShift Container Platform web console](https://console.redhat.com/openshift)
+
+- [Kubernetes 1.33](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.33.md)
+
+- [Red Hat OpenShift Container Platform Life Cycle Policy](https://access.redhat.com/support/policy/updates/openshift)
+
+- [Cryptographic Module Validation Program](https://csrc.nist.gov/Projects/cryptographic-module-validation-program/validated-modules)
+
+- [Compliance Activities and Government Standards](https://access.redhat.com/articles/2918071#fips-140-2-and-fips-140-3-2)
+
+</div>
 
 # OpenShift Container Platform layered and dependent component support and compatibility
 
@@ -1710,7 +1728,7 @@ You can review the list of known issues in OpenShift Container Platform 4.20 to 
 
 # Asynchronous errata updates
 
-Security, bug fix, and enhancement updates for OpenShift Container Platform 4.20 are released as asynchronous errata through the Red Hat Network. All OpenShift Container Platform 4.20 errata is [available on the Red Hat Customer Portal](https://access.redhat.com/downloads/content/290/). See the [OpenShift Container Platform Life Cycle](https://access.redhat.com/support/policy/updates/openshift) for more information about asynchronous errata.
+Security, bug fix, and enhancement updates for OpenShift Container Platform 4.20 are released as asynchronous errata through the Red Hat Network. All OpenShift Container Platform 4.20 errata is available on the Red Hat Customer Portal.
 
 Red Hat Customer Portal users can enable errata notifications in the account settings for Red Hat Subscription Management (RHSM). When errata notifications are enabled, users are notified through email whenever new errata relevant to their registered systems are released.
 
@@ -1720,7 +1738,45 @@ Red Hat Customer Portal users can enable errata notifications in the account se
 This section will continue to be updated over time to provide notes on enhancements and bug fixes for future asynchronous errata releases of OpenShift Container Platform 4.20. Versioned asynchronous releases, for example with the form OpenShift Container Platform 4.20.z, will be detailed in subsections. In addition, releases in which the errata text cannot fit in the space provided by the advisory will be detailed in subsections that follow.
 
 > [!IMPORTANT]
-> For any OpenShift Container Platform release, always review the instructions on [updating your cluster](../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console) properly.
+> For any OpenShift Container Platform release, always review the cluster updating instructions.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Available on the Red Hat Customer Portal](https://access.redhat.com/downloads/content/290/)
+
+- [OpenShift Container Platform Life Cycle](https://access.redhat.com/support/policy/updates/openshift)
+
+- [Updating your cluster](../updating/updating_a_cluster/updating-cluster-web-console.md#updating-cluster-web-console)
+
+</div>
+
+## RHBA-2026:92283 - OpenShift Container Platform 4.20.45 bug fix update
+
+Issued: 3 November 2026
+
+OpenShift Container Platform release 4.20.45 is now available. The list of fixed issues that are included in the update is documented in the [RHSA-2026:92283](https://access.redhat.com/errata/RHSA-2026:92283) advisory. There are no RPM packages for this release.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.45 --pullspecs
+```
+
+### Fixed issues
+
+There are no notable fixed issues in this release.
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
 
 ## RHSA-2026:83502 - OpenShift Container Platform 4.20.43 bug fix and security update
 
@@ -2059,6 +2115,8 @@ $ oc adm release info 4.20.31 --pullspecs
 - Before this update, the Cluster Ingress Operator (CIO) depended on the Marketplace capability to install OSSM through OLM for the Gateway API. On clusters where the Marketplace capability was disabled, such as disconnected clusters that cannot reach external catalog sources, the CIO could not create or manage the OLM subscription and the Istio control plane never started. As a consequence, the Gateway API did not function on these clusters. When the GatewayClass was created, the `istiod-openshift-gateway` pod did not start. With this release, the OLM-based OSSM installation is replaced with the Sail Library, which installs Istio directly through embedded Helm charts. As a result, the dependency on the Marketplace capability is removed and the Gateway API works on disconnected clusters and other environments without the Marketplace capability, if the required container images are mirrored to an accessible registry. ([OCPBUGS-92042](https://issues.redhat.com/browse/OCPBUGS-92042))
 
 - Before this update, the Operator used the `reflect.DeepEqual` parameter for node label comparison which required an exact label match instead of Kubernetes label selector semantics. As a consequence, the `IngressNodeFirewallNodeState` objects were not created for nodes added after the Operator startup. With this release, the `reflect.DeepEqual` parameter is replaced with the `labels.SelectorFromSet().Matches()` parameter for correct Kubernetes label selector matching. As a result, the Operator correctly creates the `IngressNodeFirewallNodeState` object for dynamically added nodes and label changes. ([OCPBUGS-98955](https://issues.redhat.com/browse/OCPBUGS-98955))
+
+- Before this update, when multiple node pools in a hosted cluster on AWS referenced subnets in the same availability zone (AZ), VPC endpoint reconciliation failed with an AWS `DuplicateSubnetsInSameZone` error. The AWS API requires at most one subnet per AZ per VPC endpoint, so affected clusters experienced indefinite endpoint unavailability. With this update, the Control Plane Operator deduplicates subnets by AZ before calling the AWS endpoint API, selecting one subnet per AZ deterministically. VPC endpoint reconciliation no longer fails due to multiple subnets in the same AZ. ([OCPBUGS-98574](https://redhat.atlassian.net/browse/OCPBUGS-98574))
 
 ### Updating
 

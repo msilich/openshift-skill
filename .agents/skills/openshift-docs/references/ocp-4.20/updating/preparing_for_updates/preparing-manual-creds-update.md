@@ -924,14 +924,6 @@ Procedure
 
 1.  Create YAML files with secrets for any `CredentialsRequest` custom resources that the new release image adds. The secrets must be stored using the namespace and secret name defined in the `spec.secretRef` for each `CredentialsRequest` object.
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Sample AWS `CredentialsRequest` object with secrets
-
-    </div>
-
     ``` yaml
     apiVersion: cloudcredential.openshift.io/v1
     kind: CredentialsRequest
@@ -956,16 +948,6 @@ Procedure
       ...
     ```
 
-    </div>
-
-    <div class="formalpara">
-
-    <div class="title">
-
-    Sample AWS `Secret` object
-
-    </div>
-
     ``` yaml
     apiVersion: v1
     kind: Secret
@@ -977,18 +959,8 @@ Procedure
       aws_secret_access_key: <base64_encoded_aws_secret_access_key>
     ```
 
-    </div>
-
     > [!NOTE]
     > Global Azure and Azure Stack Hub use the same `CredentialsRequest` object and secret formats.
-
-    <div class="formalpara">
-
-    <div class="title">
-
-    Sample Azure `CredentialsRequest` object with secrets
-
-    </div>
 
     ``` yaml
     apiVersion: cloudcredential.openshift.io/v1
@@ -1010,16 +982,6 @@ Procedure
       ...
     ```
 
-    </div>
-
-    <div class="formalpara">
-
-    <div class="title">
-
-    Sample Azure `Secret` object
-
-    </div>
-
     ``` yaml
     apiVersion: v1
     kind: Secret
@@ -1035,16 +997,6 @@ Procedure
       azure_resourcegroup: <base64_encoded_azure_resourcegroup>
       azure_region: <base64_encoded_azure_region>
     ```
-
-    </div>
-
-    <div class="formalpara">
-
-    <div class="title">
-
-    Sample Google Cloud `CredentialsRequest` object with secrets
-
-    </div>
 
     ``` yaml
     apiVersion: cloudcredential.openshift.io/v1
@@ -1068,16 +1020,6 @@ Procedure
       ...
     ```
 
-    </div>
-
-    <div class="formalpara">
-
-    <div class="title">
-
-    Sample Google Cloud `Secret` object
-
-    </div>
-
     ``` yaml
     apiVersion: v1
     kind: Secret
@@ -1087,8 +1029,6 @@ Procedure
     data:
       service_account.json: <base64_encoded_gcp_service_account_file>
     ```
-
-    </div>
 
 2.  If the `CredentialsRequest` custom resources for any existing credentials that are stored in secrets have changed permissions requirements, update the permissions as required.
 
@@ -1160,14 +1100,6 @@ Procedure
     $ oc edit cloudcredential cluster
     ```
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Text to add
-
-    </div>
-
     ``` yaml
     ...
       metadata:
@@ -1175,8 +1107,6 @@ Procedure
           cloudcredential.openshift.io/upgradeable-to: <version_number>
     ...
     ```
-
-    </div>
 
     Where `<version_number>` is the version that you are upgrading to, in the format `x.y.z`. For example, use `4.12.2` for OpenShift Container Platform 4.12.2.
 

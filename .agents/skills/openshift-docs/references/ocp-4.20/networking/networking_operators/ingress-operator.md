@@ -2752,14 +2752,6 @@ Procedure
     $ curl -u <user>:<password> http://<router_IP>:<stats_port>/metrics
     ```
 
-    <div class="example">
-
-    <div class="title">
-
-    Example output
-
-    </div>
-
     ``` terminal
     ...
     # HELP haproxy_backend_connections_total Total number of connections.
@@ -2787,8 +2779,6 @@ Procedure
     haproxy_server_bytes_in_total{namespace="default",pod="hello-rc-vkjqx",route="hello-route",server="10.130.0.90:8080",service="hello-svc-1"} 0
     ...
     ```
-
-    </div>
 
 7.  Launch the stats window by entering the following URL in a browser:
 

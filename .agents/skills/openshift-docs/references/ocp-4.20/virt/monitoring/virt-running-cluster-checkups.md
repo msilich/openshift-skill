@@ -478,7 +478,10 @@ Prerequisites
     namespace: <target_namespace>
   ```
 
-  - The namespace where the checkup is to be run.
+  where:
+
+  `<target_namespace>`
+  Specifies the namespace where the checkup is to be run.
 
 </div>
 
@@ -646,37 +649,37 @@ Procedure
       status.result.vmsWithUnsetEfsStorageClass: <vm_list>
     ```
 
-    - Specifies if the checkup is successful (`true`) or not (`false`).
+    - `data.status.succeeded` defines if the checkup is successful (`true`) or not (`false`).
 
-    - The reason for failure if the checkup fails.
+    - `data.status.failureReason` defines the reason for failure if the checkup fails.
 
-    - The time when the checkup started, in RFC 3339 time format.
+    - `data.status.startTimestamp` defines the time when the checkup started, in RFC 3339 time format.
 
-    - The time when the checkup has completed, in RFC 3339 time format.
+    - `data.status.completionTimestamp` defines the time when the checkup has completed, in RFC 3339 time format.
 
-    - The OpenShift Virtualization version.
+    - `data.status.result.cnvVersion` defines the OpenShift Virtualization version.
 
-    - Specifies if there is a default storage class.
+    - `data.status.result.defaultStorageClass` defines if there is a default storage class.
 
-    - The list of golden images whose data source is not ready.
+    - `data.status.result.goldenImagesNoDataSource` defines the list of golden images whose data source is not ready.
 
-    - The list of golden images whose data import cron is not up-to-date.
+    - `data.status.result.goldenImagesNotUpToDate` defines the list of golden images whose data import cron is not up-to-date.
 
-    - The OpenShift Container Platform version.
+    - `data.status.result.ocpVersion` defines the OpenShift Container Platform version.
 
-    - Specifies if a PVC of 10Mi has been created and bound by the provisioner.
+    - `data.status.result.pvcBound` defines if a PVC of 10Mi has been created and bound by the provisioner.
 
-    - The list of storage profiles using snapshot-based clone but missing VolumeSnapshotClass.
+    - `data.status.result.storageProfileMissingVolumeSnapshotClass` defines the list of storage profiles using snapshot-based clone but missing VolumeSnapshotClass.
 
-    - The list of storage profiles with unknown provisioners.
+    - `data.status.result.storageProfilesWithEmptyClaimPropertySets` defines the list of storage profiles with unknown provisioners.
 
-    - The list of storage profiles with smart clone support (CSI/snapshot).
+    - `data.status.result.storageProfilesWithSmartClone` defines the list of storage profiles with smart clone support (CSI/snapshot).
 
-    - The list of storage profiles spec-overriden claimPropertySets.
+    - `data.status.result.storageProfilesWithSpecClaimPropertySets` defines the list of storage profiles spec-overriden claimPropertySets.
 
-    - The list of virtual machines that use the Ceph RBD storage class when the virtualization storage class exists.
+    - `data.status.result.vmsWithNonVirtRbdStorageClass` defines the list of virtual machines that use the Ceph RBD storage class when the virtualization storage class exists.
 
-    - The list of virtual machines that use an Elastic File Store (EFS) storage class where the GID and UID are not set in the storage class.
+    - `data.status.result.vmsWithUnsetEfsStorageClass` defines the list of virtual machines that use an Elastic File Store (EFS) storage class where the GID and UID are not set in the storage class.
 
 7.  Delete the job and config map that you previously created by running the following commands:
 

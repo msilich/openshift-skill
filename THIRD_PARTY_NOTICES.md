@@ -34,7 +34,7 @@
 ## RHACS 4.11 and optional StackRox MCP
 
 - RHACS source: `openshift/openshift-docs`, branch `rhacs-docs-4.11`, commit
-  `9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7`, distribution `openshift-acs`.
+  `fb48f6bfd2e5f69c07ef73888ffa05bb6e4f0135`, distribution `openshift-acs`.
 - License: Apache-2.0. The complete topic-map conversion, original source license,
   converter license, SOURCE.json, TOPIC_MAP.yml and CONVERSION.json are under
   `.agents/skills/openshift-docs/references/acs-4.11/`.
@@ -74,7 +74,7 @@ and the referenced `SOURCE.json` file.
 ### OCP source snapshot
 
 - Project: `openshift/openshift-docs`
-- Source revision: `773aa10f325eb2095681d9a3aee7243d6accf8a5`
+- Source revision: `58129476889c10ea389b15c2cb7c3c239fdb4cbc`
 - License: Apache License 2.0
 - Bundled license:
   `.agents/skills/openshift-docs/references/ocp-4.20/LICENSE.openshift-docs`
@@ -97,7 +97,7 @@ and the referenced `SOURCE.json` file.
 ## Additional GitOps documentation and adapted workflows
 
 - GitOps 1.21 documentation: `openshift/openshift-docs`, branch `gitops-docs-1.21`,
-  commit `034a9d11f8031c9a18b32b67e5854eca0d6124c8`, Apache-2.0. The full topic map is
+  commit `2833be1175d730de0bbb6a701622c1ed92d6fe84`, Apache-2.0. The full topic map is
   converted to Markdown in the documentation skill's `references/gitops-1.21/`.
   Local changes include format notices, product-specific navigation titles and
   offline cross-references. License and exact build metadata accompany the snapshot.

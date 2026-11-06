@@ -50,17 +50,22 @@ Procedure
           pullPolicy: Always
     ```
 
-    - Specifies an OCI container image that is available on the host machine.
+    where:
 
-    - Specifies the path to the image.
+    `spec.volumes[].image`
+    Specifies an OCI container image that is available on the host machine.
 
-    - Specifies a pull policy, one of the following options:
+    `spec.volumes[].image.reference`
+    Specifies the path to the image.
 
-      - If `Always`, the kubelet always attempts to pull the image. If the pull fails, the kubelet sets the pod to `Failed`.
+    `spec.volumes[].image.pullPolicy`
+    Specifies a pull policy, one of the following options:
 
-      - If `Never`, the kubelet never pulls the image and only uses a local image. The pod becomes `Failed` if any layers of the image are not present locally, or if the manifest for that image is not already cached.
+    - If `Always`, the kubelet always attempts to pull the image. If the pull fails, the kubelet sets the pod to `Failed`.
 
-      - If `IfNotPresent` the kubelet pulls the image if it is not present. The pod becomes `Failed` if the image is not present and the pull fails. This is the default.
+    - If `Never`, the kubelet never pulls the image and only uses a local image. The pod becomes `Failed` if any layers of the image are not present locally, or if the manifest for that image is not already cached.
+
+    - If `IfNotPresent`, the kubelet pulls the image if it is not present. The pod becomes `Failed` if the image is not present and the pull fails. This is the default.
 
 2.  Create the pod by running the following command:
 
@@ -113,8 +118,8 @@ Verification
 
   </div>
 
-  - Indicates that the image was mounted to the pod.
+- The `volume` entry indicates that the image was mounted to the pod.
 
-  - Indicates that the image was successfully pulled.
+- The log message indicates that the image was successfully pulled.
 
 </div>

@@ -176,7 +176,7 @@ Verification
 
 </div>
 
-# Create a service by using the command line
+# Expose a VM as a service by using the CLI
 
 You can use the command line to create a service and associate it with a virtual machine (VM). You must create a label on the VM that matches the selector in the `Service` manifest.
 

@@ -21,7 +21,7 @@ The `ClusterInstance` CR provides a more unified and generic approach to definin
 > [!IMPORTANT]
 > The SiteConfig Operator only reconciles updates for `ClusterInstance` objects. The controller does not monitor or manage deprecated `SiteConfig` objects.
 
-The migration from `SiteConfig` CRs to `ClusterInstance` CRs provides several improvements, such as enhanced scalability and a clear separation of cluster parameters from the cluster deployment method. For more information about these improvements, and the SiteConfig Operator, see [SiteConfig](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.12/html-single/multicluster_engine_operator_with_red_hat_advanced_cluster_management/index#siteconfig-intro).
+The migration from `SiteConfig` CRs to `ClusterInstance` CRs provides several improvements, such as enhanced scalability and a clear separation of cluster parameters from the cluster deployment method.
 
 The migration process involves the following high-level steps:
 
@@ -74,6 +74,18 @@ The following Git repository folder structure is used as a basis for this exampl
 └── site-policies/ #Policies and configurations implemented for the clusters
 ...
 ```
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [SiteConfig Operator](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.12/html-single/multicluster_engine_operator_with_red_hat_advanced_cluster_management/index#siteconfig-intro)
+
+</div>
 
 # Preparing a parallel Argo CD pipeline for ClusterInstance CRs
 
@@ -208,12 +220,16 @@ Procedure
 
         </div>
 
-        - The `project` field must match the name of the `AppProject` resource created in the previous step.
+        where:
 
-        - The `path` field must match the root folder in your Git repository that will contain the `ClusterInstance` CRs and associated resources.
+        `spec.project`
+        Specifies the name of the `AppProject` resource created in the previous step.
 
-          > [!NOTE]
-          > By default, `auto-sync` is enabled. However, synchronization only occurs when you push configuration data for the cluster to the new configuration folder, or in this example, the `site-configs-v2/` folder.
+        `spec.source.path`
+        Specifies the root folder in your Git repository that will contain the `ClusterInstance` CRs and associated resources.
+
+        > [!NOTE]
+        > By default, `auto-sync` is enabled. However, synchronization only occurs when you push configuration data for the cluster to the new configuration folder, or in this example, the `site-configs-v2/` folder.
 
 2.  Create and commit a root folder in your Git repository that will contain the `ClusterInstance` CRs and associated resources, for example:
 

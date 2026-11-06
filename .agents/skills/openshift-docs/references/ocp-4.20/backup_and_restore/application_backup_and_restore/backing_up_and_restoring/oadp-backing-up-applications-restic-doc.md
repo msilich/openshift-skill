@@ -85,6 +85,6 @@ Additional resources
 
 </div>
 
-- [FSB limitations](https://velero.io/docs/v1.12/file-system-backup/#limitations)
+- [FSB limitations](https://velero.io/docs/latest/file-system-backup/#limitations)
 
 </div>

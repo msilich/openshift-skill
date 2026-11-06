@@ -610,7 +610,10 @@ Procedure
         userProvisionedDNS: Enabled
     ```
 
-    - Enable DNS management.
+    where:
+
+    `platform.gcp.userProvisionedDNS`
+    Specifies that DNS management is enabled.
 
 </div>
 

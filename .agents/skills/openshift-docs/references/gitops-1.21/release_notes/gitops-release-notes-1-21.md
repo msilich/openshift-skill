@@ -48,15 +48,15 @@ In the table, features are marked with the following statuses:
 
 </div>
 
-| GitOps | Argo CD CLI | Helm | Kustomize | Argo CD | Argo Rollouts | Dex | Argo CD Agent | Argo CD Image Updater | OpenShift Container Platform |
-|----|----|----|----|----|----|----|----|----|----|
-| 1.21.0 | 3.4.3 GA | 3.19.4 GA | 5.8.1 GA | 3.4.3 GA | 1.9.0 GA | 2.45.0 GA | 0.9.0 GA | 1.2.1 GA | 4.18-4.22 |
-| 1.20.0 | 3.3.2 TP | 3.19.4 GA | 5.8.1 GA | 3.3.2 GA | 1.8.4 GA | 2.43.1 GA | 0.7.0 GA | 1.1.2 TP | 4.14, 4.16-4.21 |
-| 1.19.0 | 3.1.9 TP | 3.18.4 GA | 5.7.0 GA | 3.1.9 GA | 1.8.3 GA | 2.43.0 GA | 0.5.3 GA | 1.0.4 TP | 4.14, 4.16-4.21 |
+| GitOps | Argo CD CLI | Helm | Kustomize | Argo CD | Argo Rollouts | Dex | Argo CD Agent | Argo CD Image Updater |
+|----|----|----|----|----|----|----|----|----|
+| 1.21.0 | 3.4.3 GA | 3.19.4 GA | 5.8.1 GA | 3.4.3 GA | 1.9.0 GA | 2.45.0 GA | 0.9.0 GA | 1.2.1 GA |
+| 1.20.0 | 3.3.2 TP | 3.19.4 GA | 5.8.1 GA | 3.3.2 GA | 1.8.4 GA | 2.43.1 GA | 0.7.0 GA | 1.1.2 TP |
+| 1.19.0 | 3.1.9 TP | 3.18.4 GA | 5.7.0 GA | 3.1.9 GA | 1.8.3 GA | 2.43.0 GA | 0.5.3 GA | 1.0.4 TP |
 
 GitOps and component versions
 
-For more information about lifecycle and support timelines, see [OpenShift Operator Life Cycles](https://access.redhat.com/support/policy/updates/openshift_operators).
+For more information about life cycle and support timelines, see [OpenShift Operator Life Cycles](https://access.redhat.com/support/policy/updates/openshift_operators).
 
 <div class="important">
 
@@ -92,9 +92,54 @@ Technology Preview tracker
 > [!NOTE]
 > The `ApplicationSet Progressive Sync Strategy` feature name aligns with the upstream naming convention and replaces the earlier name, `ApplicationSet Progressive Rollout Strategy`, used in previous Red Hat OpenShift GitOps versions. The functionality remains unchanged.
 
+# Release notes for Red Hat OpenShift GitOps 1.21.7
+
+Red Hat OpenShift GitOps 1.21.7 is available. This release includes security updates.
+
+## Errata updates
+
+RHSA-2026:94583 - Red Hat OpenShift GitOps 1.21.7 security update advisory
+Issued: 2026-11-03
+
+The following advisory documents the security fixes and enhancements in this release:
+
+- [RHSA-2026:94583](https://access.redhat.com/errata/RHSA-2026:94583)
+
+If you have installed the Red Hat OpenShift GitOps Operator in the default namespace, run the following command to view the container images in this release:
+
+``` terminal
+$ oc describe deployment gitops-operator-controller-manager -n openshift-gitops-operator
+```
+
+## Fixed issues
+
+Argo Rollouts controller outputs clean semantic version information
+Before this update, running `rollouts-controller --version` could output malformed version tags. With this update, the Argo Rollouts controller correctly outputs clean semantic version information. As a result, version queries return properly formatted semantic versions.
+
+[GITOPS-10775](https://redhat.atlassian.net/browse/GITOPS-10775)
+
+# Release notes for Red Hat OpenShift GitOps 1.21.6
+
+Red Hat OpenShift GitOps 1.21.6 is available. This release includes security updates.
+
+## Errata updates
+
+RHSA-2026:90337 - Red Hat OpenShift GitOps 1.21.6 security update advisory
+Issued: 2026-10-26
+
+The following advisory documents the security fixes and enhancements in this release:
+
+- [RHSA-2026:90337](https://access.redhat.com/errata/RHSA-2026:90337)
+
+If you have installed the Red Hat OpenShift GitOps Operator in the default namespace, run the following command to view the container images in this release:
+
+``` terminal
+$ oc describe deployment gitops-operator-controller-manager -n openshift-gitops-operator
+```
+
 # Release notes for Red Hat OpenShift GitOps 1.21.5
 
-Red Hat OpenShift GitOps 1.21.5 is now available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.
+Red Hat OpenShift GitOps 1.21.5 is available. This release includes security updates.
 
 ## Errata updates
 
@@ -123,7 +168,7 @@ Before this update, when the Dex service account token expired, token rotation m
 
 # Release notes for Red Hat OpenShift GitOps 1.21.4
 
-Red Hat OpenShift GitOps 1.21.4 is now available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.
+Red Hat OpenShift GitOps 1.21.4 is available. This release includes security updates.
 
 ## Errata updates
 
@@ -149,7 +194,7 @@ Before this update, OpenShift login to Argo CD failed with an `unauthorized_clie
 
 # Release notes for Red Hat OpenShift GitOps 1.21.3
 
-Red Hat OpenShift GitOps 1.21.3 is now available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.
+Red Hat OpenShift GitOps 1.21.3 is available. This release includes bug fixes and enhancements.
 
 ## Errata updates
 
@@ -175,7 +220,7 @@ Before this update, the Red Hat OpenShift GitOps Operator used an outdated Redis
 
 # Release notes for Red Hat OpenShift GitOps 1.21.2
 
-Red Hat OpenShift GitOps 1.21.2 is now available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.
+Red Hat OpenShift GitOps 1.21.2 is available. This release includes bug fixes and enhancements.
 
 ## Errata updates
 
@@ -241,7 +286,7 @@ As a workaround, configure the Argo CD custom resource (CR) to use Kustomize v5.
 
 # Release notes for Red Hat OpenShift GitOps 1.21.1
 
-Red Hat OpenShift GitOps 1.21.1 is available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.
+Red Hat OpenShift GitOps 1.21.1 is available. This release includes security updates.
 
 ## Errata updates
 
@@ -287,7 +332,7 @@ Before this update, permissions were missing to access the web terminal from the
 
 # Release notes for Red Hat OpenShift GitOps 1.21.0
 
-Red Hat OpenShift GitOps 1.21.0 is available on OpenShift Container Platform 4.18, 4.19, 4.20, 4.21, and 4.22.
+Red Hat OpenShift GitOps 1.21.0 is available. New features, updates, fixed issues, and known issues that pertain to Red Hat OpenShift GitOps on OpenShift Container Platform are included in the following sections.
 
 ## Errata updates
 

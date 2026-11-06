@@ -141,7 +141,9 @@ Before this update, the controller crashed during image-based upgrade (IBU) due 
 
 # OADP 1.5.4 release notes
 
-OpenShift API for Data Protection (OADP) 1.5.4 is a Container Grade Only (CGO) release, which is released to refresh the health grades of the containers. No code was changed in the product itself compared to that of OADP 1.5.3. OADP 1.5.4 introduces a known issue and fixes several Common Vulnerabilities and Exposures (CVEs).
+OpenShift API for Data Protection (OADP) 1.5.4 is a Container Grade Only (CGO) release, which is released to refresh the health grades of the containers. No code was changed in the product itself compared to that of OADP 1.5.3.
+
+OADP 1.5.4 introduces a known issue and fixes several Common Vulnerabilities and Exposures (CVEs).
 
 ## Known issues
 

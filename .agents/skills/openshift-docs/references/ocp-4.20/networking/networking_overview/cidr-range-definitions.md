@@ -95,6 +95,8 @@ Additional resources
 
 - [Configuring the cluster network range](../configuring_network_settings/configuring-cluster-network-range.md#configuring-cluster-network-range)
 
+- [Increasing the cluster network hostPrefix](../ovn_kubernetes_network_provider/increasing-cluster-network-hostprefix.md#increasing-cluster-network-hostprefix)
+
 </div>
 
 # Host prefix

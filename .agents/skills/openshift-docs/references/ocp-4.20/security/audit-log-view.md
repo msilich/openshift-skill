@@ -37,15 +37,11 @@ Example output for the Kubernetes API server:
 
 You can view the logs for the OpenShift API server, Kubernetes API server, OpenShift OAuth API server, and OpenShift OAuth server for each control plane node.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To view the audit logs:
 
 </div>
 
@@ -263,6 +259,8 @@ To view the audit logs:
 
       The possible values for the `authentication.openshift.io/decision` annotation are `allow`, `deny`, or `error`.
 
+</div>
+
 # Filter audit logs
 
 You can use `jq` or another JSON parsing tool to filter the API server audit logs.
@@ -360,7 +358,7 @@ Procedure
     $ tar cvaf must-gather.tar.gz must-gather.local.472290403699006248
     ```
 
-    - Replace `must-gather-local.472290403699006248` with the actual directory name.
+    Replace `must-gather-local.472290403699006248` with the actual directory name.
 
 3.  Attach the compressed file to your support case on the [the **Customer Support** page](https://access.redhat.com/support/cases/#/case/list) of the Red Hat Customer Portal.
 

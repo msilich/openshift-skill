@@ -58,8 +58,8 @@ Secondary network
 
 - [Connecting a virtual machine to an SR-IOV network](../../vm_networking/virt-connecting-vm-to-sriov.md#virt-connecting-vm-to-sriov)
 
-- [Creating a Linux bridge NAD by using the web console](../../vm_networking/virt-connecting-vm-to-linux-bridge.md#virt-creating-linux-bridge-nad-web_virt-connecting-vm-to-linux-bridge)
+- [Create a Linux bridge NAD by using the web console](../../vm_networking/virt-connecting-vm-to-linux-bridge.md#virt-creating-linux-bridge-nad-web_virt-connecting-vm-to-linux-bridge)
 
-- [Configuring SR-IOV additional network](../../vm_networking/virt-connecting-vm-to-sriov.md#nw-sriov-additional-network_virt-connecting-vm-to-sriov)
+- [Configure an SR-IOV additional network](../../vm_networking/virt-connecting-vm-to-sriov.md#nw-sriov-additional-network_virt-connecting-vm-to-sriov)
 
 - [Accessing a virtual machine by using its external FQDN](../../vm_networking/virt-accessing-vm-secondary-network-fqdn.md#virt-accessing-vm-secondary-network-fqdn)

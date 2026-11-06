@@ -20,15 +20,11 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To remove the Security Profiles Operator by using the OpenShift Container Platform web console:
 
 </div>
 
@@ -53,3 +49,5 @@ To remove the Security Profiles Operator by using the OpenShift Container Platfo
     ``` terminal
     $ oc delete MutatingWebhookConfiguration spo-mutating-webhook-configuration
     ```
+
+</div>

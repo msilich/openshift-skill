@@ -228,11 +228,7 @@ Procedure
 
 ## Creating MachineConfigPool groups for the cluster
 
-Creating `mcp` groups is a 2-step process:
-
-1.  Add an `mcp` label to the nodes in the cluster
-
-2.  Apply an `mcp` CR to the cluster that organizes the nodes based on their labels
+To control the rollout of configuration updates across worker nodes in OpenShift Container Platform, you can create MachineConfigPool (mcp) groups. Label nodes with `mcp` roles and apply `MachineConfigPool` custom resources (CRs) to organize them into groups.
 
 <div>
 

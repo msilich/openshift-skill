@@ -33,7 +33,7 @@
     "openshift_acs_docs": {
       "version": "4.11",
       "branch": "rhacs-docs-4.11",
-      "commit": "9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7",
+      "commit": "fb48f6bfd2e5f69c07ef73888ffa05bb6e4f0135",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0",
       "build_lock": "tools/docs/acs.lock.json"
@@ -82,13 +82,13 @@
     },
     "openshift_docs": {
       "branch": "enterprise-4.20",
-      "commit": "773aa10f325eb2095681d9a3aee7243d6accf8a5",
+      "commit": "58129476889c10ea389b15c2cb7c3c239fdb4cbc",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0"
     },
     "openshift_gitops_docs": {
       "branch": "gitops-docs-1.21",
-      "commit": "034a9d11f8031c9a18b32b67e5854eca0d6124c8",
+      "commit": "2833be1175d730de0bbb6a701622c1ed92d6fe84",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0",
       "version": "1.21"

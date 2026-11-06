@@ -53,7 +53,9 @@ Additional resources
 
 # Configure Amazon Web Services
 
-Configure Amazon Web Services (AWS) S3 storage and Identity and Access Management (IAM) credentials for backup storage with OADP. This provides the necessary permissions and storage infrastructure for data protection operations.
+Configure Amazon Web Services (AWS) S3 storage and Identity and Access Management (IAM) credentials for backup storage.
+
+This provides the necessary permissions and storage infrastructure for data protection operations with OADP.
 
 <div>
 
@@ -591,15 +593,15 @@ Prerequisites
 
 </div>
 
-- You must install the OADP Operator.
+- You have installed the OADP Operator.
 
-- You must configure object storage as a backup location.
+- You have configured object storage as a backup location.
 
-- If you use snapshots to back up PVs, your cloud provider must support either a native snapshot API or Container Storage Interface (CSI) snapshots.
+- If you use snapshots to back up PVs, your cloud provider supports either a native snapshot API or Container Storage Interface (CSI) snapshots.
 
-- If the backup and snapshot locations use the same credentials, you must create a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
+- If the backup and snapshot locations use the same credentials, you have created a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
 
-- If the backup and snapshot locations use different credentials, you must create two `Secrets`:
+- If the backup and snapshot locations use different credentials, you have created two `Secrets`:
 
   - `Secret` with a custom name for the backup location. You add this `Secret` to the `DataProtectionApplication` CR.
 
@@ -1387,7 +1389,9 @@ Procedure
 
 # Configure the backup storage location with a MD5 checksum algorithm
 
-You can configure the Backup Storage Location (BSL) in the Data Protection Application (DPA) to use a MD5 checksum algorithm for both Amazon Simple Storage Service (Amazon S3) and S3-compatible storage providers. The checksum algorithm calculates the checksum for uploading and downloading objects to Amazon S3. You can use one of the following options to set the `checksumAlgorithm` field in the `spec.backupLocations.velero.config.checksumAlgorithm` section of the DPA.
+You can configure the Backup Storage Location (BSL) in the Data Protection Application (DPA) to use a MD5 checksum algorithm for both Amazon Simple Storage Service (Amazon S3) and S3-compatible storage providers.
+
+The checksum algorithm calculates the checksum for uploading and downloading objects to Amazon S3. You can use one of the following options to set the `checksumAlgorithm` field in the `spec.backupLocations.velero.config.checksumAlgorithm` section of the DPA.
 
 - `CRC32`
 
@@ -2237,22 +2241,14 @@ Procedure
 
 </div>
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+# Additional resources
 
 - [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc)
 
-- [Velero 1.16](https://velero.io/docs/v1.16/)
+- [Velero 1.16](https://velero.io/docs/)
 
 - [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks)
 
 - [Installing the Data Protection Application with the `kubevirt` and `openshift` plugins](installing-oadp-kubevirt.md#oadp-installing-dpa_installing-oadp-kubevirt)
 
 - [Running tasks in pods using jobs](../../../nodes/jobs/nodes-nodes-jobs.md#nodes-nodes-jobs)
-
-</div>

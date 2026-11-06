@@ -6,6 +6,8 @@ Red Hat supports Intel Gaudi 2 and Intel Gaudi 3 devices. Intel Gaudi 3 devices
 
 # Intel Gaudi AI accelerators prerequisites
 
+Before using Intel Gaudi AI accelerators for AI/ML workloads in OpenShift Container Platform, your cluster must meet hardware, access, and software requirements. At minimum, you need at least one GPU worker node, cluster-admin access, the OpenShift CLI, and the Node Feature Discovery (NFD) Operator.
+
 - You have a working OpenShift Container Platform cluster with at least one GPU worker node.
 
 - You have access to the OpenShift Container Platform cluster as a cluster-admin to perform the required steps.

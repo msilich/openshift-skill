@@ -115,36 +115,39 @@ To view the current boot image used in your cluster, use one of the following me
 
   </div>
 
-  - This boot image is the same as the originally-installed OpenShift Container Platform version, in this example OpenShift Container Platform 4.12, regardless of the current version of the cluster. The way that the boot image is represented in the machine set depends on the platform, as the structure of the `providerSpec` field differs from platform to platform.
+  where:
 
-    <div class="formalpara">
+  `spec.template.spec.providerSpec.value.disks[].image`
+  Specifies the boot image. This boot image is the same as the originally-installed OpenShift Container Platform version, in this example OpenShift Container Platform 4.12, regardless of the current version of the cluster. The way that the boot image is represented in the machine set depends on the platform, as the structure of the `providerSpec` field differs from platform to platform.
 
-    <div class="title">
+  <div class="formalpara">
 
-    Example AWS machine set with the boot image reference
+  <div class="title">
 
-    </div>
+  Example AWS machine set with the boot image reference
 
-    ``` yaml
-    apiVersion: machine.openshift.io/v1beta1
-    kind: MachineSet
-    metadata:
-      name: ci-ln-hmy310k-72292-5f87z-worker-a
-      namespace: openshift-machine-api
-    spec:
-    # ...
-      template:
-    # ...
-        spec:
-    # ...
-          providerSpec:
-             value:
-              ami:
-                id: ami-0e8fd9094e487d1ff
-    # ...
-    ```
+  </div>
 
-    </div>
+  ``` yaml
+  apiVersion: machine.openshift.io/v1beta1
+  kind: MachineSet
+  metadata:
+    name: ci-ln-hmy310k-72292-5f87z-worker-a
+    namespace: openshift-machine-api
+  spec:
+  # ...
+    template:
+  # ...
+      spec:
+  # ...
+        providerSpec:
+           value:
+            ami:
+              id: ami-0e8fd9094e487d1ff
+  # ...
+  ```
+
+  </div>
 
 - For VMware vSphere, examine an affected node by opening an `oc debug` session to the node and using the `rpm-ostree status` command.
 
@@ -332,7 +335,10 @@ Verification
 
     </div>
 
-    - This boot image is the same as the current OpenShift Container Platform version.
+    where:
+
+    `spec.template.spec.providerSpec.value.disks[].image`
+    Specifies the boot image. This boot image is the same as the current OpenShift Container Platform version.
 
   - For VMware vSphere, get the boot image version from an affected node:
 
@@ -568,7 +574,10 @@ Verification
 
     </div>
 
-    - This boot image is the same as the current OpenShift Container Platform version.
+    where:
+
+    `spec.template.spec.providerSpec.value.disks[].image`
+    Specifies the boot image. This boot image is the same as the current OpenShift Container Platform version.
 
   - For VMware vSphere, get the boot image version from an affected node:
 

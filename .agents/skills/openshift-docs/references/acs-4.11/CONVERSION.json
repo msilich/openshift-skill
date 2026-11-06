@@ -22,6 +22,8 @@
     "https://access.redhat.com/knowledgebase",
     "https://access.redhat.com/security/cve",
     "https://access.redhat.com/security/cve/CVE-2026-103314",
+    "https://access.redhat.com/security/cve/CVE-2026-111943",
+    "https://access.redhat.com/security/cve/CVE-2026-114406",
     "https://access.redhat.com/security/cve/CVE-2026-13149",
     "https://access.redhat.com/security/cve/CVE-2026-25681",
     "https://access.redhat.com/security/cve/CVE-2026-27136",
@@ -636,6 +638,56 @@
       "document": "installing/installing_ocp/install-central-ocp.md",
       "kind": "unresolved-output-fragment",
       "target": "install-central-config-options-ocp.md#install-central-config-options-ocp"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-1"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-2"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-3"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-4"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-5"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-6"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-7"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-8"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-9"
+    },
+    {
+      "document": "installing/installing_ocp/install-secured-cluster-config-options-ocp.md",
+      "kind": "unresolved-output-fragment",
+      "target": "#cb1-10"
     },
     {
       "document": "installing/installing_ocp/install-secured-cluster-ocp.md",
@@ -1703,7 +1755,7 @@
         "run-roxctl-from-container_installing-roxctl-cli"
       ],
       "code_blocks": 17,
-      "code_sha256": "59123741575750bd31b2e863882f1a164093b571348aaf49f564052e2807ea46",
+      "code_sha256": "1502c207def3058e5642d9acbdf16c74f03506dff3d5bdfee3bdc34f4a3f3ef2",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -1922,7 +1974,7 @@
         "next-steps_install-secured-cluster-cloud-ocp"
       ],
       "code_blocks": 23,
-      "code_sha256": "c3383504f840cf2ea975782250907ab2fabac5095ebd54b043968e6c6476d36d",
+      "code_sha256": "77f4b21f6e1a59651143042806aeaa84a8729ca5224b476c19d43d8ff69e24ed",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
@@ -2001,7 +2053,7 @@
         "install-sensor-roxctl_install-secured-cluster-cloud-other"
       ],
       "code_blocks": 23,
-      "code_sha256": "c3383504f840cf2ea975782250907ab2fabac5095ebd54b043968e6c6476d36d",
+      "code_sha256": "77f4b21f6e1a59651143042806aeaa84a8729ca5224b476c19d43d8ff69e24ed",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
@@ -2101,7 +2153,7 @@
         "rhcos-enable-node-scan_upgrade-cloudsvc-roxctl"
       ],
       "code_blocks": 30,
-      "code_sha256": "90ec8562a4d5c2fa2199e6565495f61bc91445fdf879dc7bfca7d6edb4e2e75f",
+      "code_sha256": "7275eb3f773e9a2686213231cd5421d7e3f31a8ac85d95a3600b67ea22dfd639",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "e50bfb29446ee0bfa4dd454896cd71a126002bf08829a2ee9ed1551ee329e36d",
@@ -2333,10 +2385,10 @@
         "upload-kernel-support-package-to-central_enable-offline-mode"
       ],
       "code_blocks": 19,
-      "code_sha256": "6b4a86116676589d0fa72a3e89c77e062f0e9557515bceb8aaefa3ead31e5f16",
+      "code_sha256": "ba047b1d76e3a1e526269478047fde613f55c74182d19aca3e254a7e7c2427e0",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "1def0e8db028c6c37644e566be1f99f6df1c0e90966a3918d2b28663fc35755f",
+      "table_text_sha256": "6921e7f354601fe452d4497068a619cad377fe83a6ce30f6efc9e9b2d32bbc12",
       "tables": 1
     },
     "configuration/expose-portal-over-http.md": {
@@ -2659,7 +2711,7 @@
         "install-central-roxctl_install-central-ocp"
       ],
       "code_blocks": 49,
-      "code_sha256": "00d953d34d5b0739b5ee23db1858a13ab80f35b555c5297f826557ab251e552e",
+      "code_sha256": "b9a8e36a682f601fc5d9e20a4688458367a115a5bbda9261b4f49be783507dcc",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4a232be30719f61a3ef773bcece0a05342b226c5f27420b1fd95691b192fbc46",
@@ -2668,7 +2720,13 @@
     "installing/installing_ocp/install-secured-cluster-config-options-ocp.md": {
       "anchors": [
         "secured-cluster-configuration-options-operator_install-secured-cluster-config-options-ocp",
+        "required-configuration-settings_install-secured-cluster-config-options-ocp",
         "admission-controller-settings_install-secured-cluster-config-options-ocp",
+        "scanner-configuration-settings_install-secured-cluster-config-options-ocp",
+        "image-configuration-settings_install-secured-cluster-config-options-ocp",
+        "per-node-settings_install-secured-cluster-config-options-ocp",
+        "sensor-configuration-settings_install-secured-cluster-config-options-ocp",
+        "general-and-miscellaneous-settings-secured-cluster_install-secured-cluster-config-options-ocp",
         "customize-installation-operator-overlays_install-secured-cluster-config-options-ocp",
         "overlays_install-secured-cluster-config-options-ocp",
         "adding-an-overlay_install-secured-cluster-config-options-ocp",
@@ -2679,12 +2737,12 @@
         "changing-configmap-data_install-secured-cluster-config-options-ocp",
         "adding-a-container-to-a-deployment_install-secured-cluster-config-options-ocp"
       ],
-      "code_blocks": 6,
-      "code_sha256": "8dea89ca6f1321927f2a2d5b81194525434da5bbfe05a25862ea8b92dd942222",
+      "code_blocks": 7,
+      "code_sha256": "023d477b57c93fdd346666b97281de789335d04db157411ebe98aded02562fc3",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "e85c5e646f11ef883b718e2556ecc0c6863b2190f81746107b72a987b2ea30f8",
-      "tables": 1
+      "table_text_sha256": "68c927ba8771db2c1fdb17ef9357f21948c1ab3f07a785a1d5b53f6c14d03658",
+      "tables": 7
     },
     "installing/installing_ocp/install-secured-cluster-ocp.md": {
       "anchors": [
@@ -2708,7 +2766,7 @@
         "install-sensor-roxctl_install-secured-cluster-ocp"
       ],
       "code_blocks": 21,
-      "code_sha256": "87883b24e11227d3996537df55b3fe49d1f2f741405b018258132a0344c7c976",
+      "code_sha256": "92ea6fc360d5e19536ae8c85a80200b2b5c8a0159498bafa3afc6eb99b44881f",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
@@ -2784,7 +2842,7 @@
         "install-central-roxctl_install-central-other"
       ],
       "code_blocks": 33,
-      "code_sha256": "c4dad710851f95bac03be0f67f69434880b89842458f6274845d09cd48a39725",
+      "code_sha256": "139ee5850317c315bfe2f5788f61b8e2608c4c1f1e22e3a931968fd5dbe6a60e",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "ec89c44ca26d8cca602639c8c1624563ac27a9b4c0b778ee61e4f417d28c050b",
@@ -2823,7 +2881,7 @@
         "manifest-roxctl_install-secured-cluster-other"
       ],
       "code_blocks": 30,
-      "code_sha256": "f0d622de7e9196db08622b694984622d5d0beb6d96abd1c962fb24444488791f",
+      "code_sha256": "476465b5756966c52b6e2a36db0590e68e8cbf0e21c23f18bafa34dcb7556298",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4d5fc74a497e6d4197969e144b42a078af7c03a8f082bbd15d70e02b587007e7",
@@ -2933,7 +2991,7 @@
         "integrate-circle-ci_integrate-with-ci-systems"
       ],
       "code_blocks": 20,
-      "code_sha256": "cdb42a5b2729819fc57ff42ad79143feeac5df1aae81df5515a9a743f078a6d4",
+      "code_sha256": "476ef6b007c1cb6cf0c8a3b16869485388a046d3d50a2e600fc9a7653893a9b4",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
@@ -3611,7 +3669,7 @@
         "verifying-the-status-of-vulnerabilities_scan-rhcos-node-host"
       ],
       "code_blocks": 9,
-      "code_sha256": "6174df7a161a384f91a228f2ab78c7f504b4824e9d75b01682efc6ffb85a6066",
+      "code_sha256": "532d728edcf6dee6d887a5e9983cbc57e70b7ccfee35b158bd5a841f4f81f084",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "9361fa4aad6414156a31a5afbed69ab0b170ff268b92031a8f85307a97b0bc35",
@@ -4047,13 +4105,15 @@
         "bug-fixes-in-version-4115_release-notes-411",
         "about-this-release-4116_release-notes-411",
         "bug-fixes-in-version-4116_release-notes-411",
+        "about-this-release-4117_release-notes-411",
+        "bug-fixes-in-version-4117_release-notes-411",
         "image-versions_release-notes-411"
       ],
       "code_blocks": 0,
       "code_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
-      "table_text_sha256": "39c05e0428dc3db5129976eeddf32f3e1ead7a69b6cda82cc1a0c9fc3de08dff",
+      "table_text_sha256": "3d6827a941fa6aa54e9acb3789ae8b8ad61e231c0e62c479dc002f7e033a428e",
       "tables": 3
     },
     "rest_api/APITokenService/APITokenService.md": {
@@ -8864,7 +8924,7 @@
         "getting-upgrader-logs_upgrade-roxctl"
       ],
       "code_blocks": 59,
-      "code_sha256": "6052ec1304d3bb2b36fc082096b8bc8bcc4bc119940cb7285ac8049742ac904e",
+      "code_sha256": "a1cb2b880d85718bca7597e129165772358384cb71a352632d264dad08391448",
       "redacted_webhook_examples": 0,
       "source_warnings": [],
       "table_text_sha256": "e50bfb29446ee0bfa4dd454896cd71a126002bf08829a2ee9ed1551ee329e36d",

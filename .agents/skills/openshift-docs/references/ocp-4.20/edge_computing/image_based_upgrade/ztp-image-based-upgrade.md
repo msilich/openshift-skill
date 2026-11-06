@@ -18,15 +18,9 @@ Additional resources
 
 # Managing the image-based upgrade at scale using the ImageBasedGroupUpgrade CR on the hub
 
-The `ImageBasedGroupUpgrade` CR combines the `ImageBasedUpgrade` and `ClusterGroupUpgrade` APIs. For example, you can define the cluster selection and rollout strategy with the `ImageBasedGroupUpgrade` API in the same way as the `ClusterGroupUpgrade` API. The stage transitions are different from the `ImageBasedUpgrade` API. The `ImageBasedGroupUpgrade` API allows you to combine several stage transitions, also called actions, into one step that share one rollout strategy.
+The `ImageBasedGroupUpgrade` CR combines the `ImageBasedUpgrade` and `ClusterGroupUpgrade` APIs.
 
-<div class="formalpara">
-
-<div class="title">
-
-Example ImageBasedGroupUpgrade.yaml
-
-</div>
+For example, you can define the cluster selection and rollout strategy with the `ImageBasedGroupUpgrade` API in the same way as the `ClusterGroupUpgrade` API. The stage transitions are different from the `ImageBasedUpgrade` API. The `ImageBasedGroupUpgrade` API allows you to combine several stage transitions, also called actions, into one step that share one rollout strategy.
 
 ``` yaml
 apiVersion: lcm.openshift.io/v1alpha1
@@ -62,24 +56,31 @@ spec:
         timeout: 2400
 ```
 
-</div>
+where:
 
-- Clusters to upgrade.
+`spec.clusterLabelSelectors`
+Specifies the clusters to upgrade.
 
-- Target platform version, the seed image to be used, and the secret required to access the image.
+`spec.ibuSpec.seedImageRef`
+Specifies the target platform version, the seed image to be used, and the secret required to access the image.
 
-  > [!NOTE]
-  > If you add the seed image pull secret in the hub cluster, in the same namespace as the `ImageBasedGroupUpgrade` resource, the secret is added to the manifest list for the `Prep` stage. The secret is recreated in each spoke cluster in the `openshift-lifecycle-agent` namespace.
+> [!NOTE]
+> If you add the seed image pull secret in the hub cluster, in the same namespace as the `ImageBasedGroupUpgrade` resource, the secret is added to the manifest list for the `Prep` stage. The secret is recreated in each spoke cluster in the `openshift-lifecycle-agent` namespace.
 
-- Optional: Applies additional manifests, which are not in the seed image, to the target cluster. Also applies `ConfigMap` objects for custom catalog sources.
+`spec.ibuSpec.extraManifests`
+Specifies additional manifests, which are not in the seed image, to apply to the target cluster. Also applies `ConfigMap` objects for custom catalog sources. This field is optional.
 
-- `ConfigMap` resources that contain the OADP `Backup` and `Restore` CRs.
+`spec.ibuSpec.oadpContent`
+Specifies `ConfigMap` resources that contain the OADP `Backup` and `Restore` CRs.
 
-- Upgrade plan details.
+`spec.plan`
+Specifies the upgrade plan details.
 
-- Number of clusters to update in a batch.
+`spec.plan[].rolloutStrategy.maxConcurrency`
+Specifies the number of clusters to update in a batch.
 
-- Timeout limit to complete the action in minutes.
+`spec.plan[].rolloutStrategy.timeout`
+Specifies the timeout limit to complete the action in minutes.
 
 ## Supported action combinations
 
@@ -226,7 +227,9 @@ Shows all failed actions along with a detailed error message.
 
 # Performing an image-based upgrade on managed clusters at scale in several steps
 
-For use cases when you need better control of when the upgrade interrupts your service, you can upgrade a set of your managed clusters by using the `ImageBasedGroupUpgrade` CR with adding actions after the previous step is complete. After evaluating the results of the previous steps, you can move to the next upgrade stage or troubleshoot any failed steps throughout the procedure.
+For use cases when you need better control of when the upgrade interrupts your service, you can upgrade a set of your managed clusters by using the `ImageBasedGroupUpgrade` CR. You can use the `ImageBasedGroupUpgrade` CR to add actions after the earlier step is complete.
+
+After evaluating the results of the earlier steps, you can move to the next upgrade stage or troubleshoot any failed steps throughout the procedure.
 
 > [!IMPORTANT]
 > Only certain action combinations are supported and listed in *Supported action combinations*.
@@ -291,18 +294,25 @@ Procedure
             timeout: 2400
     ```
 
-    - Clusters to upgrade.
+    where:
 
-    - Target platform version, the seed image to be used, and the secret required to access the image.
+    `spec.clusterLabelSelectors`
+    Specifies the clusters to upgrade.
 
-      > [!NOTE]
-      > If you add the seed image pull secret in the hub cluster, in the same namespace as the `ImageBasedGroupUpgrade` resource, the secret is added to the manifest list for the `Prep` stage. The secret is recreated in each spoke cluster in the `openshift-lifecycle-agent` namespace.
+    `spec.ibuSpec.seedImageRef`
+    Specifies the target platform version, the seed image to be used, and the secret required to access the image.
 
-    - Optional: Applies additional manifests, which are not in the seed image, to the target cluster. Also applies `ConfigMap` objects for custom catalog sources.
+    > [!NOTE]
+    > If you add the seed image pull secret in the hub cluster, in the same namespace as the `ImageBasedGroupUpgrade` resource, the secret is added to the manifest list for the `Prep` stage. The secret is recreated in each spoke cluster in the `openshift-lifecycle-agent` namespace.
 
-    - List of `ConfigMap` resources that contain the OADP `Backup` and `Restore` CRs.
+    `spec.ibuSpec.extraManifests`
+    Specifies additional manifests, which are not in the seed image, to apply to the target cluster. Also applies `ConfigMap` objects for custom catalog sources. This field is optional.
 
-    - Upgrade plan details.
+    `spec.ibuSpec.oadpContent`
+    Specifies a list of `ConfigMap` resources that contain the OADP `Backup` and `Restore` CRs.
+
+    `spec.plan`
+    Specifies the upgrade plan details.
 
 2.  Apply the created file by running the following command on the hub cluster:
 
@@ -316,13 +326,7 @@ Procedure
     $ oc get ibgu -o yaml
     ```
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    Example output
-
-    </div>
+    Example output:
 
     ``` yaml
     # ...
@@ -339,8 +343,6 @@ Procedure
         name: spoke6
     # ...
     ```
-
-    </div>
 
     The previous output of an example plan starts with the `Prep` stage only and you add actions to the plan based on the results of the previous step. TALM adds a label to the clusters to mark if the upgrade succeeded or failed. For example, the `lcm.openshift.io/ibgu-prep-failed` is applied to clusters that failed the `Prep` stage.
 
@@ -402,13 +404,7 @@ Verification
   $ oc get ibgu -o yaml
   ```
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  Example output:
 
   ``` yaml
   # ...
@@ -432,8 +428,6 @@ Verification
       name: spoke6
   # ...
   ```
-
-  </div>
 
 </div>
 
@@ -461,7 +455,9 @@ Additional resources
 
 # Performing an image-based upgrade on managed clusters at scale in one step
 
-For use cases when service interruption is not a concern, you can upgrade a set of your managed clusters by using the `ImageBasedGroupUpgrade` CR with several actions combined in one step with one rollout strategy. With one rollout strategy, the upgrade time can be reduced but you can only troubleshoot failed clusters after the upgrade plan is complete.
+For use cases when service interruption is not a concern, you can upgrade a set of your managed clusters by using the `ImageBasedGroupUpgrade` CR with several actions combined in one step with one rollout strategy.
+
+With one rollout strategy, the upgrade time can be reduced but you can only troubleshoot failed clusters after the upgrade plan is complete.
 
 <div>
 
@@ -523,22 +519,31 @@ Procedure
             timeout: 2400
     ```
 
-    - Clusters to upgrade.
+    where:
 
-    - Target platform version, the seed image to be used, and the secret required to access the image.
+    `spec.clusterLabelSelectors`
+    Specifies the clusters to upgrade.
 
-      > [!NOTE]
-      > If you add the seed image pull secret in the hub cluster, in the same namespace as the `ImageBasedGroupUpgrade` resource, the secret is added to the manifest list for the `Prep` stage. The secret is recreated in each spoke cluster in the `openshift-lifecycle-agent` namespace.
+    `spec.ibuSpec.seedImageRef`
+    Specifies the target platform version, the seed image to be used, and the secret required to access the image.
 
-    - Optional: Applies additional manifests, which are not in the seed image, to the target cluster. Also applies `ConfigMap` objects for custom catalog sources.
+    > [!NOTE]
+    > If you add the seed image pull secret in the hub cluster, in the same namespace as the `ImageBasedGroupUpgrade` resource, the secret is added to the manifest list for the `Prep` stage. The secret is recreated in each spoke cluster in the `openshift-lifecycle-agent` namespace.
 
-    - `ConfigMap` resources that contain the OADP `Backup` and `Restore` CRs.
+    `spec.ibuSpec.extraManifests`
+    Specifies additional manifests, which are not in the seed image, to apply to the target cluster. Also applies `ConfigMap` objects for custom catalog sources. This field is optional.
 
-    - Upgrade plan details.
+    `spec.ibuSpec.oadpContent`
+    Specifies `ConfigMap` resources that contain the OADP `Backup` and `Restore` CRs.
 
-    - Number of clusters to update in a batch.
+    `spec.plan`
+    Specifies the upgrade plan details.
 
-    - Timeout limit to complete the action in minutes.
+    `spec.plan[].rolloutStrategy.maxConcurrency`
+    Specifies the number of clusters to update in a batch.
+
+    `spec.plan[].rolloutStrategy.timeout`
+    Specifies the timeout limit to complete the action in minutes.
 
 2.  Apply the created file by running the following command on the hub cluster:
 
@@ -562,13 +567,7 @@ Verification
   $ oc get ibgu -o yaml
   ```
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  Example output:
 
   ``` yaml
   # ...
@@ -589,8 +588,6 @@ Verification
       name: spoke6
   # ...
   ```
-
-  </div>
 
 </div>
 
@@ -800,13 +797,7 @@ Verification
   $ oc get ibgu -o yaml
   ```
 
-  <div class="formalpara">
-
-  <div class="title">
-
-  Example output
-
-  </div>
+  \+ .Example output
 
   ``` yaml
   # ...
@@ -818,8 +809,6 @@ Verification
       name: spoke4
   # ...
   ```
-
-  </div>
 
 </div>
 

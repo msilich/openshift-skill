@@ -2517,9 +2517,13 @@ platform:
           password: <password>
 ```
 
-- The `address` configuration setting specifies the protocol.
+\+ where:
 
-- The `username` configuration setting must specify a user with `Administrator` privileges.
+`platform.baremetal.hosts[].bmc.address`
+Specifies the protocol.
+
+`platform.baremetal.hosts[].bmc.username`
+Specifies the BMC username. The username must specify a user with `Administrator` privileges.
 
 For Dell hardware, Red Hat supports integrated Dell Remote Access Controller (iDRAC) virtual media, Redfish network boot, and IPMI.
 
@@ -2629,7 +2633,10 @@ platform:
           password: <password>
 ```
 
-- The `address` configuration setting specifies the protocol.
+\+ where:
+
+`platform.baremetal.hosts[].bmc.address`
+Specifies the protocol.
 
 For HPE integrated Lights Out (iLO), Red Hat supports Redfish virtual media, Redfish network boot, and IPMI.
 
@@ -2724,7 +2731,10 @@ platform:
           password: <password>
 ```
 
-- The `address` configuration setting specifies the protocol.
+\+ where:
+
+`platform.baremetal.hosts[].bmc.address`
+Specifies the protocol.
 
 For Fujitsu hardware, Red Hat supports integrated Remote Management Controller (iRMC) and IPMI.
 
@@ -2735,17 +2745,8 @@ For Fujitsu hardware, Red Hat supports integrated Remote Management Controller (
 
 BMC address formats for Fujitsu iRMC
 
-<div class="formalpara">
-
-<div class="title">
-
 iRMC
-
-</div>
-
 Fujitsu nodes can use `irmc://<out-of-band-ip>` and defaults to port `443`. The following example demonstrates an iRMC configuration within the `install-config.yaml` file.
-
-</div>
 
 ``` yaml
 platform:
@@ -2778,7 +2779,10 @@ platform:
           password: <password>
 ```
 
-- The `address` configuration setting specifies the protocol.
+\+ where:
+
+`platform.baremetal.hosts[].bmc.address`
+Specifies the protocol.
 
 For Cisco UCS C-Series and X-Series servers, Red Hat supports Cisco Integrated Management Controller (CIMC).
 

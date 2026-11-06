@@ -13,9 +13,9 @@ To create a Linux bridge network and attach a VM to the network, perform the fol
 > [!NOTE]
 > OpenShift Virtualization does not support Linux bridge bonding modes 0, 5, and 6. For more information, see "Additional resources".
 
-# Creating a Linux bridge NNCP
+# Create a Linux bridge node network configuration policy
 
-You can configure a Linux bridge network for live migration or external access to virtual machines (VMs) by creating a `NodeNetworkConfigurationPolicy` (NNCP) manifest for a Linux bridge network.
+You can configure a Linux bridge network for live migration or external access to virtual machines (VMs) by creating a `NodeNetworkConfigurationPolicy` (NNCP) manifest.
 
 <div>
 
@@ -92,7 +92,7 @@ Procedure
 
 </div>
 
-# Creating a Linux bridge `NetworkAttachmentDefinition` by using the web console
+# Create a Linux bridge NAD by using the web console
 
 Use the OpenShift Container Platform web console to create a `NetworkAttachmentDefinition` (`net-attach-def`) that connects pods and virtual machines to a layer-2 network.
 
@@ -151,7 +151,7 @@ Procedure
 
 </div>
 
-# Creating a Linux bridge NAD by using the CLI
+# Create a Linux bridge NAD by using the CLI
 
 You can create a network attachment definition (NAD) to provide layer-2 networking to pods and virtual machines (VMs) by using the command line.
 
@@ -274,7 +274,7 @@ Verification
 
 </div>
 
-## Enabling port isolation for a Linux bridge NAD
+## Enable port isolation for a Linux bridge NAD
 
 You can enable port isolation for a Linux bridge network attachment definition (NAD) so that virtual machines (VMs) or pods that run on the same virtual LAN (VLAN) can operate in isolation from one another.
 
@@ -348,7 +348,7 @@ Procedure
 
 </div>
 
-# Add a network interface to a VM by using the web console
+# Add a VM network interface in the web console
 
 You can add a network interface to a virtual machine (VM) from the OpenShift Container Platform web console and attach it to an existing network attachment definition. Restart or live migrate the VM to apply the change.
 
@@ -434,7 +434,7 @@ Information about networking fields in the virtual machine wizard.
 </tbody>
 </table>
 
-# Configuring a VM network interface by using the CLI
+# Configure a VM network interface by using the CLI
 
 You can configure a virtual machine (VM) network interface for a bridge network by using the command line.
 

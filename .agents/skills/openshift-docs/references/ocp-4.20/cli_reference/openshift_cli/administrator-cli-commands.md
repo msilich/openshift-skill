@@ -8,6 +8,8 @@ Run `oc adm -h` to list all administrator commands or run `oc <command> --help` 
 
 # OpenShift CLI (oc) administrator commands
 
+The OpenShift Container Platform `oc adm` commands provide cluster management capabilities for users with administrative privileges. Use these commands to manage builds, certificates, cluster configuration, node operations, and authentication policies.
+
 ## oc adm build-chain
 
 Output the inputs and dependencies of your builds

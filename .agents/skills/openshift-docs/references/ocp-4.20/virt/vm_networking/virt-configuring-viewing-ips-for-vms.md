@@ -2,7 +2,7 @@
 
 You can configure an IP address when you create a virtual machine (VM). The IP address is provisioned with cloud-init. View the IP address of a VM by using the OpenShift Container Platform web console or the command line. The network information is collected by the QEMU guest agent.
 
-# Configuring a static IP address when creating a virtual machine by using the web console
+# Configure a VM IP address by using the web console
 
 You can configure a static IP address when you create a virtual machine (VM) by using the web console. The IP address is provisioned with cloud-init.
 
@@ -49,7 +49,7 @@ Procedure
 
 </div>
 
-# Configuring an IP address when creating a virtual machine by using the CLI
+# Configure a VM IP address by using the CLI
 
 You can configure a static or dynamic IP address when you create a virtual machine (VM). The IP address is provisioned with cloud-init.
 
@@ -129,7 +129,7 @@ Procedure
 
 </div>
 
-# Viewing the IP address of a virtual machine by using the web console
+# View a VM IP address by using the web console
 
 You can view the IP address of a virtual machine (VM) by using the OpenShift Container Platform web console.
 
@@ -152,7 +152,7 @@ Procedure
 
 </div>
 
-# Viewing the IP address of a virtual machine by using the CLI
+# View a VM IP address by using the CLI
 
 You can view the IP address of a virtual machine (VM) by using the command line.
 

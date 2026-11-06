@@ -6,7 +6,7 @@ You must install the QEMU guest agent on VMs created from operating system image
 
 You clone a PVC by creating a data volume that references a source PVC.
 
-# About cloning
+# VM cloning methods
 
 When cloning a data volume, the Containerized Data Importer (CDI) chooses one of the Container Storage Interface (CSI) clone methods: CSI volume cloning or smart cloning. Both methods are efficient but have certain requirements. If the requirements are not met, the CDI uses host-assisted cloning.
 
@@ -109,7 +109,7 @@ Procedure
 
 </div>
 
-# Creating a VM from a PVC by using the CLI
+# VM creation from a cloned PVC
 
 You can create a virtual machine (VM) by cloning the persistent volume claim (PVC) of an existing VM by using the command line.
 
@@ -123,7 +123,7 @@ You can clone a PVC by using one of the following options:
 
   This method creates a data volume whose lifecycle is dependent on the original VM. Deleting the original VM deletes the cloned data volume and its associated PVC.
 
-## Optimizing clone Performance at scale in OpenShift Data Foundation
+## Optimize clone performance at scale in OpenShift Data Foundation
 
 When you use OpenShift Data Foundation, the storage profile configures the default cloning strategy as `csi-clone`. However, this method has limitations, as shown in the following link.
 
@@ -165,7 +165,7 @@ Procedure
 
 </div>
 
-## Cloning a PVC to a data volume
+## Clone a PVC to a data volume
 
 You can clone the persistent volume claim (PVC) of an existing virtual machine (VM) disk to a data volume by using the command line.
 
@@ -265,7 +265,7 @@ Procedure
 
 </div>
 
-## Creating a VM from a cloned PVC by using a data volume template
+## Create a VM from a cloned PVC data volume template
 
 You can create a virtual machine (VM) that clones the persistent volume claim (PVC) of an existing VM by using a data volume template. This method creates a data volume whose lifecycle is independent on the original VM.
 

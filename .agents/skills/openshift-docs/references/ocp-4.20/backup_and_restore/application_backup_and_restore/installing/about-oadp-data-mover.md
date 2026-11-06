@@ -2,7 +2,7 @@
 
 Use the OpenShift API for Data Protection (OADP) built-in Data Mover to move Container Storage Interface (CSI) volume snapshots to remote object storage and restore stateful applications after cluster failures. This provides disaster recovery capabilities for both containerized and virtual machine workloads.
 
-The Data Mover uses [Kopia](../backing_up_and_restoring/oadp-about-kopia.md#oadp-about-kopia) as the uploader mechanism to read the snapshot data and write to the unified repository.
+The Data Mover uses Kopia as the uploader mechanism to read the snapshot data and write to the unified repository.
 
 OADP supports CSI snapshots on the following:
 
@@ -108,3 +108,7 @@ OADP backup support matrix for OpenShift Virtualization workloads
 
 > [!NOTE]
 > The CSI Data Mover backups use Kopia regardless of `uploaderType`.
+
+# Additional resources
+
+- [About Kopia](../backing_up_and_restoring/oadp-about-kopia.md#oadp-about-kopia)

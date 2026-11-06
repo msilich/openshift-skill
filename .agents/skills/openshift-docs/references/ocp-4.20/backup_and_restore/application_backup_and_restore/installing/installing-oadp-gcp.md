@@ -1,15 +1,17 @@
 <!-- Format modified: converted from AsciiDoc to Markdown. See SOURCE.json for provenance. -->
 
-You install the OpenShift API for Data Protection (OADP) with Google Cloud by installing the OADP Operator. The Operator installs [Velero 1.16](https://velero.io/docs/v1.16/).
+You install the OpenShift API for Data Protection (OADP) with Google Cloud by installing the OADP Operator. The Operator installs Velero 1.16.
 
 > [!NOTE]
 > Starting from OADP 1.0.4, all OADP 1.0.*z* versions can only be used as a dependency of the Migration Toolkit for Containers Operator and are not available as a standalone Operator.
 
-You configure Google Cloud for Velero, create a default `Secret`, and then install the Data Protection Application. For more details, see [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc).
+You configure Google Cloud for Velero, create a default `Secret`, and then install the Data Protection Application.
 
-To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog. See [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks) for details.
+To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog.
 
 # Configure Google Cloud
+
+Configure Google Cloud storage and service account credentials for backup storage.
 
 You configure Google Cloud for the OpenShift API for Data Protection (OADP).
 
@@ -647,7 +649,7 @@ Prerequisites
 
 </div>
 
-- You have installed a cluster in manual mode with [Google Cloud Workload Identity configured](https://docs.openshift.com/container-platform/latest/installing/installing_gcp/installing-gcp-customizations.html#installing-gcp-with-short-term-creds_installing-gcp-customizations).
+- You have installed a cluster in manual mode with Google Cloud Workload Identity configured.
 
 - You have access to the Cloud Credential Operator utility (`ccoctl`) and to the associated workload identity pool.
 
@@ -741,15 +743,15 @@ Prerequisites
 
 </div>
 
-- You must install the OADP Operator.
+- You have installed the OADP Operator.
 
-- You must configure object storage as a backup location.
+- You have configured object storage as a backup location.
 
-- If you use snapshots to back up PVs, your cloud provider must support either a native snapshot API or Container Storage Interface (CSI) snapshots.
+- If you use snapshots to back up PVs, your cloud provider supports either a native snapshot API or Container Storage Interface (CSI) snapshots.
 
-- If the backup and snapshot locations use the same credentials, you must create a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
+- If the backup and snapshot locations use the same credentials, you have created a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
 
-- If the backup and snapshot locations use different credentials, you must create two `Secrets`:
+- If the backup and snapshot locations use different credentials, you have created two `Secrets`:
 
   - `Secret` with a custom name for the backup location. You add this `Secret` to the `DataProtectionApplication` CR.
 
@@ -2051,18 +2053,16 @@ Procedure
 
 </div>
 
-<div>
+# Additional resources
 
-<div class="title">
+- [Velero 1.16](https://velero.io/docs/)
 
-Additional resources
+- [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc)
 
-</div>
+- [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks)
 
 - [Installing the Data Protection Application with the `kubevirt` and `openshift` plugins](installing-oadp-kubevirt.md#oadp-installing-dpa_installing-oadp-kubevirt)
 
 - [Running tasks in pods using jobs](../../../nodes/jobs/nodes-nodes-jobs.md#nodes-nodes-jobs)
 
 - [Configuring the OpenShift API for Data Protection (OADP) with multiple backup storage locations](configuring-oadp-multiple-bsl.md#configuring-oadp-multiple-bsl)
-
-</div>

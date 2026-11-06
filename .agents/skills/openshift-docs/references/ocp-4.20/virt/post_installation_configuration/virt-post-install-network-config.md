@@ -10,9 +10,9 @@ After you install OpenShift Virtualization, you can install networking Operators
 
 - You can add the MetalLB Operator to manage the lifecycle for an instance of MetalLB on your cluster.
 
-# Creating a Linux bridge NNCP
+# Create a Linux bridge node network configuration policy
 
-You can configure a Linux bridge network for live migration or external access to virtual machines (VMs) by creating a `NodeNetworkConfigurationPolicy` (NNCP) manifest for a Linux bridge network.
+You can configure a Linux bridge network for live migration or external access to virtual machines (VMs) by creating a `NodeNetworkConfigurationPolicy` (NNCP) manifest.
 
 <div>
 
@@ -89,7 +89,7 @@ Procedure
 
 </div>
 
-# Creating a Linux bridge `NetworkAttachmentDefinition` by using the web console
+# Create a Linux bridge NAD by using the web console
 
 Use the OpenShift Container Platform web console to create a `NetworkAttachmentDefinition` (`net-attach-def`) that connects pods and virtual machines to a layer-2 network.
 
@@ -259,7 +259,7 @@ Verification
 
 </div>
 
-# Selecting a dedicated network by using the web console
+# Select a dedicated migration network by using the web console
 
 You can select a dedicated network for live migration by using the OpenShift Container Platform web console.
 

@@ -119,7 +119,9 @@ Member CSVs of an Operator group have the following annotations:
 
 # Provided APIs annotation
 
-A *group/version/kind (GVK)* is a unique identifier for a Kubernetes API. Information about what GVKs are provided by an Operator group are shown in an `olm.providedAPIs` annotation. The value of the annotation is a string consisting of `<kind>.<version>.<group>` delimited with commas. The GVKs of CRDs and API services provided by all active member CSVs of an Operator group are included.
+A *group/version/kind (GVK)* is a unique identifier for a Kubernetes API. Information about what GVKs are provided by an Operator group are shown in an `olm.providedAPIs` annotation.
+
+The value of the annotation is a string consisting of `<kind>.<version>.<group>` delimited with commas. The GVKs of CRDs and API services provided by all active member CSVs of an Operator group are included.
 
 Review the following example of an `OperatorGroup` object with a single active member CSV that provides the `PackageManifest` resource:
 
@@ -464,6 +466,8 @@ Additional resources
 </div>
 
 # Troubleshooting Operator groups
+
+Use this reference to troubleshoot common Operator group issues in OpenShift Container Platform, such as invalid install plans caused by missing, duplicate, or misconfigured Operator groups in a namespace.
 
 ## Membership
 

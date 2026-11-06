@@ -695,7 +695,7 @@ The following Image permission is required for deletion:
 
 ## Required Google Cloud permissions for shared VPC installations
 
-When you are installing a cluster to a [shared VPC](https://cloud.google.com/vpc/docs/shared-vpc), you must configure the service account for both the host project and the service project.
+When you are installing a cluster to a shared VPC, you must configure the service account for both the host project and the service project.
 
 > [!IMPORTANT]
 > You can use granular permissions for a Cloud Credential Operator that operates in either Manual or Mint credentials mode. For more information about the minimum permissions required for a standard installation that is configured with either of these credentials modes, see "Required Google Cloud permissions for installer-provisioned infrastructure".
@@ -784,6 +784,18 @@ Required minimal permissions for provisioning DNS resources in a separate projec
 * `dns.resourceRecordSets.delete`
 * `dns.resourceRecordSets.list`
 ```
+
+</div>
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Shared VPC](https://cloud.google.com/vpc/docs/shared-vpc)
 
 </div>
 

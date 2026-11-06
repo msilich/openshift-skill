@@ -113,7 +113,7 @@ Verification
 
 </div>
 
-# Selecting a dedicated network by using the web console
+# Select a dedicated migration network by using the web console
 
 You can select a dedicated network for live migration by using the OpenShift Container Platform web console.
 

@@ -9,7 +9,7 @@ This also makes it possible to install an operating system from a CD-ROM in the 
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
-# Inserting a CD-ROM in a live VM by using the command line
+# Insert a CD-ROM in a running VM by using the CLI
 
 To make data on a CD-ROM storage device available to a running virtual machine (VM), create a virtual CD-ROM drive in the VM and insert the CD-ROM into the drive as an ISO image.
 
@@ -114,7 +114,7 @@ Procedure
 
 </div>
 
-# Inserting a CD-ROM in a live VM by using the web console
+# Insert a CD-ROM into a running VM from the web console
 
 To make data on a CD-ROM storage device available to a running virtual machine (VM), create a virtual CD-ROM drive in the VM and insert the CD-ROM into the drive as an ISO image.
 

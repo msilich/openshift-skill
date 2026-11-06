@@ -112,15 +112,11 @@ Procedure
 
 After you create applications in your project and deploy them, you can use the **Topology** view in the **Developer** perspective to see the alerts and metrics for your application. Critical and warning alerts for your application are indicated on the workload node in the **Topology** view.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-To see the alerts for your workload:
 
 </div>
 
@@ -142,7 +138,11 @@ To see the alerts for your workload:
 
     3.  Click **View monitoring dashboard** to see the monitoring dashboard for that application.
 
+</div>
+
 # Image vulnerabilities breakdown
+
+The **Developer** perspective shows image vulnerability details in the **Image Vulnerabilities breakdown** window, including severity levels, vulnerable container images, and fixable container images.
 
 In the **Developer** perspective, the project dashboard shows the **Image Vulnerabilities** link in the **Status** section. Using this link, you can view the **Image Vulnerabilities breakdown** window, which includes details regarding vulnerable container images and fixable container images. The icon color indicates severity:
 
@@ -160,6 +160,8 @@ Based on the severity level, you can prioritize vulnerabilities and fix them in 
 </figure>
 
 # Monitoring your application and image vulnerabilities metrics
+
+After you create and deploy applications, you can use the **Developer** perspective to monitor image vulnerability metrics across your cluster, including counts of vulnerable images and their severity levels.
 
 After you create applications in your project and deploy them, use the **Developer** perspective in the web console to see the metrics for your application dependency vulnerabilities across your cluster. The metrics help you to analyze the following image vulnerabilities in detail:
 

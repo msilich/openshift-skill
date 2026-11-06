@@ -174,7 +174,9 @@ $ oc apply -f <extension_name>.yaml
 
 # Object ownership for cluster extensions
 
-In Operator Lifecycle Manager (OLM) v1, a Kubernetes object can only be owned by a single `ClusterExtension` object at a time. This ensures that objects within an OpenShift Container Platform cluster are managed consistently and prevents conflicts between multiple cluster extensions attempting to control the same object.
+In Operator Lifecycle Manager (OLM) v1, a Kubernetes object can only be owned by a single `ClusterExtension` object at a time.
+
+This ensures that objects within an OpenShift Container Platform cluster are managed consistently and prevents conflicts between multiple cluster extensions attempting to control the same object.
 
 ## Single ownership
 

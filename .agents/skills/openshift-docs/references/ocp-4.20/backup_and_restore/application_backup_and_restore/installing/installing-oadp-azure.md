@@ -2,18 +2,20 @@
 
 Configure the OpenShift API for Data Protection (OADP) with Microsoft Azure to back up and restore cluster resources by using Azure storage. This provides data protection capabilities for your OpenShift Container Platform clusters.
 
-The OADP Operator installs [Velero 1.16](https://velero.io/docs/v1.16/).
+The OADP Operator installs Velero 1.16.
 
 > [!NOTE]
 > Starting from OADP 1.0.4, all OADP 1.0.*z* versions can only be used as a dependency of the Migration Toolkit for Containers Operator and are not available as a standalone Operator.
 
-You configure Azure for Velero, create a default `Secret`, and then install the Data Protection Application. For more details, see [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc).
+You configure Azure for Velero, create a default `Secret`, and then install the Data Protection Application.
 
-To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog. See [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks) for details.
+To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog.
 
 # Configure Microsoft Azure
 
-Configure Microsoft Azure storage and service principal credentials for backup storage with OADP. This provides the necessary authentication and storage infrastructure for data protection operations.
+Configure Microsoft Azure storage and service principal credentials for backup storage.
+
+This provides the necessary authentication and storage infrastructure for data protection operations with OADP.
 
 <div>
 
@@ -325,7 +327,9 @@ Procedure
 
 # Use OADP with Azure Security Token Service authentication
 
-You can use Microsoft Entra Workload ID to access Azure storage for OADP backup and restore operations. This approach uses the signed Kubernetes service account tokens of the OpenShift cluster. These token are automatically rotated every hour and exchanged with the Azure Active Directory (AD) access tokens, eliminating the need for long-term client secrets.
+You can use Microsoft Entra Workload ID to access Azure storage for OADP backup and restore operations.
+
+This approach uses the signed Kubernetes service account tokens of the OpenShift cluster. These token are automatically rotated every hour and exchanged with the Azure Active Directory (AD) access tokens, eliminating the need for long-term client secrets.
 
 To use the Azure Security Token Service (STS) configuration, you need the `credentialsMode` field set to `Manual` during cluster installation. This approach uses the Cloud Credential Operator (`ccoctl`) to set up the workload identity infrastructure, including the OpenID Connect (OIDC) provider, issuer configuration, and user-assigned managed identities.
 
@@ -792,15 +796,15 @@ Prerequisites
 
 </div>
 
-- You must install the OADP Operator.
+- You have installed the OADP Operator.
 
-- You must configure object storage as a backup location.
+- You have configured object storage as a backup location.
 
-- If you use snapshots to back up PVs, your cloud provider must support either a native snapshot API or Container Storage Interface (CSI) snapshots.
+- If you use snapshots to back up PVs, your cloud provider supports either a native snapshot API or Container Storage Interface (CSI) snapshots.
 
-- If the backup and snapshot locations use the same credentials, you must create a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
+- If the backup and snapshot locations use the same credentials, you have created a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
 
-- If the backup and snapshot locations use different credentials, you must create two `Secrets`:
+- If the backup and snapshot locations use different credentials, you have created two `Secrets`:
 
   - `Secret` with a custom name for the backup location. You add this `Secret` to the `DataProtectionApplication` CR.
 
@@ -2102,18 +2106,16 @@ Procedure
 
 </div>
 
-<div>
+# Additional resources
 
-<div class="title">
+- [Velero 1.16](https://velero.io/docs/)
 
-Additional resources
+- [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc)
 
-</div>
+- [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks)
 
 - [Installing the Data Protection Application with the `kubevirt` and `openshift` plugins](installing-oadp-kubevirt.md#oadp-installing-dpa_installing-oadp-kubevirt)
 
 - [Running tasks in pods using jobs](../../../nodes/jobs/nodes-nodes-jobs.md#nodes-nodes-jobs)
 
 - [Configuring the OpenShift API for Data Protection (OADP) with multiple backup storage locations](configuring-oadp-multiple-bsl.md#configuring-oadp-multiple-bsl)
-
-</div>

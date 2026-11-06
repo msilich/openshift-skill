@@ -21,7 +21,7 @@ You must consider the following limitations before implementing a primary UDN:
 
 - You cannot use headless services to access a VM.
 
-# Create a primary user-defined network by using the web console
+# Primary overlay network creation in the web console
 
 You can use the OpenShift Container Platform web console to create a primary namespace-scoped `UserDefinedNetwork` (UDN) or a cluster-scoped `ClusterUserDefinedNetwork` custom resource definition (CRD).
 
@@ -29,7 +29,7 @@ The UDN serves as the default primary network for pods and VMs that you create i
 
 After you define the custom primary overlay network, you can create namespaces that are associated with the cluster-scoped UDN.
 
-## Creating a namespace for user-defined networks by using the web console
+## Create a namespace for overlay networks by using the web console
 
 You can create a namespace to be used with primary user-defined networks (UDNs) by using the OpenShift Container Platform web console.
 
@@ -69,7 +69,7 @@ Procedure
 
 </div>
 
-## Creating a primary namespace-scoped user-defined network by using the web console
+## Create a namespace-scoped primary overlay network in the web console
 
 You can create an isolated primary network in your project namespace by creating a `UserDefinedNetwork` custom resource in the OpenShift Container Platform web console.
 
@@ -107,7 +107,7 @@ Procedure
 
 </div>
 
-## Creating a primary cluster-scoped user-defined network by using the web console
+## Create a cluster-scoped primary overlay network in the web console
 
 You can connect multiple namespaces to the same primary user-defined network (UDN) by creating a `ClusterUserDefinedNetwork` custom resource in the OpenShift Container Platform web console.
 
@@ -145,11 +145,11 @@ Procedure
 
 </div>
 
-# Create a primary user-defined network by using the CLI
+# Primary overlay network creation by using the CLI
 
 You can create a primary `UserDefinedNetwork` or `ClusterUserDefinedNetwork` custom resource definition (CRD) by using the OpenShift CLI (`oc`). After you define the custom primary overlay network, you can create namespaces that are associated with the cluster-scoped UDN.
 
-## Creating a namespace for user-defined networks by using the CLI
+## Create a namespace for overlay networks by using the CLI
 
 You can create a namespace to be used with primary user-defined networks (UDNs) by using the OpenShift CLI (`oc`).
 
@@ -197,7 +197,7 @@ Procedure
 
 </div>
 
-## Creating a primary namespace-scoped user-defined network by using the CLI
+## Create a namespace-scoped primary overlay network by using the CLI
 
 You can create an isolated primary network in your project namespace by using the CLI. You must use the OVN-Kubernetes layer 2 topology and enable persistent IP address allocation in the user-defined network (UDN) configuration to ensure VM live migration support.
 
@@ -262,7 +262,7 @@ Procedure
 
 </div>
 
-## Creating a primary cluster-scoped user-defined network by using the CLI
+## Create a cluster-scoped primary overlay network by using the CLI
 
 You can connect multiple namespaces to the same primary user-defined network (UDN) to achieve native tenant isolation by using the CLI.
 
@@ -333,7 +333,7 @@ Procedure
 
 </div>
 
-# Attach a virtual machine to the primary user-defined network
+# VM attachment to the primary overlay network
 
 You can connect a virtual machine (VM) to the primary user-defined network (UDN) by requesting the pod network attachment and configuring the interface binding.
 
@@ -356,7 +356,7 @@ Passt binding has the following benefits:
 >
 > For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
 
-## Creating a virtual machine in a namespace with a primary user-defined network by using the web console
+## Create a VM with primary overlay access in the web console
 
 You can create a virtual machine (VM) in a namespace that is configured to use a primary user-defined network (UDN) by using the OpenShift Container Platform web console.
 
@@ -397,7 +397,7 @@ Procedure
 
 </div>
 
-## Attaching a virtual machine to the primary user-defined network by using the CLI
+## Attach a VM to a primary overlay network
 
 You can connect a virtual machine (VM) to the primary user-defined network (UDN) by using the OpenShift CLI (`oc`).
 

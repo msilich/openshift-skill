@@ -2,18 +2,20 @@
 
 Configure OpenShift API for Data Protection (OADP) to use Multicloud Object Gateway (MCG), a component of OpenShift Data Foundation, as a backup storage location by setting up credentials, secrets, and the Data Protection Application.
 
-You can install the OpenShift API for Data Protection (OADP) with MCG by installing the OADP Operator. The Operator installs [Velero 1.16](https://velero.io/docs/v1.16/).
+You can install the OpenShift API for Data Protection (OADP) with MCG by installing the OADP Operator. The Operator installs Velero 1.16.
 
 > [!NOTE]
 > Starting from OADP 1.0.4, all OADP 1.0.*z* versions can only be used as a dependency of the Migration Toolkit for Containers Operator and are not available as a standalone Operator.
 
-You can create a `Secret` CR for the backup location and install the Data Protection Application. For more details, see [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc).
+You can create a `Secret` CR for the backup location and install the Data Protection Application.
 
-To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog. For details, see [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks).
+To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog.
 
 # Retrieve Multicloud Object Gateway credentials
 
-Retrieve the Multicloud Object Gateway (MCG) bucket credentials to create a `Secret` custom resource (CR) for OpenShift API for Data Protection (OADP).
+Retrieve the Multicloud Object Gateway (MCG) credentials to create a `Secret` custom resource (CR) for your backup storage.
+
+You need the MCG bucket credentials for OpenShift API for Data Protection (OADP).
 
 > [!NOTE]
 > Although the MCG Operator is [deprecated](https://catalog.redhat.com/software/containers/ocs4/mcg-rhel8-operator/5ddbcefbdd19c71643b56ce9?architecture=amd64&image=64243f5dcd0eb61355af9abd), the MCG plugin is still available for OpenShift Data Foundation. To download the plugin, browse to [Download Red Hat OpenShift Data Foundation](https://access.redhat.com/downloads/content/547/ver=4/rhel---9/4.15.4/x86_64/product-software) and download the appropriate MCG plugin for your operating system.
@@ -553,15 +555,15 @@ Prerequisites
 
 </div>
 
-- You must install the OADP Operator.
+- You have installed the OADP Operator.
 
-- You must configure object storage as a backup location.
+- You have configured object storage as a backup location.
 
-- If you use snapshots to back up PVs, your cloud provider must support either a native snapshot API or Container Storage Interface (CSI) snapshots.
+- If you use snapshots to back up PVs, your cloud provider supports either a native snapshot API or Container Storage Interface (CSI) snapshots.
 
-- If the backup and snapshot locations use the same credentials, you must create a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
+- If the backup and snapshot locations use the same credentials, you have created a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
 
-- If the backup and snapshot locations use different credentials, you must create two `Secrets`:
+- If the backup and snapshot locations use different credentials, you have created two `Secrets`:
 
   - `Secret` with a custom name for the backup location. You add this `Secret` to the `DataProtectionApplication` CR.
 
@@ -1863,13 +1865,13 @@ Procedure
 
 </div>
 
-<div>
+# Additional resources
 
-<div class="title">
+- [Velero 1.16](https://velero.io/docs/)
 
-Additional resources
+- [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc)
 
-</div>
+- [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks)
 
 - [Performance tuning guide for Multicloud Object Gateway](https://access.redhat.com/solutions/6719951)
 
@@ -1880,5 +1882,3 @@ Additional resources
 - [Configuring the OpenShift API for Data Protection (OADP) with multiple backup storage locations](configuring-oadp-multiple-bsl.md#configuring-oadp-multiple-bsl)
 
 - [Configuring node agents and node labels](installing-oadp-mcg.md#oadp-configuring-node-agents_installing-oadp-mcg)
-
-</div>

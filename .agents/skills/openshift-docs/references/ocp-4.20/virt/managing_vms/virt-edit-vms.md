@@ -4,7 +4,7 @@ You can update virtual machine (VM) configuration details like CPU, memory, and 
 
 To edit a VM to configure disk sharing by using virtual disks or LUN, see "Configuring shared volumes for virtual machines".
 
-# Changing the instance type of a VM by using the web console
+# Change a VM instance type by using the web console
 
 You can change the instance type associated with a running virtual machine (VM) by using the web console. The change takes effect immediately.
 
@@ -62,7 +62,7 @@ Verification
 
 </div>
 
-# Hot plugging memory on a virtual machine
+# Change VM memory without a restart
 
 You can add or remove the amount of memory allocated to a virtual machine (VM) without having to restart the VM by using the OpenShift Container Platform web console.
 
@@ -102,7 +102,7 @@ Procedure
 
 </div>
 
-# Hot plugging CPUs on a virtual machine
+# Change VM CPU sockets without a restart
 
 You can increase or decrease the number of CPU sockets allocated to a virtual machine (VM) without having to restart the VM by using the OpenShift Container Platform web console.
 
@@ -140,7 +140,7 @@ Procedure
 
 </div>
 
-# Editing a virtual machine by using the CLI
+# Edit a virtual machine by using the CLI
 
 You can edit a virtual machine (VM) by using the command line.
 
@@ -184,7 +184,7 @@ Procedure
 
 </div>
 
-# Adding a disk to a virtual machine
+# Add a disk to a virtual machine
 
 You can add a virtual disk to a virtual machine (VM) by using the OpenShift Container Platform web console.
 
@@ -215,7 +215,9 @@ Procedure
 
 </div>
 
-## Storage fields
+## Virtual machine storage fields
+
+To optimize storage performance and ensure data availability for your workloads, configure the storage fields to define the source, size, and disk characteristics of your virtual machine (VM).
 
 | Field | Description |
 |----|----|
@@ -284,7 +286,7 @@ If you do not specify these parameters, the system uses the default storage prof
 </tbody>
 </table>
 
-# Mounting a Windows driver disk on a virtual machine
+# Mount a Windows driver disk on a virtual machine
 
 You can mount a Windows driver disk on a virtual machine (VM) by using the OpenShift Container Platform web console.
 
@@ -308,7 +310,7 @@ Procedure
 
 </div>
 
-# Adding a secret, config map, or service account to a virtual machine
+# Add a secret, config map, or service account to a VM
 
 You can add a secret, config map, or service account to a virtual machine by using the OpenShift Container Platform web console.
 
@@ -368,7 +370,7 @@ Verification
 
 You can now mount the secret, config map, or service account as you would mount any other disk.
 
-# Updating multiple virtual machines
+# Update multiple virtual machines
 
 You can use the command line interface (CLI) to update multiple virtual machines (VMs) at the same time.
 
@@ -470,7 +472,7 @@ Procedure
 
 </div>
 
-## Performing bulk actions on virtual machines
+## Bulk actions on virtual machines
 
 You can perform bulk actions on multiple virtual machines (VMs) simultaneously by using the **VirtualMachines** list view in the web console. This allows you to efficiently manage a group of VMs with minimal manual effort.
 
@@ -486,7 +488,7 @@ Available bulk actions:
 
 - **Take snapshot** - Take snapshots of multiple VMs. The **Take snapshots** dialog allows you to enter a suffix for the names of the resulting snapshots.
 
-# Configuring multiple I/O threads for fast storage access
+# Configure multiple I/O threads for fast storage access
 
 You can improve storage performance by configuring multiple I/O threads for a virtual machine (VM) that uses fast storage, such as solid-state drive (SSD) or non-volatile memory express (NVMe). This configuration option is only available by editing YAML of the VM.
 

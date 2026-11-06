@@ -55,14 +55,6 @@ Procedure
 
     The `source-crs/ibu/PlatformBackupRestoreWithIBGU.yaml` file is provided in the ZTP container image.
 
-    <div class="formalpara">
-
-    <div class="title">
-
-    PlatformBackupRestoreWithIBGU.yaml
-
-    </div>
-
     ``` yaml
     apiVersion: velero.io/v1
     kind: Backup
@@ -101,8 +93,6 @@ Procedure
         acm-klusterlet
     ```
 
-    </div>
-
     > [!NOTE]
     > If your `multiclusterHub` CR does not have `.spec.imagePullSecret` defined and the secret does not exist on the `open-cluster-management-agent` namespace in your hub cluster, remove `v1/secrets/open-cluster-management-agent/open-cluster-management-image-pull-credentials` from the `metadata.annotations.lca.openshift.io/apply-label` value in the `acm-klusterlet` `Backup` CR.
 
@@ -110,14 +100,6 @@ Procedure
     > If you perform the image-based upgrade directly on managed clusters, use the `PlatformBackupRestore.yaml` file.
 
     If you use LVM Storage to create persistent volumes, you can use the `source-crs/ibu/PlatformBackupRestoreLvms.yaml` provided in the ZTP container image to back up your LVM Storage resources.
-
-    <div class="formalpara">
-
-    <div class="title">
-
-    PlatformBackupRestoreLvms.yaml
-
-    </div>
 
     ``` yaml
     apiVersion: velero.io/v1
@@ -149,21 +131,11 @@ Procedure
         lvmcluster
     ```
 
-    </div>
-
     - The `lca.openshift.io/apply-wave` value must be lower than the values specified in the application `Restore` CRs.
 
 2.  If you need to restore applications after the upgrade, create the OADP `Backup` and `Restore` CRs for your application in the `openshift-adp` namespace:
 
     1.  Create the OADP CRs for cluster-scoped application artifacts in the `openshift-adp` namespace:
-
-        <div class="formalpara">
-
-        <div class="title">
-
-        Example OADP CRs for cluster-scoped application artifacts for LSO and LVM Storage
-
-        </div>
 
         ``` yaml
         apiVersion: velero.io/v1
@@ -198,21 +170,11 @@ Procedure
             backup-app-cluster-resources
         ```
 
-        </div>
-
         - Replace the example resource names in the `lca.openshift.io/apply-label` field with your actual resources.
 
         - The value in the `lca.openshift.io/apply-wave` field must be higher than the value in the platform `Restore` CRs and lower than the value in the application namespace-scoped `Restore` CR.
 
     2.  Create the OADP CRs for your namespace-scoped application artifacts in the `source-crs/custom-crs` directory:
-
-        <div class="formalpara">
-
-        <div class="title">
-
-        Example OADP CRs namespace-scoped application artifacts when LSO is used
-
-        </div>
 
         ``` yaml
         apiVersion: velero.io/v1
@@ -253,17 +215,7 @@ Procedure
             backup-app
         ```
 
-        </div>
-
         - Define custom resources for your application in the `includedNamespaceScopedResources` field.
-
-        <div class="formalpara">
-
-        <div class="title">
-
-        Example OADP CRs namespace-scoped application artifacts when LVM Storage is used
-
-        </div>
 
         ``` yaml
         apiVersion: velero.io/v1
@@ -309,8 +261,6 @@ Procedure
             includedResources:
             - logicalvolumes
         ```
-
-        </div>
 
         where:
 

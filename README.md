@@ -91,12 +91,12 @@ equal cluster names are insufficient. The existing four-choice Secret policy is
 unchanged. Denied access is not retried through another tool or identity.
 
 Documentation source is `openshift/openshift-docs`, `rhacs-docs-4.11`, commit
-`9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7`. On a connected preparation machine,
+`fb48f6bfd2e5f69c07ef73888ffa05bb6e4f0135`. On a connected preparation machine,
 obtain that exact clean checkout and the existing pinned conversion dependencies:
 
 ```bash
 git clone --branch rhacs-docs-4.11 https://github.com/openshift/openshift-docs.git rhacs-docs
-git -C rhacs-docs checkout --detach 9e69fa90b143a677ddcfb0e5cc4d50c3b37bf0a7
+git -C rhacs-docs checkout --detach fb48f6bfd2e5f69c07ef73888ffa05bb6e4f0135
 python3 tools/docs/build.py --lock tools/docs/acs.lock.json \
   --source-dir rhacs-docs --output-dir /path/to/new-acs-docs
 ```
@@ -708,7 +708,7 @@ details, and the content manifest are recorded in
 `.agents/skills/openshift-docs/references/ocp-4.20/SOURCE.json`.
 
 The snapshot is pinned to `openshift/openshift-docs` branch `enterprise-4.20`,
-commit `773aa10f325eb2095681d9a3aee7243d6accf8a5`.
+commit `58129476889c10ea389b15c2cb7c3c239fdb4cbc`.
 The converter includes a small local correction: this source revision's distro
 map lacks a 4.20 entry, so the product version is derived from the explicit
 `enterprise-4.20` branch instead of silently using the upstream 4.17 fallback.
@@ -718,7 +718,7 @@ Asciidoctor 2.0.23, and Pandoc 3.7.0.2 installed:
 
 ```bash
 git clone --branch enterprise-4.20 --single-branch https://github.com/openshift/openshift-docs.git /path/to/openshift-docs
-git -C /path/to/openshift-docs checkout --detach 773aa10f325eb2095681d9a3aee7243d6accf8a5
+git -C /path/to/openshift-docs checkout --detach 58129476889c10ea389b15c2cb7c3c239fdb4cbc
 python3 tools/docs/build.py \
   --source-dir /path/to/openshift-docs \
   --output-dir .agents/skills/openshift-docs/references/ocp-4.20
@@ -745,7 +745,7 @@ for review. Repeated-build tests check reproducibility and installed content.
 ## Offline GitOps documentation and procedure sources
 
 Both OCP branches additionally bundle the complete GitOps 1.21 topic map
-from `openshift/openshift-docs` at `034a9d11f8031c9a18b32b67e5854eca0d6124c8`.
+from `openshift/openshift-docs` at `2833be1175d730de0bbb6a701622c1ed92d6fe84`.
 GitOps 1.21 is a separate product baseline, not inferred from the OCP version.
 Use `search_docs.py "repo server" --product gitops`; the default search remains OCP.
 The product's `SOURCE.json`, licenses and navigation files are under the

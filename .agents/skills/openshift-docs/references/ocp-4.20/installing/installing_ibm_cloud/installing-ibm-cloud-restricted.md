@@ -239,10 +239,10 @@ Procedure
     $ ibmcloud is security-group-rule-add $DEFAULT_SG inbound tcp --remote 0.0.0.0/0 --port-min 443 --port-max 443
     ```
 
-</div>
+    > [!NOTE]
+    > Be sure that your endpoint gateways are configured to use this security group.
 
-> [!NOTE]
-> Be sure that your endpoint gateways are configured to use this security group.
+</div>
 
 # Generating a key pair for cluster node SSH access
 

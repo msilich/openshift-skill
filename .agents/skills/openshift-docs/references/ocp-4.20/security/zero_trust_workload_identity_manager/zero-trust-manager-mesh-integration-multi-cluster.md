@@ -905,7 +905,9 @@ Procedure
 
 # Deploying the Istio custom resource with the federation configuration
 
-Deploy the Istio custom resource on Cluster A and Cluster B with SPIFFE Runtime Environment (SPIRE) federation and multi-cluster Red Hat OpenShift Service Mesh settings. This configures Istiod to obtain workload certificates from SPIRE and to trust SPIFFE bundles from both clusters for cross-cluster mTLS.
+Deploy the Istio custom resource on Cluster A and Cluster B with SPIFFE Runtime Environment (SPIRE) federation and multi-cluster Red Hat OpenShift Service Mesh settings.
+
+This configures Istiod to obtain workload certificates from SPIRE and to trust SPIFFE bundles from both clusters for cross-cluster mTLS.
 
 The Istio CR must include the following fields and values:
 
@@ -1164,7 +1166,9 @@ Procedure
 
 # Verifying SPIRE integration with Istio on each cluster
 
-Verify that Red Hat OpenShift Service Mesh on Cluster A and Cluster B obtains workload certificates from SPIFFE Runtime Environment (SPIRE). This confirms Istio sidecars use SPIRE-issued identities rather than the built-in Istio certificate authority (CA) before you proceed with cross-cluster mesh verification.
+Verify that Red Hat OpenShift Service Mesh on Cluster A and Cluster B obtains workload certificates from SPIFFE Runtime Environment (SPIRE).
+
+This confirms Istio sidecars use SPIRE-issued identities rather than the built-in Istio certificate authority (CA) before you proceed with cross-cluster mesh verification.
 
 <div>
 

@@ -70,8 +70,6 @@ An egress firewall has the following limitations:
 
   To find the IP address for your API servers, run `oc get ep kubernetes -n default`.
 
-  For more information, see [BZ#1988324](https://bugzilla.redhat.com/show_bug.cgi?id=1988324).
-
 - A maximum of one `EgressFirewall` object with a maximum of 8,000 rules can be defined per project.
 
 - If you are using the OVN-Kubernetes network plugin with shared gateway mode in Red Hat OpenShift Networking, return ingress replies are affected by egress firewall rules. If the egress firewall rules drop the ingress reply destination IP, the traffic is dropped.
@@ -95,6 +93,18 @@ If you use DNS names in any of your egress firewall policy rules, proper resolut
 - The pod must resolve the domain from the same local name servers when necessary. Otherwise the IP addresses for the domain known by the egress firewall controller and the pod can be different. If the IP addresses for a hostname differ, the egress firewall might not be enforced consistently.
 
 - Because the egress firewall controller and pods asynchronously poll the same local name server, the pod might obtain the updated IP address before the egress controller does, which causes a race condition. Due to this current limitation, domain name usage in `EgressFirewall` objects is only recommended for domains with infrequent IP address changes.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [BZ#1988324](https://bugzilla.redhat.com/show_bug.cgi?id=1988324)
+
+</div>
 
 ### Improved DNS resolution and resolving wildcard domain names
 

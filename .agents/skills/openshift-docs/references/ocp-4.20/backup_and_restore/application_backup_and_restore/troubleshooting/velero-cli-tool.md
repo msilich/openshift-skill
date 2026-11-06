@@ -28,7 +28,7 @@ Procedure
 
 </div>
 
-1.  Open a browser and navigate to ["Install the CLI" on the Velero website](https://velero.io/docs/v1.16/basic-install/#install-the-cli).
+1.  Open a browser and navigate to ["Install the CLI" on the Velero website](https://velero.io/docs/basic-install/#install-the-cli).
 
 2.  Follow the appropriate procedure for macOS, GitHub, or Windows.
 

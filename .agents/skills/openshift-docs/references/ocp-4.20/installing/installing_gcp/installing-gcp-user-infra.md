@@ -1758,13 +1758,19 @@ Procedure
     EOF
     ```
 
-    - `infra_id` is the `INFRA_ID` infrastructure name from the extraction step.
+    where:
 
-    - `region` is the region to deploy the cluster into, for example `us-central1`.
+    `infra_id`
+    Specifies the `INFRA_ID` infrastructure name from the extraction step.
 
-    - `master_subnet_cidr` is the CIDR for the master subnet, for example `10.0.0.0/17`.
+    `region`
+    Specifies the region to deploy the cluster into, for example `us-central1`.
 
-    - `worker_subnet_cidr` is the CIDR for the worker subnet, for example `10.0.128.0/17`.
+    `master_subnet_cidr`
+    Specifies the CIDR for the master subnet, for example `10.0.0.0/17`.
+
+    `worker_subnet_cidr`
+    Specifies the CIDR for the worker subnet, for example `10.0.128.0/17`.
 
 3.  Create the deployment by using the `gcloud` CLI:
 
@@ -1916,15 +1922,22 @@ Procedure
     EOF
     ```
 
-    - Required only when deploying an external cluster.
+    where:
 
-    - `infra_id` is the `INFRA_ID` infrastructure name from the extraction step.
+    `02_lb_int.py`
+    Specifies the load balancer import. Required only when deploying an external cluster.
 
-    - `region` is the region to deploy the cluster into, for example `us-central1`.
+    `infra_id`
+    Specifies the `INFRA_ID` infrastructure name from the extraction step.
 
-    - `control_subnet` is the URI to the control subnet.
+    `region`
+    Specifies the region to deploy the cluster into, for example `us-central1`.
 
-    - `zones` are the zones to deploy the control plane instances into, like `us-east1-b`, `us-east1-c`, and `us-east1-d`.
+    `control_subnet`
+    Specifies the URI to the control subnet.
+
+    `zones`
+    Specifies the zones to deploy the control plane instances into, like `us-east1-b`, `us-east1-c`, and `us-east1-d`.
 
 5.  Create the deployment by using the `gcloud` CLI:
 
@@ -2010,11 +2023,16 @@ Procedure
     EOF
     ```
 
-    - `infra_id` is the `INFRA_ID` infrastructure name from the extraction step.
+    where:
 
-    - `cluster_domain` is the domain for the cluster, for example `openshift.example.com`.
+    `infra_id`
+    Specifies the `INFRA_ID` infrastructure name from the extraction step.
 
-    - `cluster_network` is the `selfLink` URL to the cluster network.
+    `cluster_domain`
+    Specifies the domain for the cluster, for example `openshift.example.com`.
+
+    `cluster_network`
+    Specifies the `selfLink` URL to the cluster network.
 
 3.  Create the deployment by using the `gcloud` CLI:
 
@@ -2123,13 +2141,19 @@ Procedure
     EOF
     ```
 
-    - `allowed_external_cidr` is the CIDR range that can access the cluster API and SSH to the bootstrap host. For an internal cluster, set this value to `${NETWORK_CIDR}`.
+    where:
 
-    - `infra_id` is the `INFRA_ID` infrastructure name from the extraction step.
+    `allowed_external_cidr`
+    Specifies the CIDR range that can access the cluster API and SSH to the bootstrap host. For an internal cluster, set this value to `${NETWORK_CIDR}`.
 
-    - `cluster_network` is the `selfLink` URL to the cluster network.
+    `infra_id`
+    Specifies the `INFRA_ID` infrastructure name from the extraction step.
 
-    - `network_cidr` is the CIDR of the VPC network, for example `10.0.0.0/16`.
+    `cluster_network`
+    Specifies the `selfLink` URL to the cluster network.
+
+    `network_cidr`
+    Specifies the CIDR of the VPC network, for example `10.0.0.0/16`.
 
 3.  Create the deployment by using the `gcloud` CLI:
 
@@ -2190,7 +2214,10 @@ Procedure
     EOF
     ```
 
-    - `infra_id` is the `INFRA_ID` infrastructure name from the extraction step.
+    where:
+
+    `infra_id`
+    Specifies the `INFRA_ID` infrastructure name from the extraction step.
 
 3.  Create the deployment by using the `gcloud` CLI:
 
@@ -2386,23 +2413,34 @@ Procedure
     EOF
     ```
 
-    - `infra_id` is the `INFRA_ID` infrastructure name from the extraction step.
+    where:
 
-    - `region` is the region to deploy the cluster into, for example `us-central1`.
+    `infra_id`
+    Specifies the `INFRA_ID` infrastructure name from the extraction step.
 
-    - `zone` is the zone to deploy the bootstrap instance into, for example `us-central1-b`.
+    `region`
+    Specifies the region to deploy the cluster into, for example `us-central1`.
 
-    - `cluster_network` is the `selfLink` URL to the cluster network.
+    `zone`
+    Specifies the zone to deploy the bootstrap instance into, for example `us-central1-b`.
 
-    - `control_subnet` is the `selfLink` URL to the control subnet.
+    `cluster_network`
+    Specifies the `selfLink` URL to the cluster network.
 
-    - `image` is the `selfLink` URL to the RHCOS image.
+    `control_subnet`
+    Specifies the `selfLink` URL to the control subnet.
 
-    - `machine_type` is the machine type of the instance, for example `n1-standard-4`.
+    `image`
+    Specifies the `selfLink` URL to the RHCOS image.
 
-    - `root_volume_size` is the boot disk size for the bootstrap machine.
+    `machine_type`
+    Specifies the machine type of the instance, for example `n1-standard-4`.
 
-    - `bootstrap_ign` is the URL output when creating a signed URL.
+    `root_volume_size`
+    Specifies the boot disk size for the bootstrap machine.
+
+    `bootstrap_ign`
+    Specifies the URL output when creating a signed URL.
 
 6.  Create the deployment by using the `gcloud` CLI:
 
@@ -2500,19 +2538,28 @@ Procedure
     EOF
     ```
 
-    - `infra_id` is the `INFRA_ID` infrastructure name from the extraction step.
+    where:
 
-    - `zones` are the zones to deploy the control plane instances into, for example `us-central1-a`, `us-central1-b`, and `us-central1-c`.
+    `infra_id`
+    Specifies the `INFRA_ID` infrastructure name from the extraction step.
 
-    - `control_subnet` is the `selfLink` URL to the control subnet.
+    `zones`
+    Specifies the zones to deploy the control plane instances into, for example `us-central1-a`, `us-central1-b`, and `us-central1-c`.
 
-    - `image` is the `selfLink` URL to the RHCOS image.
+    `control_subnet`
+    Specifies the `selfLink` URL to the control subnet.
 
-    - `machine_type` is the machine type of the instance, for example `n1-standard-4`.
+    `image`
+    Specifies the `selfLink` URL to the RHCOS image.
 
-    - `service_account_email` is the email address for the master service account that you created.
+    `machine_type`
+    Specifies the machine type of the instance, for example `n1-standard-4`.
 
-    - `ignition` is the contents of the `master.ign` file.
+    `service_account_email`
+    Specifies the email address for the master service account that you created.
+
+    `ignition`
+    Specifies the contents of the `master.ign` file.
 
 4.  Create the deployment by using the `gcloud` CLI:
 
@@ -2730,21 +2777,31 @@ Procedure
     EOF
     ```
 
-    - `name` is the name of the worker machine, for example `worker-0`.
+    where:
 
-    - `infra_id` is the `INFRA_ID` infrastructure name from the extraction step.
+    `name`
+    Specifies the name of the worker machine, for example `worker-0`.
 
-    - `zone` is the zone to deploy the worker machine into, for example `us-central1-a`.
+    `infra_id`
+    Specifies the `INFRA_ID` infrastructure name from the extraction step.
 
-    - `compute_subnet` is the `selfLink` URL to the compute subnet.
+    `zone`
+    Specifies the zone to deploy the worker machine into, for example `us-central1-a`.
 
-    - `image` is the `selfLink` URL to the RHCOS image. <sup>1</sup>
+    `compute_subnet`
+    Specifies the `selfLink` URL to the compute subnet.
 
-    - `machine_type` is the machine type of the instance, for example `n1-standard-4`.
+    `image`
+    Specifies the `selfLink` URL to the RHCOS image.
 
-    - `service_account_email` is the email address for the worker service account that you created.
+    `machine_type`
+    Specifies the machine type of the instance, for example `n1-standard-4`.
 
-    - `ignition` is the contents of the `worker.ign` file.
+    `service_account_email`
+    Specifies the email address for the worker service account that you created.
+
+    `ignition`
+    Specifies the contents of the `worker.ign` file.
 
 4.  Optional: If you want to launch additional instances, include additional resources of type `06_worker.py` in your `06_worker.yaml` resource definition file.
 

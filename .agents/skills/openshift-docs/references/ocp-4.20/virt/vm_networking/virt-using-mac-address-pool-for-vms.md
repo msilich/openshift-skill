@@ -7,7 +7,7 @@ A virtual machine instance created from that VM retains the assigned MAC address
 > [!NOTE]
 > KubeMacPool does not handle virtual machine instances created independently from a virtual machine.
 
-# Managing KubeMacPool by using the CLI
+# Manage KubeMacPool by using the CLI
 
 You can disable and re-enable KubeMacPool by using the command line.
 

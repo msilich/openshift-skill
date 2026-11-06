@@ -125,7 +125,7 @@ Additional resources
 
 # Performing a platform update with PolicyGenerator CRs
 
-You can perform a platform update with the TALM.
+To upgrade the OpenShift Container Platform platform on managed clusters using TALM, you can create `PolicyGenerator` CRs that specify the required platform version and update policies. The TALM progressively rolls out the platform upgrade across target clusters.
 
 <div>
 
@@ -320,7 +320,7 @@ Additional resources
 
 # Performing an Operator update with PolicyGenerator CRs
 
-You can perform an Operator update with the TALM.
+To update Day 2 Operators on managed OpenShift Container Platform clusters using TALM, you can create `PolicyGenerator` CRs that specify the required catalog source and subscription versions. The TALM progressively rolls out the update across target clusters.
 
 <div>
 

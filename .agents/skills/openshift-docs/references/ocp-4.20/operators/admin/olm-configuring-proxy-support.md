@@ -130,7 +130,9 @@ Procedure
 
 # Injecting a custom CA certificate
 
-When a cluster administrator adds a custom CA certificate to a cluster using a config map, the Cluster Network Operator merges the user-provided certificates and system CA certificates into a single bundle. You can inject this merged bundle into your Operator running on Operator Lifecycle Manager (OLM), which is useful if you have a man-in-the-middle HTTPS proxy.
+When a cluster administrator adds a custom CA certificate to a cluster using a config map, the Cluster Network Operator merges the user-provided certificates and system CA certificates into a single bundle.
+
+You can inject this merged bundle into your Operator running on Operator Lifecycle Manager (OLM), which is useful if you have a man-in-the-middle HTTPS proxy.
 
 <div>
 
@@ -167,11 +169,15 @@ Procedure
         config.openshift.io/inject-trusted-cabundle: "true"
     ```
 
-    - Name of the config map.
+    where:
 
-    - Requests the Cluster Network Operator to inject the merged bundle.
+    `metadata.name`
+    Specifies the name of the config map.
 
-      After creating this config map, it is immediately populated with the certificate contents of the merged bundle.
+    `metadata.labels.config.openshift.io/inject-trusted-cabundle`
+    Requests the Cluster Network Operator to inject the merged bundle.
+
+    After creating this config map, it is immediately populated with the certificate contents of the merged bundle.
 
 2.  Update the `Subscription` object to include a `spec.config` section that mounts the `trusted-ca` config map as a volume to each container within a pod that requires a custom CA:
 
@@ -200,20 +206,28 @@ Procedure
           readOnly: true
     ```
 
-    - Add a `config` section if it does not exist.
+    where:
 
-    - Specify labels to match pods that are owned by the Operator.
+    `spec.config`
+    Specifies configuration for pods created by the Subscription. Add this section if it does not exist.
 
-    - Create a `trusted-ca` volume.
+    `spec.config.selector.matchLabels`
+    Specifies labels to match pods that are owned by the Operator.
 
-    - `ca-bundle.crt` is required as the config map key.
+    `spec.config.volumes`
+    Specifies the `trusted-ca` volume.
 
-    - `tls-ca-bundle.pem` is required as the config map path.
+    `spec.config.volumes[].configMap.items[].key`
+    Specifies `ca-bundle.crt` as the required config map key.
 
-    - Create a `trusted-ca` volume mount.
+    `spec.config.volumes[].configMap.items[].path`
+    Specifies `tls-ca-bundle.pem` as the required config map path.
 
-      > [!NOTE]
-      > Deployments of an Operator can fail to validate the authority and display a `x509 certificate signed by unknown authority` error. This error can occur even after injecting a custom CA when using the subscription of an Operator. In this case, you can set the `mountPath` as `/etc/ssl/certs` for trusted-ca by using the subscription of an Operator.
+    `spec.config.volumeMounts`
+    Specifies the `trusted-ca` volume mount.
+
+    > [!NOTE]
+    > Deployments of an Operator can fail to validate the authority and display a `x509 certificate signed by unknown authority` error. This error can occur even after injecting a custom CA when using the subscription of an Operator. In this case, you can set the `mountPath` as `/etc/ssl/certs` for trusted-ca by using the subscription of an Operator.
 
 </div>
 

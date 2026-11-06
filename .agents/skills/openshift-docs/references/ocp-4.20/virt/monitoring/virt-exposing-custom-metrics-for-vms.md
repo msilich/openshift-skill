@@ -53,19 +53,19 @@ Procedure
         monitor: metrics
     ```
 
-    - The node-exporter service that exposes the metrics from the virtual machines.
+    - `metadata.name` defines the node-exporter service that exposes the metrics from the virtual machines.
 
-    - The namespace where the service is created.
+    - `metadata.namespace` defines the namespace where the service is created.
 
-    - The label for the service. The `ServiceMonitor` uses this label to match this service.
+    - `metadata.labels.servicetype` defines the label for the service. The `ServiceMonitor` uses this label to match this service.
 
-    - The name given to the port that exposes metrics on port 9100 for the `ClusterIP` service.
+    - `spec.ports.name` defines the name given to the port that exposes metrics on port 9100 for the `ClusterIP` service.
 
-    - The target port used by `node-exporter-service` to listen for requests.
+    - `spec.ports.port` defines the target port used by `node-exporter-service` to listen for requests.
 
-    - The TCP port number of the virtual machine that is configured with the `monitor` label.
+    - `spec.ports.targetPort` defines the TCP port number of the virtual machine that is configured with the `monitor` label.
 
-    - The label used to match the virtual machine’s pods. In this example, any virtual machine’s pod with the label `monitor` and a value of `metrics` will be matched.
+    - `spec.selector.monitor` defines the label used to match the virtual machine’s pods. In this example, any virtual machine’s pod with the label `monitor` and a value of `metrics` will be matched.
 
 2.  Create the node-exporter service:
 
@@ -355,13 +355,13 @@ Procedure
           servicetype: metrics
     ```
 
-    - The name of the `ServiceMonitor`.
+    - `metadata.name` defines the name of the `ServiceMonitor`.
 
-    - The namespace where the `ServiceMonitor` is created.
+    - `metadata.namespace` defines the namespace where the `ServiceMonitor` is created.
 
-    - The interval at which the port will be queried.
+    - `spec.endpoints.interval` defines the interval at which the port will be queried.
 
-    - The name of the port that is queried every 30 seconds
+    - `spec.endpoints.port` defines the name of the port that is queried every 30 seconds.
 
 2.  Create the `ServiceMonitor` configuration for the node-exporter service.
 

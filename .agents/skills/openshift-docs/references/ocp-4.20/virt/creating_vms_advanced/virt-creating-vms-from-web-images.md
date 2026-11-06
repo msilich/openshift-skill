@@ -47,7 +47,7 @@ Procedure
 
 </div>
 
-# Creating a VM from an image on a web page by using the CLI
+# Create a VM from a web-hosted image
 
 You can create a virtual machine (VM) from an image on a web page by using the command line.
 

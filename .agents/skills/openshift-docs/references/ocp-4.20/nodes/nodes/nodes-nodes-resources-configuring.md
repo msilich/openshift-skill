@@ -106,9 +106,25 @@ In OpenShift Container Platform, consider these two supported limits for process
 
   The default value depends on node resources. In OpenShift Container Platform, this value is controlled by the `systemReserved` parameter in a kubelet configuration, which reserves PIDs on each node based on the total resources of the node. For more information, see "Allocating resources for nodes in an OpenShift Container Platform cluster".
 
-When a pod exceeds the allowed maximum number of PIDs per pod, the pod might stop functioning correctly and might be evicted from the node. See [the Kubernetes documentation for eviction signals and thresholds](https://kubernetes.io/docs/concepts/scheduling-eviction/node-pressure-eviction/#eviction-signals-and-thresholds) for more information.
+When a pod exceeds the allowed maximum number of PIDs per pod, the pod might stop functioning correctly and might be evicted from the node.
 
 When a node exceeds the allowed maximum number of PIDs per node, the node can become unstable because new processes cannot have PIDs assigned. If existing processes cannot complete without creating additional processes, the entire node can become unusable and require reboot. This situation can result in data loss, depending on the processes and applications being run. Customer administrators and Red Hat Site Reliability Engineering are notified when this threshold is reached, and a `Worker node is experiencing PIDPressure` warning will appear in the cluster logs.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Node resources](https://access.redhat.com/documentation/en-us/openshift_container_platform/4.20/html-single/nodes/index#nodes-nodes-resources-configuring)
+
+- [`--system-reserved` parameter](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#system-reserved)
+
+- [Eviction signals and thresholds](https://kubernetes.io/docs/concepts/scheduling-eviction/node-pressure-eviction/#eviction-signals-and-thresholds)
+
+</div>
 
 <div>
 
@@ -314,7 +330,7 @@ Prerequisites
 
     </div>
 
-    - The label appears under Labels.
+    - The `pools.operator.machineconfiguration.openshift.io/worker` label appears under Labels.
 
       > [!TIP]
       > If the label is not present, add a key/value pair such as:
@@ -359,11 +375,16 @@ Procedure
 
     </div>
 
-    - Assign a name to CR.
+    where:
 
-    - Specify the label from the machine config pool.
+    `metadata.name`
+    Specifies a name for the CR.
 
-    - Specify the resources to reserve for the node components and system components.
+    `spec.machineConfigPoolSelector.matchLabels.pools.operator.machineconfiguration.openshift.io/worker`
+    Specifies the label from the machine config pool.
+
+    `spec.kubeletConfig.systemReserved`
+    Specifies the resources to reserve for the node components and system components.
 
 2.  Run the following command to create the CR:
 

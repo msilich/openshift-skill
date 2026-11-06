@@ -102,7 +102,9 @@ Additional resources
 
 # Operator colocation and Operator groups
 
-Operator Lifecycle Manager (OLM) handles OLM-managed Operators that are installed in the same namespace, meaning their `Subscription` resources are colocated in the same namespace, as related Operators. Even if they are not actually related, OLM considers their states, such as their version and update policy, when any one of them is updated.
+Operator Lifecycle Manager (OLM) handles OLM-managed Operators that are installed in the same namespace, meaning their `Subscription` resources are colocated in the same namespace, as related Operators.
+
+Even if they are not actually related, OLM considers their states, such as their version and update policy, when any one of them is updated.
 
 <div>
 

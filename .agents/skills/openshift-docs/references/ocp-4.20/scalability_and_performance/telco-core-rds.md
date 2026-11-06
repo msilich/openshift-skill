@@ -2,13 +2,13 @@
 
 The telco core reference design specifications (RDS) configures an OpenShift Container Platform cluster running on commodity hardware to host telco core workloads.
 
-# Telco core RDS 4.20 use model overview
+# Review which core functions the reference design supports
 
 The Telco core reference design specification (RDS) describes a platform that supports large-scale telco applications including control plane and centralized data plane functions such as user plane functions (UPF).
 
 These functions generally require scalability, complex networking support, resilient software-defined storage, and performance requirements that are less stringent than far-edge deployments such as RAN.
 
-# About the telco core cluster use model
+# Check that your workloads fit the telco core use model
 
 The telco core cluster use model supports large-scale telco applications on commodity hardware, including control plane functions and centralized data plane functions such as 5G user plane functions (UPF).
 
@@ -50,7 +50,7 @@ Deviation from the RDS can have some or all of the following consequences:
   > [!NOTE]
   > Red Hat prioritizes the servicing of requests for deviations based on partner engagement priorities.
 
-# Telco core common baseline model
+# Review the baseline common to every telco core cluster
 
 The following configurations and use models are applicable to all telco core use cases. The telco core use cases build on this common baseline of features.
 

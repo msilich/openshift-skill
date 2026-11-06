@@ -30,13 +30,15 @@ Use the following REST API v2 endpoints to subscribe the `cloud-event-consumer` 
 
 # PTP events REST API v2 endpoints
 
+The PTP events REST API v2 provides endpoints for managing subscriptions and retrieving event data from PTP-enabled nodes in OpenShift Container Platform. Use these endpoints to subscribe to PTP events and query current clock status from consumer applications.
+
 ## api/ocloudNotifications/v2/subscriptions
 
-**HTTP method**
+## HTTP method
 
 `GET api/ocloudNotifications/v2/subscriptions`
 
-**Description**
+## Description
 
 Returns a list of subscriptions. If subscriptions exist, a `200 OK` status code is returned along with the list of subscriptions.
 
@@ -85,11 +87,11 @@ Example API response
 
 </div>
 
-**HTTP method**
+## HTTP method
 
 `POST api/ocloudNotifications/v2/subscriptions`
 
-**Description**
+## Description
 
 Creates a new subscription for the required event by passing the appropriate payload.
 
@@ -226,11 +228,11 @@ The following subscription status events are possible:
 
 PTP events REST API v2 subscription status codes
 
-**HTTP method**
+## HTTP method
 
 `DELETE api/ocloudNotifications/v2/subscriptions`
 
-**Description**
+## Description
 
 Deletes all subscriptions.
 
@@ -252,11 +254,11 @@ Example API response
 
 ## api/ocloudNotifications/v2/subscriptions/{subscription_id}
 
-**HTTP method**
+## HTTP method
 
 `GET api/ocloudNotifications/v2/subscriptions/{subscription_id}`
 
-**Description**
+## Description
 
 Returns details for the subscription with ID `subscription_id`.
 
@@ -285,11 +287,11 @@ Example API response
 
 </div>
 
-**HTTP method**
+## HTTP method
 
 `DELETE api/ocloudNotifications/v2/subscriptions/{subscription_id}`
 
-**Description**
+## Description
 
 Deletes the subscription with ID `subscription_id`.
 
@@ -307,11 +309,11 @@ HTTP response codes
 
 ## api/ocloudNotifications/v2/health
 
-**HTTP method**
+## HTTP method
 
 `GET api/ocloudNotifications/v2/health/`
 
-**Description**
+## Description
 
 Returns the health status for the `ocloudNotifications` REST API.
 
@@ -323,11 +325,11 @@ HTTP response codes
 
 ## api/ocloudNotifications/v2/publishers
 
-**HTTP method**
+## HTTP method
 
 `GET api/ocloudNotifications/v2/publishers`
 
-**Description**
+## Description
 
 Returns a list of publisher details for the cluster node. The system generates notifications when the relevant equipment state changes.
 
@@ -386,7 +388,7 @@ HTTP response codes
 
 ## api/ocloudNotifications/v2/{resource_address}/CurrentState
 
-**HTTP method**
+## HTTP method
 
 `GET api/ocloudNotifications/v2/cluster/node/{node_name}/sync/ptp-status/lock-state/CurrentState`
 
@@ -398,7 +400,7 @@ HTTP response codes
 
 `GET api/ocloudNotifications/v2/cluster/node/{node_name}/sync/gnss-status/gnss-sync-state/CurrentState`
 
-**Description**
+## Description
 
 Returns the current state of the `os-clock-sync-state`, `clock-class`, `lock-state`, `gnss-sync-status`, or `sync-state` events for the cluster node.
 

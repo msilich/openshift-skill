@@ -45,7 +45,10 @@ Procedure
   EOF
   ```
 
-  - Disabled copied CSVs for `AllNamespaces` install mode Operators
+  where:
+
+  `spec.features.disableCopiedCSVs`
+  Specifies whether copied CSVs are disabled for `AllNamespaces` install mode Operators.
 
 </div>
 

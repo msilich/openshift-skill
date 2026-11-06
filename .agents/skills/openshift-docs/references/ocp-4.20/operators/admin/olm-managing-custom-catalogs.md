@@ -492,11 +492,11 @@ Procedure
         [--binary-image <registry_base_image>]
     ```
 
-    - Comma-separated list of bundle images to add to the index.
+    - `--bundles` specifies a comma-separated list of bundle images to add to the index.
 
-    - The image tag that you want the index image to have.
+    - `--tag` specifies the image tag that you want the index image to have.
 
-    - Optional: An alternative registry base image to use for serving the catalog.
+    - `--binary-image` specifies an alternative registry base image to use for serving the catalog. This argument is optional.
 
 2.  Push the index image to a registry.
 
@@ -550,9 +550,9 @@ Procedure
 
     ``` terminal
     $ opm index add \
-        --bundles <registry>/<namespace>/<new_bundle_image>@sha256:<digest> \
-        --from-index <registry>/<namespace>/<existing_index_image>:<existing_tag> \
-        --tag <registry>/<namespace>/<existing_index_image>:<updated_tag> \
+        --bundles <registry>/<namespace>/<new_bundle_image>@sha256:<digest>
+        --from-index <registry>/<namespace>/<existing_index_image>:<existing_tag>
+        --tag <registry>/<namespace>/<existing_index_image>:<updated_tag>
         --pull-tool podman
     ```
 
@@ -723,19 +723,19 @@ Procedure
 
     ``` text
     $ opm index prune \
-        -f registry.redhat.io/redhat/redhat-operator-index:v4.20 \
-        -p advanced-cluster-management,jaeger-product,quay-operator \
-        [-i registry.redhat.io/openshift4/ose-operator-registry-rhel9:v4.20] \
+        -f registry.redhat.io/redhat/redhat-operator-index:v4.20
+        -p advanced-cluster-management,jaeger-product,quay-operator
+        [-i registry.redhat.io/openshift4/ose-operator-registry-rhel9:v4.20]
         -t <target_registry>:<port>/<namespace>/redhat-operator-index:v4.20
     ```
 
-    - Index to prune.
+    - `-f` specifies the index to prune.
 
-    - Comma-separated list of packages to keep.
+    - `-p` specifies a comma-separated list of packages to keep.
 
-    - Required only for IBM Power® and IBM Z® images: Operator Registry base image with the tag that matches the target OpenShift Container Platform cluster major and minor version.
+    - `-i` specifies the Operator Registry base image with the tag that matches the target OpenShift Container Platform cluster major and minor version. Required only for IBM Power® and IBM Z® images.
 
-    - Custom tag for new index image being built.
+    - `-t` specifies a custom tag for the new index image being built.
 
 4.  Run the following command to push the new index image to your target registry:
 
@@ -977,9 +977,13 @@ Procedure
 
     </div>
 
-    - Turn off pod security label synchronization by adding the `security.openshift.io/scc.podSecurityLabelSync=false` label to the namespace.
+    where:
 
-    - Apply the pod security admission `pod-security.kubernetes.io/enforce` label. Set the label to `baseline` or `privileged`. Use the `baseline` pod security profile unless other workloads in the namespace require a `privileged` profile.
+    `metadata.labels.security.openshift.io/scc.podSecurityLabelSync`
+    Specifies whether to turn off pod security label synchronization. Add the `security.openshift.io/scc.podSecurityLabelSync=false` label to the namespace.
+
+    `metadata.labels.pod-security.kubernetes.io/enforce`
+    Specifies the pod security admission label. Set the label to `baseline` or `privileged`. Use the `baseline` pod security profile unless other workloads in the namespace require a `privileged` profile.
 
 </div>
 
@@ -1306,12 +1310,16 @@ Procedure
           interval: 30m
     ```
 
-    - Add a `spec.secrets` section and specify any required secrets.
+    \+ where:
 
-    - Specify the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
+    `spec.secrets`
+    Specifies any required secrets.
 
-      > [!NOTE]
-      > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
+    `spec.grpcPodConfig.securityContextConfig`
+    Specifies the value of `legacy` or `restricted`. If the field is not set, the default value is `legacy`. In a future OpenShift Container Platform release, it is planned that the default value will be `restricted`.
+
+    > [!NOTE]
+    > If your catalog cannot run with `restricted` permissions, it is recommended that you manually set this field to `legacy`.
 
 3.  If any Operator or Operand images that are referenced by a subscribed Operator require access to a private registry, you can either provide access to all namespaces in the cluster, or individual target tenant namespaces.
 
@@ -1330,11 +1338,11 @@ Procedure
 
           ``` terminal
           $ cat .dockerconfigjson | \
-              jq --compact-output '.auths["<registry>:<port>/<namespace>/"] |= . + {"auth":"<token>"}' \
+              jq --compact-output '.auths["<registry>:<port>/<namespace>/"] |= . + {"auth":"<token>"}'
               > new_dockerconfigjson
           ```
 
-          - Replace `<registry>:<port>/<namespace>` with the private registry details and `<token>` with your authentication credentials.
+          Replace `<registry>:<port>/<namespace>` with the private registry details and `<token>` with your authentication credentials.
 
       3.  Update the global pull secret with the new file:
 
@@ -1360,15 +1368,10 @@ Procedure
           $ oc get sa -n <tenant_namespace>
           ```
 
-          - If the Operator was installed in an individual namespace, search that namespace. If the Operator was installed for all namespaces, search the `openshift-operators` namespace.
+          \+ where:
 
-          <div class="formalpara">
-
-          <div class="title">
-
-          Example output
-
-          </div>
+          `<tenant_namespace>`
+          Specifies the namespace to search. If the Operator was installed in an individual namespace, search that namespace. If the Operator was installed for all namespaces, search the `openshift-operators` namespace.
 
           ``` terminal
           NAME            SECRETS   AGE
@@ -1378,9 +1381,7 @@ Procedure
           etcd-operator   2         5m18s
           ```
 
-          </div>
-
-          - Service account for an installed etcd Operator.
+          \+ \* `etcd-operator` is the service account for an installed etcd Operator.
 
       3.  Link the secret to the service account for the Operator:
 

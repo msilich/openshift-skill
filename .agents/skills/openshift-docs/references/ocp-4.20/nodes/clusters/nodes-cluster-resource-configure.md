@@ -108,7 +108,7 @@ Java-based agents can use the following JVM arguments to encourage the JVM to re
 -XX:AdaptiveSizePolicyWeight=90
 ```
 
-These arguments are intended to return heap memory to the operating system whenever allocated memory exceeds 110% of in-use memory (`-XX:MaxHeapFreeRatio`), spending up to 20% of CPU time in the garbage collector (`-XX:GCTimeRatio`). At no time will the application heap allocation be less than the initial heap allocation (overridden by `-XX:InitialHeapSize` / `-Xms`). Detailed additional information is available [Tuning Java’s footprint in OpenShift (Part 1)](https://developers.redhat.com/blog/2014/07/15/dude-wheres-my-paas-memory-tuning-javas-footprint-in-openshift-part-1/), [Tuning Java’s footprint in OpenShift (Part 2)](https://developers.redhat.com/blog/2014/07/22/dude-wheres-my-paas-memory-tuning-javas-footprint-in-openshift-part-2/), and at [OpenJDK and Containers](https://developers.redhat.com/blog/2017/04/04/openjdk-and-containers/).
+These arguments are intended to return heap memory to the operating system whenever allocated memory exceeds 110% of in-use memory (`-XX:MaxHeapFreeRatio`), spending up to 20% of CPU time in the garbage collector (`-XX:GCTimeRatio`). At no time will the application heap allocation be less than the initial heap allocation (overridden by `-XX:InitialHeapSize` / `-Xms`).
 
 Ensuring all JVM processes within a container are appropriately configured
 In the case that multiple JVMs run in the same container, it is essential to ensure that they are all configured appropriately. For many workloads it will be necessary to grant each JVM a percentage memory budget, leaving a perhaps substantial additional safety margin.
@@ -122,6 +122,22 @@ JAVA_TOOL_OPTIONS="-Dsun.zip.disableMemoryMapping=true"
 ```
 
 This does not guarantee that additional options are not required, but is intended to be a helpful starting point. Optimally tuning JVM workloads for running in a container is beyond the scope of this documentation, and may involve setting multiple additional JVM options.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Tuning Java’s Footprint in OpenShift (Part 1)](https://developers.redhat.com/blog/2014/07/15/dude-wheres-my-paas-memory-tuning-javas-footprint-in-openshift-part-1/)
+
+- [Tuning Java’s Footprint in OpenShift (Part 2)](https://developers.redhat.com/blog/2014/07/22/dude-wheres-my-paas-memory-tuning-javas-footprint-in-openshift-part-2/)
+
+- [OpenJDK and Containers](https://developers.redhat.com/blog/2017/04/04/openjdk-and-containers/)
+
+</div>
 
 # Find the memory request and limit from within a pod
 

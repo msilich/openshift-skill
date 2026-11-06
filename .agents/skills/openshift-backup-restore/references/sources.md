@@ -1,6 +1,6 @@
 # Procedure sources
 
-Product: OpenShift Container Platform 4.20. Source: openshift/openshift-docs at commit `773aa10f325eb2095681d9a3aee7243d6accf8a5`.
+Product: OpenShift Container Platform 4.20. Source: openshift/openshift-docs at commit `58129476889c10ea389b15c2cb7c3c239fdb4cbc`.
 Read [snapshot provenance](../../openshift-docs/references/ocp-4.20/SOURCE.json) for the source, license and conversion details.
 
 | Procedure | Local chapter | Sections to read |

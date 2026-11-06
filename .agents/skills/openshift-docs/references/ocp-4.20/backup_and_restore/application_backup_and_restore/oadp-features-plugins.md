@@ -67,7 +67,7 @@ Additional resources
 
 </div>
 
-- [Custom plugins](https://velero.io/docs/v1.16/custom-plugins/)
+- [Custom plugins](https://velero.io/docs/latest/custom-plugins/)
 
 </div>
 

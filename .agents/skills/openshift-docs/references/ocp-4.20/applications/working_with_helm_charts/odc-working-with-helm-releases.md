@@ -61,6 +61,8 @@ To rollback a release using the **Helm** view:
 
 # Deleting a Helm release
 
+You can delete a Helm release from the **Topology** view in the **Developer** perspective of the web console.
+
 <div>
 
 <div class="title">

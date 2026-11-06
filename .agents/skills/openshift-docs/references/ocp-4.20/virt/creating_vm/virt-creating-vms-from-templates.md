@@ -76,7 +76,7 @@ Procedure
 
 </div>
 
-# Removing a deprecated designation from a customized VM template by using the web console
+# Undeprecate a customized VM template in the web console
 
 You can customize an existing virtual machine (VM) template before you start the VM, by modifying the VM or template parameters, such as data sources, cloud-init, or SSH keys.
 
@@ -115,7 +115,7 @@ Procedure
 
 </div>
 
-## Creating a custom VM template in the web console
+## Create a custom VM template in the web console
 
 You can create a virtual machine template by editing a YAML file example in the OpenShift Container Platform web console.
 
@@ -143,7 +143,7 @@ Procedure
 
 </div>
 
-## Enabling dedicated resources for a virtual machine template
+## Enable dedicated resources for a VM template
 
 You can enable dedicated resources for a virtual machine (VM) template in the OpenShift Container Platform web console. VMs that are created from this template will be scheduled with dedicated resources.
 

@@ -193,9 +193,9 @@ Procedure
 
     </div>
 
-</div>
+    The nodes will reboot and when the updating field returns to `false`, you can validate on the nodes by looking at the devices in a debug pod.
 
-The nodes will reboot and when the updating field returns to `false`, you can validate on the nodes by looking at the devices in a debug pod.
+</div>
 
 # Configuring the NFD Operator
 
@@ -2954,14 +2954,6 @@ Procedure
 
       Upon completion of the `ib_write_bw` command, the server side output also appears on the server pod. See the following example:
 
-      <div class="formalpara">
-
-      <div class="title">
-
-      Example output
-
-      </div>
-
       ``` terminal
       WARNING: BW peak won't be measured in this run.
       Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
@@ -3073,7 +3065,5 @@ Procedure
       deallocating GPU buffer 00007f447a600000
       destroying current CUDA Ctx
       ```
-
-      </div>
 
 </div>

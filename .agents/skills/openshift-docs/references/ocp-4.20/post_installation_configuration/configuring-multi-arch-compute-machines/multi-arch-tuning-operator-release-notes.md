@@ -8,6 +8,42 @@ These release notes track the development of the Multiarch Tuning Operator.
 
 - [Managing workloads on multi-architecture clusters by using the Multiarch Tuning Operator](multiarch-tuning-operator.md#multiarch-tuning-operator)
 
+- [Configuring architecture placement rules by using CEL expressions](multiarch-tuning-operator.md#multi-arch-creating-namespace-podplacement-config-cel_multiarch-tuning-operator)
+
+- [Network policies created by the Multiarch Tuning Operator](multiarch-tuning-operator.md#multi-arch-tuning-operator-network-policies_multiarch-tuning-operator)
+
+# Release notes for the Multiarch Tuning Operator 1.4.0
+
+The release notes for the Multiarch Tuning Operator 1.4.0 summarize all new features and enhancements, notable technical changes, major corrections from the previous version, and any known bugs upon general availability.
+
+Some linked Jira tickets are accessible only with Red Hat credentials.
+
+Issued: 28 October 2026
+
+## New features and enhancements
+
+CEL rules select workload architectures
+You can use the `celArchitecturePlacement` plugin in a namespace-scoped `PodPlacementConfig` object to select architectures by using Common Expression Language (CEL) expressions that evaluate pod metadata. For eligible pods, the first rule that evaluates to `true` determines the target architectures. Fallback architectures apply when the rule list is empty or at least one rule evaluates successfully but no rule matches. If every rule fails at runtime, the configuration is skipped and lower-priority configurations can be considered.
+
+[MULTIARCH-6069](https://redhat.atlassian.net/browse/MULTIARCH-6069)
+
+Managed network policies protect Operator workloads
+The Multiarch Tuning Operator creates `NetworkPolicy` objects at runtime to restrict network traffic to and from its controller manager and pod placement operands while allowing required connectivity. The policies allow DNS, Kubernetes API, metrics, webhook, and image-inspection traffic, depending on the workload.
+
+[MULTIARCH-5569](https://redhat.atlassian.net/browse/MULTIARCH-5569)
+
+## Technical changes
+
+Operator SDK is updated to version 1.42.3
+The Multiarch Tuning Operator uses Operator SDK version 1.42.3.
+
+[MULTIARCH-6359](https://redhat.atlassian.net/browse/MULTIARCH-6359)
+
+Kubernetes and controller-runtime dependencies are updated
+The Multiarch Tuning Operator uses Kubernetes module version 0.36.5 and `controller-runtime` version 0.24.1.
+
+[MULTIARCH-6466](https://redhat.atlassian.net/browse/MULTIARCH-6466)
+
 # Release notes for the Multiarch Tuning Operator 1.2.1
 
 Issued: 15 December 2025

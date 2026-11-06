@@ -5,11 +5,11 @@ Install the OpenShift API for Data Protection (OADP) with OpenShift Data Foundat
 > [!NOTE]
 > Starting from OADP 1.0.4, all OADP 1.0.*z* versions can only be used as a dependency of the Migration Toolkit for Containers Operator and are not available as a standalone Operator.
 
-You can configure [Multicloud Object Gateway](installing-oadp-mcg.md#installing-oadp-mcg) or any AWS S3-compatible object storage as a backup location.
+You can configure Multicloud Object Gateway or any AWS S3-compatible object storage as a backup location.
 
-You can create a `Secret` CR for the backup location and install the Data Protection Application. For more details, see [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc).
+You can create a `Secret` CR for the backup location and install the Data Protection Application.
 
-To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog. For details, see [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks).
+To install the OADP Operator in a restricted network environment, you must first disable the default software catalog sources and mirror the Operator catalog.
 
 # About backup and snapshot locations and their secrets
 
@@ -521,15 +521,15 @@ Prerequisites
 
 </div>
 
-- You must install the OADP Operator.
+- You have installed the OADP Operator.
 
-- You must configure object storage as a backup location.
+- You have configured object storage as a backup location.
 
-- If you use snapshots to back up PVs, your cloud provider must support either a native snapshot API or Container Storage Interface (CSI) snapshots.
+- If you use snapshots to back up PVs, your cloud provider supports either a native snapshot API or Container Storage Interface (CSI) snapshots.
 
-- If the backup and snapshot locations use the same credentials, you must create a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
+- If the backup and snapshot locations use the same credentials, you have created a `Secret` with the default name for your storage provider: `cloud-credentials` for AWS, Multicloud Object Gateway (MCG), Red Hat OpenShift Data Foundation (ODF), IBM Cloud, or KubeVirt; `cloud-credentials-azure` for Azure; or `cloud-credentials-gcp` for GCP.
 
-- If the backup and snapshot locations use different credentials, you must create two `Secrets`:
+- If the backup and snapshot locations use different credentials, you have created two `Secrets`:
 
   - `Secret` with a custom name for the backup location. You add this `Secret` to the `DataProtectionApplication` CR.
 
@@ -1727,8 +1727,6 @@ If you use cluster storage for your Multicloud Object Gateway (MCG) bucket `back
 
 > [!NOTE]
 > Unless specified otherwise, "NooBaa" refers to the open source project that provides lightweight object storage, while "Multicloud Object Gateway (MCG)" refers to the Red Hat distribution of NooBaa.
->
-> For more information on the MCG, see [Accessing the Multicloud Object Gateway with your applications](https://access.redhat.com/documentation/en-us/red_hat_openshift_data_foundation/4.13/html-single/managing_hybrid_and_multicloud_resources/index#accessing-the-multicloud-object-gateway-with-your-applications_rhodf).
 
 <div>
 
@@ -1855,13 +1853,13 @@ Procedure
 
 </div>
 
-<div>
+# Additional resources
 
-<div class="title">
+- [Installing the OADP Operator](oadp-installing-operator.md#oadp-installing-operator-doc)
 
-Additional resources
+- [Using Operator Lifecycle Manager in disconnected environments](../../../disconnected/using-olm.md#olm-restricted-networks)
 
-</div>
+- [Installing OADP on Multicloud Object Gateway](installing-oadp-mcg.md#installing-oadp-mcg)
 
 - [Installing the Data Protection Application with the `kubevirt` and `openshift` plugins](installing-oadp-kubevirt.md#oadp-installing-dpa_installing-oadp-kubevirt)
 
@@ -1872,5 +1870,3 @@ Additional resources
 - [Creating an Object Bucket Claim using the OpenShift Web Console](https://access.redhat.com/documentation/en-us/red_hat_openshift_data_foundation/4.13/html/managing_hybrid_and_multicloud_resources/object-bucket-claim#creating-an-object-bucket-claim-using-the-openshift-web-console_rhodf)
 
 - [Configuring node agents and node labels](installing-oadp-ocs.md#oadp-configuring-node-agents_installing-oadp-ocs)
-
-</div>

@@ -2014,7 +2014,7 @@
   - [Storage configuration](virt/post_installation_configuration/virt-post-install-storage-config.md)
   - [Allocate physical cores for virtual machines](virt/post_installation_configuration/virt-physical-cores-allocation-vms.md)
   - [Configuring higher VM workload density](virt/post_installation_configuration/virt-configuring-higher-vm-workload-density.md)
-  - [Configuring certificate rotation](virt/post_installation_configuration/virt-configuring-certificate-rotation.md)
+  - [Configure certificate rotation](virt/post_installation_configuration/virt-configuring-certificate-rotation.md)
 - **Updating**
   - [Updating OpenShift Virtualization](virt/updating/upgrading-virt.md)
 - **Creating a virtual machine**
@@ -2054,9 +2054,9 @@
   - [Migrating VMs in a single cluster to a different storage class](virt/managing_vms/virt-migrating-vms-in-single-cluster-to-different-storage-class.md)
   - **Advanced virtual machine management**
     - [Working with resource quotas for virtual machines](virt/managing_vms/advanced_vm_management/virt-working-with-resource-quotas-for-vms.md)
-    - [Configuring the Application-Aware Quota Operator](virt/managing_vms/advanced_vm_management/virt-understanding-aaq-operator.md)
+    - [Accurate VM resource measurement with AAQ](virt/managing_vms/advanced_vm_management/virt-understanding-aaq-operator.md)
     - [Specifying nodes for virtual machines](virt/managing_vms/advanced_vm_management/virt-specifying-nodes-for-vms.md)
-    - [Configuring the default CPU model](virt/managing_vms/advanced_vm_management/virt-configuring-default-cpu-model.md)
+    - [Configure the default CPU model](virt/managing_vms/advanced_vm_management/virt-configuring-default-cpu-model.md)
     - [UEFI mode for virtual machines](virt/managing_vms/advanced_vm_management/virt-uefi-mode-for-vms.md)
     - [Configuring PXE booting for virtual machines](virt/managing_vms/advanced_vm_management/virt-configuring-pxe-booting.md)
     - [Using huge pages with virtual machines](virt/managing_vms/advanced_vm_management/virt-using-huge-pages-with-vms.md)

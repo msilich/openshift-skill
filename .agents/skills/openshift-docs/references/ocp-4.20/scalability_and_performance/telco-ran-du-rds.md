@@ -6,7 +6,7 @@ Use the use model and system level information to plan telco RAN DU workloads, c
 
 Specific limits, requirements, and engineering considerations for individual components are described in individual sections.
 
-# Reference design specifications for telco RAN DU 5G deployments
+# Review the validated RAN DU reference design
 
 Red Hat and certified partners offer deep technical expertise and support for networking and operational capabilities required to run telco applications on OpenShift Container Platform 4.20 clusters.
 
@@ -59,7 +59,7 @@ Deviation from the RDS can have some or all of the following consequences:
   > [!NOTE]
   > Red Hat prioritizes the servicing of requests for deviations based on partner engagement priorities.
 
-# Engineering considerations for the RAN DU use model
+# Plan a RAN DU cluster within the validated limits
 
 The RAN DU use model configures an OpenShift Container Platform cluster running on commodity hardware for hosting RAN distributed unit (DU) workloads.
 
@@ -99,7 +99,7 @@ Supported cluster topologies for RAN DU
 Supported cluster topologies for RAN DU
 
 Workloads
-1.  DU workloads are described in [Telco RAN DU application workloads](telco-ran-du-rds.md#telco-ran-du-application-workloads_telco-ran-du).
+1.  DU workloads are described in [Review the application limits for a RAN DU workload](telco-ran-du-rds.md#telco-ran-du-application-workloads_telco-ran-du).
 
 2.  DU worker nodes are Intel 3rd Generation Xeon (IceLake) 2.20 GHz or newer with host firmware tuned for maximum performance.
 
@@ -172,7 +172,7 @@ The following table describes resource utilization under reference application l
 
 Resource utilization under reference application load
 
-# Telco RAN DU application workloads
+# Review the application limits for a RAN DU workload
 
 Develop RAN DU applications that are subject to the following requirements and limitations.
 
@@ -1127,7 +1127,9 @@ Machine configuration CRs
 
 # Comparing a cluster with the telco RAN DU reference configuration
 
-After you deploy a telco RAN DU cluster, you can use the `cluster-compare` plugin to assess the cluster’s compliance with the telco RAN DU reference design specifications (RDS). The `cluster-compare` plugin is an OpenShift CLI (`oc`) plugin. The plugin uses a telco RAN DU reference configuration to validate the cluster with the telco RAN DU custom resources (CRs).
+After you deploy a telco RAN DU cluster, you can use the `cluster-compare` plugin to assess the cluster’s compliance with the telco RAN DU reference design specifications (RDS).
+
+The `cluster-compare` plugin is an OpenShift CLI (`oc`) plugin. The plugin uses a telco RAN DU reference configuration to validate the cluster with the telco RAN DU custom resources (CRs).
 
 The plugin-specific reference configuration for telco RAN DU is packaged in a container image with the telco RAN DU CRs.
 

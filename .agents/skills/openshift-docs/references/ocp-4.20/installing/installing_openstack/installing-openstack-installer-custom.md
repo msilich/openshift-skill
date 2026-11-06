@@ -1368,13 +1368,7 @@ You can create a dual-stack cluster on RHOSP. However, the dual-stack configurat
 
 ### Deploying the dual-stack cluster
 
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
+To deploy a dual-stack OpenShift Container Platform cluster on Red Hat OpenStack Platform (RHOSP), you can create a dual-stack network with IPv4 and IPv6 subnets and then run the installer. The cluster uses OVN-Kubernetes to support both address families. .Procedure
 
 1.  Create a network with IPv4 and IPv6 subnets. The available address modes for the `ipv6-ra-mode` and `ipv6-address-mode` fields are: `dhcpv6-stateful`, `dhcpv6-stateless`, and `slaac`.
 
@@ -1446,118 +1440,125 @@ Procedure
 
     </div>
 
-    - You must specify an IP address range for both the IPv4 and IPv6 address families.
+    where:
 
-    - Specify the virtual IP (VIP) address endpoints for the Ingress VIP services to provide an interface to the cluster.
+    `networking.machineNetwork`; `networking.clusterNetwork`; `networking.serviceNetwork`
+    Specifies an IP address range for both the IPv4 and IPv6 address families.
 
-    - Specify the virtual IP (VIP) address endpoints for the API VIP services to provide an interface to the cluster.
+    `platform.openstack.ingressVIPs`
+    Specifies the virtual IP (VIP) address endpoints for the Ingress VIP services to provide an interface to the cluster.
 
-    - Specify the dual-stack network details that are used by all of the nodes across the cluster.
+    `platform.openstack.apiVIPs`
+    Specifies the virtual IP (VIP) address endpoints for the API VIP services to provide an interface to the cluster.
 
-    - The CIDR of any subnet specified in this field must match the CIDRs listed on `networks.machineNetwork`.
+    `platform.openstack.controlPlanePort`
+    Specifies the dual-stack network details that are used by all of the nodes across the cluster.
 
-    - You can specify a value for either `name` or `id`, or both.
+    `platform.openstack.controlPlanePort.fixedIPs`
+    Specifies the subnets for the control plane port. The CIDR of any subnet specified in this field must match the CIDRs listed on `networks.machineNetwork`.
 
-    - Specifying the `network` under the `ControlPlanePort` field is optional.
+    `platform.openstack.controlPlanePort.fixedIPs[].subnet`
+    Specifies each subnet. You can specify a value for either `name` or `id`, or both.
 
-      Alternatively, if you want an IPv6 primary dual-stack cluster, edit the `install-config.yaml` file following the example below:
+    `platform.openstack.controlPlanePort.network`
+    Specifies the network. This field is optional.
 
-      <div class="formalpara">
+    Alternatively, if you want an IPv6 primary dual-stack cluster, edit the `install-config.yaml` file following the example below:
 
-      <div class="title">
+    <div class="formalpara">
 
-      Example `install-config.yaml`
+    <div class="title">
 
-      </div>
+    Example `install-config.yaml`
 
-      ``` yaml
-      apiVersion: v1
-      baseDomain: mydomain.test
-      compute:
-      - name: worker
-        platform:
-          openstack:
-            type: m1.xlarge
-        replicas: 3
-      controlPlane:
-        name: master
-        platform:
-          openstack:
-            type: m1.xlarge
-        replicas: 3
-      metadata:
-        name: mycluster
-      networking:
-        machineNetwork:
-        - cidr: "fd2e:6f44:5dd8:c956::/64"
-        - cidr: "192.168.25.0/24"
-        clusterNetwork:
-        - cidr: fd01::/48
-          hostPrefix: 64
-        - cidr: 10.128.0.0/14
-          hostPrefix: 23
-        serviceNetwork:
-        - fd02::/112
-        - 172.30.0.0/16
+    </div>
+
+    ``` yaml
+    apiVersion: v1
+    baseDomain: mydomain.test
+    compute:
+    - name: worker
       platform:
         openstack:
-          ingressVIPs: ['fd2e:6f44:5dd8:c956:f816:3eff:fef1:1bad', '192.168.25.79']
-          apiVIPs: ['fd2e:6f44:5dd8:c956:f816:3eff:fe78:cf36', '192.168.25.199']
-          controlPlanePort:
-            fixedIPs:
-            - subnet:
-                name: subnet-v6
-                id: subnet-v6-id
-            - subnet:
-                name: subnet-v4
-                id: subnet-v4-id
-            network:
-              name: dualstack
-              id: network-id
-      ```
+          type: m1.xlarge
+      replicas: 3
+    controlPlane:
+      name: master
+      platform:
+        openstack:
+          type: m1.xlarge
+      replicas: 3
+    metadata:
+      name: mycluster
+    networking:
+      machineNetwork:
+      - cidr: "fd2e:6f44:5dd8:c956::/64"
+      - cidr: "192.168.25.0/24"
+      clusterNetwork:
+      - cidr: fd01::/48
+        hostPrefix: 64
+      - cidr: 10.128.0.0/14
+        hostPrefix: 23
+      serviceNetwork:
+      - fd02::/112
+      - 172.30.0.0/16
+    platform:
+      openstack:
+        ingressVIPs: ['fd2e:6f44:5dd8:c956:f816:3eff:fef1:1bad', '192.168.25.79']
+        apiVIPs: ['fd2e:6f44:5dd8:c956:f816:3eff:fe78:cf36', '192.168.25.199']
+        controlPlanePort:
+          fixedIPs:
+          - subnet:
+              name: subnet-v6
+              id: subnet-v6-id
+          - subnet:
+              name: subnet-v4
+              id: subnet-v4-id
+          network:
+            name: dualstack
+            id: network-id
+    ```
 
-      </div>
+    </div>
 
-      - `networking.machineNetwork`, `networking.clusterNetwork`, and `networking.serviceNetwork` specify IP address ranges for both the IPv4 and IPv6 address families.
+    - `networking.machineNetwork`, `networking.clusterNetwork`, and `networking.serviceNetwork` specify IP address ranges for both the IPv4 and IPv6 address families.
 
-      - `platform.openstack.ingressVIPs` specifies the virtual IP (VIP) address endpoints for the Ingress VIP services to give an interface to the cluster.
+    - `platform.openstack.ingressVIPs` specifies the virtual IP (VIP) address endpoints for the Ingress VIP services to give an interface to the cluster.
 
-      - `platform.openstack.apiVIPs` specifies the virtual IP (VIP) address endpoints for the API VIP services to give an interface to the cluster.
+    - `platform.openstack.apiVIPs` specifies the virtual IP (VIP) address endpoints for the API VIP services to give an interface to the cluster.
 
-      - `platform.openstack.controlPlanePort` specifies the dual-stack network details that all the nodes across the cluster use.
+    - `platform.openstack.controlPlanePort` specifies the dual-stack network details that all the nodes across the cluster use.
 
-      - `platform.openstack.controlPlanePort.fixedIPs` specifies the subnets for the control plane port. The CIDR of any subnet specified in this field must match the CIDRs listed on `networking.machineNetwork`.
+    - `platform.openstack.controlPlanePort.fixedIPs` specifies the subnets for the control plane port. The CIDR of any subnet specified in this field must match the CIDRs listed on `networking.machineNetwork`.
 
-      - `platform.openstack.controlPlanePort.fixedIPs[].subnet` specifies each subnet. You can specify a value for either `name` or `id`, or both.
+    - `platform.openstack.controlPlanePort.fixedIPs[].subnet` specifies each subnet. You can specify a value for either `name` or `id`, or both.
 
-      - `platform.openstack.controlPlanePort.network` specifies the network. Specifying the `network` under the `controlPlanePort` field is optional.
+    - `platform.openstack.controlPlanePort.network` specifies the network. Specifying the `network` under the `controlPlanePort` field is optional.
 
-        > [!NOTE]
-        > When using an installation host in an isolated dual-stack network, the IPv6 address may not be reassigned correctly upon reboot.
-        >
-        > To resolve this problem on Red Hat Enterprise Linux (RHEL) 8, create a file called `/etc/NetworkManager/system-connections/required-rhel8-ipv6.conf` that contains the following configuration:
-        >
-        > ``` text
-        > [connection]
-        > type=ethernet
-        > [ipv6]
-        > addr-gen-mode=eui64
-        > method=auto
-        > ```
-        >
-        > To resolve this problem on RHEL 9, create a file called `/etc/NetworkManager/conf.d/required-rhel9-ipv6.conf` that contains the following configuration:
-        >
-        > ``` text
-        > [connection]
-        > ipv6.addr-gen-mode=0
-        > ```
-        >
-        > After you create and edit the file, reboot the installation host.
+      > [!NOTE]
+      > When using an installation host in an isolated dual-stack network, the IPv6 address may not be reassigned correctly upon reboot.
+      >
+      > To resolve this problem on Red Hat Enterprise Linux (RHEL) 8, create a file called `/etc/NetworkManager/system-connections/required-rhel8-ipv6.conf` that contains the following configuration:
+      >
+      > ``` text
+      > [connection]
+      > type=ethernet
+      > [ipv6]
+      > addr-gen-mode=eui64
+      > method=auto
+      > ```
+      >
+      > To resolve this problem on RHEL 9, create a file called `/etc/NetworkManager/conf.d/required-rhel9-ipv6.conf` that contains the following configuration:
+      >
+      > ``` text
+      > [connection]
+      > ipv6.addr-gen-mode=0
+      > ```
+      >
+      > After you create and edit the file, reboot the installation host.
 
-        > [!NOTE]
-        > The `ip=dhcp,dhcp6` kernel argument, which is set on all of the nodes, results in a single Network Manager connection profile that is activated on multiple interfaces simultaneously. Because of this behavior, any additional network has the same connection enforced with an identical UUID. If you need an interface-specific configuration, create a new connection profile for that interface so that the default connection is no longer enforced on it.
-
-</div>
+      > [!NOTE]
+      > The `ip=dhcp,dhcp6` kernel argument, which is set on all of the nodes, results in a single Network Manager connection profile that is activated on multiple interfaces simultaneously. Because of this behavior, any additional network has the same connection enforced with an identical UUID. If you need an interface-specific configuration, create a new connection profile for that interface so that the default connection is no longer enforced on it.
 
 ## Configuring a cluster with single-stack IPv6 networking
 
@@ -1661,13 +1662,19 @@ Procedure
     <certificate_of_the_mirror>
     ```
 
-    - The CIDR of the subnet specified in this field must match the CIDR of the subnet that is specified in the `controlPlanePort` section.
+    where:
 
-    - Use the address from the ports you generated in the previous steps as the values for the parameters `platform.openstack.ingressVIPs` and `platform.openstack.apiVIPs`.
+    `networking.machineNetwork[].cidr`
+    Specifies the CIDR of the subnet. This value must match the CIDR of the subnet that is specified in the `controlPlanePort` section.
 
-    - Items under the `platform.openstack.controlPlanePort.fixedIPs` and `platform.openstack.controlPlanePort.network` keys can contain an ID, a name, or both.
+    `platform.openstack.ingressVIPs` and `platform.openstack.apiVIPs`
+    Specifies the addresses from the ports you generated in the previous steps.
 
-    - The `imageContentSources` section contains the mirror details. For more information on configuring a local image registry, see "Creating a mirror registry with mirror registry for Red Hat OpenShift".
+    `platform.openstack.controlPlanePort.fixedIPs` and `platform.openstack.controlPlanePort.network`
+    Specifies items that can contain an ID, a name, or both.
+
+    `imageContentSources`
+    Specifies the mirror details. For more information on configuring a local image registry, see "Creating a mirror registry with mirror registry for Red Hat OpenShift".
 
 </div>
 

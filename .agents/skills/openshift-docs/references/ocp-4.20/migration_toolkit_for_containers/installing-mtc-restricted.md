@@ -619,6 +619,8 @@ MTC supports the [file system and snapshot data copy methods](about-mtc.md#migra
 
 ## Retrieve Multicloud Object Gateway credentials
 
+Retrieve the Multicloud Object Gateway (MCG) credentials to create a `Secret` custom resource (CR) for your backup storage.
+
 > [!NOTE]
 > Although the MCG Operator is [deprecated](https://catalog.redhat.com/software/containers/ocs4/mcg-rhel8-operator/5ddbcefbdd19c71643b56ce9?architecture=amd64&image=64243f5dcd0eb61355af9abd), the MCG plugin is still available for OpenShift Data Foundation. To download the plugin, browse to [Download Red Hat OpenShift Data Foundation](https://access.redhat.com/downloads/content/547/ver=4/rhel---9/4.15.4/x86_64/product-software) and download the appropriate MCG plugin for your operating system.
 

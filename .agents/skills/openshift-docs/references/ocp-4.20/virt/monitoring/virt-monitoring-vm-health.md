@@ -77,21 +77,21 @@ Procedure
     # ...
     ```
 
-    - The HTTP GET request to perform to connect to the VM.
+    - `spec.template.spec.readinessProbe.httpGet` defines the HTTP GET request to perform to connect to the VM.
 
-    - The port of the VM that the probe queries. In the above example, the probe queries port 1500.
+    - `spec.template.spec.readinessProbe.httpGet.port` defines the port of the VM that the probe queries. In the above example, the probe queries port 1500.
 
-    - The path to access on the HTTP server. In the above example, if the handler for the server’s /healthz path returns a success code, the VM is considered to be healthy. If the handler returns a failure code, the VM is removed from the list of available endpoints.
+    - `spec.template.spec.readinessProbe.httpGet.path` defines the path to access on the HTTP server. In the above example, if the handler for the server’s /healthz path returns a success code, the VM is considered to be healthy. If the handler returns a failure code, the VM is removed from the list of available endpoints.
 
-    - The time, in seconds, after the VM starts before the readiness probe is initiated.
+    - `spec.template.spec.readinessProbe.initialDelaySeconds` defines the time, in seconds, after the VM starts before the readiness probe is initiated.
 
-    - The delay, in seconds, between performing probes. The default delay is 10 seconds. This value must be greater than `timeoutSeconds`.
+    - `spec.template.spec.readinessProbe.periodSeconds` defines the delay, in seconds, between performing probes. The default delay is 10 seconds. This value must be greater than `timeoutSeconds`.
 
-    - The number of seconds of inactivity after which the probe times out and the VM is assumed to have failed. The default value is 1. This value must be lower than `periodSeconds`.
+    - `spec.template.spec.readinessProbe.timeoutSeconds` defines the number of seconds of inactivity after which the probe times out and the VM is assumed to have failed. The default value is 1. This value must be lower than `periodSeconds`.
 
-    - The number of times that the probe is allowed to fail. The default is 3. After the specified number of attempts, the pod is marked `Unready`.
+    - `spec.template.spec.readinessProbe.failureThreshold` defines the number of times that the probe is allowed to fail. The default is 3. After the specified number of attempts, the pod is marked `Unready`.
 
-    - The number of times that the probe must report success, after a failure, to be considered successful. The default is 1.
+    - `spec.template.spec.readinessProbe.successThreshold` defines the number of times that the probe must report success, after a failure, to be considered successful. The default is 1.
 
 2.  Create the VM by running the following command:
 
@@ -149,15 +149,15 @@ Procedure
     # ...
     ```
 
-    - The time, in seconds, after the VM starts before the readiness probe is initiated.
+    - `spec.template.spec.readinessProbe.initialDelaySeconds` defines the time, in seconds, after the VM starts before the readiness probe is initiated.
 
-    - The delay, in seconds, between performing probes. The default delay is 10 seconds. This value must be greater than `timeoutSeconds`.
+    - `spec.template.spec.readinessProbe.periodSeconds` defines the delay, in seconds, between performing probes. The default delay is 10 seconds. This value must be greater than `timeoutSeconds`.
 
-    - The TCP action to perform.
+    - `spec.template.spec.readinessProbe.tcpSocket` defines the TCP action to perform.
 
-    - The port of the VM that the probe queries.
+    - `spec.template.spec.readinessProbe.tcpSocket.port` defines the port of the VM that the probe queries.
 
-    - The number of seconds of inactivity after which the probe times out and the VM is assumed to have failed. The default value is 1. This value must be lower than `periodSeconds`.
+    - `spec.template.spec.readinessProbe.timeoutSeconds` defines the number of seconds of inactivity after which the probe times out and the VM is assumed to have failed. The default value is 1. This value must be lower than `periodSeconds`.
 
 2.  Create the VM by running the following command:
 
@@ -219,17 +219,17 @@ Procedure
     # ...
     ```
 
-    - The time, in seconds, after the VM starts before the liveness probe is initiated.
+    - `spec.template.spec.livenessProbe.initialDelaySeconds` defines the time, in seconds, after the VM starts before the liveness probe is initiated.
 
-    - The delay, in seconds, between performing probes. The default delay is 10 seconds. This value must be greater than `timeoutSeconds`.
+    - `spec.template.spec.livenessProbe.periodSeconds` defines the delay, in seconds, between performing probes. The default delay is 10 seconds. This value must be greater than `timeoutSeconds`.
 
-    - The HTTP GET request to perform to connect to the VM.
+    - `spec.template.spec.livenessProbe.httpGet` defines the HTTP GET request to perform to connect to the VM.
 
-    - The port of the VM that the probe queries. In the above example, the probe queries port 1500. The VM installs and runs a minimal HTTP server on port 1500 via cloud-init.
+    - `spec.template.spec.livenessProbe.httpGet.port` defines the port of the VM that the probe queries. In the above example, the probe queries port 1500. The VM installs and runs a minimal HTTP server on port 1500 via cloud-init.
 
-    - The path to access on the HTTP server. In the above example, if the handler for the server’s `/healthz` path returns a success code, the VM is considered to be healthy. If the handler returns a failure code, the VM is deleted and a new VM is created.
+    - `spec.template.spec.livenessProbe.httpGet.path` defines the path to access on the HTTP server. In the above example, if the handler for the server’s `/healthz` path returns a success code, the VM is considered to be healthy. If the handler returns a failure code, the VM is deleted and a new VM is created.
 
-    - The number of seconds of inactivity after which the probe times out and the VM is assumed to have failed. The default value is 1. This value must be lower than `periodSeconds`.
+    - `spec.template.spec.livenessProbe.timeoutSeconds` defines the number of seconds of inactivity after which the probe times out and the VM is assumed to have failed. The default value is 1. This value must be lower than `periodSeconds`.
 
 2.  Create the VM by running the following command:
 
@@ -307,9 +307,9 @@ Procedure
     # ...
     ```
 
-    - The watchdog device model to use. For `x86` specify `i6300esb`. For `s390x` specify `diag288`.
+    - `spec.template.spec.domain.devices.watchdog.<watchdog-device-model>` defines the watchdog device model to use. For `x86` specify `i6300esb`. For `s390x` specify `diag288`.
 
-    - Specify `poweroff`, `reset`, or `shutdown`. The `shutdown` action requires that the guest virtual machine is responsive to ACPI signals. Therefore, using `shutdown` is not recommended.
+    - `spec.template.spec.domain.devices.watchdog.<watchdog-device-model>.action` defines the watchdog device action. Specify `poweroff`, `reset`, or `shutdown`. The `shutdown` action requires that the guest virtual machine is responsive to ACPI signals. Using `shutdown` is not recommended.
 
       The example above configures the watchdog device on a VM with the `poweroff` action and exposes the device as `/dev/watchdog`.
 
@@ -451,17 +451,17 @@ Procedure
     # ...
     ```
 
-    - The guest agent ping probe to connect to the VM.
+    - `spec.template.spec.readinessProbe.guestAgentPing` defines the guest agent ping probe to connect to the VM.
 
-    - Optional: The time, in seconds, after the VM starts before the guest agent probe is initiated.
+    - `spec.template.spec.readinessProbe.initialDelaySeconds` defines the time, in seconds, after the VM starts before the guest agent probe is initiated. This value is optional.
 
-    - Optional: The delay, in seconds, between performing probes. The default delay is 10 seconds. This value must be greater than `timeoutSeconds`.
+    - `spec.template.spec.readinessProbe.periodSeconds` defines the delay, in seconds, between performing probes. The default delay is 10 seconds. This value must be greater than `timeoutSeconds`. This value is optional.
 
-    - Optional: The number of seconds of inactivity after which the probe times out and the VM is assumed to have failed. The default value is 1. This value must be lower than `periodSeconds`.
+    - `spec.template.spec.readinessProbe.timeoutSeconds` defines the number of seconds of inactivity after which the probe times out and the VM is assumed to have failed. The default value is 1. This value must be lower than `periodSeconds`. This value is optional.
 
-    - Optional: The number of times that the probe is allowed to fail. The default is 3. After the specified number of attempts, the pod is marked `Unready`.
+    - `spec.template.spec.readinessProbe.failureThreshold` defines the number of times that the probe is allowed to fail. The default is 3. After the specified number of attempts, the pod is marked `Unready`. This value is optional.
 
-    - Optional: The number of times that the probe must report success, after a failure, to be considered successful. The default is 1.
+    - `spec.template.spec.readinessProbe.successThreshold` defines the number of times that the probe must report success, after a failure, to be considered successful. The default is 1. This value is optional.
 
 2.  Create the VM by running the following command:
 

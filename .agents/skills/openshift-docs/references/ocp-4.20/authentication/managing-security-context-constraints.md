@@ -593,25 +593,37 @@ volumes:
 
 </div>
 
-- A list of capabilities that a pod can request. An empty list means that none of capabilities can be requested while the special symbol `*` allows any capabilities.
+\+ where:
 
-- A list of additional capabilities that are added to any pod.
+`allowedCapabilities`
+Specifies a list of capabilities that a pod can request. An empty list means that none of the capabilities can be requested, while the special symbol `*` allows any capabilities.
 
-- The `FSGroup` strategy, which dictates the allowable values for the security context.
+`defaultAddCapabilities`
+Specifies a list of additional capabilities that are added to any pod.
 
-- The groups that can access this SCC.
+`fsGroup`
+Specifies the `FSGroup` strategy, which dictates the allowable values for the security context.
 
-- A list of capabilities to drop from a pod. Or, specify `ALL` to drop all capabilities.
+`groups`
+Specifies the groups that can access this SCC.
 
-- The `runAsUser` strategy type, which dictates the allowable values for the security context.
+`requiredDropCapabilities`
+Specifies a list of capabilities to drop from a pod. Or, specify `ALL` to drop all capabilities.
 
-- The `seLinuxContext` strategy type, which dictates the allowable values for the security context.
+`runAsUser`
+Specifies the `runAsUser` strategy type, which dictates the allowable values for the security context.
 
-- The `supplementalGroups` strategy, which dictates the allowable supplemental groups for the security context.
+`seLinuxContext`
+Specifies the `seLinuxContext` strategy type, which dictates the allowable values for the security context.
 
-- The users who can access this SCC.
+`supplementalGroups`
+Specifies the `supplementalGroups` strategy, which dictates the allowable supplemental groups for the security context.
 
-- The allowable volume types for the security context. In the example, `*` allows the use of all volume types.
+`users`
+Specifies the users who can access this SCC.
+
+`volumes`
+Specifies the allowable volume types for the security context. In the example, `*` allows the use of all volume types.
 
 The `users` and `groups` fields on the SCC control which users can access the SCC. By default, cluster administrators, nodes, and the build controller are granted access to the privileged SCC. All authenticated users are granted access to the `restricted-v2` SCC.
 
@@ -644,7 +656,7 @@ spec:
 
 </div>
 
-- When a container or pod does not request a user ID under which it should be run, the effective UID depends on the SCC that emits this pod. Because the `restricted-v2` SCC is granted to all authenticated users by default, it will be available to all users and service accounts and used in most cases. The `restricted-v2` SCC uses `MustRunAsRange` strategy for constraining and defaulting the possible values of the `securityContext.runAsUser` field. The admission plugin will look for the `openshift.io/sa.scc.uid-range` annotation on the current project to populate range fields, as it does not provide this range. In the end, a container will have `runAsUser` equal to the first value of the range that is hard to predict because every project has different ranges.
+When a container or pod does not request a user ID under which it should be run, the effective UID depends on the SCC that emits this pod. Because the `restricted-v2` SCC is granted to all authenticated users by default, it will be available to all users and service accounts and used in most cases. The `restricted-v2` SCC uses `MustRunAsRange` strategy for constraining and defaulting the possible values of the `securityContext.runAsUser` field. The admission plugin will look for the `openshift.io/sa.scc.uid-range` annotation on the current project to populate range fields, as it does not provide this range. In the end, a container will have `runAsUser` equal to the first value of the range that is hard to predict because every project has different ranges.
 
 <div class="formalpara">
 
@@ -669,7 +681,7 @@ spec:
 
 </div>
 
-- A container or pod that requests a specific user ID will be accepted by OpenShift Container Platform only when a service account or a user is granted access to a SCC that allows such a user ID. The SCC can allow arbitrary IDs, an ID that falls into a range, or the exact user ID specific to the request.
+A container or pod that requests a specific user ID is accepted by OpenShift Container Platform only when a service account or a user is granted access to a SCC that allows such a user ID. The SCC can allow arbitrary IDs, an ID that falls into a range, or the exact user ID specific to the request.
 
 This configuration is valid for SELinux, fsGroup, and Supplemental Groups.
 
@@ -850,7 +862,7 @@ Procedure
 
     </div>
 
-    - Specify the name of the SCC to require.
+    - Replace `"my-scc"` with the name of the SCC to require.
 
 2.  Create the resource by running the following command:
 
@@ -876,9 +888,9 @@ Verification
       $ oc get pod <pod_name> -o jsonpath='{.metadata.annotations.openshift\.io\/scc}{"\n"}'
       ```
 
-      - Replace `<pod_name>` with the name of your deployment pod.
+- Replace `<pod_name>` with the name of your deployment pod.
 
-  2.  Examine the output and confirm that the displayed SCC matches the SCC that you defined in the deployment:
+  1.  Examine the output and confirm that the displayed SCC matches the SCC that you defined in the deployment:
 
       <div class="formalpara">
 
@@ -932,17 +944,25 @@ rules:
   - use
 ```
 
-- The role’s name.
+\+ where:
 
-- Namespace of the defined role. Defaults to `default` if not specified.
+`metadata.name`
+Specifies the role’s name.
 
-- The API group that includes the `SecurityContextConstraints` resource. Automatically defined when `scc` is specified as a resource.
+`metadata.namespace`
+Specifies the namespace of the defined role. Defaults to `default` if not specified.
 
-- An example name for an SCC you want to have access.
+`rules[].apiGroups`
+Specifies the API group that includes the `SecurityContextConstraints` resource. Automatically defined when `scc` is specified as a resource.
 
-- Name of the resource group that allows users to specify SCC names in the `resourceNames` field.
+`rules[].resourceNames`
+Specifies an example name for an SCC you want to have access.
 
-- A list of verbs to apply to the role.
+`rules[].resources`
+Specifies the name of the resource group that allows users to specify SCC names in the `resourceNames` field.
+
+`rules[].verbs`
+Specifies a list of verbs to apply to the role.
 
 A local or cluster role with such a rule allows the subjects that are bound to it with a role binding or a cluster role binding to use the user-defined SCC called `scc-name`.
 
@@ -1045,10 +1065,6 @@ Settings:
 ```
 
 </div>
-
-- Lists which users and service accounts the SCC is applied to.
-
-- Lists which groups the SCC is applied to.
 
 > [!NOTE]
 > To preserve customized SCCs during upgrades, do not edit settings on the default SCCs.

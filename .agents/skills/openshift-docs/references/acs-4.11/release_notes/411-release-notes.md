@@ -19,6 +19,7 @@ Review the official release dates and update schedule for RHACS 4.11.
 | `4.11.4`      | 15 September 2026 |
 | `4.11.5`      | 12 October 2026   |
 | `4.11.6`      | 20 October 2026   |
+| `4.11.7`      | 4 November 2026   |
 
 Release dates
 
@@ -828,6 +829,22 @@ This release also addresses the following security vulnerabilities:
 
 - Central issues new authentication tokens in case of SAML response replay ([CVE-2026-103314](https://access.redhat.com/security/cve/CVE-2026-103314))
 
+<a id="about-this-release-4117_release-notes-411"></a>
+
+# About release 4.11.7
+
+<a id="bug-fixes-in-version-4117_release-notes-411"></a>
+
+## Bug fixes and security updates in version 4.11.7
+
+This release addresses the following security vulnerabilities:
+
+- Man-in-the-middle attacks through untrusted intermediate certificates ([CVE-2026-111943](https://access.redhat.com/security/cve/CVE-2026-111943))
+
+<!-- -->
+
+- Distrust eMudhra intermediate CA certificates due to security concerns ([CVE-2026-114406](https://access.redhat.com/security/cve/CVE-2026-114406))
+
 <a id="image-versions_release-notes-411"></a>
 
 # Image versions
@@ -852,40 +869,40 @@ You can manually pull, retag, and push Red Hat Advanced Cluster Security for Ku
 <tr>
 <td style="text-align: left;"><p>Main</p></td>
 <td style="text-align: left;"><p>Includes Central, Sensor, Admission controller, and Compliance components. Also includes <code>roxctl</code> for use in continuous integration (CI) systems.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.6</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-main-rhel9:4.11.7</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Central DB</p></td>
 <td style="text-align: left;"><p>PostgreSQL instance that provides the database storage for Central.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.6</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-central-db-rhel9:4.11.7</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner</p></td>
 <td style="text-align: left;"><p>Scans images and nodes.</p></td>
 <td style="text-align: left;"><ul>
-<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.6</code></p></li>
-<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.6</code></p></li>
+<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-rhel9:4.11.7</code></p></li>
+<li><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-slim-rhel9:4.11.7</code></p></li>
 </ul></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner DB</p></td>
 <td style="text-align: left;"><p>Stores image scan results and vulnerability definitions.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.6</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-db-rhel9:4.11.7</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner V4</p></td>
 <td style="text-align: left;"><p>Scans images.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-rhel9:4.11.6</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-rhel9:4.11.7</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Scanner V4 DB</p></td>
 <td style="text-align: left;"><p>Stores image scan results and vulnerability definitions for Scanner V4.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-db-rhel9:4.11.6</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-scanner-v4-db-rhel9:4.11.7</code></p></td>
 </tr>
 <tr>
 <td style="text-align: left;"><p>Collector</p></td>
 <td style="text-align: left;"><p>Collects runtime activity in Kubernetes or OpenShift Container Platform clusters.</p></td>
-<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.6</code></p></td>
+<td style="text-align: left;"><p><code>registry.redhat.io/advanced-cluster-security/rhacs-collector-rhel9:4.11.7</code></p></td>
 </tr>
 </tbody>
 </table>

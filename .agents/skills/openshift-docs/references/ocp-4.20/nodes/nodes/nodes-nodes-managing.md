@@ -169,7 +169,9 @@ Procedure
 
 # Setting SELinux booleans
 
-OpenShift Container Platform allows you to enable and disable an SELinux boolean on a Red Hat Enterprise Linux CoreOS (RHCOS) node. The following procedure explains how to modify SELinux booleans on nodes using the Machine Config Operator (MCO). This procedure uses `container_manage_cgroup` as the example boolean. You can modify this value to whichever boolean you need.
+OpenShift Container Platform allows you to enable and disable an SELinux boolean on a Red Hat Enterprise Linux CoreOS (RHCOS) node.
+
+The following procedure explains how to modify SELinux booleans on nodes using the Machine Config Operator (MCO). This procedure uses `container_manage_cgroup` as the example boolean. You can modify this value to whichever boolean you need.
 
 <div>
 

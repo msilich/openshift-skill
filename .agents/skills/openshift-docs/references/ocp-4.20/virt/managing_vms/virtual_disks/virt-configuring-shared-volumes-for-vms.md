@@ -10,7 +10,7 @@ You configure disk sharing by exposing the storage as either of these types:
 
 In addition to configuring disk sharing, you can also set an error policy for each ordinary VM disk or LUN disk. The error policy controls how the hypervisor behaves when an input/output error occurs on a disk Read or Write.
 
-# Configuring disk sharing by using virtual machine disks
+# Share a block disk between multiple VMs
 
 You can configure block volumes so that multiple virtual machines (VMs) can share storage.
 
@@ -85,7 +85,7 @@ Procedure
 
 </div>
 
-# Configuring disk sharing by using LUN
+# Share a LUN-backed disk between multiple VMs
 
 To secure data on your VM from outside access, you can enable SCSI persistent reservation and configure a LUN-backed virtual machine disk to be shared among multiple virtual machines.
 
@@ -179,7 +179,7 @@ Procedure
 
 </div>
 
-## Configuring disk sharing by using LUN and the web console
+## Share a LUN-backed disk by using the web console
 
 You can use the OpenShift Container Platform web console to configure disk sharing by using LUN.
 
@@ -225,7 +225,7 @@ Procedure
 
 </div>
 
-## Configuring disk sharing by using LUN and the CLI
+## Share a LUN-backed disk by using the CLI
 
 You can use the command line to configure disk sharing by using LUN.
 

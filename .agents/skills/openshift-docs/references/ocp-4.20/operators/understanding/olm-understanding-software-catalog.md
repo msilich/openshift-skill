@@ -4,7 +4,9 @@ The software catalog in OpenShift Container Platform provides a web console inte
 
 # About the software catalog
 
-The *software catalog* is the web console interface in OpenShift Container Platform that cluster administrators use to discover and install Operators. With one click, an Operator can be pulled from its off-cluster source, installed and subscribed on the cluster, and made ready for engineering teams to self-service manage the product across deployment environments using Operator Lifecycle Manager (OLM).
+The *software catalog* is the web console interface in OpenShift Container Platform that cluster administrators use to discover and install Operators.
+
+With one click, an Operator can be pulled from its off-cluster source, installed and subscribed on the cluster, and made ready for engineering teams to self-service manage the product across deployment environments using Operator Lifecycle Manager (OLM).
 
 Cluster administrators can choose from catalogs grouped into the following categories:
 
@@ -50,9 +52,13 @@ spec:
 
 </div>
 
-- `disableAllDefaultSources` is an override that controls availability of all default catalogs that are configured by default during an OpenShift Container Platform installation.
+\+ where:
 
-- Disable default catalogs individually by changing the `disabled` parameter value per source.
+`spec.disableAllDefaultSources`
+Specifies an override that controls availability of all default catalogs that are configured by default during an OpenShift Container Platform installation.
+
+`spec.sources[].disabled`
+Specifies whether to disable default catalogs individually. Change the `disabled` parameter value per source.
 
 # Additional resources
 

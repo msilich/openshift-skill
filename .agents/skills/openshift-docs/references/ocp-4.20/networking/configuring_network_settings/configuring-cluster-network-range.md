@@ -8,7 +8,7 @@ The following limitations apply when modifying the cluster network IP address ra
 
 - The CIDR mask size specified must always be smaller than the currently configured CIDR mask size, because you can only increase IP space by adding more nodes to an installed cluster
 
-- The host prefix cannot be modified
+- This procedure does not change the `hostPrefix` value or per-node subnet size. To increase the effective per-node pod subnet size, see "Increasing the cluster network hostPrefix".
 
 - Pods that are configured with an overridden default gateway must be recreated after the cluster network expands
 
@@ -154,5 +154,7 @@ Procedure
 - [OVN-Kubernetes network plugin](../ovn_kubernetes_network_provider/about-ovn-kubernetes.md#about-ovn-kubernetes)
 
 - [Red Hat OpenShift Network Calculator](https://access.redhat.com/labs/ocpnc/)
+
+- [Increasing the cluster network hostPrefix](../ovn_kubernetes_network_provider/increasing-cluster-network-hostprefix.md#increasing-cluster-network-hostprefix)
 
 - [About the OVN-Kubernetes network plugin](../ovn_kubernetes_network_provider/about-ovn-kubernetes.md#about-ovn-kubernetes)

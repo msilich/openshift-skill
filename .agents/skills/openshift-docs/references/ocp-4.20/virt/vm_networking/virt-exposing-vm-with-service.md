@@ -18,7 +18,7 @@ Creates an external load balancer in the current cloud (if supported) and assign
 > [!NOTE]
 > For on-premise clusters, you can configure a load balancing service by deploying the MetalLB Operator.
 
-# Dual-stack support
+# Dual-stack support for services
 
 If IPv4 and IPv6 dual-stack networking is enabled for your cluster, you can create a service that uses IPv4, IPv6, or both, by defining the `spec.ipFamilyPolicy` and the `spec.ipFamilies` fields in the `Service` object.
 
@@ -43,7 +43,7 @@ You can define which IP family to use for single-stack or define the order of IP
 
 - `[IPv6, IPv4]`
 
-# Create a service by using the command line
+# Expose a VM as a service by using the CLI
 
 You can use the command line to create a service and associate it with a virtual machine (VM). You must create a label on the VM that matches the selector in the `Service` manifest.
 

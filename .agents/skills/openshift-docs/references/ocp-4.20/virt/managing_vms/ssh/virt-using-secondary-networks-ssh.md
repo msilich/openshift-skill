@@ -16,7 +16,7 @@ For additional information about networking options, see the Multus and SR-IOV d
 
 - You created a network attachment definition for a Linux bridge network or the SR-IOV Network Operator created a network attachment definition when you created an `SriovNetwork` object.
 
-# Add a network interface to a VM by using the web console
+# Add a VM network interface in the web console
 
 You can add a network interface to a virtual machine (VM) from the OpenShift Container Platform web console and attach it to an existing network attachment definition. Restart or live migrate the VM to apply the change.
 

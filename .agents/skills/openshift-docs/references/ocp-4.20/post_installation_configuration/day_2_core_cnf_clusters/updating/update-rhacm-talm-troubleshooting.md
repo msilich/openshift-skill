@@ -470,7 +470,9 @@ Procedure
 
 # Resolving a noncompliant policy hold during an update
 
-During the update, TALM verifies the status of `ClusterVersion` for the OpenShift Container Platform update and `Subscription` for OLM Operators. If errors occur during those updates, the status does not change to the expected value and the policies do not become compliant. TALM holds at that point waiting for compliance.
+During the update, TALM verifies the status of `ClusterVersion` for the OpenShift Container Platform update and `Subscription` for OLM Operators.
+
+If errors occur during those updates, the status does not change to the expected value and the policies do not become compliant. TALM holds at that point waiting for compliance.
 
 If you are monitoring the update, you can fix the issue on the target cluster and the update continues automatically when the policy becomes compliant.
 

@@ -25,7 +25,11 @@ The factory-precaching-cli tool does the following:
 
 # Getting the factory-precaching-cli tool
 
-The factory-precaching-cli tool Go binary is publicly available in [the {rds-first} tools container image](https://quay.io/openshift-kni/telco-ran-tools:latest). The factory-precaching-cli tool Go binary in the container image is executed on the server running an RHCOS live image using `podman`. If you are working in a disconnected environment or have a private registry, you need to copy the image there so you can download the image to the server.
+The factory-precaching-cli tool Go binary in the container image is executed on the server running an RHCOS live image using `podman`.
+
+The factory-precaching-cli tool Go binary is publicly available in [the {rds-first} tools container image](https://quay.io/openshift-kni/telco-ran-tools:latest).
+
+If you are working in a disconnected environment or have a private registry, you need to copy the image there so you can download the image to the server.
 
 <div>
 
@@ -172,6 +176,10 @@ Prerequisites
 
 - You have enough storage to install OpenShift Container Platform and pre-cache the required images.
 
+- The container must run as `privileged` due to formatting host devices.
+
+- You have to mount the `/dev` folder so that the process can be executed inside the container.
+
 </div>
 
 <div>
@@ -212,45 +220,15 @@ Procedure
     /dev/nvme0n1: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
     ```
 
-</div>
+    > [!IMPORTANT]
+    > The tool fails if the disk is not empty because it uses partition number 1 of the device for pre-caching the artifacts.
 
-> [!IMPORTANT]
-> The tool fails if the disk is not empty because it uses partition number 1 of the device for pre-caching the artifacts.
+    Create a single partition and a GPT partition table. The partition is automatically labelled as `data` and created at the end of the device. Otherwise, the partition will be overridden by the `coreos-installer`.
 
-## Creating the partition
+    > [!IMPORTANT]
+    > The `coreos-installer` requires the partition to be created at the end of the device and to be labelled as `data`. Both requirements are necessary to save the partition when writing the RHCOS image to the disk.
 
-Once the device is ready, you create a single partition and a GPT partition table. The partition is automatically labelled as `data` and created at the end of the device. Otherwise, the partition will be overridden by the `coreos-installer`.
-
-> [!IMPORTANT]
-> The `coreos-installer` requires the partition to be created at the end of the device and to be labelled as `data`. Both requirements are necessary to save the partition when writing the RHCOS image to the disk.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- The container must run as `privileged` due to formatting host devices.
-
-- You have to mount the `/dev` folder so that the process can be executed inside the container.
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Procedure
-
-</div>
-
-In the following example, the size of the partition is 250 GiB due to allow pre-caching the DU profile for Day 2 Operators.
-
-</div>
-
-1.  Run the container as `privileged` and partition the disk:
+3.  Run the container as `privileged` and partition the disk. In the following example, the size of the partition is 250 GiB to allow pre-caching the DU profile for Day 2 Operators:
 
     ``` terminal
     # podman run -v /dev:/dev --privileged \
@@ -264,11 +242,11 @@ In the following example, the size of the partition is 250 GiB due to allow pre-
 
     - `factory-precaching-cli partition` specifies the partitioning function of the factory-precaching-cli tool.
 
-    - `-d /dev/nvme0n1` specifies the root directory on the disk.
+    - `-d /dev/nvme0n1` defines the root directory on the disk.
 
-    - `-s 250` specifies the size of the disk in GB.
+    - `-s 250` defines the size of the disk in GB.
 
-2.  Check the storage information:
+4.  Check the storage information:
 
     ``` terminal
     # lsblk
@@ -285,64 +263,12 @@ In the following example, the size of the partition is 250 GiB due to allow pre-
     └─nvme0n1p1 259:3    0   250G  0 part
     ```
 
-<div class="formalpara">
+    After verifying that the disk is partitioned correctly, mount the device into `/mnt`.
 
-<div class="title">
+    > [!IMPORTANT]
+    > It is recommended to mount the device into `/mnt` because that mounting point is used during GitOps ZTP preparation.
 
-Verification
-
-</div>
-
-You must verify that the following requirements are met:
-
-</div>
-
-- The device has a GPT partition table
-
-- The partition uses the latest sectors of the device.
-
-- The partition is correctly labeled as `data`.
-
-Query the disk status to verify that the disk is partitioned as expected:
-
-``` terminal
-# gdisk -l /dev/nvme0n1
-```
-
-The following is example output:
-
-``` terminal
-GPT fdisk (gdisk) version 1.0.3
-
-Partition table scan:
-  MBR: protective
-  BSD: not present
-  APM: not present
-  GPT: present
-
-Found valid GPT with protective MBR; using GPT.
-Disk /dev/nvme0n1: 3125627568 sectors, 1.5 TiB
-Model: Dell Express Flash PM1725b 1.6TB SFF
-Sector size (logical/physical): 512/512 bytes
-Disk identifier (GUID): CB5A9D44-9B3C-4174-A5C1-C64957910B61
-Partition table holds up to 128 entries
-Main partition table begins at sector 2 and ends at sector 33
-First usable sector is 34, last usable sector is 3125627534
-Partitions will be aligned on 2048-sector boundaries
-Total free space is 2601338846 sectors (1.2 TiB)
-
-Number  Start (sector)    End (sector)  Size       Code  Name
-   1      2601338880      3125627534   250.0 GiB   8300  data
-```
-
-## Mounting the partition
-
-After verifying that the disk is partitioned correctly, you can mount the device into `/mnt`.
-
-> [!IMPORTANT]
-> It is recommended to mount the device into `/mnt` because that mounting point is used during GitOps ZTP preparation.
-
-1.  Verify that the partition is formatted as `xfs`:
+5.  Verify that the partition is formatted as `xfs`:
 
     ``` terminal
     # lsblk -f /dev/nvme0n1
@@ -356,11 +282,13 @@ After verifying that the disk is partitioned correctly, you can mount the device
     └─nvme0n1p1 xfs          1bee8ea4-d6cf-4339-b690-a76594794071
     ```
 
-2.  Mount the partition:
+6.  Mount the partition:
 
     ``` terminal
     # mount /dev/nvme0n1p1 /mnt/
     ```
+
+</div>
 
 <div>
 
@@ -370,13 +298,45 @@ Verification
 
 </div>
 
+- Verify that the device has a GPT partition table, the partition uses the latest sectors of the device, and the partition is correctly labeled as `data`. Query the disk status to verify that the disk is partitioned as expected:
+
+  ``` terminal
+  # gdisk -l /dev/nvme0n1
+  ```
+
+  The following is example output:
+
+  ``` terminal
+  GPT fdisk (gdisk) version 1.0.3
+
+  Partition table scan:
+    MBR: protective
+    BSD: not present
+    APM: not present
+    GPT: present
+
+  Found valid GPT with protective MBR; using GPT.
+  Disk /dev/nvme0n1: 3125627568 sectors, 1.5 TiB
+  Model: Dell Express Flash PM1725b 1.6TB SFF
+  Sector size (logical/physical): 512/512 bytes
+  Disk identifier (GUID): CB5A9D44-9B3C-4174-A5C1-C64957910B61
+  Partition table holds up to 128 entries
+  Main partition table begins at sector 2 and ends at sector 33
+  First usable sector is 34, last usable sector is 3125627534
+  Partitions will be aligned on 2048-sector boundaries
+  Total free space is 2601338846 sectors (1.2 TiB)
+
+  Number  Start (sector)    End (sector)  Size       Code  Name
+     1      2601338880      3125627534   250.0 GiB   8300  data
+  ```
+
 - Check that the partition is mounted:
 
   ``` terminal
   # lsblk
   ```
 
-  The following is example output. The mount point is `/var/mnt` because the `/mnt` folder in RHCOS is a link to `/var/mnt`.
+  The following is example output:
 
   ``` terminal
   NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
@@ -386,6 +346,8 @@ Verification
   nvme0n1     259:1    0   1.5T  0 disk
   └─nvme0n1p1 259:2    0   250G  0 part /var/mnt
   ```
+
+  The mount point is `/var/mnt` because the `/mnt` folder in RHCOS is a link to `/var/mnt`.
 
 </div>
 
@@ -675,7 +637,9 @@ Procedure
 
 ## Pre-caching custom images in disconnected environments
 
-The `--generate-imageset` argument stops the factory-precaching-cli tool after the `ImageSetConfiguration` custom resource (CR) is generated. This allows you to customize the `ImageSetConfiguration` CR before downloading any images. After you customized the CR, you can use the `--skip-imageset` argument to download the images that you specified in the `ImageSetConfiguration` CR.
+The `--generate-imageset` argument stops the factory-precaching-cli tool after the `ImageSetConfiguration` custom resource (CR) is generated.
+
+This allows you to customize the `ImageSetConfiguration` CR before downloading any images. After you customized the CR, you can use the `--skip-imageset` argument to download the images that you specified in the `ImageSetConfiguration` CR.
 
 You can customize the `ImageSetConfiguration` CR in the following ways:
 
@@ -868,7 +832,9 @@ Procedure
 
 # Pre-caching images in GitOps ZTP
 
-The `SiteConfig` manifest defines how an OpenShift cluster is to be installed and configured. In the GitOps Zero Touch Provisioning (ZTP) provisioning workflow, the factory-precaching-cli tool requires the following additional fields in the `SiteConfig` manifest:
+The `SiteConfig` manifest defines how an OpenShift cluster is to be installed and configured.
+
+In the GitOps Zero Touch Provisioning (ZTP) provisioning workflow, the factory-precaching-cli tool requires the following additional fields in the `SiteConfig` manifest:
 
 - `clusters.ignitionConfigOverride`
 

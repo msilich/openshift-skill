@@ -195,6 +195,8 @@ Procedure
 
 Configure two backup storage locations with different cloud credentials to back up applications to multiple storage targets. With this setup, you can distribute backups across different storage providers for redundancy.
 
+OADP supports multiple credentials for configuring more than one BSL, so that you can specify the credentials to use with any BSL.
+
 <div>
 
 <div class="title">

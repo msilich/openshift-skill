@@ -2,7 +2,7 @@
 
 OpenShift Virtualization supports using disaster recovery (DR) solutions to ensure that your environment can recover after a site outage. To use these methods, you must plan your OpenShift Virtualization deployment in advance.
 
-# About disaster recovery methods
+# Disaster recovery methods
 
 The two primary DR methods for OpenShift Virtualization are Metropolitan Disaster Recovery (Metro-DR) and Regional-DR.
 
@@ -16,9 +16,9 @@ Metro-DR uses synchronous replication. It writes to storage at both the primary 
 
 Regional-DR uses asynchronous replication. The data in the primary site is synchronized with the secondary site at regular intervals. For this type of replication, you can have a higher latency connection between the primary and secondary sites.
 
-# Defining applications for disaster recovery
+# Definition of applications for disaster recovery
 
-Define applications for disaster recovery by using VMs that Red Hat Advanced Cluster Management (RHACM) manages or discovers.
+You can define applications for disaster recovery by using VMs that Red Hat Advanced Cluster Management (RHACM) manages or discovers.
 
 ## Best practices when defining an RHACM-managed VM
 

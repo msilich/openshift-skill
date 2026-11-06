@@ -4,6 +4,32 @@ The Zero Trust Workload Identity Manager leverages Secure Production Identity Fr
 
 These release notes track the development of Zero Trust Workload Identity Manager.
 
+# Zero Trust Workload Identity Manager 1.1.3
+
+Issued: 3 November 2026
+
+A Common Vulnerability and Exposure (CVE) and advisories are available for the Zero Trust Workload Identity Manager 1.1.3.
+
+The following advisories are available for this release:
+
+- [RHSA-2026:94569](https://access.redhat.com/errata/RHSA-2026:94569)
+
+- [RHSA-2026:94570](https://access.redhat.com/errata/RHSA-2026:94570)
+
+- [RHSA-2026:94571](https://access.redhat.com/errata/RHSA-2026:94571)
+
+- [RHSA-2026:94572](https://access.redhat.com/errata/RHSA-2026:94572)
+
+- [RHSA-2026:94573](https://access.redhat.com/errata/RHSA-2026:94573)
+
+- [RHSA-2026:94575](https://access.redhat.com/errata/RHSA-2026:94575)
+
+## CVEs
+
+The following CVE is available for this release:
+
+- [CVE-2026-111943](https://access.redhat.com/security/cve/CVE-2026-111943)
+
 # Zero Trust Workload Identity Manager 1.1.2
 
 Issued: 14 October 2026
@@ -89,7 +115,9 @@ The following advisories are available for Zero Trust Workload Identity Manager:
 
 Issued: 30 Jun 2026
 
-This release adds integration and operational capabilities for workloads that use external certificate authorities, service mesh deployments, or file-based Transport Layer Security (TLS) credentials. The release includes a supported SPIFFE Helper container image, SPIRE UpstreamAuthority plugins for cert-manager and HashiCorp Vault, and Red Hat OpenShift Service Mesh integration with SPIRE for single-cluster and federated multi-cluster mutual Transport Layer Security (mTLS).
+This release adds integration and operational capabilities for workloads that use external certificate authorities, service mesh deployments, or file-based Transport Layer Security (TLS) credentials.
+
+The release includes a supported SPIFFE Helper container image, SPIRE UpstreamAuthority plugins for cert-manager and HashiCorp Vault, and Red Hat OpenShift Service Mesh integration with SPIRE for single-cluster and federated multi-cluster mutual Transport Layer Security (mTLS).
 
 The following advisories are available for Zero Trust Workload Identity Manager:
 
@@ -197,6 +225,40 @@ Create-only mode status updates reconcile reliably
 - Before this update, Zero Trust Workload Identity Manager controllers wrote the custom resource (CR) status twice during each reconciliation cycle. The CR status was written at the start through the `SetInitialReconciliationStatus` cycle and again at the end through the status manager. Because the informer cache could return a stale `ResourceVersion` after the first write, the deferred status update was rejected with `HTTP 409 Conflict`. Status conditions, including `CreateOnlyMode`, could fail to transition to the expected state even after you changed configuration in the Operator subscription. With this release, controllers apply the status in a single update at the end of reconciliation, and status update retry logic now complies with the `RetryOnConflict` contract. CR status updates, including create-only mode transitions, are now completed.
 
   ([SPIRE-506](https://issues.redhat.com/browse/SPIRE-506))
+
+# Zero Trust Workload Identity Manager 1.0.4
+
+Issued: 29 October 2026
+
+Some Common Vulnerabilities and Exposures (CVEs) and advisories are available for the Zero Trust Workload Identity Manager 1.0.4.
+
+The following advisories are available for this release:
+
+- [RHBA-2026:92267](https://access.redhat.com/errata/RHBA-2026:92267)
+
+- [RHBA-2026:92269](https://access.redhat.com/errata/RHBA-2026:92269)
+
+- [RHBA-2026:92270](https://access.redhat.com/errata/RHBA-2026:92270)
+
+- [RHBA-2026:92271](https://access.redhat.com/errata/RHBA-2026:92271)
+
+- [RHBA-2026:92273](https://access.redhat.com/errata/RHBA-2026:92273)
+
+- [RHBA-2026:92274](https://access.redhat.com/errata/RHBA-2026:92274)
+
+## Fixed issues
+
+The following bug fix is available for this release:
+
+- Before this update, the `CreateOnlyMode` condition remained `True` after you removed the `CREATE_ONLY_MODE` environment variable from the Operator subscription or set the variable to `false`. As a consequence, custom resource status continued to report that create-only mode was enabled. With this release, Zero Trust Workload Identity Manager sets the `CreateOnlyMode` condition to `False` with reason `CreateOnlyModeDisabled` when `CREATE_ONLY_MODE` is removed or set to `false`. ([SPIRE-683](https://issues.redhat.com/browse/SPIRE-683))
+
+## CVEs
+
+The following CVEs are available for this release:
+
+- [CVE-2026-111943](https://access.redhat.com/security/cve/CVE-2026-111943)
+
+- [CVE-2026-33818](https://access.redhat.com/security/cve/CVE-2026-33818)
 
 # Zero Trust Workload Identity Manager 1.0.2
 
@@ -458,6 +520,8 @@ Corrected update rollback for DaemonSets, Deployments, and StatefulSets
 
 # Zero Trust Workload Identity Manager 0.2.0 (General Availability)
 
+The Zero Trust Workload Identity Manager 0.2.0 General Availability release was issued on August 9, 2025. This release adds managed OIDC Discovery Provider Route support, custom certificate authority TTL settings, and manual user configuration capabilities.
+
 Issued: 09 August 2025
 
 The following advisories are available for the Zero Trust Workload Identity Manager:
@@ -507,6 +571,8 @@ JSON Web Token Issuer field now requires a valid URL
   ([SPIRE-117](https://issues.redhat.com/browse/SPIRE-117))
 
 # Zero Trust Workload Identity Manager 0.1.0 (General Availability)
+
+The Zero Trust Workload Identity Manager 0.1.0 General Availability release was issued on June 16, 2025. It includes multiple Red Hat advisory updates for OpenShift Container Platform.
 
 Issued: 16 June 2025
 

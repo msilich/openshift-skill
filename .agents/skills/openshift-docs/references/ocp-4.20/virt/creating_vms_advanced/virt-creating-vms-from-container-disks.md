@@ -22,7 +22,7 @@ You create a VM from a container disk by performing the following steps:
 > [!IMPORTANT]
 > You must install the QEMU guest agent on VMs created from operating system images that are not provided by Red Hat.
 
-# Building and uploading a container disk
+# Prepare a container disk for VMs
 
 You can build a virtual machine (VM) image into a container disk and upload it to a registry.
 
@@ -87,7 +87,7 @@ Procedure
 
 </div>
 
-# Disabling TLS for a container registry
+# Disable TLS for an insecure registry
 
 You can disable TLS (transport layer security) for one or more container registries by editing the `insecureRegistries` field of the `HyperConverged` custom resource.
 
@@ -168,7 +168,7 @@ Procedure
 
 </div>
 
-# Creating a VM from a container disk by using the CLI
+# Create a VM from a container disk by using the CLI
 
 You can create a virtual machine (VM) from a container disk by using the command line.
 

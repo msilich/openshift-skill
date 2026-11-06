@@ -7,7 +7,7 @@ You can manage the link state of a primary or secondary virtual machine (VM) int
 
 You can specify the desired link state when you first create a VM, by editing the configuration of an existing VM that is stopped or running, or when you hot plug a new network interface to a running VM. If you edit a running VM, you do not need to restart or migrate the VM for the changes to be applied. The current link state of a VM interface is reported in the `status.interfaces.linkState` field of the `VirtualMachineInstance` manifest.
 
-# Setting the VM interface link state by using the web console
+# Set the VM interface link state by using the web console
 
 You can set the link state of a primary or secondary virtual machine (VM) network interface by using the web console.
 
@@ -47,7 +47,7 @@ Procedure
 
 </div>
 
-# Setting the VM interface link state by using the CLI
+# Set the VM interface link state by using the CLI
 
 You can set the link state of a primary or secondary virtual machine (VM) network interface by using the CLI.
 

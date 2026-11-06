@@ -22,7 +22,19 @@ Additional resources
 Use the Precision Time Protocol (PTP) fast event REST API v2 to subscribe cluster applications to PTP events that the bare-metal cluster node generates.
 
 > [!NOTE]
-> The fast events notifications framework uses a REST API for communication. The PTP events REST API v2 is based on the *O-RAN O-Cloud Notification API Specification for Event Consumers 4.0* that is available from [O-RAN ALLIANCE Specifications](https://orandownloadsweb.azurewebsites.net/specifications).
+> The fast events notifications framework uses a REST API for communication. The PTP events REST API v2 is based on the *O-RAN O-Cloud Notification API Specification for Event Consumers 4.0* that is available from "O-RAN ALLIANCE Specifications".
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [O-RAN ALLIANCE Specifications](https://orandownloadsweb.azurewebsites.net/specifications)
+
+</div>
 
 # Retrieving PTP events with the PTP events REST API v2
 
@@ -90,7 +102,7 @@ Procedure
             enableEventPublisher: true
         ```
 
-        - Enable PTP fast event notifications by setting `enableEventPublisher` to `true`.
+        - `enableEventPublisher`: Enable PTP fast event notifications by setting `enableEventPublisher` to `true`.
 
     2.  Update the `PtpOperatorConfig` CR:
 
@@ -114,13 +126,19 @@ Procedure
           minOffsetThreshold: -100
     ```
 
-    - Append `--summary_interval -4` to use PTP fast events.
+    where:
 
-    - Required `phc2sysOpts` values. `-m` prints messages to `stdout`. The `linuxptp-daemon` `DaemonSet` parses the logs and generates Prometheus metrics.
+    `spec.profile[].ptp4lOpts`
+    Specifies PTP4L options. Append `--summary_interval -4` to use PTP fast events.
 
-    - Specify a string that contains the configuration to replace the default `/etc/ptp4l.conf` file. To use the default configuration, leave the field empty.
+    `spec.profile[].phc2sysOpts`
+    Specifies the required `phc2sysOpts` values. `-m` prints messages to `stdout`. The `linuxptp-daemon` `DaemonSet` parses the logs and generates Prometheus metrics.
 
-    - Optional. If the `ptpClockThreshold` stanza is not present, default values are used for the `ptpClockThreshold` fields. The stanza shows default `ptpClockThreshold` values. The `ptpClockThreshold` values configure how long after the PTP master clock is disconnected before PTP events are triggered. `holdOverTimeout` is the time value in seconds before the PTP clock event state changes to `FREERUN` when the PTP master clock is disconnected. The `maxOffsetThreshold` and `minOffsetThreshold` settings configure offset values in nanoseconds that compare against the values for `CLOCK_REALTIME` (`phc2sys`) or master offset (`ptp4l`). When the `ptp4l` or `phc2sys` offset value is outside this range, the PTP clock state is set to `FREERUN`. When the offset value is within this range, the PTP clock state is set to `LOCKED`.
+    `spec.profile[].ptp4lConf`
+    Specifies a string that contains the configuration to replace the default `/etc/ptp4l.conf` file. To use the default configuration, leave the field empty.
+
+    `spec.profile[].ptpClockThreshold`
+    Specifies the PTP clock threshold values. If the `ptpClockThreshold` stanza is not present, default values are used for the `ptpClockThreshold` fields. The stanza shows default `ptpClockThreshold` values. The `ptpClockThreshold` values configure how long after the PTP master clock is disconnected before PTP events are triggered. `holdOverTimeout` is the time value in seconds before the PTP clock event state changes to `FREERUN` when the PTP master clock is disconnected. The `maxOffsetThreshold` and `minOffsetThreshold` settings configure offset values in nanoseconds that compare against the values for `CLOCK_REALTIME` (`phc2sys`) or master offset (`ptp4l`). When the `ptp4l` or `phc2sys` offset value is outside this range, the PTP clock state is set to `FREERUN`. When the offset value is within this range, the PTP clock state is set to `LOCKED`. This field is optional.
 
 </div>
 
