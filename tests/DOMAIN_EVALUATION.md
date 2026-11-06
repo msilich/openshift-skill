@@ -21,6 +21,17 @@ the suite round-trips all topics and checks prose, table rows, code contents and
 images. Its second offline build must match the first content hash. This is format
 and integrity validation, not proof that all upstream product advice is correct.
 
+ACM 2.17 adds all 22 versioned source handbooks and ten illustrations to the
+existing documentation skill. `test_acm_docs.py` checks their file and Markdown
+manifests, legal attribution, source pins, final code/table signatures and local
+Markdown/HTML targets. It exercises adjacent code-block preservation, missing
+includes/images, source path confinement, network-include rejection and the
+two-source updater with a strict second build. German/English ACM lookup prompts
+are in the routing corpus; no model-selection result is inferred from them.
+The separate release API repository contains only a placeholder, recorded as a
+coverage gap. External references and source-fragment adjustments are inventoried
+in CONVERSION.json, not fetched or claimed to be available offline.
+
 ## Scenario corpus
 
 ACS has additional [bilingual scenarios](fixtures/acs_scenarios.json), test-only

@@ -11,6 +11,19 @@
     "notes": "Skills are text assets; adapt paths and revalidate binaries on other supported OpenCode platforms."
   },
   "sources": {
+    "acm_docs": {
+      "version": "2.17",
+      "url": "https://github.com/stolostron/rhacm-docs",
+      "branch": "2.17_prod",
+      "commit": "da77ef38f05cf583d057e43ecb6aa5697158fada",
+      "license": "CC-BY-SA-3.0",
+      "api_url": "https://github.com/stolostron/api-documentation",
+      "api_branch": "release-2.17",
+      "api_commit": "8678381d989a967f30ba04e0a3d5d9724f89e554",
+      "api_license": "Apache-2.0",
+      "api_coverage": "No generated API reference at the pinned revision; use live API discovery",
+      "build_lock": "tools/docs/acm.lock.json"
+    },
     "netobserv_offline_references": {
       "manifest": "tools/docs/netobserv/manifest.json",
       "manifest_sha256": "7dd0cf4fce20978ccc2dee3c2c546affc83026a8a721941f28c338de70e8d34e",

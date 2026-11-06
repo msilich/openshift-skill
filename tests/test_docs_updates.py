@@ -111,6 +111,33 @@ class DocumentationUpdateTest(unittest.TestCase):
                 updater.require_identical(first, second)
             (second / name).write_bytes(b"same")
 
+    def test_acm_update_keeps_both_source_revisions_and_other_products(self):
+        old = updater.read_json(self.tools / "acm.lock.json")
+        before = updater.read_json(self.root / "sources.lock.json")
+        api_new = "b" * 40
+        def prepare(lock, work):
+            new = copy.deepcopy(lock)
+            new["sources"]["rhacm_docs"]["commit"] = self.new
+            new["sources"]["api_docs"]["commit"] = api_new
+            output = work / "first"
+            output.mkdir()
+            updater.write_json(output / "SOURCE.json", {"artifact": {"converted_topics": 22}})
+            updater.write_json(output / "CONVERSION.json", {"source_issues": [{}], "link_adjustments": [], "external_references": []})
+            return new, output, None
+        (self.root / "README.md").write_text(old["sources"]["rhacm_docs"]["commit"] + "\n" + old["sources"]["api_docs"]["commit"])
+        report = self.root / "report.md"
+        with patch.object(updater, "prepare_acm", side_effect=prepare):
+            updater.update(["acm"], report)
+        after = updater.read_json(self.root / "sources.lock.json")
+        self.assertEqual(after["sources"]["acm_docs"]["commit"], self.new)
+        self.assertEqual(after["sources"]["acm_docs"]["api_commit"], api_new)
+        for key in before["sources"]:
+            if key != "acm_docs":
+                self.assertEqual(after["sources"][key], before["sources"][key])
+        self.assertIn(api_new, (self.root / "README.md").read_text())
+        self.assertIn("Source gaps: 1", report.read_text())
+        self.assertIn(api_new, report.read_text())
+
     def test_git_noop_does_not_build_and_invalid_sources_are_rejected(self):
         lock = updater.read_json(self.tools / "build.lock.json")
         with patch.object(updater, "run", return_value=self.old + "\trefs/heads/enterprise-4.20\n") as run:
@@ -160,6 +187,24 @@ class DocumentationUpdateTest(unittest.TestCase):
             })
         with patch.object(importer, "fetch", side_effect=fetch), patch.object(importer, "build", side_effect=build):
             self.assertIsNone(updater.prepare_devspaces(lock, self.root))
+
+
+@unittest.skipUnless(importlib.util.find_spec("yaml"), "requires build dependency")
+class WorkflowTriggerTest(unittest.TestCase):
+    def test_push_and_pr_validate_but_only_schedule_and_dispatch_update(self):
+        import yaml
+        # BaseLoader preserves GitHub's `on` key instead of treating it as YAML 1.1 true.
+        workflow = yaml.load((ROOT / ".github/workflows/documentation.yml").read_text(), Loader=yaml.BaseLoader)
+        for event in ("push", "pull_request"):
+            self.assertEqual(workflow["on"][event]["branches"], ["main", "v4.22"])
+        self.assertIn("schedule", workflow["on"])
+        self.assertIn("workflow_dispatch", workflow["on"])
+        self.assertEqual(workflow["permissions"], {"contents": "read"})
+        self.assertEqual(workflow["jobs"]["validate"]["if"],
+                         "github.event_name == 'pull_request' || github.event_name == 'push'")
+        self.assertNotIn("permissions", workflow["jobs"]["validate"])
+        self.assertEqual(workflow["jobs"]["update"]["if"],
+                         "github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'")
 
 
 @unittest.skipUnless(importlib.util.find_spec("yaml"), "requires build dependency")

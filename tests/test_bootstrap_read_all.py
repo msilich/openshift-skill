@@ -144,6 +144,19 @@ class BootstrapReadAllTests(unittest.TestCase):
             newline="\n",
         )
         fake_oc.chmod(0o755)
+        # GNU chmod accepts a misplaced -- after the mode; BSD chmod does not.
+        fake_chmod = fake_bin / "chmod"
+        fake_chmod.write_text(
+            '#!/usr/bin/env bash\n'
+            'if [[ "${2-}" == "--" ]]; then\n'
+            '  printf "chmod: -- after mode is not portable\\n" >&2\n'
+            '  exit 1\n'
+            'fi\n'
+            'exec /bin/chmod "$@"\n',
+            encoding="utf-8",
+            newline="\n",
+        )
+        fake_chmod.chmod(0o755)
         return fake_bin
 
     def run_phase(
@@ -271,6 +284,55 @@ class BootstrapReadAllTests(unittest.TestCase):
             self.assertNotIn(" apply -f ", f" {calls} ")
             self.assertNotIn(" create token ", f" {calls} ")
             self.assertFalse(output.exists())
+
+    def test_chmod_fixture_rejects_the_gnu_only_argument_order(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            fake_bin = self.make_fake_oc(directory)
+            target = directory / "--kubeconfig with spaces"
+            target.write_text("placeholder\n")
+            for arguments, succeeds in ((["600", "--"], False), (["--", "600"], True)):
+                result = subprocess.run(
+                    [self.bash, bash_path(fake_bin / "chmod"), *arguments, bash_path(target)],
+                    text=True, capture_output=True,
+                )
+                self.assertEqual(result.returncode == 0, succeeds, result.stderr)
+            if os.name != "nt":
+                self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o600)
+
+    def test_token_renewal_retains_private_permissions_without_exposing_token(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            admin = directory / "admin.kubeconfig"
+            ca = directory / "customer-ca.pem"
+            target = directory / "--read all.kubeconfig"
+            log = directory / "oc.log"
+            admin.write_text("admin placeholder\n")
+            ca.write_text("-----BEGIN CERTIFICATE-----\nZmFrZQ==\n-----END CERTIFICATE-----\n")
+            target.write_text("existing read-all fixture\n")
+            fake_bin = self.make_fake_oc(directory)
+            environment = {
+                **os.environ,
+                "PATH": f"{bash_path(fake_bin)}:/usr/bin:/bin",
+                "FAKE_OC_LOG": bash_path(log),
+                "FAKE_CA_PATH": bash_path(ca),
+                "FAKE_ADMIN_KUBECONFIG": bash_path(admin),
+                "FAKE_SERVER": "https://api.customer.example:6443",
+                "FAKE_ADMIN_IDENTITY": "customer-admin",
+                "FAKE_INSECURE_TLS": "",
+            }
+            result = subprocess.run(
+                [self.bash, bash_path(SCRIPT.with_name("update-read-all-token.sh")),
+                 "--admin-kubeconfig", bash_path(admin), "--target", bash_path(target)],
+                env=environment, text=True, capture_output=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("Embedded CA retained: yes", result.stdout)
+            self.assertNotIn("fake-service-account-token", result.stdout + result.stderr)
+            self.assertEqual(target.read_text(), "existing read-all fixture\n")
+            self.assertEqual(log.read_text().count("create token opencode-admin-readonly"), 1)
+            if os.name != "nt":
+                self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o600)
 
     def test_can_copy_the_ca_from_the_admin_kubeconfig(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

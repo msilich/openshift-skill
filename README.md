@@ -8,7 +8,7 @@ OpenShift with [OpenCode](https://opencode.ai/):
 - `openshift-api` — live API discovery with `oc api-resources`, `oc explain`,
   OpenAPI v3, and CRD schemas.
 - `openshift-docs` — a complete, searchable, offline OpenShift Container
-  Platform 4.22, OpenShift GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11 documentation snapshots.
+  Platform 4.22, OpenShift GitOps 1.21, Dev Spaces 3.29, RHACS 4.11 and ACM 2.17 documentation snapshots (source gaps recorded).
 - `openshift-troubleshooting` — evidence-led workload, service, storage, node and Operator diagnosis.
 - `openshift-disconnected` — oc-mirror v2, internal registries, transfer workflows and image-pull diagnosis.
 - `openshift-gitops` — Application/ApplicationSet reconciliation, access, trust and reviewed configuration changes.
@@ -38,7 +38,7 @@ The `main` branch retains the 4.20 snapshot.
 | `.agents/skills/openshift-mcp/assets/argocd-readonly-rbac/` | Optional additive Argo CD account and read-only RBAC patches |
 | `.agents/skills/openshift-mcp/scripts/` | CA-aware OpenShift and Argo CD/OpenCode bootstrap scripts |
 | `.agents/skills/openshift-api/` | Live API/schema discovery skill and helper |
-| `.agents/skills/openshift-docs/` | Offline OCP 4.22, GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11 documentation skill |
+| `.agents/skills/openshift-docs/` | Offline OCP 4.22, GitOps 1.21, Dev Spaces 3.29, RHACS 4.11 and ACM 2.17 documentation skill |
 | `.agents/skills/openshift-{troubleshooting,disconnected,gitops,upgrade,backup-restore,devspaces,acs}/` | Documentation-based operational workflows |
 | `manifests/openshift-gitops-argocd-mcp-readonly/` | Simple reviewed merge-patch YAMLs for an unchanged default OpenShift GitOps instance |
 | `sources.lock.json` | Exact source and compatibility baselines |
@@ -817,22 +817,70 @@ Dev Spaces documentation and the new skill's adapted text use CC BY-SA 3.0, unli
 the Apache-licensed OCP/GitOps snapshots. The complete legal notice, license and
 per-topic source URLs are retained; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
+## Offline ACM 2.17
+
+The existing `openshift-docs` skill also bundles all 22 handbooks from
+[`stolostron/rhacm-docs`](https://github.com/stolostron/rhacm-docs), branch `2.17_prod`,
+at `da77ef38f05cf583d057e43ecb6aa5697158fada`. No eleventh skill or additional MCP
+server is needed. The installer copies this snapshot with the existing skills.
+
+```sh
+python3 .agents/skills/openshift-docs/scripts/search_docs.py 'ManagedCluster' --product acm
+```
+
+Start at [the local ACM map](.agents/skills/openshift-docs/references/acm-2.17/AGENTS.md).
+Installation, governance, applications, observability, recovery and troubleshooting
+are included with local illustrations. The [conversion report](.agents/skills/openshift-docs/references/acm-2.17/CONVERSION.json)
+records external references, source warnings and unresolved cross-references.
+These external materials are not downloaded when using the skill offline.
+
+The separate [`stolostron/api-documentation`](https://github.com/stolostron/api-documentation)
+branch `release-2.17`, at `8678381d989a967f30ba04e0a3d5d9724f89e554`, contains only
+an `api-docs/.gitkeep` placeholder. A complete generated API reference is therefore
+**not** claimed. Use `openshift-api` for served schemas on the actual hub or managed
+cluster. ACM/MCE versions and OCP compatibility must be checked independently.
+The existing `openshift-mcp` identity, Secret and approval rules still apply.
+
+To rebuild without network access, supply clean local Git checkouts at both pinned
+revisions. Use the existing documentation toolchain: Python 3.12+, Asciidoctor 2.0.23,
+Pandoc 3.7.0.2 and both `tools/docs/requirements*.lock.txt` files.
+
+```sh
+python3 tools/docs/import_acm.py \
+  --source-dir /path/to/rhacm-docs \
+  --api-source-dir /path/to/api-documentation \
+  --output-dir /path/to/new-acm-docs
+```
+
+[The ACM build lock](tools/docs/acm.lock.json) pins sources, tools, legal fragments
+and content hashes. The importer checks code/table preservation and local links,
+rejects missing includes/images and does not fetch remote content. The manuals
+use CC BY-SA 3.0 with Red Hat's legal notice; the separate API repository and reused
+converter code retain their Apache-2.0 licenses.
+
 ## Automated documentation update PRs
+
+Pushes and pull requests targeting `main` or `v4.22` run the offline test suite
+with read-only repository permissions. They do not refresh documentation or create
+update PRs; those operations remain restricted to scheduled and manual runs.
 
 [Documentation maintenance](.github/workflows/documentation.yml) runs every Monday
 at 05:23 UTC and can also be started from GitHub Actions with **Run workflow**.
 The scheduled workflow lives on the default branch and checks `main` and `v4.22`
 as separate jobs. Each branch keeps the product versions in its build locks:
-OCP 4.20 or 4.22, GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11. Moving to another
+OCP 4.20 or 4.22, GitOps 1.21, Dev Spaces 3.29, RHACS 4.11 and ACM 2.17. Moving to another
 product version requires a separate reviewed change.
 
-The updater checks the selected upstream Git branches and fetches a fresh versioned
+The updater checks the selected upstream Git branches (including both pinned ACM
+release branches, never their rolling defaults) and fetches a fresh versioned
 Dev Spaces HTML inventory. It builds changed candidates twice and compares every
 output file, checks topic coverage and local links, and updates the source locks,
 skill source maps and notices together. Dev Spaces retrieval timestamps alone do
 not cause an update PR. Removed chapters still referenced by a skill fail the test
 suite and require maintainer intervention. Source gaps and external references
 remain visible in provenance and the PR report.
+If the ACM API repository starts publishing generated reference files, the updater
+stops for an importer review instead of silently omitting the new material.
 
 Dev Spaces downloads use three parallel requests per branch job. A transient
 timeout, interrupted response or HTTP 408/429/500/502/503/504 response is retried
@@ -841,7 +889,7 @@ keeps its 45 second socket timeout. Persistent failures stop the batch before
 publication and report the affected URL. Certificate failures, other HTTP errors,
 cross-host redirects, oversized responses and corrupt caches are not retried.
 
-After the offline test suite passes, the workflow creates or refreshes one PR per
+On scheduled/manual runs, after the offline tests pass, the workflow creates or refreshes one PR per
 base branch using the reserved `automation/docs-main` and `automation/docs-v4.22`
 branches. Do not edit those branches manually: each run replaces their generated
 contents using a Git lease. PRs are not automatically merged. Review changed

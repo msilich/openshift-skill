@@ -21,6 +21,7 @@ PRODUCTS = {
     "gitops": ("gitops.lock.json", "openshift_gitops_docs"),
     "acs": ("acs.lock.json", "openshift_acs_docs"),
     "devspaces": ("devspaces.lock.json", "devspaces_docs"),
+    "acm": ("acm.lock.json", "acm_docs"),
 }
 
 
@@ -97,6 +98,40 @@ def prepare_devspaces(lock, work):
     return candidate, first, archive
 
 
+def prepare_acm(lock, work):
+    import import_acm as importer
+    importer.definition(lock)
+    candidate = copy.deepcopy(lock)
+    for name in ("rhacm_docs", "api_docs"):
+        source = candidate["sources"][name]
+        revision = run("git", "ls-remote", "--exit-code", source["url"], "refs/heads/" + source["branch"]).split()[0]
+        if not re.fullmatch(r"[0-9a-f]{40}", revision):
+            raise ValueError("Invalid upstream ACM commit")
+        source["commit"] = revision
+    if candidate == lock:
+        return None
+    for name in ("rhacm_docs", "api_docs"):
+        source, checkout = candidate["sources"][name], work / name
+        run("git", "init", checkout)
+        run("git", "-C", checkout, "fetch", "--depth=1", source["url"], source["commit"])
+        run("git", "-C", checkout, "checkout", "--detach", "FETCH_HEAD")
+    candidate_path = work / "candidate.lock.json"
+    write_json(candidate_path, candidate)
+    first, second = work / "first", work / "second"
+    command = (sys.executable, TOOLS / "import_acm.py", "--lock", candidate_path,
+               "--source-dir", work / "rhacm_docs", "--api-source-dir", work / "api_docs")
+    run(*command, "--output-dir", first, "--refresh-lock")
+    run(*command, "--output-dir", second)
+    require_identical(first, second)
+    return read_json(candidate_path), first, None
+
+
+def revision(lock, product):
+    if product == "devspaces":
+        return lock["archive_sha256"]
+    return lock["sources"]["rhacm_docs" if product == "acm" else "openshift_docs"]["commit"]
+
+
 def sync_provenance(updates):
     sources_path = ROOT / "sources.lock.json"
     sources = read_json(sources_path)
@@ -107,9 +142,13 @@ def sync_provenance(updates):
             before, after = old["archive_sha256"], new["archive_sha256"]
             entry["archive_sha256"] = after
         else:
-            before = old["sources"]["openshift_docs"]["commit"]
-            after = new["sources"]["openshift_docs"]["commit"]
+            before, after = revision(old, product), revision(new, product)
             entry["commit"] = after
+            if product == "acm":
+                api_before = old["sources"]["api_docs"]["commit"]
+                api_after = new["sources"]["api_docs"]["commit"]
+                entry["api_commit"] = api_after
+                replacements[api_before] = api_after
         replacements[before] = after
     write_json(sources_path, sources)
     paths = [ROOT / "README.md", ROOT / "THIRD_PARTY_NOTICES.md"]
@@ -132,15 +171,19 @@ def update(products, report):
             work = Path(temporary) / product
             work.mkdir()
             print(f"Checking {product} {old['document']['version']}", flush=True)
-            result = prepare_devspaces(old, work) if product == "devspaces" else prepare_git(product, old, work)
+            if product == "devspaces":
+                result = prepare_devspaces(old, work)
+            elif product == "acm":
+                result = prepare_acm(old, work)
+            else:
+                result = prepare_git(product, old, work)
             if result is None:
                 lines.append(f"- {product} {old['document']['version']}: unchanged.")
                 continue
             new, output, archive = result
             updates.append((product, old, new, output, archive))
             source = read_json(output / "SOURCE.json")
-            before = old.get("archive_sha256") or old["sources"]["openshift_docs"]["commit"]
-            after = new.get("archive_sha256") or new["sources"]["openshift_docs"]["commit"]
+            before, after = revision(old, product), revision(new, product)
             lines.append(f"- {product} {new['document']['version']}: `{before}` → `{after}`; "
                          f"{source['artifact']['converted_topics']} topics.")
             if product == "acs":
@@ -150,6 +193,12 @@ def update(products, report):
             elif product == "devspaces":
                 lines.append(f"  Link adjustments: {len(source['conversion']['link_adjustments'])}; "
                              f"external references: {len(source['external_references'])}.")
+            elif product == "acm":
+                quality = read_json(output / "CONVERSION.json")
+                lines.append(f"  API source: `{old['sources']['api_docs']['commit']}` → "
+                             f"`{new['sources']['api_docs']['commit']}`. Source gaps: {len(quality['source_issues'])}; "
+                             f"link adjustments: {len(quality['link_adjustments'])}; external references: "
+                             f"{len(quality['external_references'])}.")
         # Finish all builds before touching the checkout; any failed product aborts the batch.
         for product, old, new, output, archive in updates:
             destination = SNAPSHOTS / f"{product}-{new['document']['version']}"

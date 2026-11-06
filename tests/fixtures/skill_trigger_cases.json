@@ -1,4 +1,7 @@
 [
+  {"prompt": "Find the bundled ACM 2.17 documentation on hub governance policies; do not access a cluster.", "expected_skill": "openshift-docs"},
+  {"prompt": "Finde die lokale ACM-Dokumentation zu ManagedCluster und Cluster-Import.", "expected_skill": "openshift-docs"},
+  {"prompt": "Welche ManagedCluster-Felder bietet der verbundene Hub tatsaechlich an?", "expected_skill": "openshift-api"},
   {"prompt": "Diagnose RHACS Sensor connection failures without changing the cluster.", "expected_skill": "openshift-acs"},
   {"prompt": "Warum zeigt ACS keine Schwachstellen trotz veralteter Offline-Scanner-Daten?", "expected_skill": "openshift-acs"},
   {"prompt": "Configure the optional read-only StackRox MCP for this Central.", "expected_skill": "openshift-acs"},

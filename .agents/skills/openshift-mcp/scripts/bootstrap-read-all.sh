@@ -187,7 +187,7 @@ else
 
   temporary_ca="$(mktemp)"
   printf '%s' "$admin_ca_data" | base64 --decode >"$temporary_ca"
-  chmod 600 -- "$temporary_ca"
+  chmod -- 600 "$temporary_ca"
   cluster_ca="$temporary_ca"
   ca_source="embedded CA from admin kubeconfig"
 fi
