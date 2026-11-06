@@ -190,6 +190,24 @@ class DocumentationUpdateTest(unittest.TestCase):
 
 
 @unittest.skipUnless(importlib.util.find_spec("yaml"), "requires build dependency")
+class WorkflowTriggerTest(unittest.TestCase):
+    def test_push_and_pr_validate_but_only_schedule_and_dispatch_update(self):
+        import yaml
+        # BaseLoader preserves GitHub's `on` key instead of treating it as YAML 1.1 true.
+        workflow = yaml.load((ROOT / ".github/workflows/documentation.yml").read_text(), Loader=yaml.BaseLoader)
+        for event in ("push", "pull_request"):
+            self.assertEqual(workflow["on"][event]["branches"], ["main", "v4.22"])
+        self.assertIn("schedule", workflow["on"])
+        self.assertIn("workflow_dispatch", workflow["on"])
+        self.assertEqual(workflow["permissions"], {"contents": "read"})
+        self.assertEqual(workflow["jobs"]["validate"]["if"],
+                         "github.event_name == 'pull_request' || github.event_name == 'push'")
+        self.assertNotIn("permissions", workflow["jobs"]["validate"])
+        self.assertEqual(workflow["jobs"]["update"]["if"],
+                         "github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'")
+
+
+@unittest.skipUnless(importlib.util.find_spec("yaml"), "requires build dependency")
 class BuildInventoryTest(unittest.TestCase):
     def test_source_inventory_is_filtered_by_product_and_must_be_nonempty(self):
         import build
