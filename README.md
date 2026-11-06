@@ -860,6 +860,10 @@ converter code retain their Apache-2.0 licenses.
 
 ## Automated documentation update PRs
 
+Pushes and pull requests targeting `main` or `v4.22` run the offline test suite
+with read-only repository permissions. They do not refresh documentation or create
+update PRs; those operations remain restricted to scheduled and manual runs.
+
 [Documentation maintenance](.github/workflows/documentation.yml) runs every Monday
 at 05:23 UTC and can also be started from GitHub Actions with **Run workflow**.
 The scheduled workflow lives on the default branch and checks `main` and `v4.22`
@@ -885,7 +889,7 @@ keeps its 45 second socket timeout. Persistent failures stop the batch before
 publication and report the affected URL. Certificate failures, other HTTP errors,
 cross-host redirects, oversized responses and corrupt caches are not retried.
 
-After the offline test suite passes, the workflow creates or refreshes one PR per
+On scheduled/manual runs, after the offline tests pass, the workflow creates or refreshes one PR per
 base branch using the reserved `automation/docs-main` and `automation/docs-v4.22`
 branches. Do not edit those branches manually: each run replaces their generated
 contents using a Git lease. PRs are not automatically merged. Review changed
