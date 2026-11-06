@@ -1,6 +1,6 @@
 ---
 name: openshift-docs
-description: Search the bundled official OCP 4.20, OpenShift GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11 documentation offline. Use for document lookup, procedure explanations and product-behavior questions. For live diagnosis, mirroring, GitOps, Dev Spaces, ACS operations, updates or recovery, use the matching domain skill with this documentation as evidence.
+description: Search the bundled official OCP 4.20, OpenShift GitOps 1.21, Dev Spaces 3.29, RHACS 4.11 and ACM 2.17 documentation offline. Use for document lookup, procedure explanations, hub/managed-cluster concepts and product-behavior questions. For live diagnosis, mirroring, GitOps, Dev Spaces, ACS operations, updates or recovery, use the matching domain skill with this documentation as evidence.
 ---
 
 # OpenShift product documentation
@@ -20,7 +20,7 @@ they are not proof that the linked external information is available offline.
 
 Keep these boundaries explicit:
 
-- The snapshots cover OCP 4.20, GitOps 1.21, Dev Spaces 3.29 and RHACS 4.11. State the limitation for another requested version. Bundling them together does not certify product compatibility.
+- The snapshots cover OCP 4.20, GitOps 1.21, Dev Spaces 3.29, RHACS 4.11 and ACM 2.17. State the limitation for another requested version. Bundling them together does not certify product compatibility.
 - Documentation explains supported behavior; it does not prove the state of a live cluster.
 - When bundled documentation and the connected cluster disagree about a served API version, resource, or field, use live discovery through `openshift-api` as authoritative for that cluster and report the discrepancy.
 - Work offline. Do not fetch documentation, scripts, or dependencies from the network.
@@ -35,3 +35,17 @@ Cite [ACS provenance](references/acs-4.11/SOURCE.json) and inspect
 external references and fragment adjustments. Live Central API evidence is the
 authority for Central schemas; Kubernetes `oc explain` cannot substitute for it.
 Use openshift-acs for RHACS operations and optional StackRox MCP setup.
+
+For Red Hat Advanced Cluster Management (RHACM/ACM), start with
+[the ACM 2.17 map](references/acm-2.17/AGENTS.md) and use
+`python3 <resolved-skill-directory>/scripts/search_docs.py "ManagedCluster" --product acm`.
+The 22 source handbooks cover installation, cluster lifecycle, governance, applications,
+observability, backup and troubleshooting. Consult [ACM provenance](references/acm-2.17/SOURCE.json)
+and [conversion details](references/acm-2.17/CONVERSION.json) for coverage and external references.
+The pinned separate API repository has no generated reference: read the
+[API coverage limitation](references/acm-2.17/api-reference.md) and use openshift-api
+for actual served schemas. Do not invent fields from examples.
+Distinguish the hub, managed clusters and their kubeconfigs before any live operation;
+verify ACM, multicluster engine and OCP versions independently. Use openshift-mcp
+for approved execution and the existing Secret choice. Documentation does not grant
+access or authorize changes; no additional ACM MCP server is installed by this skill.

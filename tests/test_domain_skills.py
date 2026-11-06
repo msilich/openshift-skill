@@ -38,7 +38,7 @@ class DomainBundleTest(unittest.TestCase):
             unrelated.mkdir()
             for name in SKILL_NAMES:
                 for path in (installed / name).rglob("*.md"):
-                    if any(part in str(path) for part in ("/references/ocp-", "/references/gitops-1.21/", "/references/devspaces-3.29/", "/references/acs-4.11/")):
+                    if any(part in str(path) for part in ("/references/ocp-", "/references/gitops-1.21/", "/references/devspaces-3.29/", "/references/acs-4.11/", "/references/acm-2.17/")):
                         continue  # Generated snapshots have their own manifest/link test.
                     for target in re.findall(r"\[[^]]*\]\(([^)]+)\)", path.read_text()):
                         local = target.split("#")[0]
@@ -48,7 +48,7 @@ class DomainBundleTest(unittest.TestCase):
                         self.assertTrue(resolved.is_relative_to(installed.resolve()), (path, target))
                         self.assertTrue(resolved.exists(), (path, target))
             script = installed / "openshift-docs/scripts/search_docs.py"
-            for product, query in (("ocp", "ingress"), ("gitops", "ApplicationSet"), ("devspaces", "CheCluster"), ("acs", "Scanner")):
+            for product, query in (("ocp", "ingress"), ("gitops", "ApplicationSet"), ("devspaces", "CheCluster"), ("acs", "Scanner"), ("acm", "ManagedCluster")):
                 result = subprocess.run([sys.executable, str(script), query, "--product", product,
                                          "--max-results", "2"], cwd=unrelated, capture_output=True, text=True)
                 self.assertEqual(result.returncode, 0, result.stderr)

@@ -1,0 +1,168 @@
+{
+  "artifact": {
+    "assets": 10,
+    "base_url": "https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.17/",
+    "converted_topics": 22,
+    "license": "CC-BY-SA-3.0",
+    "product": "Red Hat Advanced Cluster Management for Kubernetes",
+    "scope": "All 22 versioned source handbooks; separate generated API reference unavailable at the pinned revision",
+    "version": "2.17"
+  },
+  "conversion": {
+    "checks": "Exact code blocks and table text checked through Pandoc AST; local files, anchors and images verified",
+    "dependencies": {
+      "asciidoctor": "2.0.23",
+      "beautifulsoup4": "4.13.4",
+      "pandoc": "3.7.0.2",
+      "python_minimum": "3.12",
+      "pyyaml": "6.0.3",
+      "soupsieve": "2.7",
+      "typing_extensions": "4.14.1"
+    },
+    "local_build_helpers": {
+      "acs.py": "0d6838be708ed4f0600354dd91d52fd1d2abb8885245be38daf3288b73ab7a6c",
+      "import_acm.py": "b74ce53f0f589f2dbf609b6be3b7e1dfcc407f0fabddf8cd01997e60d276348d",
+      "import_devspaces.py": "38fc2d648fea470134a0e504c3d8385b67c3a3a76e549e3213b96b6f51cffa89"
+    },
+    "verified_local_links": 14392
+  },
+  "integrity": {
+    "files": {
+      "AGENTS.md": "46c6f543cd28654601fd2a7acb368269da8eb92d9ce33729ccc8a79286d5908b",
+      "CONVERSION.json": "24b7f88e8572f09b0e44c14df2c11b291f543458fbf1ebb864312b21093847e7",
+      "LEGAL-NOTICE.md": "fcd8295e67c0ac655a66df956fe1e3a01c558d9498ae956e0dbf2faac8a84279",
+      "LICENSE.agentic-skills": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "LICENSE.api-documentation": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "LICENSE.md": "6daf10ac1d5dfe500a5e762525ccb87198f4c93c5cb9fdfdc3c842f931d64027",
+      "about.md": "50e42d8792f5404595820e639080791982066369f6c70a348dc4f25217be8f5a",
+      "add-ons.md": "0c2ac3b7c5ff45cbe363825591651a6b395e0824bf3c034d0d2a2c3954948015",
+      "api-reference.md": "732d57757b8a0c0dc5c3b6571af96c74a7f446e9dc2d6a4c35521cdd5494e717",
+      "applications.md": "d9c8be2b947e06052da152ec99abd52ad7ff568a236382b50dc7778badf415b8",
+      "assets/018e55645c09b2b1387a.png": "018e55645c09b2b1387abeaaf422531376409c2d1d1b92fa2690ccfbd034636b",
+      "assets/30c173f797c392410180.png": "30c173f797c392410180db00981fe4716b8deffae98d26e0bcf113e9671b940d",
+      "assets/342fa52a233477f8ebba.png": "342fa52a233477f8ebbacba674456f7fa738a803c16850231e765688779e4a25",
+      "assets/712890b895996d63d86a.png": "712890b895996d63d86a88ea742776bad2acd82522e40bae2b39df54aa2296e4",
+      "assets/9e8f430bfd29849f2b21.png": "9e8f430bfd29849f2b21b583a181b3d070b3f6bf6d4da618c414c1ce58a8dc86",
+      "assets/b32f9628d1a6369b7112.png": "b32f9628d1a6369b71122c60e72b0808311dba6b60c31c7a738a27ef177d76bf",
+      "assets/c62dd8c3ed4e217cf7a8.png": "c62dd8c3ed4e217cf7a8416a332acdb0782f1bb84fffe2226f6047070ada24da",
+      "assets/ce73941b364984287864.png": "ce73941b3649842878643308a1ab89f170cfb1bad9cb61b5f53bd63adbe5c314",
+      "assets/db37e6dd8101c781605b.png": "db37e6dd8101c781605b5d3ef8c4fd901ba854e64681763f00cfd126643990a3",
+      "assets/fe90a6a5ea1818c02911.png": "fe90a6a5ea1818c0291171917064820b9bcf21b1c0646521885691d0cd31615e",
+      "business_continuity.md": "bd9a7a9294413dc156377a5a8d760c0ff2c97c10627c35a20461d2083ec464f2",
+      "clusters.md": "63b29b58e9bd9ebcd50c0d55f7c58cf72e3edbbc3527c8693cba950bd0e6dc1d",
+      "console.md": "9db3bcb9600affcfe47fdea526ae38a2f1db2f7893db3bcb580fac44573b56e6",
+      "get_started.md": "340f45b491bf2d810658e746b76d1798574456bc64362dea05beb1c8f6c64d0b",
+      "gitops.md": "a74d855c61d743313496211f974678993ac6383d760b229efaded4c075d3fbbe",
+      "global_hub.md": "5eb5be3dfb879fd5a08bffd876b315e65494783fad55a97532dacf7df8b6c1e1",
+      "governance.md": "369fd308bff0f62a1e9ae3f6caf134cc1a0a119e97c4ebe9ae24cf57777d252a",
+      "health_metrics.md": "e50ebf64cf0618849447466f10ad293a78426979d42e6ec0d39bfb82ae5d22e3",
+      "index.md": "c60860ec43cf85cf0f94b9aa7cede002f2b56a1748af0f4701330a81eae0e3ac",
+      "mce_acm_integration.md": "b7341d7f19a27c94496c1e1318107158477e44708a3d76425f3572ba2ee2dcab",
+      "mce_release_notes.md": "c0f649e9db0926c07adc88521e5cba26028e621c88afa95f56d0316116990914",
+      "mce_troubleshooting.md": "e8d51aede21019f48baad8e30815360130be7bc83207e319e0098ccc88e154b4",
+      "mcp.md": "22532b9393447a06ffd982c1df782c881f2e5514d91b68db0b77d2e9ba5b0929",
+      "networking.md": "6daff67227b8086dd913a40e5a5fe9ab679c5906cbd7ba6a7442455263291316",
+      "observability.md": "212f2d1a8fca9b7e4da4f2ba6c53b208295616c8140466c9aee60f2b9262b3c9",
+      "release_notes.md": "60247933d82c2b9ba7172411415f693e325a734e01680f3e8ebe3e0d26c5c062",
+      "search.md": "a286a7e11efaebff0343bf936d75bd3decc45701a66b8ef8423280eb4b02262b",
+      "secure_clusters.md": "273f2f3f3df58104c8d77b9029bc9e78e9b014b9373fef995a464115b44b957b",
+      "troubleshooting.md": "3383e6c5095eb8334bde5321c1ca1145b2dc36559da81495a8449ad3f5ade2bb",
+      "virtualization.md": "aa1be371022c524304963a5207ddb4705883dc5217abd8eb294c69cf004f4b07"
+    },
+    "handbooks": 22,
+    "markdown_files": 27,
+    "markdown_manifest_sha256": "e07f5e179dc53c94a98b9a1ae6ea945aacfc1aaade30f8bf53156e34d46b859b"
+  },
+  "inventory": {
+    "about/master.adoc": "f4ed4c8e39376e89d169dd128835063e1201083c4dac1ddf62c0f3136c24c71d",
+    "add-ons/master.adoc": "69c95c652ac37bd2d5e9c35d19ed4521930745baa4d30df4db5701394892715c",
+    "applications/master.adoc": "1f901cc6c2b49e17fc3dd6ccb209b6e55d0c5b318d5ec4d9d71632f92dd2a459",
+    "business_continuity/master.adoc": "d089885e18592cb91d601c852eb935df4d84dee35a1985d9720037e7d96acb06",
+    "clusters/master.adoc": "4accc18d32154bfc00e859ad5780db060ea68fe04d50bae07bcd367c45957116",
+    "console/master.adoc": "5d1b7ccfb22d7c4c8bdfa7a1b19419c1f0c8e5c81899450346ebfad1a05f89e8",
+    "get_started/master.adoc": "838f7ef7704fd25a856bd57966e1e2a4c28a4ca20f994f7f90ac8acdb6fc8ae5",
+    "gitops/master.adoc": "5a5421f47b794ff7d261aeefa0aa164a4d989a0c9e6636f6471c3bfee822e5d3",
+    "global_hub/master.adoc": "2f2803a451ab35c2ed011c85b26c955fc22351f9a231f09c2537118a38d5099d",
+    "governance/master.adoc": "e835a75b74a8aba98eb676b90e62517596074fcc4193d76df2526f50d8fb4099",
+    "health_metrics/master.adoc": "d7213fd1415c5c211bb13938f695aaa1189bed0036438673793b14f1a65f39f6",
+    "mce_acm_integration/master.adoc": "d46dcfe89c2541bc0d08a38c0407bd99967616640fa07d8fc121b03e86e4a485",
+    "mce_release_notes/master.adoc": "52ad83cdb6e516dd16ff4ab5145ca3cfc0c6def873592e6c89b061d922113565",
+    "mce_troubleshooting/master.adoc": "c1c7c08c9ae057d8f4cdcf5687a566a0ab2df277cd7ebba768c1d22a5c9616e3",
+    "mcp/master.adoc": "dad256d39a86ca9b8fbaa131a4c815cdc0b9bbb45c8c204ec4b64fa2ed1b640b",
+    "networking/master.adoc": "969f65d2256228773b77c7a4c9b5c68087d8d12ad3db436548b8c14f681d3364",
+    "observability/master.adoc": "c95e5adf4fbf5276e0d4f9761b969d993ead72fa35c2baf214f2c8ff0f0e6076",
+    "release_notes/master.adoc": "58ce70355562c2c747b962b9e5e2c248474d64e39090b1c2fa158347fc3ff46d",
+    "search/master.adoc": "3e6142c410aea453b5e233d4a8c784b89ed976a1695d8d447977122a2d179bd3",
+    "secure_clusters/master.adoc": "d8a5de5f2695d393b9738ad159889d1a12cc7ae9a5512754eaf1550e55ccd8ea",
+    "troubleshooting/master.adoc": "77c9430e8b1df064232c3b512dac54993ddab1f8a2f8492ae0feb506e4bbc770",
+    "virtualization/master.adoc": "e586bfd6496f0e3ba918cad73ff51dbbd0e8dbe7114e80229830a69f8157accb"
+  },
+  "legal_notices": [
+    {
+      "original_fragment_sha256": "335e86948c3f373d5ea5003b634c9ba9ad638fd7928d21883cb76f87c5de8314",
+      "output": "LEGAL-NOTICE.md",
+      "path": "acm-legal/legal-notice.html",
+      "response_sha256": "d701b8900046ff22b86d52540b65ace6b21f69089164b3f31b6a5009236e0ce7",
+      "retrieved_at": "2026-10-19T11:56:39.496049+00:00",
+      "sha256": "8bfe78e40b2137f2b7f5b24f1ca4b780ec9575d89fd62e0da752966bed29f1eb",
+      "storage_modification": "Reused global legal fragments from the pinned Dev Spaces source archive; normalized final newline",
+      "url": "https://docs.redhat.com/en/legal-notice"
+    },
+    {
+      "original_fragment_sha256": "3b376e3faab6abce908d0ee4cda2026ebcd0cd19e50f2a1bde8591491e94795e",
+      "output": "LICENSE.md",
+      "path": "acm-legal/license.html",
+      "response_sha256": "c33d7ebdbcc5c8db073e69a794b2ac44805f5d7d9edcfb8b5181a71869a9b7d5",
+      "retrieved_at": "2026-10-19T11:56:39.585004+00:00",
+      "sha256": "336175e18d3c01e7bc07d7a15ee456cb5556b800b61a933457a768b4062056c9",
+      "storage_modification": "Reused global legal fragments from the pinned Dev Spaces source archive; normalized final newline",
+      "url": "https://creativecommons.org/licenses/by-sa/3.0/legalcode.en"
+    }
+  ],
+  "runtime_network_required": false,
+  "source_commit_times": {
+    "api_docs": "2026-08-18T15:40:12-04:00",
+    "rhacm_docs": "2026-11-03T16:05:56-05:00"
+  },
+  "source_issues": [
+    {
+      "detail": "api-docs contains only a placeholder at this revision. No core API field reference is bundled; use openshift-api against the actual hub/managed cluster.",
+      "kind": "missing-generated-api-reference",
+      "source": {
+        "branch": "release-2.17",
+        "commit": "8678381d989a967f30ba04e0a3d5d9724f89e554",
+        "license": "Apache-2.0",
+        "license_file": "LICENSE.api-documentation",
+        "url": "https://github.com/stolostron/api-documentation"
+      }
+    }
+  ],
+  "sources": {
+    "agentic_skills_converter": {
+      "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.agentic-skills",
+      "modifications": [
+        "Resolve product versions from explicit enterprise-X.Y, gitops-docs-X.Y and rhacs-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions. RHACS-only rendering preserves anchors and validates code/table content via acs.py; other distributions retain their original conversion path."
+      ],
+      "path": "documentation/openshift-docs/convert.py",
+      "sha256": "33ee0162e18d1df7920c9d0514528cb78c2a8348fb514738b56852d84345ddbf",
+      "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "url": "https://github.com/openshift/agentic-skills"
+    },
+    "api_docs": {
+      "branch": "release-2.17",
+      "commit": "8678381d989a967f30ba04e0a3d5d9724f89e554",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.api-documentation",
+      "url": "https://github.com/stolostron/api-documentation"
+    },
+    "rhacm_docs": {
+      "branch": "2.17_prod",
+      "commit": "da77ef38f05cf583d057e43ecb6aa5697158fada",
+      "license": "CC-BY-SA-3.0",
+      "license_basis": "Source docinfo.xml includes Common_Content/Legal_Notice.xml; published Red Hat legal notice bundled locally",
+      "url": "https://github.com/stolostron/rhacm-docs"
+    }
+  }
+}
