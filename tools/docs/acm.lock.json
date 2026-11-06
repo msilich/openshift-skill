@@ -1,0 +1,79 @@
+{
+  "dependencies": {
+    "asciidoctor": "2.0.23",
+    "beautifulsoup4": "4.13.4",
+    "pandoc": "3.7.0.2",
+    "python_minimum": "3.12",
+    "pyyaml": "6.0.3",
+    "soupsieve": "2.7",
+    "typing_extensions": "4.14.1"
+  },
+  "document": {
+    "base_url": "https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.17/",
+    "license": "CC-BY-SA-3.0",
+    "product": "Red Hat Advanced Cluster Management for Kubernetes",
+    "scope": "All 22 versioned source handbooks; separate generated API reference unavailable at the pinned revision",
+    "version": "2.17"
+  },
+  "expected_output": {
+    "handbooks": 22,
+    "markdown_files": 27,
+    "markdown_manifest_sha256": "e07f5e179dc53c94a98b9a1ae6ea945aacfc1aaade30f8bf53156e34d46b859b"
+  },
+  "legal_notices": [
+    {
+      "original_fragment_sha256": "335e86948c3f373d5ea5003b634c9ba9ad638fd7928d21883cb76f87c5de8314",
+      "output": "LEGAL-NOTICE.md",
+      "path": "acm-legal/legal-notice.html",
+      "response_sha256": "d701b8900046ff22b86d52540b65ace6b21f69089164b3f31b6a5009236e0ce7",
+      "retrieved_at": "2026-10-19T11:56:39.496049+00:00",
+      "sha256": "8bfe78e40b2137f2b7f5b24f1ca4b780ec9575d89fd62e0da752966bed29f1eb",
+      "storage_modification": "Reused global legal fragments from the pinned Dev Spaces source archive; normalized final newline",
+      "url": "https://docs.redhat.com/en/legal-notice"
+    },
+    {
+      "original_fragment_sha256": "3b376e3faab6abce908d0ee4cda2026ebcd0cd19e50f2a1bde8591491e94795e",
+      "output": "LICENSE.md",
+      "path": "acm-legal/license.html",
+      "response_sha256": "c33d7ebdbcc5c8db073e69a794b2ac44805f5d7d9edcfb8b5181a71869a9b7d5",
+      "retrieved_at": "2026-10-19T11:56:39.585004+00:00",
+      "sha256": "336175e18d3c01e7bc07d7a15ee456cb5556b800b61a933457a768b4062056c9",
+      "storage_modification": "Reused global legal fragments from the pinned Dev Spaces source archive; normalized final newline",
+      "url": "https://creativecommons.org/licenses/by-sa/3.0/legalcode.en"
+    }
+  ],
+  "local_build_helpers": {
+    "acs.py": "0d6838be708ed4f0600354dd91d52fd1d2abb8885245be38daf3288b73ab7a6c",
+    "import_acm.py": "b74ce53f0f589f2dbf609b6be3b7e1dfcc407f0fabddf8cd01997e60d276348d",
+    "import_devspaces.py": "38fc2d648fea470134a0e504c3d8385b67c3a3a76e549e3213b96b6f51cffa89"
+  },
+  "schema_version": 1,
+  "sources": {
+    "agentic_skills_converter": {
+      "commit": "b09c2e645940b945c5a224a8f14927e10216ba07",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.agentic-skills",
+      "modifications": [
+        "Resolve product versions from explicit enterprise-X.Y, gitops-docs-X.Y and rhacs-docs-X.Y branches when the distro map is stale; reject missing or conflicting versions. RHACS-only rendering preserves anchors and validates code/table content via acs.py; other distributions retain their original conversion path."
+      ],
+      "path": "documentation/openshift-docs/convert.py",
+      "sha256": "33ee0162e18d1df7920c9d0514528cb78c2a8348fb514738b56852d84345ddbf",
+      "upstream_sha256": "d95eefdef8e395a9519ebc3c0fc0bb02e088d5df67d19629b9aa873580075e5b",
+      "url": "https://github.com/openshift/agentic-skills"
+    },
+    "api_docs": {
+      "branch": "release-2.17",
+      "commit": "8678381d989a967f30ba04e0a3d5d9724f89e554",
+      "license": "Apache-2.0",
+      "license_file": "LICENSE.api-documentation",
+      "url": "https://github.com/stolostron/api-documentation"
+    },
+    "rhacm_docs": {
+      "branch": "2.17_prod",
+      "commit": "da77ef38f05cf583d057e43ecb6aa5697158fada",
+      "license": "CC-BY-SA-3.0",
+      "license_basis": "Source docinfo.xml includes Common_Content/Legal_Notice.xml; published Red Hat legal notice bundled locally",
+      "url": "https://github.com/stolostron/rhacm-docs"
+    }
+  }
+}

@@ -1,5 +1,36 @@
 # Third-party notices
 
+## Red Hat Advanced Cluster Management 2.17 documentation
+
+- Source: `stolostron/rhacm-docs`, branch `2.17_prod`, commit
+  `da77ef38f05cf583d057e43ecb6aa5697158fada`. All 22 source handbooks are compiled
+  under `.agents/skills/openshift-docs/references/acm-2.17/`.
+- Product text and illustrations: CC-BY-SA-3.0, with the published Red Hat legal
+  notice and Section 4d waiver retained as `LEGAL-NOTICE.md` and `LICENSE.md`.
+  The source book metadata includes `Common_Content/Legal_Notice.xml`; there is
+  no root LICENSE in the source repository. Do not infer an Apache license from
+  other OpenShift documentation projects.
+- The global legal fragments are reused from the pinned official Dev Spaces
+  archive with a normalized final newline; original response hashes, retrieval
+  dates and stored fragment hashes are in `tools/docs/acm.lock.json`.
+- Separate API repository: `stolostron/api-documentation`, branch `release-2.17`,
+  commit `8678381d989a967f30ba04e0a3d5d9724f89e554`, Apache-2.0. Its full license
+  is bundled as `LICENSE.api-documentation`; no generated API reference exists
+  at this revision. `api-reference.md` records the gap explicitly.
+- Modifications: compiled versioned AsciiDoc books to DocBook/GFM, retained
+  section anchors, separated adjacent code examples, escaped pipe-table code,
+  localized cross-references, copied illustrations and added attribution/index
+  files. Source warnings, link adjustments and external references are recorded
+  in `CONVERSION.json`; `SOURCE.json` records inventory and output checksums.
+- `tools/docs/import_acm.py` adapts the existing Apache-2.0 converter helpers;
+  their pinned provenance and checksums are recorded in the ACM lock. Original
+  code/table content is checked through Pandoc round trips (credential-shaped
+  Slack examples, if any, use the existing documented placeholder substitution).
+  The converter license is bundled as `LICENSE.agentic-skills`.
+- Project-authored skill routing, approval rules and importer code do not
+  relicense the separately attributed product documentation. Bundling does not
+  certify ACM/MCE/OCP compatibility.
+
 ## RHACS 4.11 and optional StackRox MCP
 
 - RHACS source: `openshift/openshift-docs`, branch `rhacs-docs-4.11`, commit
