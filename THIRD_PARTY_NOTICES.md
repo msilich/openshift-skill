@@ -3,7 +3,7 @@
 ## Red Hat Advanced Cluster Management 2.17 documentation
 
 - Source: `stolostron/rhacm-docs`, branch `2.17_prod`, commit
-  `da77ef38f05cf583d057e43ecb6aa5697158fada`. All 22 source handbooks are compiled
+  `c673fcc51a919970db15b6c3c5c37ed37a393644`. All versioned source handbooks are compiled
   under `.agents/skills/openshift-docs/references/acm-2.17/`.
 - Product text and illustrations: CC-BY-SA-3.0, with the published Red Hat legal
   notice and Section 4d waiver retained as `LEGAL-NOTICE.md` and `LICENSE.md`.
@@ -34,7 +34,7 @@
 ## RHACS 4.11 and optional StackRox MCP
 
 - RHACS source: `openshift/openshift-docs`, branch `rhacs-docs-4.11`, commit
-  `a27d50427f722af95709d914fd36fea7de36142f`, distribution `openshift-acs`.
+  `3752a68a799f9803f080f490b37e66f424ca9506`, distribution `openshift-acs`.
 - License: Apache-2.0. The complete topic-map conversion, original source license,
   converter license, SOURCE.json, TOPIC_MAP.yml and CONVERSION.json are under
   `.agents/skills/openshift-docs/references/acs-4.11/`.
@@ -74,7 +74,7 @@ and the referenced `SOURCE.json` file.
 ### OCP source snapshot
 
 - Project: `openshift/openshift-docs`
-- Source revision: `ddc507039aa71e6c2a878208d5792e1534460261`
+- Source revision: `ac7a08d806b6e00ea50f5183b3c61e2daf3d2d1d`
 - License: Apache License 2.0
 - Bundled license:
   `.agents/skills/openshift-docs/references/ocp-4.22/LICENSE.openshift-docs`
@@ -97,7 +97,7 @@ and the referenced `SOURCE.json` file.
 ## Additional GitOps documentation and adapted workflows
 
 - GitOps 1.21 documentation: `openshift/openshift-docs`, branch `gitops-docs-1.21`,
-  commit `b5021228885fa8978f60a545a103ceb57590253f`, Apache-2.0. The full topic map is
+  commit `2833be1175d730de0bbb6a701622c1ed92d6fe84`, Apache-2.0. The full topic map is
   converted to Markdown in the documentation skill's `references/gitops-1.21/`.
   Local changes include format notices, product-specific navigation titles and
   offline cross-references. License and exact build metadata accompany the snapshot.

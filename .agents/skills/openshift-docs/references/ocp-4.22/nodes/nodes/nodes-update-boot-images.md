@@ -11,7 +11,18 @@ The following table lists the platforms on which boot image management is availa
 | Microsoft Azure           | Enabled by default  | Disabled by default        |
 | VMware vSphere            | Enabled by default  | Not supported              |
 
-For all other platforms, the MCO does not automatically update the boot image with each cluster update. Images from the Google Cloud Marketplace or AWS Marketplace are not automatically updated.
+> [!NOTE]
+> On VMware vSphere, the Machine Config Operator (MCO) manages boot images by matching each machine set to a failure domain defined in the Infrastructure resource, `infrastructures.config.openshift.io/cluster`. If no failure domain matches, the MCO derives the required topology information, such as compute cluster and network objects, from the provider specification of the machine set.
+>
+> In rare situations, the MCO cannot manage boot images for a machine set. The following examples detail the cause of these rare situations:
+>
+> - You did not specify a resource pool or you specified a resource pool path that does not follow the standard `/<datacenter>/host/<cluster>/Resources/…​` format in the `providerSpec.resourcePool` field of the machine set configuration.
+>
+> - You did not specify any network device under the `providerSpec` stanza of the machine set.
+>
+> A skipped machine set is not degraded but is logged with a warning. You must manage boot images manually for a skipped machine set or the boot image skew widens over time. For information on manual boot image updates, see "Manually updating the boot image".
+
+For all other platforms, the MCO does not automatically update the boot image with each cluster update. Images from the Google Cloud Marketplace are not automatically updated.
 
 For clusters where automatic updates are disabled or not supported, you can manually update the boot image on your cluster. See "Manually updating the boot image" for information. The method to update or specify the image varies by platform.
 
@@ -23,19 +34,29 @@ This means that the MCO updates the boot image whenever you update your cluster.
 
 New nodes created after enabling the feature use the updated boot image. This feature has no effect on existing nodes.
 
+The following table lists the platforms on which boot image management is available:
+
+| Platform                  | Worker machine sets | Control plane machine sets |
+|---------------------------|---------------------|----------------------------|
+| Google Cloud              | Enabled by default  | Disabled by default        |
+| Amazon Web Services (AWS) | Enabled by default  | Disabled by default        |
+| Microsoft Azure           | Enabled by default  | Disabled by default        |
+| VMware vSphere            | Enabled by default  | Not supported              |
+
 > [!NOTE]
-> The following table lists the platforms on which boot image management is available:
+> On VMware vSphere, the Machine Config Operator (MCO) manages boot images by matching each machine set to a failure domain defined in the Infrastructure resource, `infrastructures.config.openshift.io/cluster`. If no failure domain matches, the MCO derives the required topology information, such as compute cluster and network objects, from the provider specification of the machine set.
 >
-> | Platform                  | Worker machine sets | Control plane machine sets |
-> |---------------------------|---------------------|----------------------------|
-> | Google Cloud              | Enabled by default  | Disabled by default        |
-> | Amazon Web Services (AWS) | Enabled by default  | Disabled by default        |
-> | Microsoft Azure           | Enabled by default  | Disabled by default        |
-> | VMware vSphere            | Enabled by default  | Not supported              |
+> In rare situations, the MCO cannot manage boot images for a machine set. The following examples detail the cause of these rare situations:
 >
-> For all other platforms, the MCO does not automatically update the boot image with each cluster update. Images from the Google Cloud Marketplace or AWS Marketplace are not automatically updated.
+> - You did not specify a resource pool or you specified a resource pool path that does not follow the standard `/<datacenter>/host/<cluster>/Resources/…​` format in the `providerSpec.resourcePool` field of the machine set configuration.
 >
-> For clusters where automatic updates are disabled or not supported, you can manually update the boot image on your cluster. See "Manually updating the boot image" for information. The method to update or specify the image varies by platform.
+> - You did not specify any network device under the `providerSpec` stanza of the machine set.
+>
+> A skipped machine set is not degraded but is logged with a warning. You must manage boot images manually for a skipped machine set or the boot image skew widens over time. For information on manual boot image updates, see "Manually updating the boot image".
+
+For all other platforms, the MCO does not automatically update the boot image with each cluster update. Images from the Google Cloud Marketplace are not automatically updated.
+
+For clusters where automatic updates are disabled or not supported, you can manually update the boot image on your cluster. See "Manually updating the boot image" for information. The method to update or specify the image varies by platform.
 
 For example, with the feature disabled, if your cluster was originally created with OpenShift Container Platform 4.16, the boot image that the MCO would use to create new nodes is the same RHCOS version that was installed for the cluster, even if your cluster is currently at a later OpenShift Container Platform version.
 
@@ -127,19 +148,29 @@ You can disable the boot image management feature so that the Machine Config Ope
 
 You disable the boot image management feature for the control plane or worker machine sets in your cluster by editing the `MachineConfiguration` object.
 
+The following table lists the platforms on which boot image management is available:
+
+| Platform                  | Worker machine sets | Control plane machine sets |
+|---------------------------|---------------------|----------------------------|
+| Google Cloud              | Enabled by default  | Disabled by default        |
+| Amazon Web Services (AWS) | Enabled by default  | Disabled by default        |
+| Microsoft Azure           | Enabled by default  | Disabled by default        |
+| VMware vSphere            | Enabled by default  | Not supported              |
+
 > [!NOTE]
-> The following table lists the platforms on which boot image management is available:
+> On VMware vSphere, the Machine Config Operator (MCO) manages boot images by matching each machine set to a failure domain defined in the Infrastructure resource, `infrastructures.config.openshift.io/cluster`. If no failure domain matches, the MCO derives the required topology information, such as compute cluster and network objects, from the provider specification of the machine set.
 >
-> | Platform                  | Worker machine sets | Control plane machine sets |
-> |---------------------------|---------------------|----------------------------|
-> | Google Cloud              | Enabled by default  | Disabled by default        |
-> | Amazon Web Services (AWS) | Enabled by default  | Disabled by default        |
-> | Microsoft Azure           | Enabled by default  | Disabled by default        |
-> | VMware vSphere            | Enabled by default  | Not supported              |
+> In rare situations, the MCO cannot manage boot images for a machine set. The following examples detail the cause of these rare situations:
 >
-> For all other platforms, the MCO does not automatically update the boot image with each cluster update. Images from the Google Cloud Marketplace or AWS Marketplace are not automatically updated.
+> - You did not specify a resource pool or you specified a resource pool path that does not follow the standard `/<datacenter>/host/<cluster>/Resources/…​` format in the `providerSpec.resourcePool` field of the machine set configuration.
 >
-> For clusters where automatic updates are disabled or not supported, you can manually update the boot image on your cluster. See "Manually updating the boot image" for information. The method to update or specify the image varies by platform.
+> - You did not specify any network device under the `providerSpec` stanza of the machine set.
+>
+> A skipped machine set is not degraded but is logged with a warning. You must manage boot images manually for a skipped machine set or the boot image skew widens over time. For information on manual boot image updates, see "Manually updating the boot image".
+
+For all other platforms, the MCO does not automatically update the boot image with each cluster update. Images from the Google Cloud Marketplace are not automatically updated.
+
+For clusters where automatic updates are disabled or not supported, you can manually update the boot image on your cluster. See "Manually updating the boot image" for information. The method to update or specify the image varies by platform.
 
 Disabling this feature does not rollback the nodes or machine sets to the originally-installed boot image. The machine sets retain the boot image version that was present when the feature was disabled and is not updated if the cluster is upgraded to a new OpenShift Container Platform version in the future. This feature has no effect on existing nodes.
 
@@ -292,19 +323,29 @@ Verification
 
 For supported platforms, the Machine Config Operator (MCO) can manage and update the boot image on each node to ensure the Red Hat Enterprise Linux CoreOS (RHCOS) version of the boot image matches the Red Hat Enterprise Linux CoreOS (RHCOS) version appropriate for your cluster.
 
+The following table lists the platforms on which boot image management is available:
+
+| Platform                  | Worker machine sets | Control plane machine sets |
+|---------------------------|---------------------|----------------------------|
+| Google Cloud              | Enabled by default  | Disabled by default        |
+| Amazon Web Services (AWS) | Enabled by default  | Disabled by default        |
+| Microsoft Azure           | Enabled by default  | Disabled by default        |
+| VMware vSphere            | Enabled by default  | Not supported              |
+
 > [!NOTE]
-> The following table lists the platforms on which boot image management is available:
+> On VMware vSphere, the Machine Config Operator (MCO) manages boot images by matching each machine set to a failure domain defined in the Infrastructure resource, `infrastructures.config.openshift.io/cluster`. If no failure domain matches, the MCO derives the required topology information, such as compute cluster and network objects, from the provider specification of the machine set.
 >
-> | Platform                  | Worker machine sets | Control plane machine sets |
-> |---------------------------|---------------------|----------------------------|
-> | Google Cloud              | Enabled by default  | Disabled by default        |
-> | Amazon Web Services (AWS) | Enabled by default  | Disabled by default        |
-> | Microsoft Azure           | Enabled by default  | Disabled by default        |
-> | VMware vSphere            | Enabled by default  | Not supported              |
+> In rare situations, the MCO cannot manage boot images for a machine set. The following examples detail the cause of these rare situations:
 >
-> For all other platforms, the MCO does not automatically update the boot image with each cluster update. Images from the Google Cloud Marketplace or AWS Marketplace are not automatically updated.
+> - You did not specify a resource pool or you specified a resource pool path that does not follow the standard `/<datacenter>/host/<cluster>/Resources/…​` format in the `providerSpec.resourcePool` field of the machine set configuration.
 >
-> For clusters where automatic updates are disabled or not supported, you can manually update the boot image on your cluster. See "Manually updating the boot image" for information. The method to update or specify the image varies by platform.
+> - You did not specify any network device under the `providerSpec` stanza of the machine set.
+>
+> A skipped machine set is not degraded but is logged with a warning. You must manage boot images manually for a skipped machine set or the boot image skew widens over time. For information on manual boot image updates, see "Manually updating the boot image".
+
+For all other platforms, the MCO does not automatically update the boot image with each cluster update. Images from the Google Cloud Marketplace are not automatically updated.
+
+For clusters where automatic updates are disabled or not supported, you can manually update the boot image on your cluster. See "Manually updating the boot image" for information. The method to update or specify the image varies by platform.
 
 To enable the boot image management feature for control plane machine sets or to re-enable the boot image management feature for worker machine sets where it was disabled, edit the `MachineConfiguration` object. You can enable the feature for all of the machine sets in the cluster or specific machine sets.
 
@@ -312,6 +353,9 @@ To enable the boot image management feature for control plane machine sets or to
 > Because the boot image management feature for worker nodes is default for the Google Cloud and AWS platforms, the `managedBootImages` configuration does not appear in the machine configuration object. To enable the feature for control plane machine sets without disabling the feature for worker machine sets, you must expressly add the configuration for both the control plane and worker machine sets, as shown in the following procedure. If you add only the configuration for control plane machine sets, due to default behavior, the Machine Config Operator (MCO) overwrites the configuration for the worker machine sets.
 
 Enabling the feature updates the boot image to the Red Hat Enterprise Linux CoreOS (RHCOS) boot image version appropriate for your cluster. If the cluster is again updated to a new OpenShift Container Platform version in the future, the boot image is updated again. New nodes created after enabling the feature use the updated boot image. This feature has no effect on existing nodes.
+
+> [!NOTE]
+> On VMware vSphere, the MCO automatically derives topology information from each provider specification of a machine set when no matching failure domain exists. No additional configuration is required for clusters without failure domains.
 
 When boot image management is enabled, the MCO automatically enables boot image skew enforcement to ensure that the boot image version is compliant for your cluster. For more information, see "Boot image skew enforcement".
 

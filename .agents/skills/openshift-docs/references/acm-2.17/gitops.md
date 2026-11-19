@@ -19,14 +19,6 @@ All supported models use the `GitOpsCluster` custom resource for configuration a
 
 For more information, see the [Self-managed Red Hat OpenShift subscription guide](https://www.redhat.com/en/resources/self-managed-openshift-subscription-guide).
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Push and Pull model overview](gitops.md#gitops-models)
 
 - [Configure Placement resources for OpenShift GitOps](gitops.md#gitops-placement)
@@ -38,8 +30,6 @@ Additional resources
 - [Query Argo CD applications](gitops.md#gitops-console-query)
 
 - [Manage policy definitions with Red Hat OpenShift GitOps](gitops.md#gitops-policies)
-
-</div>
 
 <a id="gitops-models"></a>
 
@@ -53,7 +43,7 @@ You can use Red Hat OpenShift GitOps with Red Hat Advanced Cluster Management fo
 
 - The Argo CD Agent requires a Red Hat OpenShift Platform Plus subscription. The Argo CD Agent can run on OpenShift Container Platform or in supported Kubernetes environments.
 
-For more information, see the [Self-managed Red Hat OpenShift subscription guide](https://www.redhat.com/en/resources/self-managed-openshift-subscription-guide).
+For more information, see the *Self-managed Red Hat OpenShift subscription guide*.
 
 | Model | Description | `ApplicationSet` template key | Use case | Required subscription |
 |----|----|----|----|----|
@@ -74,6 +64,8 @@ Additional resources
 - [Push model overview](gitops.md#gitops-push-overview)
 
 - [Pull model overview](gitops.md#gitops-pull-overview)
+
+- [Self-managed Red Hat OpenShift subscription guide](https://www.redhat.com/en/resources/self-managed-openshift-subscription-guide)
 
 </div>
 
@@ -159,14 +151,6 @@ If you want to use the `ManifestWork`-based or Argo CD Agent-based model with th
 
 **Important:** Red Hat Advanced Cluster Management does not include entitlements for OpenShift GitOps. You might need a separate Red Hat OpenShift Container Platform subscription for certain features. For more information, see the [Self-managed Red Hat OpenShift subscription guide](https://www.redhat.com/en/resources/self-managed-openshift-subscription-guide).
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Register OpenShift Container Platform managed clusters to the Red Hat OpenShift GitOps operator](gitops.md#gitops-push-register)
 
 - [Register non-OpenShift Container Platform clusters to the Red Hat OpenShift GitOps operator](gitops.md#gitops-push-register-non-ocp)
@@ -174,8 +158,6 @@ Additional resources
 - [Deploy an application with the Push model](gitops.md#gitops-push-deploy)
 
 - [Create a custom service account for Argo CD Push model](gitops.md#gitops-push-service-account)
-
-</div>
 
 <a id="gitops-push-register"></a>
 
@@ -280,17 +262,7 @@ Procedure
 
     - An `ArgoCD` `Policy` named `<gitopscluster-name>-argocd-policy`
 
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-1.  Make sure that the `acm-placement` ConfigMap resembles the following example:
+5.  Make sure that the `acm-placement` ConfigMap resembles the following example:
 
     ``` yaml
     apiVersion: v1
@@ -305,7 +277,7 @@ Verification
       matchKey: clusterName
     ```
 
-2.  Verify that each of the resources were created. Run the following commands:
+6.  Verify that each of the resources were created. Run the following commands:
 
     ``` bash
     oc get configmap acm-placement -n openshift-gitops -o yaml
@@ -422,13 +394,13 @@ Procedure
     oc apply -f gitops-cluster-push.yaml
     ```
 
-    **Note:** The `GitOpsCluster` controller automatically creates the following resources during reconciliation:
+    - The `GitOpsCluster` controller automatically creates the following resources during reconciliation:
 
-    - The `acm-placement` duck-type `ConfigMap` in the `argoServer.argoNamespace`
+      - The `acm-placement` duck-type `ConfigMap` in the `argoServer.argoNamespace`
 
-    - A `Role` and `RoleBinding`
+      - A `Role` and `RoleBinding`
 
-    - An `ArgoCD` `Policy` named `<gitopscluster-name>-argocd-policy`
+      - An `ArgoCD` `Policy` named `<gitopscluster-name>-argocd-policy`
 
 5.  If the API server URL in the `ManagedCluster` resource `spec` is empty, update it manually. Run the following command. Replace `<cluster-name>` with the name of the managed cluster:
 
@@ -445,40 +417,30 @@ Procedure
         url: https://<api-server-url>
     ```
 
-</div>
+7.  Make sure that the `acm-placement` ConfigMap resembles the following example:
 
-<div>
+    ``` yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: acm-placement
+      namespace: openshift-gitops
+    data:
+      apiVersion: cluster.open-cluster-management.io/v1beta1
+      kind: placementdecisions
+      statusListKey: decisions
+      matchKey: clusterName
+    ```
 
-<div class="title">
-
-Verification
-
-</div>
-
-1.  Make sure that the `acm-placement` ConfigMap resembles the following example:
-
-</div>
-
-``` yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: acm-placement
-  namespace: openshift-gitops
-data:
-  apiVersion: cluster.open-cluster-management.io/v1beta1
-  kind: placementdecisions
-  statusListKey: decisions
-  matchKey: clusterName
-```
-
-1.  Verify that each of the resources were created. Run the following commands:
+8.  Verify that each of the resources were created. Run the following commands:
 
     ``` bash
     oc get configmap acm-placement -n openshift-gitops -o yaml
     oc get role openshift-gitops-applicationset-controller-placement -n openshift-gitops
     oc get rolebinding openshift-gitops-applicationset-controller-placement -n openshift-gitops
     ```
+
+</div>
 
 <div>
 
@@ -675,8 +637,6 @@ Procedure
         namespace: openshift-gitops
     ```
 
-3.  Verification
-
     - Verify that the new Argo CD cluster secret is created. Run the following command. Replace `<managed-cluster>` with the name of the managed cluster and `<managed-sa-sample>` with the name of the service account you created:
 
     ``` bash
@@ -701,14 +661,6 @@ In the Pull model, the Red Hat OpenShift GitOps add-on installs the OpenShift Gi
 
 - If you enable the OpenShift GitOps add-on by using the `GitOpsCluster` custom resource, the `GitOpsCluster` disables the Push model for all applications.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Argo CD with the Argo CD Agent-based pull model overview](gitops.md#gitops-pull-agent)
 
 - [*ManifestWork*-based pull model overview](gitops.md#gitops-pull-manifest)
@@ -718,8 +670,6 @@ Additional resources
 - [Enable the *ApplicationSet* resource in any namespace (Technology Preview)](gitops.md#gitops-pull-appset-enable)
 
 - [Implement progressive rollout strategy (Technology Preview)](gitops.md#gitops-pull-rollout)
-
-</div>
 
 <a id="gitops-pull-agent"></a>
 
@@ -731,7 +681,7 @@ Additionally, the principal and agent architecture enables the hub cluster Argo 
 
 The Argo CD Agent-based pull model provides the same Argo CD user interface experience as the Push model, while keeping the security and network benefits of the pull architecture.
 
-**Important:** The Argo CD Agent requires a Red Hat OpenShift Platform Plus subscription. Red Hat Advanced Cluster Management does not include this entitlement. See [Self-Managed OpenShift Subscription Guide](https://www.redhat.com/en/resources/self-managed-openshift-subscription-guide) for more information.
+**Important:** The Argo CD Agent requires a Red Hat OpenShift Platform Plus subscription. Red Hat Advanced Cluster Management does not include this entitlement. See the *Self-Managed OpenShift Subscription Guide* for more information.
 
 The Argo CD Agent-based pull model uses a principal and agent architecture:
 
@@ -772,6 +722,8 @@ Additional resources
 - [Enable the Red Hat OpenShift GitOps add-on with Argo CD Agent in autonomous mode](gitops.md#gitops-pull-agent-autonomous)
 
 - [Disable agent version drift heal](gitops.md#gitops-pull-agent-drift)
+
+- [Self-Managed OpenShift Subscription Guide](https://www.redhat.com/en/resources/self-managed-openshift-subscription-guide)
 
 </div>
 
@@ -874,17 +826,7 @@ Procedure
     oc apply -f appproject.yaml
     ```
 
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-1.  Verify that a `ManagedClusterSetBinding` resource for the `ManagedClusterSet` exists in the `openshift-gitops` namespace. Without the resource, the `Placement` controller does not find any managed clusters. See the following YAML sample:
+7.  Verify that a `ManagedClusterSetBinding` resource for the `ManagedClusterSet` exists in the `openshift-gitops` namespace. Without the resource, the `Placement` controller does not find any managed clusters. See the following YAML sample:
 
     ``` yaml
     apiVersion: cluster.open-cluster-management.io/v1beta2
@@ -1173,29 +1115,19 @@ Procedure
     oc apply -f applicationset.yaml
     ```
 
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-1.  Verify that the agent principal is running on the hub cluster by running the following command:
+14. Verify that the agent principal is running on the hub cluster by running the following command:
 
     ``` bash
     oc get pods -n openshift-gitops -l app.kubernetes.io/name=openshift-gitops-agent-principal
     ```
 
-2.  On the managed cluster, verify the agent is running by running the following command:
+15. On the managed cluster, verify the agent is running by running the following command:
 
     ``` bash
     oc get pods -n openshift-gitops -l app.kubernetes.io/part-of=argocd-agent --context <managed-cluster-context>
     ```
 
-3.  On the hub cluster, verify that the application status shows `Synced` by running the following command:
+16. On the hub cluster, verify that the application status shows `Synced` by running the following command:
 
     ``` bash
     oc get applications.argoproj.io -n openshift-gitops
@@ -1421,17 +1353,7 @@ Procedure
 
     - Use Git to manage applications after initial bootstrap. With autonomous mode, the managed cluster Argo CD instance watches Git repositories and synchronizes changes automatically. The agent synchronizes application specs and the status back to the principal on the hub cluster for visibility.
 
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-1.  On the hub cluster, verify that autonomous applications are visible as read-only mirrors by running the following command:
+8.  On the hub cluster, verify that autonomous applications are visible as read-only mirrors by running the following command:
 
     ``` bash
     oc get applications.argoproj.io -n openshift-gitops
@@ -1477,7 +1399,7 @@ The policy is user-owned after creation. You can modify the policy for RBAC or `
 
 - If you need full Argo CD user interface compatibility with real-time resource trees, logs, and detailed status from managed clusters, use the Argo CD Agent-based pull model instead.
 
-- Red Hat Advanced Cluster Management does not include entitlements for OpenShift GitOps. You might need a separate Red Hat OpenShift Container Platform subscription for certain features. For more information, see the [Self-managed Red Hat OpenShift subscription guide](https://www.redhat.com/en/resources/self-managed-openshift-subscription-guide).
+- Red Hat Advanced Cluster Management does not include entitlements for OpenShift GitOps. You might need a separate Red Hat OpenShift Container Platform subscription for certain features. For more information, see the *Self-managed Red Hat OpenShift subscription guide*.
 
 <div>
 
@@ -1492,6 +1414,8 @@ Additional resources
 - [Customize the Argo CD policy for the *ManifestWork*-based pull model](gitops.md#gitops-pull-manifest-customize)
 
 - [Deploy an application with the `ManifestWork`-based pull model](gitops.md#gitops-pull-manifest-deploy)
+
+- [Self-managed Red Hat OpenShift subscription guide](https://www.redhat.com/en/resources/self-managed-openshift-subscription-guide)
 
 </div>
 
@@ -1610,17 +1534,7 @@ Procedure
 
     - An `ArgoCD` `Policy` named `<gitopscluster-name>-argocd-policy`
 
-</div>
-
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-1.  Make sure that the `acm-placement` ConfigMap resembled the following example:
+7.  Make sure that the `acm-placement` ConfigMap resembled the following example:
 
     ``` yaml
     apiVersion: v1
@@ -1635,7 +1549,7 @@ Verification
       matchKey: clusterName
     ```
 
-2.  Verify that each of the resources were created. Run the following commands:
+8.  Verify that each of the resources were created. Run the following commands:
 
     ``` bash
     oc get configmap acm-placement -n openshift-gitops -o yaml
@@ -1644,7 +1558,7 @@ Verification
     oc get policy <gitopscluster-name>-argocd-policy -n openshift-gitops
     ```
 
-3.  Verify that the `ArgoCD` `Policy` was created on the hub cluster by running the following command:
+9.  Verify that the `ArgoCD` `Policy` was created on the hub cluster by running the following command:
 
     ``` bash
     oc get policy gitops-clusters-argocd-policy -n openshift-gitops
@@ -1874,7 +1788,7 @@ Additional resources
 
 </div>
 
-- [Configure Placement resources for Red Hat OpenShift GitOps](gitops.md#gitops-placement) for details.
+- [Configure Placement resources for Red Hat OpenShift GitOps](gitops.md#gitops-placement)
 
 - [Red Hat OpenShift GitOps add-on overview](gitops.md#gitops-addon-overview)
 
@@ -1903,14 +1817,6 @@ The Operator Lifecycle Manager subscription configuration. If you set `olmSubscr
 `argoCDAgent`  
 Argo CD Agent configuration (`enabled`, `serverAddress`, `serverPort`, `mode`). The default mode is `managed`.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Skip the OpenShift GitOps add-on enforcement](gitops.md#gitops-pull-skip-addon)
 
 - [Skip the Argo CD policy recreation](gitops.md#gitops-pull-skip-policy)
@@ -1920,8 +1826,6 @@ Additional resources
 - [Check the OpenShift GitOps add-on functions](gitops.md#gitops-pull-check)
 
 - [Check the Argo CD Agent function](gitops.md#gitops-pull-check-agent)
-
-</div>
 
 <a id="gitops-pull-skip-addon"></a>
 
@@ -2374,86 +2278,76 @@ Procedure
 
 3.  Customize the `ApplicationSet` resource for your progressive rollout strategy. Use the following YAML template:
 
-</div>
-
-``` yaml
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: guestbook-allclusters-app-set
-  namespace: openshift-gitops
-spec:
-  generators:
-  - clusterDecisionResource:
-      configMapRef: acm-placement
-      labelSelector:
-        matchLabels:
-          cluster.open-cluster-management.io/placement: app-placement
-      requeueAfterSeconds: 30
-  strategy:
-    type: RollingSync
-    rollingSync:
-      steps:
-      - name: dev-stage
-        matchExpressions:
-        - key: envLabel
-          operator: In
-          values: [env-dev]
-        maxUpdate: 100%
-      - name: qa-stage
-        matchExpressions:
-        - key: envLabel
-          operator: In
-          values: [env-qa]
-        maxUpdate: 100%
-      - name: prod-stage
-        matchExpressions:
-        - key: envLabel
-          operator: In
-          values: [env-prod]
-        maxUpdate: 100%
-  template:
-    preserveFields:
-    - metadata.labels.envLabel
+    ``` yaml
+    apiVersion: argoproj.io/v1alpha1
+    kind: ApplicationSet
     metadata:
-      annotations:
-        apps.open-cluster-management.io/ocm-managed-cluster: '{{name}}'
-        apps.open-cluster-management.io/ocm-managed-cluster-app-namespace: openshift-gitops
-        argocd.argoproj.io/skip-reconcile: "true"
-      labels:
-        apps.open-cluster-management.io/pull-to-ocm-managed-cluster: "true"
-      name: '{{name}}-guestbook-app'
+      name: guestbook-allclusters-app-set
+      namespace: openshift-gitops
     spec:
-      destination:
-        namespace: guestbook
-        server: https://kubernetes.default.svc
-      project: default
-      sources:
-      - repoURL: https://github.com/argoproj/argocd-example-apps.git
-        targetRevision: main
-        path: guestbook
-      syncPolicy:
-        syncOptions:
-        - CreateNamespace=true
-```
+      generators:
+      - clusterDecisionResource:
+          configMapRef: acm-placement
+          labelSelector:
+            matchLabels:
+              cluster.open-cluster-management.io/placement: app-placement
+          requeueAfterSeconds: 30
+      strategy:
+        type: RollingSync
+        rollingSync:
+          steps:
+          - name: dev-stage
+            matchExpressions:
+            - key: envLabel
+              operator: In
+              values: [env-dev]
+            maxUpdate: 100%
+          - name: qa-stage
+            matchExpressions:
+            - key: envLabel
+              operator: In
+              values: [env-qa]
+            maxUpdate: 100%
+          - name: prod-stage
+            matchExpressions:
+            - key: envLabel
+              operator: In
+              values: [env-prod]
+            maxUpdate: 100%
+      template:
+        preserveFields:
+        - metadata.labels.envLabel
+        metadata:
+          annotations:
+            apps.open-cluster-management.io/ocm-managed-cluster: '{{name}}'
+            apps.open-cluster-management.io/ocm-managed-cluster-app-namespace: openshift-gitops
+            argocd.argoproj.io/skip-reconcile: "true"
+          labels:
+            apps.open-cluster-management.io/pull-to-ocm-managed-cluster: "true"
+          name: '{{name}}-guestbook-app'
+        spec:
+          destination:
+            namespace: guestbook
+            server: https://kubernetes.default.svc
+          project: default
+          sources:
+          - repoURL: https://github.com/argoproj/argocd-example-apps.git
+            targetRevision: main
+            path: guestbook
+          syncPolicy:
+            syncOptions:
+            - CreateNamespace=true
+    ```
 
-\+ \* Use the `preserveFields` parameter to list the labels that you want the `ApplicationSet` to ignore. Without this field, the controller overwrites or deletes labels not defined in the template.
+    - Use the `preserveFields` parameter to list the labels that you want the `ApplicationSet` to ignore. Without this field, the controller overwrites or deletes labels not defined in the template.
 
-1.  Apply the `ApplicationSet` resource. Run the following command:
+4.  Apply the `ApplicationSet` resource. Run the following command:
 
     ``` bash
     oc apply -f guestbook-allclusters-app-set.yaml
     ```
 
-<div>
-
-<div class="title">
-
-Verification
-
-</div>
-
-1.  Make sure the application has a unique label that specifies the promotion order. Run the following commands:
+5.  Make sure the application has a unique label that specifies the promotion order. Run the following commands:
 
     ``` bash
     oc -n openshift-gitops label applications.argoproj.io/cluster1-guestbook-app envLabel=env-dev
@@ -2461,7 +2355,7 @@ Verification
     oc -n openshift-gitops label applications.argoproj.io/cluster3-guestbook-app envLabel=env-prod
     ```
 
-    **Note:** When Argo CD detects committed changes, the `ApplicationSet` controller detects `OutOfSync` applications and schedules a staged rollout. The controller processes `env-dev` first, then `env-qa`, then `env-prod`. Each group must reach the `Healthy` status before the next begins.
+    - When Argo CD detects committed changes, the `ApplicationSet` controller detects `OutOfSync` applications and schedules a staged rollout. The controller processes `env-dev` first, then `env-qa`, then `env-prod`. Each group must reach the `Healthy` status before the next begins.
 
 </div>
 

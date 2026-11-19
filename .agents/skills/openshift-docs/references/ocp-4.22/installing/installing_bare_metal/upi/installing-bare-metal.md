@@ -4557,13 +4557,15 @@ Procedure
 
 2.  Append the kernel arguments by invoking the `coreos-installer` program:
 
+    > [!NOTE]
+    > Starting in OpenShift Container Platform 4.22, you no longer need to include the `--append-karg root=/dev/disk/by-label/dm-mpath-root` parameter in these commands. Including this parameter could lead to non-booting nodes. The installation program now refers to the root disk by uuid, and automatically adds the `root=/dev/disk/by-label/dm-mpath-$UUID` parameter.
+
     - If there is only one multipath device connected to the machine, the device should be available at path `/dev/mapper/mpatha`. For example:
 
       ``` terminal
       $ coreos-installer install /dev/mapper/mpatha \
       --ignition-url=http://host/worker.ign \
       --append-karg rd.multipath=default \
-      --append-karg root=/dev/disk/by-label/dm-mpath-root \
       --append-karg rw
       ```
 
@@ -4575,7 +4577,6 @@ Procedure
       $ coreos-installer install /dev/disk/by-id/wwn-<wwn_ID> \
       --ignition-url=http://host/worker.ign \
       --append-karg rd.multipath=default \
-      --append-karg root=/dev/disk/by-label/dm-mpath-root \
       --append-karg rw
       ```
 

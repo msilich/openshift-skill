@@ -15,14 +15,6 @@ Release images are the version of OpenShift Container Platform that you use when
 
 With hosted control planes for OpenShift Container Platform, you can create control planes as pods on a hosting cluster without the need for dedicated physical machines for each control plane.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Installing and configuring OpenShift Container Platform clusters](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/installation_overview/index)
 
 - [About multicluster engine for Kubernetes operator](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/architecture/about-the-multicluster-engine-for-kubernetes-operator)
@@ -55,8 +47,6 @@ Additional resources
 
 - [Troubleshooting](mce_troubleshooting.md#troubleshooting-mce)
 
-</div>
-
 <a id="mce-console-overview"></a>
 
 ## Console overview
@@ -71,19 +61,15 @@ See [Disabling the multicluster engine for Kubernetes operator console plug-in](
 
 ## Disabling the multicluster engine for Kubernetes operator console plug-in
 
-Disable the multicluster engine operator console plug-in to hide the cluster lifecycle features from the OpenShift Container Platform console. This does not affect the API access to the cluster lifecycle features.
+Disable the multicluster engine operator console plug-in to hide the cluster lifecycle features from the OpenShift Container Platform console. This does not affect the API access to the cluster lifecycle features. Complete the following steps to disable the multicluster engine for Kubernetes operator console plug-in.
 
 **Required access:** Cluster administrator
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-Complete the following steps to disable the multicluster engine for Kubernetes operator console plug-in:
 
 </div>
 
@@ -96,6 +82,8 @@ Complete the following steps to disable the multicluster engine for Kubernetes o
 4.  Click the *Console plug-ins* tab. The `mce` plug-in is listed. **Note:** If Red Hat Advanced Cluster Management is installed, it is also listed as `acm`.
 
 5.  Modify plug-in status from the table. In a few moments, you are prompted to refresh the console.
+
+</div>
 
 <a id="mce-rbac"></a>
 
@@ -278,17 +266,13 @@ Console RBAC table for cluster lifecycle
 
 ## Managing cluster lifecycle RBAC for multicluster engine operator
 
-Validate RBAC at the console level and at the API level. Enable or disable actions in the console based on user access role permissions.
+Validate RBAC at the console level and at the API level. Enable or disable actions in the console based on user access role permissions. View the following cluster lifecycle RBAC operations.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-View the following cluster lifecycle RBAC operations:
 
 </div>
 
@@ -375,7 +359,9 @@ View the following cluster lifecycle RBAC operations:
 
       **Note:** As a `team-admin` and `team-user`, you have `admin` permission to the `clusterpool`, `clusterdeployment`, and `clusterclaim`.
 
-<div class="formalpara">
+</div>
+
+<div>
 
 <div class="title">
 
@@ -383,7 +369,7 @@ Additional resources
 
 </div>
 
-To learn more about each role, see [Overview of multicluster engine for Kubernetes operator roles](clusters.md#mce-role-definitions).
+- [Overview of multicluster engine for Kubernetes operator roles](clusters.md#mce-role-definitions)
 
 </div>
 
@@ -447,14 +433,6 @@ A more efficient model where control planes run as pods on a shared management c
 
 - Allows for better resource utilization
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Hosted control planes overview](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/hosted_control_planes/hosted-control-planes-overview)
 
 - [Requirements for hosted control planes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/hosted_control_planes/preparing-to-deploy-hosted-control-planes)
@@ -487,9 +465,7 @@ Additional resources
 
 - [Discovering hosted control plane clusters with Red Hat Advanced Cluster Management](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.14/html/multicluster_engine_operator_with_red_hat_advanced_cluster_management/mce-acm-integration#discover-hosted-acm)
 
-- [Backup and restore for hosted control planes and hosted clusters](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.14/html/business_continuity/business-cont-overview#config-hcp-backup)
-
-</div>
+- [Backup and restore for hosted control planes and hosted clusters](backup_restore.md#config-hcp-backup)
 
 <a id="get-started-mce"></a>
 
@@ -1497,7 +1473,7 @@ See the following procedures to prepare and update clusters in a disconnected en
 
 ### Preparing the disconnected mirror registry to use with OpenShift Update Service
 
-If you use the Red Hat Advanced Cluster Management hub cluster to manage, update, and install components with the the `MultiClusterHub` operator, you can use the OpenShift Update Service and Red Hat Advanced Cluster Management policies to update multiple clusters in a disconnected environment.
+If you use the Red Hat Advanced Cluster Management hub cluster to manage, update, and install components with the `MultiClusterHub` operator, you can use the OpenShift Update Service and Red Hat Advanced Cluster Management policies to update multiple clusters in a disconnected environment.
 
 OpenShift Update Service is a separate operator and operand that monitors available versions for managed clusters and makes them accessible for updating in restricted networks.
 
@@ -2129,7 +2105,7 @@ Procedure
 
     - `matchExpressions` selects all clusters if you do not specify any expressions.
 
-6.  Run the `oc get get routes -A` command on the hub cluster to determine the path to the operand.
+6.  Run the `oc get routes -A` command on the hub cluster to determine the path to the operand.
 
 7.  Find the route to `update-service`. The path to the operand is the value in the `HOST/PORT` field.
 
@@ -2143,7 +2119,7 @@ Procedure
     oc get clusterversion -o yaml
     ```
 
-11. Ensure that the the results resemble the following content:
+11. Ensure that the results resemble the following content:
 
     ``` yaml
     apiVersion: v1
@@ -2180,7 +2156,7 @@ After configuring the disconnected registry, Red Hat Advanced Cluster Management
 
 If no available updates are displayed, make sure that you have the release image of the current level of the cluster and at least one later level mirrored in the local repository.
 
-If the release image for the current version of the cluster is not available, no updates are available.
+If the release image for the current version of the cluster is not available, no updates are available. If your cluster update fails, the Operator generally retries the update a few times, stops, and reports the status of the failing component. In some cases, the update process continues to cycle through attempts to complete the process. Rolling your cluster back to a previous version after a failed update is not supported. Contact Red Hat support for assistance if your cluster update fails.
 
 <div>
 
@@ -2210,8 +2186,6 @@ Procedure
 
 </div>
 
-If your cluster update fails, the Operator generally retries the update a few times, stops, and reports the status of the failing component. In some cases, the update process continues to cycle through attempts to complete the process. Rolling your cluster back to a previous version after a failed update is not supported. Contact Red Hat support for assistance if your cluster update fails.
-
 <div>
 
 <div class="title">
@@ -2228,9 +2202,9 @@ Additional resources
 
 ## APIs
 
-Use the *API Explorer* in the console, or run an `oc` or `kubectl` command, to view current and supported APIs.
+APIs for cluster lifecycle management are available with the multicluster engine operator. Use the *API Explorer* in the console, or run an `oc` or `kubectl` command, to view current and supported APIs.
 
-You can access APIs for cluster lifecycle management with the multicluster engine operator. **User required access:** You can only perform actions that your role is assigned.
+**Required access:** You can only perform actions that your role is assigned.
 
 **Notes:**
 
@@ -3129,20 +3103,20 @@ Procedure
 
 - Create an opaque secret for by using the API. Apply YAML content that is similar to the following example:
 
+  ``` yaml
+  kind: Secret
+  metadata:
+      name: <managed-cluster-name>-vsphere-creds
+      namespace: <managed-cluster-namespace>
+  type: Opaque
+  data:
+      username: $(echo -n "${VMW_USERNAME}" | base64 -w0)
+      password.json: $(base64 -w0 "${VMW_PASSWORD}")
+  ```
+
+  **Notes:** - Opaque secrets are not visible in the console. - Opaque secrets are created in the managed cluster namespace you chose. Hive uses the opaque secret to provision the cluster. When provisioning the cluster by using the Red Hat Advanced Cluster Management console, the credentials you previoulsy created are copied to the managed cluster namespace as the opaque secret.
+
 </div>
-
-``` yaml
-kind: Secret
-metadata:
-    name: <managed-cluster-name>-vsphere-creds
-    namespace: <managed-cluster-namespace>
-type: Opaque
-data:
-    username: $(echo -n "${VMW_USERNAME}" | base64 -w0)
-    password.json: $(base64 -w0 "${VMW_PASSWORD}")
-```
-
-\+ **Notes:** - Opaque secrets are not visible in the console. - Opaque secrets are created in the managed cluster namespace you chose. Hive uses the opaque secret to provision the cluster. When provisioning the cluster by using the Red Hat Advanced Cluster Management console, the credentials you previoulsy created are copied to the managed cluster namespace as the opaque secret.
 
 <div>
 
@@ -3502,7 +3476,7 @@ Next steps
 
 </div>
 
-You can create a cluster that uses this credential by completing the steps in [Create a cluster in an on-premises environment by using the CLI](clusters.md#create-a-cluster-on-premises-cli) or [Create a cluster in an on-premises environment by using the console](clusters.md#create-a-cluster-on-premises-console).
+You can create a cluster that uses this credential by completing the steps in [Create a cluster in an on-premises environment by using the command line interface](clusters.md#create-a-cluster-on-premises-cli) or [Create a cluster in an on-premises environment by using the console](clusters.md#create-a-cluster-on-premises-console).
 
 </div>
 
@@ -3526,17 +3500,17 @@ See the following documentation:
 
 - [Accessing your cluster](clusters.md#accessing-your-cluster)
 
-- [Scaling managed clusters](clusters.md#scaling-managed-intro)
+- [Scale managed clusters introduction](clusters.md#scaling-managed-intro)
 
-- [Hibernating a created cluster](clusters.md#hibernating-a-created-cluster)
+- [Cluster hibernation](clusters.md#hibernating-a-created-cluster)
 
-- [Updating your cluster](clusters.md#updating-your-cluster)
+- [Cluster update introduction](clusters.md#updating-your-cluster)
 
 - [Cluster proxy](clusters.md#proxy-intro)
 
 - [Ansible Automation Platform for cluster management](clusters.md#ansible-intro)
 
-- [ClusterClaims](clusters.md#clusterclaims)
+- [*ClusterClaims*](clusters.md#clusterclaims)
 
 - [*ManagedClusterSets*](clusters.md#managedclustersets-intro)
 
@@ -3544,7 +3518,7 @@ See the following documentation:
 
 - [Cluster pools (Technology Preview)](clusters.md#managing-cluster-pools)
 
-- [Enabling ManagedServiceAccount](clusters.md#managed-serviceaccount-addon)
+- [*ManagedServiceAccount* add-on](clusters.md#managed-serviceaccount-addon)
 
 - [Configure the klusterlet to run on specific nodes](clusters.md#config-klusterlet-nodes)
 
@@ -3566,7 +3540,7 @@ The following diagram shows the components that are installed with the multiclus
 
 The components of the cluster lifecycle management architecture include the following items:
 
-<a id="components-hub-mce"></a>
+<a id="_hub_cluster"></a>
 
 #### Hub cluster
 
@@ -3578,7 +3552,7 @@ The components of the cluster lifecycle management architecture include the foll
 
 - When a managed cluster add-on is enabled on the hub cluster, its *add-on hub controller* is deployed on the hub cluster. The *add-on hub controller* deploys the *add-on agent* to the managed clusters.
 
-<a id="components-managed-mce"></a>
+<a id="_managed_cluster"></a>
 
 #### Managed cluster
 
@@ -3600,14 +3574,6 @@ The components of the cluster lifecycle management architecture include the foll
 
   - Allows the agent to send events to the hub cluster
 
-To continue adding and managing clusters, see the [Cluster lifecycle introduction](clusters.md#cluster-intro).
-
-<a id="release-images-intro"></a>
-
-## Release images
-
-The release image identifies the version of the Red Hat OpenShift Container Platform image that is used to create the cluster. When you build your cluster, use the version that the release image specifies. By default, OpenShift Container Platform uses the `clusterImageSets` resources to get the list of supported release images.
-
 <div>
 
 <div class="title">
@@ -3615,6 +3581,16 @@ The release image identifies the version of the Red Hat OpenShift Container Plat
 Additional resources
 
 </div>
+
+- [Cluster lifecycle introduction](clusters.md#cluster-intro)
+
+</div>
+
+<a id="release-images-intro"></a>
+
+## Release images
+
+The release image identifies the version of the Red Hat OpenShift Container Platform image that is used to create the cluster. When you build your cluster, use the version that the release image specifies. By default, OpenShift Container Platform uses the `clusterImageSets` resources to get the list of supported release images.
 
 - [Specify release images](clusters.md#release-images-specify)
 
@@ -3631,8 +3607,6 @@ Additional resources
 - [Synchronize available release images](clusters.md#sync-release-images)
 
 - [Refresh the release images list](clusters.md#refresh-release-images)
-
-</div>
 
 <a id="release-images-specify"></a>
 
@@ -3770,21 +3744,19 @@ Procedure
 
 1.  Use the following `clusterImageSet` to provision a cluster. Replace `4.x.0` with the current supported version:
 
-</div>
+    ``` yaml
+    apiVersion: hive.openshift.io/v1
+    kind: ClusterImageSet
+    metadata:
+      labels:
+        channel: fast
+        visible: 'true'
+      name: img4.x.0-multi-appsub
+    spec:
+      releaseImage: quay.io/openshift-release-dev/ocp-release:4.x.0-multi
+    ```
 
-``` yaml
-apiVersion: hive.openshift.io/v1
-kind: ClusterImageSet
-metadata:
-  labels:
-    channel: fast
-    visible: 'true'
-  name: img4.x.0-multi-appsub
-spec:
-  releaseImage: quay.io/openshift-release-dev/ocp-release:4.x.0-multi
-```
-
-1.  To create the release image for OpenShift Container Platform images that do not support multiple architectures, complete steps similar to the following example for your architecture type:
+2.  To create the release image for OpenShift Container Platform images that do not support multiple architectures, complete steps similar to the following example for your architecture type:
 
     1.  From the [OpenShift Container Platform release registry](clusters.md), create a [manifest list](clusters.md) that includes `x86_64`, `s390x`, `aarch64`, and `ppc64le` release images.
 
@@ -3833,7 +3805,7 @@ spec:
     podman manifest push mymanifest docker://<private-repo>/ocp-release:4.x.1
     ```
 
-2.  On the hub cluster, create a release image that references the manifest in your repository.
+3.  On the hub cluster, create a release image that references the manifest in your repository.
 
     1.  Create a YAML file that contains information that is similar to the following example. Replace `<private-repo>` with the path to your repository. Replace `4.x.1` with the current version:
 
@@ -3855,11 +3827,13 @@ spec:
     oc apply -f <file-name>.yaml
     ```
 
-3.  Select the new release image when you create your OpenShift Container Platform cluster.
+4.  Select the new release image when you create your OpenShift Container Platform cluster.
 
-4.  If you deploy the managed cluster by using the Red Hat Advanced Cluster Management console, specify the architecture for the managed cluster in the *Architecture* field during the cluster creation process.
+5.  If you deploy the managed cluster by using the Red Hat Advanced Cluster Management console, specify the architecture for the managed cluster in the *Architecture* field during the cluster creation process.
 
     **Note:** The creation process uses the merged release images to create the cluster.
+
+</div>
 
 <a id="release-images-connected"></a>
 
@@ -3957,7 +3931,7 @@ Procedure
 
     - For an OpenShift Container Platform managed cluster, see [Configuring image registry repository mirroring](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html-single/images/index#images-configuration-registry-mirror-configuring_image-configuration) for information about using your `ImageContentSourcePolicy` object to complete the mapping.
 
-    - For a managed cluster that is not an OpenShift Container Platform cluster, use the `ManageClusterImageRegistry` custom resource definition to override the location of the image sets. See [Specifying registry images on managed clusters for import](clusters.md#specify-registry-img-on-managed-clusters-for-import) for information about how to override the cluster for the mapping.
+    - For a managed cluster that is not an OpenShift Container Platform cluster, use the `ManageClusterImageRegistry` custom resource definition to override the location of the image sets. See [Image registry on managed clusters for import](clusters.md#specify-registry-img-on-managed-clusters-for-import) for information about how to override the cluster for the mapping.
 
 4.  Add the YAML files for the images that you want to be available when you create a cluster by using the console or CLI to manually add the `clusterImageSet` YAML content.
 
@@ -4130,11 +4104,11 @@ Learn how to create Red Hat OpenShift Container Platform clusters across cloud p
 
 multicluster engine operator uses the Hive operator that is provided with OpenShift Container Platform to provision clusters for all providers except the on-premises clusters and hosted control planes. When provisioning the on-premises clusters, multicluster engine operator uses the central infrastructure management and Assisted Installer function that are provided with OpenShift Container Platform. The hosted clusters for hosted control planes are provisioned by using the HyperShift operator.
 
-- [Prepare to create a cluster with the CLI](clusters.md#prepare-to-create-a-cluster-with-the-cli)
+- [Prepare to create a cluster with the command line interface](clusters.md#prepare-to-create-a-cluster-with-the-cli)
 
-- [Create a cluster with the CLI](clusters.md#create-a-cluster-with-the-cli)
+- [Create a cluster with the command line interface](clusters.md#create-a-cluster-with-the-cli)
 
-- [Configuring additional manifests during cluster creation](clusters.md#config-manifest-create)
+- [Additional manifests during cluster creation](clusters.md#config-manifest-create)
 
 - [Create a cluster on Amazon Web Services](clusters.md#create-a-cluster-on-amazon-web-services)
 
@@ -4160,7 +4134,7 @@ multicluster engine operator uses the Hive operator that is provided with OpenSh
 
 - [Red Hat OpenStack Platform console settings](clusters.md#openstack-console-settings)
 
-- [Create a cluster in an on-premises environment by using the CLI](clusters.md#create-a-cluster-on-premises-cli)
+- [Create a cluster in an on-premises environment by using the command line interface](clusters.md#create-a-cluster-on-premises-cli)
 
 - [Create a cluster in an on-premises environment by using the console](clusters.md#create-a-cluster-on-premises-console)
 
@@ -4172,7 +4146,7 @@ multicluster engine operator uses the Hive operator that is provided with OpenSh
 
 <a id="prepare-to-create-a-cluster-with-the-cli"></a>
 
-### Prepare to create a cluster with the CLI
+### Prepare to create a cluster with the command line interface
 
 Before you create a cluster with the CLI, complete the following preparation steps.
 
@@ -4213,13 +4187,13 @@ Procedure
       releaseImage: quay.io/openshift-release-dev/ocp-release:4.x.47-x86_64
     ```
 
-3.  Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Configuring the hub cluster `KubeAPIServer` verification strategy](clusters.md#set-hub-kube-api-server).
+3.  Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Hub cluster `KubeAPIServer` verification strategies](clusters.md#set-hub-kube-api-server).
 
 </div>
 
 <a id="create-a-cluster-with-the-cli"></a>
 
-### Create a cluster with the CLI
+### Create a cluster with the command line interface
 
 The multicluster engine for Kubernetes operator uses internal Hive components to create Red Hat OpenShift Container Platform clusters. See the following information to learn how to create clusters.
 
@@ -4231,7 +4205,7 @@ Prerequisites
 
 </div>
 
-- Before you create a cluster with the CLI, complete the steps in [Prepare to create a cluster with the CLI](clusters.md#prepare-to-create-a-cluster-with-the-cli).
+- Before you create a cluster with the CLI, complete the steps in [Prepare to create a cluster with the command line interface](clusters.md#prepare-to-create-a-cluster-with-the-cli).
 
 </div>
 
@@ -4251,23 +4225,41 @@ Procedure
 
 <a id="config-manifest-create"></a>
 
-### Configuring additional manifests during cluster creation
+## Additional manifests during cluster creation
 
-You can configure additional Kubernetes resource manifests during the installation process of creating your cluster. This can help if you need to configure additional manifests for scenarios such as configuring networking or setting up a load balancer.
-
-<a id="config-manifest-create-prereq"></a>
-
-#### Prerequisites
+Additional Kubernetes resource manifests during the installation process of creating your cluster help you with configuring networking or setting up a load balancer.
 
 Add a reference to the `ClusterDeployment` resource that specifies a config map resource that contains the additional resource manifests.
 
 **Note:** The `ClusterDeployment` resource and the config map must be in the same namespace.
 
-<a id="config-manifest-create-steps"></a>
+<div>
 
-#### Configuring additional manifests during cluster creation by using examples
+<div class="title">
 
-If you want to configure additional manifests by using a config map with resource manifests, complete the following steps:
+Additional resources
+
+</div>
+
+- [Create a ConfigMap with resource manifests](clusters.md#config-manifest-create-configmap)
+
+- [Reference a ConfigMap in a *ClusterDeployment*](clusters.md#config-manifest-create-clusterdeployment)
+
+</div>
+
+<a id="config-manifest-create-configmap"></a>
+
+### Create a ConfigMap with resource manifests
+
+Configure additional manifests by using a config map with resource manifests.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Create a YAML file and add the following example content:
 
@@ -4305,9 +4297,37 @@ If you want to configure additional manifests by using a config map with resourc
     oc apply -f <filename>.yaml
     ```
 
-    If you want to configure additional manifests by using a `ClusterDeployment` by referencing a resource manifest `ConfigMap`, complete the following steps:
+</div>
 
-3.  Create a YAML file and add the following example content. The resource manifest `ConfigMap` is referenced in `spec.provisioning.manifestsConfigMapRef`:
+<a id="config-manifest-create-clusterdeployment"></a>
+
+### Reference a ConfigMap in a *ClusterDeployment*
+
+Configure additional manifests by using a `ClusterDeployment` that references a resource manifest `ConfigMap`.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You created a resource manifest `ConfigMap`. See [Create a ConfigMap with resource manifests](clusters.md#config-manifest-create-configmap).
+
+- The `ClusterDeployment` resource and the config map are in the same namespace.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a YAML file and add the following example content. The resource manifest `ConfigMap` is referenced in `spec.provisioning.manifestsConfigMapRef`:
 
     ``` yaml
     apiVersion: hive.openshift.io/v1
@@ -4341,11 +4361,13 @@ If you want to configure additional manifests by using a config map with resourc
         name: <my-baremetal-cluster-pull-secret>
     ```
 
-4.  Apply the file by running the following command:
+2.  Apply the file by running the following command:
 
     ``` bash
     oc apply -f <filename>.yaml
     ```
+
+</div>
 
 <a id="create-a-cluster-on-amazon-web-services"></a>
 
@@ -5277,7 +5299,7 @@ Continue with [Accessing your cluster](clusters.md#accessing-your-cluster) for i
 
 <a id="create-a-cluster-on-premises-cli"></a>
 
-### Create a cluster in an on-premises environment by using the CLI
+### Create a cluster in an on-premises environment by using the command line interface
 
 You can create on-premises Red Hat OpenShift Container Platform clusters by using the CLI. You can create single-node OpenShift clusters, multi-node clusters, and compact three-node clusters. You can create these clusters on VMware vSphere, Red Hat OpenStack, Nutanix, External, or in a bare metal environment.
 
@@ -5317,7 +5339,7 @@ Prerequisites
 
     `*.apps.<cluster_name>.<base_domain>`
 
-- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Configuring the hub cluster `KubeAPIServer` verification strategy](clusters.md#set-hub-kube-api-server).
+- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Hub cluster `KubeAPIServer` verification strategies](clusters.md#set-hub-kube-api-server).
 
 </div>
 
@@ -5669,7 +5691,7 @@ Prerequisites
 
     `*.apps.<cluster_name>.<base_domain>`
 
-- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Configuring the hub cluster `KubeAPIServer` verification strategy](clusters.md#set-hub-kube-api-server).
+- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Hub cluster `KubeAPIServer` verification strategies](clusters.md#set-hub-kube-api-server).
 
 </div>
 
@@ -5705,7 +5727,7 @@ Additional resources
 
 - [On-premises console settings](clusters.md#on-prem-console-settings)
 
-- [Create a cluster in an on-premises environment by using the CLI](clusters.md#create-a-cluster-on-premises-cli)
+- [Create a cluster in an on-premises environment by using the command line interface](clusters.md#create-a-cluster-on-premises-cli)
 
 - [Creating a credential for a hosted environment](clusters.md#creating-a-credential-hosted)
 
@@ -5765,7 +5787,7 @@ Continue with [Accessing your cluster](clusters.md#accessing-your-cluster) for i
 
 <a id="config-agent-proxy"></a>
 
-#### Configure *AgentClusterInstall* proxy
+### Configure *AgentClusterInstall* proxy
 
 The *AgentClusterInstall* proxy fields determine the proxy settings during installation, and are used to create the cluster-wide proxy resource in the created cluster.
 
@@ -5881,7 +5903,7 @@ Prerequisites
 
 - A defined `multiclusterhub.spec.imagePullSecret` if you are importing a cluster that was not created by OpenShift Container Platform. This secret might have been created when multicluster engine for Kubernetes operator was installed. See *Custom image pull secret* for more information about how to define this secret.
 
-- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Configuring the hub cluster `KubeAPIServer` verification strategy](clusters.md#set-hub-kube-api-server).
+- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Hub cluster `KubeAPIServer` verification strategies](clusters.md#set-hub-kube-api-server).
 
 - Ensure that a previously installed agent is deleted from the cluster that you want to import. You must remove the `open-cluster-management-agent` and `open-cluster-management-agent-addon` namespaces to avoid errors.
 
@@ -5949,9 +5971,25 @@ Options for *import mode*
 
 - A hub cluster cannot manage a different hub cluster. A hub cluster is set up to automatically import and manage itself as a `local-cluster`. You do not have to manually import a hub cluster to manage.
 
-- The namespace for the imported cluster must match the name of the cluster. To configure a cluster API address, see [Optional: Configure the cluster API address](clusters.md#import-configuring-cluster-api).
+- The namespace for the imported cluster must match the name of the cluster.
 
-To configure your managed cluster klusterlet to run on specific nodes, see [Optional: Configure the klusterlet to run on specific nodes](clusters.md#import-configuring-nodeselector-tolerations).
+To configure a cluster API address, see *Optional: Configure the cluster API address*.
+
+To configure your managed cluster klusterlet to run on specific nodes, see *Optional: Configure the klusterlet to run on specific nodes*.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Optional: Configure the cluster API address](clusters.md#import-configuring-cluster-api)
+
+- [Optional: Configure the klusterlet to run on specific nodes](clusters.md#import-configuring-nodeselector-tolerations)
+
+</div>
 
 <a id="import-configuring-cluster-api"></a>
 
@@ -5977,7 +6015,7 @@ Prerequisites
 
 - A defined `multiclusterhub.spec.imagePullSecret` if you are importing a cluster that was not created by OpenShift Container Platform. This secret might have been created when multicluster engine for Kubernetes operator was installed. See *Custom image pull secret* for more information about how to define this secret.
 
-- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Configuring the hub cluster `KubeAPIServer` verification strategy](clusters.md#set-hub-kube-api-server).
+- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Hub cluster `KubeAPIServer` verification strategies](clusters.md#set-hub-kube-api-server).
 
 </div>
 
@@ -6034,7 +6072,7 @@ Prerequisites
 
 - A defined `multiclusterhub.spec.imagePullSecret` if you are importing a cluster that was not created by OpenShift Container Platform. This secret might have been created when multicluster engine for Kubernetes operator was installed. See *Custom image pull secret* for more information about how to define this secret.
 
-- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Configuring the hub cluster `KubeAPIServer` verification strategy](clusters.md#set-hub-kube-api-server).
+- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Hub cluster `KubeAPIServer` verification strategies](clusters.md#set-hub-kube-api-server).
 
 </div>
 
@@ -6113,7 +6151,7 @@ Prerequisites
 
 - A defined `multiclusterhub.spec.imagePullSecret` if you are importing a cluster that was not created by OpenShift Container Platform. This secret might have been created when multicluster engine for Kubernetes operator was installed. See *Custom image pull secret* for more information about how to define this secret.
 
-- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Configuring the hub cluster `KubeAPIServer` verification strategy](clusters.md#set-hub-kube-api-server).
+- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Hub cluster `KubeAPIServer` verification strategies](clusters.md#set-hub-kube-api-server).
 
 </div>
 
@@ -6185,7 +6223,7 @@ Prerequisites
 
 - A defined `multiclusterhub.spec.imagePullSecret` if you are importing a cluster that was not created by OpenShift Container Platform. This secret might have been created when multicluster engine for Kubernetes operator was installed. See [*MultiClusterHub* advanced configuration](get_started.md#advanced-config-hub) for more information about how to define this secret.
 
-- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Configuring the hub cluster `KubeAPIServer` verification strategy](clusters.md#set-hub-kube-api-server).
+- Review the hub cluster `KubeAPIServer` certificate verification strategy and update the strategy if needed. To learn what strategy to use for your setup, see [Hub cluster `KubeAPIServer` verification strategies](clusters.md#set-hub-kube-api-server).
 
 - You need one of the following architectures: Linux (x86_64, s390x, ppc64le) or macOS
 
@@ -6603,6 +6641,22 @@ Procedure
 
 After you install multicluster engine for Kubernetes operator, you are ready to import a managed cluster. You can import an existing OpenShift Container Platform cluster so that you can add additional nodes. Continue reading the following topics to learn more:
 
+- *Import an OpenShift Container Platform cluster*
+
+- *OpenShift Container Platform cluster resources*
+
+- *Save and apply managed OpenShift Container Platform cluster resources*
+
+- *Remove the managed OpenShift Container Platform cluster from the source hub cluster*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
 - [Import an OpenShift Container Platform cluster](clusters.md#import-ocp-cluster-steps)
 
 - [OpenShift Container Platform cluster resources](clusters.md#import-ocp-cluster-resources)
@@ -6610,6 +6664,8 @@ After you install multicluster engine for Kubernetes operator, you are ready to 
 - [Save and apply managed OpenShift Container Platform cluster resources](clusters.md#save-apply-cluster-resources)
 
 - [Remove the managed OpenShift Container Platform cluster from the source hub cluster](clusters.md#removing-managed-cluster-source-hub)
+
+</div>
 
 <a id="import-ocp-cluster-steps"></a>
 
@@ -7093,7 +7149,7 @@ spec:
 
 <a id="specify-registry-img-on-managed-clusters-for-import"></a>
 
-#### Specifying image registry on managed clusters for import
+## Image registry on managed clusters for import
 
 You might need to override the image registry on the managed clusters that you are importing. You can do this by creating a `ManagedClusterImageRegistry` custom resource definition.
 
@@ -7113,30 +7169,30 @@ spec:
   placementRef:
     group: cluster.open-cluster-management.io
     resource: placements
-    name: <placementName> 
+    name: <placementName>
   pullSecret:
-    name: <pullSecretName> 
-  registries: 
+    name: <pullSecretName>
+  registries:
   - mirror: <mirrored-image-registry-address>
     source: <image-registry-address>
   - mirror: <mirrored-image-registry-address>
     source: <image-registry-address>
 ```
 
-- Replace with the name of a Placement in the same namespace that selects a set of managed clusters.
+- Replace `<placementName>` with the name of a Placement in the same namespace that selects a set of managed clusters.
 
-- Replace with the name of the pull secret that is used to pull images from the custom image registry.
+- Replace `<pullSecretName>` with the name of the pull secret that is used to pull images from the custom image registry.
 
-- List the values for each of the `source` and `mirror` registries. Replace the `mirrored-image-registry-address` and `image-registry-address` with the value for each of the `mirror` and `source` values of the registries.
+- For `registries`, list the values for each of the `source` and `mirror` registries. Replace the `mirrored-image-registry-address` and `image-registry-address` with the value for each of the `mirror` and `source` values of the registries.
 
-  - Example 1: To replace the source image registry named `registry.redhat.io/rhacm2` with `localhost:5000/rhacm2`, and `registry.redhat.io/multicluster-engine` with `localhost:5000/multicluster-engine`, use the following example:
+- Example 1: To replace the source image registry named `registry.redhat.io/rhacm2` with `localhost:5000/rhacm2`, and `registry.redhat.io/multicluster-engine` with `localhost:5000/multicluster-engine`, use the following example:
 
 ``` yaml
 registries:
 - mirror: localhost:5000/rhacm2/
-    source: registry.redhat.io/rhacm2
+  source: registry.redhat.io/rhacm2
 - mirror: localhost:5000/multicluster-engine
-    source: registry.redhat.io/multicluster-engine
+  source: registry.redhat.io/multicluster-engine
 ```
 
 - Example 2: To replace the source image, `registry.redhat.io/rhacm2/registration-rhel8-operator` with `localhost:5000/rhacm2-registration-rhel8-operator`, use the following example:
@@ -7144,7 +7200,7 @@ registries:
   ``` yaml
   registries:
   - mirror: localhost:5000/rhacm2-registration-rhel8-operator
-      source: registry.redhat.io/rhacm2/registration-rhel8-operator
+    source: registry.redhat.io/rhacm2/registration-rhel8-operator
   ```
 
 **Important:** If you are importing a managed cluster by using agent registration, you must create a `KlusterletConfig` that contains image registries. See the following example. Replace values where needed:
@@ -7165,22 +7221,44 @@ spec:
       source: <image-registry-address>
 ```
 
-See [Import a managed cluster by using agent registration](clusters.md#importing-managed-agent) to learn more.
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Import a managed cluster by using agent registration](clusters.md#importing-managed-agent)
+
+- [Import a cluster that has a *ManagedClusterImageRegistry*](clusters.md#import-cluster-managedclusterimageregistry)
+
+</div>
 
 <a id="import-cluster-managedclusterimageregistry"></a>
 
-##### Importing a cluster that has a *ManagedClusterImageRegistry*
+### Import a cluster that has a *ManagedClusterImageRegistry*
 
-Complete the following steps to import a cluster that is customized with a ManagedClusterImageRegistry custom resource definition:
+Import a cluster that is customized with a `ManagedClusterImageRegistry` custom resource definition.
 
-1.  Create a pull secret in the namespace where you want your cluster to be imported. For these steps, the namespace is `myNamespace`.
+<div>
 
-        $ kubectl create secret docker-registry myPullSecret \
-          --docker-server=<your-registry-server> \
-          --docker-username=<my-name> \
-          --docker-password=<my-password>
+<div class="title">
 
-2.  Create a Placement in the namespace that you created.
+Procedure
+
+</div>
+
+1.  Create a pull secret in the namespace where you want your cluster to be imported. For these steps, the namespace is `myNamespace`:
+
+    ``` bash
+    oc create secret docker-registry myPullSecret \
+      --docker-server=<your-registry-server> \
+      --docker-username=<my-name> \
+      --docker-password=<my-password>
+    ```
+
+2.  Create a Placement in the namespace that you created:
 
     ``` yaml
     apiVersion: cluster.open-cluster-management.io/v1beta1
@@ -7198,7 +7276,7 @@ Complete the following steps to import a cluster that is customized with a Manag
 
     **Note:** The `unreachable` toleration is required for the Placement to be able to select the cluster.
 
-3.  Create a `ManagedClusterSet` resource and bind it to your namespace.
+3.  Create a `ManagedClusterSet` resource and bind it to your namespace:
 
     ``` yaml
     apiVersion: cluster.open-cluster-management.io/v1beta2
@@ -7216,7 +7294,7 @@ Complete the following steps to import a cluster that is customized with a Manag
       clusterSet: myClusterSet
     ```
 
-4.  Create the `ManagedClusterImageRegistry` custom resource definition in your namespace.
+4.  Create the `ManagedClusterImageRegistry` custom resource definition in your namespace:
 
     ``` yaml
     apiVersion: imageregistry.open-cluster-management.io/v1alpha1
@@ -7238,11 +7316,21 @@ Complete the following steps to import a cluster that is customized with a Manag
 
 6.  Copy and run the import commands on the managed cluster after the `open-cluster-management.io/image-registry=myNamespace.myImageRegistry` label is added to the managed cluster.
 
+</div>
+
 <a id="accessing-your-cluster"></a>
 
 ### Accessing your cluster
 
-To access an Red Hat OpenShift Container Platform cluster that was created and is managed, complete the following steps:
+Access an Red Hat OpenShift Container Platform cluster that was created and is managed.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  From the console, navigate to **Infrastructure** \> **Clusters** and select the name of the cluster that you created or want to access.
 
@@ -7254,23 +7342,13 @@ To access an Red Hat OpenShift Container Platform cluster that was created and i
 
 4.  Log in to the cluster by using the user ID and password that you found in step three.
 
+</div>
+
 <a id="scaling-managed-intro"></a>
 
-### Scaling managed clusters
+## Scale managed clusters introduction
 
-For clusters that you created, you can customize and resize your managed cluster specifications, such as virtual machine sizes and number of nodes. See the following option if you are using installer-provisioned infrastructure for cluster deployment:
-
-- [Scaling with MachinePool](clusters.md#scaling-machinepool)
-
-See the following options if you are using central infrastructure management for cluster deployment:
-
-- [Adding worker nodes to OpenShift Container Platform clusters](clusters.md#add-nodes-cim-ocp)
-
-- [Adding control plane nodes to managed clusters](clusters.md#adding-ctrl-nodes-managed)
-
-<a id="scaling-machinepool"></a>
-
-#### Scaling with MachinePool
+For clusters that you created, you can customize and resize your managed cluster specifications, such as virtual machine sizes and number of nodes.
 
 For clusters that you provision with multicluster engine operator, a `MachinePool` resource is automatically created for you. You can further customize and resize your managed cluster specifications, such as virtual machine sizes and number of nodes, by using `MachinePool`.
 
@@ -7282,103 +7360,177 @@ For clusters that you provision with multicluster engine operator, a `MachinePoo
 
 - With `MachinePool`, you can manually configure the desired number of nodes or configure autoscaling of nodes on the managed cluster.
 
-<a id="configure-autoscale"></a>
+  - [Create a valid `kubeconfig`](clusters.md#add-nodes-cim-ocp-create-config)
 
-##### Configure autoscaling
+  - [Add worker nodes](clusters.md#add-nodes-cim-ocp-procedure)
+
+  - [Add control plane nodes to healthy managed clusters](clusters.md#adding-ctrl-nodes-managed-healthy)
+
+  - [Add control plane nodes to healthy managed clusters by using the API](clusters.md#adding-ctrl-nodes-managed-healthy-api)
+
+  - [Add control plane nodes to unhealthy managed clusters](clusters.md#adding-ctrl-nodes-managed-unhealthy)
+
+  - [Enable autoscaling by using the console](clusters.md#configure-autoscale-console)
+
+  - [Enable autoscaling by using the command line](clusters.md#configure-autoscale-cli)
+
+  - [Disable autoscaling by using the console](clusters.md#machinepools-autoscale-disable-console)
+
+  - [Disable autoscaling by using the command line](clusters.md#machinepools-autoscale-disable-cli)
+
+  - [Enable manual scaling with the console](clusters.md#manual-console)
+
+  - [Enable manual scaling by using the command line](clusters.md#manual-cli)
+
+<a id="configure-autoscale-console"></a>
+
+### Enable autoscaling by using the console
 
 Configuring autoscaling provides the flexibility of your cluster to scale as needed to lower your cost of resources by scaling down when traffic is low, and by scaling up to ensure that there are enough resources when there is a higher demand for resources.
 
-- To enable autoscaling on your `MachinePool` resources using the console, complete the following steps:
+<div>
 
-  1.  In the navigation, select **Infrastructure** \> **Clusters**.
+<div class="title">
 
-  2.  Click the name of your target cluster and select the *Machine pools* tab.
+Procedure
 
-  3.  From the machine pools page, select **Enable autoscale** from the *Options* menu for the target machine pool.
+</div>
 
-  4.  Select the minimum and maximum number of machine set replicas. A machine set replica maps directly to a node on the cluster.
+1.  In the navigation, select **Infrastructure** \> **Clusters**.
 
-      The changes might take several minutes to reflect on the console after you click **Scale**. You can view the status of the scaling operation by clicking **View machines** in the notification of the *Machine pools* tab.
+2.  Click the name of your target cluster and select the *Machine pools* tab.
 
-- To enable autoscaling on your `MachinePool` resources using the command line, complete the following steps:
+3.  From the machine pools page, select **Enable autoscale** from the *Options* menu for the target machine pool.
 
-  1.  Enter the following command to view your list of machine pools, replacing `managed-cluster-namespace` with the namespace of your target managed cluster.
+4.  Select the minimum and maximum number of machine set replicas. A machine set replica maps directly to a node on the cluster.
 
-          oc get machinepools -n <managed-cluster-namespace>
+    The changes might take several minutes to reflect on the console after you click **Scale**. You can view the status of the scaling operation by clicking **View machines** in the notification of the *Machine pools* tab.
 
-  2.  Enter the following command to edit the YAML file for the machine pool:
+</div>
 
-          oc edit machinepool <MachinePool-resource-name> -n <managed-cluster-namespace>
+<a id="configure-autoscale-cli"></a>
 
-      - Replace `MachinePool-resource-name` with the name of your `MachinePool` resource.
+### Enable autoscaling by using the command line
 
-      - Replace `managed-cluster-namespace` with the name of the namespace of your managed cluster.
+Configuring autoscaling provides the flexibility of your cluster to scale as needed to lower your cost of resources by scaling down when traffic is low, and by scaling up to ensure that there are enough resources when there is a higher demand for resources.
 
-  3.  Delete the `spec.replicas` field from the YAML file.
+<div>
 
-  4.  Add the `spec.autoscaling.minReplicas` setting and `spec.autoscaling.maxReplicas` fields to the resource YAML.
+<div class="title">
 
-  5.  Add the minimum number of replicas to the `minReplicas` setting.
+Procedure
 
-  6.  Add the maximum number of replicas into the `maxReplicas` setting.
+</div>
 
-  7.  Save the file to submit the changes.
+1.  Enter the following command to view your list of machine pools, replacing `managed-cluster-namespace` with the namespace of your target managed cluster.
 
-<a id="machinepools-autoscale-disable"></a>
+    ``` bash
+    oc get machinepools -n <managed-cluster-namespace>
+    ```
 
-##### Disabling autoscaling
+2.  Enter the following command to edit the YAML file for the machine pool:
 
-You can disable autoscaling by using the console or the command line.
+    ``` bash
+    oc edit machinepool <MachinePool-resource-name> -n <managed-cluster-namespace>
+    ```
 
-- To disable autoscaling by using the console, complete the following steps:
+    - Replace `MachinePool-resource-name` with the name of your `MachinePool` resource.
 
-  1.  In the navigation, select **Infrastructure** \> **Clusters**.
+    - Replace `managed-cluster-namespace` with the name of the namespace of your managed cluster.
 
-  2.  Click the name of your target cluster and select the *Machine pools* tab.
+3.  Delete the `spec.replicas` field from the YAML file.
 
-  3.  From the machine pools page, select **Disable autoscale** from the *Options* menu for the target machine pool.
+4.  Add the `spec.autoscaling.minReplicas` setting and `spec.autoscaling.maxReplicas` fields to the resource YAML.
 
-  4.  Select the number of machine set replicas that you want. A machine set replica maps directly with a node on the cluster.
+5.  Add the minimum number of replicas to the `minReplicas` setting.
 
-      It might take several minutes to display in the console after you click **Scale**. You can view the status of the scaling by clicking **View machines** in the notification on the *Machine pools* tab.
+6.  Add the maximum number of replicas into the `maxReplicas` setting.
 
-- To disable autoscaling by using the command line, complete the following steps:
+7.  Save the file to submit the changes.
 
-  1.  Enter the following command to view your list of machine pools:
+</div>
 
-          oc get machinepools -n <managed-cluster-namespace>
+<a id="machinepools-autoscale-disable-console"></a>
 
-      Replace `managed-cluster-namespace` with the namespace of your target managed cluster.
+### Disable autoscaling by using the console
 
-  2.  Enter the following command to edit the YAML file for the machine pool:
+Configuring autoscaling provides the flexibility of your cluster to scale as needed to lower your cost of resources by scaling down when traffic is low, and by scaling up to ensure that there are enough resources when there is a higher demand for resources.
 
-          oc edit machinepool <name-of-MachinePool-resource> -n <namespace-of-managed-cluster>
+<div>
 
-      Replace `name-of-MachinePool-resource` with the name of your `MachinePool` resource.
+<div class="title">
 
-      Replace `namespace-of-managed-cluster` with the name of the namespace of your managed cluster.
+Procedure
 
-  3.  Delete the `spec.autoscaling` field from the YAML file.
+</div>
 
-  4.  Add the `spec.replicas` field to the resource YAML.
+1.  In the navigation, select **Infrastructure** \> **Clusters**.
 
-  5.  Add the number of replicas to the `replicas` setting.
+2.  Click the name of your target cluster and select the *Machine pools* tab.
 
-  6.  Save the file to submit the changes.
+3.  From the machine pools page, select **Disable autoscale** from the *Options* menu for the target machine pool.
 
-<a id="machinepools-manual-scale"></a>
+4.  Select the number of machine set replicas that you want. A machine set replica maps directly with a node on the cluster.
 
-##### Enabling manual scaling
+    It might take several minutes to display in the console after you click **Scale**. You can view the status of the scaling by clicking **View machines** in the notification on the *Machine pools* tab.
 
-You can scale manually from the console and from the command line.
+</div>
+
+<a id="machinepools-autoscale-disable-cli"></a>
+
+### Disable autoscaling by using the command line
+
+Configuring autoscaling provides the flexibility of your cluster to scale as needed to lower your cost of resources by scaling down when traffic is low, and by scaling up to ensure that there are enough resources when there is a higher demand for resources.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Enter the following command to view your list of machine pools. Replace `managed-cluster-namespace` with the namespace of your target managed cluster.:
+
+    ``` bash
+    oc get machinepools -n <managed-cluster-namespace>
+    ```
+
+2.  Enter the following command to edit the YAML file for the machine pool:
+
+    ``` bash
+    oc edit machinepool <name-of-MachinePool-resource> -n <namespace-of-managed-cluster>
+    ```
+
+    - Replace `name-of-MachinePool-resource` with the name of your `MachinePool` resource.
+
+    - Replace `namespace-of-managed-cluster` with the name of the namespace of your managed cluster.
+
+3.  Delete the `spec.autoscaling` field from the YAML file.
+
+4.  Add the `spec.replicas` field to the resource YAML.
+
+5.  Add the number of replicas to the `replicas` setting.
+
+6.  Save the file to submit the changes.
+
+</div>
 
 <a id="manual-console"></a>
 
-###### Enabling manual scaling with the console
+### Enable manual scaling with the console
 
-To scale your `MachinePool` resources using the console, complete the following steps:
+Scale `MachinePool` resources to adjust compute capacity for varying workload demands and manage the underlying infrastructure of managed clusters. Provision specialized node groups precisely where specific resources are needed across clusters.
 
-1.  Disable autoscaling for your `MachinePool` if it is enabled. See the previous steps.
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Disable autoscaling for your `MachinePool` if it is enabled. See [Disable autoscaling by using the console](clusters.md#machinepools-autoscale-disable-console).
 
 2.  From the console, click **Infrastructure** \> **Clusters**.
 
@@ -7388,19 +7540,33 @@ To scale your `MachinePool` resources using the console, complete the following 
 
 5.  Select the number of machine set replicas that you want. A machine set replica maps directly with a node on the cluster. Changes might take several minutes to reflect on the console after you click **Scale**. You can view the status of the scaling operation by clicking **View machines** from the notification of the Machine pools tab.
 
+</div>
+
 <a id="manual-cli"></a>
 
-###### Enabling manual scaling with the command line
+### Enable manual scaling by using the command line
 
-To scale your `MachinePool` resources by using the command line, complete the following steps:
+Scale `MachinePool` resources to adjust compute capacity for varying workload demands and manage the underlying infrastructure of managed clusters. Provision specialized node groups precisely where specific resources are needed across clusters.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Enter the following command to view your list of machine pools, replacing `<managed-cluster-namespace>` with the namespace of your target managed cluster namespace:
 
-        oc get machinepools.hive.openshift.io -n <managed-cluster-namespace>
+    ``` bash
+    oc get machinepools.hive.openshift.io -n <managed-cluster-namespace>
+    ```
 
 2.  Enter the following command to edit the YAML file for the machine pool:
 
-        oc edit machinepool.hive.openshift.io <MachinePool-resource-name> -n <managed-cluster-namespace>
+    ``` bash
+    oc edit machinepool.hive.openshift.io <MachinePool-resource-name> -n <managed-cluster-namespace>
+    ```
 
     - Replace `MachinePool-resource-name` with the name of your `MachinePool` resource.
 
@@ -7412,33 +7578,33 @@ To scale your `MachinePool` resources by using the command line, complete the fo
 
 5.  Save the file to submit the changes.
 
-<a id="add-nodes-cim-ocp"></a>
-
-#### Adding worker nodes to OpenShift Container Platform clusters
-
-If you are using central infrastructure management, you can customize your OpenShift Container Platform clusters by adding additional production environment nodes.
-
-**Required access:** Administrator
-
-- [Prerequisites](clusters.md#add-nodes-cim-ocp-prereqs)
-
-- [Creating a valid `kubeconfig`](clusters.md#add-nodes-cim-ocp-create-config)
-
-- [Adding worker nodes](clusters.md#add-nodes-cim-ocp-procedure)
-
-<a id="add-nodes-cim-ocp-prereqs"></a>
-
-##### Prerequisites
-
-You must have the new CA certificates required to trust the managed cluster API.
+</div>
 
 <a id="add-nodes-cim-ocp-create-config"></a>
 
-##### Creating a valid `kubeconfig`
+### Create a valid `kubeconfig`
 
 Before adding production environment worker nodes to OpenShift Container Platform clusters, you must check if you have a valid `kubeconfig`.
 
-If the API certificates in your managed cluster changed, complete the following steps to update the `kubeconfig` with new CA certificates:
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You must have the new CA certificates required to trust the managed cluster API.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Check if the `kubeconfig` for your `clusterDeployment` is valid by running the following commands. Replace `<kubeconfig_name>` with the name of your current `kubeconfig` and replace `<cluster_name>` with the name of your cluster:
 
@@ -7448,7 +7614,7 @@ If the API certificates in your managed cluster changed, complete the following 
     oc --kubeconfig=original-kubeconfig get node
     ```
 
-2.  If you receive the following error message, you must update your `kubeconfig` secret. If you receive no error message, continue to [Adding worker nodes](clusters.md#add-nodes-cim-ocp-procedure):
+2.  If you receive the following error message, you must update your `kubeconfig` secret. If you receive no error message, continue to [Add worker nodes](clusters.md#add-nodes-cim-ocp-procedure):
 
         Unable to connect to the server: tls: failed to verify certificate: x509: certificate signed by unknown authority
 
@@ -7486,11 +7652,33 @@ If the API certificates in your managed cluster changed, complete the following 
     oc patch secret $original-kubeconfig --type='json' -p="[{'op': 'replace', 'path': '/data/kubeconfig', 'value': '$(openssl base64 -A -in <new_kubeconfig_name>)'},{'op': 'replace', 'path': '/data/raw-kubeconfig', 'value': '$(openssl base64 -A -in <new_kubeconfig_name>)'}]"
     ```
 
+</div>
+
 <a id="add-nodes-cim-ocp-procedure"></a>
 
-##### Adding worker nodes
+### Add worker nodes
 
-If you have a valid `kubeconfig`, complete the following steps to add production environment worker nodes to OpenShift Container Platform clusters:
+Expand the compute capacity of your cluster ti support heavier workloads or growing application demands. Improve resource distribution and application reliability across the managed environment.
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You have a valid `kubeconfig`.
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Boot the machine that you want to use as a worker node from the ISO you previously downloaded.
 
@@ -7518,23 +7706,25 @@ If you have a valid `kubeconfig`, complete the following steps to add production
     oc get agent -n managed-cluster -ojson | jq -r '.items[] | select(.spec.approved==false) | .metadata.name'| xargs oc -n managed-cluster patch -p '{"spec":{"approved":true}}' --type merge agent
     ```
 
-Wait for the installation of the worker node. When the worker node installation is complete, the worker node contacts the managed cluster with a Certificate Signing Request (CSR) to start the joining process. The CSR is automatically signed.
+    Wait for the installation of the worker node. When the worker node installation is complete, the worker node contacts the managed cluster with a Certificate Signing Request (CSR) to start the joining process. The CSR is automatically signed.
 
-<a id="adding-ctrl-nodes-managed"></a>
-
-#### Adding control plane nodes to managed clusters
-
-You can replace a failing control plane by adding control plane nodes to healthy or unhealthy managed clusters.
-
-**Required access:** Administrator
+</div>
 
 <a id="adding-ctrl-nodes-managed-healthy"></a>
 
-##### Adding control plane nodes to healthy managed clusters
+### Add control plane nodes to healthy managed clusters
 
-Complete the following steps to add control plane nodes to healthy managed clusters:
+Enhance high availability and resilience against potential infrastructure failures. Handle increased API server loads and performance demands as the managed cluster scales.
 
-1.  Complete the steps in [Adding worker nodes to OpenShift Container Platform clusters](clusters.md#add-nodes-cim-ocp) to add the new control plane node.
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Complete the steps in [Add worker nodes](clusters.md#add-nodes-cim-ocp-procedure) to add the new control plane node.
 
 2.  If you are using the Discovery ISO to add a node, set the agent to `master` before you approve the agent. Run the following command:
 
@@ -7552,11 +7742,21 @@ Complete the following steps to add control plane nodes to healthy managed clust
 
 4.  Follow the steps in [Replacing a control plane node in a healthy cluster](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2025/html-single/installing_openshift_container_platform_with_the_assisted_installer/index#installing-control-plane-node-healthy-cluster_expanding-the-cluster) in the Assisted Installer for OpenShift Container Platform documentation.
 
+</div>
+
 <a id="adding-ctrl-nodes-managed-healthy-api"></a>
 
-##### Adding control plane nodes to healthy managed clusters by using the API
+### Add control plane nodes to healthy managed clusters by using the API
 
-Complete the following steps to add control plane nodes to healthy managed clusters by using the API:
+Enhance high availability and resilience against potential infrastructure failures. Handle increased API server loads and performance demands as the managed cluster scales.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Log in to the hub cluster by running the following command. Add the name of your cluster:
 
@@ -7568,37 +7768,33 @@ Complete the following steps to add control plane nodes to healthy managed clust
 
     **Note:** Alternatively, apply the new host to your `InfraEnv` by applying the `BareMetalHost` YAML.
 
-3.  Check the agent state to ensure that the agent is ready to bind to the cluster again. Run the following commands and replace variables where needed:
+3.  Check the agent state to ensure that the agent is ready to bind to the cluster again. Run the following command to switch your inventory. Replace `<host-inventory-namespace>` with your namespace:
 
-    1.  Run the following command to switch your inventory. Replace `<host-inventory-namespace>` with your namespace:
+    ``` bash
+    oc project <host-inventory-namespace>
+    ```
 
-        ``` bash
-        oc project <host-inventory-namespace>
-        ```
+4.  Run the following command to get the state of your agent. Replace `<agent-name>` with the name of your agent:
 
-    2.  Run the following command to get the state of your agent. Replace `<agent-name>` with the name of your agent:
+    ``` bash
+    oc get agent <agent-name> -oyaml | grep state
+    ```
 
-        ``` bash
-        oc get agent <agent-name> -oyaml | grep state
-        ```
+5.  In the output, check the `stateInfo` line to make sure that the host is ready to bind to a cluster.
 
-    3.  In the output, check the `stateInfo` line to make sure that the host is ready to bind to a cluster.
+6.  Set the role of your host to `master`. If you are using the Discovery ISO to add a node, approve the agent and set the role to `master`. Run the following command:
 
-4.  Set the role of your host to `master`:
+    ``` bash
+    oc patch agent <agent-name> -p '{"spec":{"approved":true,"role":"master"}}' --type=merge
+    ```
 
-    1.  If you are using the Discovery ISO to add a node, approve the agent and set the role to `master`. Run the following command:
-
-        ``` bash
-        oc patch agent <agent-name> -p '{"spec":{"approved":true,"role":"master"}}' --type=merge
-        ```
-
-    2.  If you are using a `BareMetalHost` to add a node, add the following line to your `BareMetalHost` annotations when creating the `BareMetalHost` resource:
+7.  If you are using a `BareMetalHost` to add a node, add the following line to your `BareMetalHost` annotations when creating the `BareMetalHost` resource:
 
     ``` yaml
         bmac.agent-install.openshift.io/role: master
     ```
 
-5.  Verify the patch by running the following command:
+8.  Verify the patch by running the following command:
 
     ``` bash
     oc get agent
@@ -7611,13 +7807,13 @@ Complete the following steps to add control plane nodes to healthy managed clust
     c6e00642-0e11-1689-a79d-0e131d2c6ecf              true        master
     ```
 
-6.  Add the agent to the cluster by running the following command:
+9.  Add the agent to the cluster by running the following command:
 
     ``` bash
     oc patch agent <agent name> -p '{"spec":{"clusterDeploymentName":{"name":"<managed-cluster-name>","namespace":"<managed-cluster-namespace>"}}}' --type=merge
     ```
 
-7.  Confirm that the agent is bound to the cluster by running the following command:
+10. Confirm that the agent is bound to the cluster by running the following command:
 
     ``` bash
     oc get agent
@@ -7630,7 +7826,7 @@ Complete the following steps to add control plane nodes to healthy managed clust
     c6e00642-0e11-1689-a79d-0e131d2c6ecf   hcpagent   true        master
     ```
 
-8.  Verify the agent status by the running the following command. While the agent is installing and joining the cluster, you might need to wait a few minutes:
+11. Verify the agent status by the running the following command. While the agent is installing and joining the cluster, you might need to wait a few minutes:
 
     ``` bash
     oc get agent -w
@@ -7638,45 +7834,53 @@ Complete the following steps to add control plane nodes to healthy managed clust
 
     **Note:** Certificate Signing Requests (CSRs) are not automatically approved.
 
-9.  After the agent reaches the `Rebooting` stage, you must manually approve the CSRs. Complete the following steps:
+12. After the agent reaches the `Rebooting` stage, you must manually approve the CSRs. Get the managed cluster `kubeconfig` file by running the following command:
 
-    1.  Get the managed cluster `kubeconfig` file by running the following command:
+    ``` bash
+    kubeconfig_secret_name=$(oc -n ${cluster_name} get clusterdeployments ${cluster_name} -ojsonpath='{.spec.clusterMetadata.adminKubeconfigSecretRef.name}')
+    oc -n ${cluster_name} get secret ${kubeconfig_secret_name} -ojsonpath={.data.kubeconfig} | base64 -d > managed-cluster.kubeconfig
+    ```
 
-        ``` bash
-        kubeconfig_secret_name=$(oc -n ${cluster_name} get clusterdeployments ${cluster_name} -ojsonpath='{.spec.clusterMetadata.adminKubeconfigSecretRef.name}')
-        oc -n ${cluster_name} get secret ${kubeconfig_secret_name} -ojsonpath={.data.kubeconfig} | base64 -d > managed-cluster.kubeconfig
-        ```
+13. Find any pending CSRs on the managed cluster by running the following command:
 
-    2.  Find any pending CSRs on the managed cluster by running the following command:
+    ``` bash
+    oc --kubeconfig managed-cluster.kubeconfig get csr | grep Pending
+    ```
 
-        ``` bash
-        oc --kubeconfig managed-cluster.kubeconfig get csr | grep Pending
-        ```
+14. Approve any pending CSRs for the agent in the managed cluster. Run the following command and replace `<csr-name>` with your CSR name:
 
-    3.  Approve any pending CSRs for the agent in the managed cluster. Run the following command and replace `<csr-name>` with your CSR name:
+    ``` bash
+    oc  --kubeconfig managed-cluster.kubeconfig  adm certificate approve <csr-name>
+    ```
 
-        ``` bash
-        oc  --kubeconfig managed-cluster.kubeconfig  adm certificate approve <csr-name>
-        ```
+15. The host is installed when the `STAGE` shows `Done`. See the following output example:
 
-The host is installed when the `STAGE` shows `Done`. See the following output example:
+    ``` bash
+    NAME                                   CLUSTER    APPROVED   ROLE     STAGE
+    c6e00642-0e11-1689-a79d-0e131d2c6ecf   hcpagent   true       master   Done
+    ```
 
-``` bash
-NAME                                   CLUSTER    APPROVED   ROLE     STAGE
-c6e00642-0e11-1689-a79d-0e131d2c6ecf   hcpagent   true       master   Done
-```
+</div>
 
 <a id="adding-ctrl-nodes-managed-unhealthy"></a>
 
-##### Adding control plane nodes to unhealthy managed clusters
+### Add control plane nodes to unhealthy managed clusters
 
-Complete the following steps to add control plane nodes to unhealthy managed clusters:
+Replace failed or unresponsive master nodes. Adding nodes restores high availability, stability, and control plane functionality for the cluster.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Remove the agent for unhealthy control plane nodes.
 
 2.  If you used the zero-touch provisioning flow for deployment, remove the bare metal host.
 
-3.  Complete the steps in [Adding worker nodes to OpenShift Container Platform clusters](clusters.md#add-nodes-cim-ocp) for your the new control plane node.
+3.  Complete the steps in [Add worker nodes](clusters.md#add-nodes-cim-ocp-procedure) for your the new control plane node.
 
 4.  Set the agent to `master` before you approve the agent by running the following command:
 
@@ -7688,11 +7892,15 @@ Complete the following steps to add control plane nodes to unhealthy managed clu
 
 5.  Follow the steps in [Installing a primary control plane node on an unhealthy cluster](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2025/html/installing_openshift_container_platform_with_the_assisted_installer/expanding-the-cluster#installing-primary-control-plane-node-unhealthy-cluster_expanding-the-cluster) in the Assisted Installer for OpenShift Container Platform documentation.
 
+</div>
+
 <a id="hibernating-a-created-cluster"></a>
 
-### Hibernating a created cluster
+## Cluster hibernation
 
-You can hibernate a cluster that was created using multicluster engine operator to conserve resources. A hibernating cluster requires significantly fewer resources than one that is running, so you can potentially lower your provider costs by moving clusters in and out of a hibernating state. This feature only applies to clusters that were created by multicluster engine operator in the following environments:
+Hibernation reduces resource use for clusters that multicluster engine operator created so that you can lower provider costs by moving clusters in and out of a hibernating state.
+
+A hibernating cluster requires significantly fewer resources than a running cluster. This feature applies only to clusters that multicluster engine operator created in the following environments:
 
 - Amazon Web Services
 
@@ -7700,105 +7908,195 @@ You can hibernate a cluster that was created using multicluster engine operator 
 
 - Google Cloud Platform
 
+See the following documentation to hibernate and resume clusters:
+
+- *Hibernate a cluster by using the console*
+
+- *Hibernate a cluster by using the command line interface*
+
+- *Resume a hibernating cluster by using the console*
+
+- *Resume a hibernating cluster by using the command line interface*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Hibernate a cluster by using the console](clusters.md#hibernate-cluster-console)
+
+- [Hibernate a cluster by using the command line interface](clusters.md#hibernate-cluster-cli)
+
+- [Resume a hibernating cluster by using the console](clusters.md#resume-hibernate-cluster-console)
+
+- [Resume a hibernating cluster by using the command line interface](clusters.md#resume-hibernate-cluster-cli)
+
+</div>
+
 <a id="hibernate-cluster-console"></a>
 
-#### Hibernate a cluster by using the console
+### Hibernate a cluster by using the console
 
-To use the console to hibernate a cluster that was created by multicluster engine operator, complete the following steps:
+Hibernate a cluster that multicluster engine operator created so that the cluster uses fewer resources.
 
-1.  From the navigation menu, select **Infrastructure** \> **Clusters**. Ensure that the *Manage clusters* tab is selected.
+<div>
 
-2.  Select **Hibernate cluster** from the *Options* menu for the cluster. **Note:** If the *Hibernate cluster* option is not available, you cannot hibernate the cluster. This can happen when the cluster is imported, and not created by multicluster engine operator.
+<div class="title">
 
-The status for the cluster on the *Clusters* page is `Hibernating` when the process completes.
+Procedure
 
-**Tip:** You can hibernate multiple clusters by selecting the clusters that you want to hibernate on the *Clusters* page, and selecting **Actions** \> **Hibernate clusters**.
+</div>
 
-Your selected cluster is hibernating.
+1.  From the navigation menu, select **Infrastructure** \> **Clusters**. Ensure that the **Manage clusters** tab is selected.
+
+2.  Select **Hibernate cluster** from the **Options** menu for the cluster.
+
+    **Note:** If the **Hibernate cluster** option is not available, you cannot hibernate the cluster. This situation can occur when the cluster is imported and was not created by multicluster engine operator.
+
+3.  To hibernate multiple clusters, select the clusters on the **Clusters** page, then select **Actions** \> **Hibernate clusters**.
+
+    The status for the cluster on the **Clusters** page is `Hibernating` when the process completes.
+
+</div>
 
 <a id="hibernate-cluster-cli"></a>
 
-#### Hibernate a cluster by using the CLI
+### Hibernate a cluster by using the command line interface
 
-To use the CLI to hibernate a cluster that was created by multicluster engine operator, complete the following steps:
+Hibernate a cluster that multicluster engine operator created so that the cluster uses fewer resources.
 
-1.  Enter the following command to edit the settings for the cluster that you want to hibernate:
+<div>
 
-        oc edit clusterdeployment <name-of-cluster> -n <namespace-of-cluster>
+<div class="title">
 
-    Replace `name-of-cluster` with the name of the cluster that you want to hibernate.
+Procedure
 
-    Replace `namespace-of-cluster` with the namespace of the cluster that you want to hibernate.
+</div>
+
+1.  Run the following command to edit the settings for the cluster that you want to hibernate. Replace `name-of-cluster` with the name of the cluster. Replace `namespace-of-cluster` with the namespace of the cluster:
+
+    ``` bash
+    oc edit clusterdeployment <name-of-cluster> -n <namespace-of-cluster>
+    ```
 
 2.  Change the value for `spec.powerState` to `Hibernating`.
 
-3.  Enter the following command to view the status of the cluster:
+3.  Run the following command to view the status of the cluster:
 
-        oc get clusterdeployment <name-of-cluster> -n <namespace-of-cluster> -o yaml
+    ``` bash
+    oc get clusterdeployment <name-of-cluster> -n <namespace-of-cluster> -o yaml
+    ```
 
-    Replace `name-of-cluster` with the name of the cluster that you want to hibernate.
+    When hibernation is complete, the value of the type for the cluster is `type=Hibernating`.
 
-    Replace `namespace-of-cluster` with the namespace of the cluster that you want to hibernate.
+</div>
 
-    When the process of hibernating the cluster is complete, the value of the type for the cluster is `type=Hibernating`.
+<a id="resume-hibernate-cluster-console"></a>
 
-Your selected cluster is hibernating.
+### Resume a hibernating cluster by using the console
 
-<a id="resuming-normal-operation-of-a-hibernating-cluster-console"></a>
+Resume normal operation of a hibernating cluster by using the console.
 
-#### Resuming normal operation of a hibernating cluster by using the console
+<div>
 
-To resume normal operation of a hibernating cluster by using the console, complete the following steps:
+<div class="title">
 
-1.  From the navigation menu, select **Infrastructure** \> **Clusters**. Ensure that the *Manage clusters* tab is selected.
+Procedure
 
-2.  Select **Resume cluster** from the *Options* menu for the cluster that you want to resume.
+</div>
 
-The status for the cluster on the *Clusters* page is `Ready` when the process completes.
+1.  From the navigation menu, select **Infrastructure** \> **Clusters**. Ensure that the **Manage clusters** tab is selected.
 
-**Tip:** You can resume multiple clusters by selecting the clusters that you want to resume on the *Clusters* page, and selecting **Actions** \> **Resume clusters**.
+2.  Select **Resume cluster** from the **Options** menu for the cluster that you want to resume.
 
-Your selected cluster is resuming normal operation.
+3.  To resume multiple clusters, select the clusters on the **Clusters** page, then select **Actions** \> **Resume clusters**.
 
-<a id="resuming-normal-operation-of-a-hibernating-cluster-cli"></a>
+    The status for the cluster on the **Clusters** page is `Ready` when the process completes.
 
-#### Resuming normal operation of a hibernating cluster by using the CLI
+</div>
 
-To resume normal operation of a hibernating cluster by using the CLI, complete the following steps:
+<a id="resume-hibernate-cluster-cli"></a>
 
-1.  Enter the following command to edit the settings for the cluster:
+### Resume a hibernating cluster by using the command line interface
 
-        oc edit clusterdeployment <name-of-cluster> -n <namespace-of-cluster>
+Resume normal operation of a hibernating cluster by using the command line interface.
 
-    Replace `name-of-cluster` with the name of the cluster that you want to hibernate.
+<div>
 
-    Replace `namespace-of-cluster` with the namespace of the cluster that you want to hibernate.
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Run the following command to edit the settings for the cluster. Replace `name-of-cluster` with the name of the cluster. Replace `namespace-of-cluster` with the namespace of the cluster:
+
+    ``` bash
+    oc edit clusterdeployment <name-of-cluster> -n <namespace-of-cluster>
+    ```
 
 2.  Change the value for `spec.powerState` to `Running`.
 
-3.  Enter the following command to view the status of the cluster:
+3.  Run the following command to view the status of the cluster:
 
-        oc get clusterdeployment <name-of-cluster> -n <namespace-of-cluster> -o yaml
+    ``` bash
+    oc get clusterdeployment <name-of-cluster> -n <namespace-of-cluster> -o yaml
+    ```
 
-    Replace `name-of-cluster` with the name of the cluster that you want to hibernate.
+    When the cluster resumes normal operation, the value of the type for the cluster is `type=Running`.
 
-    Replace `namespace-of-cluster` with the namespace of the cluster that you want to hibernate.
-
-    When the process of resuming the cluster is complete, the value of the type for the cluster is `type=Running`.
-
-Your selected cluster is resuming normal operation.
+</div>
 
 <a id="updating-your-cluster"></a>
 
-### Updating your cluster
+## Cluster update introduction
 
 After you create Red Hat OpenShift Container Platform clusters that you want to manage with multicluster engine operator, you can use the multicluster engine operator console to update those clusters to the latest minor version that is available in the version channel that the managed cluster uses.
 
 In a connected environment, the updates are automatically identified with notifications provided for each cluster that requires an update in the console.
 
-<a id="updating-your-cluster-prereq"></a>
+**Important:** You cannot update Red Hat OpenShift Kubernetes Service managed clusters or OpenShift Container Platform managed clusters on Red Hat OpenShift Dedicated by using the multicluster engine operator console.
 
-#### Prerequisites
+Continue reading to learn more about updating your cluster:
+
+- *Update your cluster in a connected environment*
+
+- *Select a channel*
+
+- *Disconnected cluster update overview*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Update your cluster in a connected environment](clusters.md#updating-your-cluster-conn-steps)
+
+- [Select a channel](clusters.md#selecting-a-channel)
+
+- [Disconnected cluster update overview](clusters.md#updating-disconnected-cluster)
+
+</div>
+
+<a id="updating-your-cluster-conn-steps"></a>
+
+### Update your cluster in a connected environment
+
+To update your cluster in a connected environment, complete the following steps:
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
 
 - Verify that you meet all of the prerequisites for updating to that version. You must update the version channel on the managed cluster before you can update the cluster with the console.
 
@@ -7806,13 +8104,15 @@ In a connected environment, the updates are automatically identified with notifi
 
 - Your OpenShift Container Platform managed clusters must be in a *Ready* state.
 
-**Important:** You cannot update Red Hat OpenShift Kubernetes Service managed clusters or OpenShift Container Platform managed clusters on Red Hat OpenShift Dedicated by using the multicluster engine operator console.
+</div>
 
-<a id="updating-your-cluster-conn-steps"></a>
+<div>
 
-#### Updating your cluster in a connected environment
+<div class="title">
 
-To update your cluster in a connected environment, complete the following steps:
+Procedure
+
+</div>
 
 1.  From the navigation menu, go to **Infrastructure** \> **Clusters**. If an update is available, it appears in the *Distribution version* column.
 
@@ -7824,15 +8124,23 @@ To update your cluster in a connected environment, complete the following steps:
 
 5.  Select **Update**.
 
-If your cluster update fails, the Operator generally retries the update a few times, stops, and reports the status of the failing component. In some cases, the update process continues to cycle through attempts to complete the process. Rolling your cluster back to a previous version following a failed update is not supported. Contact Red Hat support for assistance if your cluster update fails.
+    **Note:** If your cluster update fails, the Operator generally retries the update a few times, stops, and reports the status of the failing component. In some cases, the update process continues to cycle through attempts to complete the process. Rolling your cluster back to a previous version following a failed update is not supported. Contact Red Hat support for assistance if your cluster update fails.
+
+</div>
 
 <a id="selecting-a-channel"></a>
 
-#### Selecting a channel
+### Select a channel
 
 You can use the console to select a channel for your cluster updates on OpenShift Container Platform. After selecting a channel, you are automatically reminded of cluster updates that are available for both errata versions and release versions.
 
-To select a channel for your cluster, complete the following steps:
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  From the navigation, select **Infrastructure** \> **Clusters**.
 
@@ -7842,13 +8150,13 @@ To select a channel for your cluster, complete the following steps:
 
 4.  Select a channel in the *New channel* field.
 
-You can find the reminders for the available channel updates in the *Cluster details* page of the cluster.
+    **Note:** You can find the reminders for the available channel updates in the *Cluster details* page of the cluster.
+
+</div>
 
 <a id="updating-disconnected-cluster"></a>
 
-#### Updating a disconnected cluster
-
-You can use OpenShift Update Service with multicluster engine operator to update clusters in a disconnected environment.
+### Disconnected cluster update overview
 
 In some cases, security concerns prevent you from connecting clusters directly to the internet. Configuring OpenShift Update Service to know when updates are available, even when your managed cluster is not connected to the internet.
 
@@ -7860,7 +8168,19 @@ OpenShift Update Service is a separate operator that monitors the available vers
 
 - Notify you that an update is available for your cluster by using the console.
 
-Follow the steps in [Updating a cluster using the CLI](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/updating_clusters/performing-a-cluster-update#updating-cluster-cli) in the Red Hat OpenShift Container Platform documentation on your managed cluster to update your cluster in a disconnected environment.
+Follow the steps in *Updating a cluster using the CLI* in the Red Hat OpenShift Container Platform documentation on your managed cluster to update your cluster in a disconnected environment.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Updating a cluster using the CLI](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/updating_clusters/performing-a-cluster-update#updating-cluster-cli)
+
+</div>
 
 <a id="proxy-intro"></a>
 
@@ -7885,6 +8205,8 @@ See the following documentation:
 - [Configure cluster proxy add-ons for hub clusters and managed clusters](clusters.md#config-cluster-proxy-addon-hub-managed)
 
 - [Configure proxy settings for cluster proxy add-ons](clusters.md#cluster-proxy-addon-settings)
+
+- [Hub cluster *KubeAPIServer* certificates](clusters.md#custom-hub-api-certificates)
 
 - [Configure the proxy between hub cluster and managed cluster](clusters.md#config-proxy-hub-managed)
 
@@ -8188,7 +8510,7 @@ Additional resources
 
 <a id="custom-hub-api-certificates"></a>
 
-### Customizing the hub cluster *KubeAPIServer* certificates
+### Hub cluster *KubeAPIServer* certificates
 
 The managed clusters communicate with the hub cluster through a mutual connection with the Red Hat OpenShift Container Platform `KubeAPIServer` external load balancer. The default OpenShift Container Platform `KubeAPIServer` certificate is issued by an internal OpenShift Container Platform cluster certificate authority (CA) when OpenShift Container Platform is installed. If necessary, you can add or change certificates.
 
@@ -8196,11 +8518,35 @@ Changing the API server certificate might impact the communication between the m
 
 The following list contains some examples of when you might need to update your certificates:
 
-- You want to replace the default API server certificate for the external load balancer with your own certificate. By following the guidance in [Adding API server certificates](https://docs.redhat.com/documentation/en-us/openshift_container_platform/4.17/html/security_and_compliance/configuring-certificates#api-server-certificates) in the OpenShift Container Platform documentation, you can add a named certificate with host name `api.<cluster_name>.<base_domain>` to replace the default API server certificate for the external load balancer. Replacing the certificate might cause some of your managed clusters to move to an offline state. If your clusters are in an offline state after upgrading the certificates, follow the troubleshooting instructions for [Troubleshooting imported clusters offline after certificate change](mce_troubleshooting.md#troubleshooting-imported-clusters-offline-after-certificate-change-mce) to resolve it.
+- You want to replace the default API server certificate for the external load balancer with your own certificate. By following the guidance in *Adding API server certificates* in the OpenShift Container Platform documentation, you can add a named certificate with host name `api.<cluster_name>.<base_domain>` to replace the default API server certificate for the external load balancer. Replacing the certificate might cause some of your managed clusters to move to an offline state. If your clusters are in an offline state after upgrading the certificates, follow the troubleshooting instructions for *Troubleshooting imported clusters offline after certificate change* to resolve it.
 
-**Note:** Adding the named certificate before installing the product helps to avoid your clusters moving to an offline state.
+  **Note:** Adding the named certificate before installing the product helps to avoid your clusters moving to an offline state.
 
-- The named certificate for the external load balancer is expiring and you need to replace it. If both the old and the new certificate share the same root CA certificate, despite the number of intermediate certificates, you can follow the guidance in [Adding API server certificates](https://docs.redhat.com/documentation/en-us/openshift_container_platform/4.17/html/security_and_compliance/configuring-certificates#api-server-certificates) in the OpenShift Container Platform documentation to create a new secret for the new certificate. Then update the serving certificate reference for host name `api.<cluster_name>.<base_domain>` to the new secret in the `APIServer` custom resource. Otherwise, when the old and new certificates have different root CA certificates, complete the following steps to replace the certificate:
+- The named certificate for the external load balancer is expiring and you need to replace it. If both the old and the new certificate share the same root CA certificate, despite the number of intermediate certificates, you can follow the guidance in *Adding API server certificates* in the OpenShift Container Platform documentation to create a new secret for the new certificate. Then update the serving certificate reference for host name `api.<cluster_name>.<base_domain>` to the new secret in the `APIServer` custom resource. Otherwise, when the old and new certificates have different root CA certificates, see *Replace a hub certificate with a different root CA*.
+
+  **Note:** Managed clusters must use the host name `api.<cluster_name>.<base_domain>` to access the hub cluster. You cannot use named certificates that are configured with other host names.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Adding API server certificates](https://docs.redhat.com/documentation/en-us/openshift_container_platform/4.17/html/security_and_compliance/configuring-certificates#api-server-certificates)
+
+- [Troubleshooting imported clusters offline after certificate change](mce_troubleshooting.md#troubleshooting-imported-clusters-offline-after-certificate-change-mce)
+
+- [Replace a hub certificate with a different root CA](clusters.md#custom-hub-api-certificates-replace)
+
+</div>
+
+<a id="custom-hub-api-certificates-replace"></a>
+
+### Replace a hub certificate with a different root CA
+
+Replace the named certificate for the hub cluster external load balancer when the old and new certificates have different root CA certificates.
 
 <div>
 
@@ -8230,25 +8576,25 @@ Procedure
 
 2.  Create a new secret in the `openshift-config` namespace that contains the content of the existing and new certificates.
 
-    1.  Copy the old certificate into a new certificate by running the following command:
+3.  Copy the old certificate into a new certificate by running the following command:
 
-        ``` bash
-        cp old.crt combined.crt
-        ```
+    ``` bash
+    cp old.crt combined.crt
+    ```
 
-    2.  Add the contents of the new certificate to the copy of the old certificate by running the following command:
+4.  Add the contents of the new certificate to the copy of the old certificate by running the following command:
 
-        ``` bash
-        cat new.crt >> combined.crt
-        ```
+    ``` bash
+    cat new.crt >> combined.crt
+    ```
 
-    3.  Apply the combined certificates to create a secret by running the following command:
+5.  Apply the combined certificates to create a secret by running the following command:
 
     ``` bash
     oc create secret tls combined-certs-secret --cert=combined.crt --key=old.key -n openshift-config
     ```
 
-3.  Update your `APIServer` resource to reference the combined certificate as the `servingCertificate`. Your `APIServer` resource might resemble the following file:
+6.  Update your `APIServer` resource to reference the combined certificate as the `servingCertificate`. Your `APIServer` resource might resemble the following file:
 
     ``` yaml
     apiVersion: config.openshift.io/v1
@@ -8266,15 +8612,15 @@ Procedure
             name: combined-cert-secret
     ```
 
-4.  After about 15 minutes, the CA bundle containing both new and old certificates is propagated to the managed clusters.
+    After about 15 minutes, the CA bundle containing both new and old certificates is propagated to the managed clusters.
 
-5.  Create another secret named `new-cert-secret` in the `openshift-config` namespace that contains only the new certificate information by entering the following command:
+7.  Create another secret named `new-cert-secret` in the `openshift-config` namespace that contains only the new certificate information by entering the following command:
 
     ``` bash
-    oc create secret tls new-cert-secret --cert=new.crt --key=new.key -n openshift-config {code}
+    oc create secret tls new-cert-secret --cert=new.crt --key=new.key -n openshift-config
     ```
 
-6.  Update the `APIServer` resource by changing the name of `servingCertificate` to reference the `new-cert-secret`. Your resource might resemble the following example:
+8.  Update the `APIServer` resource by changing the name of `servingCertificate` to reference the `new-cert-secret`. Your resource might resemble the following example:
 
     ``` yaml
     apiVersion: config.openshift.io/v1
@@ -8292,11 +8638,9 @@ Procedure
             name: new-cert-secret
     ```
 
+    After about 15 minutes, the previous certificate is removed from the CA bundle, and the change is automatically propagated to the managed clusters.
+
 </div>
-
-After about 15 minutes, the previous certificate is removed from the CA bundle, and the change is automatically propagated to the managed clusters.
-
-**Note:** Managed clusters must use the host name `api.<cluster_name>.<base_domain>` to access the hub cluster. You cannot use named certificates that are configured with other host names.
 
 <a id="config-proxy-hub-managed"></a>
 
@@ -8449,7 +8793,7 @@ You can authenticate and gather data by using one of the following methods:
 
 - Managed cluster services, when the managed cluster is an Red Hat OpenShift Container Platform cluster and the service uses `services-serving-certificate` to generate server certificates
 
-Before you use these methods, configure proxy settings for the cluster proxy add-on. See [Configure proxy settings for cluster proxy add-ons](clusters.md#cluster-proxy-addon-settings).
+Before you use these methods, configure proxy settings for the cluster proxy add-on. See *Configure proxy settings for cluster proxy add-ons*.
 
 <div>
 
@@ -8458,6 +8802,8 @@ Before you use these methods, configure proxy settings for the cluster proxy add
 Additional resources
 
 </div>
+
+- [Configure proxy settings for cluster proxy add-ons](clusters.md#cluster-proxy-addon-settings)
 
 - [Gather data with a managed cluster user token](clusters.md#gather-data-managed-token)
 
@@ -8674,14 +9020,6 @@ Configuring prehook and posthook jobs for cluster destroy and cluster scale acti
 
 **Required access:** Cluster administrator
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Configure an Automation template on a cluster by using the console](clusters.md#ansible-template-run-cluster-console)
 
 - [Create an Automation template](clusters.md#ansible-template-create)
@@ -8713,8 +9051,6 @@ Additional resources
 - [Installing the hosted control planes command-line interface](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/hosted_control_planes/preparing-to-deploy-hosted-control-planes#installing-the-hosted-control-plane-command-line-interface)
 
 - [Introduction to hosted control planes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/hosted_control_planes/hosted-control-planes-overview#hosted-control-planes-overview_hcp-overview)
-
-</div>
 
 <a id="ansible-template-run-cluster-console"></a>
 
@@ -9087,31 +9423,31 @@ Procedure
 
     See the following full example of the `ClusterCurator` that is configured to upgrade EUS to EUS:
 
-</div>
+    ``` yaml
+    apiVersion: cluster.open-cluster-management.io/v1beta1
+    kind: ClusterCurator
+    metadata:
+      annotations:
+        cluster.open-cluster-management.io/upgrade-clusterversion-backoff-limit: "10"
+      name: your-name
+      namespace: your-namespace
+    spec:
+      desiredCuration: upgrade
+      upgrade:
+        intermediateUpdate: 4.17.x
+        desiredUpdate: 4.18.x
+        monitorTimeout: 120
+        posthook:
+          - extra_vars: {}
+            name: Unpause machinepool
+            type: Job
+        prehook:
+          - extra_vars: {}
+            name: Pause machinepool
+            type: Job
+    ```
 
-``` yaml
-apiVersion: cluster.open-cluster-management.io/v1beta1
-kind: ClusterCurator
-metadata:
-  annotations:
-    cluster.open-cluster-management.io/upgrade-clusterversion-backoff-limit: "10"
-  name: your-name
-  namespace: your-namespace
-spec:
-  desiredCuration: upgrade
-  upgrade:
-    intermediateUpdate: 4.17.x
-    desiredUpdate: 4.18.x
-    monitorTimeout: 120
-    posthook:
-      - extra_vars: {}
-        name: Unpause machinepool
-        type: Job
-    prehook:
-      - extra_vars: {}
-        name: Pause machinepool
-        type: Job
-```
+</div>
 
 <a id="update-ocp-cluster-curator"></a>
 
@@ -9669,7 +10005,7 @@ Procedure
 
 <a id="clusterclaims"></a>
 
-## ClusterClaims
+## *ClusterClaims*
 
 A `ClusterClaim` is a cluster-scoped custom resource definition (CRD) on a managed cluster. A `ClusterClaim` represents a piece of information that a managed cluster claims. You can use the `ClusterClaim` to determine the Placement of the resource on the target clusters.
 
@@ -9696,6 +10032,8 @@ The following table shows the defined `ClusterClaim` list for a cluster that mul
 | `consoleurl.openshift.io` | false | true | URL of the management console, which is only available for an OpenShift Container Platform cluster |
 | `version.openshift.io` | false | true | OpenShift Container Platform version, which is only available for an OpenShift Container Platform cluster |
 
+Table of *ClusterClaims*
+
 If any of the previous claims are deleted or updated on managed cluster, they are restored or rolled back to a previous version automatically.
 
 After the managed cluster joins the hub cluster, the following two types of `ClusterClaim` resources that are created on the managed cluster are synchronized with the status of the `ManagedCluster` resource on the hub cluster. `ClusterClaim` resources with the `open-cluster-management.io/spoke-only` label are not synchronized.
@@ -9704,11 +10042,39 @@ After the managed cluster joins the hub cluster, the following two types of `Clu
 Includes `id.k8s.io`, or labels with the `open-cluster-management.io` or `openshift.io` suffix. These `ClusterClaim` resources are synchronized to the `ManagedCluster` status on the hub cluster.
 
 `ClusterClaim` resources that you manage  
-Without the `open-cluster-management.io` or `openshift.io` suffix. By default, up to 20 `ClusterClaim` resources are synchronized to the `ManagedCluster` status on the hub cluster. Configure the `KlusterletConfig` API to change the number of `ClusterClaim` resources you manage that are synchronized. Complete the following steps:
+Without the `open-cluster-management.io` or `openshift.io` suffix. By default, up to 20 `ClusterClaim` resources are synchronized to the `ManagedCluster` status on the hub cluster. Configure the `KlusterletConfig` API to change the number of `ClusterClaim` resources you manage that are synchronized. See *Configure custom ClusterClaim synchronization*.
 
-If you are managing `ClusterClaim` resources, configure the `KlusterletConfig` API to change the number of `ClusterClaim` resources that are synchronized. Complete the following steps:
+<div>
 
-1.  Create a `KlusterletConfig` and set `clusterClaimConfiguration.maxCustomClusterClaims` to your desired value. The maxmimum value is `100`. See the following example:
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Configure custom *ClusterClaim* synchronization](clusters.md#configure-custom-clusterclaims-sync)
+
+- [Create a custom ClusterClaim](clusters.md#create-custom-clusterclaims)
+
+- [List existing ClusterClaims](clusters.md#list-clusterclaims)
+
+</div>
+
+<a id="configure-custom-clusterclaims-sync"></a>
+
+### Configure custom *ClusterClaim* synchronization
+
+If you are managing `ClusterClaim` resources, configure the `KlusterletConfig` API to change the number of `ClusterClaim` resources that are synchronized.
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a `KlusterletConfig` and set `clusterClaimConfiguration.maxCustomClusterClaims` to your desired value. The maximum value is `100`. See the following example:
 
     ``` yaml
     kind: KlusterletConfig
@@ -9726,7 +10092,7 @@ If you are managing `ClusterClaim` resources, configure the `KlusterletConfig` A
     oc annotate managedcluster <cluster-name> agent.open-cluster-management.io/klusterlet-config="klusterlet-cluster-claim-config"
     ```
 
-    After adding the annotation, yor `ManagedCluster` resource resembles the following example:
+    After adding the annotation, your `ManagedCluster` resource resembles the following example:
 
     ``` yaml
     apiVersion: cluster.open-cluster-management.io/v1
@@ -9740,34 +10106,60 @@ If you are managing `ClusterClaim` resources, configure the `KlusterletConfig` A
       leaseDurationSeconds: 60
     ```
 
+</div>
+
 <a id="create-custom-clusterclaims"></a>
 
-### Create custom ClusterClaims
+### Create a custom ClusterClaim
 
-You can create a `ClusterClaim` resource with a custom name on a managed cluster, which makes it easier to identify. The custom `ClusterClaim` resource is synchronized with the status of the `ManagedCluster` resource on the hub cluster. The following content shows an example of a definition for a customized `ClusterClaim` resource:
+You can create a `ClusterClaim` resource with a custom name on a managed cluster, which makes it easier to identify. The custom `ClusterClaim` resource is synchronized with the status of the `ManagedCluster` resource on the hub cluster.
 
-``` yaml
-apiVersion: cluster.open-cluster-management.io/v1alpha1
-kind: ClusterClaim
-metadata:
-  name: <custom_claim_name>
-spec:
-  value: <custom_claim_value>
-```
+<div>
 
-The length of `spec.value` field must be 1024 or less. The `create` permission on resource `clusterclaims.cluster.open-cluster-management.io` is required to create a `ClusterClaim` resource.
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a `ClusterClaim` resource on the managed cluster. The following content shows an example of a definition for a customized `ClusterClaim` resource:
+
+    ``` yaml
+    apiVersion: cluster.open-cluster-management.io/v1alpha1
+    kind: ClusterClaim
+    metadata:
+      name: <custom_claim_name>
+    spec:
+      value: <custom_claim_value>
+    ```
+
+    **Note:** The length of the `spec.value` field must be 1024 or less. The `create` permission on resource `clusterclaims.cluster.open-cluster-management.io` is required to create a `ClusterClaim` resource.
+
+</div>
 
 <a id="list-clusterclaims"></a>
 
-## List existing ClusterClaims
+### List existing *ClusterClaims*
 
-You can use the `kubectl` command to list the ClusterClaims that apply to your managed cluster so that you can compare your ClusterClaim to an error message.
+You can use the `oc` command to list the `ClusterClaims` that apply to your managed cluster so that you can compare your `ClusterClaim` to an error message.
 
 **Note:** Make sure you have `list` permission on resource `clusterclaims.cluster.open-cluster-management.io`.
 
-Run the following command to list all existing ClusterClaims that are on the managed cluster:
+<div>
 
-    kubectl get clusterclaims.cluster.open-cluster-management.io
+<div class="title">
+
+Procedure
+
+</div>
+
+- Run the following command to list all existing ClusterClaims that are on the managed cluster:
+
+  ``` bash
+  oc get clusterclaims.cluster.open-cluster-management.io
+  ```
+
+</div>
 
 <a id="managedclustersets-intro"></a>
 
@@ -9781,9 +10173,9 @@ Continue reading to learn more about how to create and manage managed cluster se
 
 - [*ManagedClusterSet* overview](clusters.md#creating-a-managedclusterset)
 
-- [Create a *ManagedClusterSet* by using the command line](clusters.md#creating-managedclusterset-cli)
+- [Create a *ManagedClusterSet* by using the command line interface](clusters.md#creating-managedclusterset-cli)
 
-- [Add clusters to a *ManagedClusterSet* by using the command line](clusters.md#adding-clusters-managedclusterset-cli)
+- [Add clusters to a *ManagedClusterSet* by using the command line interface](clusters.md#adding-clusters-managedclusterset-cli)
 
 - [Assign RBAC permissions to a *ManagedClusterSet*](clusters.md#assign-role-managedclusterset)
 
@@ -9793,11 +10185,13 @@ Continue reading to learn more about how to create and manage managed cluster se
 
 - [Create a *ManagedClusterSetBinding* by using the console](clusters.md#creating-managedclustersetbinding-console)
 
-- [Create a *ManagedClusterSetBinding* by using the command line](clusters.md#creating-a-managedclustersetbinding-cli)
+- [Create a *ManagedClusterSetBinding* by using the command line interface](clusters.md#creating-a-managedclustersetbinding-cli)
 
 - [Remove a cluster from a *ManagedClusterSet* by using the console](clusters.md#removing-cluster-managedclusterset-console)
 
 - [Remove a cluster from a *ManagedClusterSet* by using the command line](clusters.md#removing-cluster-managedclusterset-cli)
+
+- [Set managed namespaces for *ManagedClusterSets*](clusters.md#set-managed-ns)
 
 <a id="creating-a-managedclusterset"></a>
 
@@ -9831,13 +10225,27 @@ spec:
 
 Continue reading to learn more about how to create a managed cluster set and add clusters to it:
 
-- [Create a *ManagedClusterSet* by using the CLI](clusters.md#creating-managedclusterset-cli)
+- *Create a ManagedClusterSet by using the command line interface*
 
-- [Add clusters to a *ManagedClusterSet* by using the CLI](clusters.md#adding-clusters-managedclusterset-cli)
+- *Add clusters to a ManagedClusterSet by using the command line interface*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Create a *ManagedClusterSet* by using the command line interface](clusters.md#creating-managedclusterset-cli)
+
+- [Add clusters to a *ManagedClusterSet* by using the command line interface](clusters.md#adding-clusters-managedclusterset-cli)
+
+</div>
 
 <a id="creating-managedclusterset-cli"></a>
 
-### Create a *ManagedClusterSet* by using the CLI
+### Create a *ManagedClusterSet* by using the command line interface
 
 Create a managed cluster set by adding a `ManagedClusterSet` resource definition to your YAML file.
 
@@ -9864,7 +10272,7 @@ Procedure
 
 <a id="adding-clusters-managedclusterset-cli"></a>
 
-### Add clusters to a *ManagedClusterSet* by using the command line
+### Add clusters to a *ManagedClusterSet* by using the command line interface
 
 Complete the following steps to add a cluster to a managed cluster set by using the command line.
 
@@ -9954,9 +10362,11 @@ Procedure
 
     **Note:** It might take a few seconds for the permission assignments for all of the managed cluster set resources to be propagated to your user or group.
 
+    See *ManagedCluster selection filters* for placement information.
+
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -9964,7 +10374,7 @@ Additional resources
 
 </div>
 
-See [*ManagedCluster* selection filters](clusters.md#managedcluster-selection-filters) for placement information.
+- [*ManagedCluster* selection filters](clusters.md#managedcluster-selection-filters)
 
 </div>
 
@@ -9994,9 +10404,23 @@ If you only have permissions to access the managed cluster set, you do not autom
 
 You can create a managed cluster set binding by using the console or the command line. Continue reading to learn more:
 
+- *Create a ManagedClusterSetBinding by using the console*
+
+- *Create a ManagedClusterSetBinding by using the command line interface*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
 - [Create a *ManagedClusterSetBinding* by using the console](clusters.md#creating-managedclustersetbinding-console)
 
-- [Create a *ManagedClusterSetBinding* by using the CLI](clusters.md#creating-a-managedclustersetbinding-cli)
+- [Create a *ManagedClusterSetBinding* by using the command line interface](clusters.md#creating-a-managedclustersetbinding-cli)
+
+</div>
 
 <a id="creating-managedclustersetbinding-console"></a>
 
@@ -10024,7 +10448,7 @@ Procedure
 
 <a id="creating-a-managedclustersetbinding-cli"></a>
 
-### Create a *ManagedClusterSetBinding* by using the command line
+### Create a *ManagedClusterSetBinding* by using the command line interface
 
 Complete the following steps to create a `ManagedClusterSetBinding` by using the command line.
 
@@ -10068,23 +10492,22 @@ Procedure
 
 <a id="set-hub-kube-api-server"></a>
 
-#### Setting the hub cluster `KubeAPIServer` verification strategy
+### Hub cluster `KubeAPIServer` verification strategies
 
-Managed clusters communicate with the hub cluster through a mutual connection with the OpenShift Container Platform `KubeAPIServer` external load balancer. An internal OpenShift Container Platform cluster certificate authority (CA) issues the default OpenShift Container Platform `KubeAPIServer` certificate when you install OpenShift Container Platform. The multicluster engine for Kubernetes operator automatically detects and adds the certificate to managed clusters in the `bootstrap-kubeconfig-secret` namespace.
+Strategies for verifying the hub cluster `KubeAPIServer` certificate on managed clusters.
 
-If your automatically detected certificate does not work, you can manually configure a strategy configuration in the `KlusterletConfig` resource. Manually configuring the strategy allows you to control how you verify the hub cluster `KubeAPIServer` certificate.
+Managed clusters communicate with the hub cluster through a mutual connection with the OpenShift Container Platform `KubeAPIServer` external load balancer. An internal OpenShift Container Platform cluster certificate authority (CA) issues the default OpenShift Container Platform `KubeAPIServer` certificate when you install OpenShift Container Platform. The multicluster engine operator automatically detects and adds the certificate to managed clusters in the `bootstrap-kubeconfig-secret` namespace.
+
+If your automatically detected certificate does not work, you can manually configure a strategy in the `KlusterletConfig` resource. Manual configuration controls how you verify the hub cluster `KubeAPIServer` certificate.
 
 **Required access:** Cluster administrator
 
-See the examples in one of the following three strategies to learn how to manually configure a strategy:
+See the following strategies:
 
-<a id="set-hub-strategy-auto-detect-ca"></a>
+`UseAutoDetectedCABundle`  
+The default configuration strategy. The multicluster engine operator automatically detects the certificate on the hub cluster and merges the certificate that is configured in the `trustedCABundles` list of config map references to the real CA bundles, if any exist.
 
-##### Setting the strategy with *UseAutoDetectedCABundle*
-
-The default configuration strategy is `UseAutoDetectedCABundle`. The multicluster engine operator automatically detects the certificate on the hub cluster and merges the certificate configured in the `trustedCABundles` list of config map references to the real CA bundles, if there are any.
-
-The following example merges the automatically detected certificates from the hub cluster and the certificates that you configured in the `new-ocp-ca` config map, and adds both to the managed cluster:
+The following example merges the automatically detected certificates from the hub cluster and the certificates that you configured in the `new-ocp-ca` config map, then adds both to the managed cluster:
 
 ``` yaml
 apiVersion: config.open-cluster-management.io/v1alpha1
@@ -10101,11 +10524,10 @@ spec:
        namespace: default
 ```
 
-<a id="set-hub-strategy-system-truststore"></a>
+`UseSystemTruststore`  
+When you set `UseSystemTruststore`, multicluster engine operator does not detect any certificate and ignores the certificates that are configured in the `trustedCABundles` specification. This configuration does not pass any certificate to the managed clusters. Instead, the managed clusters use certificates from the system trusted store to verify the hub cluster API server. Use this strategy when a public CA, such as Let’s Encrypt, issues the hub cluster certificate.
 
-##### Setting the strategy with *UseSystemTruststore*
-
-When you define `UseSystemTruststore` as a value, multicluster engine operator does not detect any certificate and ignores the certificates configured in the `trustedCABundles` specification. This configuration does not pass any certificate to the managed clusters. Instead, the managed clusters use certificates from the system trusted store of the managed clusters to verify the hub cluster API server. This applies to situations where a public CA, such as `Let’s Encrypt`, issues the hub cluster certificate. See the following example that uses `UseSystemTruststore` as the parameter value:
+See the following example:
 
 ``` yaml
 apiVersion: config.open-cluster-management.io/v1alpha1
@@ -10117,73 +10539,72 @@ spec:
    serverVerificationStrategy: UseSystemTruststore
 ```
 
-<a id="config-hub-strategy-custom-ca"></a>
+`UseCustomCABundles`  
+Use `UseCustomCABundles` when you know the CA of the hub cluster API server and you do not want multicluster engine operator to automatically detect it. For this strategy, multicluster engine operator adds your configured certificates from the `trustedCABundles` parameter to the managed clusters.
 
-##### Setting the strategy with *UseCustomCABundles*
+See the following example:
 
-- You can use `UseCustomCABundles` if you know the CA of the hub cluster API server and do not want multicluster engine operator to automatically detect it. For this strategy, multicluster engine operator adds your configured certificates from the `trustedCABundles` parameter to the managed clusters. See the following examples to learn how to use `UseCustomCABundles`:
+``` yaml
+apiVersion: config.open-cluster-management.io/v1alpha1
+kind: KlusterletConfig
+metadata:
+ name: ca-strategy
+spec:
+ hubKubeAPIServerConfig:
+   serverVerificationStrategy: UseCustomCABundles
+   trustedCABundles:
+   - name: ca
+     caBundle:
+       name: ocp-ca
+       namespace: default
+```
 
-  ``` yaml
-  apiVersion: config.open-cluster-management.io/v1alpha1
-  kind: KlusterletConfig
-  metadata:
-   name: ca-strategy
-  spec:
-   hubKubeAPIServerConfig:
-     serverVerificationStrategy: UseCustomCABundles
-     trustedCABundles:
-     - name: ca
-       caBundle:
-         name: ocp-ca
-         namespace: default
-  ```
+Typically, this policy is the same for each managed cluster. As the hub cluster administrator, you can configure a `KlusterletConfig` named `global` to activate the policy for each managed cluster when you install multicluster engine operator or when the hub cluster certificate changes. See the following example:
 
-- Typically, this policy is the same for each managed cluster. As the hub cluster administrator, you can configure a `KlusterletConfig` named `global` to activate the policy for each managed cluster when you install multicluster engine operator or the hub cluster certificate changes. See the following example:
+``` yaml
+apiVersion: config.open-cluster-management.io/v1alpha1
+kind: KlusterletConfig
+metadata:
+ name: global
+spec:
+ hubKubeAPIServerConfig:
+   serverVerificationStrategy: UseSystemTruststore
+```
 
-  ``` yaml
-  apiVersion: config.open-cluster-management.io/v1alpha1
-  kind: KlusterletConfig
-  metadata:
-   name: global
-  spec:
-   hubKubeAPIServerConfig:
-     serverVerificationStrategy: UseSystemTruststore
-  ```
+When a managed cluster needs a different strategy, create a different `KlusterletConfig` and use the `agent.open-cluster-management.io/klusterlet-config` annotation on the managed cluster to point to a specific strategy. See the following example:
 
-- When a managed cluster needs to use a different strategy, you can also create a different `KlusterletConfig` and use the `agent.open-cluster-management.io/klusterlet-config` annotation in the managed clusters to point to a specific strategy. See the following example:
-
-  ``` yaml
-  apiVersion: config.open-cluster-management.io/v1alpha1
-  kind: KlusterletConfig
-  metadata:
-   name: test-ca
-  spec:
-   hubKubeAPIServerConfig:
-     serverVerificationStrategy: UseCustomCABundles
-     trustedCABundles:
-     - name: ca
-       caBundle:
-         name: ocp-ca
-         namespace: default
-  --
-  apiVersion: cluster.open-cluster-management.io/v1
-  kind: ManagedCluster
-  metadata:
-    annotations:
-      agent.open-cluster-management.io/klusterlet-config: test-ca
-    name: cluster1
-  spec:
-    hubAcceptsClient: true
-    leaseDurationSeconds: 60
-  ```
+``` yaml
+apiVersion: config.open-cluster-management.io/v1alpha1
+kind: KlusterletConfig
+metadata:
+ name: test-ca
+spec:
+ hubKubeAPIServerConfig:
+   serverVerificationStrategy: UseCustomCABundles
+   trustedCABundles:
+   - name: ca
+     caBundle:
+       name: ocp-ca
+       namespace: default
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  annotations:
+    agent.open-cluster-management.io/klusterlet-config: test-ca
+  name: cluster1
+spec:
+  hubAcceptsClient: true
+  leaseDurationSeconds: 60
+```
 
 <a id="set-managed-ns"></a>
 
-#### Setting managed namespaces for *ManagedClusterSets*
+### Set managed namespaces for *ManagedClusterSets*
 
 You can define one or more managed namespaces in a `ManagedClusterSet` to manage and scale clusters efficiently, or to apply configurations consistently across your fleet. If you specify managed namespaces, they are automatically created on every managed cluster that belongs to the set.
 
-**Important:** Namespaces that you create on managed clusters are not deleted, even in the followiwing situations:
+**Important:** Namespaces that you create on managed clusters are not deleted, even in the following situations:
 
 - You remove the namespace from the `ManagedClusterSet` specification
 
@@ -10191,53 +10612,59 @@ You can define one or more managed namespaces in a `ManagedClusterSet` to manage
 
 - You detach the managed cluster from the hub cluster
 
-Complete the following steps to create namespaces for your `ManagedClusterSet` resource:
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Add the name of your managed namespaces. See the following example of a `ManagedClusterSet` resource where the `my-cluster-ns1` and `my-cluster-ns2` managed namespaces are defined:
 
-``` yaml
-apiVersion: cluster.open-cluster-management.io/v1beta2
-kind: ManagedClusterSet
-metadata:
-  name: my-clusterset
-spec:
-  clusterSelector:
-    selectorType: ExclusiveClusterSetLabel
-  managedNamespaces:
-  - name: my-clusterset-ns1
-  - name: my-clusterset-ns2
-```
+    ``` yaml
+    apiVersion: cluster.open-cluster-management.io/v1beta2
+    kind: ManagedClusterSet
+    metadata:
+      name: my-clusterset
+    spec:
+      clusterSelector:
+        selectorType: ExclusiveClusterSetLabel
+      managedNamespaces:
+      - name: my-clusterset-ns1
+      - name: my-clusterset-ns2
+    ```
 
-1.  Check the managed namespaces in the `status` of each `ManagedCluster` that is part of the set.
+2.  Check the managed namespaces in the `status` of each `ManagedCluster` that is part of the set. See the following `ManagedCluster` `status` with managed namespaces. The `conditions.type` shows if the namespace is available on the managed cluster:
 
-See the following `ManagedCluster` `status` with managed namespaces. The `conditions.type` shows if the namespace is available on the managed cluster:
+    ``` yaml
+    apiVersion: cluster.open-cluster-management.io/v1
+    kind: ManagedCluster
+    metadata:
+      labels:
+        cluster.open-cluster-management.io/clusterset: my-clusterset
+      name: cluster1
+    status:
+      managedNamespaces:
+      - clusterSet: my-clusterset
+        conditions:
+        - lastTransitionTime: "2025-09-26T03:15:52Z"
+          message: Namespace successfully applied and managed
+          reason: NamespaceApplied
+          status: "True"
+          type: NamespaceAvailable
+        name: my-clusterset-ns1
+      - clusterSet: my-clusterset
+        conditions:
+        - lastTransitionTime: "2025-09-26T03:15:52Z"
+          message: Namespace successfully applied and managed
+          reason: NamespaceApplied
+          status: "True"
+          type: NamespaceAvailable
+        name: my-clusterset-ns2
+    ```
 
-``` yaml
-apiVersion: cluster.open-cluster-management.io/v1
-kind: ManagedCluster
-metadata:
-  labels:
-    cluster.open-cluster-management.io/clusterset: my-clusterset
-  name: cluster1
-status:
-  managedNamespaces:
-  - clusterSet: my-clusterset
-    conditions:
-    - lastTransitionTime: "2025-09-26T03:15:52Z"
-      message: Namespace successfully applied and managed
-      reason: NamespaceApplied
-      status: "True"
-      type: NamespaceAvailable
-    name: my-clusterset-ns1
-  - clusterSet: my-clusterset
-    conditions:
-    - lastTransitionTime: "2025-09-26T03:15:52Z"
-      message: Namespace successfully applied and managed
-      reason: NamespaceApplied
-      status: "True"
-      type: NamespaceAvailable
-    name: my-clusterset-ns2
-```
+</div>
 
 <a id="removing-cluster-managedclusterset-console"></a>
 
@@ -10706,7 +11133,7 @@ Additional resources
 
 One or more `PlacementDecision` kinds with the label `cluster.open-cluster-management.io/placement={placement_name}` are created to represent `ManagedClusters` selected by a placement. To learn more about the API, use the *API Explorer* in the console, or an `oc` command. If you select a `ManagedCluster` and add it to a `PlacementDecision`, the components that consume this placement might apply the workload on this `ManagedCluster`.
 
-When you do not select `ManagedCluster` and you remove it from the `PlacementDecision`, the workload that is applied on this `ManagedCluster` is removed. You can prevent the workload removal by defining tolerations. To learn more about tolerations, see [Taints and tolerations](clusters.md#taints-tolerations).
+When you do not select `ManagedCluster` and you remove it from the `PlacementDecision`, the workload that is applied on this `ManagedCluster` is removed. You can prevent the workload removal by defining tolerations. To learn more about tolerations, see *Taints and tolerations*.
 
 See the following `PlacementDecision` example:
 
@@ -10743,6 +11170,8 @@ Additional resources
 
 </div>
 
+- [Taints and tolerations](clusters.md#taints-tolerations)
+
 - [Troubleshooting no PlacementDecision after creating Placement](mce_troubleshooting.md#troubleshooting-no-placementdecision-mce)
 
 - [Placement](clusters.md#placement-intro)
@@ -10757,6 +11186,22 @@ You can control which placements can select your managed clusters by using taint
 
 **Important:** When a cluster has a taint, only placements with matching tolerations can select that cluster. This filtering happens automatically to protect workloads from being deployed to clusters that might not be suitable. For example, if a managed cluster becomes unreachable or unavailable, built-in taints are automatically applied to prevent new workloads from being placed on that cluster until it recovers. See the following information about built-in taints and how to use tolerations to allow placements to select clusters with built-in taints:
 
+- *Managed cluster taints*
+
+- *Built-in taints*
+
+- *Placement tolerations*
+
+- *Temporary tolerations*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
 - [Managed cluster taints](clusters.md#managed-cluster-taints)
 
 - [Built-in taints](clusters.md#built-in-taints)
@@ -10764,6 +11209,8 @@ You can control which placements can select your managed clusters by using taint
 - [Placement tolerations](clusters.md#placement-tolerations)
 
 - [Temporary tolerations](clusters.md#temporary-tolerations)
+
+</div>
 
 <a id="managed-cluster-taints"></a>
 
@@ -11002,7 +11449,7 @@ Additional resources
 
 <a id="managing-cluster-pools"></a>
 
-### Cluster pools (Technology Preview)
+## Cluster pools (Technology Preview)
 
 Cluster pools provide rapid and cost-effective access to configured Red Hat OpenShift Container Platform clusters on-demand and at scale.
 
@@ -11011,14 +11458,6 @@ Cluster pools provision a configurable and scalable number of OpenShift Containe
 `ClusterClaim` resources are used to check out clusters from cluster pools. When a cluster claim is created, the pool assigns a running cluster to it. If no running clusters are available, a hibernating cluster is resumed to provide the cluster or a new cluster is provisioned. The cluster pool automatically creates new clusters and resumes hibernating clusters to maintain the specified size and number of available running clusters in the pool.
 
 The procedure for creating a cluster pool is similar to the procedure for creating a cluster. Clusters in a cluster pool are not created for immediate use.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
 
 - [Create a cluster pool](clusters.md#creating-a-clusterpool)
 
@@ -11032,11 +11471,9 @@ Additional resources
 
 - [Destroy a cluster pool](clusters.md#destroying-a-cluster-pool)
 
-</div>
-
 <a id="creating-a-clusterpool"></a>
 
-#### Create a cluster pool
+### Create a cluster pool
 
 Create a cluster pool to provision a scalable number of OpenShift Container Platform clusters that you can claim when you need them. Clusters in a cluster pool are not created for immediate use.
 
@@ -11117,7 +11554,7 @@ Additional resources
 
 <a id="create-a-sno-cluster-pool"></a>
 
-#### Create a single-node OpenShift cluster pool (Technology Preview)
+### Create a single-node OpenShift cluster pool (Technology Preview)
 
 Create a single-node OpenShift cluster pool to provision hibernating single-node clusters that you can claim when you need them. Clusters in a single-node OpenShift cluster pool are not created for immediate use.
 
@@ -11225,7 +11662,7 @@ Additional resources
 
 <a id="claiming-clusters-from-cluster-pools"></a>
 
-#### Claim clusters from cluster pools
+### Claim clusters from cluster pools
 
 Claim a cluster from a cluster pool by creating a `ClusterClaim` resource. The pool assigns a running cluster, resumes a hibernating cluster, or provisions a new cluster to fulfill the claim.
 
@@ -11273,7 +11710,7 @@ Procedure
 
 <a id="updating-the-cluster-pool-release-image"></a>
 
-#### Update the cluster pool release image
+### Update the cluster pool release image
 
 Update the OpenShift Container Platform release image for clusters in a cluster pool when hibernating clusters become backlevel.
 
@@ -11309,7 +11746,7 @@ Procedure
 
 <a id="scaling-cluster-pools"></a>
 
-#### Scale cluster pools (Technology Preview)
+### Scale cluster pools (Technology Preview)
 
 Scale a cluster pool by increasing or decreasing the cluster pool size and the number of running clusters.
 
@@ -11337,7 +11774,7 @@ Procedure
 
 <a id="destroying-a-cluster-pool"></a>
 
-#### Destroy a cluster pool
+### Destroy a cluster pool
 
 Destroy a cluster pool that you no longer need. You can only destroy cluster pools that do not have any cluster claims.
 
@@ -11371,33 +11808,57 @@ Procedure
 
 <a id="managed-serviceaccount-addon"></a>
 
-### Enabling ManagedServiceAccount add-ons
+## *ManagedServiceAccount* add-on
 
-When you install a supported version of multicluster engine operator, the `ManagedServiceAccount` add-on is enabled by default.
-
-The `ManagedServiceAccount` allows you to create or delete a service account on a managed cluster.
-
-**Required access:** Editor
+When you install a supported version of multicluster engine operator, the `ManagedServiceAccount` add-on is enabled by default. The `ManagedServiceAccount` allows you to create or delete a service account on a managed cluster.
 
 When a `ManagedServiceAccount` custom resource is created in the `<managed_cluster>` namespace on the hub cluster, a `ServiceAccount` is created on the managed cluster.
 
 A `TokenRequest` is made with the `ServiceAccount` on the managed cluster to the Kubernetes API server on the managed cluster. The token is then stored in a `Secret` in the `<target_managed_cluster>` namespace on the hub cluster.
 
-**Note:** The token can expire and be rotated. See [TokenRequest](https://kubernetes.io/docs/reference/kubernetes-api/authentication-resources/token-request-v1/) for more information about token requests.
+**Note:** The token can expire and be rotated. See *TokenRequest* in the additional resources section for more information about token requests.
 
-<a id="serviceaccount_prereqs"></a>
+<div>
 
-#### Prerequisites
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [TokenRequest](https://kubernetes.io/docs/reference/kubernetes-api/authentication-resources/token-request-v1/)
+
+</div>
+
+<a id="serviceaccount_enable"></a>
+
+### Enable the ManagedServiceAccount add-on
+
+Enable the `ManagedServiceAccount` add-on for a hub cluster and a managed cluster.
+
+**Required access:** Editor
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
 
 - You need a supported Red Hat OpenShift Container Platform environment.
 
 - You need the multicluster engine operator installed.
 
-<a id="serviceaccount_enable"></a>
+</div>
 
-#### Enabling ManagedServiceAccount
+<div>
 
-To enable a `ManagedServiceAccount` add-on for a hub cluster and a managed cluster, complete the following steps:
+<div class="title">
+
+Procedure
+
+</div>
 
 1.  Enable the `ManagedServiceAccount` add-on on hub cluster. See *ManagedServiceAccount add-on* in [Advanced configuration](clusters.md#advanced-config-engine) to learn more.
 
@@ -11419,9 +11880,39 @@ To enable a `ManagedServiceAccount` add-on for a hub cluster and a managed clust
 
         oc apply -f -
 
-    You have now enabled the `ManagedServiceAccount` plug-in for your managed cluster. See the following steps to configure a `ManagedServiceAccount`.
+    You have now enabled the `ManagedServiceAccount` plug-in for your managed cluster. See [Create a ManagedServiceAccount](clusters.md#serviceaccount_create) to configure a `ManagedServiceAccount`.
 
-4.  Create a `ManagedServiceAccount` custom resource with the following YAML source:
+</div>
+
+<a id="serviceaccount_create"></a>
+
+### Create a ManagedServiceAccount
+
+Create a `ManagedServiceAccount` custom resource and verify the token secret on the hub cluster.
+
+**Required access:** Editor
+
+<div>
+
+<div class="title">
+
+Prerequisites
+
+</div>
+
+- You enabled the `ManagedServiceAccount` add-on. See [Enable the ManagedServiceAccount add-on](clusters.md#serviceaccount_enable).
+
+</div>
+
+<div>
+
+<div class="title">
+
+Procedure
+
+</div>
+
+1.  Create a `ManagedServiceAccount` custom resource with the following YAML source:
 
     ``` yaml
     apiVersion: authentication.open-cluster-management.io/v1alpha1
@@ -11437,17 +11928,19 @@ To enable a `ManagedServiceAccount` add-on for a hub cluster and a managed clust
 
     - Replace `target_managed_cluster` with the name of the managed cluster to which you are applying the `ManagedServiceAccount`.
 
-5.  To verify, view the `tokenSecretRef` attribute in the `ManagedServiceAccount` object status to find the secret name and namespace. Run the following command with your account and cluster name:
+2.  To verify, view the `tokenSecretRef` attribute in the `ManagedServiceAccount` object status to find the secret name and namespace. Run the following command with your account and cluster name:
 
     ``` bash
     oc get managedserviceaccount <managed_serviceaccount_name> -n <target_managed_cluster> -o yaml
     ```
 
-6.  View the `Secret` containing the retrieved token that is connected to the created `ServiceAccount` on the managed cluster. Run the following command:
+3.  View the `Secret` containing the retrieved token that is connected to the created `ServiceAccount` on the managed cluster. Run the following command:
 
     ``` bash
     oc get secret <managed_serviceaccount_name> -n <target_managed_cluster> -o yaml
     ```
+
+</div>
 
 <a id="config-klusterlet-nodes"></a>
 
@@ -11729,11 +12222,11 @@ You must have an OpenShift Cluster Manager credential. See [Creating a credentia
 
 - [Configure Discovery with the console](clusters.md#discovery-console)
 
-- [Configure Discovery using the CLI](clusters.md#discovery-enable-cli)
+- [Enable Discovery using the command line interface](clusters.md#discovery-enable-cli)
 
 - [Importing discovered Red Hat OpenShift Service on AWS (classic) and hosted control plane clusters by using the console](clusters.md#discovery-import-console)
 
-- [Importing discovered Red Hat OpenShift Service on AWS (classic) and hosted control plane clusters by using the CLI](clusters.md#discovery-import-cli)
+- [Importing discovered Red Hat OpenShift Service on AWS (classic) and hosted control plane clusters by using the command line interface](clusters.md#discovery-import-cli)
 
 <a id="discovery-auth"></a>
 
@@ -11866,7 +12359,7 @@ Procedure
 
 <a id="discovery-enable-cli"></a>
 
-### Enable Discovery using the CLI
+### Enable Discovery using the command line interface
 
 Enable discovery using the CLI to find clusters that are available from OpenShift Cluster Manager.
 
@@ -12032,7 +12525,7 @@ Procedure
 
 <a id="discovery-import-cli"></a>
 
-### Importing discovered Red Hat OpenShift Service on AWS (classic) and hosted control plane clusters by using the CLI
+### Importing discovered Red Hat OpenShift Service on AWS (classic) and hosted control plane clusters by using the command line interface
 
 Automatically import supported clusters into your hub cluster with the `Discovery-Operator` for faster cluster management, without manually importing individual clusters. The following procedure is an example of how to import your discovered Red Hat OpenShift Service on AWS (classic) and hosted control planes clusters automatically by using the `Discovery-Operator` from the command-line interface.
 
@@ -12114,7 +12607,7 @@ Continue reading to learn more about host inventories and central infrastructure
 
 - [Configuring third-party CNI plugins for on-premises cluster installation (Technology Preview)](clusters.md#config-third-party-cni-on-prem)
 
-- [Create a cluster in an on-premises environment by using the CLI](clusters.md#create-a-cluster-on-premises-cli)
+- [Create a cluster in an on-premises environment by using the command line interface](clusters.md#create-a-cluster-on-premises-cli)
 
 - [Import an on-premises OpenShift Container Platform cluster manually by using central infrastructure management](clusters.md#import-ocp-cluster)
 
@@ -12130,7 +12623,7 @@ The Assisted Installer is an install method for OpenShift Container Platform tha
 
 The infrastructure operator for Red Hat OpenShift is a multicluster engine operator component that manages and installs the workloads that run the Assisted Installer service.
 
-If you are using standalone multicluster engine operator, you can use central infrastructure management features, such as deploying managed clusters. If you need additional features, such as SiteConfig operator or policy-based governance, you need to [install Red Hat Advanced Cluster Management for Kubernetes](get_started.md#prepare-install-acm), which automatically installs the multicluster engine operator.
+If you are using standalone multicluster engine operator, you can use central infrastructure management features, such as deploying managed clusters. If you need additional features, such as SiteConfig operator or policy-based governance, you need to install Red Hat Advanced Cluster Management for Kubernetes, which automatically installs the multicluster engine operator. See *Install Red Hat Advanced Cluster Management for Kubernetes*.
 
 Use the console to create a host inventory, which is a pool of bare-metal or virtual machines that you can use to create on-premises OpenShift Container Platform clusters. These clusters can be standalone, with dedicated machines for the control plane, or hosted control planes, where the control plane runs as pods on a hub cluster. See *Hosted control planes overview* in the additional resources section for more details.
 
@@ -12148,7 +12641,7 @@ After the host boots and the agent contacts the service, the service creates a n
 
 You can install hosts in the inventory as OpenShift nodes later. The agent writes the operating system to the disk, along with the necessary configuration, and reboots the host.
 
-**Note:** Red Hat Advanced Cluster Management and central infrastructure management supports the Nutanix platform by using the `AgentClusterInstall` resource, which requires additional configuration by creating the Nutanix virtual machines. To learn more, see [Optional: Installing on Nutanix](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2025/html/installing_openshift_container_platform_with_the_assisted_installer/assembly_installing-on-nutanix) in the Assisted Installer documentation.
+**Note:** Red Hat Advanced Cluster Management and central infrastructure management supports the Nutanix platform by using the `AgentClusterInstall` resource, which requires additional configuration by creating the Nutanix virtual machines. To learn more, see *Optional: Installing on Nutanix* in the Assisted Installer documentation.
 
 <div>
 
@@ -12157,6 +12650,10 @@ You can install hosts in the inventory as OpenShift nodes later. The agent write
 Additional resources
 
 </div>
+
+- [Install Red Hat Advanced Cluster Management for Kubernetes](get_started.md#prepare-install-acm)
+
+- [Optional: Installing on Nutanix](https://docs.redhat.com/en/documentation/assisted_installer_for_openshift_container_platform/2025/html/installing_openshift_container_platform_with_the_assisted_installer/assembly_installing-on-nutanix)
 
 - [Hosted control planes overview](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/hosted_control_planes/hosted-control-planes-overview)
 
@@ -12852,7 +13349,7 @@ To add hosts to your inventory, choose a method to download an ISO file and atta
 
 <div class="title">
 
-Prequisites
+Prerequisites
 
 </div>
 
@@ -13110,8 +13607,6 @@ Procedure
 4.  Add the required information and click **Create**.
 
 </div>
-
-To learn more about BMC address formatting, see *BMC addressing* in the additional resources section.
 
 <div>
 
@@ -13892,7 +14387,7 @@ Additional resources
 
 - [Certified OpenShift CNI Plug-ins](https://access.redhat.com/articles/5436171)
 
-- [Create a cluster in an on-premises environment by using the CLI](clusters.md#create-a-cluster-on-premises-cli)
+- [Create a cluster in an on-premises environment by using the command line interface](clusters.md#create-a-cluster-on-premises-cli)
 
 </div>
 
@@ -15241,7 +15736,7 @@ Deleting the `ROSAControlPlane` deprovisions the Red Hat OpenShift Service on AW
 
 <div class="title">
 
-Prequisites
+Prerequisites
 
 </div>
 

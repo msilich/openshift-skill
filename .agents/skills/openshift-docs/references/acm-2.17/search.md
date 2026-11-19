@@ -127,6 +127,8 @@ Specify your search query by using search operations as conditions. Characters s
 
 Search operation and data types table
 
+For more topics about the Red Hat Advanced Cluster Management for Kubernetes console, see *Web console*. If you want to disable the search service on your managed cluster, see *Modify the klusterlet add-ons settings of your cluster*.
+
 <div>
 
 <div class="title">
@@ -135,9 +137,9 @@ Additional resources
 
 </div>
 
-- For more topics about the Red Hat Advanced Cluster Management for Kubernetes console, see [Web console](console.md#web-console).
+- [Web console](console.md#web-console)
 
-- If you want to disable the search service on your managed cluster, see [Modify the klusterlet add-ons settings of your cluster](add-ons.md#modify-klusterlet-add-ons) for more information.
+- [Modify the klusterlet add-ons settings of your cluster](add-ons.md#modify-klusterlet-add-ons)
 
 </div>
 
@@ -363,7 +365,7 @@ Additional resources
 
 </div>
 
-- [Configuring persistent storage](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/monitoring/configuring-core-platform-monitoring#configuring-persistent-storage_storing-and-recording-data) in the OpenShift Container Platform documentation
+- [Configuring persistent storage in the OpenShift Container Platform documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/monitoring/configuring-core-platform-monitoring#configuring-persistent-storage_storing-and-recording-data)
 
 </div>
 
@@ -625,24 +627,24 @@ Use the Search API to query resources that match filters or keywords, and to vie
 
   - Use the following variables:
 
-    ``` graphql
-    {"input":[
-        {
-            "keywords": [],
-            "filters": [
-              {
-                "property": "kind",
-                "values": [
-                  "Deployment"
-                ]
-              }
-            ],
-            "limit": 10,
-            "offset": 5,
-            "orderBy": "name asc"
-        }
-    ]}
-    ```
+  ``` graphql
+  {"input":[
+      {
+          "keywords": [],
+          "filters": [
+            {
+              "property": "kind",
+              "values": [
+                "Deployment"
+              ]
+            }
+          ],
+          "limit": 10,
+          "offset": 5,
+          "orderBy": "name asc"
+      }
+  ]}
+  ```
 
 - Sample output of search for deployments
 
@@ -725,18 +727,18 @@ Use the Search API to query resources that match filters or keywords, and to vie
 
   - Use the following variables:
 
-    ``` graphql
-    {"input":[
-        {
-            "keywords":[],
-            "filters":[
-                {"property":"kind","values":["Pod"]},
-                {"property":"label","values":["app=search"]}],
+  ``` graphql
+  {"input":[
+      {
+          "keywords":[],
+          "filters":[
+              {"property":"kind","values":["Pod"]},
+              {"property":"label","values":["app=search"]}],
 
-            "limit":10
-        }
-    ]}
-    ```
+          "limit":10
+      }
+  ]}
+  ```
 
 - Sample output of search for pods with the label `app=search`
 

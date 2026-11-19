@@ -37,7 +37,7 @@ Procedure
 
 - Backup and restore
 
-  To view the main documentation for backup and restore, see [Backup and restore](business_continuity.md#backup-intro).
+  To view the main documentation for backup and restore, see [Backup and restore](backup_restore.md#backup-intro).
 
   - [Troubleshooting restore status finishes with errors](troubleshooting.md#troubleshooting-restore-finishedwitherrors)
 

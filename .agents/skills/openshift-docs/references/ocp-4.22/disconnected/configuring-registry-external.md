@@ -7,11 +7,6 @@ If your cluster was installed without an external registry, you can configure th
 
 When you install a cluster using the method described in "Installing a cluster without an external registry", the cluster relies on images contained in the downloaded ISO for its lifecycle management. However, you might want to configure your cluster to use an external image registry and mirror images to the registry instead. To do this, you must set up an external registry, successfully complete an update using images from the external registry, and finally delete `InternalReleaseImage` custom resource, which maintains an internal image registry in the cluster.
 
-> [!IMPORTANT]
-> Configuring your cluster to use an external registry is a Technology Preview feature only. Technology Preview features are not supported with Red Hat production service level agreements (SLAs) and might not be functionally complete. Red Hat does not recommend using them in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
->
-> For more information about the support scope of Red Hat Technology Preview features, see [Technology Preview Features Support Scope](https://access.redhat.com/support/offerings/techpreview/).
-
 # Pre-configuration tasks
 
 Before you can configure your cluster to use an external registry, you must prepare your environment with an image registry and perform an update using images on the registry.

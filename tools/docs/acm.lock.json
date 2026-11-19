@@ -12,13 +12,13 @@
     "base_url": "https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.17/",
     "license": "CC-BY-SA-3.0",
     "product": "Red Hat Advanced Cluster Management for Kubernetes",
-    "scope": "All 22 versioned source handbooks; separate generated API reference unavailable at the pinned revision",
+    "scope": "All versioned source handbooks; separate generated API reference unavailable at the pinned revision",
     "version": "2.17"
   },
   "expected_output": {
-    "handbooks": 22,
-    "markdown_files": 27,
-    "markdown_manifest_sha256": "e07f5e179dc53c94a98b9a1ae6ea945aacfc1aaade30f8bf53156e34d46b859b"
+    "handbooks": 23,
+    "markdown_files": 28,
+    "markdown_manifest_sha256": "76deedac7d937bd5185c88ebfc6a646a29ff6c2d7816bf9e31e278f7a5754cd7"
   },
   "legal_notices": [
     {
@@ -70,7 +70,7 @@
     },
     "rhacm_docs": {
       "branch": "2.17_prod",
-      "commit": "da77ef38f05cf583d057e43ecb6aa5697158fada",
+      "commit": "c673fcc51a919970db15b6c3c5c37ed37a393644",
       "license": "CC-BY-SA-3.0",
       "license_basis": "Source docinfo.xml includes Common_Content/Legal_Notice.xml; published Red Hat legal notice bundled locally",
       "url": "https://github.com/stolostron/rhacm-docs"

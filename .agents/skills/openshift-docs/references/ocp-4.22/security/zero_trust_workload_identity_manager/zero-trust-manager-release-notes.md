@@ -4,6 +4,32 @@ The Zero Trust Workload Identity Manager leverages Secure Production Identity Fr
 
 These release notes track the development of Zero Trust Workload Identity Manager.
 
+# Zero Trust Workload Identity Manager 1.1.3
+
+Issued: 3 November 2026
+
+A Common Vulnerability and Exposure (CVE) and advisories are available for the Zero Trust Workload Identity Manager 1.1.3.
+
+The following advisories are available for this release:
+
+- [RHSA-2026:94569](https://access.redhat.com/errata/RHSA-2026:94569)
+
+- [RHSA-2026:94570](https://access.redhat.com/errata/RHSA-2026:94570)
+
+- [RHSA-2026:94571](https://access.redhat.com/errata/RHSA-2026:94571)
+
+- [RHSA-2026:94572](https://access.redhat.com/errata/RHSA-2026:94572)
+
+- [RHSA-2026:94573](https://access.redhat.com/errata/RHSA-2026:94573)
+
+- [RHSA-2026:94575](https://access.redhat.com/errata/RHSA-2026:94575)
+
+## CVEs
+
+The following CVE is available for this release:
+
+- [CVE-2026-111943](https://access.redhat.com/security/cve/CVE-2026-111943)
+
 # Zero Trust Workload Identity Manager 1.1.2
 
 Issued: 14 October 2026

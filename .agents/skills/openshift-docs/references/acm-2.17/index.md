@@ -5,7 +5,7 @@ All versioned source handbooks; [API coverage limitation](api-reference.md). Ext
 - [about](about.md)
 - [add-ons](add-ons.md)
 - [applications](applications.md)
-- [business_continuity](business_continuity.md)
+- [backup_restore](backup_restore.md)
 - [clusters](clusters.md)
 - [console](console.md)
 - [get_started](get_started.md)
@@ -24,3 +24,4 @@ All versioned source handbooks; [API coverage limitation](api-reference.md). Ext
 - [secure_clusters](secure_clusters.md)
 - [troubleshooting](troubleshooting.md)
 - [virtualization](virtualization.md)
+- [volsync](volsync.md)

@@ -424,15 +424,18 @@ Each of these custom resource objects identify the following information:
 
 - A separate entry for each mirror repository you want to offer the content
 
-Note the following actions and how they affect node drain behavior:
+The following table shows how specific actions on these custom resource objects affect node drain behavior.
 
-- If you create an IDMS or ICSP CR object, the MCO does not drain or reboot the node.
+| Object | Operation | Drain | Reboot |
+|--------|-----------|-------|--------|
+| IDMS   | Create    | No    | No     |
+| Modify | Yes       | No    |        |
+| Delete | Yes       | No    |        |
+| ITMS   | Create    | Yes   | No     |
+| Modify | Yes       | No    |        |
+| Delete | Yes       | No    |        |
 
-- If you create an ITMS CR object, the MCO drains and reboots the node.
-
-- If you delete an ITMS or IDMS CR object, the MCO drains and reboots the node.
-
-- If you modify an ITMS or IDMS CR object, the MCO drains and reboots the node.
+Node actions and drain/reboot behahior
 
 The Windows Machine Config Operator (WMCO) watches for changes to the IDMS and ITMS resources and generates a set of `hosts.toml` containerd configuration files, one file for each source registry, with those changes. The WMCO then updates any existing Windows nodes to use the new registry configuration.
 

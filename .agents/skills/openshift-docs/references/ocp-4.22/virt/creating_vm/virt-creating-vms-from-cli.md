@@ -1241,7 +1241,7 @@ Video device support by architecture
 
 - [Installing VirtIO drivers on Windows VMs](../managing_vms/virt-install-virtio-drivers-on-windows-vms.md#virt-install-virtio-drivers-on-windows-vms)
 
-- [Red Hat VirtIO drivers download page](https://access.redhat.com/downloads/content/479/virtio-win/noarch/package-latest)
+- [Red Hat VirtIO drivers download page](https://access.redhat.com/downloads/content/virtio-win)
 
 - [How to check virtio-win drivers version on Windows guest](https://access.redhat.com/solutions/764103)
 

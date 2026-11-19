@@ -15,7 +15,7 @@
     },
     "openshift_docs": {
       "branch_hint": "gitops-docs-1.21",
-      "commit": "b5021228885fa8978f60a545a103ceb57590253f",
+      "commit": "2833be1175d730de0bbb6a701622c1ed92d6fe84",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"
@@ -30,7 +30,7 @@
   "expected_output": {
     "converted_topics": 56,
     "markdown_files": 58,
-    "markdown_manifest_sha256": "2639daeb3aa86604bd908c4459637f011f222176ee2d6eda90f5d9d8cfa41303"
+    "markdown_manifest_sha256": "647017a0dd888c2e2789505f3af6f43bd2757728193da16da8fc8f546bc998ce"
   },
   "document": {
     "product": "Red Hat OpenShift GitOps",

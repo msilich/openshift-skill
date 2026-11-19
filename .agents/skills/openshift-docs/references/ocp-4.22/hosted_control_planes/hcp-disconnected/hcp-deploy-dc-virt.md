@@ -394,7 +394,7 @@ The hosted cluster includes the control plane and its corresponding data plane.
 
 To create an OpenShift Container Platform cluster on OpenShift Virtualization, you must meet several prerequisites.
 
-- You have administrator access to an OpenShift Container Platform cluster, version 4.14 or later, specified in the `KUBECONFIG` environment variable.
+- You have administrator access to an OpenShift Container Platform cluster, version 4.14 or later, specified in the `KUBECONFIG` environment variable. For IBM Z (`s390x`), the cluster version must be 4.22 or later.
 
 - The OpenShift Container Platform management cluster must have wildcard DNS routes enabled, as shown in the following command:
 
@@ -404,7 +404,7 @@ To create an OpenShift Container Platform cluster on OpenShift Virtualization, y
     -p '[{ "op": "add", "path": "/spec/routeAdmission", "value": {wildcardPolicy: "WildcardsAllowed"}}]'
   ```
 
-- The OpenShift Container Platform management cluster has OpenShift Virtualization, version 4.14 or later, installed on it. For more information, see "Installing OpenShift Virtualization using the web console".
+- The OpenShift Container Platform management cluster has OpenShift Virtualization, version 4.14 or later, installed on it. For IBM Z (`s390x`), OpenShift Virtualization version 4.22 or later is required. For more information, see "Installing OpenShift Virtualization using the web console".
 
 - The OpenShift Container Platform management cluster is on-premise bare metal.
 

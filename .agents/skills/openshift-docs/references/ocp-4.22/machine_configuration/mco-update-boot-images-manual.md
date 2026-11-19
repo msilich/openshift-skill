@@ -107,7 +107,7 @@ Procedure
 
     2.  Determine your image variant by comparing the output to the entries in the following table:
 
-        | Output parmeters | Variant |
+        | Output parameters | Variant |
         |----|----|
         | `resourceID` is non-empty | `no-purchase-plan` |
         | `publisher` is `azureopenshift` | `no-purchase-plan` |

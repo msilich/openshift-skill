@@ -7,14 +7,6 @@
 
 Use Red Hat Advanced Cluster Management governance to define and enforce security policies across private, multi, and hybrid cloud environments. The policy framework helps you meet internal standards for software engineering, security, resiliency, and regulatory compliance.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Policy deployment strategy](governance.md#policy-deployment)
 
 - [Policy controllers overview](governance.md#policy-controllers)
@@ -32,8 +24,6 @@ Additional resources
 - [Gatekeeper operator overview](governance.md#gk-operator-overview)
 
 - [Policy Generator integration](governance.md#integrate-policy-generator)
-
-</div>
 
 <a id="governance-architecture"></a>
 
@@ -248,14 +238,6 @@ Policy controllers check for policy violations, and can make the cluster status 
 
 - *Operator policy controller*
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Configuration policy controller](governance.md#kubernetes-config-policy-controller)
 
 - [Certificate policy controller](governance.md#certificate-policy-controller)
@@ -263,8 +245,6 @@ Additional resources
 - [Policy set controller](governance.md#policy-set-controller)
 
 - [Operator policy controller](governance.md#operator-policy-ctrl)
-
-</div>
 
 <a id="kubernetes-config-policy-controller"></a>
 
@@ -2154,7 +2134,7 @@ Additional resources
 
 - [Advanced template processing in policies](governance.md#adv-template-processing)
 
-- [Resources that are backed up](business_continuity.md#backed-up-resources)
+- [Resources that are backed up](backup_restore.md#backed-up-resources)
 
 </div>
 
@@ -2209,7 +2189,7 @@ Use the Policy Generator to complete the following actions:
     - policy-generator-config.yaml
   ```
 
-  **Note:** The `policy-generator-config.yaml` file that is referenced in the previous example is a YAML file with the instructions of the policies to generate.
+  - The `policy-generator-config.yaml` file is the Policy Generator configuration file. It contains the instructions that define which policies to generate.
 
 - A simple `PolicyGenerator` configuration file might resemble the following example, with `policyDefaults` and `policies`:
 
@@ -2227,7 +2207,7 @@ Use the Policy Generator to complete the following actions:
         - path: configmap.yaml
   ```
 
-  **Note:** The `configmap.yaml` file represents a Kubernetes manifest YAML file to be included in the policy. Alternatively, you can set the path to a Kustomize directory, or a directory with multiple Kubernetes manifest YAML files. View the following `ConfigMap` example:
+  - Set `path` to a Kubernetes manifest YAML file to include in the policy, such as `configmap.yaml`. You can also set `path` to a Kustomize directory, or to a directory that contains multiple Kubernetes manifest YAML files. View the following `ConfigMap` example:
 
   ``` yaml
   apiVersion: v1
@@ -2988,7 +2968,7 @@ You can create a `Policy` resource in any namespace on the hub cluster except th
 
   - To use a `Placement` resource, you must bind a `ManagedClusterSet` resource to the namespace of the `Placement` resource with a `ManagedClusterSetBinding` resource.
 
-  - When you create a `Placement` resource for your policy from the console, the status of the placement toleration is automatically added to the `Placement` resource. See [Placement tolerations](clusters.md#placement-tolerations) for more details.
+  - When you create a `Placement` resource for your policy from the console, the status of the placement toleration is automatically added to the `Placement` resource. See *Placement tolerations* for more details.
 
 **Best practice:** Use the command line interface to make updates to the policies when you use the `Placement` resource.
 
@@ -3169,6 +3149,8 @@ Additional resources
 
 - [Placement overview](clusters.md#placement-overview)
 
+- [Placement tolerations](clusters.md#placement-tolerations)
+
 - [*ManagedClusterSetBinding* resource overview](clusters.md#creating-managedclustersetbinding)
 
 </div>
@@ -3248,9 +3230,9 @@ spec:
 
 - The `dependencies` field is set on a `Policy` object, and the requirements apply to all policy templates in the policy.
 
-- The `extraDependencies` field can be set on individual policy template. For example the parameter can be set for a configuration policy, and defines criteria that must be satisfied in addition to any `dependencies` set in the policy.
+- You can set the `extraDependencies` field on an individual policy template, such as a configuration policy. The template must satisfy these criteria in addition to any `dependencies` set on the policy.
 
-- The `ignorePending` field can be set on each individual policy template, and configures whether the `Pending` status on that template is considered as `Compliant` or `NonCompliant` when the overall policy compliance is calculated. By default, this is set to `false` and a `Pending` template causes the policy to be `NonCompliant`. When you set this to `true` the policy can still be `Compliant` when this template is `Pending`, which is useful when that is expected status of the template.
+- You can set the `ignorePending` field on each policy template. This field controls whether a `Pending` status on that template is treated as `Compliant` or `NonCompliant` when the overall policy compliance is calculated. By default, `ignorePending` is `false`, and a `Pending` template causes the policy to be `NonCompliant`. Set `ignorePending` to `true` when `Pending` is the expected status and you still want the policy to be `Compliant`.
 
 <a id="create-configuration-policies"></a>
 
@@ -5425,14 +5407,6 @@ The Gatekeeper operator installs Gatekeeper, which is a validating webhook with 
 
 - To allow Gatekeeper to enforce policies in `openshift-` or `kube-` namespaces, set `spec.config.disableDefaultMatches: true` in the `Gatekeeper` custom resource.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [General support](governance.md#general-support)
 
 - [Operator channels](governance.md#operator-channels)
@@ -5442,8 +5416,6 @@ Additional resources
 - [Managing the Gatekeeper operator installation policies](governance.md#managing-gk-policies)
 
 - [Integrating Gatekeeper constraints and constraint templates](governance.md#integrate-gk-constraints-templates)
-
-</div>
 
 <a id="general-support"></a>
 
@@ -5505,15 +5477,13 @@ Prerequisites
 
 </div>
 
-<div class="formalpara">
+The Gatekeeper operator custom resource is a cluster-scoped resource and must be named `gatekeeper`. Both the validating and mutating webhooks are enabled by default. Use the `validatingWebhook` and `mutatingWebhook` parameters to enable or disable the webhooks. Complete the following steps to configure the Gatekeeper operator custom resource:
+
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-The Gatekeeper operator custom resource is a cluster-scoped resource and must be named `gatekeeper`. Both the validating and mutating webhooks are enabled by default. Use the `validatingWebhook` and `mutatingWebhook` parameters to enable or disable the webhooks. Complete the following steps to configure the Gatekeeper operator custom resource:
 
 </div>
 
@@ -5762,13 +5732,9 @@ The Gatekeeper operator custom resource is a cluster-scoped resource and must be
 
     - Configuring `auditFromCache` for sync details
 
-    The Gatekeeper operator exposes a setting in the Gatekeeper operator custom resource for the audit configuration with the `auditFromCache` parameter, which is disabled by default. Configure the `auditFromCache` parameter to collect resources from constraints.
+    The Gatekeeper operator exposes a setting in the Gatekeeper operator custom resource for the audit configuration with the `auditFromCache` parameter, which is disabled by default. Configure the `auditFromCache` parameter to collect resources from constraints. When you set the `auditFromCache` parameter to `Automatic`, the Gatekeeper operator collects resources from constraints and inserts those resources into your Gatekeeper `Config` resource. If the resource does not exist, the Gatekeeper operator creates the `Config` resource. To configure the `auditFromCache` parameter for resource collection from constraints, complete the following steps:
 
-When you set the `auditFromCache` parameter to `Automatic`, the Gatekeeper operator collects resources from constraints and inserts those resources into your Gatekeeper `Config` resource. If the resource does not exist, the Gatekeeper operator creates the `Config` resource.
-
-To configure the `auditFromCache` parameter for resource collection from constraints, complete the following steps:
-
-1.  Set `auditFromCache` to `Automatic` in the `Gatekeeper` resource. See the following example:
+13. Set `auditFromCache` to `Automatic` in the `Gatekeeper` resource. See the following example:
 
     ``` yaml
     apiVersion: operator.gatekeeper.sh/v1alpha1
@@ -5784,7 +5750,7 @@ To configure the `auditFromCache` parameter for resource collection from constra
 
     **Note:** If you set the `auditFromCache` parameter to `Enabled`, you need to manually set the Gatekeeper `Config` resource with the objects to sync to the cache. For more information, see *Configuring Audit* in the Gatekeeper documentation.
 
-2.  To verify that the resources are added to your `Config` resource, view that the `syncOnly` parameter section is added. Run the following command:
+14. To verify that the resources are added to your `Config` resource, view that the `syncOnly` parameter section is added. Run the following command:
 
     ``` bash
     oc get configs.config.gatekeeper.sh config -n openshift-gatekeeper-system
@@ -5809,11 +5775,13 @@ To configure the `auditFromCache` parameter for resource collection from constra
          kind: "Pod"
     ```
 
-3.  **Optional:** You can view the explanation of the `auditFromCache` setting from the description of the Gatekeeper operator custom resource by running the following command:
+15. **Optional:** You can view the explanation of the `auditFromCache` setting from the description of the Gatekeeper operator custom resource by running the following command:
 
     ``` bash
     oc explain gatekeeper.spec.audit.auditFromCache
     ```
+
+</div>
 
 <div>
 
@@ -6195,17 +6163,13 @@ Additional resources
 
 ## Integrate Gatekeeper constraints and constraint templates
 
-Integrate Gatekeeper constraints and constraint templates to create `Gatekeeper` policies for multicluster distribution of Gatekeeper constraints and audit results. Add templates and constraints to the `policy-templates` of a `Policy` resource.
+Integrate Gatekeeper constraints and constraint templates to create `Gatekeeper` policies for multicluster distribution of Gatekeeper constraints and audit results. Add templates and constraints to the `policy-templates` of a `Policy` resource. Review the following YAML examples that use Gatekeeper constraints in Red Hat Advanced Cluster Management policies.
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
 Procedure
-
-</div>
-
-Review the following YAML examples that use Gatekeeper constraints in Red Hat Advanced Cluster Management policies:
 
 </div>
 
@@ -6217,7 +6181,7 @@ Review the following YAML examples that use Gatekeeper constraints in Red Hat Ad
   metadata:
     name: require-gatekeeper-labels-on-ns
   spec:
-    remediationAction: inform 
+    remediationAction: inform
     disabled: false
     policy-templates:
       - objectDefinition:
@@ -6226,7 +6190,7 @@ Review the following YAML examples that use Gatekeeper constraints in Red Hat Ad
           metadata:
             name: k8srequiredlabels
             annotations:
-              policy.open-cluster-management.io/severity: low 
+              policy.open-cluster-management.io/severity: low
           spec:
             crd:
               spec:
@@ -6255,7 +6219,7 @@ Review the following YAML examples that use Gatekeeper constraints in Red Hat Ad
           metadata:
             name: ns-must-have-gk
             annotations:
-              policy.open-cluster-management.io/severity: low 
+              policy.open-cluster-management.io/severity: low
           spec:
             enforcementAction: dryrun
             match:
@@ -6266,19 +6230,19 @@ Review the following YAML examples that use Gatekeeper constraints in Red Hat Ad
               labels: ["gatekeeper"]
   ```
 
-  - Since the `remediationAction` is set to `inform`, the `enforcementAction` field of the Gatekeeper constraint is overridden to `warn`. This means that Gatekeeper detects and warns you about creating or updating a namespace that is missing the `gatekeeper` label. If the policy `remediationAction` is set to `enforce`, the Gatekeeper constraint `enforcementAction` field is overridden to `deny`. In this context, this configuration prevents any user from creating or updating a namespace that is missing the `gatekeeper` label.
+- When `spec.remediationAction` is set to `inform`, the `enforcementAction` field of the Gatekeeper constraint is overridden to `warn`. Gatekeeper detects and warns you about creating or updating a namespace that is missing the `gatekeeper` label. If you set the policy `remediationAction` to `enforce`, the Gatekeeper constraint `enforcementAction` field is overridden to `deny`, which prevents any user from creating or updating a namespace that is missing the `gatekeeper` label.
 
-  - **Optional:** Set a severity value for the `policy.open-cluster-management.io/severity` annotation for each Gatekeeper constraint or constraint template. Valid values are the same as for other Red Hat Advanced Cluster Management policy types: `low`, `medium`, `high`, or `critical`.
+- **Optional:** Set the `policy.open-cluster-management.io/severity` annotation on each Gatekeeper constraint and constraint template. Valid values are `low`, `medium`, `high`, or `critical`, which are the same severity values used by other Red Hat Advanced Cluster Management policy types.
 
-    With the previous policy, you might receive the following policy status message: `warn - you must provide labels: {"gatekeeper"} (on Namespace default); warn - you must provide labels: {"gatekeeper"} (on Namespace gatekeeper-system)`. When you delete Gatekeeper constraints or `ConstraintTemplates` from a policy, the constraints and `ConstraintTemplates` are also deleted from your managed cluster.
+  With the previous policy, you might receive the following policy status message: `warn - you must provide labels: {"gatekeeper"} (on Namespace default); warn - you must provide labels: {"gatekeeper"} (on Namespace gatekeeper-system)`. When you delete Gatekeeper constraints or `ConstraintTemplates` from a policy, the constraints and `ConstraintTemplates` are also deleted from your managed cluster.
 
-    To view the Gatekeeper audit results for a specific managed cluster from the console, go to to the policy template *Results* page. If search is enabled, view the YAML of the Kubernetes objects that failed the audit.
+  To view the Gatekeeper audit results for a specific managed cluster from the console, go to to the policy template *Results* page. If search is enabled, view the YAML of the Kubernetes objects that failed the audit.
 
-    **Notes:**
+  **Notes:**
 
-    - The *Related resources* section is only available when Gatekeeper generates audit results.
+  - The *Related resources* section is only available when Gatekeeper generates audit results.
 
-    - The Gatekeeper audit runs every minute by default. Audit results are sent back to the hub cluster to be viewed in the Red Hat Advanced Cluster Management policy status of the managed cluster.
+  - The Gatekeeper audit runs every minute by default. Audit results are sent back to the hub cluster to be viewed in the Red Hat Advanced Cluster Management policy status of the managed cluster.
 
 - `policy-gatekeeper-admission`: Use the `policy-gatekeeper-admission` configuration policy within a Red Hat Advanced Cluster Management policy to check for Kubernetes API requests denied by the Gatekeeper admission webhook. View the following example:
 
@@ -6288,7 +6252,7 @@ Review the following YAML examples that use Gatekeeper constraints in Red Hat Ad
   metadata:
     name: policy-gatekeeper-admission
   spec:
-    remediationAction: inform 
+    remediationAction: inform
     severity: low
     object-templates:
       - complianceType: mustnothave
@@ -6296,7 +6260,7 @@ Review the following YAML examples that use Gatekeeper constraints in Red Hat Ad
           apiVersion: v1
           kind: Event
           metadata:
-            namespace: openshift-gatekeeper-system 
+            namespace: openshift-gatekeeper-system
             annotations:
               constraint_action: deny
               constraint_kind: K8sRequiredLabels
@@ -6304,19 +6268,17 @@ Review the following YAML examples that use Gatekeeper constraints in Red Hat Ad
               event_type: violation
   ```
 
-  - The `ConfigurationPolicy` `remediationAction` parameter is overwritten by `remediationAction` in the parent policy.
+- The `spec.remediationAction` value in this `ConfigurationPolicy` resource is overwritten by the `spec.remediationAction` value in the parent `Policy` resource.
 
-  - Set to the actual namespace where Gatekeeper is running if it is different.
+- Set `metadata.namespace` to the namespace where Gatekeeper is running. Use `openshift-gatekeeper-system` when Gatekeeper runs in the default namespace, and replace that value when Gatekeeper runs in a different namespace.
 
-<div class="formalpara">
+</div>
+
+<div>
 
 <div class="title">
 
 Additional resources
-
-</div>
-
-For more details, see the following resources:
 
 </div>
 
@@ -6327,6 +6289,8 @@ For more details, see the following resources:
 - [Creating configuration policies](governance.md#create-configuration-policies)
 
 - [Governance](governance.md#governance)
+
+</div>
 
 <a id="grc-dashboard"></a>
 

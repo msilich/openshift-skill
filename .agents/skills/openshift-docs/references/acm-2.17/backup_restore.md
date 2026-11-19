@@ -1,69 +1,49 @@
-> Source: [Red Hat Advanced Cluster Management for Kubernetes 2.17](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.17/html/business_continuity/index). Copyright Red Hat.
+> Source: [Red Hat Advanced Cluster Management for Kubernetes 2.17](https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.17/html/backup_restore/index). Copyright Red Hat.
 > Adapted from AsciiDoc to Markdown for offline use; see [legal notice](LEGAL-NOTICE.md), [CC BY-SA 3.0](LICENSE.md) and SOURCE.json for source revisions and gaps.
-
-<a id="business-cont-overview"></a>
-
-# Business continuity
-
-See the following topics for disaster recovery solutions and for the hub cluster, as well as managed clusters.
-
-- [Backup and restore](business_continuity.md#backup-intro)
-
-- [VolSync persistent volume replication service](business_continuity.md#volsync)
 
 <a id="backup-intro"></a>
 
-## Backup and restore
+# Backup and restore
 
 The cluster backup and restore operator runs on the hub cluster and provides disaster recovery solutions for Red Hat Advanced Cluster Management for Kubernetes hub cluster failures. When the hub cluster fails, some features stop working, even if all managed clusters still work. When the hub cluster is unavailable, you need a recovery plan to decide if recovery is possible, or if you need to recover the data on a newly deployed hub cluster.
 
 The cluster backup and restore operator supports backups of any third-party resources that extend the hub cluster installation. With this backup solution, you can define cron-based backup schedules that run at specified time intervals. When the hub cluster fails, you can deploy a new hub cluster and move the backed up data to that new hub cluster.
 
-<div>
+- [Backup and restore operator architecture](backup_restore.md#backup-restore-architecture)
 
-<div class="title">
+- [Active-passive hub cluster configuration](backup_restore.md#dr4hub-config)
 
-Additional resources
+- [Install the backup and restore operator](backup_restore.md#dr4hub-install-backup-and-restore)
 
-</div>
+- [Schedule backups](backup_restore.md#using-backup-restore)
 
-- [Backup and restore operator architecture](business_continuity.md#backup-restore-architecture)
+- [Restore a backup](backup_restore.md#restore-backup)
 
-- [Active-passive hub cluster configuration](business_continuity.md#dr4hub-config)
+- [Backup and restore configuration validation](backup_restore.md#backup-validation-using-a-policy)
 
-- [Install the backup and restore operator](business_continuity.md#dr4hub-install-backup-and-restore)
+- [Managed clusters connection using Managed Service Account](backup_restore.md#auto-connect-clusters-msa)
 
-- [Schedule backups](business_continuity.md#using-backup-restore)
+- [Run the restore operation while the primary hub cluster is active](backup_restore.md#keep-hub-active-restore)
 
-- [Restore a backup](business_continuity.md#restore-backup)
+- [Configuring Velero resource requests and limits](backup_restore.md#config-velero-res-limit)
 
-- [Backup and restore configuration validation](business_continuity.md#backup-validation-using-a-policy)
+- [Scenarios when using an existing hub cluster as a restore hub cluster](backup_restore.md#using-existing-hub)
 
-- [Managed clusters connection using Managed Service Account](business_continuity.md#auto-connect-clusters-msa)
+- [Tag user resources with the backup label](backup_restore.md#tagging-resources)
 
-- [Run the restore operation while the primary hub cluster is active](business_continuity.md#keep-hub-active-restore)
+- [Restore data to the initial hub cluster](backup_restore.md#restore-data-initial-hub)
 
-- [Configuring Velero resource requests and limits](business_continuity.md#config-velero-res-limit)
+- [Backup and restore for hosted control plane overview](backup_restore.md#config-hcp-backup)
 
-- [Scenarios when using an existing hub cluster as a restore hub cluster](business_continuity.md#using-existing-hub)
+- [Restore the hosted control plane management configuration](backup_restore.md#restore-hcp-management)
 
-- [Tag user resources with the backup label](business_continuity.md#tagging-resources)
+- [Backup and restore configuration for observability](backup_restore.md#backup-restore-obs-config)
 
-- [Restore data to the initial hub cluster](business_continuity.md#restore-data-initial-hub)
-
-- [Backup and restore for hosted control plane overview](business_continuity.md#config-hcp-backup)
-
-- [Restore the hosted control plane management configuration](business_continuity.md#restore-hcp-management)
-
-- [Backup and restore configuration for observability](business_continuity.md#backup-restore-obs-config)
-
-- [Back up and restore the observability service](business_continuity.md#backup-restore-obs)
-
-</div>
+- [Back up and restore the observability service](backup_restore.md#backup-restore-obs)
 
 <a id="backup-restore-architecture"></a>
 
-### Backup and restore operator architecture
+## Backup and restore operator architecture
 
 The backup and restore operator manages the backup and restore processes for Red Hat Advanced Cluster Management hub clusters. The operator implements the following custom resources:
 
@@ -89,13 +69,13 @@ Additional resources
 
 </div>
 
-- [Resources that are backed up](business_continuity.md#backed-up-resources)
+- [Resources that are backed up](backup_restore.md#backed-up-resources)
 
-- [Resources restored at managed cluster activation time](business_continuity.md#backup-arch-activation)
+- [Resources restored at managed cluster activation time](backup_restore.md#backup-arch-activation)
 
-- [Backup function](business_continuity.md#backup-function)
+- [Backup function](backup_restore.md#backup-function)
 
-- [Backup and restore configuration validation](business_continuity.md#backup-validation-using-a-policy)
+- [Backup and restore configuration validation](backup_restore.md#backup-validation-using-a-policy)
 
 - [OADP Operator](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/backup_and_restore/oadp-application-backup-and-restore)
 
@@ -103,7 +83,7 @@ Additional resources
 
 <a id="backed-up-resources"></a>
 
-### Resources that are backed up
+## Resources that are backed up
 
 The cluster backup and restore operator solution provides backup and restore support for all hub cluster resources such as managed clusters, applications, and policies. With this backup solution, define a cron-based backup schedule, which runs at specified time intervals and continuously backs up the latest version of the hub cluster content.
 
@@ -189,7 +169,7 @@ View the following list of the cluster backup and restore process, and how they 
 
 <a id="backup-arch-activation"></a>
 
-### Resources restored at managed cluster activation time
+## Resources restored at managed cluster activation time
 
 Some backed up resources are restored only when managed cluster activation data is restored on a new hub cluster.
 
@@ -233,7 +213,7 @@ Aside from the activation data resources that are identified by using the `clust
 
 <a id="dr4hub-config"></a>
 
-## Active-passive hub cluster configuration
+# Active-passive hub cluster configuration
 
 In an active-passive hub cluster configuration, the initial hub cluster backs up data and the passive hub clusters control the managed clusters when the active cluster becomes unavailable.
 
@@ -259,15 +239,15 @@ Additional resources
 
 </div>
 
-- [Disaster recovery](business_continuity.md#dr4hub-disaster-recovery)
+- [Disaster recovery](backup_restore.md#dr4hub-disaster-recovery)
 
-- [Restore passive resources while checking for backups](business_continuity.md#restore-passive-resources-check-backups)
+- [Restore passive resources while checking for backups](backup_restore.md#restore-passive-resources-check-backups)
 
 </div>
 
 <a id="dr4hub-disaster-recovery"></a>
 
-### Disaster recovery
+## Disaster recovery
 
 When the primary hub cluster fails, as a hub administrator, you can promote a passive hub cluster to become the new primary hub cluster and restore managed cluster activation data.
 
@@ -303,19 +283,19 @@ Additional resources
 
 </div>
 
-- [Backup and restore configuration validation](business_continuity.md#backup-validation-using-a-policy)
+- [Backup and restore configuration validation](backup_restore.md#backup-validation-using-a-policy)
 
-- [Restore passive resources while checking for backups](business_continuity.md#restore-passive-resources-check-backups)
+- [Restore passive resources while checking for backups](backup_restore.md#restore-passive-resources-check-backups)
 
-- [Restore passive resources](business_continuity.md#restore-passive-resources-check-backups)
+- [Restore passive resources](backup_restore.md#restore-passive-resources-check-backups)
 
-- [Restore activation resources](business_continuity.md#restore-activation-resources)
+- [Restore activation resources](backup_restore.md#restore-activation-resources)
 
 </div>
 
 <a id="backup-function"></a>
 
-## Backup function
+# Backup function
 
 You can backup third-party resources with cluster backup and restore by adding the `cluster.open-cluster-management.io/backup` label to the resources.
 
@@ -325,7 +305,7 @@ The value of the label can be any string, including an empty string. Use a value
 
 <a id="dr4hub-install-backup-and-restore"></a>
 
-## Install the backup and restore operator
+# Install the backup and restore operator
 
 Install and enable the backup and restore operator on hub clusters by setting up your hub cluster. The cluster backup and restore operator is not installed automatically.
 
@@ -351,23 +331,23 @@ Procedure
 
 </div>
 
-1.  By default, the backup and restore operator is disabled. To enable the operator, see [Enable the backup operator for your hub clusters](business_continuity.md#dr4hub-install-enable-backup-operator).
+1.  By default, the backup and restore operator is disabled. To enable the operator, see [Enable the backup operator for your hub clusters](backup_restore.md#dr4hub-install-enable-backup-operator).
 
-2.  You must create a `Secret` resource that has credentials for your target backup location. See [Create the storage location secret](business_continuity.md#dr4hub-install-storage-secret).
+2.  You must create a `Secret` resource that has credentials for your target backup location. See [Create the storage location secret](backup_restore.md#dr4hub-install-storage-secret).
 
-3.  To help with disaster recovery, you need to install the OADP operator. See [OADP operator installation on the hub cluster](business_continuity.md#dr4hub-install-oadp).
+3.  To help with disaster recovery, you need to install the OADP operator. See [OADP operator installation on the hub cluster](backup_restore.md#dr4hub-install-oadp).
 
-4.  You can install a specific OADP version. See [Install a custom OADP version](business_continuity.md#dr4hub-install-oadp-custom).
+4.  You can install a specific OADP version. See [Install a custom OADP version](backup_restore.md#dr4hub-install-oadp-custom).
 
-5.  To define your backup locations and enable specific storage plugins, see [Create a *DataProtectionApplication* resource](business_continuity.md#dr4hub-install-dpa).
+5.  To define your backup locations and enable specific storage plugins, see [Create a *DataProtectionApplication* resource](backup_restore.md#dr4hub-install-dpa).
 
-6.  If you are in a disconnected environment, you can enable the backup and restore operator. See [Enable the backup and restore component in a disconnected environment](business_continuity.md#dr4hub-install-disconnected).
+6.  If you are in a disconnected environment, you can enable the backup and restore operator. See [Enable the backup and restore component in a disconnected environment](backup_restore.md#dr4hub-install-disconnected).
 
 </div>
 
 <a id="dr4hub-install-enable-backup-operator"></a>
 
-### Enable the backup operator for your hub clusters
+## Enable the backup operator for your hub clusters
 
 Enable the backup operator for your active and passive hub clusters. The cluster backup and restore operator can be enabled by updating the `MultiClusterHub` resource. When the operator is enabled, the operator resources are installed.
 
@@ -464,7 +444,7 @@ Additional resources
 
 <a id="dr4hub-install-storage-secret"></a>
 
-### Create the storage location secret
+## Create the storage location secret
 
 Create a storage location secret for the cloud storage where backups are saved.
 
@@ -484,7 +464,7 @@ Procedure
 
 <a id="dr4hub-install-oadp"></a>
 
-### OADP operator installation on the hub cluster
+## OADP operator installation on the hub cluster
 
 If the OADP operator is not automatically installed after you enable the backup and restore operator, manually install the OADP operator. To learn how to install OADP, see *OADP operator installation on the hub cluster* in the OpenShift Container Platform documentation.
 
@@ -528,7 +508,7 @@ Additional resources
 
 <a id="dr4hub-install-oadp-custom"></a>
 
-### Install a custom OADP version
+## Install a custom OADP version
 
 Customize the OADP version installed by the backup and restore operator by setting an annotation on your `MultiClusterHub` resource.
 
@@ -569,7 +549,7 @@ Procedure
 
 <a id="dr4hub-install-dpa"></a>
 
-### Create a *DataProtectionApplication* resource
+## Create a *DataProtectionApplication* resource
 
 Create an instance of the `DataProtectionApplication` resource for your active and passive hub clusters.
 
@@ -633,7 +613,7 @@ Procedure
 
 <a id="dr4hub-install-disconnected"></a>
 
-### Enable the backup and restore component in a disconnected environment
+## Enable the backup and restore component in a disconnected environment
 
 Enable the backup and restore component with Red Hat OpenShift Container Platform in a disconnected environment.
 
@@ -674,7 +654,7 @@ Procedure
 
 <a id="using-backup-restore"></a>
 
-## Schedule backups
+# Schedule backups
 
 By scheduling a backup, you help ensure your data remains protected and accessible.
 
@@ -743,23 +723,23 @@ Additional resources
 
 </div>
 
-- [Backup resource groups](business_continuity.md#backup-schedule-resource-groups)
+- [Backup resource groups](backup_restore.md#backup-schedule-resource-groups)
 
-- [BackupSchedule status](business_continuity.md#backup-schedule-status)
+- [BackupSchedule status](backup_restore.md#backup-schedule-status)
 
-- [Backup collisions](business_continuity.md#understanding-backup-collisions)
+- [Backup collisions](backup_restore.md#understanding-backup-collisions)
 
-- [Prevent backup collisions](business_continuity.md#preventing-backup-collisions)
+- [Prevent backup collisions](backup_restore.md#preventing-backup-collisions)
 
-- [Restore a backup](business_continuity.md#restore-backup)
+- [Restore a backup](backup_restore.md#restore-backup)
 
-- [Backup and restore](business_continuity.md#backup-intro)
+- [Backup and restore](backup_restore.md#backup-intro)
 
 </div>
 
 <a id="backup-schedule-resource-groups"></a>
 
-### Backup resource groups
+## Backup resource groups
 
 Resources are separately backed up in the following groups.
 
@@ -784,13 +764,13 @@ Additional resources
 
 </div>
 
-- [Schedule backups](business_continuity.md#using-backup-restore)
+- [Schedule backups](backup_restore.md#using-backup-restore)
 
 </div>
 
 <a id="backup-schedule-status"></a>
 
-### BackupSchedule status
+## BackupSchedule status
 
 Review the descriptions of the various `BackupSchedule` statuses.
 
@@ -814,15 +794,15 @@ Additional resources
 
 </div>
 
-- [Backup collisions](business_continuity.md#understanding-backup-collisions)
+- [Backup collisions](backup_restore.md#understanding-backup-collisions)
 
-- [Prevent backup collisions](business_continuity.md#preventing-backup-collisions)
+- [Prevent backup collisions](backup_restore.md#preventing-backup-collisions)
 
 </div>
 
 <a id="understanding-backup-collisions"></a>
 
-### Backup collisions
+## Backup collisions
 
 Backup collisions might occur if the hub cluster changes status from passive to primary hub cluster, or from primary to passive, and different hub clusters back up data at the same storage location.
 
@@ -874,13 +854,13 @@ Additional resources
 
 </div>
 
-- [Prevent backup collisions](business_continuity.md#preventing-backup-collisions)
+- [Prevent backup collisions](backup_restore.md#preventing-backup-collisions)
 
 </div>
 
 <a id="preventing-backup-collisions"></a>
 
-### Prevent backup collisions
+## Prevent backup collisions
 
 Prevent and report backup collisions by using the `BackupCollision` state in the `BackupSchedule.cluster.open-cluster-management.io` resource.
 
@@ -919,15 +899,15 @@ Additional resources
 
 </div>
 
-- [Backup collisions](business_continuity.md#understanding-backup-collisions)
+- [Backup collisions](backup_restore.md#understanding-backup-collisions)
 
-- [Restore a backup](business_continuity.md#restore-backup)
+- [Restore a backup](backup_restore.md#restore-backup)
 
 </div>
 
 <a id="restore-backup"></a>
 
-## Restore a backup
+# Restore a backup
 
 In a typical restore situation, the hub cluster where the backups run becomes unavailable, and you need to move the backed up data to a new hub cluster. Run the cluster restore operation on the new hub cluster. In this case, the restore operation runs on a different hub cluster than where the backup is created.
 
@@ -943,23 +923,23 @@ Procedure
 
 </div>
 
-1.  Use the restore operation for backup types. See [Restore operation for backup types](business_continuity.md#restore-backup-types).
+1.  Use the restore operation for backup types. See [Restore operation for backup types](backup_restore.md#restore-backup-types).
 
-2.  Prepare the new hub cluster. See [Prepare the new hub cluster](business_continuity.md#prepare-new-hub).
+2.  Prepare the new hub cluster. See [Prepare the new hub cluster](backup_restore.md#prepare-new-hub).
 
-3.  Run a restore operation on a hub cluster with a newer version. See [Run a restore operation on a hub cluster with a newer version](business_continuity.md#run-restore-operation).
+3.  Run a restore operation on a hub cluster with a newer version. See [Run a restore operation on a hub cluster with a newer version](backup_restore.md#run-restore-operation).
 
-4.  Post restore clean up. See [Post restore clean up](business_continuity.md#clean-hub-restore).
+4.  Post restore clean up. See [Post restore clean up](backup_restore.md#clean-hub-restore).
 
-5.  Restore passive resources. See [Restore passive resources while checking for backups](business_continuity.md#restore-passive-resources-check-backups).
+5.  Restore passive resources. See [Restore passive resources while checking for backups](backup_restore.md#restore-passive-resources-check-backups).
 
-6.  Restore activation resources. See [Restore activation resources](business_continuity.md#restore-activation-resources).
+6.  Restore activation resources. See [Restore activation resources](backup_restore.md#restore-activation-resources).
 
-7.  Restore imported managed clusters. See [Restore imported managed clusters](business_continuity.md#restore-imported-managed-clusters).
+7.  Restore imported managed clusters. See [Restore imported managed clusters](backup_restore.md#restore-imported-managed-clusters).
 
-8.  Use other restore samples. See [Restore samples](business_continuity.md#more-restore-samples).
+8.  Use other restore samples. See [Restore samples](backup_restore.md#more-restore-samples).
 
-9.  View restore events. See [View restore events](business_continuity.md#viewing-restore-events).
+9.  View restore events. See [View restore events](backup_restore.md#viewing-restore-events).
 
 </div>
 
@@ -975,13 +955,13 @@ Additional resources
 
 - [Import a cluster by using the auto import secret](clusters.md#importing-clusters-auto-import-secret)
 
-- [Schedule backups](business_continuity.md#using-backup-restore)
+- [Schedule backups](backup_restore.md#using-backup-restore)
 
 </div>
 
 <a id="restore-backup-types"></a>
 
-### Restore operation for backup types
+## Restore operation for backup types
 
 Use the restore operation to restore all three backup types that the backup operation creates. Choose to install only a certain type of backup, such as only managed clusters, only user credentials, or only hub cluster resources.
 
@@ -1039,13 +1019,13 @@ Additional resources
 
 </div>
 
-- [Restore imported managed clusters](business_continuity.md#restore-imported-managed-clusters)
+- [Restore imported managed clusters](backup_restore.md#restore-imported-managed-clusters)
 
 </div>
 
 <a id="prepare-new-hub"></a>
 
-### Prepare the new hub cluster
+## Prepare the new hub cluster
 
 To restore a hub cluster and ensure that it is the same as the initial hub cluster, use a new hub cluster when you run the hub restore operation.
 
@@ -1059,9 +1039,9 @@ Prerequisites
 
 </div>
 
-- In a disaster recovery simulation, you might need to return back to your initial hub cluster instead of using a new hub cluster. To return to your initial hub cluster, complete the steps in [Return to the primary hub cluster](business_continuity.md#restore-hub-return-primary).
+- In a disaster recovery simulation, you might need to return back to your initial hub cluster instead of using a new hub cluster. To return to your initial hub cluster, complete the steps in [Return to the primary hub cluster](backup_restore.md#restore-hub-return-primary).
 
-- **Important:** To prevent managed clusters from switching back and forth between the old and new hub clusters, stop the initial hub cluster before running the restore operation and the new cluster becomes the active hub cluster. To keep the initial hub cluster active during or after the restore operation, complete the steps in [Prepare the primary hub cluster](business_continuity.md#active-restore-prepare).
+- **Important:** To prevent managed clusters from switching back and forth between the old and new hub clusters, stop the initial hub cluster before running the restore operation and the new cluster becomes the active hub cluster. To keep the initial hub cluster active during or after the restore operation, complete the steps in [Prepare the primary hub cluster](backup_restore.md#active-restore-prepare).
 
 </div>
 
@@ -1089,13 +1069,13 @@ Additional resources
 
 </div>
 
-- [Run a restore operation on a hub cluster with a newer version](business_continuity.md#run-restore-operation)
+- [Run a restore operation on a hub cluster with a newer version](backup_restore.md#run-restore-operation)
 
 </div>
 
 <a id="run-restore-operation"></a>
 
-### Run a restore operation on a hub cluster with a newer version
+## Run a restore operation on a hub cluster with a newer version
 
 Run the restore operation on the hub cluster that uses the same Red Hat Advanced Cluster Management operator version as the hub cluster where you backed up the data. If you want to run the restore operation on a hub cluster that uses a newer Red Hat Advanced Cluster Management operator version, complete the following steps.
 
@@ -1117,7 +1097,7 @@ Procedure
 
 <a id="clean-hub-restore"></a>
 
-### Post restore clean up
+## Post restore clean up
 
 Velero updates existing resources if they have changed with the currently restored backup. Velero does not clean up delta resources, which are resources created by a previous restore and not part of the currently restored backup. This limits the scenarios you can use when restoring hub cluster data on a new hub cluster. Unless the restore is applied only once, you cannot reliably use the new hub cluster as a passive configuration. The data on the hub cluster does not reflect the data available with the restored resources.
 
@@ -1143,13 +1123,25 @@ The post restore cleanup uses the `cleanupBeforeRestore` property to identify th
 
 - Velero sets the status, `PartiallyFailed`, for a velero restore resource if the restored backup has no resources. This means that a `restore.cluster.open-cluster-management.io` resource can be in `PartiallyFailed` status if any of the created `restore.velero.io` resources do not restore any resources because the corresponding backup is empty.
 
-- The `restore.cluster.open-cluster-management.io` resource is run once, unless you use the `syncRestoreWithNewBackups:true` to keep restoring passive data when new backups are available. For this case, follow the restore passive with sync sample. See [Restore passive resources while checking for backups](business_continuity.md#restore-passive-resources-check-backups). After the restore operation is complete and you want to run another restore operation on the same hub cluster, you have to create a new `restore.cluster.open-cluster-management.io` resource.
+- The `restore.cluster.open-cluster-management.io` resource is run once, unless you use the `syncRestoreWithNewBackups:true` to keep restoring passive data when new backups are available. For this case, follow the restore passive with sync sample. See *Restore passive resources while checking for backups*. After the restore operation is complete and you want to run another restore operation on the same hub cluster, you have to create a new `restore.cluster.open-cluster-management.io` resource.
 
 - Although you can create multiple `restore.cluster.open-cluster-management.io` resources, only one can be active at any moment in time.
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Restore passive resources while checking for backups](backup_restore.md#restore-passive-resources-check-backups)
+
+</div>
+
 <a id="restore-passive-resources-check-backups"></a>
 
-### Restore passive resources while checking for backups
+## Restore passive resources while checking for backups
 
 Use the `restore-passive-sync` sample to restore passive data, while continuing to check if new backups are available and restore them automatically. To automatically restore new backups, you must set the `syncRestoreWithNewBackups` parameter to `true`. You must also only restore the latest passive data.
 
@@ -1207,7 +1199,7 @@ Procedure
 
 <a id="restore-activation-resources"></a>
 
-### Restore activation resources
+## Restore activation resources
 
 Restore activation data so the hub cluster can manage the clusters.
 
@@ -1250,7 +1242,7 @@ Procedure
 
     See the following options to restore activation resources, depending on how you restored the passive resources:
 
-    - If you used the `restore-acm-passive-sync cluster.open-cluster-management.io` resource as documented in [Restore passive resources while checking for backups](business_continuity.md#restore-passive-resources-check-backups), update the `veleroManagedClustersBackupName` value to `latest` on this resource. As a result, the managed cluster resources and the `restore-acm-passive-sync` resource are restored.
+    - If you used the `restore-acm-passive-sync cluster.open-cluster-management.io` resource as documented in [Restore passive resources while checking for backups](backup_restore.md#restore-passive-resources-check-backups), update the `veleroManagedClustersBackupName` value to `latest` on this resource. As a result, the managed cluster resources and the `restore-acm-passive-sync` resource are restored.
 
     - If you restored the passive resources as a one time operation, or did not restore any resources yet, choose to restore all resources.
 
@@ -1289,13 +1281,13 @@ Additional resources
 
 </div>
 
-- [Schedule backups](business_continuity.md#using-backup-restore)
+- [Schedule backups](backup_restore.md#using-backup-restore)
 
 </div>
 
 <a id="restore-imported-managed-clusters"></a>
 
-### Restore imported managed clusters
+## Restore imported managed clusters
 
 Restore imported managed clusters so they can reconnect to the new hub cluster after you restore activation data. Unlike clusters created with the Hive API, imported clusters are not connected automatically and appear as `Pending Import` until you enable automatic import.
 
@@ -1311,13 +1303,13 @@ Procedure
 
 </div>
 
-- To reconnect imported clusters on the new hub cluster during a restore operation, enable the automatic import feature on the `BackupSchedule`. See [Enable automatic import](business_continuity.md#msa-enable-automatic-import).
+- To reconnect imported clusters on the new hub cluster during a restore operation, enable the automatic import feature on the `BackupSchedule`. See [Enable automatic import](backup_restore.md#msa-enable-automatic-import).
 
 </div>
 
 <a id="more-restore-samples"></a>
 
-### Restore samples
+## Restore samples
 
 The following YAML samples are examples of `Restore` configurations for different types of backed up files.
 
@@ -1447,7 +1439,7 @@ The following YAML samples are examples of `Restore` configurations for differen
 
 <a id="viewing-restore-events"></a>
 
-### View restore events
+## View restore events
 
 View restore events from the command line interface to get information.
 
@@ -1519,7 +1511,7 @@ Procedure
 
 <a id="backup-validation-using-a-policy"></a>
 
-## Backup and restore configuration validation
+# Backup and restore configuration validation
 
 When you set the `cluster-backup` option to `true` on the `MultiClusterHub` resource, multicluster engine operator installs the cluster backup and restore operator Helm chart that is named the `cluster-backup-chart`. This chart installs the `backup-restore-enabled` policy. Use the policy to view information about issues with your backup and restore components.
 
@@ -1618,15 +1610,15 @@ Additional resources
 
 </div>
 
-- [Server-side encryption protection](business_continuity.md#protecting-data-server-side-encryption)
+- [Server-side encryption protection](backup_restore.md#protecting-data-server-side-encryption)
 
-- [Prevent backup collisions](business_continuity.md#preventing-backup-collisions)
+- [Prevent backup collisions](backup_restore.md#preventing-backup-collisions)
 
 </div>
 
 <a id="protecting-data-server-side-encryption"></a>
 
-### Server-side encryption protection
+## Server-side encryption protection
 
 Server-side encryption is data encryption for the application or service that receives the data at the storage location.
 
@@ -1664,23 +1656,39 @@ Additional resources
 
 <a id="auto-connect-clusters-msa"></a>
 
-## Managed clusters connection using Managed Service Account
+# Managed clusters connection using Managed Service Account
 
 The backup controller automatically connects imported clusters to the new hub cluster by using the Managed Service Account component. The Managed Service Account creates a token that is backed up for each imported cluster in each managed cluster namespace.
 
 The token uses a `klusterlet-bootstrap-kubeconfig` `ClusterRole` binding, allowing an automatic import operation to implement the token. The `klusterlet-bootstrap-kubeconfig` `ClusterRole` can only get or update the `bootstrap-hub-kubeconfig` secret.
 
-When the activation data is restored on the new hub cluster, the restore controller runs a post restore operation and looks for all managed clusters in the `Pending Import` state. If a valid token generated by the Managed Service Account is found, the controller creates an `auto-import-secret` using the token that reconnects import component to the managed cluster. If the cluster is accessible, the operation is successful. Continue reading the following topics:
+When the activation data is restored on the new hub cluster, the restore controller runs a post restore operation and looks for all managed clusters in the `Pending Import` state. If a valid token generated by the Managed Service Account is found, the controller creates an `auto-import-secret` using the token that reconnects import component to the managed cluster. If the cluster is accessible, the operation is successful. Continue reading the following topics in the additional resources section:
 
-- [Enable automatic import](business_continuity.md#msa-enable-automatic-import).
+- *Enable automatic import*
 
-- [Automatic import considerations for ManagedServiceAccount](business_continuity.md#msa-automatic-import-considerations)
+- *Automatic import considerations for ManagedServiceAccount*
 
-- [Disable the automatic import](business_continuity.md#msa-disable-automatic-import)
+- *Disable the automatic import*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Enable automatic import](backup_restore.md#msa-enable-automatic-import)
+
+- [Automatic import considerations for ManagedServiceAccount](backup_restore.md#msa-automatic-import-considerations)
+
+- [Disable the automatic import](backup_restore.md#msa-disable-automatic-import)
+
+</div>
 
 <a id="msa-enable-automatic-import"></a>
 
-### Enable automatic import
+## Enable automatic import
 
 Enable the automatic import feature by using the Managed Service Account component.
 
@@ -1755,7 +1763,7 @@ Procedure
 
 <a id="msa-automatic-import-considerations"></a>
 
-### Automatic import considerations for ManagedServiceAccount
+## Automatic import considerations for ManagedServiceAccount
 
 Learn more about what to consider as you automatically import the `ManagedServiceAccount` resource. Read the following scenarios:
 
@@ -1783,7 +1791,7 @@ Learn more about what to consider as you automatically import the `ManagedServic
 
 <a id="msa-disable-automatic-import"></a>
 
-### Disable the automatic import
+## Disable the automatic import
 
 Disable the automatic import cluster feature on your backup schedule.
 
@@ -1811,27 +1819,33 @@ Procedure
 
   **Note:** The default value is `false`. After setting the value to `false`, the backup operator removes all created resources, including `ManagedServiceAddon`, `ManagedServiceAccount`, and `ManifestWork`. Removing the resources deletes the automatic import token on the hub cluster and managed cluster.
 
+- To turn the feature back on, see *Enable automatic import*.
+
+- For an overview of the Managed Service Account connection, see *Managed clusters connection using Managed Service Account*.
+
+- To manage the backup schedule that includes the `useManagedServiceAccount` setting, see *Schedule backups*.
+
 </div>
 
 <div>
 
 <div class="title">
 
-Next steps
+Additional resources
 
 </div>
 
-- To turn the feature back on, see [Enable automatic import](business_continuity.md#msa-enable-automatic-import).
+- [Enable automatic import](backup_restore.md#msa-enable-automatic-import)
 
-- For an overview of the Managed Service Account connection, see [Managed clusters connection using Managed Service Account](business_continuity.md#auto-connect-clusters-msa).
+- [Managed clusters connection using Managed Service Account](backup_restore.md#auto-connect-clusters-msa)
 
-- To manage the backup schedule that includes the `useManagedServiceAccount` setting, see [Schedule backups](business_continuity.md#using-backup-restore).
+- [Schedule backups](backup_restore.md#using-backup-restore)
 
 </div>
 
 <a id="keep-hub-active-restore"></a>
 
-## Run the restore operation while the primary hub cluster is active
+# Run the restore operation while the primary hub cluster is active
 
 In a typical disaster recovery restore operation, the primary hub cluster is inactive, and there is no conflict with the restore hub cluster. You might need to keep the original hub cluster active during or after your restore operation, for example, you would typically need to do this if you run a disaster recovery simulation test.
 
@@ -1847,17 +1861,17 @@ Procedure
 
 </div>
 
-1.  You need to prepare the primary hub cluster before you run a disaster recovery test. See [Prepare the primary hub cluster](business_continuity.md#active-restore-prepare).
+1.  You need to prepare the primary hub cluster before you run a disaster recovery test. See [Prepare the primary hub cluster](backup_restore.md#active-restore-prepare).
 
-2.  Start the restore operation. See [Run the restore operation on the new hub cluster](business_continuity.md#active-restore-run).
+2.  Start the restore operation. See [Run the restore operation on the new hub cluster](backup_restore.md#active-restore-run).
 
-3.  Clean up managed cluster resources from the primary hub cluster after managed clusters connect to the new hub cluster. See [Clean up managed cluster resources on the backup hub cluster](business_continuity.md#active-restore-cleanup).
+3.  Clean up managed cluster resources from the primary hub cluster after managed clusters connect to the new hub cluster. See [Clean up managed cluster resources on the backup hub cluster](backup_restore.md#active-restore-cleanup).
 
 </div>
 
 <a id="active-restore-prepare"></a>
 
-### Prepare the primary hub cluster
+## Prepare the primary hub cluster
 
 Prepare the primary hub cluster before you run the restore operation and keep the hub cluster active.
 
@@ -1913,7 +1927,7 @@ Procedure
 
     As a result, any restore operation that runs on the primary cluster by using a `Restore` resource with the `cleanupBeforeRestore` option set to `CleanupRestored` processes these resources, and deletes all resources if they are not part of the latest backup.
 
-    1.  Run the restore operation. See [Run the restore operation on the new hub cluster](business_continuity.md#active-restore-run).
+    1.  Run the restore operation. See [Run the restore operation on the new hub cluster](backup_restore.md#active-restore-run).
 
 3.  Disable the automatic import for managed clusters. Set the following annotation on the `ManagedCluster` global resource for all managed clusters that you want to move to the restore hub cluster. By setting the annotation, you prevent the backup hub cluster from recovering any managed cluster after you restore the managed cluster on the restore hub cluster:
 
@@ -1932,13 +1946,13 @@ Additional resources
 
 </div>
 
-- [Run the restore operation while the primary hub cluster is active](business_continuity.md#keep-hub-active-restore)
+- [Run the restore operation while the primary hub cluster is active](backup_restore.md#keep-hub-active-restore)
 
 </div>
 
 <a id="active-restore-run"></a>
 
-### Run the restore operation on the new hub cluster
+## Run the restore operation on the new hub cluster
 
 After you prepare the primary hub cluster, run the restore operation on the new hub cluster and move your managed clusters. The managed clusters connect to the new hub cluster and do not move back to the initial hub cluster because the automatic import feature is now disabled on the backup hub cluster.
 
@@ -1983,13 +1997,13 @@ Additional resources
 
 </div>
 
-- [Run the restore operation while the primary hub cluster is active](business_continuity.md#keep-hub-active-restore)
+- [Run the restore operation while the primary hub cluster is active](backup_restore.md#keep-hub-active-restore)
 
 </div>
 
 <a id="active-restore-cleanup"></a>
 
-### Clean up managed cluster resources on the backup hub cluster
+## Clean up managed cluster resources on the backup hub cluster
 
 After the restore and after the managed clusters successfully connect to the new hub cluster, clean up the managed cluster resources from the initial backup hub cluster. If you want to restore the data to the backup after your recovery test completes, skip cleaning the resources.
 
@@ -2015,7 +2029,7 @@ Procedure
 
 <a id="config-velero-res-limit"></a>
 
-## Configuring Velero resource requests and limits
+# Configuring Velero resource requests and limits
 
 When you install the backup and restore operator, a `DataProtectionApplication` resource is created to manage the Velero deployment on the hub cluster.
 
@@ -2070,7 +2084,7 @@ Additional resources
 
 <a id="using-existing-hub"></a>
 
-## Scenarios when using an existing hub cluster as a restore hub cluster
+# Scenarios when using an existing hub cluster as a restore hub cluster
 
 If you use an existing hub cluster as a restore hub cluster with resources that you created before the restore operation, consider the following scenarios:
 
@@ -2096,13 +2110,13 @@ Additional resources
 
 </div>
 
-- [Tag user resources with the backup label](business_continuity.md#tagging-resources)
+- [Tag user resources with the backup label](backup_restore.md#tagging-resources)
 
 </div>
 
 <a id="tagging-resources"></a>
 
-## Tag user resources with the backup label
+# Tag user resources with the backup label
 
 Tag user-created resources that you want to include in the hub cluster when you use an existing hub cluster for a restore hub cluster configuration. Apply the `velero.io/backup-name: backupName` label to the resources that you choose.
 
@@ -2116,7 +2130,7 @@ Prerequisites
 
 </div>
 
-- Review the scenarios of using an existing hub cluster as a restore hub cluster with resources that you created before the restore operation. See [Scenarios when using an existing hub cluster as a restore hub cluster](business_continuity.md#using-existing-hub).
+- Review the scenarios of using an existing hub cluster as a restore hub cluster with resources that you created before the restore operation. See [Scenarios when using an existing hub cluster as a restore hub cluster](backup_restore.md#using-existing-hub).
 
 - On the restore hub cluster, update the `DataProtectionApplication` resource and set the storage location to a new, temporary location. You do not want to create the backup used to tag the restore hub cluster resources in the same storage location with the backup hub cluster.
 
@@ -2197,7 +2211,7 @@ Procedure
 
 <a id="restore-data-initial-hub"></a>
 
-## Restore data to the initial hub cluster
+# Restore data to the initial hub cluster
 
 After you run a hub cluster disaster recovery simulation, you can restore your data to the initial hub cluster, then use it as your primary hub cluster. Complete the following steps to restore your data to the initial hub cluster after running a disaster recovery simulation.
 
@@ -2211,7 +2225,7 @@ Prerequisites
 
 </div>
 
-- If the primary hub cluster must stay active during the disaster recovery simulation, complete [Run the restore operation while the primary hub cluster is active](business_continuity.md#keep-hub-active-restore) before you begin.
+- If the primary hub cluster must stay active during the disaster recovery simulation, complete [Run the restore operation while the primary hub cluster is active](backup_restore.md#keep-hub-active-restore) before you begin.
 
 </div>
 
@@ -2223,17 +2237,17 @@ Procedure
 
 </div>
 
-1.  After you restore hub cluster data, make the new hub cluster the active hub cluster. See [Activate the new hub cluster](business_continuity.md#restore-hub-activate-new).
+1.  After you restore hub cluster data, make the new hub cluster the active hub cluster. See [Activate the new hub cluster](backup_restore.md#restore-hub-activate-new).
 
-2.  If you want to use the initial primary hub cluster, see [Return to the primary hub cluster](business_continuity.md#restore-hub-return-primary).
+2.  If you want to use the initial primary hub cluster, see [Return to the primary hub cluster](backup_restore.md#restore-hub-return-primary).
 
-3.  After you activate your primary hub cluster, enable the backup schedule. See [Enable the backup schedule on the primary hub cluster](business_continuity.md#restore-hub-enable-schedule).
+3.  After you activate your primary hub cluster, enable the backup schedule. See [Enable the backup schedule on the primary hub cluster](backup_restore.md#restore-hub-enable-schedule).
 
 </div>
 
 <a id="restore-hub-activate-new"></a>
 
-### Activate the new hub cluster
+## Activate the new hub cluster
 
 Make the new hub cluster the active hub cluster to begin the disaster recovery simulation.
 
@@ -2255,7 +2269,7 @@ Procedure
 
 <a id="restore-hub-return-primary"></a>
 
-### Return to the primary hub cluster
+## Return to the primary hub cluster
 
 Return to the primary hub cluster and make it the active hub cluster that manages the cluster fleet after your disaster recovery tests finish.
 
@@ -2307,7 +2321,7 @@ Procedure
 
 <a id="restore-hub-enable-schedule"></a>
 
-### Enable the backup schedule on the primary hub cluster
+## Enable the backup schedule on the primary hub cluster
 
 Enable the backup schedule on the primary hub cluster after it becomes the active hub cluster again.
 
@@ -2342,7 +2356,7 @@ Procedure
 
 <a id="config-hcp-backup"></a>
 
-## Backup and restore for hosted control plane overview
+# Backup and restore for hosted control plane overview
 
 When using Red Hat Advanced Cluster Management to manage hosted clusters with multicluster engine operator hosting clusters, you can back up and restore the management capability of both the Red Hat Advanced Cluster Management hub cluster and the hosted clusters.
 
@@ -2366,15 +2380,15 @@ Additional resources
 
 - [Disaster recovery for a hosted cluster by using OADP](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/hosted_control_planes/high-availability-for-hosted-control-planes#hcp-disaster-recovery-oadp)
 
-- [Backup scope for hosted clusters](business_continuity.md#hcp-backup-scope)
+- [Backup scope for hosted clusters](backup_restore.md#hcp-backup-scope)
 
-- [Restore hosted control plane management configuration](business_continuity.md#restore-hcp-management)
+- [Restore hosted control plane management configuration](backup_restore.md#restore-hcp-management)
 
 </div>
 
 <a id="hcp-backup-scope"></a>
 
-### Backup scope for hosted clusters
+## Backup scope for hosted clusters
 
 When using Red Hat Advanced Cluster Management to manage hosted clusters with multicluster engine operator hosting clusters, you need to know the scope of the Red Hat Advanced Cluster Management backup and recovery operation.
 
@@ -2436,7 +2450,7 @@ Additional resources
 
 <a id="restore-hcp-management"></a>
 
-### Restore hosted control plane management configuration
+## Restore hosted control plane management configuration
 
 When restoring hosted clusters that are managed by Red Hat Advanced Cluster Management, follow steps to ensure a successful recovery of both the Red Hat Advanced Cluster Management hub cluster and the hosted clusters.
 
@@ -2448,9 +2462,9 @@ Procedure
 
 </div>
 
-1.  Restore the Red Hat Advanced Cluster Management hub cluster. See [Restore a backup](business_continuity.md#restore-backup).
+1.  Restore the Red Hat Advanced Cluster Management hub cluster. See [Restore a backup](backup_restore.md#restore-backup).
 
-2.  Deploy new Red Hat Advanced Cluster Management hub with same configuration as the original. See [Install the backup and restore operator](business_continuity.md#dr4hub-install-backup-and-restore).
+2.  Deploy new Red Hat Advanced Cluster Management hub with same configuration as the original. See [Install the backup and restore operator](backup_restore.md#dr4hub-install-backup-and-restore).
 
 3.  Enable backup component and configure OADP.
 
@@ -2458,7 +2472,7 @@ Procedure
 
 5.  Verify discovery and auto-import policies are restored. See [multicluster engine operator hosted cluster discovery in Red Hat Advanced Cluster Management](mce_acm_integration.md#discover-hosted-acm).
 
-6.  Verify that multicluster engine operator hosted environment is reconnected to the restored Red Hat Advanced Cluster Management hub cluster. See [Restore a backup](business_continuity.md#restore-backup). The following clusters and resources are restored when the backup and restore is successful:
+6.  Verify that multicluster engine operator hosted environment is reconnected to the restored Red Hat Advanced Cluster Management hub cluster. See [Restore a backup](backup_restore.md#restore-backup). The following clusters and resources are restored when the backup and restore is successful:
 
     - multicluster engine operator hosting clusters automatically reconnect to restored Red Hat Advanced Cluster Management hub cluster.
 
@@ -2478,7 +2492,7 @@ Additional resources
 
 </div>
 
-- [Backup and restore](business_continuity.md#backup-intro)
+- [Backup and restore](backup_restore.md#backup-intro)
 
 - [About hosted control planes with multicluster engine operator](clusters.md#mce-hcp-overview)
 
@@ -2486,7 +2500,7 @@ Additional resources
 
 <a id="backup-restore-obs-config"></a>
 
-## Backup and restore configuration for observability
+# Backup and restore configuration for observability
 
 The observability service uses an S3-compatible object store to keep all time-series data collected from managed clusters. Because observability is a stateful service, it is sensitive to active and passive backup patterns. You must configure observability to ensure that your data stays safe and keeps its continuity during the hub cluster migration or backup.
 
@@ -2511,13 +2525,13 @@ Additional resources
 
 </div>
 
-- [Back up and restore the observability service](business_continuity.md#backup-restore-obs)
+- [Back up and restore the observability service](backup_restore.md#backup-restore-obs)
 
 </div>
 
 <a id="backup-restore-obs"></a>
 
-### Back up and restore the observability service
+## Back up and restore the observability service
 
 Backup and restore the observability service to keep data safe and to support continuity during the hub cluster migration or backup. To help with disruption in metric data collection, use the same S3-compatible object store for both the primary and backup hub clusters.
 
@@ -2529,7 +2543,7 @@ Prerequisites
 
 </div>
 
-- Ensure that you can run a restore operation for backup types by completing the [Restore operation for backup types](business_continuity.md#restore-backup-types) process.
+- Ensure that you can run a restore operation for backup types by completing the [Restore operation for backup types](backup_restore.md#restore-backup-types) process.
 
 </div>
 
@@ -2606,1580 +2620,5 @@ Procedure
     ``` bash
     oc delete mco observability
     ```
-
-</div>
-
-<a id="volsync"></a>
-
-## VolSync persistent volume replication service
-
-VolSync is a Kubernetes operator that asynchronously replicates persistent volumes within a cluster, or across clusters with storage types that are not otherwise compatible for replication. It uses the Container Storage Interface (CSI) to overcome the compatibility limitation.
-
-**Important:** VolSync only supports replicating persistent volume claims with the `volumeMode` of `Filesystem`. If you do not select the `volumeMode`, it defaults to `Filesystem`.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [VolSync installation on managed clusters](business_continuity.md#volsync-install-clusters)
-
-- [Configure an Rsync-TLS replication](business_continuity.md#rsync-tls-replication-volsync)
-
-- [Configure an Rsync replication](business_continuity.md#rsync-replication-volsync)
-
-- [Configure a Restic backup](business_continuity.md#restic-backup-volsync)
-
-- [Configure an Rclone replication](business_continuity.md#rclone-replication-volsync)
-
-- [Convert a replicated image to a persistent volume claim](business_continuity.md#volsync-convert-backup-pvc)
-
-- [VolSync replication schedule](business_continuity.md#volsync-schedule)
-
-- [VolSync copy and storage parameters](business_continuity.md#volsync-copy-params)
-
-</div>
-
-<a id="volsync-install-clusters"></a>
-
-### VolSync installation on managed clusters
-
-VolSync installation on managed clusters places the VolSync operator in the `volsync-system` namespace. That deployment supports managed clusters that are not OpenShift Container Platform, and is required on both the source and destination clusters for persistent volume claim replication.
-
-If you installed VolSync as an Operator Lifecycle Manager operator on an OpenShift Container Platform managed cluster in an earlier Red Hat Advanced Cluster Management version, the VolSync Operator Lifecycle Manager operator is removed and replaced with the VolSync deployment in the `volsync-system` namespace.
-
-VolSync can be installed with a managed cluster label or with a `ManagedClusterAddOn` resource on the hub cluster.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Install VolSync by adding a label in the console](business_continuity.md#volsync-install-label)
-
-- [Install VolSync by adding a label from the command line](business_continuity.md#volsync-install-label-cli)
-
-- [Install VolSync by creating a ManagedClusterAddOn](business_continuity.md#volsync-install-mcaddon)
-
-</div>
-
-<a id="volsync-install-label"></a>
-
-### Install VolSync by adding a label in the console
-
-Install VolSync on a managed cluster by adding the VolSync add-on label from the Red Hat Advanced Cluster Management console.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- A configured Red Hat OpenShift Container Platform environment on a supported Red Hat Advanced Cluster Management hub cluster
-
-- The storage driver for the source persistent volume is CSI-compatible and supports snapshots
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Select a managed cluster from the **Clusters** page in the hub cluster console to view its details.
-
-2.  In the **Labels** field, add the following label:
-
-        addons.open-cluster-management.io/volsync=true
-
-    The VolSync service pod is installed on the managed cluster.
-
-3.  Add the same label to the other managed cluster.
-
-4.  Run the following command on the hub cluster to confirm that the VolSync operator is installed:
-
-    ``` bash
-    oc -n <managed-cluster-name> get ManagedClusterAddOn volsync
-    ```
-
-    Replace `managed-cluster-name` with the name of the managed cluster.
-
-5.  Verify that the command output shows that the `ManagedClusterAddOn` has a `Ready` status.
-
-6.  Run the following command on the managed cluster to confirm that the VolSync operator is installed:
-
-    ``` bash
-    kubectl -n volsync-system get deployment volsync
-    ```
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Install VolSync by adding a label from the command line](business_continuity.md#volsync-install-label-cli)
-
-- [Install VolSync by creating a ManagedClusterAddOn](business_continuity.md#volsync-install-mcaddon)
-
-</div>
-
-<a id="volsync-install-label-cli"></a>
-
-### Install VolSync by adding a label from the command line
-
-Install VolSync on a managed cluster by adding the VolSync add-on label to the `ManagedCluster` resource from the command line.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- A configured Red Hat OpenShift Container Platform environment on a supported Red Hat Advanced Cluster Management hub cluster
-
-- The storage driver for the source persistent volume is CSI-compatible and supports snapshots
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Start a command-line session on the hub cluster.
-
-2.  Enter the following command to add the label to the first managed cluster:
-
-    ``` bash
-    oc label managedcluster <managed-cluster-1> "addons.open-cluster-management.io/volsync"="true"
-    ```
-
-    Replace `managed-cluster-1` with the name of one of your managed clusters.
-
-3.  Add the label to the second managed cluster. Run the following command:
-
-    ``` bash
-    oc label managedcluster <managed-cluster-2> "addons.open-cluster-management.io/volsync"="true"
-    ```
-
-    Replace `managed-cluster-2` with the name of your other managed cluster.
-
-    A `ManagedClusterAddOn` resource is created automatically on the hub cluster in the namespace of each corresponding managed cluster.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Install VolSync by adding a label in the console](business_continuity.md#volsync-install-label)
-
-- [Install VolSync by creating a ManagedClusterAddOn](business_continuity.md#volsync-install-mcaddon)
-
-</div>
-
-<a id="volsync-install-mcaddon"></a>
-
-### Install VolSync by creating a *ManagedClusterAddOn* resource
-
-Install VolSync on a managed cluster by creating and applying a `ManagedClusterAddOn` resource on the hub cluster.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- A configured Red Hat OpenShift Container Platform environment on a supported Red Hat Advanced Cluster Management hub cluster
-
-- The storage driver for the source persistent volume is CSI-compatible and supports snapshots
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  On the hub cluster, create a YAML file called `volsync-mcao.yaml` that contains content that is similar to the following example:
-
-    ``` yaml
-    apiVersion: addon.open-cluster-management.io/v1alpha1
-    kind: ManagedClusterAddOn
-    metadata:
-      name: volsync
-      namespace: <managed-cluster-1-namespace>
-    spec: {}
-    ```
-
-    Replace `managed-cluster-1-namespace` with the namespace of one of your managed clusters. This namespace is the same as the name of the managed cluster.
-
-    **Note:** The name of the `ManagedClusterAddOn` must be `volsync`.
-
-2.  Apply the file by entering a command similar to the following example:
-
-    ``` bash
-    oc apply -f volsync-mcao.yaml
-    ```
-
-3.  Repeat the procedure for the other managed cluster.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [VolSync installation on managed clusters](business_continuity.md#volsync-install-clusters)
-
-</div>
-
-<a id="rsync-tls-replication-volsync"></a>
-
-### Rsync-TLS persistent volume replication
-
-Rsync-TLS-based replication creates a 1:1 asynchronous replication of a persistent volume claim across managed clusters. VolSync synchronizes data by using Rsync across a TLS-protected tunnel that is provided by stunnel.
-
-You can use Rsync-TLS-based replication for disaster recovery or for sending data to a remote site. For more information about stunnel, see the [stunnel documentation](https://www.stunnel.org/docs.html). For more information about Rsync-TLS, see [Usage](https://volsync.readthedocs.io/en/latest/usage/index.html) in the VolSync documentation.
-
-**Note:** You must copy the values for `address` and `keySecret` from the destination to the source, so configure the destination before you configure the source.
-
-Before you configure Rsync-TLS replication, ensure that the following requirements are met:
-
-- VolSync is installed on the source and destination managed clusters. See [VolSync installation on managed clusters](business_continuity.md#volsync-install-clusters).
-
-- At least two managed clusters for the same Red Hat Advanced Cluster Management hub cluster
-
-- Network connectivity between the clusters that you configure with VolSync. If the clusters are not on the same network, you can configure the [Submariner multicluster networking and service discovery](networking.md#submariner) and use the `ClusterIP` value for `ServiceType`, or use a load balancer with the `LoadBalancer` value for `ServiceType`.
-
-- The source persistent volume claim is on a CSI storage class
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Configure an Rsync-TLS replication destination](business_continuity.md#volsync-rsync-tls-destination)
-
-- [Copy the Rsync-TLS key secret to the source cluster](business_continuity.md#volsync-rsync-tls-copy-secret)
-
-- [Configure an Rsync-TLS replication source](business_continuity.md#volsync-rsync-tls-source)
-
-- [Verify an Rsync-TLS replication](business_continuity.md#volsync-rsync-tls-verify)
-
-- [Rsync-TLS key secret](business_continuity.md#volsync-rsync-create-tls-secret)
-
-- [Convert a replicated image to a persistent volume claim](business_continuity.md#volsync-convert-backup-pvc)
-
-- [Usage](https://volsync.readthedocs.io/en/latest/usage/index.html)
-
-- [VolSync copy and storage parameters](business_continuity.md#volsync-copy-params)
-
-- [VolSync replication schedule](business_continuity.md#volsync-schedule)
-
-</div>
-
-<a id="volsync-rsync-tls-destination"></a>
-
-### Configure an Rsync-TLS replication destination
-
-Configure a `ReplicationDestination` on the destination cluster and capture the `.status.rsyncTLS.address` and `.status.rsyncTLS.keySecret` values to use on the source cluster.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- VolSync is installed on the source and destination managed clusters. See [VolSync installation on managed clusters](business_continuity.md#volsync-install-clusters).
-
-- At least two managed clusters for the same Red Hat Advanced Cluster Management hub cluster
-
-- Network connectivity between the clusters that you configure with VolSync. If the clusters are not on the same network, you can configure the [Submariner multicluster networking and service discovery](networking.md#submariner) and use the `ClusterIP` value for `ServiceType`, or use a load balancer with the `LoadBalancer` value for `ServiceType`.
-
-- The source persistent volume claim is on a CSI storage class
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Run the following command on the destination cluster to create the namespace:
-
-    ``` bash
-    oc create ns <destination-ns>
-    ```
-
-    Replace `destination-ns` with the namespace where your replication destination is located.
-
-2.  Create a file named `replication_destination.yaml`. Your resource might resemble the following content:
-
-    ``` yaml
-    apiVersion: volsync.backube/v1alpha1
-    kind: ReplicationDestination
-    metadata:
-      name: <destination>
-      namespace: <destination-ns>
-    spec:
-      rsyncTLS:
-        serviceType: LoadBalancer
-        copyMethod: Snapshot
-        capacity: 2Gi
-        accessModes: [ReadWriteOnce]
-        storageClassName: gp2-csi
-        volumeSnapshotClassName: csi-aws-vsc
-    ```
-
-    - For this example, the `serviceType` value of `LoadBalancer` is used. The load balancer service enables your source managed cluster to transfer information to a different destination managed cluster. You can use `ClusterIP` as the service type if your source and destinations are on the same cluster, or if you have Submariner network service configured. Note the address and the name of the secret to refer to when you configure the source cluster.
-
-    - Make sure that the `capacity` value matches the capacity of the persistent volume claim that is being replicated.
-
-    - Replace `destination` with the name of your replication destination custom resource.
-
-    - Replace `destination-ns` with the name of the namespace where your destination is located.
-
-3.  Run the following command on the destination cluster to create the `ReplicationDestination` resource:
-
-    ``` bash
-    oc create -n <destination-ns> -f replication_destination.yaml
-    ```
-
-    Replace `destination-ns` with the name of the namespace where your destination is located.
-
-    After the `ReplicationDestination` resource is created, the `.status.rsyncTLS.address` field provides the destination address for source-to-destination communication, and the `.status.rsyncTLS.keySecret` field provides the name of the TLS key secret that authenticates the connection with the source cluster.
-
-4.  Run the following command to copy the value of `.status.rsyncTLS.address` to use on the source cluster:
-
-    ``` bash
-    ADDRESS=`oc get replicationdestination <destination> -n <destination-ns> --template={{.status.rsyncTLS.address}}`
-    echo $ADDRESS
-    ```
-
-    - Replace `destination` with the name of your replication destination custom resource.
-
-    - Replace `destination-ns` with the name of the namespace where your destination is located.
-
-      The output appears similar to the following example, which is for an Amazon Web Services environment:
-
-    <!-- -->
-
-        a831264645yhrjrjyer6f9e4a02eb2-5592c0b3d94dd376.elb.us-east-1.amazonaws.com
-
-5.  Run the following command to copy the name of the secret:
-
-    ``` bash
-    KEYSECRET=`oc get replicationdestination <destination> -n <destination-ns> --template={{.status.rsyncTLS.keySecret}}`
-    echo $KEYSECRET
-    ```
-
-    - Replace `destination` with the name of your replication destination custom resource.
-
-    - Replace `destination-ns` with the name of the namespace where your destination is located.
-
-      Use the TLS key secret name from the output when you configure the source cluster. The output might resemble the following name:
-
-    <!-- -->
-
-        volsync-rsync-tls-destination-name
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Next steps
-
-</div>
-
-To copy the TLS key secret to the source cluster, see [Copy the Rsync-TLS key secret to the source cluster](business_continuity.md#volsync-rsync-tls-copy-secret).
-
-</div>
-
-<a id="volsync-rsync-tls-copy-secret"></a>
-
-### Copy the Rsync-TLS key secret to the source cluster
-
-Copy the Rsync-TLS key secret from the destination cluster to the source cluster so that the `ReplicationSource` can authenticate to the destination.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You configured a `ReplicationDestination` and captured the `.status.rsyncTLS.keySecret` value. See [Configure an Rsync-TLS replication destination](business_continuity.md#volsync-rsync-tls-destination).
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Copy the key secret from the destination cluster by entering the following command:
-
-    ``` bash
-    oc get secret -n <destination-ns> $KEYSECRET -o yaml > /tmp/secret.yaml
-    ```
-
-    Replace `destination-ns` with the namespace where your replication destination is located.
-
-2.  Open the secret file by entering the following command:
-
-    ``` bash
-    vi /tmp/secret.yaml
-    ```
-
-3.  Change the namespace to the namespace of your source cluster. For this example, it is `source-ns`.
-
-4.  Remove the owner references (`.metadata.ownerReferences`).
-
-5.  On the source cluster, create the secret by entering the following command:
-
-    ``` bash
-    oc create -f /tmp/secret.yaml
-    ```
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Next steps
-
-</div>
-
-To configure the `ReplicationSource`, see [Configure an Rsync-TLS replication source](business_continuity.md#volsync-rsync-tls-source).
-
-</div>
-
-<a id="volsync-rsync-tls-source"></a>
-
-### Configure an Rsync-TLS replication source
-
-Configure a `ReplicationSource` on the source cluster by using the address and TLS key secret values that you copied from the `ReplicationDestination`.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You configured a `ReplicationDestination` and captured the `.status.rsyncTLS.address` and `.status.rsyncTLS.keySecret` values. See [Configure an Rsync-TLS replication destination](business_continuity.md#volsync-rsync-tls-destination).
-
-- You copied the Rsync-TLS key secret to the source cluster. See [Copy the Rsync-TLS key secret to the source cluster](business_continuity.md#volsync-rsync-tls-copy-secret).
-
-- The source persistent volume claim is on a CSI storage class
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Identify the source persistent volume claim that you want to replicate.
-
-2.  Create the `ReplicationSource` resource on the source cluster. Your resource might resemble the following content:
-
-    ``` yaml
-    apiVersion: volsync.backube/v1alpha1
-    kind: ReplicationSource
-    metadata:
-      name: <source>
-      namespace: <source-ns>
-    spec:
-      sourcePVC: <persistent_volume_claim>
-      trigger:
-        schedule: "*/3 * * * *"
-      rsyncTLS:
-        keySecret: <mykeysecret>
-        address: <my.host.com>
-        copyMethod: Snapshot
-        storageClassName: gp2-csi
-        volumeSnapshotClassName: csi-aws-vsc
-    ```
-
-    - Replace `source` with the name for your replication source custom resource.
-
-    - Replace `source-ns` with the namespace of the persistent volume claim where your source is located.
-
-    - Replace `persistent_volume_claim` with the name of your source persistent volume claim.
-
-    - Replace `mykeysecret` with the name of the secret that you copied from the destination cluster to the source cluster (the value of `$KEYSECRET`).
-
-    - Replace `my.host.com` with the host address that you copied from the `.status.rsyncTLS.address` field of the `ReplicationDestination`.
-
-3.  On the source cluster, replace the `address` and `keySecret` values with the values that you noted from the destination cluster, then create the resource:
-
-    ``` bash
-    sed -i "s/<my.host.com>/$ADDRESS/g" replication_source.yaml
-    sed -i "s/<mykeysecret>/$KEYSECRET/g" replication_source.yaml
-    oc create -n <source-ns> -f replication_source.yaml
-    ```
-
-    Replace `source-ns` with the namespace of the persistent volume claim where your source is located.
-
-    **Note:** You must create the file in the same namespace as the persistent volume claim that you want to replicate.
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Next steps
-
-</div>
-
-To verify that the replication completed, see [Verify an Rsync-TLS replication](business_continuity.md#volsync-rsync-tls-verify).
-
-</div>
-
-<a id="volsync-rsync-tls-verify"></a>
-
-### Verify an Rsync-TLS replication
-
-Verify that the Rsync-TLS replication completed by checking the status of the `ReplicationSource` object on the source cluster.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You created a `ReplicationSource` on the source cluster. See [Configure an Rsync-TLS replication source](business_continuity.md#volsync-rsync-tls-source).
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Verify that the replication completed by running the following command on the `ReplicationSource` object:
-
-    ``` bash
-    oc describe ReplicationSource -n <source-ns> <source>
-    ```
-
-    - Replace `source-ns` with the namespace of the persistent volume claim where your source is located.
-
-    - Replace `source` with the name of your replication source custom resource.
-
-      If the replication is successful, the output should be similar to the following example:
-
-    <!-- -->
-
-        Status:
-          Conditions:
-            Last Transition Time:  2021-10-14T20:48:00Z
-            Message:               Synchronization in-progress
-            Reason:                SyncInProgress
-            Status:                True
-            Type:                  Synchronizing
-            Last Transition Time:  2021-10-14T20:41:41Z
-            Message:               Reconcile complete
-            Reason:                ReconcileComplete
-            Status:                True
-            Type:                  Reconciled
-          Last Sync Duration:      5m20.764642395s
-          Last Sync Time:          2021-10-14T20:47:01Z
-          Next Sync Time:          2021-10-14T20:48:00Z
-
-    If the `Last Sync Time` has no time listed, then the replication is not complete.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Rsync-TLS key secret](business_continuity.md#volsync-rsync-create-tls-secret)
-
-- [Convert a replicated image to a persistent volume claim](business_continuity.md#volsync-convert-backup-pvc)
-
-- [Usage](https://volsync.readthedocs.io/en/latest/usage/index.html)
-
-- [VolSync copy and storage parameters](business_continuity.md#volsync-copy-params)
-
-- [VolSync replication schedule](business_continuity.md#volsync-schedule)
-
-</div>
-
-<a id="rsync-replication-volsync"></a>
-
-### Rsync persistent volume replication
-
-Rsync-based replication creates a 1:1 asynchronous replication of a persistent volume claim across managed clusters. You can use Rsync-based replication for disaster recovery or for sending data to a remote site.
-
-**Important:** Use Rsync-TLS instead of Rsync for enhanced security. By using Rsync-TLS, you can avoid using elevated user permissions that are not required for replicating persistent volumes.
-
-For Rsync-based replication, configure custom resources on the source and destination clusters. The custom resources use the `address` value to connect the source to the destination, and the `sshKeys` to ensure that the transferred data is secure.
-
-**Note:** You must copy the values for `address` and `sshKeys` from the destination to the source, so configure the destination before you configure the source.
-
-Before you configure Rsync replication, ensure that the following requirements are met:
-
-- VolSync is installed on the source and destination managed clusters. See [VolSync installation on managed clusters](business_continuity.md#volsync-install-clusters).
-
-- At least two managed clusters for the same Red Hat Advanced Cluster Management hub cluster
-
-- Network connectivity between the clusters that you configure with VolSync. If the clusters are not on the same network, you can configure the [Submariner multicluster networking and service discovery](networking.md#submariner) and use the `ClusterIP` value for `ServiceType`, or use a load balancer with the `LoadBalancer` value for `ServiceType`.
-
-- The source persistent volume claim is on a CSI storage class
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Configure an Rsync replication destination](business_continuity.md#volsync-rsync-destination)
-
-- [Copy the Rsync SSH secret to the source cluster](business_continuity.md#volsync-rsync-copy-secret)
-
-- [Configure an Rsync replication source](business_continuity.md#volsync-rsync-source)
-
-- [Verify an Rsync replication](business_continuity.md#volsync-rsync-verify)
-
-- [Configure an Rsync-TLS replication](business_continuity.md#rsync-tls-replication-volsync)
-
-- [Convert a replicated image to a persistent volume claim](business_continuity.md#volsync-convert-backup-pvc)
-
-- [Usage](https://volsync.readthedocs.io/en/latest/usage/index.html)
-
-- [VolSync copy and storage parameters](business_continuity.md#volsync-copy-params)
-
-- [VolSync replication schedule](business_continuity.md#volsync-schedule)
-
-</div>
-
-<a id="volsync-rsync-destination"></a>
-
-### Configure an Rsync replication destination
-
-Configure a `ReplicationDestination` on the destination cluster and capture the `.status.rsync.address` and `.status.rsync.sshKeys` values to use on the source cluster.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- VolSync is installed on the source and destination managed clusters. See [VolSync installation on managed clusters](business_continuity.md#volsync-install-clusters).
-
-- At least two managed clusters for the same Red Hat Advanced Cluster Management hub cluster
-
-- Network connectivity between the clusters that you configure with VolSync. If the clusters are not on the same network, you can configure the [Submariner multicluster networking and service discovery](networking.md#submariner) and use the `ClusterIP` value for `ServiceType`, or use a load balancer with the `LoadBalancer` value for `ServiceType`.
-
-- The source persistent volume claim is on a CSI storage class
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Run the following command on the destination cluster to create the namespace:
-
-    ``` bash
-    oc create ns <destination-ns>
-    ```
-
-    Replace `destination-ns` with a name for the namespace that will contain your destination persistent volume claim.
-
-2.  Create a file named `replication_destination.yaml`. Your resource might resemble the following content:
-
-    ``` yaml
-    apiVersion: volsync.backube/v1alpha1
-    kind: ReplicationDestination
-    metadata:
-      name: <destination>
-      namespace: <destination-ns>
-    spec:
-      rsync:
-        serviceType: LoadBalancer
-        copyMethod: Snapshot
-        capacity: 2Gi
-        accessModes: [ReadWriteOnce]
-        storageClassName: gp2-csi
-        volumeSnapshotClassName: csi-aws-vsc
-    ```
-
-    - For this example, the `serviceType` value of `LoadBalancer` is used. The load balancer service enables your source managed cluster to transfer information to a different destination managed cluster. You can use `ClusterIP` as the service type if your source and destinations are on the same cluster, or if you have Submariner network service configured. Note the address and the name of the secret to refer to when you configure the source cluster.
-
-    - Make sure that the `capacity` value matches the capacity of the persistent volume claim that is being replicated.
-
-    - Replace `destination` with the name of your replication destination custom resource.
-
-    - Replace `destination-ns` with the name of the namespace where your destination is located.
-
-3.  Run the following command on the destination cluster to create the `ReplicationDestination` resource:
-
-    ``` bash
-    oc create -n <destination-ns> -f replication_destination.yaml
-    ```
-
-    Replace `destination-ns` with the name of the namespace where your destination is located.
-
-    After the `ReplicationDestination` resource is created, the `.status.rsync.address` field provides the destination address for source-to-destination communication, and the `.status.rsync.sshKeys` field provides the name of the SSH key secret for secure data transfer.
-
-4.  Run the following command to copy the value of `.status.rsync.address` to use on the source cluster:
-
-    ``` bash
-    ADDRESS=`oc get replicationdestination <destination> -n <destination-ns> --template={{.status.rsync.address}}`
-    echo $ADDRESS
-    ```
-
-    - Replace `destination` with the name of your replication destination custom resource.
-
-    - Replace `destination-ns` with the name of the namespace where your destination is located.
-
-      The output should appear similar to the following example for an Amazon Web Services environment:
-
-    <!-- -->
-
-        a831264645yhrjrjyer6f9e4a02eb2-5592c0b3d94dd376.elb.us-east-1.amazonaws.com
-
-5.  Run the following command to copy the name of the secret:
-
-    ``` bash
-    SSHKEYS=`oc get replicationdestination <destination> -n <destination-ns> --template={{.status.rsync.sshKeys}}`
-    echo $SSHKEYS
-    ```
-
-    - Replace `destination` with the name of your replication destination custom resource.
-
-    - Replace `destination-ns` with the name of the namespace where your destination is located.
-
-      Use the SSH keys secret name from the output when you configure the source cluster. The output might resemble the following name:
-
-    <!-- -->
-
-        volsync-rsync-dst-src-destination-name
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Next steps
-
-</div>
-
-To copy the SSH secret to the source cluster, see [Copy the Rsync SSH secret to the source cluster](business_continuity.md#volsync-rsync-copy-secret).
-
-</div>
-
-<a id="volsync-rsync-copy-secret"></a>
-
-### Copy the Rsync SSH secret to the source cluster
-
-Copy the Rsync SSH secret from the destination cluster to the source cluster so that the `ReplicationSource` can authenticate to the destination.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You configured a `ReplicationDestination` and captured the `.status.rsync.sshKeys` value. See [Configure an Rsync replication destination](business_continuity.md#volsync-rsync-destination).
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Copy the SSH secret from the destination cluster by entering the following command:
-
-    ``` bash
-    oc get secret -n <destination-ns> $SSHKEYS -o yaml > /tmp/secret.yaml
-    ```
-
-2.  Replace `destination-ns` with the namespace of the persistent volume claim where your destination is located.
-
-3.  Open the secret file by entering the following command:
-
-    ``` bash
-    vi /tmp/secret.yaml
-    ```
-
-4.  Change the namespace to the namespace of your source cluster. For this example, it is `source-ns`.
-
-5.  Remove the owner references (`.metadata.ownerReferences`).
-
-6.  On the source cluster, create the secret by entering the following command:
-
-    ``` bash
-    oc create -f /tmp/secret.yaml
-    ```
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Next steps
-
-</div>
-
-To configure the `ReplicationSource`, see [Configure an Rsync replication source](business_continuity.md#volsync-rsync-source).
-
-</div>
-
-<a id="volsync-rsync-source"></a>
-
-### Configure an Rsync replication source
-
-Configure a `ReplicationSource` on the source cluster by using the address and SSH keys values that you copied from the `ReplicationDestination`.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You configured a `ReplicationDestination` and captured the `.status.rsync.address` and `.status.rsync.sshKeys` values. See [Configure an Rsync replication destination](business_continuity.md#volsync-rsync-destination).
-
-- You copied the Rsync SSH secret to the source cluster. See [Copy the Rsync SSH secret to the source cluster](business_continuity.md#volsync-rsync-copy-secret).
-
-- The source persistent volume claim is on a CSI storage class
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Identify the source persistent volume claim that you want to replicate.
-
-2.  Create the `ReplicationSource` resource on the source cluster. Your resource might resemble the following content:
-
-    ``` yaml
-    apiVersion: volsync.backube/v1alpha1
-    kind: ReplicationSource
-    metadata:
-      name: <source>
-      namespace: <source-ns>
-    spec:
-      sourcePVC: <persistent_volume_claim>
-      trigger:
-        schedule: "*/3 * * * *"
-      rsync:
-        sshKeys: <mysshkeys>
-        address: <my.host.com>
-        copyMethod: Snapshot
-        storageClassName: gp2-csi
-        volumeSnapshotClassName: csi-aws-vsc
-    ```
-
-    - Replace `source` with the name for your replication source custom resource.
-
-    - Replace `source-ns` with the namespace of the persistent volume claim where your source is located.
-
-    - Replace `persistent_volume_claim` with the name of your source persistent volume claim.
-
-    - Replace `mysshkeys` with the keys that you copied from the `.status.rsync.sshKeys` field of the `ReplicationDestination` when you configured it.
-
-    - Replace `my.host.com` with the host address that you copied from the `.status.rsync.address` field of the `ReplicationDestination` when you configured it.
-
-3.  On the source cluster, replace the `address` and `sshKeys` values with the values that you noted from the destination cluster, then create the resource:
-
-    ``` bash
-    sed -i "s/<my.host.com>/$ADDRESS/g" replication_source.yaml
-    sed -i "s/<mysshkeys>/$SSHKEYS/g" replication_source.yaml
-    oc create -n <source-ns> -f replication_source.yaml
-    ```
-
-4.  Replace `source-ns` with the namespace of the persistent volume claim where your source is located.
-
-    **Note:** You must create the file in the same namespace as the persistent volume claim that you want to replicate.
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Next steps
-
-</div>
-
-To verify that the replication completed, see [Verify an Rsync replication](business_continuity.md#volsync-rsync-verify).
-
-</div>
-
-<a id="volsync-rsync-verify"></a>
-
-### Verify an Rsync replication
-
-Verify that the Rsync replication completed by checking the status of the `ReplicationSource` object on the source cluster.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- You created a `ReplicationSource` on the source cluster. See [Configure an Rsync replication source](business_continuity.md#volsync-rsync-source).
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Verify that the replication completed by running the following command on the `ReplicationSource` object:
-
-    ``` bash
-    oc describe ReplicationSource -n <source-ns> <source>
-    ```
-
-    - Replace `source-ns` with the namespace of the persistent volume claim where your source is located.
-
-    - Replace `source` with the name of your replication source custom resource.
-
-      If the replication was successful, the output should be similar to the following example:
-
-    <!-- -->
-
-        Status:
-          Conditions:
-            Last Transition Time:  2021-10-14T20:48:00Z
-            Message:               Synchronization in-progress
-            Reason:                SyncInProgress
-            Status:                True
-            Type:                  Synchronizing
-            Last Transition Time:  2021-10-14T20:41:41Z
-            Message:               Reconcile complete
-            Reason:                ReconcileComplete
-            Status:                True
-            Type:                  Reconciled
-          Last Sync Duration:      5m20.764642395s
-          Last Sync Time:          2021-10-14T20:47:01Z
-          Next Sync Time:          2021-10-14T20:48:00Z
-
-    If the `Last Sync Time` has no time listed, then the replication is not complete.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Configure an Rsync-TLS replication](business_continuity.md#rsync-tls-replication-volsync)
-
-- [Convert a replicated image to a persistent volume claim](business_continuity.md#volsync-convert-backup-pvc)
-
-- [Usage](https://volsync.readthedocs.io/en/latest/usage/index.html)
-
-- [VolSync copy and storage parameters](business_continuity.md#volsync-copy-params)
-
-- [VolSync replication schedule](business_continuity.md#volsync-schedule)
-
-</div>
-
-<a id="restic-backup-volsync"></a>
-
-### Configure a Restic backup
-
-Configure a Restic backup of a persistent volume by creating a repository secret and a `ReplicationSource`. A Restic backup does not synchronize data between clusters. It copies backup data to the location that you specify in your `restic-config` secret.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- VolSync is installed on the managed cluster. See [VolSync installation on managed clusters](business_continuity.md#volsync-install-clusters).
-
-- The storage driver for the source persistent volume is CSI-compatible and supports snapshots
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Specify a repository where your backup images are stored by creating a secret. Your resource might resemble the following example:
-
-    ``` yaml
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: restic-config
-    type: Opaque
-    stringData:
-      RESTIC_REPOSITORY: <my-restic-repository>
-      RESTIC_PASSWORD: <my-restic-password>
-      AWS_ACCESS_KEY_ID: access
-      AWS_SECRET_ACCESS_KEY: password
-    ```
-
-    - Replace `my-restic-repository` with the location of the S3 bucket repository where you want to store your backup files.
-
-    - Replace `my-restic-password` with the encryption key that is required to access the repository.
-
-    - Replace `access` and `password` with the credentials for your provider, if required.
-
-      If you need to prepare a new repository, see [Preparing a new repository](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) for the procedure. If you use that procedure, skip the step that requires you to run the `restic init` command. VolSync automatically initializes the repository during the first backup.
-
-      **Important:** When you back up multiple persistent volume claims to the same S3 bucket, the path to the bucket must be unique for each persistent volume claim. Each persistent volume claim is backed up with a separate `ReplicationSource`, and each requires a separate restic-config secret. By sharing the same S3 bucket, each `ReplicationSource` has write access to the entire S3 bucket.
-
-2.  Create the `ReplicationSource` resource to configure your backup policy. Your resource might resemble the following example:
-
-    ``` yaml
-    apiVersion: volsync.backube/v1alpha1
-    kind: ReplicationSource
-    metadata:
-      name: mydata-backup
-    spec:
-      sourcePVC: <source>
-      trigger:
-        schedule: "*/30 * * * *"
-      restic:
-        pruneIntervalDays: 14
-        repository: <restic-config>
-        retain:
-          hourly: 6
-          daily: 5
-          weekly: 4
-          monthly: 2
-          yearly: 1
-        copyMethod: Clone
-    ```
-
-    - Replace `source` with the persistent volume claim that you are backing up.
-
-    - Replace the value for `schedule` with how often to run the backup. This example runs every 30 minutes.
-
-    - Replace the value of `pruneIntervalDays` with the number of days that elapse between instances of repacking the data to save space. The prune operation can generate significant I/O traffic while it is running.
-
-    - Replace `restic-config` with the name of the secret that you created in the previous step.
-
-    - Set the values for `retain` to your retention policy for the backed up images.
-
-      **Note:** Use `Clone` for the value of `copyMethod` to ensure that a point-in-time image is saved.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Restore a Restic backup](business_continuity.md#restore-restic-backup)
-
-- [Run VolSync movers as root](business_continuity.md#volsync-privileged-movers)
-
-- [VolSync copy and storage parameters](business_continuity.md#volsync-copy-params)
-
-- [VolSync replication schedule](business_continuity.md#volsync-schedule)
-
-- [Backup options](https://volsync.readthedocs.io/en/latest/usage/restic/index.html#backup-options)
-
-</div>
-
-<a id="restore-restic-backup"></a>
-
-### Restore a Restic backup
-
-Restore copied data from a Restic backup into a new persistent volume claim by creating the claim and a `ReplicationDestination` that points to that claim. The restore process needs to be completed only once. This example restores the most recent backup.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Create a new persistent volume claim to contain the restored data. Your resource might resemble the following example:
-
-    ``` yaml
-    kind: PersistentVolumeClaim
-    apiVersion: v1
-    metadata:
-      name: <pvc-name>
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 3Gi
-    ```
-
-    - Replace `pvc-name` with the name of the new persistent volume claim.
-
-      **Note:** Restore only one backup into a new persistent volume claim.
-
-2.  Create a `ReplicationDestination` custom resource to specify where to restore the data. Your resource might resemble the following example:
-
-    ``` yaml
-    apiVersion: volsync.backube/v1alpha1
-    kind: ReplicationDestination
-    metadata:
-      name: <destination>
-    spec:
-      trigger:
-        manual: restore-once
-      restic:
-        repository: <restic-repo>
-        destinationPVC: <pvc-name>
-        copyMethod: Direct
-    ```
-
-    - Replace `destination` with the name of your replication destination custom resource.
-
-    - Replace `restic-repo` with the path to your repository where the source is stored.
-
-    - Replace `pvc-name` with the name of the persistent volume claim where you want to restore the data. Use an existing persistent volume claim for this value, rather than provisioning a new one.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Configure a Restic backup](business_continuity.md#restic-backup-volsync)
-
-- [Restore options](https://volsync.readthedocs.io/en/latest/usage/restic/index.html#restore-options)
-
-</div>
-
-<a id="rclone-replication-volsync"></a>
-
-### Configure an Rclone replication
-
-Configure an Rclone replication to copy a single persistent volume to multiple locations by creating a `ReplicationSource` and a `ReplicationDestination` that use Rclone through an intermediate object storage location, such as AWS S3.
-
-<div>
-
-<div class="title">
-
-Prerequisites
-
-</div>
-
-- VolSync is installed on the managed clusters that participate in the replication. See [VolSync installation on managed clusters](business_continuity.md#volsync-install-clusters).
-
-</div>
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Create the `ReplicationSource` resource on the source cluster. Your resource might resemble the following example:
-
-    ``` yaml
-    apiVersion: volsync.backube/v1alpha1
-    kind: ReplicationSource
-    metadata:
-      name: <source>
-      namespace: <source-ns>
-    spec:
-      sourcePVC: <source-pvc>
-      trigger:
-        schedule: "*/6 * * * *"
-      rclone:
-        rcloneConfigSection: <intermediate-s3-bucket>
-        rcloneDestPath: <destination-bucket>
-        rcloneConfig: <rclone-secret>
-        copyMethod: Snapshot
-        storageClassName: <my-sc-name>
-        volumeSnapshotClassName: <my-vsc>
-    ```
-
-    - Replace `source` with the name for your replication source custom resource.
-
-    - Replace `source-ns` with the namespace of the persistent volume claim where your source is located.
-
-    - Replace `source-pvc` with the persistent volume claim that you are replicating.
-
-    - Replace the value of `schedule` with how often to run the replication. This example runs every 6 minutes. The value must be within quotation marks.
-
-    - Replace `intermediate-s3-bucket` with the path to the configuration section of the Rclone configuration file.
-
-    - Replace `destination-bucket` with the path to the object bucket where you want your replicated files copied.
-
-    - Replace `rclone-secret` with the name of the secret that contains your Rclone configuration information.
-
-2.  Create the `ReplicationDestination` resource. Your resource might resemble the following example:
-
-    ``` yaml
-    apiVersion: volsync.backube/v1alpha1
-    kind: ReplicationDestination
-    metadata:
-      name: database-destination
-      namespace: dest
-    spec:
-      trigger:
-        schedule: "3,9,15,21,27,33,39,45,51,57 * * * *"
-      rclone:
-        rcloneConfigSection: <intermediate-s3-bucket>
-        rcloneDestPath: <destination-bucket>
-        rcloneConfig: <rclone-secret>
-        copyMethod: Snapshot
-        accessModes: [ReadWriteOnce]
-        capacity: 10Gi
-        storageClassName: <my-sc>
-        volumeSnapshotClassName: <my-vsc>
-    ```
-
-    - Replace the value for `schedule` with how often to move the replication to the destination. The schedules for the source and destination must be offset so that the data can finish replicating before it is pulled from the destination. This example runs every 6 minutes, offset by 3 minutes. The value must be within quotation marks.
-
-    - Replace `intermediate-s3-bucket` with the path to the configuration section of the Rclone configuration file.
-
-    - Replace `destination-bucket` with the path to the object bucket where you want your replicated files copied.
-
-    - Replace `rclone-secret` with the name of the secret that contains your Rclone configuration information.
-
-    - The value for `accessModes` specifies the access modes for the persistent volume claim. Valid values are `ReadWriteOnce` or `ReadWriteMany`.
-
-    - The `capacity` value specifies the size of the destination volume, which must be large enough to contain the incoming data.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Run VolSync movers as root](business_continuity.md#volsync-privileged-movers)
-
-- [Convert a replicated image to a persistent volume claim](business_continuity.md#volsync-convert-backup-pvc)
-
-- [VolSync copy and storage parameters](business_continuity.md#volsync-copy-params)
-
-- [VolSync replication schedule](business_continuity.md#volsync-schedule)
-
-</div>
-
-<a id="volsync-privileged-movers"></a>
-
-### Run VolSync movers as root
-
-Run Restic or Rclone movers as root by annotating the namespace with the elevated permissions annotation. Restic and Rclone movers run without root permissions by default.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Run the following command to add the elevated permissions annotation to your namespace:
-
-    ``` bash
-    oc annotate namespace <namespace> volsync.backube/privileged-movers=true
-    ```
-
-2.  Replace `namespace` with the name of your namespace.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Configure a Restic backup](business_continuity.md#restic-backup-volsync)
-
-- [Configure an Rclone replication](business_continuity.md#rclone-replication-volsync)
-
-</div>
-
-<a id="volsync-convert-backup-pvc"></a>
-
-### Convert a replicated image to a persistent volume claim
-
-Convert the copy of the image to a usable persistent volume claim to recover data from a replicated image. When you replicate or restore a persistent volume claim from a `ReplicationDestination` by using a `VolumeSnapshot`, a `VolumeSnapshot` is created. The `VolumeSnapshot` contains the `latestImage` from the last successful synchronization. The VolSync `ReplicationDestination` volume populator converts that image to a usable persistent volume claim.
-
-<div>
-
-<div class="title">
-
-Procedure
-
-</div>
-
-1.  Create a persistent volume claim with a `dataSourceRef` that references the `ReplicationDestination` where you want to restore a persistent volume claim. This persistent volume claim is populated with the contents of the `VolumeSnapshot` that is specified in the `status.latestImage` setting of the `ReplicationDestination` custom resource definition. The following YAML content shows a sample persistent volume claim that might be used:
-
-    ``` yaml
-    apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: <pvc-name>
-      namespace: <destination-ns>
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      dataSourceRef:
-        kind: ReplicationDestination
-        apiGroup: volsync.backube
-        name: <replicationdestination_to_replace>
-      resources:
-        requests:
-          storage: 2Gi
-    ```
-
-    - Replace `pvc-name` with a name for your new persistent volume claim.
-
-    - Replace `destination-ns` with the namespace where the persistent volume claim and `ReplicationDestination` are located.
-
-    - Replace `replicationdestination_to_replace` with the `ReplicationDestination` name.
-
-      **Note:** You can update `resources.requests.storage` with a different value when the value is at least the same size as the initial source persistent volume claim.
-
-2.  Validate that your persistent volume claim is running in the environment. Replace `destination-ns` with the namespace where the persistent volume claim is located. Run the following command:
-
-    ``` bash
-    kubectl get pvc -n <destination-ns>
-    ```
-
-    **Notes:**
-
-    - If no `latestImage` exists, the persistent volume claim remains in a pending state until the `ReplicationDestination` completes and a snapshot is available. You can create a `ReplicationDestination` and a persistent volume claim that use the `ReplicationDestination` at the same time. The persistent volume claim starts the volume population process only after the `ReplicationDestination` completes a replication and a snapshot is available. You can find the snapshot in `.status.latestImage`.
-
-    - If the storage class that is used has a `volumeBindingMode` value of `WaitForFirstConsumer`, the volume populator waits until there is a consumer of the persistent volume claim before the volume is populated. When a consumer requires access, such as a pod that wants to mount the persistent volume claim, then the volume is populated. The VolSync volume populator controller uses the `latestImage` from the `ReplicationDestination`. The `latestImage` is updated each time a replication completes after the persistent volume claim was created.
-
-</div>
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [VolSync persistent volume replication service](business_continuity.md#volsync)
-
-</div>
-
-<a id="volsync-schedule"></a>
-
-### VolSync replication schedule
-
-A VolSync replication can start continuously, on a schedule, or manually. The replication starts when the scheduled time occurs.
-
-See the following order of the schedule values:
-
-    "minute (0-59) hour (0-23) day-of-month (1-31) month (1-12) day-of-week (0-6)"
-
-Your setting for this replication option might resemble the following content:
-
-``` yaml
-spec:
-  trigger:
-    schedule: "*/6 * * * *"
-```
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [VolSync](https://volsync.readthedocs.io/en/latest/index.html) documentation
-
-- [Configure an Rsync-TLS replication](business_continuity.md#rsync-tls-replication-volsync)
-
-- [Configure an Rclone replication](business_continuity.md#rclone-replication-volsync)
-
-</div>
-
-<a id="volsync-copy-params"></a>
-
-### VolSync copy and storage parameters
-
-The `copyMethod`, `storageClassName`, and `volumeSnapshotClassName` fields control how VolSync creates a point-in-time copy of a persistent volume claim.
-
-`copyMethod`  
-Specifies whether a point-in-time copy is generated, and which method is used. Valid values include `Clone`, `Direct`, and `Snapshot`. If your storage driver supports cloning, `Clone` can be a more streamlined process for replication. For Restic backups, use `Clone` when you want to ensure that a point-in-time image is saved.
-
-`storageClassName`  
-Name of the storage class to use for the point-in-time copy. Specify this value when you use a storage class that is different from the default for your environment. If you omit the value on a `ReplicationSource`, the storage class of the source volume is used. If you omit the value on a `ReplicationDestination`, the system storage class is used.
-
-`volumeSnapshotClassName`  
-Name of the `VolumeSnapshotClass` to use when `copyMethod` is `Snapshot`. This value is not required for other `copyMethod` values. If you omit the value, the system default `VolumeSnapshotClass` is used.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Configure an Rsync-TLS replication](business_continuity.md#rsync-tls-replication-volsync)
-
-- [Configure an Rsync replication](business_continuity.md#rsync-replication-volsync)
-
-- [Configure a Restic backup](business_continuity.md#restic-backup-volsync)
-
-- [Configure an Rclone replication](business_continuity.md#rclone-replication-volsync)
-
-</div>
-
-<a id="volsync-rsync-create-tls-secret"></a>
-
-### Rsync-TLS key secret
-
-The source and destination clusters must have access to the shared key for the TLS connection. You can find the key location in the `keySecret` field. If you do not provide a secret name in `.spec.rsyncTLS.keySecret`, the secret name is automatically generated and added to `.status.rsyncTLS.keySecret`.
-
-See the following format for the secret:
-
-    <id>:<at_least_32_hex_digits>
-
-See the following example: `1:23b7395fafc3e842bd8ac0fe142e6ad1`
-
-The corresponding secret might resemble the following example:
-
-``` yaml
-apiVersion: v1
-data:
-  # echo -n 1:23b7395fafc3e842bd8ac0fe142e6ad1 | base64
-  psk.txt: MToyM2I3Mzk1ZmFmYzNlODQyYmQ4YWMwZmUxNDJlNmFkMQ==
-kind: Secret
-metadata:
-  name: tls-key-secret
-type: Opaque
-```
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
-- [Configure an Rsync-TLS replication](business_continuity.md#rsync-tls-replication-volsync)
 
 </div>

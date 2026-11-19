@@ -2,7 +2,7 @@
 
 If you are creating quick start tutorials for the OpenShift Container Platform web console, follow these guidelines to keep a consistent user experience across all quick starts.
 
-# Understand quick starts
+# Create quick start tutorials in the web console
 
 A quick start is a guided tutorial with user tasks. In the web console, you can access quick starts under the **Help** menu. They are especially useful for getting oriented with an application, Operator, or other product offering.
 

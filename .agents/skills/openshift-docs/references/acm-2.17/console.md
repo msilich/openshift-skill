@@ -28,14 +28,6 @@ The credential stores the access information for a cloud provider. Each provider
 
 Review your credentials or add a credential.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Overview page](console.md#overview-page)
 
 - [Access command line tools](console.md#command-line-tools)
@@ -53,8 +45,6 @@ Additional resources
 - [Governance](governance.md#governance)
 
 - [Managing credentials overview](clusters.md#credentials)
-
-</div>
 
 <a id="overview-page"></a>
 

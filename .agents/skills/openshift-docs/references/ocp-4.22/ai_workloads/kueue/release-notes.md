@@ -60,6 +60,14 @@ On OpenShift Container Platform 5.0 and later, you can set quotas for shared Dyn
 Beta API deprecation
 Beta (`v1beta1`) APIs are deprecated in Red Hat build of Kueue 1.5 and planned for removal in a future release.
 
+# Release notes for Red Hat build of Kueue version 1.4.4
+
+Red Hat build of Kueue version 1.4.4 is a generally available release that is supported on OpenShift Container Platform versions 4.18 and later. Red Hat build of Kueue version 1.4.4 uses [Kueue](https://kueue.sigs.k8s.io/docs/overview/) version 0.18.
+
+## Fixed issues
+
+Updates Operator and Operand images to the latest Red Hat Universal Base Image (UBI) layers to incorporate security fixes.
+
 # Release notes for Red Hat build of Kueue version 1.4.3
 
 Red Hat build of Kueue version 1.4.3 is a generally available release that is supported on OpenShift Container Platform versions 4.18 and later. Red Hat build of Kueue version 1.4.3 uses [Kueue](https://kueue.sigs.k8s.io/docs/overview/) version 0.18.

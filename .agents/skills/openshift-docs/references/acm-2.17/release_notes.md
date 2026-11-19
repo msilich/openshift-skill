@@ -69,13 +69,13 @@ Red Hat Advanced Cluster Management is available on the [AWS Marketplace](https:
 
 ### New features and enhancements for each component
 
-Learn specific details about new features for components within Red Hat Advanced Cluster Management:
+Learn specific details about new features for components within Red Hat Advanced Cluster Management.
 
 Some features and components are identified and released as [Technology Preview](https://access.redhat.com/support/offerings/techpreview).
 
 Learn about Red Hat Advanced Cluster Management advanced configuration options at [MultiClusterHub advanced configuration](get_started.md#advanced-config-hub) in the documentation.
 
-<a id="console-new-features"></a>
+<a id="_console"></a>
 
 ### Console
 
@@ -125,7 +125,7 @@ Learn about new features for Governance.
 
 See [Governance](governance.md#governance) to learn more about the dashboard and the policy framework.
 
-<a id="virt-new-features"></a>
+<a id="_virtualization"></a>
 
 ### Virtualization
 
@@ -171,9 +171,11 @@ Review the known issues for application management. The following list contains 
 
 **Important:** Cluster lifecycle components and features are within the multicluster engine operator, which is a software operator that enhances cluster fleet management. Release notes for multicluster engine operator-specific features are found in at [Release notes for the multicluster engine operator](mce_release_notes.md#mce-release-notes-intro).
 
+If you find a security issue that you want to disclose confidentially, contact the Red Hat Product Security team. For more details, see [Security Contacts and Procedures](https://docs.redhat.com/security/team/contact/).
+
 - [Installation known issues](release_notes.md#known-issues-install)
 
-- [Business continuity known issues](release_notes.md#known-issues-continuity)
+- [Back up and restore known issues](release_notes.md#known-issues-continuity)
 
 - [Console known issues](release_notes.md#known-issues-console)
 
@@ -329,7 +331,7 @@ Additional resources
 
 <a id="known-issues-continuity"></a>
 
-### Business continuity known issues
+### Back up and restore known issues
 
 Review the known issues for Red Hat Advanced Cluster Management for Kubernetes. The following list contains known issues for this release, or known issues that continued from the previous release.
 
@@ -401,7 +403,7 @@ A new hub cluster can have a different configuration than the active hub cluster
 
 Velero skips existing resources if they are not part of the restored backup, so the policy on the new hub cluster remains unchanged, resulting in a different configuration between the new hub cluster and active hub cluster.
 
-To address this limitation, the cluster backup and restore operator runs a post restore operation to clean up the resources created by the user or a different restore operation when a `restore.cluster.open-cluster-management.io` resource is created. For more information, see the [Cleaning the hub cluster after restore](business_continuity.md#clean-hub-restore) topic.
+To address this limitation, the cluster backup and restore operator runs a post restore operation to clean up the resources created by the user or a different restore operation when a `restore.cluster.open-cluster-management.io` resource is created. For more information, see the *Post restore clean up* topic.
 
 <div>
 
@@ -410,6 +412,8 @@ To address this limitation, the cluster backup and restore operator runs a post 
 Additional resources
 
 </div>
+
+- [Post restore clean up](backup_restore.md#clean-hub-restore)
 
 - [GH-21861](https://github.com/stolostron/backlog/issues/21861)
 
@@ -447,7 +451,7 @@ Procedure
 
 </div>
 
-- Apply any configuration changes that are related to the `local-cluster` resource on the restored cluster. See *Prepare the new hub cluster* in the [Install the backup and restore operator](business_continuity.md#dr4hub-install-backup-and-restore) topic.
+- Apply any configuration changes that are related to the `local-cluster` resource on the restored cluster. See *Prepare the new hub cluster* in the [Install the backup and restore operator](backup_restore.md#dr4hub-install-backup-and-restore) topic.
 
 </div>
 
@@ -497,7 +501,7 @@ Additional resources
 
 #### Imported managed clusters show a *Pending Import* status
 
-Managed clusters that are manually imported on the primary hub cluster show a `Pending Import` status when the activation data is restored on the passive hub cluster. For more information, see [Connecting clusters by using a Managed Service Account](business_continuity.md#auto-connect-clusters-msa).
+Managed clusters that are manually imported on the primary hub cluster show a `Pending Import` status when the activation data is restored on the passive hub cluster. For more information, see *Connecting clusters by using a Managed Service Account*.
 
 <div>
 
@@ -506,6 +510,8 @@ Managed clusters that are manually imported on the primary hub cluster show a `P
 Additional resources
 
 </div>
+
+- [Connecting clusters by using a Managed Service Account](backup_restore.md#auto-connect-clusters-msa)
 
 - [ACM-1890](https://issues.redhat.com/browse/ACM-1890)
 
@@ -2019,7 +2025,7 @@ Additional resources
 
 #### Retention change causes data loss
 
-The default retention for all resolution levels, such as `retentionResolutionRaw`, `retentionResolution5m`, or `retentionResolution1h`, is 365 days (`365d`). This `365d` default retention means that the default retention for a 1 hour resolution has decreased from indefinite, `0d` to `365d`. This retention change might cause you to lose data. If you did not set an explicit value for the resolution retention in your `MultiClusterObservability` `spec.advanced.retentionConfig` parameter, you might lose data. For more information, see [Observability advanced configuration](observability.md#adv-config-obs).
+The default retention for all resolution levels, such as `retentionResolutionRaw`, `retentionResolution5m`, or `retentionResolution1h`, is 365 days (`365d`). This `365d` default retention means that the default retention for a 1 hour resolution has decreased from indefinite, `0d` to `365d`. This retention change might cause you to lose data. If you did not set an explicit value for the resolution retention in your `MultiClusterObservability` `spec.advanced.retentionConfig` parameter, you might lose data. For more information, see *Observability advanced configuration*.
 
 <div>
 
@@ -2028,6 +2034,8 @@ The default retention for all resolution levels, such as `retentionResolutionRaw
 Additional resources
 
 </div>
+
+- [Observability advanced configuration](observability.md#adv-config-obs)
 
 - [ACM-11048](https://issues.redhat.com/browse/ACM-11048)
 
@@ -2816,7 +2824,6 @@ Function that was deprecated in previous releases and is no longer available in 
 | Product or category | Affected item | Version | Recommended action | More details and links |
 |----|----|----|----|----|
 | Application management | Subscription | 2.13 | Use Red Hat Advanced Cluster Management with OpenShift GitOps instead. | The deprecation is extended for five releases before removal. See [GitOps overview](gitops.md#gitops-overview) for updated function. |
-| Applications and Governance | `PlacementRule` | 2.8 | Use `Placement` anywhere that you might use `PlacementRule`. | While `PlacementRule` is still available, it is not supported and the console displays `Placement` by default. |
 | multicluster global hub | PostgreSQL manual update process | Red Hat Advanced Cluster Management 2.14 | None | Automatic database updates are supported for multicluster global hub version 1.5 and later. |
 
 Table list of *deprecated* items for Red Hat Advanced Cluster Management

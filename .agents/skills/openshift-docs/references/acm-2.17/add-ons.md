@@ -33,14 +33,6 @@ In Red Hat Advanced Cluster Management, you can configure the following klusterl
 
 - work-manager
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Enable klusterlet add-ons on clusters for cluster management](add-ons.md#add-ons-klusterlet)
 
 - [Set up the *AddOnDeploymentConfig* to configure klusterlet add-ons](add-ons.md#setting-addondeploymentconfig-klusterlet-addons)
@@ -52,8 +44,6 @@ Additional resources
 - [Enable cluster-wide proxy on existing cluster add-ons](add-ons.md#enable-cluster-wide-proxy-addon)
 
 - [Modify the klusterlet add-ons settings of your cluster](add-ons.md#modify-klusterlet-add-ons)
-
-</div>
 
 <a id="add-ons-klusterlet"></a>
 
