@@ -45,7 +45,7 @@
   "local_build_helpers": {
     "acs.py": "0d6838be708ed4f0600354dd91d52fd1d2abb8885245be38daf3288b73ab7a6c",
     "import_acm.py": "b74ce53f0f589f2dbf609b6be3b7e1dfcc407f0fabddf8cd01997e60d276348d",
-    "import_devspaces.py": "38fc2d648fea470134a0e504c3d8385b67c3a3a76e549e3213b96b6f51cffa89"
+    "import_devspaces.py": "f3941fa6734faeb7fb3cf20a88e78d89b62eb457132ee7f6bebca3143c9f6c5b"
   },
   "schema_version": 1,
   "sources": {
