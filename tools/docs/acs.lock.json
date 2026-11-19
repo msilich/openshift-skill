@@ -15,7 +15,7 @@
     },
     "openshift_docs": {
       "branch_hint": "rhacs-docs-4.11",
-      "commit": "fb48f6bfd2e5f69c07ef73888ffa05bb6e4f0135",
+      "commit": "3752a68a799f9803f080f490b37e66f424ca9506",
       "license": "Apache-2.0",
       "license_file": "LICENSE.openshift-docs",
       "url": "https://github.com/openshift/openshift-docs"
@@ -30,7 +30,7 @@
   "expected_output": {
     "converted_topics": 225,
     "markdown_files": 227,
-    "markdown_manifest_sha256": "6e1c188e7e4aa267edefdd1461c8e40f99d5c973e4963dd46289028e8547eb91"
+    "markdown_manifest_sha256": "f252baf5a0943cd0164b0573d81a8d381f02f655146709875a1f8f4f8bb68c2b"
   },
   "document": {
     "product": "Red Hat Advanced Cluster Security for Kubernetes",

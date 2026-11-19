@@ -15,7 +15,7 @@
       "version": "2.17",
       "url": "https://github.com/stolostron/rhacm-docs",
       "branch": "2.17_prod",
-      "commit": "da77ef38f05cf583d057e43ecb6aa5697158fada",
+      "commit": "c673fcc51a919970db15b6c3c5c37ed37a393644",
       "license": "CC-BY-SA-3.0",
       "api_url": "https://github.com/stolostron/api-documentation",
       "api_branch": "release-2.17",
@@ -33,7 +33,7 @@
     "openshift_acs_docs": {
       "version": "4.11",
       "branch": "rhacs-docs-4.11",
-      "commit": "fb48f6bfd2e5f69c07ef73888ffa05bb6e4f0135",
+      "commit": "3752a68a799f9803f080f490b37e66f424ca9506",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0",
       "build_lock": "tools/docs/acs.lock.json"
@@ -82,7 +82,7 @@
     },
     "openshift_docs": {
       "branch": "enterprise-4.20",
-      "commit": "58129476889c10ea389b15c2cb7c3c239fdb4cbc",
+      "commit": "2b1f937b0c6aa7bc388363b9a1340d5ddba643ad",
       "url": "https://github.com/openshift/openshift-docs",
       "license": "Apache-2.0"
     },

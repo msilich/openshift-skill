@@ -845,6 +845,10 @@ This release addresses the following security vulnerabilities:
 
 - Distrust eMudhra intermediate CA certificates due to security concerns ([CVE-2026-114406](https://access.redhat.com/security/cve/CVE-2026-114406))
 
+<!-- -->
+
+- klauspost/compress: Denial of Service via crafted `zstd` compressed input ([CVE-2026-116591](https://access.redhat.com/security/cve/CVE-2026-116591))
+
 <a id="image-versions_release-notes-411"></a>
 
 # Image versions

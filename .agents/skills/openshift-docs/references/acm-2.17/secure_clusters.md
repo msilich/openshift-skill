@@ -11,14 +11,6 @@ Use the role-based access control and authentication to identify the user associ
 
 **Required access:** Cluster administrator
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Role-based access control](secure_clusters.md#rbac-rhacm)
 
 - [Fine-grained role-based access control overview](secure_clusters.md#fine-grain-intro)
@@ -31,8 +23,6 @@ Additional resources
 
 - [Role-based access control for your managed clusters with cluster permissions](secure_clusters.md#rbac-managed-cluster-permissions)
 
-</div>
-
 <a id="rbac-rhacm"></a>
 
 ## Role-based access control
@@ -42,14 +32,6 @@ Red Hat Advanced Cluster Management for Kubernetes supports role-based access co
 **Note:** Action buttons are disabled from the console if the user-role access is impermissible.
 
 The multicluster engine operator can function as a standalone operator, or it is installed as the cluster management function when you install Red Hat Advanced Cluster Management. To manage RBAC for clusters with the multicluster engine operator, use the RBAC guidance from the cluster documentation.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
 
 - [Overview of roles](secure_clusters.md#rbac-overview-roles)
 
@@ -66,8 +48,6 @@ Additional resources
 - [multicluster engine for Kubernetes operator Role-based access control](clusters.md#mce-rbac)
 
 - [OpenShift Container Platform RBAC overview](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/authentication_and_authorization/using-rbac)
-
-</div>
 
 <a id="rbac-overview-roles"></a>
 
@@ -448,14 +428,6 @@ Additional resources
 
 Red Hat Advanced Cluster Management for Kubernetes supports fine-grained role-based access control (RBAC) for virtual machine scenarios.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Fine-grained RBAC roles and descriptions](secure_clusters.md#fine-grain-roles-descriptions)
 
 - [Enabling fine-grained RBAC for virtual machines](secure_clusters.md#fine-grain-enable)
@@ -475,8 +447,6 @@ Additional resources
 - [*MulticlusterRoleAssignment* examples for fine-grained role-based access control](secure_clusters.md#fine-grain-mca-examples)
 
 - [Managing custom roles with *MulticlusterRoleAssignment*](secure_clusters.md#fine-grain-mca-custom)
-
-</div>
 
 <a id="fine-grain-roles-descriptions"></a>
 
@@ -739,9 +709,9 @@ Procedure
 
 14. Click **Create** to finalize the role assignment.
 
-</div>
+    The new role assignment appears in the **Role Assignments** table for the selected identity. The permissions take effect the next time the user logs in or refreshes their session.
 
-The new role assignment appears in the **Role Assignments** table for the selected identity. The permissions take effect the next time the user logs in or refreshes their session.
+</div>
 
 <a id="fine-grain-ui-roles"></a>
 
@@ -814,9 +784,9 @@ Procedure
 
 12. Click **Create** to finalize the role assignment.
 
-</div>
+    The new role assignment is created. You can verify the assignment by viewing the **Role Assignments** tab for either the selected role or the individual identities.
 
-The new role assignment is created. You can verify the assignment by viewing the **Role Assignments** tab for either the selected role or the individual identities.
+</div>
 
 <a id="fine-grain-ui-clusters"></a>
 
@@ -876,9 +846,9 @@ Procedure
 
 10. Click **Create** to finalize the role assignment.
 
-</div>
+    The new role assignment is created. You can verify the assignment by viewing the **Role Assignments** tab for either the selected role or the individual identities.
 
-The new role assignment is created. You can verify the assignment by viewing the **Role Assignments** tab for either the selected role or the individual identities.
+</div>
 
 <a id="fine-grain-ui-cluster-sets"></a>
 
@@ -940,9 +910,9 @@ Procedure
 
 11. Click **Create** to finalize the role assignment.
 
-</div>
+    The new role assignment is created. You can verify the assignment by viewing the **Role Assignments** tab for either the selected role or the individual identities.
 
-The new role assignment is created. You can verify the assignment by viewing the **Role Assignments** tab for either the selected role or the individual identities.
+</div>
 
 <a id="fine-grain-mca"></a>
 
@@ -951,14 +921,6 @@ The new role assignment is created. You can verify the assignment by viewing the
 The `MulticlusterRoleAssignment` custom resource provides a declarative method for defining role-based access control (RBAC) across a multicluster environment. You can use this resource to create a centralized definition on the hub cluster that specifies which users or groups receive permissions on targeted managed clusters.
 
 When you apply a `MulticlusterRoleAssignment` resource, the system creates the corresponding standard Kubernetes RBAC bindings, either a `RoleBinding` or a `ClusterRoleBinding`, on the selected managed clusters.
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
 
 - [*MulticlusterRoleAssignment* resource specification](secure_clusters.md#fine-grain-mca-spec)
 
@@ -969,8 +931,6 @@ Additional resources
 - [*MulticlusterRoleAssignment* examples for fine-grained role-based access control](secure_clusters.md#fine-grain-mca-examples)
 
 - [Managing custom roles with *MulticlusterRoleAssignment*](secure_clusters.md#fine-grain-mca-custom)
-
-</div>
 
 <a id="fine-grain-mca-spec"></a>
 
@@ -1379,11 +1339,21 @@ Procedure
                 namespace: open-cluster-management-global-set
     ```
 
-    \+ **Notes:**
+    \+ **Note:** The `clusterSelection` field uses a `Placement` resource to determine to which managed clusters the role assignment applies. For more information, see *Fine-grained role-based access control MulticlusterRoleAssignment*.
 
 </div>
 
-The `clusterSelection` field uses a `Placement` resource to determine to which managed clusters the role assignment applies. For more information, see [Fine-grained role-based access control *MulticlusterRoleAssignment*](secure_clusters.md#fine-grain-mca).
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Fine-grained role-based access control *MulticlusterRoleAssignment*](secure_clusters.md#fine-grain-mca)
+
+</div>
 
 <a id="certificates"></a>
 
@@ -1403,14 +1373,6 @@ All certificates that are required by services that run on Red Hat Advanced Clus
 
 **Note:** Users are responsible for certificate rotations and updates.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Red Hat Advanced Cluster Management hub cluster certificates](secure_clusters.md#certificates-hub)
 
 - [Red Hat Advanced Cluster Management managed certificates](secure_clusters.md#certificates-managed)
@@ -1426,8 +1388,6 @@ Additional resources
 - [Listing hub cluster managed certificates](secure_clusters.md#cert-list-hub)
 
 - [Securing service traffic using service serving certificate secrets](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/security_and_compliance/configuring-certificates#add-service-serving)
-
-</div>
 
 <a id="certificates-hub"></a>
 

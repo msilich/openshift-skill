@@ -471,7 +471,7 @@ Procedure
         source: registry.redhat.io/amq-streams
     ```
 
-    **Note:** You can configure different image registries for different managed hubs with the `ManagedClusterImageRegistry`. See [Importing a cluster that has a ManagedClusterImageRegistry](clusters.md#import-cluster-managedclusterimageregistry) to use the `ManagedClusterImageRegistry` API to replace the agent image. The following `Label` and `Annotation` are added to the selected `ManagedCluster` resource. The agent image in the cluster is replaced with the mirror image:
+    **Note:** You can configure different image registries for different managed hubs with the `ManagedClusterImageRegistry`. See [Import a cluster that has a *ManagedClusterImageRegistry*](clusters.md#import-cluster-managedclusterimageregistry) to use the `ManagedClusterImageRegistry` API to replace the agent image. The following `Label` and `Annotation` are added to the selected `ManagedCluster` resource. The agent image in the cluster is replaced with the mirror image:
 
     - Label: `multicluster-global-hub.io/image-registry=<namespace.managedclusterimageregistry-name>`
 
@@ -957,11 +957,23 @@ This alert rule watches the cluster compliance status and policy events for a cl
 - Too many policy events in a cluster: For a policy in a cluster, if there are more than 20 events in five minutes, it creates notifications. If this alert is always firing, the data in the `event.local_policies` table increases too fast.
 
 Cron Job failed  
-This alert watches the cron jobs that are described in [multicluster global hub cron job settings](global_hub.md#global-hub-configuring-cronjobs) for failed events. There are two rules in this alert:
+This alert watches the cron jobs that are described in *multicluster global hub cron job settings* for failed events. There are two rules in this alert:
 
 - Local compliance job failed: If this alert rule creates notifications, it means the local compliance status synchronization job failed. It might cause the data in the `history.local_compliance` table to be lost. Run the job manually, if necessary.
 
 - Data retention job failed: If this alert rule starts creating notifications, it means the data retention job failed. You can run it manually.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [multicluster global hub cron job settings](global_hub.md#global-hub-configuring-cronjobs)
+
+</div>
 
 <a id="global-hub-customize-grafana-alert"></a>
 
@@ -1062,7 +1074,7 @@ Procedure
 
 ## Delete Grafana alert rules
 
-If the default Grafana alert rules do not provide useful information, you can delete the Grafana alert rule by including a `deleteRules` section in the `multicluster-global-hub-custom-alerting` config map. See [Customize Grafana alerting resources](global_hub.md#global-hub-customize-grafana-alert) for more information about the `multicluster-global-hub-custom-alerting` config map.
+If the default Grafana alert rules do not provide useful information, you can delete the Grafana alert rule by including a `deleteRules` section in the `multicluster-global-hub-custom-alerting` config map. See *Customize Grafana alerting resources* for more information about the `multicluster-global-hub-custom-alerting` config map.
 
 To delete all of the default alerts, the `deleteRules` configuration section should resemble the following example:
 
@@ -1077,6 +1089,18 @@ To delete all of the default alerts, the `deleteRules` configuration section sho
             uid: globalhub_data_retention_job
           - orgId: 1
             uid: globalhub_local_compliance_job
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Customize Grafana alerting resources](global_hub.md#global-hub-customize-grafana-alert)
+
+</div>
 
 <a id="migration-intro"></a>
 
@@ -2061,11 +2085,25 @@ Procedure
 
 ## Backup for multicluster global hub (Technology Preview)
 
-Use multicluster global hub with Red Hat Advanced Cluster Management backup and restore features for recovery solutions and to access basic resources. To learn more about how these features help you, see [backup and restore](business_continuity.md#backup-intro).
+Use multicluster global hub with Red Hat Advanced Cluster Management backup and restore features for recovery solutions and to access basic resources. To learn more about how these features help you, see *backup and restore*.
 
-multicluster global hub also supports backup `postgres pvc` by using the `acm-hub-pvc-backup`. To ensure your multicluster global hub can support the backup `postgres pvc`, you must have the current version of VolySync and Red Hat Advanced Cluster Management. For detailed steps on backing up your data, see [acm-hub-pvc-backup](https://github.com/open-cluster-management-io/policy-collection/tree/main/community/CM-Configuration-Management/acm-hub-pvc-backup).
+multicluster global hub also supports backup `postgres pvc` by using the `acm-hub-pvc-backup`. To ensure your multicluster global hub can support the backup `postgres pvc`, you must have the current version of VolSync and Red Hat Advanced Cluster Management. For detailed steps on backing up your data, see *acm-hub-pvc-backup*.
 
-If you need to restore your multicluster global hub cluster, see [Backup and restore](business_continuity.md#backup-intro). Install the multicluster global hub operator but do not create the multicluster global hub custom resource (CR) because the CR is automatically restored.
+If you need to restore your multicluster global hub cluster, see *Backup and restore*. Install the multicluster global hub operator but do not create the multicluster global hub custom resource (CR) because the CR is automatically restored.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Backup and restore](backup_restore.md#backup-intro)
+
+- [acm-hub-pvc-backup](https://github.com/open-cluster-management-io/policy-collection/tree/main/community/CM-Configuration-Management/acm-hub-pvc-backup)
+
+</div>
 
 <a id="global-search"></a>
 
@@ -2081,31 +2119,37 @@ Prerequisites
 
 </div>
 
-You need to enable multicluster global hub.
+You need to enable multicluster global hub before you can enable global search. See the *multicluster global hub overview* for more information about enabling multicluster global hub.
 
 </div>
 
-<a id="_enabling_global_search"></a>
+<div>
 
-### Enabling global search
+<div class="title">
 
-To enable global search, add the `global-search-preview=true` annotation to the `search-v2-operator` resource by running the following command:
+Procedure
 
-``` bash
-oc annotate search search-v2-operator -n open-cluster-management global-search-preview=true
-```
+</div>
 
-The search operator is updated with the following status condition:
+- To enable global search, add the `global-search-preview=true` annotation to the `search-v2-operator` resource by running the following command:
 
-``` yaml
-status:
-  conditions:
-    - lastTransitionTime: '2024-05-31T19:49:37Z'
-      message: None
-      reason: None
-      status: 'True'
-      type: GlobalSearchReady
-```
+  ``` bash
+  oc annotate search search-v2-operator -n open-cluster-management global-search-preview=true
+  ```
+
+  The search operator is updated with the following status condition:
+
+  ``` yaml
+  status:
+    conditions:
+      - lastTransitionTime: '2024-05-31T19:49:37Z'
+        message: None
+        reason: None
+        status: 'True'
+        type: GlobalSearchReady
+  ```
+
+</div>
 
 <div>
 

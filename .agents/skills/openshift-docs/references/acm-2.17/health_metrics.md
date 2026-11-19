@@ -302,11 +302,7 @@ Procedure
     oc apply -f
     ```
 
-    <!-- Separate adjacent source examples. -->
-
-        See the following `Role` YAML file example:
-
-    <!-- Separate adjacent source examples. -->
+    See the following `Role` YAML file example:
 
     ``` yaml
     apiVersion: rbac.authorization.k8s.io/v1

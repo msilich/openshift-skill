@@ -1756,6 +1756,36 @@ Additional resources
 
 </div>
 
+## RHSA-2026:95380 - OpenShift Container Platform 4.20.46 bug fix and security update
+
+Issued: 09 November 2026
+
+OpenShift Container Platform release 4.20.46 is now available. The list of fixed bugs that are included in the update is documented in the [RHSA-2026:95380](https://access.redhat.com/errata/RHSA-2026:95380) advisory. The RPM packages that are included in the update are provided by the [RHBA-2026:95376](https://access.redhat.com/errata/RHBA-2026:95376) advisory.
+
+Space precluded documenting all of the container images for this release in the advisory.
+
+You can view the container images in this release by running the following command:
+
+``` terminal
+$ oc adm release info 4.20.46 --pullspecs
+```
+
+### Fixed issues
+
+- Before this update, the Kube API server Operator deployment disabled automatic service account token mounting and explicitly defined a `kube-api-access` projected volume. As a consequence, the Operator maintained a redundant custom configuration alongside default bound service account token volume injection. With this release, the explicit `kube-api-access` projected volume is removed, and automatic service account token mounting is re-enabled in the Kube API server Operator. As a result, manual configuration is replaced with the default injected volume.([OCPBUGS-60496](https://issues.redhat.com/browse/OCPBUGS-60496))
+
+- Before this update, `syncPodsForUserDefinedNetwork()` returned an unhandled `InvalidPrimaryNetworkError` when a namespace had the primary user-defined network (UDN) label but no valid UDN or NetworkAttachmentDefinition (NAD). As a consequence, the UDN controller could stall for up to 60 seconds and block pod creation in other correctly configured namespaces. With this release, `InvalidPrimaryNetworkError` is handled gracefully during pod sync. As a result, the UDN controller initializes without being stalled by misconfigured namespaces. ([OCPBUGS-121361](https://issues.redhat.com/browse/OCPBUGS-121361))
+
+- Before this update, when reconciling virtual machines (VMs) on Microsoft Azure, a creation operation could fail and leave a virtual network interface controller (NIC) attached to a load balancer without a corresponding VM. As a consequence, the load balancer could not be used until the orphaned NIC was removed. With this release, the reconciler cleans up orphaned NICs when VM creation fails. As a result, load balancers are not blocked by orphaned NICs after a failed VM creation. ([OCPBUGS-133111](https://issues.redhat.com/browse/OCPBUGS-133111))
+
+- Before this update, an infinite boot loop occurred during Lenovo SR645 V3 hardware provisioning after Red Hat Enterprise Linux CoreOS (RHCOS) was written to the disk. As a consequence, the host stalled on a boot option restoration screen and could not complete the provisioning. With this release, the `ironic` resource skips setting the boot device. As a result, non-volatile random-access memory (NVRAM) loss does not occur, and provisioning succeeds. ([OCPBUGS-134139](https://issues.redhat.com/browse/OCPBUGS-134139))
+
+- Before this update, the `AWSMachine` controller queued machine instances again before confirming the presence of tags. As a consequence, duplicate Amazon Web Services (AWS) EC2 instances were created. With this release, the `AWSMachine` controller verifies tags before it queues instances again. As a result, duplicate EC2 instances are not created. ([OCPBUGS-134665](https://issues.redhat.com/browse/OCPBUGS-134665))
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
 ## RHBA-2026:92283 - OpenShift Container Platform 4.20.45 bug fix update
 
 Issued: 3 November 2026
@@ -1773,6 +1803,36 @@ $ oc adm release info 4.20.45 --pullspecs
 ### Fixed issues
 
 There are no notable fixed issues in this release.
+
+### Updating
+
+To update an OpenShift Container Platform 4.20 cluster to this latest release, see [Updating a cluster using the CLI](../updating/updating_a_cluster/updating-cluster-cli.md#updating-cluster-cli).
+
+## RHSA-2026:89341 - OpenShift Container Platform 4.20.44 bug fix and security update
+
+Issued: 26 October 2026
+
+OpenShift Container Platform release 4.20.44 is now available. The list of packages and bug fixes included in the update are documented in the [RHSA-2026:89341](https://access.redhat.com/errata/RHSA-2026:89341) advisory. The RPM packages included in this release are provided by the [RHBA-2026:89332](https://access.redhat.com/errata/RHBA-2026:89332) advisory.
+
+### Container images
+
+You can view the container images in this release by running the following command:
+
+    $ oc adm release info 4.20.44 --pullspecs
+
+### Fixed issues
+
+- Before this update, on hosted control planes clusters where the management cluster required a proxy for outbound internet access, the `Konnectivity` proxy sidecar containers did not receive the management cluster proxy environment variables such as `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY`. As a consequence, cloud API calls to Amazon Web Services (AWS), Microsoft Azure, or IBM Cloud® endpoints made through the direct cloud API bypass path failed with TLS handshake timeouts. With this release, management cluster proxy environment variables are propagated to the `Konnectivity` sidecar containers when the direct cloud API connection feature is enabled. As a result, cloud API calls succeed through the proxy. ([OCPBUGS-100104](https://issues.redhat.com/browse/OCPBUGS-100104))
+
+- Before this update, the machine controller in the Hosted Cluster Config Operator (HCCO) included non-routable ovn-kubernetes routes in the node network configuration. As a consequence, the machine controller caused networking conflicts and routing issues. With this release, non-routable routes are filtered out during configuration. As a result, networking conflicts are resolved. ([OCPBUGS-122206](https://issues.redhat.com/browse/OCPBUGS-122206))
+
+- Before this update, the `kube-apiserver-check-endpoints` container generated a TLS certificate for the `check-endpoint` service on port `17697` with a validity of only 1 second. As a consequence, the certificate expired almost immediately after generation, which differed from previous OpenShift Container Platform versions where the certificate was valid for 1 month. With this release, the `kube-apiserver-check-endpoints` container generates certificates with an appropriate validity period. As a result, the `check-endpoint` service certificate remains valid for the expected duration, consistent with previous releases. ([OCPBUGS-127411](https://issues.redhat.com/browse/OCPBUGS-127411))
+
+- Before this update, when two EgressIP custom resources (CRs) used the same IP address and the OVN-Kubernetes control-plane pod restarted or a node rebooted, the IP address was incorrectly assigned to more than one egress node. As a consequence, multiple egress nodes shared the same IP address, which caused unpredictable routing behavior. With this update, OVN-Kubernetes ensures that only the first assigned IP address is re-assigned to an egress node, while duplicate assignments are prevented. As a result, only one egress node is assigned the IP address defined in the EgressIP CR, preventing address conflicts. ([OCPBUGS-129457](https://issues.redhat.com/browse/OCPBUGS-129457))
+
+- Before this update, when you removed failure domains from the infrastructure specification, the VMware vSphere Problem Detector (VPD) logged errors about failure domain labels missing from nodes. As a consequence, VPD logged warnings that were not relevant. With this release, VPD improves processing logic for failure domain changes in the infrastructure specification. As a result, these unnecessary warnings do not appear. ([OCPBUGS-130578](https://issues.redhat.com/browse/OCPBUGS-130578))
+
+- Before this update, VMware vSphere machine reconciliation made redundant vCenter API calls and repeated operations. As a consequence, heavy API load, duplicate tasks, and slower provisioning in large clusters occurred. With this release, virtual machine (VM) state and tag lookups are cached, queries are batched, and task references are retained. As a result, provisioning is more reliable and vCenter load is reduced. ([OCPBUGS-130608](https://issues.redhat.com/browse/OCPBUGS-130608))
 
 ### Updating
 

@@ -71,9 +71,9 @@ The components of the observability architecture include the following items:
 
 - The *observability add-on controller* is the API server that automatically updates the log of the managed cluster.
 
-- The Thanos infrastructure includes the Thanos Compactor, which is deployed by the `multicluster-observability-operator` pod. The Thanos Compactor ensures that queries are performing well by using the retention configuration, and compaction of the data in storage. To monitor Compactor health, see [Thanos Compactor default alerts](observability.md#obs-thanos-compact-alerts).
+- The Thanos infrastructure includes the Thanos Compactor, which is deployed by the `multicluster-observability-operator` pod. The Thanos Compactor ensures that queries are performing well by using the retention configuration, and compaction of the data in storage. To monitor Compactor health, see *Thanos Compactor default alerts*.
 
-- The observability component deploys an instance of *Grafana* to enable data visualization with dashboards (static) or data exploration. You can also design your Grafana dashboard. For more information, see [View and explore data with Grafana dashboards](observability.md#view-explore-data-grafana).
+- The observability component deploys an instance of *Grafana* to enable data visualization with dashboards (static) or data exploration. You can also design your Grafana dashboard. For more information, see *View and explore data with Grafana dashboards*.
 
 - The *Prometheus Alertmanager* enables alerts to be forwarded with third-party applications. You can customize the observability service by creating custom recording rules or alerting rules.
 
@@ -91,6 +91,8 @@ Additional resources
 
 - [Thanos Compactor default alerts](observability.md#obs-thanos-compact-alerts)
 
+- [View and explore data with Grafana dashboards](observability.md#view-explore-data-grafana)
+
 - [Persistent stores used in the observability service](observability.md#obs-persistent-stores)
 
 - [Observability support](observability.md#obs-support)
@@ -99,7 +101,7 @@ Additional resources
 
 - [Set up the Grafana developer instance](observability.md#setting-up-grafana-developer-instance)
 
-- [Back up and restore the observability service](business_continuity.md#backup-restore-obs)
+- [Back up and restore the observability service](backup_restore.md#backup-restore-obs)
 
 - [Thanos documentation](https://thanos.io/v0.36/thanos/getting-started.md/)
 
@@ -246,7 +248,7 @@ Additional resources
 
 - [Migrate observability storage](observability.md#obs-migrate-storage)
 
-- [Back up and restore the observability service](business_continuity.md#backup-restore-obs)
+- [Back up and restore the observability service](backup_restore.md#backup-restore-obs)
 
 </div>
 
@@ -1243,16 +1245,14 @@ Procedure
 
 2.  If you want to configure a proxy for alert forwarding, add the following `global` entry to the `alertmanager-config` YAML file:
 
-</div>
+    ``` yaml
+    global:
+      slack_api_url: '<slack_webhook_url>'
+      http_config:
+        proxy_url: http://****
+    ```
 
-``` yaml
-global:
-  slack_api_url: '<slack_webhook_url>'
-  http_config:
-    proxy_url: http://****
-```
-
-1.  To forward user workload alerts, configure the alerts to be processed by the user workload Prometheus instance and not by Thanos ruler. See the following example of the `PrometheusRule` resource:
+3.  To forward user workload alerts, configure the alerts to be processed by the user workload Prometheus instance and not by Thanos ruler. See the following example of the `PrometheusRule` resource:
 
     ``` yaml
     apiVersion: monitoring.coreos.com/v1
@@ -1261,6 +1261,8 @@ global:
       labels:
         openshift.io/prometheus-rule-evaluation-scope: leaf-prometheus
     ```
+
+</div>
 
 <a id="obs-disable-alert-forwarding"></a>
 
@@ -1317,9 +1319,9 @@ Procedure
              replicas: 6
     ```
 
-</div>
+    For more information about the parameters within the `mco observability` custom resource, use the *API Explorer* in the console, or an `oc` command.
 
-For more information about the parameters within the `mco observability` custom resource, use the *API Explorer* in the console, or an `oc` command.
+</div>
 
 <a id="increase-decrease-pv-pvc"></a>
 
@@ -2766,9 +2768,9 @@ Procedure
 
     The following information might be displayed in the pod log:
 
-</div>
+        disabled managedcluster label: <label>
 
-    disabled managedcluster label: <label>
+</div>
 
 <div>
 
@@ -2927,34 +2929,34 @@ Procedure
 
 1.  Update the `multicluster-observability-operator` resource by setting `enableMetrics` to `false`. Your updated resource might resemble the following change:
 
+    ``` yaml
+    spec:
+      imagePullPolicy: Always
+      imagePullSecret: multiclusterhub-operator-pull-secret
+      observabilityAddonSpec:
+        enableMetrics: false
+      workers: 1
+    ```
+
+    - Use the `observabilityAddonSpec` parameter to define the global settings for all managed clusters that have the observability add-on enabled.
+
+    - Use the `enableMetrics` parameter to indicate that the observability add-on is enabled to push metrics to hub cluster server.
+
+2.  Disable observability on a single cluster.
+
+    1.  Add the `observability: disabled` label to the `managedclusters.cluster.open-cluster-management.io` custom resource.
+
+    2.  From the Red Hat Advanced Cluster Management console *Clusters* page, add the `observability=disabled` label to the specified cluster.
+
+        **Note:** When a managed cluster with the observability component is detached, the `metrics-collector` deployments are removed.
+
+3.  Remove observability to disable and uninstall the observability service.
+
+    1.  From the OpenShift Container Platform console navigation, select **Operators** \> **Installed Operators** \> **Advanced Cluster Manager for Kubernetes**.
+
+    2.  Click **Remove** for the `MultiClusterObservability` custom resource.
+
 </div>
-
-``` yaml
-spec:
-  imagePullPolicy: Always
-  imagePullSecret: multiclusterhub-operator-pull-secret
-  observabilityAddonSpec:
-    enableMetrics: false
-  workers: 1
-```
-
-- Use the `observabilityAddonSpec` parameter to define the global settings for all managed clusters that have the observability add-on enabled.
-
-- Use the `enableMetrics` parameter to indicate that the observability add-on is enabled to push metrics to hub cluster server.
-
-  1.  Disable observability on a single cluster.
-
-      1.  Add the `observability: disabled` label to the `managedclusters.cluster.open-cluster-management.io` custom resource.
-
-      2.  From the Red Hat Advanced Cluster Management console *Clusters* page, add the `observability=disabled` label to the specified cluster.
-
-          **Note:** When a managed cluster with the observability component is detached, the `metrics-collector` deployments are removed.
-
-  2.  Remove observability to disable and uninstall the observability service.
-
-      1.  From the OpenShift Container Platform console navigation, select **Operators** \> **Installed Operators** \> **Advanced Cluster Manager for Kubernetes**.
-
-      2.  Click **Remove** for the `MultiClusterObservability` custom resource.
 
 <a id="configure-obs-alerts"></a>
 
@@ -3523,14 +3525,6 @@ The multicluster observability add-on is an alternative way to collect metrics f
 
 The multicluster observability add-on uses the Prometheus Operator and Prometheus Agent from the Red Hat OpenShift Cluster Observability Operator to federate, downsample, and remote-write metrics to your hub cluster. You can configure metrics collection by using names, matchers, and recording rules. Reduce data loss during network partitions between your managed and hub clusters when you enable the multicluster observability add-on. By default, the multicluster observability add-on is disabled.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Managed cluster workloads for the multicluster observability add-on](observability.md#obs-mcoa-managed-workloads)
 
 - [Configurable APIs for the multicluster observability add-on](observability.md#obs-mcoa-api-resources)
@@ -3556,8 +3550,6 @@ Additional resources
 - [Enable Perses dashboards with the multicluster observability add-on (Technology Preview)](observability.md#enable-mcoa-perses)
 
 - [View Perses dashboards in the console](observability.md#view-perses-dashboards)
-
-</div>
 
 <a id="obs-mcoa-managed-workloads"></a>
 

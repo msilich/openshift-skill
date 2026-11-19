@@ -338,9 +338,23 @@ The `ClusterAdmin` can enable Globalnet in the console by selecting the option *
 
 See the following topics to configure Globalnet:
 
+- *Enabling Globalnet by creating the submariner-broker object*
+
+- *Configuring the number of global IPs*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
 - [Enabling Globalnet by creating the *submariner-broker* object](networking.md#submariner-globalnet-enable)
 
 - [Configuring the number of global IPs](networking.md#subm-globalnet-numperip)
+
+</div>
 
 <a id="submariner-globalnet-enable"></a>
 
@@ -655,29 +669,29 @@ Procedure
 
 If your cluster is hosted on a provider that does not support automatic Submariner deployment, see the following sections to prepare the infrastructure manually. Each provider has unique steps for preparation, so make sure to select the correct provider.
 
-**Note:** By default, Submariner uses IP security (IPsec) to establish secure tunnels between the clusters on the gateway nodes. You can either use the default IPsec NATT port, or you can [specify a different port](networking.md#customizing-submariner) that you configure. When you prepare or deploy clusters without specifying an IPsec NATT port, 4500/UDP is used for the connections. See *Customizing Submariner deployments* in the additional resources section to learn more.
+**Note:** By default, Submariner uses IP security (IPsec) to establish secure tunnels between the clusters on the gateway nodes. You can either use the default IPsec NATT port, or you can customize the Submariner deployments that you configure. When you prepare or deploy clusters without specifying an IPsec NATT port, 4500/UDP is used for the connections. See *Customizing Submariner deployments* in the additional resources section to learn more.
 
 **Notes:**
 
-- Before you deploy Submariner with Red Hat Advanced Cluster Management for Kubernetes, you must prepare the clusters on the hosting environment for the connection. See [Deploying Submariner by using the console](networking.md#deploying-submariner-console) to learn how to automatically deploy Submariner on supported clusters by using the console.
+- Before you deploy Submariner with Red Hat Advanced Cluster Management for Kubernetes, you must prepare the clusters on the hosting environment for the connection. See *Deploying Submariner by using the console* in the additional resources section to learn how to automatically deploy Submariner on supported clusters by using the console.
 
 - If you are using VMware vSphere or bare metal with hosted control planes, Submariner automatically labels one or more existing worker nodes as gateways during installation. If you want to specify certain nodes as gateways, apply the `submariner.io/gateway=true` label to your nodes.
 
 See the following topics to prepare your environment and deploy Submariner manually:
 
-- [Preparing bare metal for Submariner](networking.md#preparing-bare-metal-submariner)
+- *Preparing bare metal for Submariner*
 
-- [Preparing Microsoft Azure Red Hat OpenShift for Submariner by using the CLI](networking.md#preparing-aro-submariner-cli)
+- *Preparing Microsoft Azure Red Hat OpenShift for Submariner by using the command line interface*
 
-- [Deploying Microsoft Azure Red Hat OpenShift for Submariner by using the API](networking.md#deploy-aro-submariner-api)
+- *Deploying Microsoft Azure Red Hat OpenShift for Submariner by using the API*
 
-- [Preparing Red Hat OpenShift Service on AWS for Submariner by using the CLI](networking.md#preparing-rosa-submariner-cli)
+- *Preparing Red Hat OpenShift Service on AWS for Submariner by using the command line interface*
 
-- [Deploying Red Hat OpenShift Service on AWS for Submariner by using the API](networking.md#deploy-rosa-submariner-api)
+- *Deploying Red Hat OpenShift Service on AWS for Submariner by using the API*
 
-- [Deploying Red Hat OpenShift on IBM Cloud for Submariner by using the API (Technology Preview)](networking.md#deploy-ocp-ibm-cloud-subm)
+- *Deploying Red Hat OpenShift on IBM Cloud for Submariner by using the API (Technology Preview)*
 
-- [Deploying Submariner with the ManagedClusterAddOn API](networking.md#deploying-submariner-mcaddon-api)
+- *Deploying Submariner with the ManagedClusterAddOn API*
 
 <div>
 
@@ -688,6 +702,22 @@ Additional resources
 </div>
 
 - [Customizing Submariner deployments](networking.md#customizing-submariner)
+
+- [Deploying Submariner by using the console](networking.md#deploying-submariner-console)
+
+- [Preparing bare metal for Submariner](networking.md#preparing-bare-metal-submariner)
+
+- [Preparing Microsoft Azure Red Hat OpenShift for Submariner by using the command line interface](networking.md#preparing-aro-submariner-cli)
+
+- [Deploying Microsoft Azure Red Hat OpenShift for Submariner by using the API](networking.md#deploy-aro-submariner-api)
+
+- [Preparing Red Hat OpenShift Service on AWS for Submariner by using the command line interface](networking.md#preparing-rosa-submariner-cli)
+
+- [Deploying Red Hat OpenShift Service on AWS for Submariner by using the API](networking.md#deploy-rosa-submariner-api)
+
+- [Deploying Red Hat OpenShift on IBM Cloud for Submariner by using the API (Technology Preview)](networking.md#deploy-ocp-ibm-cloud-subm)
+
+- [Deploying Submariner with the ManagedClusterAddOn API](networking.md#deploying-submariner-mcaddon-api)
 
 </div>
 
@@ -732,7 +762,7 @@ Procedure
 
 <a id="preparing-aro-submariner-cli"></a>
 
-### Preparing Microsoft Azure Red Hat OpenShift for Submariner by using the CLI
+### Preparing Microsoft Azure Red Hat OpenShift for Submariner by using the command line interface
 
 The Microsoft Azure Red Hat OpenShift service combines various tools and resources that you can use to simplify the process of building container-based applications. To prepare Azure Red Hat OpenShift clusters for deploying Submariner by using the command line interface, complete the following steps:
 
@@ -834,7 +864,7 @@ Procedure
 
 <a id="preparing-rosa-submariner-cli"></a>
 
-### Preparing Red Hat OpenShift Service on AWS for Submariner by using the CLI
+### Preparing Red Hat OpenShift Service on AWS for Submariner by using the command line interface
 
 Red Hat OpenShift Service on AWS provides a stable and flexible platform for application development and modernization. To prepare OpenShift Service on AWS clusters for deploying Submariner, complete the following steps:
 
@@ -1065,6 +1095,24 @@ You can customize some of the settings of your Submariner deployments, including
 
 See the following topics to customize your Submariner deployment:
 
+- *NATT port*
+
+- *Number of gateway nodes*
+
+- *Instance types of gateway nodes*
+
+- *Cable driver*
+
+- *Customized Submariner subscription*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
 - [NATT port](networking.md#natt-port-custom)
 
 - [Number of gateway nodes](networking.md#number-gateway-nodes)
@@ -1074,6 +1122,8 @@ See the following topics to customize your Submariner deployment:
 - [Cable driver](networking.md#cable-driver)
 
 - [Customized Submariner subscription](networking.md#customized-submariner-subscription)
+
+</div>
 
 <a id="natt-port-custom"></a>
 
@@ -1267,9 +1317,23 @@ After Submariner is deployed into the same environment as your managed clusters,
 
 See the following topics to manage service discovery:
 
+- *Enabling service discovery for Submariner*
+
+- *Disabling service discovery for Submariner*
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
 - [Enabling service discovery for Submariner](networking.md#enabling-service-discovery-submariner)
 
 - [Disabling service discovery for Submariner](networking.md#disabling-service-discovery-submariner)
+
+</div>
 
 <a id="enabling-service-discovery-submariner"></a>
 
@@ -1368,7 +1432,7 @@ Procedure
 
 1.  To uninstall Submariner by using the console, see [Uninstalling Submariner by using the console](networking.md#uninstalling-submariner-console).
 
-2.  To uninstall Submariner by using the CLI, see [Uninstalling Submariner by using the CLI](networking.md#uninstalling-submariner-cli).
+2.  To uninstall Submariner by using the CLI, see [Uninstalling Submariner by using the command line interface](networking.md#uninstalling-submariner-cli).
 
 3.  To verify Submariner resource removal, see [Verifying Submariner resource removal](networking.md#verifying-subm-resource-removal).
 
@@ -1412,7 +1476,7 @@ Procedure
 
 <a id="uninstalling-submariner-cli"></a>
 
-### Uninstalling Submariner by using the CLI
+### Uninstalling Submariner by using the command line interface
 
 To uninstall Submariner by using the command line, complete the following steps:
 

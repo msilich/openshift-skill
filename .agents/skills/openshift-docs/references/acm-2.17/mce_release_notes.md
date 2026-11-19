@@ -33,9 +33,7 @@ Learn about new features and enhancements, support, deprecations, removals, and 
 
 ## New features and enhancements for the multicluster engine operator
 
-Learn about multicluster engine for Kubernetes operator 2.11 new features and enhancements, support, deprecations, removals, and fixed issues for errata releases.
-
-multicluster engine operator version 2.11 is released with Red Hat Advanced Cluster Management version 2.16 for Cluster lifecycle management, but you can use stand-alone multicluster engine operator with your OpenShift Container Platform hub cluster, as well.
+Learn about multicluster engine for Kubernetes operator 2.11 new features and enhancements, support, deprecations, removals, and fixed issues for errata releases. multicluster engine operator version 2.11 is released with Red Hat Advanced Cluster Management version 2.16 for Cluster lifecycle management, but you can use stand-alone multicluster engine operator with your OpenShift Container Platform hub cluster, as well.
 
 For full support information, including supported OpenShift Container Platform versions, see the [multicluster engine operator Support Matrix](https://access.redhat.com/articles/7142379). For lifecycle information, see [Red Hat OpenShift Container Platform Life Cycle policy](https://access.redhat.com/support/policy/updates/openshift).
 
@@ -75,9 +73,7 @@ By default, fixed issues for *errata* releases are automatically applied when re
 
 ## Known issues for Cluster lifecycle with multicluster engine operator
 
-Review the Known issues for *Cluster lifecycle with multicluster engine operator* for this release, or known issues that continued from the previous release.
-
-Cluster management known issues and limitations are part of the *Cluster lifecycle with multicluster engine operator* documentation. Known issues for multicluster engine operator integrated *with* Red Hat Advanced Cluster Management are documented in the [Release notes for Red Hat Advanced Cluster Management](release_notes.md#acm-release-notes).
+Review the Known issues for *Cluster lifecycle with multicluster engine operator* for this release, or known issues that continued from the previous release. Cluster management known issues and limitations are part of the *Cluster lifecycle with multicluster engine operator* documentation. Known issues for multicluster engine operator integrated *with* Red Hat Advanced Cluster Management are documented in the [Release notes for Red Hat Advanced Cluster Management](release_notes.md#acm-release-notes).
 
 **Important:** OpenShift Container Platform release notes are not documented in this product documentation. For your OpenShift Container Platform cluster, see [OpenShift Container Platform release notes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.17).
 
@@ -187,9 +183,7 @@ Additional resources
 
 ### *installNamespace* field can only have one value
 
-**Note:** The `spec.installNamespace` field is deprecated. See [Product deprecations and removals](mce_release_notes.md#deprecations-removals-cluster-mce) to learn more.
-
-When enabling the `managed-serviceaccount` add-on, the `installNamespace` field in the `ManagedClusterAddOn` resource must have `open-cluster-management-agent-addon` as the value. Other values are ignored. The `managed-serviceaccount` add-on agent is always deployed in the `open-cluster-management-agent-addon` namespace on the managed cluster.
+**Note:** The `spec.installNamespace` field is deprecated. When enabling the `managed-serviceaccount` add-on, the `installNamespace` field in the `ManagedClusterAddOn` resource must have `open-cluster-management-agent-addon` as the value. Other values are ignored. The `managed-serviceaccount` add-on agent is always deployed in the `open-cluster-management-agent-addon` namespace on the managed cluster.
 
 <div>
 

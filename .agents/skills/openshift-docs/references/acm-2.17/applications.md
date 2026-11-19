@@ -155,7 +155,7 @@ The following Git repository servers are supported:
 
 `ApplicationSet` is a sub-project of Argo CD that is supported by the GitOps Operator. `ApplicationSet` adds multicluster support for Argo CD applications. You can create an application set from the Red Hat Advanced Cluster Management console.
 
-If you would like to learn more about `ApplicationSets`, see [Cluster Decision Resource Generator](https://argocd-applicationset.readthedocs.io/en/stable/Generators-Cluster-Decision-Resource/).
+If you would like to learn more about `ApplicationSets`, see *Cluster Decision Resource Generator*.
 
 - OpenShift Container Platform GitOps uses Argo CD to maintain cluster resources. Argo CD is an open-source declarative tool for the continuous integration and continuous deployment (CI/CD) of applications. OpenShift Container Platform GitOps implements Argo CD as a controller (OpenShift Container Platform GitOps Operator) so that it continuously monitors application definitions and configurations defined in a Git repository. Then, Argo CD compares the specified state of these configurations with their live state on the cluster.
 
@@ -228,6 +228,18 @@ If you would like to learn more about `ApplicationSets`, see [Cluster Decision R
       - sampleclusterset
   ```
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Cluster Decision Resource Generator](https://argocd-applicationset.readthedocs.io/en/stable/Generators-Cluster-Decision-Resource/)
+
+</div>
+
 <a id="applicationdoc"></a>
 
 ### Application documentation
@@ -262,11 +274,11 @@ Learn more about application resources, Git subscriptions, Ansible Automation Pl
 
 The console includes a dashboard for managing the application lifecycle. You can use the console dashboard to create and manage applications and view the status of applications. Enhanced capabilities help your developers and operations personnel create, deploy, update, manage, and visualize applications across your clusters.
 
-**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
+**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See *GitOps overview* for updated function.
 
 See some of the console capability in the following list and see the console for guided information about terms, actions, and how to read the Topology:
 
-**Important:** Available actions are based on your assigned role. Learn about access requirements from the [Role-based access control](secure_clusters.md) documentation.
+**Important:** Available actions are based on your assigned role. Learn about access requirements from the *Role-based access control* documentation.
 
 - Visualize deployed applications across your clusters, including any associated resource repositories, subscriptions, and placement configurations.
 
@@ -292,7 +304,7 @@ See some of the console capability in the following list and see the console for
 
   - Access to the Editor tab to edit
 
-- Click the *Topology* tab for visual representation of all the applications and resources in your project. For Helm subscriptions, see [Configure package overrides](applications.md#configuring-package-overrides) to define the appropriate `packageName` and the `packageAlias` to get an accurate topology display.
+- Click the *Topology* tab for visual representation of all the applications and resources in your project. For Helm subscriptions, see *Configure package overrides* to define the appropriate `packageName` and the `packageAlias` to get an accurate topology display.
 
 - Click the **Advanced configuration** tab to view terminology and tables of resources for all applications. You can find resources and you can filter subscriptions, placement, and channels. If you have access, you can also click multiple **Actions**, such as Edit, Search, and Delete.
 
@@ -310,7 +322,25 @@ See some of the console capability in the following list and see the console for
   | Placement            | `Placement`             |
   | Application          | `Application`           |
 
-You can also search by other fields, including name, namespace, cluster, label, and more. For more information about using search, see [Search service](search.md#search-service).
+  You can also search by other fields, including name, namespace, cluster, label, and more. For more information about using search, see *Search service*.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [GitOps overview](gitops.md#gitops-overview)
+
+- [Search service](search.md#search-service)
+
+- [Role-based access control](secure_clusters.md)
+
+- [Configure package overrides](applications.md#configuring-package-overrides)
+
+</div>
 
 <a id="subscription-reports"></a>
 
@@ -347,9 +377,9 @@ Additional resources
 
 - [ManagedClusterView](applications.md#managed-cluster-view)
 
-- [CLI application-level status](applications.md#cli-appsub-status)
+- [Command line interface application-level status](applications.md#cli-appsub-status)
 
-- [CLI Last Update Time](applications.md#cli-last-update)
+- [Get last update time using the command line interface](applications.md#cli-last-update)
 
 </div>
 
@@ -565,7 +595,7 @@ Procedure
 
 <a id="cli-appsub-status"></a>
 
-### CLI application-level status
+### Command line interface application-level status
 
 If you cannot access the managed clusters to get a subscription status, you can use the CLI. The cluster-level or the application-level subscription report provides the overall status, but not the detailed error messages for an application.
 
@@ -589,7 +619,7 @@ Procedure
 
 <a id="cli-last-update"></a>
 
-### CLI Last Update Time
+### Get last update time using the command line interface
 
 You can also get the Last Update Time of an AppSub on a given managed cluster when it is not practical to log in to each managed cluster to retrieve this information. Thus, an utility script was created to simplify the retrieval of the Last Update Time of an AppSub on a managed cluster. This script is designed to run on the Hub cluster. It creates a managedClusterView resource to get the AppSub from the managed cluster, and parses the data to get the Last Update Time.
 
@@ -742,11 +772,13 @@ Procedure
 
 ### Manage apps with Helm repositories
 
-When you deploy Kubernetes resources using an application, the resources are located in specific repositories. Learn how to deploy resources from Helm repositories in the following procedure. Learn more about the application model at [Application model and definitions (Deprecated)](applications.md#application-model-and-definitions).
+When you deploy Kubernetes resources using an application, the resources are located in specific repositories. Learn how to deploy resources from Helm repositories in the following procedure. Learn more about the application model at *Application model and definitions (Deprecated)*.
 
-**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
+Helm provides an annotation to keep specific deployed resources after you delete a subscription. **Note:** The annotation must be in the Helm chart.
 
-**User required access:** A user role that can create applications. You can only perform actions that your role is assigned. Learn about access requirements from the [Role-based access control](secure_clusters.md) documentation.
+**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See *GitOps overview* for updated function.
+
+**User required access:** A user role that can create applications. You can only perform actions that your role is assigned. Learn about access requirements from the *Role-based access control* documentation.
 
 <div>
 
@@ -778,7 +810,13 @@ Additional resources
 
 - [Sample YAML](applications.md#sample-yaml-helm)
 
-- [Keep deployed resources after deleting subscription with Helm](applications.md#helm-keep-resource-after-sub-delete)
+- [Tell Helm Not To Uninstall a Resource](https://helm.sh/docs/howto/charts_tips_and_tricks/#tell-helm-not-to-uninstall-a-resource)
+
+- [Application model and definitions (Deprecated)](applications.md#application-model-and-definitions)
+
+- [GitOps overview](gitops.md#gitops-overview)
+
+- [Role-based access control](secure_clusters.md)
 
 </div>
 
@@ -822,12 +860,6 @@ spec:
 ```
 
 **Note:** To view REST APIs, use the *API Explorer* in the console, or an `oc` command.
-
-<a id="helm-keep-resource-after-sub-delete"></a>
-
-#### Keep deployed resources after deleting subscription with Helm
-
-Helm provides an annotation to keep specific deployed resources after you delete a subscription. See [Tell Helm Not To Uninstall a Resource](https://helm.sh/docs/howto/charts_tips_and_tricks/#tell-helm-not-to-uninstall-a-resource) for more information. **Note:** The annotation must be in the Helm chart.
 
 <a id="managing-apps-with-object-storage-repositories"></a>
 
@@ -1095,21 +1127,11 @@ Red Hat Advanced Cluster Management is integrated with Red Hat Ansible Automatio
 
 **Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Integration and components](applications.md#ansible-integration)
 
 - [Set up Ansible Automation Platform](applications.md#setting-up-ansible)
 
 - [Configure Ansible Automation Platform](applications.md#ansible_config)
-
-</div>
 
 <a id="ansible-integration"></a>
 
@@ -1820,7 +1842,7 @@ Additional resources
 
 ##### Default merge option
 
-**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
+**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See *GitOps overview* for updated function.
 
 See the following sample resource YAML file from a Git repository with the default `apps.open-cluster-management.io/reconcile-option: merge` annotation. See the following example:
 
@@ -1856,6 +1878,18 @@ data:
 When the `merge` option is used, entries from subscribed resource are either created or updated in the existing resource. No entry is removed from the existing resource.
 
 **Important:** If the existing resource you want to overwrite with a subscription is automatically reconciled by another operator or controller, the resource configuration is updated by both subscription and the controller or operator. Do not use this method in this case.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [GitOps overview](gitops.md#gitops-overview)
+
+</div>
 
 <a id="mergeandown-option"></a>
 
@@ -2025,7 +2059,7 @@ Procedure
 
 ### Create an allow and deny list as subscription administrator
 
-**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
+**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See *GitOps overview* for updated function.
 
 As a subscription administrator, you can create an application from a Git repository application subscription that contains an `allow` list to allow deployment of only specified Kubernetes `kind` resources. You can also create a `deny` list in the application subscription to deny deployment of specific Kubernetes `kind` resources.
 
@@ -2082,7 +2116,23 @@ spec:
       kind: Placement
 ```
 
-This example application subscription YAML specifies deployments of all valid resources except `v1/Service` and `v1/ConfigMap` resources. Instead of listing individual resource kinds within an API group, you can add `"*"` to allow or deny all resource kinds in the API Group.
+\+ This example application subscription YAML specifies deployments of all valid resources except `v1/Service` and `v1/ConfigMap` resources. Instead of listing individual resource kinds within an API group, you can add the following string to allow or deny all resource kinds in the API Group:
+
+\+
+
+    "*"
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [GitOps overview](gitops.md#gitops-overview)
+
+</div>
 
 <a id="reconcile-options"></a>
 
@@ -2889,7 +2939,7 @@ Procedure
 
 If you need to deploy new or change Helm charts or other resources during only specific times, you can define subscriptions for those resources to begin deployments during only those specific times. Alternatively, you can restrict deployments.
 
-**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
+**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See *GitOps overview* for updated function.
 
 For instance, you can define time windows between 10:00 PM and 11:00 PM each Friday to serve as scheduled maintenance windows for applying patches or other application updates to your clusters.
 
@@ -2930,6 +2980,18 @@ To define a time window for a subscription, you need to add the required fields 
   Deployments cannot begin during the defined time frame, but can begin at any other time. You can use this setting when you have critical updates that are required, but still need to avoid deployments during specific time ranges. For instance, you can use this type to define a time window to allow security-related updates to be applied at any time except between 10:00 AM and 2:00 PM.
 
 - You can define multiple time windows for a subscription, such as to define a time window every Monday and Wednesday.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [GitOps overview](gitops.md#gitops-overview)
+
+</div>
 
 <a id="configuring-package-overrides"></a>
 
@@ -2987,7 +3049,7 @@ Procedure
 
 To associate a subscription with an application, both the subscription and application must be in the same namespace so that the subscription can retrieve Helm charts, deployables, or other resources from a channel.
 
-**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
+**Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See *GitOps overview* for updated function.
 
 Within the application resource definition, the definition must include `spec.componentKinds` settings to indicate that the application uses a subscription. The definition must also include `spec.selector` settings to define the labels (`matchLabels`) or expressions (`matchExpressions`) to use to match the application with the subscription.
 
@@ -2995,7 +3057,21 @@ Within the subscription resource definition, the definition must include the req
 
 When the subscription is associated with an application, the subscription uses the `spec.placement` settings for the subscription or deployable to deploy any subscribed charts, deployables or other Kubernetes resources for the application.
 
-For more information about the resource definition for an application, see [Manage application resources](applications.md#managing-application-resources).
+For more information about the resource definition for an application, see *Manage application resources*.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [GitOps overview](gitops.md#gitops-overview)
+
+- [Manage application resources](applications.md#managing-application-resources)
+
+</div>
 
 <a id="managing-deployables-with-a-rolling-update"></a>
 
@@ -3108,9 +3184,21 @@ Procedure
 
       With the subscription resources created or updated, the rolling update begins and the new target subscription and updated initial subscription are deployed to the managed clusters. Then, the target subscription that is on the managed clusters is used to detect the new version of the resource or chart for deployment.
 
+      See subscription samples in *Application samples*.
+
 </div>
 
-See subscription samples in [Application samples](applications.md#application-samples).
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Application samples](applications.md#application-samples)
+
+</div>
 
 <a id="view-placement-rule-status"></a>
 
@@ -3132,7 +3220,7 @@ Additional resources
 
 - [View placement rule status in the console](applications.md#view-placement-console)
 
-- [View placement rule status with the CLI](applications.md#view-placement-cli)
+- [View placement rule status with the command line interface](applications.md#view-placement-cli)
 
 - [View placement rule status with the REST API](applications.md#view-placement-api)
 
@@ -3168,7 +3256,7 @@ Procedure
 
 <a id="view-placement-cli"></a>
 
-#### View placement rule status with the CLI
+#### View placement rule status with the command line interface
 
 You can view placement rule status by using the OpenShift CLI.
 
@@ -3198,7 +3286,7 @@ To use the REST API, use the *API Explorer* in the console, or an `oc` command.
 
 <a id="app-apply-yaml-cli"></a>
 
-### Apply application YAML files with the CLI
+### Apply application YAML files with the command line interface
 
 You can apply application YAML files by using the OpenShift CLI.
 
@@ -3234,7 +3322,7 @@ View samples and YAML definitions that you can use to build your files. Channels
 
 **Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
 
-To use the OpenShift CLI tool, see [Apply application YAML files with the CLI](applications.md#app-apply-yaml-cli).
+To use the OpenShift CLI tool, see [Apply application YAML files with the command line interface](applications.md#app-apply-yaml-cli).
 
 - [Channel YAML structure](applications.md#channel-yaml-structure)
 
@@ -3409,15 +3497,7 @@ View samples and YAML definitions that you can use to build your files. As with 
 
 **Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
 
-To use the OpenShift CLI tool, see [Apply application YAML files with the CLI](applications.md#app-apply-yaml-cli).
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+To use the OpenShift CLI tool, see [Apply application YAML files with the command line interface](applications.md#app-apply-yaml-cli).
 
 - [Subscription YAML structure](applications.md#subscription-yaml-structure)
 
@@ -3434,8 +3514,6 @@ Additional resources
 - [Helm repository subscription example](applications.md#helm-repository-subscription-example)
 
 - [Git repository subscription example](applications.md#github-repository-subscription-example)
-
-</div>
 
 <a id="subscription-yaml-structure"></a>
 
@@ -4096,23 +4174,13 @@ Procedure
 
 Placement rules (`placementrule.apps.open-cluster-management.io`) define the target clusters where deployables can be deployed. Use placement rules to help you facilitate the multicluster deployment of your deployables.
 
-To use the OpenShift CLI tool, see [Apply application YAML files with the CLI](applications.md#app-apply-yaml-cli).
-
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
+To use the OpenShift CLI tool, see [Apply application YAML files with the command line interface](applications.md#app-apply-yaml-cli).
 
 - [Placement rule YAML structure](applications.md#placement-rule-yaml-structure)
 
 - [Placement rule YAML values table](applications.md#placement-rule-yaml-values-table)
 
 - [Placement rule sample files](applications.md#placement-rule-sample-files)
-
-</div>
 
 <a id="placement-rule-yaml-structure"></a>
 
@@ -4246,7 +4314,7 @@ View samples and YAML definitions that you can use to build your files. Applicat
 
 **Deprecation:** Application *subscription*, and all processes that use Application subscription, is deprecated. See [GitOps overview](gitops.md#gitops-overview) for updated function.
 
-To use the OpenShift CLI tool, see [Apply application YAML files with the CLI](applications.md#app-apply-yaml-cli).
+To use the OpenShift CLI tool, see [Apply application YAML files with the command line interface](applications.md#app-apply-yaml-cli).
 
 - [Application YAML structure](applications.md#application-yaml-structure)
 

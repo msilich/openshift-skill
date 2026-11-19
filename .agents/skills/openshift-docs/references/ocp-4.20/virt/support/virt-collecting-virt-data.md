@@ -135,7 +135,7 @@ Procedure
 
   ``` terminal
   $ oc adm must-gather \
-    --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.27 \
+    --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.35 \
     -- /usr/bin/gather
   ```
 
@@ -150,7 +150,7 @@ Procedure
 
       ``` terminal
       $ oc adm must-gather \
-        --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.27 \
+        --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.35 \
         -- PROS=<number> /usr/bin/gather
       ```
 
@@ -160,7 +160,7 @@ Procedure
 
       ``` terminal
       $ oc adm must-gather \
-        --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.27 \
+        --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.35 \
         -- NS=<namespace name> VM=<VM name> /usr/bin/gather --vms_details
       ```
 
@@ -170,7 +170,7 @@ Procedure
 
       ``` terminal
       $ oc adm must-gather \
-       --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.27 \
+       --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.35 \
        /usr/bin/gather --images
       ```
 
@@ -178,7 +178,7 @@ Procedure
 
       ``` terminal
       $ oc adm must-gather \
-       --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.27 \
+       --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.35 \
        /usr/bin/gather --instancetypes
       ```
 
@@ -244,7 +244,7 @@ must-gather syntax with optional parameters
 
 ``` terminal
 $ oc adm must-gather \
-  --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.27 \
+  --image=registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.20.35 \
   -- <environment_variable_1> <environment_variable_2> <script_name>
 ```
 

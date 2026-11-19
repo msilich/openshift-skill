@@ -2,10 +2,10 @@
   "artifact": {
     "assets": 10,
     "base_url": "https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.17/",
-    "converted_topics": 22,
+    "converted_topics": 23,
     "license": "CC-BY-SA-3.0",
     "product": "Red Hat Advanced Cluster Management for Kubernetes",
-    "scope": "All 22 versioned source handbooks; separate generated API reference unavailable at the pinned revision",
+    "scope": "All versioned source handbooks; separate generated API reference unavailable at the pinned revision",
     "version": "2.17"
   },
   "conversion": {
@@ -22,22 +22,22 @@
     "local_build_helpers": {
       "acs.py": "0d6838be708ed4f0600354dd91d52fd1d2abb8885245be38daf3288b73ab7a6c",
       "import_acm.py": "b74ce53f0f589f2dbf609b6be3b7e1dfcc407f0fabddf8cd01997e60d276348d",
-      "import_devspaces.py": "38fc2d648fea470134a0e504c3d8385b67c3a3a76e549e3213b96b6f51cffa89"
+      "import_devspaces.py": "f3941fa6734faeb7fb3cf20a88e78d89b62eb457132ee7f6bebca3143c9f6c5b"
     },
-    "verified_local_links": 14392
+    "verified_local_links": 14428
   },
   "integrity": {
     "files": {
-      "AGENTS.md": "46c6f543cd28654601fd2a7acb368269da8eb92d9ce33729ccc8a79286d5908b",
-      "CONVERSION.json": "24b7f88e8572f09b0e44c14df2c11b291f543458fbf1ebb864312b21093847e7",
+      "AGENTS.md": "b5e78f6663afef8667ee96ee2f1b06a33d21ca68afceccd39b77d49a412b9fc1",
+      "CONVERSION.json": "7b23c3d1630dd452629d3dc4a839b3efb57f621646cb1e0756d3afefcfd810f1",
       "LEGAL-NOTICE.md": "fcd8295e67c0ac655a66df956fe1e3a01c558d9498ae956e0dbf2faac8a84279",
       "LICENSE.agentic-skills": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
       "LICENSE.api-documentation": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
       "LICENSE.md": "6daf10ac1d5dfe500a5e762525ccb87198f4c93c5cb9fdfdc3c842f931d64027",
       "about.md": "50e42d8792f5404595820e639080791982066369f6c70a348dc4f25217be8f5a",
-      "add-ons.md": "0c2ac3b7c5ff45cbe363825591651a6b395e0824bf3c034d0d2a2c3954948015",
+      "add-ons.md": "43228c1a68ffe056452d05249cd527d4ae8697510b9a56171e2bc31ea3d5751f",
       "api-reference.md": "732d57757b8a0c0dc5c3b6571af96c74a7f446e9dc2d6a4c35521cdd5494e717",
-      "applications.md": "d9c8be2b947e06052da152ec99abd52ad7ff568a236382b50dc7778badf415b8",
+      "applications.md": "a592d1451cbbf010de2b3df57680029af0c95d38cbb8f007135922e1fce49486",
       "assets/018e55645c09b2b1387a.png": "018e55645c09b2b1387abeaaf422531376409c2d1d1b92fa2690ccfbd034636b",
       "assets/30c173f797c392410180.png": "30c173f797c392410180db00981fe4716b8deffae98d26e0bcf113e9671b940d",
       "assets/342fa52a233477f8ebba.png": "342fa52a233477f8ebbacba674456f7fa738a803c16850231e765688779e4a25",
@@ -48,54 +48,56 @@
       "assets/ce73941b364984287864.png": "ce73941b3649842878643308a1ab89f170cfb1bad9cb61b5f53bd63adbe5c314",
       "assets/db37e6dd8101c781605b.png": "db37e6dd8101c781605b5d3ef8c4fd901ba854e64681763f00cfd126643990a3",
       "assets/fe90a6a5ea1818c02911.png": "fe90a6a5ea1818c0291171917064820b9bcf21b1c0646521885691d0cd31615e",
-      "business_continuity.md": "bd9a7a9294413dc156377a5a8d760c0ff2c97c10627c35a20461d2083ec464f2",
-      "clusters.md": "63b29b58e9bd9ebcd50c0d55f7c58cf72e3edbbc3527c8693cba950bd0e6dc1d",
-      "console.md": "9db3bcb9600affcfe47fdea526ae38a2f1db2f7893db3bcb580fac44573b56e6",
-      "get_started.md": "340f45b491bf2d810658e746b76d1798574456bc64362dea05beb1c8f6c64d0b",
-      "gitops.md": "a74d855c61d743313496211f974678993ac6383d760b229efaded4c075d3fbbe",
-      "global_hub.md": "5eb5be3dfb879fd5a08bffd876b315e65494783fad55a97532dacf7df8b6c1e1",
-      "governance.md": "369fd308bff0f62a1e9ae3f6caf134cc1a0a119e97c4ebe9ae24cf57777d252a",
-      "health_metrics.md": "e50ebf64cf0618849447466f10ad293a78426979d42e6ec0d39bfb82ae5d22e3",
-      "index.md": "c60860ec43cf85cf0f94b9aa7cede002f2b56a1748af0f4701330a81eae0e3ac",
-      "mce_acm_integration.md": "b7341d7f19a27c94496c1e1318107158477e44708a3d76425f3572ba2ee2dcab",
-      "mce_release_notes.md": "c0f649e9db0926c07adc88521e5cba26028e621c88afa95f56d0316116990914",
+      "backup_restore.md": "30bb3735b97e1f7ade51076d7f07afebcc61e17981116a4dd3d2fe6564fab59d",
+      "clusters.md": "9e119719bfb06dc9fd68c05d6c7532cd8c9906507415e5e313799fc68b0b924f",
+      "console.md": "8880f39f3f01813438bedf43bc0fdf184d3f0808bb2e0ae00e1417fe6a464113",
+      "get_started.md": "d1b8b3e1d5c501c54418fadd962744e05ed81ff76cc4921c5ef75e75b7c11f0d",
+      "gitops.md": "d7bb1badca0333abf3d44d8c7bd5922d7e00f4b8b479ac2c8df583f31ce90a5a",
+      "global_hub.md": "f8563d75559d5bb294b1920a23f82406ec085269e5c1abf18e5bcd5fb040bb1e",
+      "governance.md": "f968e1ac29a9676331e4c4ecdf6df74ef3b1eb8f699fb77c2791b2a4d6b23c02",
+      "health_metrics.md": "8144c1dbea7425b54378f97957fa177050508d8f0e89570e8c3c9ca41cda332c",
+      "index.md": "3d3a7f8b528a1ccc47bd1dbb65a2317978f1a96eaad55684a526d81b51bd5ae0",
+      "mce_acm_integration.md": "d98a05b7acdefd033277853c450645efc9ca672d71c04e66f1bd31ce6df67ac8",
+      "mce_release_notes.md": "49812481079f6335d923ff7d98b46c76864f769a2e3e111a1e387b48143af17a",
       "mce_troubleshooting.md": "e8d51aede21019f48baad8e30815360130be7bc83207e319e0098ccc88e154b4",
       "mcp.md": "22532b9393447a06ffd982c1df782c881f2e5514d91b68db0b77d2e9ba5b0929",
-      "networking.md": "6daff67227b8086dd913a40e5a5fe9ab679c5906cbd7ba6a7442455263291316",
-      "observability.md": "212f2d1a8fca9b7e4da4f2ba6c53b208295616c8140466c9aee60f2b9262b3c9",
-      "release_notes.md": "60247933d82c2b9ba7172411415f693e325a734e01680f3e8ebe3e0d26c5c062",
-      "search.md": "a286a7e11efaebff0343bf936d75bd3decc45701a66b8ef8423280eb4b02262b",
-      "secure_clusters.md": "273f2f3f3df58104c8d77b9029bc9e78e9b014b9373fef995a464115b44b957b",
-      "troubleshooting.md": "3383e6c5095eb8334bde5321c1ca1145b2dc36559da81495a8449ad3f5ade2bb",
-      "virtualization.md": "aa1be371022c524304963a5207ddb4705883dc5217abd8eb294c69cf004f4b07"
+      "networking.md": "134857e52814e95db5150be205b56b6b995a19f82a3c513bdc15bf03659d11e8",
+      "observability.md": "3fd0400a923a75978f3c242613f837b0c5c35d0f298034e3165e8c9edf121d6e",
+      "release_notes.md": "ca19603d5db5c00d57173bf7230d8d0725d5e4d7a2d8a7e074d6c8bb589ad94e",
+      "search.md": "aafd4b50e9cad0e0e9b81686196d284bc2c54784262bba7ee6214830f7e061ee",
+      "secure_clusters.md": "e1cf428d41a7b0a4353aaaa1d9a4fa8929980b94aa59ea89f8799e441389d0f1",
+      "troubleshooting.md": "b2588d57c6bed07a2e2295bbc13f3ca7b94cb63c355ad21f3d11797c0955038c",
+      "virtualization.md": "aa1be371022c524304963a5207ddb4705883dc5217abd8eb294c69cf004f4b07",
+      "volsync.md": "5c685bd1c4a6d9e5fe3ba8446556185916eadf515404f6c5aca230b862044d88"
     },
-    "handbooks": 22,
-    "markdown_files": 27,
-    "markdown_manifest_sha256": "e07f5e179dc53c94a98b9a1ae6ea945aacfc1aaade30f8bf53156e34d46b859b"
+    "handbooks": 23,
+    "markdown_files": 28,
+    "markdown_manifest_sha256": "76deedac7d937bd5185c88ebfc6a646a29ff6c2d7816bf9e31e278f7a5754cd7"
   },
   "inventory": {
-    "about/master.adoc": "f4ed4c8e39376e89d169dd128835063e1201083c4dac1ddf62c0f3136c24c71d",
-    "add-ons/master.adoc": "69c95c652ac37bd2d5e9c35d19ed4521930745baa4d30df4db5701394892715c",
-    "applications/master.adoc": "1f901cc6c2b49e17fc3dd6ccb209b6e55d0c5b318d5ec4d9d71632f92dd2a459",
-    "business_continuity/master.adoc": "d089885e18592cb91d601c852eb935df4d84dee35a1985d9720037e7d96acb06",
-    "clusters/master.adoc": "4accc18d32154bfc00e859ad5780db060ea68fe04d50bae07bcd367c45957116",
-    "console/master.adoc": "5d1b7ccfb22d7c4c8bdfa7a1b19419c1f0c8e5c81899450346ebfad1a05f89e8",
-    "get_started/master.adoc": "838f7ef7704fd25a856bd57966e1e2a4c28a4ca20f994f7f90ac8acdb6fc8ae5",
-    "gitops/master.adoc": "5a5421f47b794ff7d261aeefa0aa164a4d989a0c9e6636f6471c3bfee822e5d3",
-    "global_hub/master.adoc": "2f2803a451ab35c2ed011c85b26c955fc22351f9a231f09c2537118a38d5099d",
-    "governance/master.adoc": "e835a75b74a8aba98eb676b90e62517596074fcc4193d76df2526f50d8fb4099",
-    "health_metrics/master.adoc": "d7213fd1415c5c211bb13938f695aaa1189bed0036438673793b14f1a65f39f6",
-    "mce_acm_integration/master.adoc": "d46dcfe89c2541bc0d08a38c0407bd99967616640fa07d8fc121b03e86e4a485",
-    "mce_release_notes/master.adoc": "52ad83cdb6e516dd16ff4ab5145ca3cfc0c6def873592e6c89b061d922113565",
-    "mce_troubleshooting/master.adoc": "c1c7c08c9ae057d8f4cdcf5687a566a0ab2df277cd7ebba768c1d22a5c9616e3",
-    "mcp/master.adoc": "dad256d39a86ca9b8fbaa131a4c815cdc0b9bbb45c8c204ec4b64fa2ed1b640b",
-    "networking/master.adoc": "969f65d2256228773b77c7a4c9b5c68087d8d12ad3db436548b8c14f681d3364",
-    "observability/master.adoc": "c95e5adf4fbf5276e0d4f9761b969d993ead72fa35c2baf214f2c8ff0f0e6076",
-    "release_notes/master.adoc": "58ce70355562c2c747b962b9e5e2c248474d64e39090b1c2fa158347fc3ff46d",
-    "search/master.adoc": "3e6142c410aea453b5e233d4a8c784b89ed976a1695d8d447977122a2d179bd3",
-    "secure_clusters/master.adoc": "d8a5de5f2695d393b9738ad159889d1a12cc7ae9a5512754eaf1550e55ccd8ea",
+    "about/master.adoc": "95bf9fbee1e013b98bda7adff63145bed6a81108c1191d22e0afb638abf9c1da",
+    "add-ons/master.adoc": "d43654f4d59907f243be43682247f905f47304edbd575d4a21e1a16ea36fd939",
+    "applications/master.adoc": "aebd7a694a1c78660f0358c9f36afc12a1b965dda25ebd25e08b11fa7272f2d3",
+    "backup_restore/master.adoc": "ba08db0b6dff688bc91027476bb7a063dc71948ebb5c65a51b9dddde191bafb8",
+    "clusters/master.adoc": "dfab5a5fb3d1ac782a7d7bb88a258b71a4b036cfd3be653a8e50d658bd948d1a",
+    "console/master.adoc": "a7f43a1e3e0a204f55b6c6e337ed75e9e52423bc8cdca1e01e193e9fee496657",
+    "get_started/master.adoc": "367a33c29789f0eead7330a0b861367060fad965382943cd323e62722b9a859f",
+    "gitops/master.adoc": "b7f9f746c5a0bb1acd88ad3db22b2d200dbbc2c288936f363da5b0c2a1367f51",
+    "global_hub/master.adoc": "d52d3299b59c9056c3074095145363baa661aca5270c10fd87371be9ae98666e",
+    "governance/master.adoc": "238b49ba184e8cc906ae6afe9f06cf4d85705ab27d110e7afa04b14c821dcf42",
+    "health_metrics/master.adoc": "3a8fb9eeab5a5aba6887d6946eba1deffb0f7fb8fbfea23279e8bb23f10b43b3",
+    "mce_acm_integration/master.adoc": "4dc85826e467b543fd71b927b1e11fd29ebfb66cba333d9bef655e31a7b493b1",
+    "mce_release_notes/master.adoc": "ae34ff3f74bdb8b76e098011c0ead5b13c4b3da3d827a79d1c9338646b3fd6a6",
+    "mce_troubleshooting/master.adoc": "a4a95df571c82dd785fd0613571e9c1898852fdc0957f4f9e307a39dde821504",
+    "mcp/master.adoc": "e4e8283cabc6dead5ba914250dce84a274477a7d667128ce2a633db4c6baa68b",
+    "networking/master.adoc": "985956b9eabcb5470f3c369e88a29166be44228e907cf17199fe43eb406473fe",
+    "observability/master.adoc": "3b3bd838902bd78e7ce5b1b90e90b0ddcb3661dca920684cca24aa78b277bc55",
+    "release_notes/master.adoc": "e9b609169733d38da5c41b9c7b72a97b192a4456da66180c4f77477a5b38fa77",
+    "search/master.adoc": "e893f6f2d490e3170c9ac68596c6385b160549b0c35b512f97b5aeb46e1c15af",
+    "secure_clusters/master.adoc": "9359a29881ebb792e00dd3f170fba0cde3f84b3116f19765d6df5ae6b2c3a0d1",
     "troubleshooting/master.adoc": "77c9430e8b1df064232c3b512dac54993ddab1f8a2f8492ae0feb506e4bbc770",
-    "virtualization/master.adoc": "e586bfd6496f0e3ba918cad73ff51dbbd0e8dbe7114e80229830a69f8157accb"
+    "virtualization/master.adoc": "ffacaee3439839dabd5d8abe94ef261ad9f3e0df561c7a764dab79bb4c786a2a",
+    "volsync/master.adoc": "f6cb3161ea87442df6a4bc58ad8e3968ea5135bb5ba64019ec6491f7bb9a2f82"
   },
   "legal_notices": [
     {
@@ -122,7 +124,7 @@
   "runtime_network_required": false,
   "source_commit_times": {
     "api_docs": "2026-08-18T15:40:12-04:00",
-    "rhacm_docs": "2026-11-03T16:05:56-05:00"
+    "rhacm_docs": "2026-11-17T13:43:22-05:00"
   },
   "source_issues": [
     {
@@ -159,7 +161,7 @@
     },
     "rhacm_docs": {
       "branch": "2.17_prod",
-      "commit": "da77ef38f05cf583d057e43ecb6aa5697158fada",
+      "commit": "c673fcc51a919970db15b6c3c5c37ed37a393644",
       "license": "CC-BY-SA-3.0",
       "license_basis": "Source docinfo.xml includes Common_Content/Legal_Notice.xml; published Red Hat legal notice bundled locally",
       "url": "https://github.com/stolostron/rhacm-docs"

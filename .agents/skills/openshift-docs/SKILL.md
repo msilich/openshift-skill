@@ -39,7 +39,7 @@ Use openshift-acs for RHACS operations and optional StackRox MCP setup.
 For Red Hat Advanced Cluster Management (RHACM/ACM), start with
 [the ACM 2.17 map](references/acm-2.17/AGENTS.md) and use
 `python3 <resolved-skill-directory>/scripts/search_docs.py "ManagedCluster" --product acm`.
-The 22 source handbooks cover installation, cluster lifecycle, governance, applications,
+The source handbooks cover installation, cluster lifecycle, governance, applications,
 observability, backup and troubleshooting. Consult [ACM provenance](references/acm-2.17/SOURCE.json)
 and [conversion details](references/acm-2.17/CONVERSION.json) for coverage and external references.
 The pinned separate API repository has no generated reference: read the

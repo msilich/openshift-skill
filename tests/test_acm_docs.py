@@ -25,8 +25,8 @@ class AcmIntegrityTest(unittest.TestCase):
         self.assertEqual(actual, source["integrity"]["files"])
         self.assertEqual(source["sources"], LOCK["sources"])
         self.assertFalse(source["runtime_network_required"])
-        self.assertEqual(source["artifact"]["converted_topics"], 22)
-        self.assertEqual(len(source["inventory"]), 22)
+        self.assertEqual(source["artifact"]["converted_topics"], LOCK["expected_output"]["handbooks"])
+        self.assertEqual(len(source["inventory"]), LOCK["expected_output"]["handbooks"])
         self.assertEqual({Path(path).parts[0] + ".md" for path in source["inventory"]},
                          set(json.loads((SNAPSHOT / "CONVERSION.json").read_text())["handbooks"]))
         markdown = {name: value for name, value in actual.items() if name.endswith(".md")}

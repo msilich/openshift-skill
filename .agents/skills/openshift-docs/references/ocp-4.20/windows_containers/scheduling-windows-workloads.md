@@ -23,7 +23,7 @@ For more information, see "Host and container version compatibility" in the Micr
 Also, it is recommended that you set the `spec.os.name.windows` parameter in your workload pods. The Windows Machine Config Operator (WMCO) uses this field to authoritatively identify the pod operating system for validation and is used to enforce Windows-specific pod security context constraints (SCCs). Currently, this parameter has no effect on pod scheduling. For more information about this parameter, see the Kubernetes Pod OS documentation.
 
 > [!IMPORTANT]
-> The container base image must be the same Windows OS version and build number that is running on the node where the conainer is to be scheduled.
+> The container base image must be the same Windows OS version and build number that is running on the node where the container is to be scheduled.
 >
 > Also, if you upgrade the Windows nodes from one version to another, for example going from 20H2 to 2022, you must upgrade your container base image to match the new version. For more information, see "Windows container version compatibility" in the Microsoft Windows documentation.
 

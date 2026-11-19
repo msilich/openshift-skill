@@ -88,7 +88,7 @@ spec:
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   name: kubevirt-hyperconverged
-  startingCSV: kubevirt-hyperconverged-operator.v4.20.27
+  startingCSV: kubevirt-hyperconverged-operator.v4.20.35
   channel: "stable"
   config:
     nodeSelector:
@@ -131,7 +131,7 @@ spec:
   source:  redhat-operators
   sourceNamespace: openshift-marketplace
   name: kubevirt-hyperconverged
-  startingCSV: kubevirt-hyperconverged-operator.v4.20.27
+  startingCSV: kubevirt-hyperconverged-operator.v4.20.35
   channel: "stable"
   config:
     tolerations:

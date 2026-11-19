@@ -5,7 +5,7 @@ Search with the sibling skill's helper using `--product acm`. Retrieve relevant 
 - [about](about.md)
 - [add-ons](add-ons.md)
 - [applications](applications.md)
-- [business_continuity](business_continuity.md)
+- [backup_restore](backup_restore.md)
 - [clusters](clusters.md)
 - [console](console.md)
 - [get_started](get_started.md)
@@ -24,5 +24,6 @@ Search with the sibling skill's helper using `--product acm`. Retrieve relevant 
 - [secure_clusters](secure_clusters.md)
 - [troubleshooting](troubleshooting.md)
 - [virtualization](virtualization.md)
+- [volsync](volsync.md)
 
 [API coverage](api-reference.md)

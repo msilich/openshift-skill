@@ -91,12 +91,12 @@ equal cluster names are insufficient. The existing four-choice Secret policy is
 unchanged. Denied access is not retried through another tool or identity.
 
 Documentation source is `openshift/openshift-docs`, `rhacs-docs-4.11`, commit
-`fb48f6bfd2e5f69c07ef73888ffa05bb6e4f0135`. On a connected preparation machine,
+`3752a68a799f9803f080f490b37e66f424ca9506`. On a connected preparation machine,
 obtain that exact clean checkout and the existing pinned conversion dependencies:
 
 ```bash
 git clone --branch rhacs-docs-4.11 https://github.com/openshift/openshift-docs.git rhacs-docs
-git -C rhacs-docs checkout --detach fb48f6bfd2e5f69c07ef73888ffa05bb6e4f0135
+git -C rhacs-docs checkout --detach 3752a68a799f9803f080f490b37e66f424ca9506
 python3 tools/docs/build.py --lock tools/docs/acs.lock.json \
   --source-dir rhacs-docs --output-dir /path/to/new-acs-docs
 ```
@@ -708,7 +708,7 @@ details, and the content manifest are recorded in
 `.agents/skills/openshift-docs/references/ocp-4.20/SOURCE.json`.
 
 The snapshot is pinned to `openshift/openshift-docs` branch `enterprise-4.20`,
-commit `58129476889c10ea389b15c2cb7c3c239fdb4cbc`.
+commit `2b1f937b0c6aa7bc388363b9a1340d5ddba643ad`.
 The converter includes a small local correction: this source revision's distro
 map lacks a 4.20 entry, so the product version is derived from the explicit
 `enterprise-4.20` branch instead of silently using the upstream 4.17 fallback.
@@ -718,7 +718,7 @@ Asciidoctor 2.0.23, and Pandoc 3.7.0.2 installed:
 
 ```bash
 git clone --branch enterprise-4.20 --single-branch https://github.com/openshift/openshift-docs.git /path/to/openshift-docs
-git -C /path/to/openshift-docs checkout --detach 58129476889c10ea389b15c2cb7c3c239fdb4cbc
+git -C /path/to/openshift-docs checkout --detach 2b1f937b0c6aa7bc388363b9a1340d5ddba643ad
 python3 tools/docs/build.py \
   --source-dir /path/to/openshift-docs \
   --output-dir .agents/skills/openshift-docs/references/ocp-4.20
@@ -815,9 +815,9 @@ per-topic source URLs are retained; see [third-party notices](THIRD_PARTY_NOTICE
 
 ## Offline ACM 2.17
 
-The existing `openshift-docs` skill also bundles all 22 handbooks from
+The existing `openshift-docs` skill also bundles all versioned handbooks from
 [`stolostron/rhacm-docs`](https://github.com/stolostron/rhacm-docs), branch `2.17_prod`,
-at `da77ef38f05cf583d057e43ecb6aa5697158fada`. No eleventh skill or additional MCP
+at `c673fcc51a919970db15b6c3c5c37ed37a393644`. No eleventh skill or additional MCP
 server is needed. The installer copies this snapshot with the existing skills.
 
 ```sh

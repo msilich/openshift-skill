@@ -22,7 +22,7 @@ Learn more about [OpenShift Virtualization architecture and deployments](../abou
 
 OpenShift Virtualization 4.20 is supported for use on OpenShift Container Platform 4.20 clusters. To use the latest z-stream release of OpenShift Virtualization, you must first upgrade to the latest version of OpenShift Container Platform.
 
-The latest stable release of OpenShift Virtualization 4.20 is 4.20.27.
+The latest stable release of OpenShift Virtualization 4.20 is 4.20.35.
 
 ## Supported guest operating systems
 

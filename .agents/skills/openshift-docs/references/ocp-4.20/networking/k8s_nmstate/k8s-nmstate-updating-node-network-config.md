@@ -1541,7 +1541,7 @@ The `routes` parameter defines static routes and these routes determine the traf
 
 The `route-rules` parameter implements a policy-based routing capability for cluster nodes. This capability allows traffic that originates from a different source IP address to be segregated and routed through different gateways and network paths.
 
-The following YAML configuration shows a static route and a static IP confiuration on interface `eth1`:
+The following YAML configuration shows a static route and a static IP configuration on interface `eth1`:
 
 ``` yaml
 dns-resolver:

@@ -972,7 +972,7 @@ Availability zones
 Availability zones isolate potential fault domains across the cluster. Typical clusters have near-equal worker node capacity in three or more availability zones.
 
 vCPU reservations and limits  
-vCPU reservations and limits establish vCPU capacity on a worker node to assign to a container. A vCPU is equal to a Kubernetes compute unit. See the Kubernetes [Meaning of CPU](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu) topic to learn about Kubernetes compute units.
+vCPU reservations and limits establish vCPU capacity on a worker node to assign to a container. A vCPU is equal to a Kubernetes compute unit. See the Kubernetes *Meaning of CPU* topic to learn about Kubernetes compute units.
 
 Memory reservations and limits  
 Memory reservations and limits establish memory capacity on a worker node to assign to a container.
@@ -1024,9 +1024,15 @@ Additional resources
 
 </div>
 
+- [Meaning of CPU](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu)
+
 - [Installing on AWS](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/installing_on_aws/index)
 
 - [machine types](https://aws.amazon.com/ec2/instance-types/m5/)
+
+- [View and manage quotas](https://cloud.google.com/docs/quotas/view-manage#managing_your_quota_console)
+
+- [Google Machine families resource and comparisons](https://docs.cloud.google.com/compute/docs/machine-resource)
 
 - [Configuring an Azure account](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/installing_on_azure/installing-azure-account)
 
@@ -1092,7 +1098,7 @@ There are some things that can affect the time that it takes to run and return r
 
 - The length of time to complete a request is proportional to the number of namespaces and resources the user is authorized to access.
 
-  **Note:** If you save and share a search query with another user, returned results depend on access level for that user. For more information on role access, see [Using RBAC to define and apply permissions](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/authentication_and_authorization/using-rbac) in the OpenShift Container Platform documentation.
+  **Note:** If you save and share a search query with another user, returned results depend on access level for that user. For more information on role access, see *Using RBAC to define and apply permissions* in the OpenShift Container Platform documentation.
 
 - The worst performance is observed for a request by a non-administrator user with access to all of the namespaces, or all of the managed clusters.
 
@@ -1224,6 +1230,18 @@ veleroSchedule:0 */1 * * *
 veleroTtl:120h
 ```
 
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Using RBAC to define and apply permissions](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/authentication_and_authorization/using-rbac)
+
+</div>
+
 <a id="component-resource-requests"></a>
 
 ## Resource requests for components
@@ -1277,7 +1295,7 @@ For example, for 100 clusters, the following formulas are used:
 
 ## Update considerations for your hub cluster
 
-Before you update your Red Hat Advanced Cluster Management for Kubernetes hub cluster, see the following information about the update process and requirements, then proceed to [Updating your hub cluster](get_started.md#updating-hub) for instructions about how to update your hub cluster.
+Before you update your Red Hat Advanced Cluster Management for Kubernetes hub cluster, see the following information about the update process and requirements, then proceed to *Updating your hub cluster* for instructions about how to update your hub cluster.
 
 **Required access:** OpenShift Container Platform administrator
 
@@ -1305,21 +1323,37 @@ Before you update your Red Hat Advanced Cluster Management for Kubernetes hub cl
 
   - If set to `Manual`, then each update to the minor release within the channel requires an administrator to approve the update.
 
-    You also use these settings when you update to the latest version of Red Hat Advanced Cluster Management by using the operator.
-
-Continue to [Updating your hub cluster](get_started.md#updating-hub) to complete the steps to update your operator.
+    You also use these settings when you update to the latest version of Red Hat Advanced Cluster Management by using the operator. Continue to *Updating your hub cluster* to complete the steps to update your operator.
 
 - Component considerations
 
-  - If you are [Cluster pools (Technology Preview)](clusters.md#managing-cluster-pools), you need further configuration to stop automatic management of these cluster pools after update. Set `cluster.open-cluster-management.io/createmanagedcluster: "false"` in the `ClusterClaim` `metadata.annotations`.
+  - If you are *Cluster pools (Technology Preview)*, you need further configuration to stop automatic management of these cluster pools after update. Set `cluster.open-cluster-management.io/createmanagedcluster: "false"` in the `ClusterClaim` `metadata.annotations`.
 
-  - If you use OpenShift GitOps, verify that the `managedserviceaccount` component is enabled in multicluster engine operator before you update. OpenShift GitOps uses short-lived tokens that require this component. If the component is disabled, OpenShift GitOps loses connectivity to managed clusters and Argo CD applications show as `Unknown`. See [ManagedServiceAccount add-on](clusters.md#advanced-config-engine) and [Register managed clusters to the Red Hat OpenShift GitOps operator](gitops.md#gitops-push-register).
+  - If you use OpenShift GitOps, verify that the `managedserviceaccount` component is enabled in multicluster engine operator before you update. OpenShift GitOps uses short-lived tokens that require this component. If the component is disabled, OpenShift GitOps loses connectivity to managed clusters and Argo CD applications show as `Unknown`. See *ManagedServiceAccount add-on* and *Register managed clusters to the Red Hat OpenShift GitOps operator*.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Updating your hub cluster](get_started.md#updating-hub)
+
+- [Cluster pools (Technology Preview)](clusters.md#managing-cluster-pools)
+
+- [ManagedServiceAccount add-on](clusters.md#advanced-config-engine)
+
+- [Register managed clusters to the Red Hat OpenShift GitOps operator](gitops.md#gitops-push-register)
+
+</div>
 
 <a id="updating-hub"></a>
 
 ## Updating your hub cluster
 
-You control your Red Hat Advanced Cluster Management for Kubernetes updates by using the operator subscription settings in the Red Hat OpenShift Container Platform console.
+You control your Red Hat Advanced Cluster Management for Kubernetes updates by using the operator subscription settings in the Red Hat OpenShift Container Platform console. It can take up to 10 minutes for the `MultiClusterHub` custom resource to finish updating.
 
 **Required access:** OpenShift Container Platform administrator
 
@@ -1361,9 +1395,7 @@ Procedure
 
     3.  Select **Save** to commit your change.
 
-    4.  Wait for the automatic updates to be applied to the operator. The updates automatically add the required updates to the latest version in the selected channel. When all of the updated updates are complete, the *Update Status* field indicates an `Up to date` status.
-
-        **Note:** It can take up to 10 minutes for the `MultiClusterHub` custom resource to finish updating. You can check whether the update is still in process by entering the following command:
+    4.  Wait for the automatic updates to be applied to the operator. The updates automatically add the required updates to the latest version in the selected channel. When all of the updated updates are complete, the *Update Status* field indicates an `Up to date` status. You can check whether the update is still in process by entering the following command:
 
         ``` bash
         oc get mch
@@ -1391,25 +1423,13 @@ Procedure
 
     2.  Verify that the `MultiClusterHub` instance `status.currentVersion` specification value is set at `2.15` and matches the `desiredVersion` status, which is also set at `2.15`.
 
-13. **Optional:** If you are [Cluster pools (Technology Preview)](clusters.md#managing-cluster-pools), you need further configuration to stop automatic management of these cluster pools.
+13. **Optional:** If you are using *Cluster pools (Technology Preview)*, you need further configuration to stop automatic management of these cluster pools.
 
-14. Set `cluster.open-cluster-management.io/createmanagedcluster: "false"` in the `ClusterClaim` `metadata.annotations`.
-
-</div>
-
-<div class="formalpara">
-
-<div class="title">
-
-Results
+14. Set `cluster.open-cluster-management.io/createmanagedcluster: "false"` in the `ClusterClaim` `metadata.annotations`. All existing cluster claims are automatically imported when the product is updated unless you change this setting.
 
 </div>
 
-All existing cluster claims are automatically imported when the product is updated unless you change this setting.
-
-</div>
-
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -1417,7 +1437,9 @@ Additional resources
 
 </div>
 
-[Operators](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/operators/index) in the OpenShift Container Platform documentation.
+- [Operators](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/operators/index)
+
+- [Cluster pools (Technology Preview)](clusters.md#managing-cluster-pools)
 
 </div>
 
@@ -1425,13 +1447,13 @@ Additional resources
 
 ## Updating in a disconnected network environment
 
-See the steps and information to update Red Hat Advanced Cluster Management in a disconnected network environment. This information follows the updating procedure in [Updating your hub cluster](get_started.md#updating-hub).
+See the steps and information to update Red Hat Advanced Cluster Management in a disconnected network environment. This information follows the updating procedure in *Updating your hub cluster*.
 
 - The process starts by changing the update channel in your Operator Lifecycle Manager subscription for Red Hat Advanced Cluster Management for Kubernetes to the channel for the new release.
 
 - Because of the special characteristics of the disconnected environment, you need to address the mirroring requirements before changing the update channel to start the update process.
 
-- You might encounter important information that is related to the interdependency between the Red Hat Advanced Cluster Management and multicluster engine operator. See [Installing in disconnected network environments](get_started.md#install-on-disconnected-networks) for consideration during install or update.
+- You might encounter important information that is related to the interdependency between the Red Hat Advanced Cluster Management and multicluster engine operator. See *Installing in disconnected network environments* for consideration during install or update.
 
 <div>
 
@@ -1457,7 +1479,7 @@ Procedure
 
     If your mirrored catalog and registry resulted in a newly named `CatalogSource` being created, update the `mce-subscription-spec` annotation in your `MulticlusterHub` resource to reflect the new catalog source name.
 
-3.  Update with catalog mirroring
+3.  Update with catalog mirroring.
 
     Red Hat Advanced Cluster Management uses the related multicluster engine operator functionality to provide foundational services that were delivered as part of the product. Red Hat Advanced Cluster Management automatically installs and manages the required multicluster engine operator and `MulticlusterEngine` resource instance as part of the hub cluster installation and update.
 
@@ -1487,7 +1509,7 @@ Procedure
 
 </div>
 
-<div class="formalpara">
+<div>
 
 <div class="title">
 
@@ -1495,7 +1517,9 @@ Additional resources
 
 </div>
 
-[Installing in disconnected network environments](get_started.md#install-on-disconnected-networks)
+- [Installing in disconnected network environments](get_started.md#install-on-disconnected-networks)
+
+- [Updating your hub cluster](get_started.md#updating-hub)
 
 </div>
 
@@ -1672,9 +1696,9 @@ Procedure
 
 # APIs
 
-You can use the Search API to query information from Red Hat Advanced Cluster Management. For other APIs, use the *API Explorer* in the console, or an `oc` command, to view current and supported APIs.
+The Search API queries information from Red Hat Advanced Cluster Management. For other APIs, use the *API Explorer* in the console, or an `oc` command, to view current and supported APIs.
 
-**User required access:** You can only perform actions that your role is assigned. Learn about access requirements from the [Role-based access control](secure_clusters.md) documentation.
+**Required access:** You can only perform actions that your role is assigned. Learn about access requirements from the [Role-based access control](secure_clusters.md) documentation.
 
 You can also access Kubernetes APIs from the integrated console. Select the **Administrator** perspective, then navigate to **Home** \> **API Explorer** to explore API groups.
 

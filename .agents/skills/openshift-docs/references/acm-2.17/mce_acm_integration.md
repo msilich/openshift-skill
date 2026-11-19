@@ -11,14 +11,6 @@ If you are using multicluster engine operator and then you install Red Hat Advan
 
 - See [MultiClusterHub advanced configuration](get_started.md#advanced-config-hub) for details about Red Hat Advanced Cluster Management after you install.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Integrated hosted control plane fleet management architecture pattern](mce_acm_integration.md#hosted-pattern)
 
 - [multicluster engine operator hosted cluster discovery in Red Hat Advanced Cluster Management](mce_acm_integration.md#discover-hosted-acm)
@@ -32,8 +24,6 @@ Additional resources
 - [Observability integration](mce_acm_integration.md#mce-acm-observability)
 
 - [SiteConfig operator](mce_acm_integration.md#siteconfig)
-
-</div>
 
 <a id="hosted-acm"></a>
 
@@ -187,14 +177,6 @@ Those hosted clusters can be automatically discovered and imported as managed cl
 
 **Note:** Since the hosted control planes run on the managed multicluster engine operator cluster nodes, the number of hosted control planes that the cluster can host is determined by the resource availability of managed multicluster engine operator cluster nodes, as well as the number of managed multicluster engine operator clusters. You can add more nodes or managed clusters to host more hosted control planes.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Configure Red Hat Advanced Cluster Management to import multicluster engine operator clusters](mce_acm_integration.md#hosted-import-config)
 
 - [Import multicluster engine operator manually](mce_acm_integration.md#hosted-import-mce)
@@ -202,8 +184,6 @@ Additional resources
 - [Discover hosted clusters](mce_acm_integration.md#hosted-discover)
 
 - [Automated import for discovered hosted clusters](mce_acm_integration.md#auto-import-hcp)
-
-</div>
 
 <a id="hosted-import-config"></a>
 
@@ -502,21 +482,11 @@ The hosted cluster is also *auto-imported* into multicluster engine operator. Th
 
 **Required access:** Cluster administrator
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Configure settings for automatic import](mce_acm_integration.md#config-hcp-autoimport)
 
 - [Create the hosted control plane placement definition](mce_acm_integration.md#create-hcp-placement)
 
 - [Bind the import policy to a hosted control plane placement definition](mce_acm_integration.md#bind-hcp-placement)
-
-</div>
 
 <a id="config-hcp-autoimport"></a>
 
@@ -765,21 +735,11 @@ Automated import of Red Hat OpenShift Service on AWS (classic) clusters uses Red
 
 **Required access:** Cluster administrator
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Create the automatic import policy](mce_acm_integration.md#creating-rosa-policy)
 
 - [Create the Red Hat OpenShift Service on AWS (classic) placement definition](mce_acm_integration.md#create-rosa-placement)
 
 - [Bind the import policy to a Red Hat OpenShift Service on AWS (classic) placement definition](mce_acm_integration.md#bind-rosa-placement)
-
-</div>
 
 <a id="creating-rosa-policy"></a>
 
@@ -1249,21 +1209,11 @@ After you enable the `multicluster-observability` pod, you can use Red Hat Advan
 
 To enable, see *Observability service*.
 
-<div>
-
-<div class="title">
-
-Additional resources
-
-</div>
-
 - [Introduction to hosted control planes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/hosted_control_planes/hosted-control-planes-overview#hosted-control-planes-overview_hcp-overview)
 
 - [Installing the hosted control planes command-line interface](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/hosted_control_planes/preparing-to-deploy-hosted-control-planes#installing-the-hosted-control-plane-command-line-interface)
 
 - [Observability service](observability.md#observing-environments-intro)
-
-</div>
 
 <a id="siteconfig"></a>
 
@@ -1427,58 +1377,14 @@ Additional resources
 
 The SiteConfig operator provides the following default, validated, and immutable set of templates in the same namespace in which the operator is installed:
 
-<table>
-<caption>Default installation templates</caption>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th style="text-align: left;">Installation method</th>
-<th style="text-align: left;">Template type</th>
-<th style="text-align: left;">File name</th>
-<th style="text-align: left;">Template content</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Assisted Installer</p></td>
-<td style="text-align: left;"><p>Cluster-level templates</p></td>
-<td style="text-align: left;"><p><code>ai-cluster-templates-v1.yaml</code></p></td>
-<td style="text-align: left;"><p><code>AgentClusterInstall</code><br />
-<code>ClusterDeployment</code><br />
-<code>InfraEnv</code><br />
-<code>KlusterletAddonConfig</code><br />
-<code>ManagedCluster</code></p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Node-level templates</p></td>
-<td style="text-align: left;"><p><code>ai-node-templates-v1.yaml</code></p></td>
-<td style="text-align: left;"><p><code>BareMetalHost</code><br />
-<code>NMStateConfig</code></p></td>
-<td></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Image-based Install Operator</p></td>
-<td style="text-align: left;"><p>Cluster-level templates</p></td>
-<td style="text-align: left;"><p><code>ibi-cluster-templates-v1.yaml</code></p></td>
-<td style="text-align: left;"><p><code>ClusterDeployment</code><br />
-<code>KlusterletAddonConfig</code><br />
-<code>ManagedCluster</code></p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p>Node-level templates</p></td>
-<td style="text-align: left;"><p><code>ibi-node-templates-v1.yaml</code></p></td>
-<td style="text-align: left;"><p><code>BareMetalHost</code><br />
-<code>ImageClusterInstall</code><br />
-<code>NetworkSecret</code></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+| Installation method | Template type | File name | Template content |
+|----|----|----|----|
+| Assisted Installer | Cluster-level templates | `ai-cluster-templates-v1.yaml` | `AgentClusterInstall` `ClusterDeployment` `InfraEnv` `KlusterletAddonConfig` `ManagedCluster` |
+| Node-level templates | `ai-node-templates-v1.yaml` | `BareMetalHost` `NMStateConfig` |  |
+| Image-based Install Operator | Cluster-level templates | `ibi-cluster-templates-v1.yaml` | `ClusterDeployment` `KlusterletAddonConfig` `ManagedCluster` |
+| Node-level templates | `ibi-node-templates-v1.yaml` | `BareMetalHost` `ImageClusterInstall` `NetworkSecret` |  |
+
+Default installation templates
 
 For more information about the `ClusterInstance` API, use the *API Explorer* in the console, or an `oc` command.
 
@@ -2175,7 +2081,19 @@ The Image Based Install Operator completes and manages image-based cluster insta
 
 Install the Image Based Install Operator so that you can complete and manage image-based cluster installations by using the same APIs as existing installation methods.
 
-For more information about, and to learn how to enable the Image Based Install Operator, see [Image-based installations for single-node OpenShift](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/edge_computing/image-based-installation-for-single-node-openshift).
+For more information about, and to learn how to enable the Image Based Install Operator, see *Image-based installations for single-node OpenShift*.
+
+<div>
+
+<div class="title">
+
+Additional resources
+
+</div>
+
+- [Image-based installations for single-node OpenShift](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/edge_computing/image-based-installation-for-single-node-openshift)
+
+</div>
 
 <a id="siteconfig-advanced"></a>
 
@@ -2203,23 +2121,23 @@ Additional resources
 
 - [Cluster reinstallation with the SiteConfig operator (Technology Preview)](mce_acm_integration.md#cluster-reinstallation)
 
-  - [Resource labeling for preservation](mce_acm_integration.md#resource-preservation-labels)
+- [Resource labeling for preservation](mce_acm_integration.md#resource-preservation-labels)
 
-  - [Cluster reinstallation monitoring](mce_acm_integration.md#reinstallation-monitoring)
+- [Cluster reinstallation monitoring](mce_acm_integration.md#reinstallation-monitoring)
 
 - [Reinstallation of a cluster with the SiteConfig operator (Technology Preview)](mce_acm_integration.md#reinstall-cluster)
 
-  - [Enable cluster reinstallation](mce_acm_integration.md#enable-cluster-reinstallation)
+- [Enable cluster reinstallation](mce_acm_integration.md#enable-cluster-reinstallation)
 
-  - [Label resources for preservation](mce_acm_integration.md#label-preservation-resources)
+- [Label resources for preservation](mce_acm_integration.md#label-preservation-resources)
 
-  - [Initiate a cluster reinstallation](mce_acm_integration.md#initiate-cluster-reinstallation)
+- [Initiate a cluster reinstallation](mce_acm_integration.md#initiate-cluster-reinstallation)
 
-  - [Monitor the cluster reinstallation](mce_acm_integration.md#monitor-cluster-reinstallation)
+- [Monitor the cluster reinstallation](mce_acm_integration.md#monitor-cluster-reinstallation)
 
 - [Hardware replacement with Image-Based Break/Fix for single-node OpenShift (Technology Preview)](mce_acm_integration.md#ibbf-hardware-replacement)
 
-  - [Initiate the Image-Based Break/Fix cluster reinstallation](mce_acm_integration.md#initiate-ibbf-reinstallation)
+- [Initiate the Image-Based Break/Fix cluster reinstallation](mce_acm_integration.md#initiate-ibbf-reinstallation)
 
 </div>
 
@@ -2744,67 +2662,17 @@ Phase 2 - Cluster provisioning
 
 You can track progress in the `status.reinstall.conditions` and `status.conditions` fields for phase 1 and 2, respectively. To track the cluster reinstallation progress, the SiteConfig operator provides the following status conditions:
 
-<table>
-<caption>Reinstallation status conditions</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<tbody>
-<tr>
-<td style="text-align: left;"><p>Condition</p></td>
-<td style="text-align: left;"><p>Description</p></td>
-<td style="text-align: left;"><p>Reasons</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>ReinstallRequestProcessed</code></p></td>
-<td style="text-align: left;"><p>Indicates the overall status of the reinstallation request.</p></td>
-<td style="text-align: left;"><p><code>InProgress</code>: The reinstallation process is ongoing.<br />
-<code>Completed</code>: The reinstallation process successfully completed, and the cluster is ready for reprovisioning.<br />
-<code>Failed</code>: The reinstallation process encountered an error and failed.<br />
-<code>TimedOut</code>: The reinstallation process exceeded the expected time limit and did not complete successfully.</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>ReinstallRequestValidated</code></p></td>
-<td style="text-align: left;"><p>Confirms the validity of the reinstallation request.</p></td>
-<td style="text-align: left;"><p><code>Completed</code>: The reinstallation request is valid.<br />
-<code>Failed</code>: The reinstallation request is invalid.</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>ReinstallPreservationDataBackedUp</code></p></td>
-<td style="text-align: left;"><p>Tracks the backup status of preserved data.</p></td>
-<td style="text-align: left;"><p><code>PreservationNotRequired</code>: No backup required as <code>spec.reinstall.preservationMode: None</code> is set.<br />
-<code>DataUnavailable</code>: No <code>Secret</code> or <code>ConfigMap</code> objects with the preservation label are found in the <code>ClusterInstance</code> namespace.<br />
-<code>Completed</code>: <code>Secret</code> and <code>ConfigMap</code> objects are successfully backed up.<br />
-<code>Failed</code>: One or more <code>Secret</code> and <code>ConfigMap</code> objects are not backed up.</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>ReinstallClusterIdentityDataDetected</code></p></td>
-<td style="text-align: left;"><p>Determines whether cluster identity data is available for preservation.</p></td>
-<td style="text-align: left;"><p><code>PreservationNotRequired</code>: Data preservation is not required. The <code>preservationMode</code> field is set to <code>None</code>.<br />
-<code>DataAvailable</code>: Cluster identity <code>Secret</code> and <code>ConfigMap</code> objects are successfully located.<br />
-<code>DataUnavailable</code>: No cluster identity <code>Secret</code> or <code>ConfigMap</code> objects are detected.<br />
-<code>Failed</code>: The preservation mode is set to <code>ClusterIdentity</code> but no cluster identity data is found.</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>ReinstallRenderedManifestsDeleted</code></p></td>
-<td style="text-align: left;"><p>Monitors the deletion of rendered manifests associated with the <code>ClusterInstance</code> resource.</p></td>
-<td style="text-align: left;"><p><code>InProgress</code>: Deleting rendered manifests is in progress.<br />
-<code>Completed</code>: Successfully deleted all rendered manifests.<br />
-<code>Failed</code>: Failed to delete one or more rendered manifests.<br />
-<code>TimedOut</code>: Timed out while waiting for rendered manifests to be deleted.</p></td>
-</tr>
-<tr>
-<td style="text-align: left;"><p><code>ReinstallPreservationDataRestored</code></p></td>
-<td style="text-align: left;"><p>Tracks the restoration status of preserved data.</p></td>
-<td style="text-align: left;"><p><code>PreservationNotRequired</code>: Preservation is not required because the <code>preservationMode</code> field is set to <code>None</code>.<br />
-<code>DataUnavailable</code>: No preserved <code>Secret</code> or <code>ConfigMap</code> objects detected for restoration.<br />
-<code>Completed</code>: <code>Secret</code> and <code>ConfigMap</code> objects are successfully restored.<br />
-<code>Failed</code>: Failed to restore one or more <code>Secret</code> and <code>ConfigMap</code> objects.</p></td>
-</tr>
-</tbody>
-</table>
+|  |  |  |
+|----|----|----|
+| Condition | Description | Reasons |
+| `ReinstallRequestProcessed` | Indicates the overall status of the reinstallation request. | `InProgress`: The reinstallation process is ongoing. `Completed`: The reinstallation process successfully completed, and the cluster is ready for reprovisioning. `Failed`: The reinstallation process encountered an error and failed. `TimedOut`: The reinstallation process exceeded the expected time limit and did not complete successfully. |
+| `ReinstallRequestValidated` | Confirms the validity of the reinstallation request. | `Completed`: The reinstallation request is valid. `Failed`: The reinstallation request is invalid. |
+| `ReinstallPreservationDataBackedUp` | Tracks the backup status of preserved data. | `PreservationNotRequired`: No backup required as `spec.reinstall.preservationMode: None` is set. `DataUnavailable`: No `Secret` or `ConfigMap` objects with the preservation label are found in the `ClusterInstance` namespace. `Completed`: `Secret` and `ConfigMap` objects are successfully backed up. `Failed`: One or more `Secret` and `ConfigMap` objects are not backed up. |
+| `ReinstallClusterIdentityDataDetected` | Determines whether cluster identity data is available for preservation. | `PreservationNotRequired`: Data preservation is not required. The `preservationMode` field is set to `None`. `DataAvailable`: Cluster identity `Secret` and `ConfigMap` objects are successfully located. `DataUnavailable`: No cluster identity `Secret` or `ConfigMap` objects are detected. `Failed`: The preservation mode is set to `ClusterIdentity` but no cluster identity data is found. |
+| `ReinstallRenderedManifestsDeleted` | Monitors the deletion of rendered manifests associated with the `ClusterInstance` resource. | `InProgress`: Deleting rendered manifests is in progress. `Completed`: Successfully deleted all rendered manifests. `Failed`: Failed to delete one or more rendered manifests. `TimedOut`: Timed out while waiting for rendered manifests to be deleted. |
+| `ReinstallPreservationDataRestored` | Tracks the restoration status of preserved data. | `PreservationNotRequired`: Preservation is not required because the `preservationMode` field is set to `None`. `DataUnavailable`: No preserved `Secret` or `ConfigMap` objects detected for restoration. `Completed`: `Secret` and `ConfigMap` objects are successfully restored. `Failed`: Failed to restore one or more `Secret` and `ConfigMap` objects. |
+
+Reinstallation status conditions
 
 The `status.reinstall` field provides further information about the reinstallation process with the following fields:
 
@@ -2932,9 +2800,9 @@ Procedure
   oc label configmap <your_configmap> "siteconfig.open-cluster-management.io/preserve=all"
   ```
 
-</div>
+  The `ClusterInstance` custom resource is updated with the correct `preservationMode` corresponding to the applied labels.
 
-The `ClusterInstance` custom resource is updated with the correct `preservationMode` corresponding to the applied labels.
+</div>
 
 <div>
 
