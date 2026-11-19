@@ -46,6 +46,21 @@ class DocumentationDownloadTest(unittest.TestCase):
         self.open.side_effect = AssertionError("must use validated cache")
         self.assertEqual(self.module.download(self.url, self.cache), (data, metadata))
 
+    def test_public_downloads_identify_the_preparation_client(self):
+        for position, url in enumerate((self.url,
+                "https://creativecommons.org/licenses/by-sa/3.0/legalcode.en",
+                "https://d2b7uw8yp7hpzk.cloudfront.net/en/documentation/red_hat_openshift_dev_spaces/3.29/images/workspace.png")):
+            with self.subTest(url=url):
+                cache = self.cache / str(position)
+                cache.mkdir()
+                self.response.url = url
+                self.module.download(url, cache)
+                request = self.open.call_args.args[0]
+                self.assertEqual(request.full_url, url)
+                self.assertEqual(request.get_header("User-agent"), self.module.USER_AGENT)
+                self.assertIn("openshift-skill-docs/", request.get_header("User-agent"))
+                self.assertEqual(self.open.call_args.kwargs, {"timeout": 45})
+
     def test_retries_stop_after_four_attempts_without_cache_files(self):
         self.open.side_effect = TimeoutError("read timed out")
         with self.assertRaisesRegex(RuntimeError, "failed after 4 attempts") as raised:

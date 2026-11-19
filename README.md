@@ -882,7 +882,11 @@ remain visible in provenance and the PR report.
 If the ACM API repository starts publishing generated reference files, the updater
 stops for an importer review instead of silently omitting the new material.
 
-Dev Spaces downloads use three parallel requests per branch job. A transient
+Dev Spaces connected preparation sends an explicit curl-compatible User-Agent
+that also identifies this project; the public documentation endpoint rejects
+urllib's default User-Agent with HTTP 403. No credentials or TLS exceptions are
+added, and a remaining HTTP 403 still stops the update without retrying.
+Downloads use three parallel requests per branch job. A transient
 timeout, interrupted response or HTTP 408/429/500/502/503/504 response is retried
 up to three times (four attempts total), with 2, 4 and 8 second waits. Each attempt
 keeps its 45 second socket timeout. Persistent failures stop the batch before

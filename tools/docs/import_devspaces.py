@@ -29,6 +29,7 @@ from bs4 import BeautifulSoup
 HERE = Path(__file__).resolve().parent
 IMPORTER_VERSION = "1"
 DOWNLOAD_ATTEMPTS = 4
+USER_AGENT = "curl/8.7.1 openshift-skill-docs/1 (+https://github.com/msilich/openshift-skill)"
 
 
 def digest(data):
@@ -95,8 +96,9 @@ def download(url, cache):
         if digest(data) != meta["response_sha256"]:
             raise ValueError(f"Corrupt preparation cache: {url}")
         return data, meta
-    # The public CC license endpoint rejects urllib's default user-agent.
-    request = Request(url, headers={"User-Agent": "curl/8.7.1"}) if urlsplit(url).hostname == "creativecommons.org" else url
+    # Red Hat and CC public endpoints reject urllib's default user-agent.
+    # Keep the working curl-compatible header and identify this preparation tool.
+    request = Request(url, headers={"User-Agent": USER_AGENT})
     for attempt in range(1, DOWNLOAD_ATTEMPTS + 1):
         try:
             with urlopen(request, timeout=45) as response:
