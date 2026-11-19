@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from urllib.error import HTTPError
 
 ROOT = Path(__file__).resolve().parents[2]
 TOOLS = ROOT / "tools/docs"
@@ -228,6 +229,9 @@ def main():
         if run("git", "-C", ROOT, "status", "--porcelain"):
             raise RuntimeError("Documentation updates require a clean checkout; commit or preserve local changes first")
         update(list(PRODUCTS) if args.product == "all" else [args.product], args.report)
+    except HTTPError as error:
+        print(f"Documentation download rejected: {error.url}: {error}", file=sys.stderr)
+        raise
     except subprocess.CalledProcessError as error:
         # Keep converter diagnostics available in Actions when a build is rejected.
         print(error.stdout or "", file=sys.stderr)
