@@ -1,6 +1,7 @@
 """Exercise update failures and provenance without downloading vendor sources."""
 import copy
 import importlib.util
+import io
 import json
 from pathlib import Path
 import sys
@@ -9,6 +10,7 @@ import unittest
 from unittest.mock import patch
 from argparse import Namespace
 from subprocess import CompletedProcess
+from urllib.error import HTTPError
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools/docs"))
@@ -77,6 +79,20 @@ class DocumentationUpdateTest(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "conversion failed"):
                 updater.update(["ocp", "gitops"], None)
         self.assertEqual(updater.file_hashes(self.root), before)
+
+    def test_cli_reports_rejected_download_url_without_retrying(self):
+        url = "https://docs.redhat.com/en/documentation/missing-topic"
+        error = HTTPError(url, 404, "Not Found", {}, None)
+        self.addCleanup(error.close)
+        with patch.object(sys, "argv", ["update.py"]), \
+             patch.object(updater, "run", return_value=""), \
+             patch.object(updater, "update", side_effect=error) as update, \
+             patch.object(sys, "stderr", new_callable=io.StringIO) as errors:
+            with self.assertRaises(HTTPError):
+                updater.main()
+            update.assert_called_once()
+            self.assertIn(url, errors.getvalue())
+            self.assertIn("404", errors.getvalue())
 
     def test_success_updates_snapshot_locks_and_source_maps_together(self):
         before = updater.read_json(self.root / "sources.lock.json")
